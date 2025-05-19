@@ -1,18 +1,14 @@
 package org.daisy.pipeline.webservice.restlet.impl;
 
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.Optional;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.daisy.common.properties.Properties;
 import org.daisy.common.properties.Properties.SettableProperty;
+import org.daisy.pipeline.webservice.request.PropertyRequest;
 import org.daisy.pipeline.webservice.restlet.AdminResource;
 import org.daisy.pipeline.webservice.xml.PropertyXmlWriter;
 import org.daisy.pipeline.webservice.xml.XmlUtils;
-import org.daisy.pipeline.webservice.xml.XmlValidator;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -23,15 +19,6 @@ import org.restlet.resource.Put;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 public class PropertyResource extends AdminResource {
 
@@ -89,65 +76,31 @@ public class PropertyResource extends AdminResource {
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			return this.getErrorRepresentation("Property not found");
 		}
-		if (representation == null) {
-			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
-			return this.getErrorRepresentation("PUT request with no data");
-		}
-		Document doc = null; {
-			try {
-				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-				factory.setNamespaceAware(true);
-				doc = factory.newDocumentBuilder().parse(new InputSource(new StringReader(representation.getText())));
-			} catch (IOException|ParserConfigurationException|SAXException e) {
-				logger.error(e.getMessage());
-				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-				return getErrorRepresentation(e);
-			}
-		}
-		if (!XmlValidator.validate(doc, XmlValidator.PROPERTY_SCHEMA_URL)) {
-			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-			return getErrorRepresentation("Invalid property XML provided");
-		}
-		Attr val = doc.getDocumentElement().getAttributeNode("value");
-		if (val != null)
-			property.get().setValue(val.getValue());
-		else {
-			Element xmlContent = null; {
-				NodeList children = doc.getDocumentElement().getChildNodes();
-				for (int i = 0; i < children.getLength(); i++) {
-					Node n = children.item(i);
-					switch (n.getNodeType()) {
-					case Node.ELEMENT_NODE:
-						if (xmlContent != null) {
-							setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-							return this.getErrorRepresentation(
-								"Invalid property XML provided: 'property' element has more than one child element");
-						}
-						xmlContent = (Element)n;
-						break;
-					case Node.TEXT_NODE:
-						if (!n.getTextContent().trim().isEmpty()) {
-							setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-							return this.getErrorRepresentation(
-								"Invalid property XML provided: 'property' element contains text");
-						}
-						break;
-					case Node.COMMENT_NODE:
-						break;
-					default:
-						setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-						return this.getErrorRepresentation(
-							"Invalid property XML provided: 'property' contains unexpected nodes");
-					}
+		String name = property.get().getName();
+		PropertyRequest req; {
+			if (representation != null) {
+				String xml = null;
+				try {
+					xml = representation.getText();
+					req = PropertyRequest.fromXML(xml, name);
+				} catch (IOException|IllegalArgumentException e) {
+					logger.error("Bad request", e);
+					if (xml != null && logger.isDebugEnabled())
+						logger.debug("Request XML: " + xml);
+					setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+					return getErrorRepresentation(e.getMessage());
+				}
+			} else {
+				try {
+					req = PropertyRequest.fromQuery(getQuery(), name);
+				} catch (IllegalArgumentException e) {
+					logger.error("Bad request", e);
+					setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+					return getErrorRepresentation(e.getMessage());
 				}
 			}
-			if (xmlContent == null) {
-				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-				return this.getErrorRepresentation(
-					"Invalid property XML provided: 'property' element missing 'value' attribute or child element");
-			}
-			property.get().setValue(XmlUtils.nodeToString(xmlContent));
 		}
+		property.get().setValue(req.getValue());
 		PropertyXmlWriter writer = new PropertyXmlWriter(property.get(), getRequest().getRootRef().toString(), false);
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, writer.getXmlDocument());
 		setStatus(Status.SUCCESS_OK);

@@ -175,15 +175,18 @@ public abstract class AbstractJob implements Job {
                         logger.error("job consumed all heap space", e);
                 } catch (Throwable e) {
                         changeStatus( Status.ERROR);
-                        ctxt.messageBus.append(new MessageBuilder()
-                                               .withLevel(Level.ERROR)
-                                               .withText(e.getMessage() + " (Please see detailed log for more info.)"))
-                                  .close();
                         if (e instanceof XProcErrorException) {
                                 logger.error("job finished with error state\n" + e.toString());
                                 logger.debug("job finished with error state", e);
                         } else
                                 logger.error("job finished with error state", e);
+                        try {
+                            // wrap in try just in case
+                            ctxt.messageBus.append(new MessageBuilder()
+                                                   .withLevel(Level.ERROR)
+                                                   .withText(e.getMessage() + " (Please see detailed log for more info.)"))
+                                      .close();
+                        } catch (Throwable ee) {}
                 }
 
                 logger.info(FINALIZE_SESSION_MARKER,"Stopping logging to job's log file");

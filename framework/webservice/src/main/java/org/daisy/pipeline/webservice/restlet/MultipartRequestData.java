@@ -93,13 +93,17 @@ public class MultipartRequestData {
 				logger.debug("XML multi:" + xml);
 			}
 		}
-		if (zip == null || xml.length() == 0)
+		if (zip == null)
 			return null;
-		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-		docFactory.setNamespaceAware(true);
-		DocumentBuilder builder = docFactory.newDocumentBuilder();
-		InputSource is = new InputSource(new StringReader(xml));
-		Document doc = builder.parse(is);
+		Document doc = null; {
+			if (xml.length() > 0) {
+				DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+				docFactory.setNamespaceAware(true);
+				DocumentBuilder builder = docFactory.newDocumentBuilder();
+				InputSource is = new InputSource(new StringReader(xml));
+				doc = builder.parse(is);
+			}
+		}
 		MultipartRequestData data = new MultipartRequestData(zip, doc);
 		return data;
 	}

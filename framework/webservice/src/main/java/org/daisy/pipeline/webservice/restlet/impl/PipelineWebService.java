@@ -21,6 +21,7 @@ import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobManagerFactory;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.webservice.CallbackHandler;
+import org.daisy.pipeline.webservice.jetty.impl.WebSocketServer;
 import org.daisy.pipeline.webservice.PipelineWebServiceConfiguration;
 import org.daisy.pipeline.webservice.Properties;
 import org.daisy.pipeline.webservice.restlet.WebServiceExtension;
@@ -60,7 +61,7 @@ import org.osgi.service.component.annotations.ReferencePolicy;
  * The Class PipelineWebService.
  */
 @org.osgi.service.component.annotations.Component(
-    name = "org.daisy.pipeline.webservice",
+    name = "webservice",
     immediate = true,
     service = { PipelineWebService.class } // this is to ensure object created by SPIHelper.createWebService()
                                            // is an instance of PipelineWebService
@@ -72,7 +73,12 @@ public class PipelineWebService extends Application {
         
         public static final String KEY_FILE_NAME="dp2key.txt";
         PipelineWebServiceConfiguration conf = new PipelineWebServiceConfiguration();
-        
+
+        /** The http server **/
+        private Server server;
+        /** The websocket server **/
+        private WebSocketServer websocketServer;
+
         /** The job manager. */
         private JobManagerFactory jobManagerFactory;
 
@@ -161,10 +167,10 @@ public class PipelineWebService extends Application {
                                 routes.getPort()));
                 component = new Component();
                 if (!conf.isSsl()){
-                        component.getServers().add(Protocol.HTTP, routes.getHost(),routes.getPort());
+                        server = component.getServers().add(Protocol.HTTP, routes.getHost(),routes.getPort());
                         logger.debug("Using HTTP");
                 }else{
-                        Server server = component.getServers().add(Protocol.HTTPS, routes.getHost(),routes.getPort());
+                        server = component.getServers().add(Protocol.HTTPS, routes.getHost(),routes.getPort());
                         server.getContext().getParameters().add("keystorePath",conf.getSslKeystore()); 
                         server.getContext().getParameters().add("keystorePassword",conf.getSslKeystorePassword());
                         server.getContext().getParameters().add("keyPassword",conf.getSslKeyPassword());
@@ -176,6 +182,20 @@ public class PipelineWebService extends Application {
                         component.start();
                         logger.debug("component started");
                         generateStopKey();
+
+                        pushNotifier = new PushNotifier(jobManagerFactory);
+
+                        // start websocket server
+                        websocketServer = new WebSocketServer(conf,
+                                                              webserviceStorage,
+                                                              jobManagerFactory,
+                                                              pushNotifier);
+                        try {
+                            websocketServer.start();
+                        } catch (Exception innerException) {
+                            throw new Exception("Failed to start websocket server", innerException);
+                        }
+
                 } catch (Exception e) {
                         logger.error("Shutting down the framework because of:"+e.getMessage());
                         try{
@@ -184,7 +204,14 @@ public class PipelineWebService extends Application {
                                 logger.error("Error shutting down:"+e.getMessage());
                         }
                 }
-                pushNotifier = new PushNotifier(jobManagerFactory);
+
+                // Disable the ability to tunnel method and client preferences via query
+                // parameters. We do this so that the "media" query parameter can be used for other
+                // purposes, notably to specify the media in a /stylesheet-parameters request.
+                // See:
+                // - https://javadocs.restlet.talend.com/2.4/jse/api/org/restlet/service/TunnelService.html
+                // - https://github.com/restlet/restlet-framework-java/issues/804
+                getTunnelService().setQueryTunnel(false);
         }
 
         private void cleanUp() {
@@ -302,6 +329,20 @@ public class PipelineWebService extends Application {
         }
 
         /**
+         * The port on which the http server is running.
+         */
+        public int getPort() {
+                return server.getActualPort();
+        }
+
+        /**
+         * The port on which the websocket server is running.
+         */
+        public int getWebSocketPort() {
+                return websocketServer.getActualPort();
+        }
+
+        /**
          * Gets the job manager.
          *
          * @return the job manager
@@ -330,7 +371,7 @@ public class PipelineWebService extends Application {
         }
         
         public PipelineWebServiceConfiguration getConfiguration(){
-                return this.conf;       
+                return conf;
         }
 
         /**

@@ -65,7 +65,8 @@ public class Pipeline1ScriptProvider implements ScriptServiceProvider {
 	boolean closed = false;
 
 	private static final Map<String,String> taskScripts = ImmutableMap.of(
-		"dtbook-to-latex", "scripts/create_distribute/latex/DTBookToLaTeX.taskScript"
+		"dtbook-to-latex", "scripts/create_distribute/latex/DTBookToLaTeX.taskScript",
+		"pef-merger", "scripts/modify_improve/pef/PEFFileMerger.taskScript"
 	);
 
 	@Override

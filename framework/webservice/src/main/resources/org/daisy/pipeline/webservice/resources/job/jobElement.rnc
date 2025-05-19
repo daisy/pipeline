@@ -37,6 +37,8 @@ element job {
 
 	& attribute href { xsd:anyURI }
 
+	& attribute notifications { xsd:anyURI }?
+
 	& attribute status { job.status }
 
 	& attribute priority { priority}?

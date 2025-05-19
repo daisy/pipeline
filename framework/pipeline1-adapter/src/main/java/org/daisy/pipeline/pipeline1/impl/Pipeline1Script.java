@@ -2,8 +2,12 @@ package org.daisy.pipeline.pipeline1.impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.EventObject;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -72,6 +76,11 @@ import org.xml.sax.InputSource;
 
 public class Pipeline1Script extends Script {
 
+	private static final Logger logger = LoggerFactory.getLogger(Pipeline1Script.class);
+	private static final Logger detailedLog
+	= LoggerFactory.getLogger(org.daisy.pipeline.job.Job.class); // choose logger that is not
+	                                                             // included by JobProgressAppender
+
 	@Override
 	public Status run(ScriptInput input, Map<String,String> properties, MessageAppender messages,
 	                  JobResultSet.Builder resultBuilder, File resultDir) throws IOException {
@@ -80,6 +89,7 @@ public class Pipeline1Script extends Script {
 		Job job = null;
 		EventBus bus = null;
 		BusListener busListener = null;
+		AtomicReference<MessageAppender> currentTaskMessages = new AtomicReference<>();
 		try (ThreadLocalEnvironment _env = new ThreadLocalEnvironment(getClass().getClassLoader(),
 		                                                              System.getProperties())) {
 			for (Map.Entry<String,String> prop : properties.entrySet())
@@ -91,40 +101,36 @@ public class Pipeline1Script extends Script {
 			// handle messages
 			busListener = new BusListener() {
 					private Task currentTask = null;
-					private MessageAppender currentTaskMessages = null;
-					private final Logger detailedLog
-						= LoggerFactory.getLogger(org.daisy.pipeline.job.Job.class); // choose logger that is not
-						                                                             // included by JobProgressAppender
 					@Override
 					public void received(EventObject event) {
 						if (event instanceof JobStateChangeEvent) {
 							if (((StateChangeEvent)event).getState() == StateChangeEvent.Status.STOPPED && currentTask != null) {
-								currentTaskMessages.close();
 								currentTask = null;
+								currentTaskMessages.getAndSet(null).close();
 							}
 						} else if (event instanceof TaskStateChangeEvent) {
 							StateChangeEvent se = (StateChangeEvent)event;
 							MessageBuilder message = new MessageBuilder().withLevel(Level.INFO);
 							Task task = (Task)se.getSource();
 							if (currentTask != null) {
-								currentTaskMessages.close();
 								currentTask = null;
+								currentTaskMessages.getAndSet(null).close();
 							}
 							String transformerName = task.getTransformerInfo() != null
 								? task.getTransformerInfo().getNiceName()
 								: task.getName();
 							if (se.getState() == StateChangeEvent.Status.STARTED) {
 								message = message.withText("Running " + transformerName);
-								currentTaskMessages = messages.append(message);
 								currentTask = task;
+								currentTaskMessages.set(messages.append(message));
 							} else {
 								// message = message.withText(transformerName + " done");
 								// messages.append(message).close();
 							}
 						} else if (event instanceof MessageEvent) {
 							MessageEvent me = (MessageEvent)event;
-							MessageAppender appender = (currentTaskMessages != null && me instanceof TaskMessageEvent)
-								? currentTaskMessages
+							MessageAppender appender = (currentTask != null && me instanceof TaskMessageEvent)
+								? currentTaskMessages.get()
 								: messages;
 							MessageBuilder message = new MessageBuilder();
 							switch (me.getType()) {
@@ -234,6 +240,8 @@ public class Pipeline1Script extends Script {
 					case FILE:
 						resultPath = String.format("%s/%s%s",
 						                           portName, portName, getFileExtension(port.getMediaType()));
+						// Pipeline1 may expect directory to exist
+						new File(resultDir, resultPath).getParentFile().mkdirs();
 						break;
 					case DIRECTORY:
 						resultPath = String.format("%s/", portName);
@@ -278,8 +286,27 @@ public class Pipeline1Script extends Script {
 			// should not happen because input was already validated in BoundScript
 			throw new IllegalArgumentException(e);
 		} catch (JobFailedException e) {
-			throw new RuntimeException(e.getMessage(), e);
+			// Handle error here, using printStackTrace(), instead of in AbstractJob, which uses
+			// Logger.error(String,Throwable), because the stack trace would otherwise be
+			// incomplete. This happens because all exceptions that extend BaseException have no
+			// getCause() but a getRootCause().
+			StringWriter stackTrace = new StringWriter();
+			e.printStackTrace(new PrintWriter(stackTrace));
+			detailedLog.error("job finished with error state\n" + stackTrace.toString());
+			currentTaskMessages.updateAndGet(appender -> {
+					if (appender != null)
+						appender.close();
+					return null; });
+			messages.append(new MessageBuilder()
+			                .withLevel(Level.ERROR)
+			                .withText(e.getMessage() + " (Please see detailed log for more info.)"))
+			        .close();
+			return Status.ERROR;
 		} finally {
+			currentTaskMessages.updateAndGet(appender -> {
+					if (appender != null)
+						appender.close();
+					return null; });
 			if (bus != null) {
 				EventBus.REGISTRY.remove(job);
 				bus.unsubscribe(busListener, MessageEvent.class);
@@ -335,6 +362,7 @@ public class Pipeline1Script extends Script {
 						switch (type.getType()) {
 						case DIRECTORY:
 							withOption(name, new Pipeline1ScriptOption(name, param, script, provider.datatypeRegistry));
+							break;
 						default:
 							if (numberOfRequiredInputPorts == 1)
 								// FIXME: make sure that "source" is not already the name of an option or input
@@ -610,6 +638,16 @@ public class Pipeline1Script extends Script {
 					return ((BooleanDatatype)t).getTrueValue();
 				else
 					return ((BooleanDatatype)t).getFalseValue();
+			} else if (type == DatatypeService.ANY_DIR_URI) {
+				try {
+					return new File(new URI(value)).getAbsolutePath();
+				} catch (URISyntaxException e) {
+					// should not happen because value was validated
+					throw new IllegalStateException(e);
+				} catch (IllegalArgumentException e) { // thrown by new File()
+					// should not happen because ScripInput.storeToDisk() was called
+					throw new IllegalStateException(e);
+				}
 			} else
 				return value;
 		}
@@ -744,9 +782,9 @@ public class Pipeline1Script extends Script {
 		if (mediaType != null) {
 			if ("application/x-tex".equals(mediaType))
 				return ".tex";
+			if ("application/x-pef+xml".equals(mediaType))
+				return ".pef";
 		}
 		return ".xml";
 	}
-
-	private static final Logger logger = LoggerFactory.getLogger(Pipeline1Script.class);
 }

@@ -1,17 +1,12 @@
 package org.daisy.pipeline.webservice.restlet.impl;
 
 import java.io.IOException;
-import java.io.StringReader;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.daisy.pipeline.clients.Client;
+import org.daisy.pipeline.webservice.request.ClientRequest;
 import org.daisy.pipeline.webservice.restlet.AdminResource;
 import org.daisy.pipeline.webservice.xml.ClientXmlWriter;
 import org.daisy.pipeline.webservice.xml.ClientsXmlWriter;
-import org.daisy.pipeline.webservice.xml.XmlValidator;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -22,12 +17,6 @@ import org.restlet.resource.Post;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 import com.google.common.base.Optional;
 
@@ -65,68 +54,52 @@ public class ClientsResource extends AdminResource {
 		return dom;
     }
 
-    @Post
-    public Representation createResource(Representation representation) {
-	logRequest();
-	maybeEnableCORS();
-	    if (!isAuthorized()) {
-		    setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
-		    return null;
-	    }
-
-	    if (representation == null) {
-		    // POST request with no entity.
-		    setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-		    return this.getErrorRepresentation("Post request with no entity");
-	    }
-
-	    Document doc = null;
-
-	    String s;
-	    try {
-		    s = representation.getText();
-		    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		    factory.setNamespaceAware(true);
-		    DocumentBuilder builder = factory.newDocumentBuilder();
-		    InputSource is = new InputSource(new StringReader(s));
-		    doc = builder.parse(is);
-	    } catch (IOException e) {
-		    logger.error(e.getMessage());
-		    setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-		    this.getErrorRepresentation(e);
-	    } catch (ParserConfigurationException e) {
-		    logger.error(e.getMessage());
-		    setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-		    this.getErrorRepresentation(e);
-	    } catch (SAXException e) {
-		    logger.error(e.getMessage());
-		    setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-		    this.getErrorRepresentation(e);
-	    }
-
-	    boolean isValid = XmlValidator.validate(doc, XmlValidator.CLIENT_SCHEMA_URL);
-
-	    if (!isValid) {
-		    setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-		    return this.getErrorRepresentation("Response XML not valid");
-	    }
-
-	    Element root = doc.getDocumentElement();
-	    Optional<Client> newClient = getStorage().getClientStorage().addClient(root.getAttribute("id"),
-			    root.getAttribute("secret"), Client.Role.valueOf(root
-				    .getAttribute("role")), root.getAttribute("contact"));
-
-	    if (!newClient.isPresent()) {
-		    // the client ID was probably not unique
-		    logger.debug("Client id not unique");
-		    setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-		    return this.getErrorRepresentation("Client id not unique");
-	    }
-
-	    setStatus(Status.SUCCESS_CREATED);
-	    ClientXmlWriter writer = new ClientXmlWriter(newClient.get(), getRequest().getRootRef().toString());
-	    DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, writer.getXmlDocument());
-	    logResponse(dom);
-	    return dom;
-    }
+	@Post
+	public Representation createResource(Representation representation) {
+		logRequest();
+		maybeEnableCORS();
+		if (!isAuthorized()) {
+			setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
+			return null;
+		}
+		ClientRequest req; {
+			if (representation != null) {
+				String xml = null;
+				try {
+					xml = representation.getText();
+					req = ClientRequest.fromXML(xml);
+				} catch (IOException|IllegalArgumentException e) {
+					logger.error("Bad request", e);
+					if (xml != null && logger.isDebugEnabled())
+						logger.debug("Request XML: " + xml);
+					setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+					return getErrorRepresentation(e.getMessage());
+				}
+			} else {
+				try {
+					req = ClientRequest.fromQuery(getQuery());
+				} catch (IllegalArgumentException e) {
+					logger.error("Bad request", e);
+					setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+					return getErrorRepresentation(e.getMessage());
+				}
+			}
+		}
+		Optional<Client> newClient = getStorage().getClientStorage().addClient(
+			req.getId(),
+			req.getSecret(),
+			req.getRole(),
+			req.getContact());
+		if (!newClient.isPresent()) {
+			// the client ID was probably not unique
+			logger.debug("Client id not unique");
+			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+			return getErrorRepresentation("Client id not unique");
+		}
+		setStatus(Status.SUCCESS_CREATED);
+		ClientXmlWriter writer = new ClientXmlWriter(newClient.get(), getRequest().getRootRef().toString());
+		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, writer.getXmlDocument());
+		logResponse(dom);
+		return dom;
+	}
 }

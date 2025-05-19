@@ -11,7 +11,7 @@
   </parent>
 
   <artifactId>webservice</artifactId>
-  <version>3.6.1-SNAPSHOT</version>
+  <version>3.7.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 :: Web Service</name>
@@ -20,6 +20,10 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
     </dependency>
     <dependency>
       <groupId>org.daisy.libs</groupId>
@@ -51,8 +55,24 @@
       <artifactId>org.restlet.ext.xml</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.restlet.osgi</groupId>
+      <artifactId>org.restlet.ext.json</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.daisy.libs</groupId>
       <artifactId>servlet-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-server</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-servlet</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty.websocket</groupId>
+      <artifactId>javax-websocket-server-impl</artifactId>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>

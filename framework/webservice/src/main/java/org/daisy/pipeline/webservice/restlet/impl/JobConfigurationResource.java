@@ -14,6 +14,7 @@ import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.webservice.restlet.AuthenticatedResource;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
+import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.ext.xml.DomRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
@@ -75,32 +76,38 @@ public class JobConfigurationResource extends AuthenticatedResource {
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
 			return this.getErrorRepresentation("Job not found");
 		}
-		
-		String xml = getStorage().getJobConfigurationStorage().get(job.get().getId());
-		Document doc;
-		try {
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			factory.setNamespaceAware(true);
-			DocumentBuilder builder = factory.newDocumentBuilder();
-			InputSource is = new InputSource(new StringReader(xml));
-			doc = builder.parse(is);
-		} catch (IOException e) {
-			logger.error(e.getMessage());
-			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-			return this.getErrorRepresentation(e);
-		} catch (ParserConfigurationException e) {
-			logger.error(e.getMessage());
-			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-			return this.getErrorRepresentation(e);
-		} catch (SAXException e) {
-			logger.error(e.getMessage());
-			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-			return this.getErrorRepresentation(e);
-		}
 
-		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, doc);
-		setStatus(Status.SUCCESS_OK);
-		logResponse(dom);
-		return dom;
+		String xmlOrJson = getStorage().getJobConfigurationStorage().get(job.get().getId());
+		if (xmlOrJson.startsWith("{")) {
+			JsonRepresentation json = new JsonRepresentation(xmlOrJson);
+			if (logger.isDebugEnabled())
+				logger.debug(xmlOrJson);
+			return json;
+		} else {
+			Document doc;
+			try {
+				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+				factory.setNamespaceAware(true);
+				DocumentBuilder builder = factory.newDocumentBuilder();
+				InputSource is = new InputSource(new StringReader(xmlOrJson));
+				doc = builder.parse(is);
+			} catch (IOException e) {
+				logger.error(e.getMessage());
+				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+				return this.getErrorRepresentation(e);
+			} catch (ParserConfigurationException e) {
+				logger.error(e.getMessage());
+				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+				return this.getErrorRepresentation(e);
+			} catch (SAXException e) {
+				logger.error(e.getMessage());
+				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+				return this.getErrorRepresentation(e);
+			}
+			DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, doc);
+			setStatus(Status.SUCCESS_OK);
+			logResponse(dom);
+			return dom;
+		}
 	}
 }

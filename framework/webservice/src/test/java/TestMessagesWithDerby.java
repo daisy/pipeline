@@ -122,11 +122,14 @@ public class TestMessagesWithDerby extends Base {
 			"org.restlet.osgi:org.restlet:?",
 			"org.restlet.osgi:org.restlet.ext.fileupload:?",
 			"org.restlet.osgi:org.restlet.ext.xml:?",
+			"org.eclipse.jetty.websocket:javax-websocket-server-impl:?",
 			"org.daisy.pipeline:framework-core:?",
 			"org.daisy.pipeline:xproc-api:?",
 			"org.daisy.pipeline:framework-persistence:?",
 			"org.daisy.pipeline:persistence-derby:?",
 			"org.daisy.pipeline:calabash-adapter:?",
+			"javax.transaction:javax.transaction-api:1.3",
+			"javax.enterprise:cdi-api:2.0.SP1",
 		};
 	}
 }
