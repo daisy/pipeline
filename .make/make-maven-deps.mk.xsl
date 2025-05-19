@@ -303,7 +303,6 @@
 					<xsl:text> %/.compile-dependencies %/.test-dependencies</xsl:text>
 					<xsl:text>&#x0A;</xsl:text>
 					<xsl:text>&#x0A;</xsl:text>
-					<xsl:if test="ends-with($version,'-SNAPSHOT')">
 						<xsl:call-template name="location-in-repo">
 							<xsl:with-param name="groupId" select="$groupId"/>
 							<xsl:with-param name="artifactId" select="$artifactId"/>
@@ -334,10 +333,22 @@
 						<xsl:value-of select="concat($dirname,'.install.pom')"/>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:value-of select="concat($dirname,'.install.pom')"/>
-						<xsl:text> : %/.install.pom : %/pom.xml %/.compile-dependencies | %/.test-dependencies .maven-init .group-eval</xsl:text>
+						<xsl:text> : | .maven-init .group-eval</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:text>&#x09;</xsl:text>
 						<xsl:text>+$(EVAL) mvn.installPom("$(patsubst %/,%,$(dir $@))");</xsl:text>
+						<xsl:text>&#x0A;</xsl:text>
+						<xsl:text>&#x0A;</xsl:text>
+						<xsl:value-of select="concat($dirname,'.install.pom')"/>
+						<xsl:text> : %/.install.pom :</xsl:text>
+						<xsl:choose>
+							<xsl:when test="ends-with($version,'-SNAPSHOT')">
+								<xsl:text> %/pom.xml %/.compile-dependencies | %/.test-dependencies</xsl:text>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:text> | %/.compile-dependencies %/.test-dependencies</xsl:text>
+							</xsl:otherwise>
+						</xsl:choose>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:if test="$type='jar'">
 							<xsl:text>&#x0A;</xsl:text>
@@ -359,8 +370,15 @@
 							<xsl:text>&#x0A;</xsl:text>
 							<xsl:text>&#x0A;</xsl:text>
 							<xsl:value-of select="concat($dirname,'.install')"/>
-							<xsl:text> : %/.install : %/pom.xml</xsl:text>
-							<xsl:text> %/.compile-dependencies | %/.test-dependencies</xsl:text>
+							<xsl:text> : %/.install :</xsl:text>
+							<xsl:choose>
+								<xsl:when test="ends-with($version,'-SNAPSHOT')">
+									<xsl:text> %/pom.xml %/.compile-dependencies | %/.test-dependencies</xsl:text>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:text> | %/.compile-dependencies %/.test-dependencies</xsl:text>
+								</xsl:otherwise>
+							</xsl:choose>
 							<xsl:text>&#x0A;</xsl:text>
 							<xsl:if test="$effective-pom
 							              /pom:project[pom:groupId=$groupId and
@@ -422,10 +440,12 @@
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:value-of select="concat($dirname,'.install-doc')"/>
-						<xsl:text> : %/.install-doc : %/pom.xml</xsl:text>
+						<xsl:text> : %/.install-doc :</xsl:text>
+						<xsl:if test="ends-with($version,'-SNAPSHOT')">
+							<xsl:text> %/pom.xml</xsl:text>
+						</xsl:if>
 						<xsl:text> | %/.compile-dependencies %/.test-dependencies</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
-					</xsl:if>
 					<xsl:text>&#x0A;</xsl:text>
 					<xsl:value-of select="concat('.SECONDARY : ',$dirname,'.compile-dependencies ',$dirname,'.test-dependencies')"/>
 					<xsl:text>&#x0A;</xsl:text>
@@ -479,40 +499,36 @@
 						</xsl:if>
 					</xsl:if>
 					<xsl:text>&#x0A;</xsl:text>
-					<xsl:text>&#x0A;</xsl:text>
-					<xsl:variable name="version-without-snapshot" select="replace($version,'-SNAPSHOT$','')"/>
-					<xsl:value-of select="concat('$(MVN_LOCAL_REPOSITORY)/',
-					                             translate($groupId,'.','/'),
-					                             '/',$artifactId,
-					                             '/',$version-without-snapshot,
-					                             '/',$artifactId,
-					                             '-',$version-without-snapshot,'.%')"/>
-					<xsl:text> \&#x0A;</xsl:text>
-					<xsl:value-of select="concat('$(MVN_LOCAL_REPOSITORY)/',
-					                             translate($groupId,'.','/'),
-					                             '/',$artifactId,
-					                             '/',$version-without-snapshot,
-					                             '/',$artifactId,
-					                             '-',$version-without-snapshot,'-%')"/>
-					<xsl:text> : </xsl:text>
-					<xsl:value-of select="concat($dirname,'.release')"/>
-					<xsl:text>&#x0A;</xsl:text>
-					<xsl:text>&#x09;</xsl:text>
-					<xsl:text>+//</xsl:text>
-					<xsl:text>&#x0A;</xsl:text>
+					<xsl:if test="ends-with($version, '-SNAPSHOT')">
+						<xsl:text>&#x0A;</xsl:text>
+						<xsl:variable name="version-without-snapshot" select="replace($version,'-SNAPSHOT$','')"/>
+						<xsl:value-of select="concat('$(MVN_LOCAL_REPOSITORY)/',
+						                             translate($groupId,'.','/'),
+						                             '/',$artifactId,
+						                             '/',$version-without-snapshot,
+						                             '/',$artifactId,
+						                             '-',$version-without-snapshot,'.%')"/>
+						<xsl:text> \&#x0A;</xsl:text>
+						<xsl:value-of select="concat('$(MVN_LOCAL_REPOSITORY)/',
+						                             translate($groupId,'.','/'),
+						                             '/',$artifactId,
+						                             '/',$version-without-snapshot,
+						                             '/',$artifactId,
+						                             '-',$version-without-snapshot,'-%')"/>
+						<xsl:text> : </xsl:text>
+						<xsl:value-of select="concat($dirname,'.release')"/>
+						<xsl:text>&#x0A;</xsl:text>
+						<xsl:text>&#x09;</xsl:text>
+						<xsl:text>+//</xsl:text>
+						<xsl:text>&#x0A;</xsl:text>
+					</xsl:if>
 				</xsl:otherwise>
 			</xsl:choose>
 			<xsl:if test="$is-release-dir or not($is-aggregator)">
 				<xsl:text>&#x0A;</xsl:text>
 				<xsl:value-of select="concat('.SECONDARY : ',$dirname,'.release')"/>
 				<xsl:text>&#x0A;</xsl:text>
-				<xsl:choose>
-					<xsl:when test="not(ends-with($version, '-SNAPSHOT'))">
-						<!-- already released, but empty rule is needed because jar might not be in .maven-workspace yet -->
-						<xsl:value-of select="concat($dirname,'.release :')"/>
-						<xsl:text>&#x0A;</xsl:text>
-					</xsl:when>
-					<xsl:otherwise>
+				<xsl:if test="ends-with($version, '-SNAPSHOT')">
 						<xsl:choose>
 							<xsl:when test="$is-aggregator">
 								<xsl:value-of select="concat($dirname,'.release : | .maven-init .group-eval')"/>
@@ -593,8 +609,7 @@
 							<xsl:sequence select="string-join($dependencies, ' \&#x0A;&#x09;')"/>
 						</xsl:if>
 						<xsl:text>&#x0A;</xsl:text>
-					</xsl:otherwise>
-				</xsl:choose>
+				</xsl:if>
 			</xsl:if>
 			<xsl:if test="not($is-aggregator)">
 				<xsl:text>&#x0A;</xsl:text>
