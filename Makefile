@@ -44,7 +44,7 @@ else
 .SILENT: help
 endif
 
-USER_HOME := $(shell println(System.getenv("HOME").replace('\\', '/'));)
+USER_HOME := $(shell println(System.getProperty("user.home").replace('\\', '/'));)
 
 # instead of passing system properties "workspace" and "cache" we substitute them in the settings.xml file
 # this is required for org.ops4j.pax.url.mvn.settings
