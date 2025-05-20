@@ -1,3 +1,0 @@
-<config>
-	<voice engine="polly" name="mock-es" lang="es" gender="male-adult"/>
-</config>

@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.google.common.io.ByteStreams;
 
@@ -93,7 +95,6 @@ public class AWSPollyTTSEngine extends TTSEngine {
 		this.mPriority = priority;
     }
 
-
 	/**
 	 * Get the list of available voices
 	 * @return
@@ -102,30 +103,41 @@ public class AWSPollyTTSEngine extends TTSEngine {
 	 */
 	@Override
 	public Collection<Voice> getAvailableVoices() throws SynthesisException, InterruptedException {
-		Collection<Voice> voices = new ArrayList<>();
-		if(awsVoicesDescription.isEmpty()){
-			// fetch all voices for all engines
-			for (Engine _engine : Engine.knownValues()) {
-				try {
-					DescribeVoicesResponse awsvoices = this.client.describeVoices(b -> b.engine(_engine));
-					awsVoicesDescription.put(_engine, awsvoices);
-				} catch (Exception e) {
-					LOGGER.error("Error fetching AWS voices for engine {}: {}", _engine, e.getMessage());
+		synchronized (this.client){
+			// Order of priorities based on
+			Engine[] engines = new Engine[] {
+				Engine.STANDARD,
+				Engine.NEURAL,
+				Engine.GENERATIVE,
+				Engine.LONG_FORM,
+			};
+			Collection<Voice> voices = new ArrayList<>();
+			if (awsVoicesDescription.isEmpty()) {
+				// fetch all voices for all engines
+				for (Engine _engine : engines) {
+					try {
+						DescribeVoicesResponse awsvoices = this.client.describeVoices(b -> b.engine(_engine));
+						awsVoicesDescription.put(_engine, awsvoices);
+					} catch (Exception e) {
+						LOGGER.error("Error fetching AWS voices for engine {}: {}", _engine, e.getMessage());
+					}
 				}
 			}
+			for (Engine engine : engines) {
+				if(awsVoicesDescription.containsKey(engine)) {
+					voices.addAll(
+						awsVoicesDescription.get(engine).voices()
+							.stream()
+							.map(i -> new Voice("aws", i.idAsString() + " ("+engine.toString()+")", new java.util.Locale(i.languageName()), Gender.of(i.genderAsString().toLowerCase())))
+							.collect(toList())
+					);
+				}
+			}
+			return voices;
 		}
-		for (DescribeVoicesResponse awsvoices : awsVoicesDescription.values()) {
-			voices.addAll(
-				awsvoices.voices()
-				.stream()
-				.map(i -> new Voice("polly",i.name(),new java.util.Locale(i.languageName()),Gender.of(i.genderAsString().toLowerCase())))
-				.collect(toList())
-			);
-		}
-		return voices;
 	}
 
-
+	private Pattern voiceIdAndEnginePattern = Pattern.compile("([a-z0-9_]+)\\s*\\((standard|neural|generative|long-form)\\)", Pattern.CASE_INSENSITIVE);
     @Override
 	public SynthesisResult synthesize(XdmNode pXdmNode, Voice pVoice, TTSRegistry.TTSResource pTTSResource) throws SynthesisException, InterruptedException {
 		String sentence; {
@@ -137,13 +149,22 @@ public class AWSPollyTTSEngine extends TTSEngine {
 			}
 		}
     	try {
+			// Search back engine and voice from voiceId
+			Matcher m = voiceIdAndEnginePattern.matcher(pVoice.getName());
+			if(!m.matches()) throw new SynthesisException("AWS VoiceId and engine not found from voice name: " + pVoice.getName());
+			VoiceId selectedVoice = VoiceId.fromValue(m.group(1));
+			Engine selectedEngine = Engine.fromValue(m.group(2));
+			if(selectedVoice == null) {
+				throw new SynthesisException("Unknown Voice provided in : " + pVoice.getName());
+			}
+			if(selectedEngine == null) {
+				throw new SynthesisException("Unknown Engine provided in " + pVoice.getName());
+			}
 			SynthesizeSpeechRequest synthReq = SynthesizeSpeechRequest.builder()
-				.engine(Engine.STANDARD)
+				.engine(selectedEngine)
 				.text(sentence)
 				.textType(TextType.SSML)
-				.voiceId(
-					VoiceId.fromValue(pVoice.getName())
-				)
+				.voiceId(selectedVoice)
 				.outputFormat(OutputFormat.PCM)
 				.build();
 			return new SynthesisResult(
