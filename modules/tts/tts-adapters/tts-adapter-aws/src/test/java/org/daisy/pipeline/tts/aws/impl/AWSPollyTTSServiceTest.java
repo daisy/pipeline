@@ -76,11 +76,8 @@ public class AWSPollyTTSServiceTest {
 		TTSResource resource = engine.allocateThreadResources();
 		try {
 			TTSEngine.SynthesisResult res = engine.synthesize(
-					// con este texto falla. Es lo que le llega desde la aplicación para probar el engine y está fallando.
-//					"<ssml:speak xmlns:ssml=\"http://www.w3.org/2001/10/synthesis\" version=\"1.0\"><s:s xmlns:tmp=\"http://\" xmlns:s=\"http://www.w3.org/2001/10/synthesis\" >small sentence</s:s><ssml:break time=\"250ms\"/></ssml:speak>",
-					// con esto funciona. Parece que no le gustan los namespaces.
-				parseSSML("<ssml:speak xmlns:ssml=\"http://www.w3.org/2001/10/synthesis\" version=\"1.0\"><s xmlns=\"http://www.w3.org/2001/10/synthesis\">García, que de humor iba justito cuando era el inocente, entró una vez a un trapo que no ayudó a la fluidez de su relación tempestuosa con Gil.</s><ssml:break time=\"250ms\"/></ssml:speak>"),
-				new Voice("polly", "Lucia"), resource
+				parseSSML("<ssml:speak xmlns:ssml=\"http://www.w3.org/2001/10/synthesis\" version=\"1.0\"><s xmlns=\"http://www.w3.org/2001/10/synthesis\" id=\"1\">García, que de humor iba justito cuando era el inocente, entró una vez a un trapo que no ayudó a la fluidez de su relación tempestuosa con Gil.</s><ssml:break time=\"250ms\"/></ssml:speak>"),
+				new Voice("aws", "Lucia (standard)"), resource
 			);
 
 			AudioFormat format = res.audio.getFormat();

@@ -81,7 +81,7 @@ public class AWSPollyTTSService implements TTSService {
 
 	@Override
 	public String getName() {
-		return "polly";
+		return "aws";
 	}
 
 	@Override

@@ -8,6 +8,10 @@
   <xsl:param name="voice" select="''"/>
   <xsl:param name="ending-mark" select="''"/>
 
+  <!-- Amazon does not like id on sentences ... -->
+  <xsl:template match="@*:id" />
+  <xsl:template match="@*:id" mode="copy"/>
+
   <xsl:template match="*">
     <speak version="1.0">
       <xsl:apply-templates select="if (local-name()='speak') then node() else ." mode="copy"/>
