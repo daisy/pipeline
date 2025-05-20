@@ -409,6 +409,9 @@ endif
 # - passing "MAKEFLAGS=" does not fix it for some reason, and also has unwanted side effects
 # - passing "--debug=no" to the sub-make would be a solution but not all versions of make support it
 .SECONDARY : .group-eval
+ifneq ($(OS), WINDOWS)
+.group-eval : export JAVA_REPL_PORT =
+endif
 .group-eval :
 ifndef SKIP_GROUP_EVAL_TARGET
 	List<String> commands = new ArrayList<>(); \
