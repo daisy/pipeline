@@ -49,7 +49,7 @@ public class AWSPollyTTSService implements TTSService {
 		true,
 		"Priority of Amazon voices relative to voices of other engines",
 		false,
-		"2");
+		"15");
 
 	@Override
     public AWSPollyTTSEngine newEngine(Map<String,String> properties) throws ServiceDisabledException, SynthesisException {
