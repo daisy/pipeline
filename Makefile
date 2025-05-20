@@ -251,6 +251,9 @@ assembly/.install-linux.zip : | .maven-init .group-eval
 	+$(EVAL) $(call make-assembly, "zip-linux")
 
 .SECONDARY : assembly/.install-mac.zip
+ifneq ($(OS), WINDOWS)
+assembly/.install-mac.zip : export JAVA_REPL_PORT =
+endif
 assembly/.install-mac.zip : | .maven-init .group-eval
 	+$(EVAL) $(call make-assembly, "zip-mac"$(comma) "--"$(comma) "--without-persistence")
 
