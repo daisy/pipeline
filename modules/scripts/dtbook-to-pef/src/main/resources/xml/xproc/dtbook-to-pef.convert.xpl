@@ -137,9 +137,8 @@
                                  'embossed',
                                  ' AND (width: ',($parameter-map('page-width'),40)[1],')',
                                  ' AND (height: ',($parameter-map('page-height'),25)[1],')',
-                                 if ($parameter-map('duplex'))
-                                   then ' AND (-daisy-duplex: 1)'
-                                   else ())"/>
+                                 ' AND (-daisy-duplex: ',if ($parameter-map('duplex')) then '1' else '0',')'
+                                 )"/>
         <p:input port="parameters">
             <p:empty/>
         </p:input>
