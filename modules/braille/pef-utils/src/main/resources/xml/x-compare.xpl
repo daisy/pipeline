@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step type="x:pef-compare" name="main"
                 xmlns:p="http://www.w3.org/ns/xproc"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pef="http://www.daisy.org/ns/2008/pef"
                 xmlns:x="http://www.daisy.org/ns/xprocspec"
                 version="1.0">
@@ -17,14 +18,14 @@
     
     <p:import href="compare.xpl"/>
     
-    <pef:compare fail-if-not-equal="false" name="compare">
+    <px:pef-compare fail-if-not-equal="false" name="compare">
         <p:input port="source">
             <p:pipe step="main" port="context"/>
         </p:input>
         <p:input port="alternate">
             <p:pipe step="main" port="expect"/>
         </p:input>
-    </pef:compare>
+    </px:pef-compare>
     
     <p:rename match="/*" new-name="x:test-result">
         <p:input port="source">

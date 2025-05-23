@@ -120,9 +120,9 @@ public class ValidateStep extends DefaultStep implements XProcStep {
 	}
 	
 	@Component(
-		name = "pef:validate",
+		name = "px:pef-validate",
 		service = { XProcStepProvider.class },
-		property = { "type:String={http://www.daisy.org/ns/2008/pef}validate" }
+		property = { "type:String={http://www.daisy.org/ns/pipeline/xproc}pef-validate" }
 	)
 	public static class Provider implements XProcStepProvider {
 		

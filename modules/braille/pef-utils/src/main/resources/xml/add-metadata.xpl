@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step type="pef:add-metadata" version="1.0"
-                xmlns:p="http://www.w3.org/ns/xproc"
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-                xmlns:pef="http://www.daisy.org/ns/2008/pef"
                 exclude-inline-prefixes="#all"
+                type="px:pef-add-metadata"
                 name="main">
     
     <p:documentation>
