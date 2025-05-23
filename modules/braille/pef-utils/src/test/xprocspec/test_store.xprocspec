@@ -55,8 +55,8 @@
       <x:option name="output-dir" select="resolve-uri('test_03/',$temp-dir)"/>
       <x:option name="name-pattern" select="'pef_3-{}'"/>
       <x:option name="file-format" select="'(line-breaks:DOS)
-                                                (page-breaks:&quot;---&quot;)
-                                                (pad:BOTH)'"/>
+                                            (page-breaks:&quot;---&quot;)
+                                            (pad:BOTH)'"/>
     </x:call>
     <x:context label="result file">
       <x:document type="file" method="text" base-uri="temp-dir" href="test_03/pef_3-1.brf"/>
@@ -75,15 +75,128 @@
       <x:option name="output-dir" select="resolve-uri('test_04/',$temp-dir)"/>
       <x:option name="name-pattern" select="'pef_3-{}'"/>
       <x:option name="file-format" select="'(table:&quot;com_braillo.BrailloTableProvider.TableType.BRAILLO_6DOT_031_01&quot;)
-                                                (line-breaks:DOS)
-                                                (page-breaks:&quot;---&quot;)
-                                                (pad:BOTH)'"/>
+                                            (line-breaks:DOS)
+                                            (page-breaks:&quot;---&quot;)
+                                            (pad:BOTH)'"/>
     </x:call>
     <x:context label="result file">
       <x:document type="file" method="text" base-uri="temp-dir" href="test_04/pef_3-1.brf"/>
     </x:context>
     <x:expect label="The BRF should use the NL Braillo table" type="compare" normalize-space="false">
       <x:document type="file" method="text" href="../resources/pef_3_2.brf"/>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="test_05">
+    <x:documentation>
+      Tests that a custom file format can be specified using the "file-format" and "pad" options.
+    </x:documentation>
+    <x:call step="px:pef-store">
+      <x:input port="source">
+        <x:document type="inline">
+          <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+            <body>
+              <volume cols="10" rows="5" rowgap="0" duplex="true">
+                <section>
+                  <page>
+                    <row>⠋⠕⠕</row>
+                  </page>
+                  <page>
+                    <row>⠃⠁⠗</row>
+                  </page>
+                </section>
+              </volume>
+            </body>
+          </pef>
+        </x:document>
+      </x:input>
+      <x:option name="file-format" select="'(line-breaks:UNIX)
+                                            (page-breaks:&quot;---&quot;)
+                                            (table:&quot;org.daisy.braille.impl.table.DefaultTableProvider.TableType.EN_US&quot;)
+                                            (pad:BOTH)'"/>
+      <x:option name="output-dir" select="resolve-uri('test_05/', $temp-dir)"/>
+      <x:option name="single-volume-name" select="'text'"/>
+    </x:call>
+    <x:context label="result file">
+      <x:document type="file" method="text" base-uri="temp-dir" href="test_05/text.brf"/>
+    </x:context>
+    <x:expect label="result file" type="compare" normalize-space="false">
+      <x:document type="file" method="text" href="../resources/test_store_05.brf"/>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_06">
+    <x:documentation>
+      Tests the "blank-last-page" feature of the "file-format" option.
+    </x:documentation>
+    <x:call step="px:pef-store">
+      <x:input port="source">
+        <x:document type="inline">
+          <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+            <body>
+              <volume cols="10" rows="5" rowgap="0" duplex="true">
+                <section>
+                  <page>
+                    <row>⠋⠕⠕</row>
+                  </page>
+                  <page>
+                    <row>⠃⠁⠗</row>
+                  </page>
+                </section>
+              </volume>
+            </body>
+          </pef>
+        </x:document>
+      </x:input>
+      <x:option name="file-format" select="'(line-breaks:UNIX)
+                                            (page-breaks:&quot;---&quot;)
+                                            (table:&quot;org.daisy.braille.impl.table.DefaultTableProvider.TableType.EN_US&quot;)
+                                            (pad:BOTH)
+                                            (blank-last-page)'"/>
+      <x:option name="output-dir" select="resolve-uri('test_06/', $temp-dir)"/>
+      <x:option name="single-volume-name" select="'text'"/>
+    </x:call>
+    <x:context label="result file">
+      <x:document type="file" method="text" base-uri="temp-dir" href="test_06/text.brf"/>
+    </x:context>
+    <x:expect label="result file" type="compare" normalize-space="false">
+      <x:document type="file" method="text" href="../resources/test_store_06.brf"/>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="test_07">
+    <x:documentation>
+      Tests the "sheets-multiple-of-two" feature of the "file-format" option.
+    </x:documentation>
+    <x:call step="px:pef-store">
+      <x:input port="source">
+        <x:document type="inline">
+          <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+            <body>
+              <volume cols="10" rows="5" rowgap="0" duplex="true">
+                <section>
+                  <page>
+                    <row>⠋⠕⠕</row>
+                  </page>
+                </section>
+              </volume>
+            </body>
+          </pef>
+        </x:document>
+      </x:input>
+      <x:option name="file-format" select="'(line-breaks:UNIX)
+                                            (page-breaks:&quot;---&quot;)
+                                            (table:&quot;org.daisy.braille.impl.table.DefaultTableProvider.TableType.EN_US&quot;)
+                                            (pad:BOTH)
+                                            (sheets-multiple-of-two)'"/>
+      <x:option name="output-dir" select="resolve-uri('test_07/', $temp-dir)"/>
+      <x:option name="single-volume-name" select="'text'"/>
+    </x:call>
+    <x:context label="result file">
+      <x:document type="file" method="text" base-uri="temp-dir" href="test_07/text.brf"/>
+    </x:context>
+    <x:expect label="result file" type="compare" normalize-space="false">
+      <x:document type="file" method="text" href="../resources/test_store_07.brf"/>
     </x:expect>
   </x:scenario>
   

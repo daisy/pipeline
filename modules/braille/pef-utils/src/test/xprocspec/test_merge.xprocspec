@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
-               xmlns:pef="http://www.daisy.org/ns/2008/pef"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                script="../../main/resources/xml/merge.xpl">
   
   <!-- ======= -->
@@ -10,7 +10,7 @@
       
   -->
   <x:scenario label="test_01">
-    <x:call step="pef:merge">
+    <x:call step="px:pef-merge">
       <x:input port="source">
         <x:document type="file" href="../resources/pef_1.pef"/>
         <x:document type="file" href="../resources/pef_2.pef"/>
@@ -32,7 +32,7 @@
       
   -->
   <x:scenario label="test_02">
-    <x:call step="pef:merge">
+    <x:call step="px:pef-merge">
       <x:input port="source">
         <x:document type="file" href="../resources/pef_1.pef"/>
         <x:document type="file" href="../resources/pef_2.pef"/>

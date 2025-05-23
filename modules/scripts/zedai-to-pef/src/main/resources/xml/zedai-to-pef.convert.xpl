@@ -58,7 +58,7 @@
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl">
         <p:documentation>
-            pef:add-metadata
+            px:pef-add-metadata
         </p:documentation>
     </p:import>
     
@@ -103,13 +103,13 @@
     </px:zedai-to-opf-metadata>
     <p:sink/>
     
-    <pef:add-metadata>
+    <px:pef-add-metadata>
         <p:input port="source">
             <p:pipe step="pef" port="result"/>
         </p:input>
         <p:input port="metadata">
             <p:pipe step="metadata" port="result"/>
         </p:input>
-    </pef:add-metadata>
+    </px:pef-add-metadata>
     
 </p:declare-step>

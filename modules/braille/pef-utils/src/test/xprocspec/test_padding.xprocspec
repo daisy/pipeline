@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
-               xmlns:p="http://www.w3.org/ns/xproc"
-               xmlns:pef="http://www.daisy.org/ns/2008/pef">
+               xmlns:p="http://www.w3.org/ns/xproc">
   
   <x:script>
-    <p:declare-step type="pef:padding" version="1.0">
+    <p:declare-step type="x:pef-padding" version="1.0">
       <p:input port="source" primary="true"/>
       <p:output port="result" primary="true"/>
       <p:xslt>
@@ -19,7 +18,7 @@
   </x:script>
   
   <x:scenario label="test">
-    <x:call step="pef:padding">
+    <x:call step="x:pef-padding">
       <x:input port="source">
         <x:document type="inline">
           <pef xmlns="http://www.daisy.org/ns/2008/pef">

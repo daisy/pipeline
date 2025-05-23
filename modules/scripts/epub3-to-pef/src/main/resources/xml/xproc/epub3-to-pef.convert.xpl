@@ -83,7 +83,7 @@
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl">
         <p:documentation>
-            pef:add-metadata
+            px:pef-add-metadata
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/css-utils/library.xpl">
@@ -355,11 +355,11 @@
             <p:pipe step="transform" port="status"/>
         </p:xpath-context>
         <p:when test="/*/@result='ok'">
-            <pef:add-metadata px:message="Adding metadata to PEF based on EPUB 3 package document metadata" px:progress=".01">
+            <px:pef-add-metadata px:message="Adding metadata to PEF based on EPUB 3 package document metadata" px:progress=".01">
                 <p:input port="metadata">
                     <p:pipe step="opf" port="result"/>
                 </p:input>
-            </pef:add-metadata>
+            </px:pef-add-metadata>
             <px:set-base-uri>
                 <p:with-option name="base-uri" select="replace(base-uri(/*),'[^/]+$',concat(((/*/opf:metadata/dc:identifier[not(@refines)]/text()), 'pef')[1],'.pef'))">
                     <p:pipe port="result" step="opf"/>

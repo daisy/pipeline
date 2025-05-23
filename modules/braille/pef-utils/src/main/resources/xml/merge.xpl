@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step type="pef:merge" name="merge"
-    xmlns:p="http://www.w3.org/ns/xproc"
-    xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
-    xmlns:pef="http://www.daisy.org/ns/2008/pef"
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:dc="http://purl.org/dc/elements/1.1/"
-    exclude-inline-prefixes="px p pxi xsl"
-    version="1.0">
-    
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                xmlns:pef="http://www.daisy.org/ns/2008/pef"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:dc="http://purl.org/dc/elements/1.1/"
+                exclude-inline-prefixes="px p pxi xsl"
+                type="px:pef-merge" name="merge">
+	
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <p>Merge PEF documents on volume- or section-level.</p>
     </p:documentation>
