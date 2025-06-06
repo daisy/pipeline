@@ -432,6 +432,8 @@ public final class SaxonHelper {
 				return (T)objectFromItem(item, Boolean.class);
 			else if (item instanceof AnyURIValue)
 				return (T)objectFromItem(item, URI.class);
+			else if (item instanceof MapItem)
+				return (T)mapFromMapItem((MapItem)item, Object.class);
 		if (item instanceof ObjectValue) {
 			Object o = ((ObjectValue<?>)item).getObject();
 			if (type.isInstance(o))
