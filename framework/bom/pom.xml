@@ -142,7 +142,7 @@
       <dependency>
         <groupId>org.daisy.libs</groupId>
         <artifactId>com.xmlcalabash</artifactId>
-        <version>1.1.20-p17-98</version>
+        <version>1.1.20-p18-98-SNAPSHOT</version>
         <exclusions>
           <exclusion>
             <groupId>org.apache.logging.log4j</groupId>
