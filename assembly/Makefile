@@ -255,8 +255,8 @@ ifndef DUMP_PROFILES
 	exec("cp", "src/main/docker/Dockerfile", "target/docker/Dockerfile");
 	exec("cp", "src/main/docker/logback.xml", "target/docker/logback.xml");
 	exec("cp", "-r", "target/assembly-$(assembly/VERSION)-linux/daisy-pipeline", "target/docker/");
-	exec("cp", "-r", "$(word 3,$^)", "target/docker/jre/amd64");
-	exec("cp", "-r", "$(word 4,$^)", "target/docker/jre/arm64");
+	exec("cp", "-r", "$(word 2,$^)", "target/docker/jre/amd64");
+	exec("cp", "-r", "$(word 3,$^)", "target/docker/jre/arm64");
 	exec("$(DOCKER)", "buildx", "create", "--use", "--name=mybuilder",                                 \
 	                                      "--driver", "docker-container",                              \
 	                                      "--driver-opt", "image=moby/buildkit:buildx-stable-1");

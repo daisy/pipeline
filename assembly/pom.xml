@@ -64,14 +64,14 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.15.3-SNAPSHOT</version>
+        <version>1.15.3</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>modules-bom</artifactId>
-        <version>1.15.1</version>
+        <version>1.15.2</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -1033,6 +1033,16 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>tts-adapter-aws</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>tts-adapter-qfrency</artifactId>
       <exclusions>
         <exclusion>
@@ -1472,8 +1482,328 @@
       </exclusions>
     </dependency>
     <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>polly</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>sdk-core</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>auth</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>identity-spi</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>http-auth</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>http-auth-aws</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>http-auth-spi</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>http-client-spi</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>apache-client</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>aws-core</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>utils</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>regions</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>aws-json-protocol</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>retries</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>retries-spi</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>profiles</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>endpoints-spi</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>metrics-spi</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>protocol-core</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>aws-json-protocol</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>json-utils</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>third-party-jackson-core</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>checksums</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>checksums-spi</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.reactivestreams</groupId>
+      <artifactId>reactive-streams</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.reactivestreams</groupId>
+      <artifactId>reactive-streams-tck</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.reactivestreams</groupId>
+      <artifactId>reactive-streams-tck-flow</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
       <groupId>com.googlecode.soundlibs</groupId>
       <artifactId>jlayer</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi-ooxml</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi-scratchpad</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.libreoffice</groupId>
+      <artifactId>libreoffice</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.libreoffice</groupId>
+      <artifactId>unoloader</artifactId>
       <exclusions>
         <exclusion>
           <groupId>*</groupId>
@@ -2045,6 +2375,10 @@
                   <artifactId>org.restlet.ext.json</artifactId>
                 </artifactItem>
                 <artifactItem>
+                  <groupId>com.sun.net.httpserver</groupId>
+                  <artifactId>http</artifactId>
+                </artifactItem>
+                <artifactItem>
                   <groupId>org.daisy.libs</groupId>
                   <artifactId>servlet-api</artifactId>
                 </artifactItem>
@@ -2379,6 +2713,10 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
+                  <artifactId>tts-adapter-aws</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>tts-adapter-qfrency</artifactId>
                 </artifactItem>
                 <artifactItem>
@@ -2569,6 +2907,117 @@
                   <artifactId>json</artifactId>
                 </artifactItem>
                 <!--
+                    for tts-adapter-aws
+                -->
+                <artifactItem>
+                  <groupId>software.amazon.awssdk</groupId>
+                  <artifactId>polly</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>software.amazon.awssdk</groupId>
+                  <artifactId>sdk-core</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>software.amazon.awssdk</groupId>
+                  <artifactId>auth</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>software.amazon.awssdk</groupId>
+                  <artifactId>identity-spi</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>software.amazon.awssdk</groupId>
+                  <artifactId>http-auth</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>software.amazon.awssdk</groupId>
+                  <artifactId>http-auth-aws</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>software.amazon.awssdk</groupId>
+                  <artifactId>http-auth-spi</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>software.amazon.awssdk</groupId>
+                  <artifactId>http-client-spi</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>software.amazon.awssdk</groupId>
+                  <artifactId>apache-client</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>software.amazon.awssdk</groupId>
+                  <artifactId>aws-core</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>software.amazon.awssdk</groupId>
+                  <artifactId>utils</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>software.amazon.awssdk</groupId>
+                  <artifactId>regions</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>software.amazon.awssdk</groupId>
+                  <artifactId>aws-json-protocol</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>software.amazon.awssdk</groupId>
+                  <artifactId>retries</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>software.amazon.awssdk</groupId>
+                  <artifactId>retries-spi</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>software.amazon.awssdk</groupId>
+                  <artifactId>profiles</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>software.amazon.awssdk</groupId>
+                  <artifactId>endpoints-spi</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>software.amazon.awssdk</groupId>
+                  <artifactId>metrics-spi</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>software.amazon.awssdk</groupId>
+                  <artifactId>protocol-core</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>software.amazon.awssdk</groupId>
+                  <artifactId>aws-json-protocol</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>software.amazon.awssdk</groupId>
+                  <artifactId>json-utils</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>software.amazon.awssdk</groupId>
+                  <artifactId>third-party-jackson-core</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>software.amazon.awssdk</groupId>
+                  <artifactId>checksums</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>software.amazon.awssdk</groupId>
+                  <artifactId>checksums-spi</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.reactivestreams</groupId>
+                  <artifactId>reactive-streams</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.reactivestreams</groupId>
+                  <artifactId>reactive-streams-tck</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.reactivestreams</groupId>
+                  <artifactId>reactive-streams-tck-flow</artifactId>
+                </artifactItem>
+                <!--
                     for audio-common
                 -->
                 <artifactItem>
@@ -2578,26 +3027,26 @@
                 <!--
                     for word-to-dtbook
                 -->
-                <dependency>
+                <artifactItem>
                   <groupId>org.apache.poi</groupId>
                   <artifactId>poi</artifactId>
-                </dependency>
-                <dependency>
+                </artifactItem>
+                <artifactItem>
                   <groupId>org.apache.poi</groupId>
                   <artifactId>poi-ooxml</artifactId>
-                </dependency>
-                <dependency>
+                </artifactItem>
+                <artifactItem>
                   <groupId>org.apache.poi</groupId>
                   <artifactId>poi-scratchpad</artifactId>
-                </dependency>
-                <dependency>
+                </artifactItem>
+                <artifactItem>
                   <groupId>org.libreoffice</groupId>
                   <artifactId>libreoffice</artifactId>
-                </dependency>
-                <dependency>
+                </artifactItem>
+                <artifactItem>
                   <groupId>org.libreoffice</groupId>
                   <artifactId>unoloader</artifactId>
-                </dependency>
+                </artifactItem>
               </artifactItems>
             </configuration>
           </execution>
