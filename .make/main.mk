@@ -425,7 +425,10 @@ ifndef SKIP_GROUP_EVAL_TARGET
 			else if (cmd.startsWith("// xxx ")) \
 				if (take) i.set(cmd.substring(7)); \
 				else exit(1); \
-			else take = false; \
+			else { \
+				i.remove(); \
+				take = false; \
+			} \
 		} \
 	} catch (SystemExit ex) { \
 		err.println("Error in build script. Contact maintainer."); \
