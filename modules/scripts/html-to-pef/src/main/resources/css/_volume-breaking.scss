@@ -83,6 +83,7 @@ $prefer-volume-break-before-higher-level-factor: 0 !default;
         
         section,
         div.leaf-section {
+            display: block;
             -daisy-volume-break-inside: -obfl-keep($min-volume-keep-priority);
         }
         
