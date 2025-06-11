@@ -103,9 +103,6 @@
             <phase>generate-resources</phase>
             <configuration>
               <tasks>
-                <exec executable="make" failonerror="true">
-                  <arg value="src/main/resources/pipeline-${pipeline1.version}.zip" />
-                </exec>
                 <unzip src="src/main/resources/pipeline-${pipeline1.version}.zip" dest="${project.build.directory}/generated-resources/pipeline1">
                   <patternset>
                     <exclude name="pipeline-${pipeline1.version}/pipeline.sh" />

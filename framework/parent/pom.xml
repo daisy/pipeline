@@ -321,22 +321,10 @@
         <enabled>false</enabled>
       </snapshots>
     </repository>
-    <!-- springsource used for the osgi version of mysql -->
-    <repository>
-      <id>com.springsource.repository.bundles.external</id>
-      <name>SpringSource Enterprise Bundle Repository - External Bundle Releases</name>
-      <url>http://repository.springsource.com/maven/bundles/external</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
     <!-- EclipseLink stuff -->
     <repository>
       <id>EclipseLink</id>
-      <url>http://download.eclipse.org/rt/eclipselink/maven.repo</url>
+      <url>https://download.eclipse.org/rt/eclipselink/maven.repo</url>
       <releases>
         <enabled>true</enabled>
       </releases>
@@ -348,7 +336,7 @@
     <repository>
       <id>eclipse-gemini-repo</id>
       <name>Eclipse Gemini Maven repository</name>
-      <url>http://download.eclipse.org/gemini/mvn/</url>
+      <url>https://download.eclipse.org/gemini/mvn/</url>
       <releases>
         <enabled>true</enabled>
       </releases>
@@ -359,7 +347,7 @@
     <repository>
       <id>eclipse-gemini-dbaccess</id>
       <name>Eclipse Gemini DBAccess Milestones</name>
-      <url>http://download.eclipse.org/gemini/dbaccess/mvn/</url>
+      <url>https://download.eclipse.org/gemini/dbaccess/mvn/</url>
       <releases>
         <enabled>true</enabled>
       </releases>
