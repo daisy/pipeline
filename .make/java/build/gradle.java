@@ -60,7 +60,15 @@ public class gradle {
 			cmd.addAll(properties);
 		for (String a : args)
 			cmd.add(a);
-		exitOnError(
-			captureOutput(System.out::println, cd, cmd));
+		try {
+			// FIXME: This system property is set to false by default in eval-java.exe, in order to
+			// work around a bug in ProcessBuilder on Windows. However, for some reason, the
+			// property needs to be set to true for gradlew commands to work. Find out why.
+			System.setProperty("jdk.lang.Process.allowAmbiguousCommands", "true");
+			exitOnError(
+				captureOutput(System.out::println, cd, cmd));
+		} finally {
+			System.setProperty("jdk.lang.Process.allowAmbiguousCommands", "false");
+		}
 	}
 }
