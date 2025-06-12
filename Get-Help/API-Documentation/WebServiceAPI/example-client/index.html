@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<title>Sample client</title>
+		<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+		<meta content="utf-8" http-equiv="encoding">
+		<script type="text/javascript" src="/pipeline/Get-Help/API-Documentation/WebServiceAPI/example-client/sha1.js"></script>
+		<script type="text/javascript" src="/pipeline/Get-Help/API-Documentation/WebServiceAPI/example-client/client.js"></script>
+		<style type="text/css">
+		 html {
+			 position: relative;
+		 }
+		 #messages {
+			 font-family: monospace;
+			 position: absolute;
+			 left: 0;
+			 right: 0;
+			 padding: 0;
+			 margin: 0 2vw;
+		 }
+		 #messages ul {
+			 margin: 0;
+			 padding: 0;
+		 }
+		 #messages li {
+			 margin: 0;
+			 padding-left: 3vw;
+			 text-indent: -3vw;
+		 }
+		 #messages, #messages ul {
+			 list-style-type: none;
+		 }
+		 [data-progress^='0.']::before {
+			 content: "";
+			 display: block;
+			 height: 1em;
+			 border: 1px solid black;
+			 width: 100%;
+			 box-sizing: border-box;
+		 }
+		 #messages[data-progress]::before {
+			 border-left-width: calc(96vw * var(--progress));
+		 }
+		 #messages > li > ul[data-progress]::before {
+			 border-left-width: calc(93vw * var(--progress));
+		 }
+		 #messages > li > ul > li > ul[data-progress]::before {
+			 border-left-width: calc(90vw * var(--progress));
+		 }
+		 #messages > li > ul > li > ul > li > ul[data-progress]::before {
+			 border-left-width: calc(87vw * var(--progress));
+		 }
+		 #messages > li > ul > li > ul > li > ul > li > ul[data-progress]::before {
+			 border-left-width: calc(84vw * var(--progress));
+		 }
+		 #messages > li > ul > li > ul > li > ul > li > ul > li > ul[data-progress]::before {
+			 border-left-width: calc(81vw * var(--progress));
+		 }
+		 #messages > li > ul > li > ul > li > ul > li > ul > li > ul > li > ul[data-progress]::before {
+			 border-left-width: calc(78vw * var(--progress));
+		 }
+		 #messages > li > ul > li > ul > li > ul > li > ul > li > ul > li > ul > li > ul[data-progress]::before {
+			 border-left-width: calc(75vw * var(--progress));
+		 }
+		 #messages li::before {
+			 content: "▷ ";
+		 }
+		 #messages li.collapsed > ul {
+			 display: none;
+		 }
+		 #messages ul[data-progress='1.0']:empty {
+			 display: none;
+		 }
+		 #messages li:has(li, ul[data-progress^='0.'])::before,
+		 #messages li:has(li, ul[data-progress^='0.']).expanded::before {
+			 content: "▼ ";
+		 }
+		 #messages li:has(li, ul[data-progress^='0.']).collapsed::before {
+			 content: "▶ ";
+		 }
+		</style>
+	</head>
+	<body>
+		<h1>Sample client</h1>
+		<div>
+			<label for="ws-url">Web service base address:</label>
+			<input type="text" id="ws-url" name="ws-url" value="http://localhost:8181/ws">
+		</div>
+		<div>
+			<label for="clientkey">Client key:</label>
+			<input type="text" id="clientkey" name="clientkey" value="clientid">
+		</div>
+		<div>
+			<label for="clientkey">Client secret:</label>
+			<input type="text" id="clientsecret" name="clientsecret" value="supersecret">
+		</div>
+		<h2>Jobs</h2>
+		<button type="button" id="refresh-button">Refresh</button>
+		<ul id="jobs">
+		</ul>
+		<ul id="messages">
+		</ul>
+	</body>
+</html>

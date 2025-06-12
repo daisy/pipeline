@@ -39,7 +39,7 @@
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>      <strong class="jxr_keyword">public</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/modules/impl/Module_dotify_utils.html">Module_dotify_utils</a>() {
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>          <strong class="jxr_keyword">super</strong>(<span class="jxr_string">"dotify-utils"</span>,
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>                <span class="jxr_string">"6.2.5"</span>,
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>                <span class="jxr_string">"6.3.0"</span>,
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>                <span class="jxr_string">"DP2 Braille Modules :: dotify-utils"</span>);
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>      }
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  
@@ -107,24 +107,24 @@
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>              <strong class="jxr_keyword">if</strong> (resource1 == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>                  resource1 = <strong class="jxr_keyword">super</strong>.getResource(<span class="jxr_string">"../xml/transform/dotify-transform.xpl"</span>);
 <a class="jxr_linenumber" name="L100" href="#L100">100</a>             <strong class="jxr_keyword">if</strong> (url.equals(resource1)) {
-<a class="jxr_linenumber" name="L101" href="#L101">101</a>                 tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/css-utils/library.xpl"</span>,
-<a class="jxr_linenumber" name="L102" href="#L102">102</a>                                     <span class="jxr_string">"[6.0.1,7.0.0)"</span>);
-<a class="jxr_linenumber" name="L103" href="#L103">103</a>                 tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl"</span>,
-<a class="jxr_linenumber" name="L104" href="#L104">104</a>                                     <span class="jxr_string">"[5.0.2,6.0.0)"</span>);
-<a class="jxr_linenumber" name="L105" href="#L105">105</a>                 tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/braille/css-utils/library.xpl"</span>,
-<a class="jxr_linenumber" name="L106" href="#L106">106</a>                                     <span class="jxr_string">"[4.0.1,5.0.0)"</span>);
-<a class="jxr_linenumber" name="L107" href="#L107">107</a>                 tryResolveXPathExtensionFunction(<span class="jxr_string">"org.daisy.pipeline.braille.css.xpath.Style"</span>);
-<a class="jxr_linenumber" name="L108" href="#L108">108</a>                 tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/file-utils/library.xsl"</span>,
-<a class="jxr_linenumber" name="L109" href="#L109">109</a>                                     <span class="jxr_string">"[4.3.2,5.0.0)"</span>);
-<a class="jxr_linenumber" name="L110" href="#L110">110</a>                 tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/common-utils/library.xsl"</span>,
-<a class="jxr_linenumber" name="L111" href="#L111">111</a>                                     <span class="jxr_string">"[3.1.3,4.0.0)"</span>);
-<a class="jxr_linenumber" name="L112" href="#L112">112</a>                 tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/braille/css-utils/library.xsl"</span>,
-<a class="jxr_linenumber" name="L113" href="#L113">113</a>                                     <span class="jxr_string">"[4.0.1,5.0.0)"</span>);
-<a class="jxr_linenumber" name="L114" href="#L114">114</a>                 tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/common-utils/generate-id.xsl"</span>,
-<a class="jxr_linenumber" name="L115" href="#L115">115</a>                                     <span class="jxr_string">"[3.1.3,4.0.0)"</span>);
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>                 tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/braille/css-utils/library.xpl"</span>,
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>                                     <span class="jxr_string">"[4.0.2,5.0.0)"</span>);
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>                 tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/braille/css-utils/library.xsl"</span>,
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>                                     <span class="jxr_string">"[4.0.2,5.0.0)"</span>);
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>                 tryResolveXPathExtensionFunction(<span class="jxr_string">"org.daisy.pipeline.braille.css.xpath.Style"</span>);
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>                 tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/common-utils/generate-id.xsl"</span>,
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>                                     <span class="jxr_string">"[3.2.0,4.0.0)"</span>);
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>                 tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/css-utils/library.xpl"</span>,
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>                                     <span class="jxr_string">"[6.1.0,7.0.0)"</span>);
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>                 tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/file-utils/library.xsl"</span>,
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>                                     <span class="jxr_string">"[4.3.2,5.0.0)"</span>);
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>                 tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl"</span>,
+<a class="jxr_linenumber" name="L113" href="#L113">113</a>                                     <span class="jxr_string">"[5.1.0,6.0.0)"</span>);
+<a class="jxr_linenumber" name="L114" href="#L114">114</a>                 tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/common-utils/library.xsl"</span>,
+<a class="jxr_linenumber" name="L115" href="#L115">115</a>                                     <span class="jxr_string">"[3.2.0,4.0.0)"</span>);
 <a class="jxr_linenumber" name="L116" href="#L116">116</a>                 tryResolveXPathExtensionFunction(<span class="jxr_string">"org.daisy.pipeline.braille.dotify.saxon.impl.ObflStyle"</span>);
 <a class="jxr_linenumber" name="L117" href="#L117">117</a>                 tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/common-utils/library.xpl"</span>,
-<a class="jxr_linenumber" name="L118" href="#L118">118</a>                                     <span class="jxr_string">"[3.1.3,4.0.0)"</span>);
+<a class="jxr_linenumber" name="L118" href="#L118">118</a>                                     <span class="jxr_string">"[3.2.0,4.0.0)"</span>);
 <a class="jxr_linenumber" name="L119" href="#L119">119</a>                 <strong class="jxr_keyword">return</strong> url;
 <a class="jxr_linenumber" name="L120" href="#L120">120</a>             }
 <a class="jxr_linenumber" name="L121" href="#L121">121</a>         } <strong class="jxr_keyword">catch</strong> (ResolutionException re) {

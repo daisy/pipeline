@@ -28,7 +28,10 @@
     &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
     
     &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"//dtb:head"</span>&gt;
-        &lt;<span class="code-xml-element-local-name">metadata</span> <span class="code-xml-attribute-local-name">prefix</span>=<span class="code-xml-attribute-value">"dc: http://purl.org/dc/elements/1.1/"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">metadata</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"//dtb:pagenum"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"prefix"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'a11y: http://www.idpf.org/epub/vocab/package/a11y/#'"</span>/&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
             &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">namespace</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dc"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'http://purl.org/dc/elements/1.1/'"</span>/&gt;
             &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"dtb:meta"</span>&gt;
                 &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
@@ -52,10 +55,10 @@
                 &lt;/<span class="code-xml-element-prefix">dc:</span><span class="code-xml-element-local-name">language</span>&gt;
             &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
             
-            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"//dtb:pagenum and not(dtb:meta[lower-case(@name)='pageBreakSource'])"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"//dtb:pagenum and not(dtb:meta[lower-case(@name)=('a11y:pageBreakSource','pageBreakSource')])"</span>&gt;
                 &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"source-of-pagination"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:string?"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"pf:dtbook-source-of-pagination(/)"</span>/&gt;
                 &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"exists($source-of-pagination)"</span>&gt;
-                    &lt;<span class="code-xml-element-local-name">meta</span> <span class="code-xml-attribute-local-name">property</span>=<span class="code-xml-attribute-value">"pageBreakSource"</span>&gt;
+                    &lt;<span class="code-xml-element-local-name">meta</span> <span class="code-xml-attribute-local-name">property</span>=<span class="code-xml-attribute-value">"a11y:pageBreakSource"</span>&gt;
                         &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$source-of-pagination"</span>/&gt;
                     &lt;/<span class="code-xml-element-local-name">meta</span>&gt;
                 &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;

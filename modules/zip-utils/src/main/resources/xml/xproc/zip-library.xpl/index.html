@@ -8,9 +8,183 @@
 <link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
 <link rev="doc" href="../zip-library.xpl">
 </head>
-<body><div class="code" about="../zip-library.xpl">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">library</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">p</span>=<span class="code-xml-attribute-value">"http://www.w3.org/ns/xproc"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">px</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/ns/pipeline/xproc"</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"1.0"</span>&gt;
+<body><div class="code" about="../zip-library.xpl">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">library</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">p</span>=<span class="code-xml-attribute-value">"http://www.w3.org/ns/xproc"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">px</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/ns/pipeline/xproc"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">letex</span>=<span class="code-xml-attribute-value">"http://www.le-tex.de/namespace"</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"1.0"</span>&gt;
 
-    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/zip-utils/src/main/resources/xml/xproc/java-library.xpl" class="source">java-library.xpl</a>"</span>/&gt;
-    
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"px:zip"</span>&gt;
+        
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://docbook.org/ns/docbook"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">para</span>&gt;A step for creating ZIP archives.&lt;/<span class="code-xml-element-local-name">para</span>&gt;
+
+            &lt;<span class="code-xml-element-local-name">para</span>&gt;The ZIP archive is identified by the &lt;<span class="code-xml-element-local-name">option</span>&gt;href&lt;/<span class="code-xml-element-local-name">option</span>&gt;. The
+            &lt;<span class="code-xml-element-local-name">option</span>&gt;manifest&lt;/<span class="code-xml-element-local-name">option</span>&gt; (described below) provides the list of files to be processed
+            in the archive.  The &lt;<span class="code-xml-element-local-name">option</span>&gt;command&lt;/<span class="code-xml-element-local-name">option</span>&gt; indicates the nature of the processing:
+            “&lt;<span class="code-xml-element-local-name">literal</span>&gt;update&lt;/<span class="code-xml-element-local-name">literal</span>&gt;”, “&lt;<span class="code-xml-element-local-name">literal</span>&gt;freshen&lt;/<span class="code-xml-element-local-name">literal</span>&gt;”, “&lt;<span class="code-xml-element-local-name">literal</span>&gt;create&lt;/<span class="code-xml-element-local-name">literal</span>&gt;”,
+            or “&lt;<span class="code-xml-element-local-name">literal</span>&gt;delete&lt;/<span class="code-xml-element-local-name">literal</span>&gt;”.&lt;/<span class="code-xml-element-local-name">para</span>&gt;
+
+            &lt;<span class="code-xml-element-local-name">para</span>&gt;If files are added to the archive, &lt;<span class="code-xml-element-local-name">option</span>&gt;compression-method&lt;/<span class="code-xml-element-local-name">option</span>&gt; indicates
+            how they should be added: “&lt;<span class="code-xml-element-local-name">literal</span>&gt;stored&lt;/<span class="code-xml-element-local-name">literal</span>&gt;” or
+            “&lt;<span class="code-xml-element-local-name">literal</span>&gt;deflated&lt;/<span class="code-xml-element-local-name">literal</span>&gt;”. For deflated files, the
+            &lt;<span class="code-xml-element-local-name">option</span>&gt;compression-level&lt;/<span class="code-xml-element-local-name">option</span>&gt; identifies the kind of compression:
+            “&lt;<span class="code-xml-element-local-name">literal</span>&gt;smallest&lt;/<span class="code-xml-element-local-name">literal</span>&gt;”, “&lt;<span class="code-xml-element-local-name">literal</span>&gt;fastest&lt;/<span class="code-xml-element-local-name">literal</span>&gt;”,
+            “&lt;<span class="code-xml-element-local-name">literal</span>&gt;default&lt;/<span class="code-xml-element-local-name">literal</span>&gt;”, “&lt;<span class="code-xml-element-local-name">literal</span>&gt;huffman&lt;/<span class="code-xml-element-local-name">literal</span>&gt;”, or
+            “&lt;<span class="code-xml-element-local-name">literal</span>&gt;none&lt;/<span class="code-xml-element-local-name">literal</span>&gt;”.&lt;/<span class="code-xml-element-local-name">para</span>&gt;
+
+            &lt;<span class="code-xml-element-local-name">para</span>&gt;The entries identified by the &lt;<span class="code-xml-element-local-name">option</span>&gt;manifest&lt;/<span class="code-xml-element-local-name">option</span>&gt; are processed. The
+            manifest must conform to the following schema:&lt;/<span class="code-xml-element-local-name">para</span>&gt;
+
+            &lt;<span class="code-xml-element-local-name">programlisting</span>&gt;default namespace c="http://www.w3.org/ns/xproc-step"
+start = zip-manifest
+zip-manifest =
+   element c:zip-manifest {
+      entry*
+   }
+entry =
+   element c:entry {
+      attribute name { text }
+    &amp; attribute href { text }
+    &amp; attribute comment { text }?
+    &amp; attribute method { "deflated" | "stored" }
+    &amp; attribute level { "smallest" | "fastest" | "huffman" | "default" | "none" }
+      empty
+   }&lt;/<span class="code-xml-element-local-name">programlisting</span>&gt;
+
+            &lt;<span class="code-xml-element-local-name">para</span>&gt;For example:&lt;/<span class="code-xml-element-local-name">para</span>&gt;
+
+            &lt;<span class="code-xml-element-local-name">programlisting</span>&gt;&lt;zip-manifest xmlns="http://www.w3.org/ns/xproc-step"&gt;
+  &lt;entry name="file1.xml" href="http://example.org/file1.xml" comment="An example file"/&gt;
+  &lt;entry name="path/to/file2.xml" href="http://example.org/file2.xml" method="stored"/&gt;
+&lt;/zip-manifest&gt;&lt;/<span class="code-xml-element-local-name">programlisting</span>&gt;
+
+            &lt;<span class="code-xml-element-local-name">para</span>&gt;If the &lt;<span class="code-xml-element-local-name">option</span>&gt;command&lt;/<span class="code-xml-element-local-name">option</span>&gt; is “&lt;<span class="code-xml-element-local-name">literal</span>&gt;delete&lt;/<span class="code-xml-element-local-name">literal</span>&gt;”, then
+            &lt;<span class="code-xml-element-local-name">filename</span>&gt;file1.xml&lt;/<span class="code-xml-element-local-name">filename</span>&gt; and &lt;<span class="code-xml-element-local-name">filename</span>&gt;path/to/file2.xml&lt;/<span class="code-xml-element-local-name">filename</span>&gt; will be
+            deleted from the archive. Otherwise, the file that appears on the &lt;<span class="code-xml-element-local-name">port</span>&gt;source&lt;/<span class="code-xml-element-local-name">port</span>&gt;
+            port that has the base URI &lt;<span class="code-xml-element-local-name">uri</span>&gt;http://example.org/file1.xml&lt;/<span class="code-xml-element-local-name">uri</span>&gt; will be stored in the
+            archive as &lt;<span class="code-xml-element-local-name">filename</span>&gt;file1.xml&lt;/<span class="code-xml-element-local-name">filename</span>&gt; (using the default method and level), the file
+            that appears on the &lt;<span class="code-xml-element-local-name">port</span>&gt;source&lt;/<span class="code-xml-element-local-name">port</span>&gt; port that has the base URI
+            &lt;<span class="code-xml-element-local-name">uri</span>&gt;http://example.org/file2.xml&lt;/<span class="code-xml-element-local-name">uri</span>&gt; will be stored in the archive as
+            &lt;<span class="code-xml-element-local-name">filename</span>&gt;path/to/file2.xml&lt;/<span class="code-xml-element-local-name">filename</span>&gt; without being compressed.&lt;/<span class="code-xml-element-local-name">para</span>&gt;
+
+            &lt;<span class="code-xml-element-local-name">para</span>&gt;A &lt;<span class="code-xml-element-local-name">tag</span>&gt;c:zipfile&lt;/<span class="code-xml-element-local-name">tag</span>&gt; description of the archive content is produced on the
+            &lt;<span class="code-xml-element-local-name">port</span>&gt;result&lt;/<span class="code-xml-element-local-name">port</span>&gt; port.&lt;/<span class="code-xml-element-local-name">para</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span> <span class="code-xml-attribute-local-name">sequence</span>=<span class="code-xml-attribute-value">"true"</span> <span class="code-xml-attribute-local-name">primary</span>=<span class="code-xml-attribute-value">"true"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"manifest"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"href"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"true"</span>/&gt;                    
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"compression-method"</span>/&gt;                      
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"compression-level"</span>/&gt;                       
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"command"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'update'"</span>/&gt;               
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"byte-order-mark"</span>/&gt;                         
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"cdata-section-elements"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"''"</span>/&gt;      
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"doctype-public"</span>/&gt;                          
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"doctype-system"</span>/&gt;                          
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"encoding"</span>/&gt;                                
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"escape-uri-attributes"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'false'"</span>/&gt;  
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"include-content-type"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'true'"</span>/&gt;    
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"indent"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'false'"</span>/&gt;                 
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"media-type"</span>/&gt;                              
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"method"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'xml'"</span>/&gt;                   
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"normalization-form"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'none'"</span>/&gt;      
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"omit-xml-declaration"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'true'"</span>/&gt;    
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"standalone"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'omit'"</span>/&gt;              
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"undeclare-prefixes"</span>/&gt;                      
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"version"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'1.0'"</span>/&gt;                  
+        
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"px:unzip"</span>&gt;
+        
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://docbook.org/ns/docbook"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">xlink</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xlink"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">para</span>&gt;A step for extracting information out of ZIP archives.&lt;/<span class="code-xml-element-local-name">para</span>&gt;
+
+            &lt;<span class="code-xml-element-local-name">para</span>&gt;The value of the &lt;<span class="code-xml-element-local-name">option</span>&gt;href&lt;/<span class="code-xml-element-local-name">option</span>&gt; option &lt;<span class="code-xml-element-local-name">rfc2119</span>&gt;must&lt;/<span class="code-xml-element-local-name">rfc2119</span>&gt; be an
+            IRI. It is a &lt;<span class="code-xml-element-local-name">glossterm</span>&gt;dynamic error&lt;/<span class="code-xml-element-local-name">glossterm</span>&gt; if the document so identified does not
+            exist or cannot be read.&lt;/<span class="code-xml-element-local-name">para</span>&gt;
+
+            &lt;<span class="code-xml-element-local-name">para</span>&gt;The value of the &lt;<span class="code-xml-element-local-name">option</span>&gt;file&lt;/<span class="code-xml-element-local-name">option</span>&gt; option, if specified,
+            &lt;<span class="code-xml-element-local-name">rfc2119</span>&gt;must&lt;/<span class="code-xml-element-local-name">rfc2119</span>&gt; be the fully qualified path-name of a document in the
+            archive. It is &lt;<span class="code-xml-element-local-name">glossterm</span>&gt;dynamic error&lt;/<span class="code-xml-element-local-name">glossterm</span>&gt; if the value specified does not
+            identify a file in the archive.&lt;/<span class="code-xml-element-local-name">para</span>&gt;
+
+            &lt;<span class="code-xml-element-local-name">para</span>&gt;The output from the &lt;<span class="code-xml-element-local-name">tag</span>&gt;pxp:unzip&lt;/<span class="code-xml-element-local-name">tag</span>&gt; step &lt;<span class="code-xml-element-local-name">rfc2119</span>&gt;must&lt;/<span class="code-xml-element-local-name">rfc2119</span>&gt; conform to
+            the &lt;<span class="code-xml-element-local-name">link</span> <span class="code-xml-attribute-prefix">xlink:</span><span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"http://exproc.org/proposed/steps/schemas/ziptoc.rnc"</span>&gt;ziptoc.rnc&lt;/<span class="code-xml-element-local-name">link</span>&gt;
+            schema.&lt;/<span class="code-xml-element-local-name">para</span>&gt;
+
+            &lt;<span class="code-xml-element-local-name">para</span>&gt;If the &lt;<span class="code-xml-element-local-name">option</span>&gt;file&lt;/<span class="code-xml-element-local-name">option</span>&gt; option is specified, the selected file in the archive
+            is extracted and returned:&lt;/<span class="code-xml-element-local-name">para</span>&gt;
+
+            &lt;<span class="code-xml-element-local-name">itemizedlist</span>&gt;
+                &lt;<span class="code-xml-element-local-name">listitem</span>&gt;
+                    &lt;<span class="code-xml-element-local-name">para</span>&gt;If the &lt;<span class="code-xml-element-local-name">option</span>&gt;content-type&lt;/<span class="code-xml-element-local-name">option</span>&gt; is not specified, or if an XML
+                    content type is specified, the file is parsed as XML and returned. It is a
+                    &lt;<span class="code-xml-element-local-name">glossterm</span>&gt;dynamic error&lt;/<span class="code-xml-element-local-name">glossterm</span>&gt; if the file is not well-formed XML.&lt;/<span class="code-xml-element-local-name">para</span>&gt;
+                &lt;/<span class="code-xml-element-local-name">listitem</span>&gt;
+                &lt;<span class="code-xml-element-local-name">listitem</span>&gt;
+                    &lt;<span class="code-xml-element-local-name">para</span>&gt;If the &lt;<span class="code-xml-element-local-name">option</span>&gt;content-type&lt;/<span class="code-xml-element-local-name">option</span>&gt; specified is not an XML content type,
+                    the file is base64 encoded and returned in a single &lt;<span class="code-xml-element-local-name">tag</span>&gt;c:data&lt;/<span class="code-xml-element-local-name">tag</span>&gt;
+                    element.&lt;/<span class="code-xml-element-local-name">para</span>&gt;
+                &lt;/<span class="code-xml-element-local-name">listitem</span>&gt;
+            &lt;/<span class="code-xml-element-local-name">itemizedlist</span>&gt;
+
+            &lt;<span class="code-xml-element-local-name">para</span>&gt;If the &lt;<span class="code-xml-element-local-name">option</span>&gt;file&lt;/<span class="code-xml-element-local-name">option</span>&gt; option &lt;<span class="code-xml-element-local-name">emphasis</span>&gt;is not&lt;/<span class="code-xml-element-local-name">emphasis</span>&gt; specified, a table
+            of contents for the archive is returned.&lt;/<span class="code-xml-element-local-name">para</span>&gt;
+
+            &lt;<span class="code-xml-element-local-name">para</span>&gt;For example, the contents of the XML Calabash 0.8.5 distribution archive might be
+            reported like this:&lt;/<span class="code-xml-element-local-name">para</span>&gt;
+
+            &lt;<span class="code-xml-element-local-name">informalexample</span>&gt;
+                &lt;<span class="code-xml-element-local-name">programlisting</span>&gt;&lt;c:zipfile xmlns:c="http://www.w3.org/ns/xproc-step"
+           href="http://xmlcalabash.com/download/calabash-0.8.5.zip"&gt;
+   &lt;c:directory name="calabash-0.8.5/" date="2008-11-04T19:29:20.000-05:00"/&gt;
+   &lt;c:directory name="calabash-0.8.5/docs/" date="2008-11-04T19:29:20.000-05:00"/&gt;
+   &lt;c:file compressed-size="11942" size="36677" name="calabash-0.8.5/docs/CDDL+GPL.txt"
+           date="2008-11-04T19:29:20.000-05:00"/&gt;
+   &lt;c:file compressed-size="928" size="2110" name="calabash-0.8.5/docs/ChangeLog"
+           date="2008-11-04T19:29:20.000-05:00"/&gt;
+   &lt;c:file compressed-size="6817" size="17987" name="calabash-0.8.5/docs/GPL.txt"
+           date="2008-11-04T19:29:20.000-05:00"/&gt;
+   &lt;c:file compressed-size="494" size="830" name="calabash-0.8.5/docs/NOTICES"
+           date="2008-11-04T19:29:20.000-05:00"/&gt;
+   &lt;c:directory name="calabash-0.8.5/lib/" date="2008-11-04T19:29:20.000-05:00"/&gt;
+   &lt;c:file compressed-size="389650" size="407421" name="calabash-0.8.5/lib/calabash.jar"
+           date="2008-11-04T19:29:20.000-05:00"/&gt;
+   &lt;c:file compressed-size="1237" size="2493" name="calabash-0.8.5/README"
+           date="2008-11-04T19:29:20.000-05:00"/&gt;
+   &lt;c:directory name="calabash-0.8.5/xpl/" date="2008-11-04T19:29:20.000-05:00"/&gt;
+   &lt;c:file compressed-size="175" size="255" name="calabash-0.8.5/xpl/pipe.xpl"
+           date="2008-11-04T19:29:20.000-05:00"/&gt;
+&lt;/c:zipfile&gt;&lt;/<span class="code-xml-element-local-name">programlisting</span>&gt;
+            &lt;/<span class="code-xml-element-local-name">informalexample</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"href"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"true"</span>/&gt;    
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"file"</span>/&gt;                    
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content-type"</span>/&gt;            
+        
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"letex:unzip"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;Will extract a complete zip file or a single contained file to a specified destination folder.&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"zip"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"true"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;The file:/ URL to the zip file.&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dest-dir"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"true"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;A file:/ URL to the destination folder. Will be created if it does not exist (subject to the $overwrite option).&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"overwrite"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"false"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'no'"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;Whether existing directories and files will be overwritten.&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"file"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"false"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;Optionally, a specific relative path to a file within the zip file. Will be restored to its 
+                relative path below $dest-dir.&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-local-name">primary</span>=<span class="code-xml-attribute-value">"true"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;A c:files document with the extracted files, as c:file elements (no hierarchy). There is an 
+                @xml:base attribute on /c:files that contains the $dest-dir location URL. A c:file element will contain a @name
+                attribute with the corresponding file’s relative location.&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span>&gt;
+        
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span>&gt;
+
 &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">library</span>&gt;</div></body>
 </html>

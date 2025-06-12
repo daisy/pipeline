@@ -43,7 +43,7 @@
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>      <strong class="jxr_keyword">public</strong> <a href="/pipeline/modules/epub-to-daisy/src/main/java/org/daisy/pipeline/modules/impl/Module_epub_to_daisy.html">Module_epub_to_daisy</a>() {
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>          <strong class="jxr_keyword">super</strong>(<span class="jxr_string">"epub-to-daisy"</span>,
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>                <span class="jxr_string">"1.4.2"</span>,
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>                <span class="jxr_string">"1.4.3"</span>,
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>                <span class="jxr_string">"DAISY Pipeline 2 module :: EPUB to DAISY"</span>);
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>          componentsToAdd = <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;();
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>          componentsBeingAdded = <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;();
@@ -134,15 +134,15 @@
 <a class="jxr_linenumber" name="L125" href="#L125">125</a>         <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L126" href="#L126">126</a>             <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"http://www.daisy.org/pipeline/modules/epub-to-daisy/library.xpl"</span>.equals(name)) {
 <a class="jxr_linenumber" name="L127" href="#L127">127</a>                 tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/epub2-to-epub3/library.xpl"</span>,
-<a class="jxr_linenumber" name="L128" href="#L128">128</a>                                     <span class="jxr_string">"[1.1.2,2.0.0)"</span>);
-<a class="jxr_linenumber" name="L129" href="#L129">129</a>                 tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/epub3-to-daisy202/library.xpl"</span>,
-<a class="jxr_linenumber" name="L130" href="#L130">130</a>                                     <span class="jxr_string">"[2.2.8,3.0.0)"</span>);
-<a class="jxr_linenumber" name="L131" href="#L131">131</a>                 tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/epub3-to-epub3/library.xpl"</span>,
-<a class="jxr_linenumber" name="L132" href="#L132">132</a>                                     <span class="jxr_string">"[5.0.0,6.0.0)"</span>);
+<a class="jxr_linenumber" name="L128" href="#L128">128</a>                                     <span class="jxr_string">"[1.1.3,2.0.0)"</span>);
+<a class="jxr_linenumber" name="L129" href="#L129">129</a>                 tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/epub3-to-epub3/library.xpl"</span>,
+<a class="jxr_linenumber" name="L130" href="#L130">130</a>                                     <span class="jxr_string">"[5.0.1,6.0.0)"</span>);
+<a class="jxr_linenumber" name="L131" href="#L131">131</a>                 tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/epub3-to-daisy202/library.xpl"</span>,
+<a class="jxr_linenumber" name="L132" href="#L132">132</a>                                     <span class="jxr_string">"[2.2.9,3.0.0)"</span>);
 <a class="jxr_linenumber" name="L133" href="#L133">133</a>                 tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/epub3-to-daisy3/library.xpl"</span>,
-<a class="jxr_linenumber" name="L134" href="#L134">134</a>                                     <span class="jxr_string">"[1.0.10,2.0.0)"</span>);
+<a class="jxr_linenumber" name="L134" href="#L134">134</a>                                     <span class="jxr_string">"[1.0.11,2.0.0)"</span>);
 <a class="jxr_linenumber" name="L135" href="#L135">135</a>                 tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/common-utils/library.xpl"</span>,
-<a class="jxr_linenumber" name="L136" href="#L136">136</a>                                     <span class="jxr_string">"[3.1.2,4.0.0)"</span>);
+<a class="jxr_linenumber" name="L136" href="#L136">136</a>                                     <span class="jxr_string">"[3.2.0,4.0.0)"</span>);
 <a class="jxr_linenumber" name="L137" href="#L137">137</a>             }
 <a class="jxr_linenumber" name="L138" href="#L138">138</a>         } <strong class="jxr_keyword">catch</strong> (ResolutionException re) {
 <a class="jxr_linenumber" name="L139" href="#L139">139</a>             logger.warn(<span class="jxr_string">"Component "</span> + component.getURI() + <span class="jxr_string">" can not be loaded: "</span> + re.getMessage());
@@ -161,19 +161,19 @@
 <a class="jxr_linenumber" name="L152" href="#L152">152</a>                 resource1 = <strong class="jxr_keyword">super</strong>.getResource(<span class="jxr_string">"../xml/epub-to-daisy.script.xpl"</span>);
 <a class="jxr_linenumber" name="L153" href="#L153">153</a>             <strong class="jxr_keyword">if</strong> (url.equals(resource1)) {
 <a class="jxr_linenumber" name="L154" href="#L154">154</a>                 tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/epub2-to-epub3/library.xpl"</span>,
-<a class="jxr_linenumber" name="L155" href="#L155">155</a>                                     <span class="jxr_string">"[1.1.2,2.0.0)"</span>);
-<a class="jxr_linenumber" name="L156" href="#L156">156</a>                 tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/epub3-to-daisy202/library.xpl"</span>,
-<a class="jxr_linenumber" name="L157" href="#L157">157</a>                                     <span class="jxr_string">"[2.2.8,3.0.0)"</span>);
-<a class="jxr_linenumber" name="L158" href="#L158">158</a>                 tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"</span>,
-<a class="jxr_linenumber" name="L159" href="#L159">159</a>                                     <span class="jxr_string">"[6.1.4,7.0.0)"</span>);
-<a class="jxr_linenumber" name="L160" href="#L160">160</a>                 tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/epub3-to-epub3/library.xpl"</span>,
-<a class="jxr_linenumber" name="L161" href="#L161">161</a>                                     <span class="jxr_string">"[5.0.0,6.0.0)"</span>);
-<a class="jxr_linenumber" name="L162" href="#L162">162</a>                 tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/epub-utils/library.xpl"</span>,
-<a class="jxr_linenumber" name="L163" href="#L163">163</a>                                     <span class="jxr_string">"[2.2.1,3.0.0)"</span>);
-<a class="jxr_linenumber" name="L164" href="#L164">164</a>                 tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/epub3-to-daisy3/library.xpl"</span>,
-<a class="jxr_linenumber" name="L165" href="#L165">165</a>                                     <span class="jxr_string">"[1.0.10,2.0.0)"</span>);
-<a class="jxr_linenumber" name="L166" href="#L166">166</a>                 tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/common-utils/library.xpl"</span>,
-<a class="jxr_linenumber" name="L167" href="#L167">167</a>                                     <span class="jxr_string">"[3.1.2,4.0.0)"</span>);
+<a class="jxr_linenumber" name="L155" href="#L155">155</a>                                     <span class="jxr_string">"[1.1.3,2.0.0)"</span>);
+<a class="jxr_linenumber" name="L156" href="#L156">156</a>                 tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/epub3-to-epub3/library.xpl"</span>,
+<a class="jxr_linenumber" name="L157" href="#L157">157</a>                                     <span class="jxr_string">"[5.0.1,6.0.0)"</span>);
+<a class="jxr_linenumber" name="L158" href="#L158">158</a>                 tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/epub-utils/library.xpl"</span>,
+<a class="jxr_linenumber" name="L159" href="#L159">159</a>                                     <span class="jxr_string">"[2.2.2,3.0.0)"</span>);
+<a class="jxr_linenumber" name="L160" href="#L160">160</a>                 tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/epub3-to-daisy202/library.xpl"</span>,
+<a class="jxr_linenumber" name="L161" href="#L161">161</a>                                     <span class="jxr_string">"[2.2.9,3.0.0)"</span>);
+<a class="jxr_linenumber" name="L162" href="#L162">162</a>                 tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/epub3-to-daisy3/library.xpl"</span>,
+<a class="jxr_linenumber" name="L163" href="#L163">163</a>                                     <span class="jxr_string">"[1.0.11,2.0.0)"</span>);
+<a class="jxr_linenumber" name="L164" href="#L164">164</a>                 tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/common-utils/library.xpl"</span>,
+<a class="jxr_linenumber" name="L165" href="#L165">165</a>                                     <span class="jxr_string">"[3.2.0,4.0.0)"</span>);
+<a class="jxr_linenumber" name="L166" href="#L166">166</a>                 tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"</span>,
+<a class="jxr_linenumber" name="L167" href="#L167">167</a>                                     <span class="jxr_string">"[7.0.0,8.0.0)"</span>);
 <a class="jxr_linenumber" name="L168" href="#L168">168</a>                 <strong class="jxr_keyword">return</strong> url;
 <a class="jxr_linenumber" name="L169" href="#L169">169</a>             }
 <a class="jxr_linenumber" name="L170" href="#L170">170</a>         } <strong class="jxr_keyword">catch</strong> (ResolutionException re) {

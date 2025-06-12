@@ -37,7 +37,7 @@
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>      <strong class="jxr_keyword">public</strong> <a href="/pipeline/modules/dtbook-validator/src/main/java/org/daisy/pipeline/modules/impl/Module_dtbook_validator.html">Module_dtbook_validator</a>() {
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>          <strong class="jxr_keyword">super</strong>(<span class="jxr_string">"dtbook-validator"</span>,
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>                <span class="jxr_string">"3.0.10"</span>,
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>                <span class="jxr_string">"3.0.11"</span>,
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>                <span class="jxr_string">"DAISY Pipeline 2 module :: DTBook Validator"</span>);
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>      }
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  
@@ -83,11 +83,11 @@
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>                  resource1 = <strong class="jxr_keyword">super</strong>.getResource(<span class="jxr_string">"../xml/dtbook-validator.xpl"</span>);
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>              <strong class="jxr_keyword">if</strong> (url.equals(resource1)) {
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>                  tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl"</span>,
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>                                      <span class="jxr_string">"[5.1.1,6.0.0)"</span>);
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>                  tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"</span>,
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>                                      <span class="jxr_string">"[6.1.4,7.0.0)"</span>);
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>                  tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/common-utils/library.xpl"</span>,
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>                                      <span class="jxr_string">"[3.1.2,4.0.0)"</span>);
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>                                      <span class="jxr_string">"[5.1.2,6.0.0)"</span>);
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>                  tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/common-utils/library.xpl"</span>,
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>                                      <span class="jxr_string">"[3.2.0,4.0.0)"</span>);
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>                  tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"</span>,
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>                                      <span class="jxr_string">"[7.0.0,8.0.0)"</span>);
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>                  <strong class="jxr_keyword">return</strong> url;
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>              }
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>          } <strong class="jxr_keyword">catch</strong> (ResolutionException re) {
