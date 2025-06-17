@@ -6,6 +6,6 @@
 [subrepo]
 	remote = git@github.com:daisy/jStyleParser.git
 	branch = org.daisy.libs
-	commit = cdc8ca74504ee27db8629765252929a4ba648962
-	parent = 1d4f4268c62775de5f8c2d1b3c3b2b2e047a4683
+	commit = 242521b0ad31e8ad8206016b3619904ef9dd9508
+	parent = 827de35a6e29ec217e85510ca82d6ce776997b22
 	cmdver = 0.3.1
