@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.braille</groupId>
   <artifactId>braille-css</artifactId>
-  <version>1.26.1-SNAPSHOT</version>
+  <version>1.26.1</version>
   <packaging>bundle</packaging>
 
   <name>braille-css</name>
@@ -21,7 +21,7 @@
     <connection>scm:git:git@github.com:snaekobbi/braille-css.git</connection>
     <url>scm:git:git@github.com:snaekobbi/braille-css.git</url>
     <developerConnection>scm:git:git@github.com:snaekobbi/braille-css.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>1.26.1</tag>
   </scm>
   
   <dependencyManagement>
@@ -29,7 +29,7 @@
       <dependency>
         <groupId>org.daisy.libs</groupId>
         <artifactId>jstyleparser</artifactId>
-        <version>1.20-p24-SNAPSHOT</version>
+        <version>1.20-p24</version>
       </dependency>
       <dependency>
         <groupId>com.google.guava</groupId>
