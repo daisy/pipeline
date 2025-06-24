@@ -49,6 +49,16 @@
 					</snapshots>
 				</repository>
 				<repository>
+					<id>restlet</id>  <!-- defined in com.xmlcalabash -->
+					<url>https://maven.restlet.talend.com</url>
+					<releases>
+						<enabled>true</enabled>
+					</releases>
+					<snapshots>
+						<enabled>false</enabled>
+					</snapshots>
+				</repository>
+				<repository>
 					<id>EclipseLink</id> <!-- defined in framework-parent -->
 					<url>https://download.eclipse.org/rt/eclipselink/maven.repo</url>
 					<releases>
