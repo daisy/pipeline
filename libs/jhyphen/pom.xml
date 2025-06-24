@@ -161,5 +161,28 @@
         <nar.aol>aarch64-MacOSX-gpp</nar.aol>
       </properties>
     </profile>
+    <profile>
+      <id>win</id>
+      <activation>
+        <os>
+          <family>windows</family>
+        </os>
+      </activation>
+      <plugins>
+        <plugin>
+          <groupId>com.github.maven-nar</groupId>
+          <artifactId>nar-maven-plugin</artifactId>
+          <executions>
+            <execution>
+              <id>get-nar-aol-property</id>
+              <phase>none</phase>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+      <properties>
+        <nar.aol>x86_64-w64-mingw32-gpp</nar.aol>
+      </properties>
+    </profile>
   </profiles>
 </project>
