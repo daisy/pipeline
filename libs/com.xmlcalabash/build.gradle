@@ -441,7 +441,7 @@ def mavenPom = {
   repositories {
     repository {
       id 'restlet'
-      url 'https://maven.restlet.org'
+      url 'https://maven.restlet.talend.com'
     }
   }
 }

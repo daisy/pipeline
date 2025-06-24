@@ -1,12 +1,15 @@
 package com.xmlcalabash.runtime;
 
 import com.xmlcalabash.core.XProcRunnable;
+import net.sf.saxon.functions.FunctionLibrary;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 
 import org.slf4j.Logger;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Vector;
@@ -307,12 +310,19 @@ public abstract class XStep implements XProcRunnable {
             runLazily = isPure().orElse(false);
         }
         if (runLazily) {
+            List<FunctionLibrary> inscopeXsltFunctions = new ArrayList<>(runtime.getConfiguration().inscopeXsltFunctions);
             XProcRunnable runIfNotRunYet = new XProcRunnable() {
                     private boolean done = false;
                     public void run() throws SaxonApiException {
                         if (done) return;
                         done = true;
+                        // re-load imported XSLT function libraries
+                        List<FunctionLibrary> restoreInscopeXsltFunction = new ArrayList<>(runtime.getConfiguration().inscopeXsltFunctions);
+                        runtime.getConfiguration().inscopeXsltFunctions.clear();
+                        runtime.getConfiguration().inscopeXsltFunctions.addAll(inscopeXsltFunctions);
                         doRun();
+                        runtime.getConfiguration().inscopeXsltFunctions.clear();
+                        runtime.getConfiguration().inscopeXsltFunctions.addAll(restoreInscopeXsltFunction);
                         // next time XStep.run() is called don't run lazily, because we already know an
                         // output will be accessed so we might as well do it immediately
                         runLazily = false;
