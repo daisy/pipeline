@@ -33,9 +33,9 @@ public class ServicesTest extends AbstractXSpecAndXProcSpecTest {
 		assertTrue(ids.remove("foo:choice"));
 		assertTrue(ids.remove("px:bar-2.params-option-2"));
 		assertTrue(ids.remove("px:script-option-1"));
-		// assertTrue(ids.remove("transform-query"));       // because braille-common on class path
-		// assertTrue(ids.remove("stylesheet-parameters")); // because css-utils on class path
-		// assertTrue(ids.remove("preview-table"));         // because pef-utils on class path
+		assertTrue(ids.remove("transform-query"));       // because braille-common on class path
+		assertTrue(ids.remove("stylesheet-parameters")); // because css-utils on class path
+		assertTrue(ids.remove("preview-table"));         // because pef-utils on class path
 		//assertTrue(ids.remove("liblouis-table-query"));  // because liblouis-utils on class path
 		assertTrue("ids not empty: " + ids, ids.isEmpty());
 	}
@@ -57,7 +57,7 @@ public class ServicesTest extends AbstractXSpecAndXProcSpecTest {
 		return new String[]{
 			"org.daisy.pipeline:framework-core:?",
 			"org.daisy.pipeline:calabash-adapter:?",
-			// "org.daisy.pipeline.modules.braille:liblouis-utils:?"
+			"org.daisy.pipeline.modules.braille:liblouis-utils:?"
 		};
 	}
 }

@@ -22,12 +22,6 @@
         </p:documentation>
     </p:output>
     
-    <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <p>Unused import</p>
-        </p:documentation>
-    </p:import>
-    
     <p:declare-step type="px:java-step">
         <p:input port="source"/>
         <p:output port="result"/>
