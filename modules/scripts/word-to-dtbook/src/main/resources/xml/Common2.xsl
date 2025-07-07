@@ -104,14 +104,13 @@
 					
 					<!-- DB :  Check if PageNumberDAISY style is applied to skip heading styles in output file when this style is applied.  -->
 					<xsl:variable name="IsPageNumberDAISYApplied" as="xs:boolean" select="w:pPr/w:rPr/w:rStyle/@w:val='PageNumberDAISY'"/>
-					
 					<!-- DB : write header in output when PageNumberDAISY is not applied  -->
 					<xsl:if test="not($IsPageNumberDAISYApplied)">
 						<xsl:call-template name="openHeading">
 							<xsl:with-param name="level" select="string($level)"/>
 						</xsl:call-template>
 					</xsl:if>
-					
+
 					<!--Calling ParaHandler template for heading text-->
 					<xsl:call-template name="TempLevelSpan">
 						<xsl:with-param name="verhead" select="$verhead"/>
@@ -131,7 +130,7 @@
 						<xsl:with-param name="sNumbers" select="$sNumbers"/>
 						<xsl:with-param name="sZeros" select="$sZeros"/>
 					</xsl:call-template>
-					
+
 					<!-- DB : write header in output when PageNumberDAISY is not applied  -->
 					<xsl:if test="not($IsPageNumberDAISYApplied)">
 						<!--Calling tmpAbbrAcrHeading template setting AbbrAcr flag and closing heading tag-->
@@ -140,7 +139,7 @@
 							<xsl:with-param name="levelValue" select="$levelValue"/>
 						</xsl:call-template>
 					</xsl:if>
-					
+
 				</xsl:if>
 			</xsl:when>
 			<!--Levels above 6-->
@@ -388,8 +387,7 @@
 		<xsl:param name="sMinuses" as="xs:string"/>
 		<xsl:param name="sNumbers" as="xs:string"/>
 		<xsl:param name="sZeros" as="xs:string"/>
-		
-		
+
 		<!--<xsl:value-of select="$CurrentLevel"/>-->
 		<!--Peeking the top value of the stack-->
 		<xsl:variable name="PeekLevel" as="xs:integer" select="d:PeekLevel($myObj)"/>
@@ -397,9 +395,8 @@
 		<!--If top level is less than or equal to current level then PoP the Stack and close that level-->
 		<xsl:choose>
 			<xsl:when test="$CurrentLevel &gt; 6 and $PeekLevel = 6 ">
-				
+
 				<xsl:variable name="PopLevel" as="xs:integer" select="d:PopLevel($myObj)"/>
-				
 				<!--Close that level-->
 				<xsl:value-of disable-output-escaping="yes" select="concat('&lt;/level',$PopLevel,'&gt;')"/>
 				<!-- TODO : if footnotes position is set to be after this level, insert footnotes here -->
@@ -1034,29 +1031,38 @@
 							<tr>
 								<!--Looping through each cell of the table-->
 								<xsl:for-each select="w:tc">
-									<xsl:if test="(w:p) and (
+									<xsl:choose>
+										<!-- Legacy code :  Wrap in an header element the cell if it is not followed by a DefinitionDataDAISY paragraph -->
+										<xsl:when test="(w:p) and (
 											not(
-												(following-sibling::w:p[1]/w:pPr/w:pStyle[@w:val='DefinitionDataDAISY']) 
+												(following-sibling::w:p[1]/w:pPr/w:pStyle[@w:val='DefinitionDataDAISY'])
 												or (following-sibling::w:p[1]/w:r/w:rPr/w:rStyle[@w:val='DefinitionTermDAISY'])
 											)
 										)">
-										<xsl:value-of disable-output-escaping="yes" select="'&lt;th&gt;'"/>
-									</xsl:if>
-									<xsl:for-each select="w:p">
-										<xsl:call-template name="ParagraphStyle">
-											<xsl:with-param name="pagination" select="$pagination"/>
-											<xsl:with-param name="version" select="$parmVerTable"/>
-											<xsl:with-param name="characterparaStyle" select="$characterStyle"/>
-										</xsl:call-template>
-									</xsl:for-each>
-									<xsl:if test="(w:p) and (
-											not(
-												(following-sibling::w:p[1]/w:pPr/w:pStyle[@w:val='DefinitionDataDAISY']) 
-												or (following-sibling::w:p[1]/w:r/w:rPr/w:rStyle[@w:val='DefinitionTermDAISY'])
-											)
-										)">
-										<xsl:value-of disable-output-escaping="yes" select="'&lt;/th&gt;'"/>
-									</xsl:if>
+											<th>
+												<xsl:for-each select="w:p">
+													<xsl:call-template name="ParagraphStyle">
+														<xsl:with-param name="pagination" select="$pagination"/>
+														<xsl:with-param name="version" select="$parmVerTable"/>
+														<xsl:with-param name="characterparaStyle" select="$characterStyle"/>
+													</xsl:call-template>
+												</xsl:for-each>
+											</th>
+										</xsl:when>
+										<xsl:otherwise>
+											<!--Not sure of the validity of the legacy code here
+												commenting the TD that i think would be required but were not in legacy -->
+											<!--<td>-->
+												<xsl:for-each select="w:p">
+													<xsl:call-template name="ParagraphStyle">
+														<xsl:with-param name="pagination" select="$pagination"/>
+														<xsl:with-param name="version" select="$parmVerTable"/>
+														<xsl:with-param name="characterparaStyle" select="$characterStyle"/>
+													</xsl:call-template>
+												</xsl:for-each>
+											<!--</td>-->
+										</xsl:otherwise>
+									</xsl:choose>
 								</xsl:for-each>
 							</tr>
 						</xsl:if>
@@ -1072,6 +1078,7 @@
 						<tr>
 							<!--Looping through each cell of the table-->
 							<xsl:for-each select="w:tc">
+						<td>
 								<xsl:if test="w:tcPr/w:vMerge[@w:val='restart']">
 									<xsl:variable name="columnPosition" as="xs:integer" select="position()"/>
 									<xsl:for-each select="../following-sibling::w:tr/w:tc[$columnPosition]/w:tcPr">
@@ -1088,50 +1095,49 @@
 								</xsl:if>
 								<!--If paragraph element exists-->
 								<xsl:if test="w:p">
-									<xsl:choose>
-										<!--Checking for both colspan and rowspan-->
-										<xsl:when test="(w:tcPr/w:gridSpan) and (w:tcPr/w:vMerge[@w:val='restart'])">
-											<!--If Column span property is set the assinging the value-->
-											<xsl:variable name="colspan" as="xs:string" select="w:tcPr/w:gridSpan/@w:val"/>
-											<!--variale holds the value of number of Rows span-->
-											<!--Creating td tag with rowspan and colspan attribute-->
-											<xsl:value-of disable-output-escaping="yes" select="concat('&lt;td colspan=&quot;',$colspan,'&quot;  rowspan=&quot;',d:GetRowspan($myObj)+1,'&quot;&gt;')"/>
-										</xsl:when>
-										<!--Checking for colspan and not rowspan-->
-										<xsl:when test="(w:tcPr/w:gridSpan) and not(w:tcPr/w:vMerge[@w:val='restart'])">
-											<!--colspan variable holds colspan value-->
-											<xsl:variable name="colspan" as="xs:string" select="w:tcPr/w:gridSpan/@w:val"/>
-											<!--Creating td tag with colspan attribute-->
-											<xsl:value-of disable-output-escaping="yes" select="concat('&lt;td colspan=&quot;',$colspan,'&quot;&gt;')"/>
-										</xsl:when>
-										<!--Checking for rowspan and not colspan-->
-										<xsl:when test="(w:tcPr/w:vMerge[@w:val='restart']) and not(w:tcPr/w:gridSpan)">
-											<!--rowspan variable holds rowspan value-->
-											<!--Creating td tag with rowspan attribute-->
-											<xsl:value-of disable-output-escaping="yes" select="concat('&lt;td rowspan=&quot;',d:GetRowspan($myObj)+1,'&quot;&gt;')"/>
-										</xsl:when>
-										<xsl:otherwise >
-											<!--Opening the td tag-->
-											<xsl:value-of disable-output-escaping="yes" select="'&lt;td &gt;'"/>
-										</xsl:otherwise>
-									</xsl:choose>
-									<xsl:variable name="var_heading" as="xs:string*">
-										<xsl:for-each select="$stylesXml//w:styles/w:style/w:name[@w:val='heading 1']">
-											<xsl:sequence select="../@w:styleId"/>
+
+										<xsl:choose>
+											<!--Checking for both colspan and rowspan-->
+											<xsl:when test="(w:tcPr/w:gridSpan) and (w:tcPr/w:vMerge[@w:val='restart'])">
+												<!--If Column span property is set the assinging the value-->
+												<xsl:variable name="colspan" as="xs:string" select="w:tcPr/w:gridSpan/@w:val"/>
+												<!--variale holds the value of number of Rows span-->
+												<!--Creating td tag with rowspan and colspan attribute-->
+												<xsl:attribute name="colspan" select="$colspan"/>
+												<xsl:attribute name="rowspan" select="d:GetRowspan($myObj)+1"/>
+											</xsl:when>
+											<!--Checking for colspan and not rowspan-->
+											<xsl:when test="(w:tcPr/w:gridSpan) and not(w:tcPr/w:vMerge[@w:val='restart'])">
+												<!--colspan variable holds colspan value-->
+												<xsl:variable name="colspan" as="xs:string" select="w:tcPr/w:gridSpan/@w:val"/>
+												<!--Creating td tag with colspan attribute-->
+												<xsl:attribute name="colspan" select="$colspan"/>
+											</xsl:when>
+											<!--Checking for rowspan and not colspan-->
+											<xsl:when test="(w:tcPr/w:vMerge[@w:val='restart']) and not(w:tcPr/w:gridSpan)">
+												<!--rowspan variable holds rowspan value-->
+												<!--Creating td tag with rowspan attribute-->
+												<xsl:attribute name="rowspan" select="d:GetRowspan($myObj)+1"/>
+											</xsl:when>
+										</xsl:choose>
+										<xsl:variable name="var_heading" as="xs:string*">
+											<xsl:for-each select="$stylesXml//w:styles/w:style/w:name[@w:val='heading 1']">
+												<xsl:sequence select="../@w:styleId"/>
+											</xsl:for-each>
+										</xsl:variable>
+										<xsl:variable name="var_heading" as="xs:string?" select="string-join($var_heading,'')[not(.='')]"/>
+										<xsl:sequence select="d:sink(d:SetRowspan($myObj))"/> <!-- empty -->
+										<xsl:for-each select="w:p">
+											<!--Calling paragraph template whenever w:p element is encountered.-->
+											<xsl:call-template name="StyleContainer">
+												<xsl:with-param name="version" select="$parmVerTable"/>
+												<xsl:with-param name="pagination" select="$pagination"/>
+												<xsl:with-param name="styleHeading" select="$var_heading"/>
+												<xsl:with-param name="mastersubstyle" select="$mastersubtbl"/>
+												<xsl:with-param name="characterStyle" select="$characterStyle"/>
+											</xsl:call-template>
 										</xsl:for-each>
-									</xsl:variable>
-									<xsl:variable name="var_heading" as="xs:string?" select="string-join($var_heading,'')[not(.='')]"/>
-									<xsl:sequence select="d:sink(d:SetRowspan($myObj))"/> <!-- empty -->
-									<xsl:for-each select="w:p">
-										<!--Calling paragraph template whenever w:p element is encountered.-->
-										<xsl:call-template name="StyleContainer">
-											<xsl:with-param name="version" select="$parmVerTable"/>
-											<xsl:with-param name="pagination" select="$pagination"/>
-											<xsl:with-param name="styleHeading" select="$var_heading"/>
-											<xsl:with-param name="mastersubstyle" select="$mastersubtbl"/>
-											<xsl:with-param name="characterStyle" select="$characterStyle"/>
-										</xsl:call-template>
-									</xsl:for-each>
+
 									<!--Checking for nested table-->
 									<xsl:for-each select="child::w:tbl">
 										<!--Calling template Tablehandler for nested tables-->
@@ -1142,12 +1148,13 @@
 											<xsl:with-param name="characterStyle" select="$characterStyle"/>
 										</xsl:call-template>
 									</xsl:for-each>
-									<!--Checking if not nested table then td is closed-->
-									<xsl:if test="not(child::w:tbl) or not(count(child::w:tbl)=0)">
-										<!--Closing the td tag-->
-										<xsl:value-of disable-output-escaping="yes" select="'&lt;/td&gt;'"/>
-									</xsl:if>
+										<!--Checking if not nested table then td is closed-->
+										<!--<xsl:if test="not(child::w:tbl) or not(count(child::w:tbl)=0)">
+											<xsl:value-of disable-output-escaping="yes" select="'&lt;/td&gt;'"/>
+										</xsl:if>-->
+
 								</xsl:if>
+								</td>
 							</xsl:for-each>
 							<xsl:sequence select="d:sink(d:SetRowspan($myObj))"/> <!-- empty -->
 							<!--Closing table row-->

@@ -224,38 +224,38 @@ public abstract class TTSEngine {
 	 *
 	 * If this method is called from {@link #synthesize}, the XSLT should not
 	 * assume that the SSML node is a root element.
+	 *
+	 * The paramter map is treated as immutable
 	 */
 	protected String transformSsmlNodeToString(XdmNode ssml, URL xslt, Map<String,Object> params)
 			throws IOException, SaxonApiException {
-		return compileXslt(xslt, ssml.getUnderlyingNode().getConfiguration())
+		return compileXslt(ssml.getUnderlyingNode().getConfiguration(), xslt, params)
 			.transformToString(ssml, params);
 	}
 
 	/**
 	 * Compile an XSLT.
 	 */
-	private ThreadUnsafeXslTransformer compileXslt(URL xslt, Configuration config)
+	private ThreadUnsafeXslTransformer compileXslt(Configuration config, URL xslt, Map<String,Object> params)
 			throws SaxonApiException, IOException {
-		Map<URL,ThreadUnsafeXslTransformer> cache = compiledXslts.get().get(config);
-		if (cache == null) {
-			cache = new HashMap<URL,ThreadUnsafeXslTransformer>();
-			compiledXslts.get().put(config, cache);
-		}
-		ThreadUnsafeXslTransformer transformer = cache.get(xslt);
+		Map<MultiKey<Configuration,URL,Map<String,Object>>,ThreadUnsafeXslTransformer> cache = compiledXslts.get();
+		MultiKey<Configuration,URL,Map<String,Object>> key = new MultiKey(config, xslt, params);
+		ThreadUnsafeXslTransformer transformer = cache.get(key);
 		if (transformer == null) {
 			transformer = new XslTransformCompiler(config)
-				.compileStylesheet(xslt.openStream())
+				.compileStylesheet(xslt.openStream(), params)
 				.newTransformer();
-			cache.put(xslt, transformer);
+			cache.put(key, transformer);
 		}
 		return transformer;
 	}
 
 	// Normally the same thread uses only one Configuration so
 	// ThreadLocal<Map<URL,ThreadUnsafeXslTransformer>> would also work, but we do it this way to be safe.
-	private static ThreadLocal<Map<Configuration,Map<URL,ThreadUnsafeXslTransformer>>> compiledXslts
-		= ThreadLocal.withInitial(() -> {
-				return new HashMap<Configuration,Map<URL,ThreadUnsafeXslTransformer>>(); });
+	private static ThreadLocal<Map<MultiKey<Configuration,URL,Map<String,Object>>,
+	                               ThreadUnsafeXslTransformer>>
+		compiledXslts = ThreadLocal.withInitial(() -> {
+			return new HashMap<MultiKey<Configuration,URL,Map<String,Object>>,ThreadUnsafeXslTransformer>(); });
 
 	/**
 	 * Create an {@link AudioInputStream} from an {@link AudioFormat} and the audio data.
@@ -278,5 +278,54 @@ public abstract class TTSEngine {
 	protected static AudioInputStream createAudioStream(InputStream stream)
 			throws UnsupportedAudioFileException, IOException {
 		return AudioUtils.createAudioStream(stream);
+	}
+
+	private static class MultiKey<T1,T2,T3> {
+
+		private final T1 key1;
+		private final T2 key2;
+		private final T3 key3;
+
+		MultiKey(T1 key1, T2 key2, T3 key3) {
+			this.key1 = key1;
+			this.key2 = key2;
+			this.key3 = key3;
+		}
+
+		@Override
+		public boolean equals(Object o) {
+			if (!(o instanceof MultiKey))
+				return false;
+			MultiKey that = (MultiKey)o;
+			if (this.key1 == null) {
+				if (that.key1 != null)
+					return false;
+			} else if (!this.key1.equals(that.key1))
+				return false;
+			if (this.key2 == null) {
+				if (that.key2 != null)
+					return false;
+			} else if (!this.key2.equals(that.key2))
+				return false;
+			if (this.key3 == null) {
+				if (that.key3 != null)
+					return false;
+			} else if (!this.key3.equals(that.key3))
+				return false;
+			return true;
+		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			if (key1 != null)
+				result = prime * result + key1.hashCode();
+			if (key2 != null)
+				result = prime * result + key2.hashCode();
+			if (key3 != null)
+				result = prime * result + key3.hashCode();
+			return result;
+		}
 	}
 }

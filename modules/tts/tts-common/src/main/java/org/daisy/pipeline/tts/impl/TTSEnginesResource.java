@@ -89,7 +89,7 @@ public class TTSEnginesResource extends AuthenticatedResource {
 					} catch (IOException|SaxonApiException e) {
 						logger.error("bad request:", e);
 						setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-						return getErrorRepresentation(e.getMessage());
+						return getErrorRepresentation(e);
 					}
 				}
 			}
@@ -116,7 +116,7 @@ public class TTSEnginesResource extends AuthenticatedResource {
 				TTSEngine e = null;
 				Throwable error = null;
 				try {
-				    e = s.newEngine(properties);
+					e = s.newEngine(properties);
 					engineElem.setAttribute("status", "available");
 				} catch (ServiceDisabledException ex) {
 					logger.debug(name + " is disabled", ex);
@@ -142,7 +142,7 @@ public class TTSEnginesResource extends AuthenticatedResource {
 					String shortMessage = error.getMessage();
 					error = error.getCause();
 					String detailedMessage = error != null ? error.getMessage() : null;
-					if (shortMessage.endsWith(detailedMessage))
+					if (detailedMessage != null && shortMessage.endsWith(detailedMessage))
 						detailedMessage = null;
 					if (shortMessage.length() > 80) {
 						// Use the heuristic that if a message is longer than 80 characters, it is possible
@@ -182,7 +182,7 @@ public class TTSEnginesResource extends AuthenticatedResource {
 				setStatus(Status.SUCCESS_OK);
 			} catch (Exception e) {
 				setStatus(Status.SERVER_ERROR_INTERNAL);
-				return getErrorRepresentation(e.getMessage());
+				return getErrorRepresentation(e);
 			}
 		}
 		logResponse(dom);

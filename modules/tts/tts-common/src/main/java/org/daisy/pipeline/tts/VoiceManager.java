@@ -35,7 +35,7 @@ public class VoiceManager {
 
 	private Logger ServerLogger = LoggerFactory.getLogger(VoiceManager.class);
 
-	private final Set<String> engineNames;
+	private final Map<String,String> engineNames;
 	/**
 	 * Map of the best services for each available voice, given that two different services can serve the same voice
 	 */
@@ -62,9 +62,12 @@ public class VoiceManager {
 	private final Map<String,Voice> voiceForID;
 
 	public VoiceManager(Collection<TTSEngine> engines, Collection<VoiceInfo> voiceInfoFromConfig) {
-		engineNames = new HashSet<>();
-		for (TTSEngine e : engines)
-			engineNames.add(e.getProvider().getName().toLowerCase());
+		engineNames = new HashMap<>();
+		for (TTSEngine e : engines) {
+			String name = e.getProvider().getName().toLowerCase();
+			engineNames.put(name, name);
+			engineNames.put(e.getProvider().getDisplayName().toLowerCase(), name);
+		}
 
 		// create a map of the best services for each available voice
 		bestEngines = new LinkedHashMap<Voice,TTSEngine>(); // LinkedHashMap: iteration order = insertion order
@@ -352,8 +355,8 @@ public class VoiceManager {
 			Gender gender = null;
 			if (f.getFamilyName().isPresent()) {
 				String name = f.getFamilyName().get();
-				if (engineNames.contains(name.toLowerCase()))
-					engineName = name;
+				if (engineNames.containsKey(name.toLowerCase()))
+					engineName = engineNames.get(name.toLowerCase());
 				else
 					voiceName = name;
 			}
@@ -504,8 +507,8 @@ public class VoiceManager {
 			return matches(voice, null, null, lang, null);
 		if (voiceFamily.getFamilyName().isPresent()) {
 			String name = voiceFamily.getFamilyName().get();
-			if (engineNames.contains(name.toLowerCase()))
-				return matches(voice, name, null, lang, null);
+			if (engineNames.containsKey(name.toLowerCase()))
+				return matches(voice, engineNames.get(name.toLowerCase()), null, lang, null);
 			else
 				return matches(voice, null, name, lang, null);
 		} else

@@ -6,18 +6,22 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.15.2-SNAPSHOT</version>
+    <version>1.15.3-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>dotify-utils</artifactId>
-  <version>6.3.1-SNAPSHOT</version>
+  <version>6.4.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: dotify-utils</name>
 
   <dependencies>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-core</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>common-utils</artifactId>
@@ -113,6 +117,8 @@
   <properties>
     <expose-services>
       org.daisy.pipeline.modules.impl.Module_dotify_utils,
+      org.daisy.pipeline.script.impl.XProcScript_obfl_to_pef,
+      org.daisy.pipeline.datatypes.impl.Datatype_px_obfl_to_pef_script_hyphenation_at_page_breaks,
       org.daisy.pipeline.braille.dotify.calabash.impl.EvalCounterStep$Provider,
       org.daisy.pipeline.braille.dotify.calabash.impl.OBFLToPEFStep$Provider,
       org.daisy.pipeline.braille.dotify.calabash.impl.OBFLNormalizeSpaceStep$Provider,

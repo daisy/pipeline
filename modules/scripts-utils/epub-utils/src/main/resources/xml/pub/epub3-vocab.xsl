@@ -5,67 +5,81 @@
                 xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions">
 
     <!--
-        EPUB 3 Structural Semantics Vocabulary: https://idpf.github.io/epub-vocabs/structure
+        EPUB 3 Structural Semantics Vocabulary
+        
+        This is the default vocabulary for use of unprefixed terms in epub:type attributes
+        
+        see https://www.w3.org/TR/epub-ssv-11/
     -->
-    <xsl:variable name="vocab-default"
-                  select="('cover',                      'titlepage',                  'balloon',
-                          'frontmatter',                 'halftitlepage',              'text-area',
-                          'bodymatter',                  'copyright-page',             'sound-area',
-                          'backmatter',                  'seriespage',                 'annotation',
-                          'volume',                      'acknowledgments',            'note',
-                          'part',                        'imprint',                    'footnote',
-                          'chapter',                     'imprimatur',                 'rearnote',
-                          'subchapter',                  'contributors',               'footnotes',
-                          'division',                    'other-credits',              'rearnotes',
-                          'abstract',                    'errata',                     'endnotes',
-                          'foreword',                    'dedication',                 'annoref',
-                          'preface',                     'revision-history',           'biblioref',
-                          'prologue',                    'case-study',                 'glossref',
-                          'introduction',                'help',                       'noteref',
-                          'preamble',                    'marginalia',                 'referrer',
-                          'conclusion',                  'notice',                     'credit',
-                          'epilogue',                    'pullquote',                  'keyword',
-                          'afterword',                   'sidebar',                    'topic-sentence',
-                          'epigraph',                    'warning',                    'concluding-sentence',
-                          'toc',                         'halftitle',                  'pagebreak',
-                          'toc-brief',                   'fulltitle',                  'page-list',
-                          'landmarks',                   'covertitle',                 'table',
-                          'loa',                         'title',                      'table-row',
-                          'loi',                         'subtitle',                   'table-cell',
-                          'lot',                         'label',                      'list',
-                          'lov',                         'ordinal',                    'list-item',
-                          'appendix',                    'bridgehead',                 'figure',
-                          'colophon',                    'learning-objective',         'antonym-group',
-                          'credits',                     'learning-objectives',        'condensed-entry',
-                          'keywords',                    'learning-outcome',           'def',
-                          'index',                       'learning-outcomes',          'dictentry',
-                          'index-headnotes',             'learning-resource',          'endnote',
-                          'index-legend',                'learning-resources',         'etymology',
-                          'index-group',                 'learning-standard',          'example',
-                          'index-entry-list',            'learning-standards',         'gram-info',
-                          'index-entry',                 'answer',                     'idiom',
-                          'index-term',                  'answers',                    'part-of-speech',
-                          'index-editor-note',           'assessment',                 'part-of-speech-group',
-                          'index-locator',               'assessments',                'part-of-speech-list',
-                          'index-locator-list',          'feedback',                   'phonetic-transcription',
-                          'index-locator-range',         'fill-in-the-blank-problem',  'phrase-group',
-                          'index-xref-preferred',        'general-problem',            'phrase-list',
-                          'index-xref-related',          'qna',                        'sense-group',
-                          'index-term-category',         'match-problem',              'sense-list',
-                          'index-term-categories',       'multiple-choice-problem',    'synonym-group',
-                          'glossary',                    'practice',                   'tran',
-                          'glossterm',                   'practices',                  'tran-info',
-                          'glossdef',                    'question',
-                          'dictionary',                  'true-false-problem',
-                          'bibliography',                'panel',
-                          'biblioentry',                 'panel-group'
-                          )"/>
+    <xsl:variable name="vocab-structure-uri" select="'http://idpf.org/epub/vocab/structure/#'"/>
+    <xsl:variable name="vocab-structure"
+                  select="('acknowledgments',           'etymology',              'index-xref-preferred',    'qna',
+                           'afterword',                 'example',                'index-xref-related',      'revision-history',
+                           'antonym-group',             'figure',                 'introduction',            'sense-group',
+                           'appendix',                  'footnote',               'keyword',                 'sense-list',
+                           'aside',                     'footnotes',              'landmarks',               'sound-area',
+                           'assessment',                'foreword',               'learning-objective',      'subtitle',
+                           'backmatter',                'frontmatter',            'learning-resource',       'synonym-group',
+                           'balloon',                   'fulltitle',              'list',                    'table',
+                           'biblioentry',               'glossary',               'list-item',               'table-cell',
+                           'bibliography',              'glossdef',               'loa',                     'table-row',
+                           'bodymatter',                'glossterm',              'loi',                     'text-area',
+                           'chapter',                   'gram-info',              'lot',                     'tip',
+                           'colophon',                  'halftitle',              'lov',                     'title',
+                           'concluding-sentence',       'halftitlepage',          'noteref',                 'titlepage',
+                           'conclusion',                'idiom',                  'notice',                  'toc',
+                           'condensed-entry',           'imprimatur',             'other-credits',           'topic-sentence',
+                           'contributors',              'imprint',                'page-list',               'tran',
+                           'copyright-page',            'index',                  'pagebreak',               'tran-info',
+                           'cover',                     'index-editor-note',      'panel',                   'volume',
+                           'covertitle',                'index-entry',            'panel-group',
+                           'dedication',                'index-entry-list',       'part',
+                           'def',                       'index-group',            'part-of-speech',
+                           'dictentry',                 'index-headnotes',        'part-of-speech-group',
+                           'dictionary',                'index-legend',           'part-of-speech-list',
+                           'division',                  'index-locator',          'phonetic-transcription',
+                           'endnote',                   'index-locator-list',     'phrase-group',
+                           'endnotes',                  'index-locator-range',    'phrase-list',
+                           'epigraph',                  'index-term',             'preamble',
+                           'epilogue',                  'index-term-categories',  'preface',
+                           'errata',                    'index-term-category',    'prologue',
+                           
+                           (:draft:)
+                           
+                           'abstract',                  'general-problem',        'multiple-choice-problem',
+                           'answer',                    'glossref',               'ordinal',
+                           'answers',                   'keywords',               'practice',
+                           'assessments',               'label',                  'practices',
+                           'backlink',                  'learning-objectives',    'pullquote',
+                           'biblioref',                 'learning-outcome',       'question',
+                           'case-study',                'learning-outcomes',      'seriespage',
+                           'credit',                    'learning-resources',     'toc-brief',
+                           'credits',                   'learning-standard',      'true-false-problem',
+                           'feedback',                  'learning-standards',
+                           'fill-in-the-blank-problem', 'match-problem',
+                           
+                           (:deprecated:)
+                           
+                           'annoref',
+                           'annotation',
+                           'bridgehead',
+                           'help',
+                           'marginalia',
+                           'note',
+                           'rearnote',
+                           'rearnotes',
+                           'sidebar',
+                           'subchapter',
+                           'warning'
+                           )"/>
     
     <!--
-        Z39.98-2012 Structural Semantics Vocabulary: http://www.daisy.org/z3998/2012/vocab/structure
+        Z39.98-2012 Structural Semantics Vocabulary
+        
+        see http://www.daisy.org/z3998/2012/vocab/structure
     -->
-    <xsl:variable name="vocab-z3998-uri" select="'http://www.daisy.org/z3998/2012/vocab/structure/#'"/>
-    <xsl:variable name="vocab-z3998"
+    <xsl:variable name="vocab-z3998-structure-uri" select="'http://www.daisy.org/z3998/2012/vocab/structure/#'"/>
+    <xsl:variable name="vocab-z3998-structure"
                   select="('abbreviations',              'email',                      'measure',                   'recipient',
                           'acknowledgments',             'email-message',              'mixed',                     'recto',
                           'acronym',                     'epigraph',                   'morpheme',                  'reference',
@@ -120,13 +134,45 @@
                           )"/>
     
     <!--
-        Package Metadata Vocabulary: http://www.idpf.org/epub/301/spec/epub-publications.html#sec-package-metadata-vocab
+        Meta Properties Vocabulary
         
-        This is the default vocabulary for use of unprefixed terms in package metadata
+        This is the default vocabulary for use of unprefixed terms in package metadata, for the
+        meta/@property attribute.
         
-        see http://www.idpf.org/epub/301/spec/epub-publications.html#sec-metadata-default-vocab
+        see https://www.w3.org/TR/epub-33/#app-meta-property-vocab
     -->
-    <xsl:variable name="vocab-package-uri" as="xs:string" select="'http://idpf.org/epub/vocab/package/#'"/>
+    <xsl:variable name="vocab-package-meta-uri" as="xs:string" select="'http://idpf.org/epub/vocab/package/meta/#'"/>
+    
+    <!--
+        Link Relationships Vocabulary
+        
+        This is the default vocabulary for use of unprefixed terms in the package metadata, for the
+        link/@rel and link/@properties attributes.
+        
+        see https://www.w3.org/TR/epub/#app-link-vocab
+    -->
+    <xsl:variable name="vocab-package-link-uri" as="xs:string" select="'http://idpf.org/epub/vocab/package/link/#'"/>
+    
+    <!--
+        Spine Properties Vocabulary
+        
+        This is the default vocabulary for use of unprefixed terms in the package metadata, for the
+        item/@properties attribute.
+        
+        see https://www.w3.org/TR/epub-33/#app-item-properties-vocab
+    -->
+    <xsl:variable name="vocab-package-item-uri" as="xs:string" select="'http://idpf.org/epub/vocab/package/item/#'"/>
+    
+    
+    <!--
+        Spine Properties Vocabulary
+        
+        This is the default vocabulary for use of unprefixed terms in the package metadata, for the
+        itemref/@properties attribute.
+        
+        see https://www.w3.org/TR/epub-33/#app-itemref-properties-vocab
+    -->
+    <xsl:variable name="vocab-package-itemref-uri" as="xs:string" select="'http://idpf.org/epub/vocab/package/itemref/#'"/>
     
     <!--
         Reserved prefix mappings in package document
@@ -146,12 +192,14 @@
     </xsl:variable>
     
     <!--
-        Parse prefix attribute: http://www.idpf.org/epub/301/spec/epub-publications.html#sec-prefix-attr
+        Parse prefix attribute
         
         Returns a sequence of f:vocab elements representing vocab declarations in a @prefix attribute where
         
         * @prefix contains the declared prefix
         * @uri contains the vocab URI
+        
+        see http://www.idpf.org/epub/301/spec/epub-publications.html#sec-prefix-attr
     -->
     <xsl:function name="f:parse-prefix-decl" as="element(f:vocab)*">
         <xsl:param name="prefix-decl" as="xs:string?"/>
@@ -177,15 +225,19 @@
         <xsl:param name="mappings" as="element(f:vocab)*"/>
         <xsl:param name="reserved-prefixes" as="element(f:vocab)*"/>
         <!--
-            no prefix may be mapped to default vocabulary
+            no prefix may be mapped to a default vocabulary
         -->
         <xsl:variable name="mappings" as="element(f:vocab)*">
             <xsl:for-each select="$mappings">
                 <xsl:choose>
-                    <xsl:when test="@uri=$vocab-package-uri">
+                    <xsl:when test="@uri=($vocab-package-meta-uri,
+                                          $vocab-package-link-uri,
+                                          $vocab-package-item-uri,
+                                          $vocab-package-itemref-uri,
+                                          $vocab-structure-uri)">
                         <xsl:message select="concat('Warning: prefix attibute must not be used to define a prefix (',
-                                                    @prefix, ') that maps to the default vocabulary ''',
-                                                    $vocab-package-uri,'''')"/>
+                                                    @prefix, ') that maps to a default vocabulary: ''',
+                                                    @uri,'''')"/>
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:sequence select="."/>

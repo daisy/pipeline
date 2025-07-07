@@ -157,5 +157,9 @@ $line-spacing: single !default;
 	}
 }
 
-@import "_volume-breaking.scss" embossed;
-@import "_notes.scss" embossed;
+// Not using SASS imports because medium would be ignored.
+// Note that having a media query should in theory be enough to make it a plain CSS import (see
+// https://sass-lang.com/documentation/at-rules/import/#plain-css-imports), but the url() function
+// appears to be also needed in practice.
+@import url("_volume-breaking.scss") embossed;
+@import url("_notes.scss") embossed;

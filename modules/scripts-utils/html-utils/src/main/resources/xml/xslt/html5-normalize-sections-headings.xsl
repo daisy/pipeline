@@ -142,11 +142,14 @@
 		<xsl:param name="wrapper-element" as="element()?" required="yes"/>
 		<xsl:variable name="fragment-text" as="text()*"
 		              select="$fragment/descendant-or-self::text()[normalize-space(.)]"/>
+		<xsl:variable name="heading-element" as="element()?"
+		              select="@heading/key('id',.,$root)"/>
 		<xsl:variable name="child-sectioning-element" as="element()?"
 		              select="d:outline[1]/@owner/key('id',.,$root)"/>
 		<xsl:variable name="deepest-common-ancestor" as="element()"
 		              select="($fragment-top,
 		                       for $e in $fragment-top/descendant::*
+		                                 intersect ($heading-element,$fragment-text[1])[1]/ancestor::*
 		                                 intersect ($child-sectioning-element,$fragment-text[1])[1]/ancestor::*
 		                       return (if (not(exists($fragment-text except $e/descendant::node())))
 		                               then $e
@@ -639,6 +642,11 @@
 
 	<!-- ignore sectioning root elements other than body -->
 	<xsl:template mode="rename-headings add-implied-headings" match="blockquote|details|fieldset|figure|td">
+		<xsl:sequence select="."/>
+	</xsl:template>
+
+	<!-- just to make sure we don't crash when a heading contains a section for some reason -->
+	<xsl:template mode="add-implied-headings" match="h1|h2|h3|h4|h5|h6">
 		<xsl:sequence select="."/>
 	</xsl:template>
 

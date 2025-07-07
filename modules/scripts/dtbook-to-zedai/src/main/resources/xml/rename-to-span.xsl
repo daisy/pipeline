@@ -132,9 +132,11 @@
     <xsl:template
         match="dtb:abbr/dtb:a | dtb:acronym/dtb:a | dtb:dt/dtb:a | dtb:sub/dtb:a | 
         dtb:sup/dtb:a | dtb:w/dtb:a">
-        <xsl:message>WARNING: 'href' attribute lost when transforming 'a' element into span. Source
-            element ID = <xsl:value-of select="@id"/>. HREF = <xsl:value-of select="@href"
-            /></xsl:message>
+        <xsl:if test="@href">
+            <xsl:message>WARNING: 'href' attribute lost when transforming 'a' element into span. Source
+                element ID = <xsl:value-of select="@id"/>. HREF = <xsl:value-of select="@href"
+                /></xsl:message>
+        </xsl:if>
         <xsl:call-template name="element2span"/>
     </xsl:template>
 
@@ -163,7 +165,7 @@
             <xsl:call-template name="copy-attrs"/>
             <!-- if no ID, then give a new ID -->
             <xsl:if test="not(@id)">
-                <xsl:attribute name="xml:id" select="$citeID"/>
+                <xsl:attribute name="id" select="$citeID"/>
             </xsl:if>
 
             <xsl:for-each select="child::node()">
@@ -244,7 +246,7 @@
 
     <xsl:template name="copy-attrs">
         <xsl:if test="@id">
-            <xsl:attribute name="xml:id" select="@id"/>
+            <xsl:attribute name="id" select="@id"/>
         </xsl:if>
         <xsl:copy-of select="@xml:space"/>
         <xsl:copy-of select="@class"/>

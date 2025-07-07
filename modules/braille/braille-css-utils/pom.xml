@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.15.2-SNAPSHOT</version>
+    <version>1.15.3-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>braille-css-utils</artifactId>
-  <version>4.0.3-SNAPSHOT</version>
+  <version>4.1.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: braille-css-utils</name>
@@ -70,7 +70,6 @@
       org.daisy.pipeline.braille.css.impl.BrailleCssCascader,
       org.daisy.pipeline.braille.css.saxon.impl.StyleFunctionProvider,
       org.daisy.pipeline.braille.css.saxon.impl.StyledTextFunctionProvider,
-      org.daisy.pipeline.braille.css.saxon.impl.ParseStylesheetDefinition,
       org.daisy.pipeline.braille.css.saxon.impl.RenderTableByDefinition
     </expose-services>
   </properties>

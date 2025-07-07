@@ -20,10 +20,83 @@ import org.daisy.pipeline.braille.css.xpath.impl.Declaration;
 import org.daisy.pipeline.braille.css.xpath.impl.Stylesheet;
 import org.daisy.pipeline.braille.css.xpath.impl.Value;
 
+import org.w3c.dom.Attr;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+
 /**
  * Interface for accessing braille CSS styles from XPath.
  */
 public abstract class Style {
+
+	private static final String XMLNS_CSS = "http://www.daisy.org/ns/pipeline/braille-css";
+	private static final BrailleCssParser PARSER = BrailleCssParser.getInstance();
+
+	public static Optional<Style> parse(Optional<Object> style) {
+		return parse(style.orElse(null), null, false);
+	}
+
+	public static Optional<Style> parse(Optional<Object> style, Optional<Style> parentStyle) {
+		return parse(style.orElse(null), parentStyle.orElse(null), true);
+	}
+
+	private static Optional<Style> parse(Object style, Style parentStyle, boolean concretizeInherit) {
+		String argStringValue;
+		Attr attr = null;
+		Element element = null;
+		if (style == null)
+			argStringValue = "";
+		else if (style instanceof Attr) {
+			attr = (Attr)style;
+			argStringValue = attr.getNodeValue();
+			element = (Element)attr.getParentNode();
+		} else if (style instanceof Node) {
+			argStringValue = ((Node)style).getTextContent();
+		} else if (style instanceof String) {
+			argStringValue = (String)style;
+		} else
+			throw new IllegalArgumentException("Unexpected type for first argument");
+		if (parentStyle != null && !(parentStyle instanceof Stylesheet))
+			throw new IllegalArgumentException("Unexpected type for second argument: " + parentStyle);
+		Context styleCtxt = Context.ELEMENT;
+		if (attr != null) {
+			if (XMLNS_CSS.equals(attr.getNamespaceURI())) {
+				String name = attr.getLocalName().replaceAll("^_", "-");
+				if ("page".equals(name)) {
+					styleCtxt = Context.PAGE;
+				} else if ("volume".equals(name)) {
+					styleCtxt = Context.VOLUME;
+				} else if ("hyphenation-resource".equals(name)) {
+					styleCtxt = Context.HYPHENATION_RESOURCE;
+				} else if ("text-transform".equals(name)) {
+					styleCtxt = Context.TEXT_TRANSFORM;
+				} else if ("counter-style".equals(name)) {
+					styleCtxt = Context.COUNTER_STYLE;
+				} else if (PARSER.isSupportedCSSProperty(name)) {
+					// assuming that context is a (pseudo-)element
+					// assuming that the value is not "inherit"
+					// not assuming that attr() and content() values have already been evaluated (although normally they will)
+					Optional<cz.vutbr.web.css.Declaration> declaration
+						= PARSER.parseDeclaration(name, argStringValue, element, false);
+					if (declaration.isPresent())
+						return Optional.of(new Declaration(declaration.get()));
+					else
+						return Optional.empty();
+				}
+			}
+		}
+		BrailleCssStyle s = concretizeInherit
+			? PARSER.parseInlineStyle(argStringValue, styleCtxt, parentStyle != null ? ((Stylesheet)parentStyle).style : null)
+			: PARSER.parseInlineStyle(argStringValue, styleCtxt);
+		if (s.isEmpty())
+			return Optional.empty();
+		if (attr != null)
+			if (styleCtxt == Context.ELEMENT)
+				s = s.evaluate(element);
+			else
+				s = BrailleCssStyle.of("@" + attr.getLocalName(), s);
+		return Optional.of(Stylesheet.of(s));
+	}
 
 	/**
 	 * Serialize the style to a string according to the <a
@@ -210,7 +283,7 @@ public abstract class Style {
 		if (styles.hasNext()) {
 			Object s = styles.next();
 			if (s instanceof String)
-				head = new Value(ContentList.of(BrailleCssParser.getInstance(),
+				head = new Value(ContentList.of(PARSER,
 				                                Context.ELEMENT,
 				                                Collections.singletonList(stringTerm((String)s))));
 			else if (!(s instanceof Style))
@@ -233,7 +306,7 @@ public abstract class Style {
 		while (styles.hasNext()) {
 			Object s = styles.next();
 			if (s instanceof String)
-				list.add(new Value(ContentList.of(BrailleCssParser.getInstance(),
+				list.add(new Value(ContentList.of(PARSER,
 				                                  Context.ELEMENT,
 				                                  Collections.singletonList(stringTerm((String)s)))));
 			else if (!(s instanceof Style))

@@ -92,12 +92,24 @@
 				</xsl:call-template>
 				<meta property="a11y:completeTranscription">true</meta>
 			</xsl:if>
-			<xsl:if test="not(meta[@property='a11y:producer'])">
-				<xsl:call-template name="pf:warn">
-					<xsl:with-param name="msg" select="'a11y:producer unknown'"/>
-				</xsl:call-template>
-				<meta property="a11y:producer">Unknown</meta>
-			</xsl:if>
+			<xsl:choose>
+				<xsl:when test="meta[@property='a11y:producer']"/>
+				<xsl:when test="$dtbook-metadata//dtb:meta[lower-case(@name)='dtb:producer']/string(@content)">
+					<xsl:call-template name="pf:warn">
+						<xsl:with-param name="msg" select="'a11y:producer taken from DTBook''s dtb:producer'"/>
+					</xsl:call-template>
+					<meta property="a11y:producer">
+						<xsl:value-of select="$dtbook-metadata//dtb:meta[lower-case(@name)='dtb:producer']
+						                      /string(@content)[1]"/>
+					</meta>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:call-template name="pf:warn">
+						<xsl:with-param name="msg" select="'a11y:producer unknown'"/>
+					</xsl:call-template>
+					<meta property="a11y:producer">Unknown</meta>
+				</xsl:otherwise>
+			</xsl:choose>
 			<xsl:if test="not(meta[@property='a11y:tactileGraphics'])">
 				<!-- this can only be true if the DTBook contains tactile graphics -->
 				<meta property="a11y:tactileGraphics">false</meta>

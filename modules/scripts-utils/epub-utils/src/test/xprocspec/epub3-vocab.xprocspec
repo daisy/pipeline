@@ -139,7 +139,7 @@
 				</x:document>
 			</x:input>
 			<x:option name="prefix" select="'foo'"/>
-			<x:option name="uri" select="'http://idpf.org/epub/vocab/package/#'"/>
+			<x:option name="uri" select="'http://idpf.org/epub/vocab/package/meta/#'"/>
 		</x:call>
 		<x:context label="the result">
 			<x:document type="port" port="result"/>

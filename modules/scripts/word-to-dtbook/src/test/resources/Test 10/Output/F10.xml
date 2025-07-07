@@ -21,199 +21,84 @@
          <table border="1">
             <col align="center"/>
             <tbody>
-               <tr><td rowspan="2"><p><imggroup>
-                     <img id="rId51" src="F10-Picture%201.jpg" alt="rasgas"/>
-                  </imggroup></p>
-</td><td ><p></p>
-</td></tr>
-               <tr><td ><p></p>
-</td><td ><p>We have experience in developing Maintenance Planning Systems for large enterprises and companies that use great number of assets. It supposed to work in interaction with ERP system and realize missing functions that customer requires for its optimization needs.</p>
-<p></p>
-<p></p>
-</td></tr>
+               <tr>
+                  <td rowspan="2"><p><imggroup>
+                        <img src="F10-Picture%201.jpg" alt="rasgas" id="rId51"/>
+                     </imggroup></p></td>
+                  <td><p></p></td>
+               </tr>
+               <tr>
+                  <td><p></p></td>
+                  <td><p>We have experience in developing Maintenance Planning Systems for large enterprises and companies that use great number of assets. It supposed to work in interaction with ERP system and realize missing functions that customer requires for its optimization needs.</p><p></p><p></p></td>
+               </tr>
             </tbody>
-         </table><level1><h1><strong >  OUR EXPERIENCE IN MAINTENANCE PLANNING SYSTEM </strong>
-</h1><p></p>
-<level2><h2>  The Maintenance Problem 
-</h2><p>Manufacturing Plants, Airports, Refineries, Transportation companies and many other large enterprises have one thing in common: they operate large amounts of assets, which all require regular scheduled maintenance and repair. </p>
-<p></p>
-<p>An experienced Maintenance Department can do the planning of proactive maintenance and repair for several hundred assets with conventional tools, based on Excel or similar programs. However, if the number of assets reaches or exceeds several 10,000, then it is obvious that this approach would not work any longer.</p>
-<p></p>
-<p>Taking into account the manufacturers preventive maintenance directives, available manpower resources, tools, spare parts and utilities, distance of asset locations, in competition with mostly always unscheduled urgent repair requests, than it becomes clear that a constraint-based long term maintenance planning tool is needed, taking these requirements into account.</p>
-<p></p>
-<p></p>
-</level2><level2><h2>  What we can offer
-</h2><p>We have experience in developing custom maintenance planning systems for large-scale asset owners (over <strong >200.000</strong> assets). </p>
-<p></p>
-<p>We know how to read asset data from ERP systems and interact with plant maintenance systems like SAP PM, process preventive maintenance requirements along with available resources and tools, take into account the competing requirement of sudden repairs, and create long term constraint-based work schedules, with work order inputs to the ERP system. </p>
-<p></p>
-<p>We understand the challenges of plant maintenance requirements of resource, we know resource leveling and the underlying mathematical planning algorithms, and we have the experience to develop enterprise-class software systems.</p>
-<p></p>
-<p>These are the keys to successful implementation of long-term maintenance planning systems on a large scale. You can download the presentation to learn more about Plant Maintenance System.</p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<table border="1">
+         </table><level1><h1><strong >  OUR EXPERIENCE IN MAINTENANCE PLANNING SYSTEM </strong></h1><p></p><level2><h2>  The Maintenance Problem </h2><p>Manufacturing Plants, Airports, Refineries, Transportation companies and many other large enterprises have one thing in common: they operate large amounts of assets, which all require regular scheduled maintenance and repair. </p><p></p><p>An experienced Maintenance Department can do the planning of proactive maintenance and repair for several hundred assets with conventional tools, based on Excel or similar programs. However, if the number of assets reaches or exceeds several 10,000, then it is obvious that this approach would not work any longer.</p><p></p><p>Taking into account the manufacturers preventive maintenance directives, available manpower resources, tools, spare parts and utilities, distance of asset locations, in competition with mostly always unscheduled urgent repair requests, than it becomes clear that a constraint-based long term maintenance planning tool is needed, taking these requirements into account.</p><p></p><p></p></level2><level2><h2>  What we can offer</h2><p>We have experience in developing custom maintenance planning systems for large-scale asset owners (over <strong >200.000</strong> assets). </p><p></p><p>We know how to read asset data from ERP systems and interact with plant maintenance systems like SAP PM, process preventive maintenance requirements along with available resources and tools, take into account the competing requirement of sudden repairs, and create long term constraint-based work schedules, with work order inputs to the ERP system. </p><p></p><p>We understand the challenges of plant maintenance requirements of resource, we know resource leveling and the underlying mathematical planning algorithms, and we have the experience to develop enterprise-class software systems.</p><p></p><p>These are the keys to successful implementation of long-term maintenance planning systems on a large scale. You can download the presentation to learn more about Plant Maintenance System.</p><p></p><p></p><p></p><p></p><p></p><table border="1">
             <tbody>
-               <tr><td rowspan="2"><p><imggroup>
-                     <img id="rId62" src="F10-Picture%203.jpg" alt="money"/>
-                  </imggroup></p>
-</td><td ><p><strong >Budget planning and controlling system of the transnational corporation</strong></p>
-</td></tr>
-               <tr><td ><p></p>
-</td><td ><p></p>
-<p>Budgeting system of transnational corporation with headquarter in Germany consisting of about 100 companies that include about 400 departments.</p>
-<p>Development on the fixed price contract, scope of work was about 9000 man-hours.</p>
-<p>Parallel work with the team of a Customer.</p>
-</td></tr>
+               <tr>
+                  <td rowspan="2"><p><imggroup>
+                        <img src="F10-Picture%203.jpg" alt="money" id="rId62"/>
+                     </imggroup></p></td>
+                  <td><p><strong >Budget planning and controlling system of the transnational corporation</strong></p></td>
+               </tr>
+               <tr>
+                  <td><p></p></td>
+                  <td><p></p><p>Budgeting system of transnational corporation with headquarter in Germany consisting of about 100 companies that include about 400 departments.</p><p>Development on the fixed price contract, scope of work was about 9000 man-hours.</p><p>Parallel work with the team of a Customer.</p></td>
+               </tr>
             </tbody>
-         </table><p></p>
-<p></p>
-<p></p>
-<p></p>
-<p><strong >Budget planning and controlling system of the transnational corporation* </strong></p>
-<p>(*) – name of the Customer is not disclosed for reasons of confidentiality.</p>
-<p></p>
-<p><strong >Business area</strong></p>
-<p>Transnational logistic corporation. </p>
-<p>The annual turnover is of nearly 50 billion USD. </p>
-<p>Corporation has offices in more than 220 countries around the world. The staff of employees is nearly 500 000.</p>
-<p></p>
-<p><strong >Purpose, functions, features</strong></p>
-<p>Budget system reflects the organizational structure of the corporation, that consist of independent companies and their departments (100 companies include about 400 departments).</p>
-<p></p>
-<p>Each department of the company has its own budget. </p>
-<p>Department budget is allocated to the projects of that department.</p>
-<p>Cash flow accounting of the project is carried out by registration of receipts and expenditure of financial documents (contracts, orders, invoices, etc.). Project costs are written off on defined cost centers. Owners of this cost centers are companies of the holding.</p>
-<p>System features:</p>
-<p>to combine the projects of different departments to super projects on corporate level;</p>
-<p>to manage long-term projects budget in the several fiscal years;</p>
-<p>to control debtor /creditor partners’ accounts, which are involved in the order execution;</p>
-<p>to get detailed statistical and analytical information for the fiscal year with the monthly split by projects, cost centers, orders, invoices etc;</p>
-<p>to inform the users about the important events through the automated messaging;</p>
-<p>to  manage referenced data;</p>
-<p>flexible system of rights and data permission.</p>
-<p></p>
-<p><strong >Technical details</strong></p>
-<p>DBMS: <strong >Oracle Database 11g</strong> </p>
-<p>Programming language: <strong >Java</strong></p>
-<p>Application server: <strong >JBoss Application Server 5.0</strong></p>
-<p>Technologies used:</p>
-<p><strong >J2EE</strong> – component model of application,</p>
-<p><strong >EJB 3 (Hibernate)</strong> – access to the data base,</p>
-<p><strong >JSP, Struts 2, Tiles, JavaScript</strong> – user interface implementation,</p>
-<p><strong >Quartz</strong> – implementation of scheduled tasks,</p>
-<p><strong >JUnit</strong> – modular automatic tests platform.</p>
-<p></p>
-<p><strong >Quality assurance </strong></p>
-<p>The quality assurance of implemented functionality has been supported by:</p>
-<p>Code Review</p>
-<p>Unit Tests</p>
-<p>Manual Functional Testing </p>
-<p></p>
-<p><strong >Project team</strong></p>
-<p>Project team had 2 members: </p>
-<p>6 developers was working on implementation of functionality and unit test development</p>
-<p>1 development manager (coordination with Customer, planning, development management)</p>
-<p>1 architect (design for reporting module, developers support)</p>
-<p></p>
-<p><strong >Terms</strong></p>
-<p>The project terms was about 7 months</p>
-<p></p>
-<p></p>
-<p><strong >Project organization</strong></p>
-<p>Fixed price contract, scope of work about 9000 man-hours.</p>
-<p>The project was implemented jointly with the partner Nearshore Solutions GmbH.</p>
-<p>Development term was 7 months. Parallel work with the team of the Customer.</p>
-<p>Project management was done by the Customer. GERSIS SOFTWARE managed its development.</p>
-<p>Specialists of GERSIS SOFTWARE clarified requirements, developed the main part of the project functionality, developed automated tests and partially developed architecture.</p>
-<p><strong >Business area</strong></p>
-<p></p>
-<p>International holding company with multi-layered structure and with about 50 affiliates in different regions and countries.</p>
-<p></p>
-<p><strong >The main functions and features of the system:</strong></p>
-<p></p>
-<p>Managing user permissions and roles, support of information and operations access control.</p>
-<p>For example: </p>
-<list type="ul"><li><p>employees of the certain company have access only to their company’s indicator values and reports, head of the holding has no restrictions to access reports;</p>
-</li><li><p>administrator has access to the administrative tools but has not permission to access reports.</p>
-</li></list><p></p>
-<p>Flexible environment for reporting process: </p>
-<list type="ul"><li><p xml:lang="ru-RU">maintaining holding structure;</p>
-</li><li><p>support of multi currencies, because holding is represented in several countries; </p>
-</li><li><p>report of holding is in the currency of holding, indicators of affiliates are recalculated to the holding currency  according currency exchange rates.</p>
-</li></list><p></p>
-<p>Intellectual control was applied to minimize the chance of error in the input of primary information. Changes to the reports after due date are restricted without permission of top management. </p>
-<p></p>
-<p>Financial KPI (Key Performance Indicators) are already part of production version. Non financial KPI is now under development and will be introduced in next version.  </p>
-<p></p>
-<p>Reports are available for the level of holding, region, company with detail of branches and detail on the indicators. </p>
-<p></p>
-<p>Developed with respect to future extensions architecture allows:</p>
-<list type="ul"><li><p>flexible change of all parameters, such as currency of holding, via graphical user interface, without any changes to the source code; </p>
-</li><li><p>fast and easy adding of new groups of indicators and appropriate reports for them. The Customer has already expressed his preliminary intention for the following steps to expand range of indicators and reports;</p>
-</li><li><p>good performance for large amounts of information (yearly report contains data from 50 affiliates).</p>
-</li></list><p></p>
-<p><strong >Technical details<br/>
-         <br/></strong>DBMS: <strong >MySQL<br/></strong>Programming language: <strong >Java<br/></strong>Application server: <strong >Tomcat Application Server 6.0.2.0</strong><br/></p>
-<p xml:lang="ru-RU">Technologies used:</p>
-<list type="ul"><li><p><strong >J2EE</strong> – component model application,</p>
-</li><li><p><strong >Hibernate</strong> – access to the data base,</p>
-</li><li><p><strong >JSP, Struts 2, Tiles, JavaScript</strong> – implementation of user interface.</p>
-</li></list><p><strong >Project organization</strong></p>
-<p>Fixed price contract. Scope of work was about 200 man-hours. Development term was 1 month. Specialists of GERSIS SOFTWARE performed a full range of services: requirements analyzes, architecture development, development of functionality, testing, installation on customer’s server and user training.</p>
-<p></p>
-<table border="1">
+         </table><p></p><p></p><p></p><p></p><p><strong >Budget planning and controlling system of the transnational corporation* </strong></p><p>(*) – name of the Customer is not disclosed for reasons of confidentiality.</p><p></p><p><strong >Business area</strong></p><p>Transnational logistic corporation. </p><p>The annual turnover is of nearly 50 billion USD. </p><p>Corporation has offices in more than 220 countries around the world. The staff of employees is nearly 500 000.</p><p></p><p><strong >Purpose, functions, features</strong></p><p>Budget system reflects the organizational structure of the corporation, that consist of independent companies and their departments (100 companies include about 400 departments).</p><p></p><p>Each department of the company has its own budget. </p><p>Department budget is allocated to the projects of that department.</p><p>Cash flow accounting of the project is carried out by registration of receipts and expenditure of financial documents (contracts, orders, invoices, etc.). Project costs are written off on defined cost centers. Owners of this cost centers are companies of the holding.</p><p>System features:</p><p>to combine the projects of different departments to super projects on corporate level;</p><p>to manage long-term projects budget in the several fiscal years;</p><p>to control debtor /creditor partners’ accounts, which are involved in the order execution;</p><p>to get detailed statistical and analytical information for the fiscal year with the monthly split by projects, cost centers, orders, invoices etc;</p><p>to inform the users about the important events through the automated messaging;</p><p>to  manage referenced data;</p><p>flexible system of rights and data permission.</p><p></p><p><strong >Technical details</strong></p><p>DBMS: <strong >Oracle Database 11g</strong> </p><p>Programming language: <strong >Java</strong></p><p>Application server: <strong >JBoss Application Server 5.0</strong></p><p>Technologies used:</p><p><strong >J2EE</strong> – component model of application,</p><p><strong >EJB 3 (Hibernate)</strong> – access to the data base,</p><p><strong >JSP, Struts 2, Tiles, JavaScript</strong> – user interface implementation,</p><p><strong >Quartz</strong> – implementation of scheduled tasks,</p><p><strong >JUnit</strong> – modular automatic tests platform.</p><p></p><p><strong >Quality assurance </strong></p><p>The quality assurance of implemented functionality has been supported by:</p><p>Code Review</p><p>Unit Tests</p><p>Manual Functional Testing </p><p></p><p><strong >Project team</strong></p><p>Project team had 2 members: </p><p>6 developers was working on implementation of functionality and unit test development</p><p>1 development manager (coordination with Customer, planning, development management)</p><p>1 architect (design for reporting module, developers support)</p><p></p><p><strong >Terms</strong></p><p>The project terms was about 7 months</p><p></p><p></p><p><strong >Project organization</strong></p><p>Fixed price contract, scope of work about 9000 man-hours.</p><p>The project was implemented jointly with the partner Nearshore Solutions GmbH.</p><p>Development term was 7 months. Parallel work with the team of the Customer.</p><p>Project management was done by the Customer. GERSIS SOFTWARE managed its development.</p><p>Specialists of GERSIS SOFTWARE clarified requirements, developed the main part of the project functionality, developed automated tests and partially developed architecture.</p><p><strong >Business area</strong></p><p></p><p>International holding company with multi-layered structure and with about 50 affiliates in different regions and countries.</p><p></p><p><strong >The main functions and features of the system:</strong></p><p></p><p>Managing user permissions and roles, support of information and operations access control.</p><p>For example: </p><list type="ul"><li><p>employees of the certain company have access only to their company’s indicator values and reports, head of the holding has no restrictions to access reports;</p></li><li><p>administrator has access to the administrative tools but has not permission to access reports.</p></li></list><p></p><p>Flexible environment for reporting process: </p><list type="ul"><li><p xml:lang="ru-RU">maintaining holding structure;</p></li><li><p>support of multi currencies, because holding is represented in several countries; </p></li><li><p>report of holding is in the currency of holding, indicators of affiliates are recalculated to the holding currency  according currency exchange rates.</p></li></list><p></p><p>Intellectual control was applied to minimize the chance of error in the input of primary information. Changes to the reports after due date are restricted without permission of top management. </p><p></p><p>Financial KPI (Key Performance Indicators) are already part of production version. Non financial KPI is now under development and will be introduced in next version.  </p><p></p><p>Reports are available for the level of holding, region, company with detail of branches and detail on the indicators. </p><p></p><p>Developed with respect to future extensions architecture allows:</p><list type="ul"><li><p>flexible change of all parameters, such as currency of holding, via graphical user interface, without any changes to the source code; </p></li><li><p>fast and easy adding of new groups of indicators and appropriate reports for them. The Customer has already expressed his preliminary intention for the following steps to expand range of indicators and reports;</p></li><li><p>good performance for large amounts of information (yearly report contains data from 50 affiliates).</p></li></list><p></p><p><strong >Technical details<br/>
+         <br/></strong>DBMS: <strong >MySQL<br/></strong>Programming language: <strong >Java<br/></strong>Application server: <strong >Tomcat Application Server 6.0.2.0</strong><br/></p><p xml:lang="ru-RU">Technologies used:</p><list type="ul"><li><p><strong >J2EE</strong> – component model application,</p></li><li><p><strong >Hibernate</strong> – access to the data base,</p></li><li><p><strong >JSP, Struts 2, Tiles, JavaScript</strong> – implementation of user interface.</p></li></list><p><strong >Project organization</strong></p><p>Fixed price contract. Scope of work was about 200 man-hours. Development term was 1 month. Specialists of GERSIS SOFTWARE performed a full range of services: requirements analyzes, architecture development, development of functionality, testing, installation on customer’s server and user training.</p><p></p><table border="1">
             <tbody>
-               <tr><td ><p xml:lang="ru-RU"><strong >Дата</strong></p>
-</td><td ><p xml:lang="ru-RU"><strong >Автор</strong></p>
-</td><td ><p xml:lang="ru-RU"><strong >Изменение / Состояние</strong></p>
-</td></tr>
-               <tr><td ><p xml:lang="ru-RU">2009-08-20</p>
-</td><td ><p xml:lang="ru-RU">Sinkevich V.</p>
-</td><td ><p xml:lang="ru-RU">Сreated.</p>
-</td></tr>
-               <tr><td ><p>2009-08-20</p>
-</td><td ><p>Kireitchik V.</p>
-</td><td ><p>some style remarks (marked without comments). One can fill that it is a translation, not an original.</p>
-</td></tr>
-               <tr><td ><p>2009-08-20</p>
-</td><td ><p>Sinkevich V.</p>
-</td><td ><p>Style corrected.</p>
-</td></tr>
-               <tr><td ><p>2009-08-21</p>
-</td><td ><p>Kireitchik V.</p>
-</td><td ><p>Approved on a condition that description will be fixed</p>
-</td></tr>
-               <tr><td ><p>2009-09-29</p>
-</td><td ><p>Sinkevich V.</p>
-</td><td ><p>KPI added, marked with yellow background.</p>
-</td></tr>
-               <tr><td ><p>2009-12-01</p>
-</td><td ><p>Radziuk A.</p>
-</td><td ><p>The link was changed</p>
-</td></tr>
-               <tr><td ><p>2010-08-02</p>
-</td><td ><p>Shpileuskaya C.</p>
-</td><td ><p>Content alteration</p>
-</td></tr>
-               <tr><td ><p>2010-08-04</p>
-</td><td ><p>Kireitchik V.</p>
-</td><td ><p>Remarks</p>
-</td></tr>
-               <tr><td ><p>2010-08-10</p>
-</td><td ><p>Shpileuskaya C.</p>
-</td><td ><p>Correction based on the remarks</p>
-</td></tr>
+               <tr>
+                  <td><p xml:lang="ru-RU"><strong >Дата</strong></p></td>
+                  <td><p xml:lang="ru-RU"><strong >Автор</strong></p></td>
+                  <td><p xml:lang="ru-RU"><strong >Изменение / Состояние</strong></p></td>
+               </tr>
+               <tr>
+                  <td><p xml:lang="ru-RU">2009-08-20</p></td>
+                  <td><p xml:lang="ru-RU">Sinkevich V.</p></td>
+                  <td><p xml:lang="ru-RU">Сreated.</p></td>
+               </tr>
+               <tr>
+                  <td><p>2009-08-20</p></td>
+                  <td><p>Kireitchik V.</p></td>
+                  <td><p>some style remarks (marked without comments). One can fill that it is a translation, not an original.</p></td>
+               </tr>
+               <tr>
+                  <td><p>2009-08-20</p></td>
+                  <td><p>Sinkevich V.</p></td>
+                  <td><p>Style corrected.</p></td>
+               </tr>
+               <tr>
+                  <td><p>2009-08-21</p></td>
+                  <td><p>Kireitchik V.</p></td>
+                  <td><p>Approved on a condition that description will be fixed</p></td>
+               </tr>
+               <tr>
+                  <td><p>2009-09-29</p></td>
+                  <td><p>Sinkevich V.</p></td>
+                  <td><p>KPI added, marked with yellow background.</p></td>
+               </tr>
+               <tr>
+                  <td><p>2009-12-01</p></td>
+                  <td><p>Radziuk A.</p></td>
+                  <td><p>The link was changed</p></td>
+               </tr>
+               <tr>
+                  <td><p>2010-08-02</p></td>
+                  <td><p>Shpileuskaya C.</p></td>
+                  <td><p>Content alteration</p></td>
+               </tr>
+               <tr>
+                  <td><p>2010-08-04</p></td>
+                  <td><p>Kireitchik V.</p></td>
+                  <td><p>Remarks</p></td>
+               </tr>
+               <tr>
+                  <td><p>2010-08-10</p></td>
+                  <td><p>Shpileuskaya C.</p></td>
+                  <td><p>Correction based on the remarks</p></td>
+               </tr>
             </tbody>
-         </table><p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-</level2></level1></bodymatter>
+         </table><p></p><p></p><p></p><p></p><p></p><p></p></level2></level1></bodymatter>
    </book>
 </dtbook>

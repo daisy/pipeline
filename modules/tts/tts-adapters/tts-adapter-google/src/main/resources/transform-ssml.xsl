@@ -1,14 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:s="http://www.w3.org/2001/10/synthesis"
                 xmlns="http://www.w3.org/2001/10/synthesis"
                 xpath-default-namespace="http://www.w3.org/2001/10/synthesis"
                 exclude-result-prefixes="#all">
 
-  <xsl:output omit-xml-declaration="yes"/>
-
   <xsl:param name="speech-rate" as="xs:double" select="1.0"/>
+  <xsl:param name="mark-not-supported" as="xs:boolean" select="false()" static="yes"/>
+
+  <xsl:output _method="{if ($mark-not-supported) then 'text' else 'xml'}" omit-xml-declaration="yes"/>
+
+  <xsl:template match="*" priority="1">
+    <xsl:choose>
+      <xsl:when test="$mark-not-supported"> <!-- Chirp voices currently do not support SSML input -->
+        <xsl:value-of select="string-join(.//text(),'')"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:next-match/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
   <xsl:template match="*">
     <speak version="1.0">

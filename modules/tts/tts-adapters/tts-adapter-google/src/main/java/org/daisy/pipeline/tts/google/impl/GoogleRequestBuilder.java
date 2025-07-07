@@ -27,6 +27,7 @@ public class GoogleRequestBuilder {
 	private Integer sampleRate = null;
 
 	private GoogleRestAction action = GoogleRestAction.VOICES;
+	private String ssml = null;
 	private String text = null;
 	private String languageCode = null;
 	private String voice = null;
@@ -72,12 +73,24 @@ public class GoogleRequestBuilder {
 	}
 
 	/**
-	 * Mandatory - Set the text to synthesise for the next requests
+	 * Set the SSML input to synthesise for the next requests
+	 *
+	 * @param ssml
+	 */
+	public GoogleRequestBuilder withSsml(String ssml) {
+		this.ssml = ssml;
+		this.text = null;
+		return this;
+	}
+
+	/**
+	 * Set the plain text input to synthesise for the next requests
 	 *
 	 * @param text
 	 */
 	public GoogleRequestBuilder withText(String text) {
 		this.text = text;
+		this.ssml = null;
 		return this;
 	}
 
@@ -118,17 +131,29 @@ public class GoogleRequestBuilder {
 			// No specific parameters
 			break;
 		case SPEECH:
-			// speech synthesis errors handling
-			if (this.text == null || text.length() == 0)
-				throw new Exception("Speech request without text.");
+			JSONObject input; {
+				if (text != null) {
+					if (text.length() == 0)
+						throw new Exception("Speech request without input.");
+					else
+						input = new JSONObject().put("text", text);
+				} else if (ssml != null) {
+					if (ssml.length() == 0)
+						throw new Exception("Speech request without input.");
+					else
+						input = new JSONObject().put("ssml", ssml);
+				} else
+					throw new Exception("Speech request without input.");
+			}
 			if (languageCode == null || languageCode.length() == 0)
-				throw new Exception("Language code definition is mandatory, please set one (speech request for " + text + ")");
+				throw new Exception("Language code definition is mandatory, please set one (speech request for "
+				                    + (text != null ? text : ssml) + ")");
 			parameters = new JSONObject()
-				.put("input", new JSONObject().put("ssml", text))
-				.put("voice", new JSONObject().put("languageCode", languageCode)
-				                              .putOpt("name", voice))
-				.put("audioConfig", new JSONObject().put("audioEncoding", "LINEAR16")
-				                                    .putOpt("sampleRateHertz", sampleRate));
+			                 .put("input", input)
+			                 .put("voice", new JSONObject().put("languageCode", languageCode)
+			                                               .putOpt("name", voice))
+			                 .put("audioConfig", new JSONObject().put("audioEncoding", "LINEAR16")
+			                                                     .putOpt("sampleRateHertz", sampleRate));
 			break;
 		}
 

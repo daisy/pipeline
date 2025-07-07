@@ -520,9 +520,12 @@
 			<xsl:if test="$flag='0'">
 				<xsl:value-of disable-output-escaping="yes" select="concat('&lt;/h',$level,'&gt;')"/>
 			</xsl:if>
+			<!--NP 2025/05/21 :
+				I was not able to produce something that match this expression to create sidebar
+				I'm replacing it by custom styles for now
+				-->
 			<xsl:for-each select="w:r/w:pict//v:textbox/w:txbxContent">
-				<sidebar>
-					<xsl:attribute    name="render">required</xsl:attribute>
+				<sidebar render="required">
 					<xsl:for-each select="./node()">
 						<xsl:choose>
 							<!--Checking for Headings in sidebar-->
@@ -1091,7 +1094,7 @@
 		<xsl:sequence select="d:sink(d:SetGetHyperLinkFlag($myObj))"/> <!-- empty -->
 		<xsl:sequence select="d:sink(d:ReSetListFlag($myObj))"/> <!-- empty -->
 		<!--code for hard return-->
-		<xsl:text>&#10;</xsl:text>
+		<!--<xsl:text>&#10;</xsl:text>-->
 
 	</xsl:template>
 
@@ -1170,8 +1173,7 @@
 							<xsl:with-param name="node" select="'body'"/>
 						</xsl:call-template>
 						<!--producer note for blank pages-->
-						<prodnote>
-							<xsl:attribute name="render">optional</xsl:attribute>
+						<prodnote render="optional">
 							<xsl:value-of select="'Blank Page'"/>
 						</prodnote>
 						<xsl:if test="$flag='3'">
@@ -1333,25 +1335,21 @@
 
 						<xsl:choose>
 							<xsl:when test="$Math_DSMT4=''">
+								<xsl:variable name="alttext">
+									<xsl:choose>
+										<xsl:when test="w:object/v:shape/@alt">
+											<xsl:value-of select="w:object/v:shape/@alt"/>
+										</xsl:when>
+										<xsl:otherwise>
+											<xsl:value-of select="'Math Equation'"/>
+											<!--Hardcoding value 'Math Equation'if user donot provide alt text for Math Equations-->
+										</xsl:otherwise>
+									</xsl:choose>
+								</xsl:variable>
+								<!--Creating variable mathimage for storing r:id value from document.xml-->
+								<xsl:variable name="Math_rid" as="xs:string" select="w:object/v:shape/v:imagedata/@r:id"/>
 								<imggroup>
-									<img>
-										<!--Creating variable mathimage for storing r:id value from document.xml-->
-										<xsl:variable name="Math_rid" as="xs:string" select="w:object/v:shape/v:imagedata/@r:id"/>
-										<xsl:choose>
-											<!--Checking for alt Text-->
-											<xsl:when test="w:object/v:shape/@alt">
-												<xsl:sequence select="w:object/v:shape/@alt"/>
-											</xsl:when>
-											<xsl:otherwise>
-												<!--Hardcoding value 'Math Equation'if user donot provide alt text for Math Equations-->
-												<xsl:attribute name="alt" select="'Math Equation'"/>
-											</xsl:otherwise>
-										</xsl:choose>
-										<xsl:attribute name="src">
-											<!--Calling MathImage function-->
-											<xsl:value-of select="d:MathImage($myObj,$Math_rid)"/>
-										</xsl:attribute>
-									</img>
+									<img alt="{$alttext}" src="{d:MathImage($myObj,$Math_rid)}" />
 								</imggroup>
 							</xsl:when>
 							<xsl:otherwise>
@@ -1362,23 +1360,18 @@
 					<!--Checking condition for MathEquations in word 2003/xp-->
 					<xsl:when test="contains(w:object/o:OLEObject/@ProgID,'Equation')and not(w:object/o:OLEObject[@ProgID='Equation.DSMT4'])">
 						<xsl:variable name="mathimage" as="xs:string" select="w:object/v:shape/v:imagedata/@r:id"/>
+						<xsl:variable name="alt">
+							<xsl:choose>
+								<xsl:when test="w:object/v:shape/@alt">
+									<xsl:value-of select="w:object/v:shape/@alt"/>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:value-of select="'Math Equation'"/>
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:variable>
 						<imggroup>
-							<img>
-								<!--<xsl:value-of select="$mathimage"/>-->
-								<xsl:attribute name="alt">
-									<xsl:choose>
-										<xsl:when test="w:object/v:shape/@alt">
-											<xsl:value-of select="w:object/v:shape/@alt"/>
-										</xsl:when>
-										<xsl:otherwise>
-											<xsl:value-of select="'Math Equation'"/>
-										</xsl:otherwise>
-									</xsl:choose>
-								</xsl:attribute>
-								<xsl:attribute name="src">
-									<xsl:value-of select="d:MathImage($myObj,$mathimage)"/>
-								</xsl:attribute>
-							</img>
+							<img alt="{$alt}" src="{d:MathImage($myObj,$mathimage)}"/>
 						</imggroup>
 					</xsl:when>
 					<xsl:otherwise>
@@ -2295,7 +2288,7 @@
 			<!--Checking for List in Blockquote-->
 			<xsl:when test="w:pPr/w:pStyle[substring(@w:val,1,5)='Block']">
 				<xsl:if test="count(preceding-sibling::node()[1]/w:pPr/w:pStyle[substring(@w:val,1,5)='Block'])=0">
-					<xsl:value-of disable-output-escaping="yes" select="'&lt;blockquote &gt;'"/>
+					<xsl:value-of disable-output-escaping="yes" select="'&lt;blockquote&gt;'"/>
 				</xsl:if>
 				<xsl:choose>
 					<!--Checking for 'Blockquote-AuthorDAISY' style-->
@@ -2532,6 +2525,20 @@
 				</xsl:choose>
 			</xsl:when>
 
+			<!--Checking for Sidebarheader* custom style-->
+			<xsl:when test="(starts-with(w:pPr/w:pStyle/@w:val,'Sidebarheader') and ends-with(w:pPr/w:pStyle/@w:val, 'DAISY')) and not(parent::w:tc)">
+				<hd>
+					<xsl:call-template name="ParaHandler">
+						<xsl:with-param name="flag" select="'0'"/>
+						<xsl:with-param name="version" select="$version"/>
+						<xsl:with-param name="pagination" select="$pagination"/>
+						<xsl:with-param name="imgOptionPara" select="$imgOptionStyle"/>
+						<xsl:with-param name="dpiPara" select="$dpiStyle"/>
+						<xsl:with-param name="txt" select="$txt"/>
+						<xsl:with-param name="charparahandlerStyle" select="$characterStyle"/>
+					</xsl:call-template>
+				</hd>
+			</xsl:when>
 			<!--Checking for Bridgehead custom style-->
 			<xsl:when test="(w:pPr/w:pStyle/@w:val='BridgeheadDAISY') and not(parent::w:tc)">
 				<bridgehead>
@@ -3016,6 +3023,44 @@
 		<xsl:param name="characterparaStyle" as="xs:boolean"/>
 
 		<xsl:variable name="checkImageposition" as="xs:integer" select="d:GetCaptionsProdnotes($myObj)"/>
+		<!-- Closing previously manually opened block before treating -->
+		<!-- Optional sidebar -->
+		<xsl:if test="not(w:pPr/w:pStyle[starts-with(@w:val,'Sidebar') and ends-with(@w:val,'OptionalDAISY')])
+									and count(preceding-sibling::node()[1]/w:pPr/w:pStyle[starts-with(@w:val,'Sidebar') and ends-with(@w:val,'OptionalDAISY')])=1">
+			<xsl:value-of disable-output-escaping="yes" select="'&lt;/sidebar&gt;'"/>
+		</xsl:if>
+		<!-- Required sidebar -->
+		<xsl:if test="not(w:pPr/w:pStyle[starts-with(@w:val,'Sidebar') and ends-with(@w:val,'RequiredDAISY')])
+									and count(preceding-sibling::node()[1]/w:pPr/w:pStyle[starts-with(@w:val,'Sidebar') and ends-with(@w:val,'RequiredDAISY')])=1">
+			<xsl:value-of disable-output-escaping="yes" select="'&lt;/sidebar&gt;'"/>
+		</xsl:if>
+		<!-- epigraph -->
+		<xsl:if test="not(w:pPr/w:pStyle[substring(@w:val,1,8)='Epigraph'])
+									and count(preceding-sibling::node()[1]/w:pPr/w:pStyle[substring(@w:val,1,8)='Epigraph'])=1">
+			<xsl:value-of disable-output-escaping="yes" select="'&lt;/epigraph&gt;'"/>
+		</xsl:if>
+
+		<!--<xsl:if test="not(w:pPr/w:pStyle[substring(@w:val,1,4)='PoemDAISY'])
+									and count(preceding-sibling::node()[1]/w:pPr/w:pStyle[@w:val='PoemDAISY'])=1">
+			<xsl:value-of disable-output-escaping="yes" select="'&lt;/linegroup&gt;'"/>
+		</xsl:if>-->
+		<!-- Poem -->
+		<xsl:if test="not(w:pPr/w:pStyle[substring(@w:val,1,4)='Poem'])
+									and count(preceding-sibling::node()[1]/w:pPr/w:pStyle[substring(@w:val,1,4)='Poem'])=1">
+			<xsl:value-of disable-output-escaping="yes" select="'&lt;/poem&gt;'"/>
+		</xsl:if>
+
+		<xsl:if test="not(w:pPr/w:pStyle[contains(@w:val,'Prodnote-RequiredDAISY')])
+									and count(preceding-sibling::node()[1]/w:pPr/w:pStyle[contains(@w:val,'Prodnote-RequiredDAISY')])=1">
+			<xsl:value-of disable-output-escaping="yes" select="'&lt;/prodnote &gt;'"/>
+		</xsl:if>
+
+		<!-- Optional prodnote-->
+		<xsl:if test="not(w:pPr/w:pStyle[contains(@w:val,'Prodnote-OptionalDAISY')])
+									and count(preceding-sibling::node()[1]/w:pPr/w:pStyle[contains(@w:val,'Prodnote-OptionalDAISY')])=1">
+			<xsl:value-of disable-output-escaping="yes" select="'&lt;/prodnote &gt;'"/>
+		</xsl:if>
+
 		<xsl:choose>
 			<!--Checking for Title/Subtitle paragraph style-->
 			<xsl:when test="(w:pPr/w:pStyle/@w:val='Title') or (w:pPr/w:pStyle/@w:val='Subtitle')">
@@ -3149,10 +3194,12 @@
 					<xsl:with-param name="txt" select="$txt"/>
 					<xsl:with-param name="flag" select="'1'"/>
 				</xsl:call-template>
-
-				<xsl:if test="count(following-sibling::node()[1]/w:pPr/w:pStyle[contains(@w:val,'Prodnote-OptionalDAISY')])=0">
-					<xsl:value-of disable-output-escaping="yes" select="'&lt;/prodnote &gt;'"/>
+				<xsl:if test="not(following-sibling::w:p)">
+					<xsl:value-of disable-output-escaping="yes" select="'&lt;/prodnote&gt;'"/>
 				</xsl:if>
+				<!--<xsl:if test="count(following-sibling::node()[1]/w:pPr/w:pStyle[contains(@w:val,'Prodnote-OptionalDAISY')])=0">
+					<xsl:value-of disable-output-escaping="yes" select="'&lt;/prodnote &gt;'"/>
+				</xsl:if>-->
 			</xsl:when>
 			<!--Checking for Prodnote-RequiredDAISY custom paragraph style-->
 			<xsl:when test="(w:pPr/w:pStyle/@w:val='Prodnote-RequiredDAISY')and (not((preceding-sibling::node()[$checkImageposition]/w:r/w:drawing) or (preceding-sibling::node()[$checkImageposition]/w:r/w:pict) or (preceding-sibling::node()[$checkImageposition]/w:r/w:object)))">
@@ -3170,10 +3217,12 @@
 					<xsl:with-param name="txt" select="$txt"/>
 					<xsl:with-param name="flag" select="'1'"/>
 				</xsl:call-template>
-
-				<xsl:if test="count(following-sibling::node()[1]/w:pPr/w:pStyle[contains(@w:val,'Prodnote-RequiredDAISY')])=0">
+				<xsl:if test="not(following-sibling::w:p)">
 					<xsl:value-of disable-output-escaping="yes" select="'&lt;/prodnote&gt;'"/>
 				</xsl:if>
+				<!--<xsl:if test="count(following-sibling::node()[1]/w:pPr/w:pStyle[contains(@w:val,'Prodnote-RequiredDAISY')])=0">
+					<xsl:value-of disable-output-escaping="yes" select="'&lt;/prodnote&gt;'"/>
+				</xsl:if>-->
 			</xsl:when>
 			<!--Checking for PoemDAISY/Poem-TitleDAISY/Poem-HeadingDAISY/Poem-AuthorDAISY/Poem-BylineDAISY custom paragraph styles-->
 			<xsl:when test="w:pPr/w:pStyle[substring(@w:val,1,4)='Poem']">
@@ -3254,9 +3303,12 @@
 						</xsl:call-template>
 					</byline>
 				</xsl:if>
-				<xsl:if test="count(following-sibling::node()[1]/w:pPr/w:pStyle[substring(@w:val,1,4)='Poem'])=0">
+				<xsl:if test="not(following-sibling::w:p)">
 					<xsl:value-of disable-output-escaping="yes" select="'&lt;/poem&gt;'"/>
 				</xsl:if>
+				<!--<xsl:if test="count(following-sibling::node()[1]/w:pPr/w:pStyle[substring(@w:val,1,4)='Poem'])=0">
+					<xsl:value-of disable-output-escaping="yes" select="'&lt;/poem&gt;'"/>
+				</xsl:if>-->
 			</xsl:when>
 			<!--Checking for EpigraphDAISY/Epigraph-AuthorDAISY custom paragraph styles-->
 			<xsl:when test="(w:pPr/w:pStyle[substring(@w:val,1,8)='Epigraph'])">
@@ -3273,9 +3325,56 @@
 					<xsl:with-param name="txt" select="$txt"/>
 					<xsl:with-param name="flag" select="'1'"/>
 				</xsl:call-template>
-				<xsl:if test="count(following-sibling::node()[1]/w:pPr/w:pStyle[substring(@w:val,1,8)='Epigraph'])=0">
+				<xsl:if test="not(following-sibling::w:p)">
 					<xsl:value-of disable-output-escaping="yes" select="'&lt;/epigraph&gt;'"/>
 				</xsl:if>
+				<!--<xsl:if test="count(following-sibling::node()[1]/w:pPr/w:pStyle[substring(@w:val,1,8)='Epigraph'])=0">
+					<xsl:value-of disable-output-escaping="yes" select="'&lt;/epigraph&gt;'"/>
+				</xsl:if>-->
+			</xsl:when>
+			<!--Checking for Sidebar(header)?-OptionalDAISY custom paragraph styles-->
+			<xsl:when test="w:pPr/w:pStyle[starts-with(@w:val,'Sidebar') and ends-with(@w:val,'OptionalDAISY')]">
+				<xsl:if test="count(preceding-sibling::node()[1]/w:pPr/w:pStyle[starts-with(@w:val,'Sidebar') and ends-with(@w:val,'OptionalDAISY')])=0">
+					<xsl:variable name="lang">
+						<xsl:call-template name="GetParagraphLanguage">
+							<xsl:with-param name="paragraphNode" select="." />
+						</xsl:call-template>
+					</xsl:variable>
+					<xsl:value-of disable-output-escaping="yes" select="concat('&lt;sidebar xml:lang=&quot;',$lang,'&quot; render=&quot;optional&quot; &gt;')"/>
+				</xsl:if>
+				<xsl:call-template name="Paracharacterstyle">
+					<xsl:with-param name="characterStyle" select="$characterparaStyle"/>
+					<xsl:with-param name="txt" select="$txt"/>
+					<xsl:with-param name="flag" select="'1'"/>
+				</xsl:call-template>
+				<xsl:if test="not(following-sibling::w:p)">
+					<xsl:value-of disable-output-escaping="yes" select="'&lt;/sidebar&gt;'"/>
+				</xsl:if>
+				<!--<xsl:if test="count(following-sibling::node()[1]/w:pPr/w:pStyle[starts-with(@w:val,'Sidebar') and ends-with(@w:val,'OptionalDAISY')])=0">
+					<xsl:value-of disable-output-escaping="yes" select="'&lt;/sidebar&gt;'"/>
+				</xsl:if>-->
+			</xsl:when>
+			<!--Checking for Sidebar(header)?-RequiredDAISY custom paragraph styles-->
+			<xsl:when test="w:pPr/w:pStyle[starts-with(@w:val,'Sidebar') and ends-with(@w:val,'RequiredDAISY')]">
+				<xsl:if test="count(preceding-sibling::node()[1]/w:pPr/w:pStyle[starts-with(@w:val,'Sidebar') and ends-with(@w:val,'RequiredDAISY')])=0">
+					<xsl:variable name="lang">
+						<xsl:call-template name="GetParagraphLanguage">
+							<xsl:with-param name="paragraphNode" select="." />
+						</xsl:call-template>
+					</xsl:variable>
+					<xsl:value-of disable-output-escaping="yes" select="concat('&lt;sidebar xml:lang=&quot;',$lang,'&quot; render=&quot;required&quot; &gt;')"/>
+				</xsl:if>
+				<xsl:call-template name="Paracharacterstyle">
+					<xsl:with-param name="characterStyle" select="$characterparaStyle"/>
+					<xsl:with-param name="txt" select="$txt"/>
+					<xsl:with-param name="flag" select="'1'"/>
+				</xsl:call-template>
+				<xsl:if test="not(following-sibling::w:p)">
+					<xsl:value-of disable-output-escaping="yes" select="'&lt;/sidebar&gt;'"/>
+				</xsl:if>
+				<!--<xsl:if test="count(following-sibling::node()[1]/w:pPr/w:pStyle[starts-with(@w:val,'Sidebar') and ends-with(@w:val,'RequiredDAISY')])=0">
+					<xsl:value-of disable-output-escaping="yes" select="'&lt;/sidebar&gt;'"/>
+				</xsl:if>-->
 			</xsl:when>
 			<!--Checking for AddressDAISY custom paragraph style-->
 			<xsl:when test="w:pPr/w:pStyle[@w:val='AddressDAISY']">

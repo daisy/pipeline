@@ -181,7 +181,7 @@ public class VoicePreviewResource extends AuthenticatedResource {
 			return rep;
 		} catch (Throwable e) {
 			setStatus(Status.SERVER_ERROR_INTERNAL);
-			return getErrorRepresentation(e.getMessage());
+			return getErrorRepresentation(e);
 		}
 	}
 }

@@ -692,28 +692,28 @@
         </x:context>
         <x:expect label="">
             <abbr>
-                <span xml:id="testid1"/>
+                <span id="testid1"/>
             </abbr>
             <acronym>
-                <span xml:id="testid2"/>
+                <span id="testid2"/>
             </acronym>
             <dt>
-                <span xml:id="testid3"/>
+                <span id="testid3"/>
             </dt>
             <sub>
-                <span xml:id="testid4"/>
+                <span id="testid4"/>
             </sub>
             <sup>
-                <span xml:id="testid5"/>
+                <span id="testid5"/>
             </sup>
             <w>
-                <span xml:id="testid6"/>
+                <span id="testid6"/>
             </w>
             <strong>
-                <span xml:id="testid7"/>
+                <span id="testid7"/>
             </strong>
             <abbr>
-                <span xml:id="testid8">
+                <span id="testid8">
                     <span property="title" about="testid8">ABC</span>
                     <span property="author" about="testid8">ABC</span>
                     <span>SPAN</span>
@@ -744,7 +744,7 @@
             <lic id="testid" xml:lang="jp" dir="ltr"/>
         </x:context>
         <x:expect label="">
-            <span xml:id="testid" xml:lang="jp" its:dir="ltr"/>
+            <span id="testid" xml:lang="jp" its:dir="ltr"/>
         </x:expect>
     </x:scenario>
 </x:description>

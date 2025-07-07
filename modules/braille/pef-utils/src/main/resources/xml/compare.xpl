@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step type="pef:compare" name="main"
-                xmlns:p="http://www.w3.org/ns/xproc"
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:pef="http://www.daisy.org/ns/2008/pef"
                 xmlns:dc="http://purl.org/dc/elements/1.1/"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 exclude-inline-prefixes="px pxi dc xsl"
-                version="1.0">
+                type="px:pef-compare" name="main">
     
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <p>Compare two PEF documents.</p>

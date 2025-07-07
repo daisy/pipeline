@@ -633,7 +633,7 @@ public class DaisyClass {
 				String retimg2007Name = ImageExt(
 					inNum,
 					new File(outputFilename, inputName + "-" + strImgName),
-					strImgName);
+					inputName + "-" + strImgName);
 				return ImageProcessing.UriEscape(retimg2007Name);
 			}
 		} catch (Throwable e) {

@@ -18,31 +18,56 @@
     <p:input port="source" primary="true" px:media-type="application/x-pef+xml"/>
     
     <p:option name="output-dir" required="false" select="''"/> <!-- URI -->
-    <p:option name="file-format" required="false" select="''"/> <!-- query -->
+    <p:option name="file-format" required="false" select="''"/> <!-- query format -->
+    <!--
+        the name for multiple volumes, {} is replaced by the volume number
+        if empty, then the PEF is not split
+    -->
     <p:option name="name-pattern" required="false" select="''"/>
+    <!-- the name for a single volume -->
     <p:option name="single-volume-name" required="false" select="''"/>
+    <!--
+        the width of the volume number,
+        if 0, then the volume number is not padded with zeroes
+    -->
     <p:option name="number-width" required="false" select="''"/>
     <p:option name="pef-href" required="false" select="''"/> <!-- URI -->
     <p:option name="preview-href" required="false" select="''"/> <!-- URI -->
     <p:option name="preview-table" required="false" select="''"/> <!-- query -->
     <p:option name="pdf-href" required="false" select="''"/> <!-- URI -->
     
-    <p:import href="pef-to-html.convert.xpl">
-        <p:documentation>
-            px:pef-to-html.convert
-        </p:documentation>
-    </p:import>
-    <p:import href="pef2text.xpl">
-        <p:documentation>
-            pef:pef2text
-        </p:documentation>
-    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
         <p:documentation>
             px:mkdir
             px:copy-resource
         </p:documentation>
     </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl">
+        <p:documentation>
+            px:parse-query
+        </p:documentation>
+    </p:import>
+    <p:import href="pef-to-html.convert.xpl">
+        <p:documentation>
+            px:pef-to-html.convert
+        </p:documentation>
+    </p:import>
+    
+    <p:declare-step type="pxi:pef2text">
+        <p:input port="source" sequence="false" primary="true"/>
+        <p:option name="output-dir"/>
+        <p:option name="file-format"/>
+        <p:option name="line-breaks"/>
+        <p:option name="page-breaks"/>
+        <p:option name="pad"/>
+        <p:option name="charset"/>
+        <p:option name="single-volume-name"/>
+        <p:option name="name-pattern"/>
+        <p:option name="number-width"/>
+        <!--
+            Implemented in ../../java/org/daisy/pipeline/braille/pef/calabash/impl/PEF2TextStep.java
+        -->
+    </p:declare-step>
     
     <p:declare-step type="pxi:pef2pdf">
         <p:input port="source"/>
@@ -50,7 +75,7 @@
         <p:option name="href" required="true"/>
         <p:option name="table" required="true"/>
         <!--
-            Implemented in ../../java/org/daisy/pipeline/braille/pef/calabash/impl/PEF2PDFTextStep.java
+            Implemented in ../../java/org/daisy/pipeline/braille/pef/calabash/impl/pdf/PEF2PDFStep.java
         -->
     </p:declare-step>
     
@@ -85,6 +110,9 @@
 
     <p:choose px:progress=".15">
         <p:when test="not($output-dir='')" px:message="Storing braille file">
+            <p:documentation>
+                Convert PEF document into a textual (ASCII-based) format.
+            </p:documentation>
             <p:variable name="format" select="if (not($file-format='')) then $file-format else '(format:pef)'"/>
             <p:identity>
                 <p:input port="source">
@@ -120,13 +148,63 @@
                     <p:empty/>
                 </p:input>
             </p:xslt>
-            <pef:pef2text px:progress="1" px:message="Storing braille file to '{$output-dir}' in format '{$format}'" px:message-severity="DEBUG">
+            <p:choose>
+                <p:xpath-context>
+                    <p:pipe step="file-format" port="result"/>
+                </p:xpath-context>
+                <p:when test="//c:param[@name='blank-last-page'][lower-case(@value)=('true','yes')]">
+                    <!--
+                        ensure each volume has a blank backside
+                    -->
+                    <p:xslt>
+                        <p:input port="stylesheet">
+                            <p:document href="blank-last-page.xsl"/>
+                        </p:input>
+                        <p:input port="parameters">
+                            <p:empty/>
+                        </p:input>
+                    </p:xslt>
+                </p:when>
+                <p:otherwise>
+                    <p:identity/>
+                </p:otherwise>
+            </p:choose>
+            <p:choose>
+                <p:xpath-context>
+                    <p:pipe step="file-format" port="result"/>
+                </p:xpath-context>
+                <p:when test="//c:param[@name='sheets-multiple-of-two'][lower-case(@value)=('true','yes')]">
+                    <!--
+                        ensure volumes have a number of sheets that is a multiple of 2
+                    -->
+                    <p:xslt>
+                        <p:input port="stylesheet">
+                            <p:document href="sheets-multiple-of-two.xsl"/>
+                        </p:input>
+                        <p:input port="parameters">
+                            <p:empty/>
+                        </p:input>
+                    </p:xslt>
+                </p:when>
+                <p:otherwise>
+                    <p:identity/>
+                </p:otherwise>
+            </p:choose>
+            <pxi:pef2text px:progress="1" px:message="Storing braille file to '{$output-dir}' in format '{$format}'" px:message-severity="DEBUG">
                 <p:with-option name="output-dir" select="$output-dir"/>
                 <p:with-option name="name-pattern" select="$name-pattern"/>
                 <p:with-option name="single-volume-name" select="$single-volume-name"/>
                 <p:with-option name="number-width" select="$number-width"/>
                 <p:with-option name="file-format" select="$format"/>
-            </pef:pef2text>
+                <p:with-option name="line-breaks" select="''"/>
+                <p:with-option name="page-breaks" select="''"/>
+                <p:with-option name="pad" select="''"/>
+                <p:with-option name="charset" select="''"/>
+            </pxi:pef2text>
+            <px:parse-query name="file-format">
+                <p:with-option name="query" select="$file-format"/>
+            </px:parse-query>
+            <p:sink/>
         </p:when>
         <p:otherwise>
             <p:sink>

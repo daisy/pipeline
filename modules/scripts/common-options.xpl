@@ -560,7 +560,9 @@ If left blank, the locale information in the input document will be used to sele
 	<p:option name="include-obfl" required="false" px:type="boolean" select="'false'">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Include OBFL</h2>
-			<p px:role="desc" xml:space="preserve">Whether or not the keep the intermediary OBFL file (for debugging).</p>
+			<p px:role="desc" xml:space="preserve">Whether or not the keep the intermediary OBFL file (for debugging).
+
+The OBFL may also be edited and transformed to the final braille document using the "OBFL to braille" script.</p>
 		</p:documentation>
 	</p:option>
 

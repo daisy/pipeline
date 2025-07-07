@@ -305,7 +305,7 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 							}
 					}
 				}
-				userAndUserAgentStyleSheet = s;
+				userAndUserAgentStyleSheet = s.filter(medium);
 			}
 			styleSheet = (StyleSheet)ruleFactory.createStyleSheet().unlock();
 			styleSheet.addAll(userAndUserAgentStyleSheet);

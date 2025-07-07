@@ -23,20 +23,18 @@
     </doc>
     <xsl:function name="css:parse-stylesheet" as="item()?">
         <xsl:param name="stylesheet" as="item()?"/> <!-- xs:string|attribute() -->
-        <xsl:sequence select="ParseStylesheet:parse($stylesheet)"
-                      xmlns:ParseStylesheet="org.daisy.pipeline.braille.css.saxon.impl.ParseStylesheetDefinition$ParseStylesheet">
+        <xsl:sequence select="s:parse($stylesheet)">
             <!--
-                Implemented in ../../java/org/daisy/pipeline/braille/css/saxon/impl/ParseStylesheetDefinition.java
+                Implemented in ../../java/org/daisy/pipeline/braille/css/xpath/Style.java
             -->
         </xsl:sequence>
     </xsl:function>
     <xsl:function name="css:parse-stylesheet" as="item()?">
         <xsl:param name="stylesheet" as="item()?"/> <!-- xs:string|attribute() -->
         <xsl:param name="parent" as="item()?"/>
-        <xsl:sequence select="ParseStylesheet:parse($stylesheet,$parent)"
-                      xmlns:ParseStylesheet="org.daisy.pipeline.braille.css.saxon.impl.ParseStylesheetDefinition$ParseStylesheet">
+        <xsl:sequence select="s:parse($stylesheet,$parent)">
             <!--
-                Implemented in ../../java/org/daisy/pipeline/braille/css/saxon/impl/ParseStylesheetDefinition.java
+                Implemented in ../../java/org/daisy/pipeline/braille/css/xpath/Style.java
             -->
         </xsl:sequence>
     </xsl:function>
@@ -69,7 +67,11 @@
     <xsl:function name="css:serialize-stylesheet-pretty" as="xs:string">
         <xsl:param name="stylesheet" as="item()*"/>
         <xsl:param name="indent" as="xs:string"/>
-        <xsl:sequence select="s:toPrettyString(s:merge($stylesheet),$indent)"/>
+        <xsl:sequence select="s:toPrettyString(s:merge($stylesheet),$indent)">
+            <!--
+                Implemented in ../../java/org/daisy/pipeline/braille/css/xpath/Style.java
+            -->
+        </xsl:sequence>
     </xsl:function>
 
     <xsl:function name="css:style-attribute" as="attribute(style)?">

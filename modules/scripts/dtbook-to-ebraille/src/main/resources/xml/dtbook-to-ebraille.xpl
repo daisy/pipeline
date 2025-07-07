@@ -2,6 +2,7 @@
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -86,6 +87,7 @@
 			px:fileset-update
 			px:fileset-copy
 			px:fileset-move
+			px:fileset-add-entry
 		</p:documentation>
 	</p:import>
 	<p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
@@ -126,6 +128,14 @@
 		</p:documentation>
 	</cx:import>
 
+	<p:declare-step type="pxi:dtbook-insert-sync-points">
+		<p:input port="source" sequence="true"/>
+		<p:output port="result" sequence="true"/>
+		<!--
+		    Implemented in ../../java/org/daisy/pipeline/dtbook_to_ebraille/calabash/impl/DTBookInsertSyncPointsStep.java
+		-->
+	</p:declare-step>
+
 	<px:fileset-load media-types="application/x-dtbook+xml" name="load-dtbook">
 		<p:input port="in-memory">
 			<p:pipe step="main" port="source.in-memory"/>
@@ -153,6 +163,18 @@
 		     that the package document of the secondary rendition will have the same metadata
 		-->
 		<p:delete match="dtb:head/dtb:meta[lower-case(@name)=('dc:date','dc:publisher','dc:rights')]"/>
+		<p:documentation>Insert synchronisation anchors</p:documentation>
+		<p:choose>
+			<p:when test="$include-original-text">
+				<p:for-each>
+					<pxi:dtbook-insert-sync-points/>
+				</p:for-each>
+				<px:add-ids match="*[@class='__tmp__sync__']" prefix="__sync__"/>
+			</p:when>
+			<p:otherwise>
+				<p:identity/>
+			</p:otherwise>
+		</p:choose>
 		<p:documentation>Mark pagenum</p:documentation>
 		<!-- We will use this information later (px:dtbook-to-epub preserves the IDs) to get the
 		     original text of page numbers. -->
@@ -351,6 +373,9 @@
 		<p:output port="in-memory" sequence="true">
 			<p:pipe step="update" port="result.in-memory"/>
 		</p:output>
+		<p:output port="html-with-sync-points" sequence="true">
+			<p:pipe step="html-with-link-to-css" port="result"/>
+		</p:output>
 		<px:fileset-load media-types="application/xhtml+xml" name="load-html">
 			<p:input port="in-memory">
 				<p:pipe step="add-css" port="in-memory"/>
@@ -395,6 +420,7 @@
 			Process other HTML documents:
 			- Fix aria-label of page breaks
 			- Add links to CSS
+			- Extract synchronization points
 		</p:documentation>
 		<p:for-each px:progress="1/2">
 			<p:iteration-source>
@@ -410,6 +436,20 @@
 			</p:xslt>
 		</p:for-each>
 		<p:identity name="html-with-link-to-css"/>
+		<p:choose>
+			<p:xpath-context>
+				<p:empty/>
+			</p:xpath-context>
+			<p:when test="$include-original-text">
+				<p:for-each>
+					<p:delete match="*[@class='__tmp__sync__']"/>
+				</p:for-each>
+			</p:when>
+			<p:otherwise>
+				<p:identity/>
+			</p:otherwise>
+		</p:choose>
+		<p:identity name="html-without-sync-points"/>
 		<p:sink/>
 		<px:fileset-update name="update">
 			<p:input port="source.fileset">
@@ -423,7 +463,7 @@
 			</p:input>
 			<p:input port="update.in-memory">
 				<p:pipe step="primary-entry-page-with-link" port="result"/>
-				<p:pipe step="html-with-link-to-css" port="result"/>
+				<p:pipe step="html-without-sync-points" port="result"/>
 			</p:input>
 		</px:fileset-update>
 	</p:group>
@@ -433,6 +473,9 @@
 		<p:output port="fileset" primary="true"/>
 		<p:output port="in-memory" sequence="true">
 			<p:pipe step="update" port="result.in-memory"/>
+		</p:output>
+		<p:output port="package-doc" sequence="false">
+			<p:pipe step="new-package-doc" port="result"/>
 		</p:output>
 		<!--
 		    We can drop zedai-mods.xml because (1) the EPUB specification says:
@@ -581,12 +624,21 @@
 		<p:otherwise px:message="Including original text">
 			<p:output port="fileset" primary="true"/>
 			<p:output port="in-memory" sequence="true">
-				<p:pipe step="update-container" port="result.in-memory"/>
+				<p:pipe step="add-resource-map" port="result.in-memory"/>
 			</p:output>
 			<p:group name="original-text">
-				<p:output port="fileset" primary="true"/>
+				<p:output port="fileset" primary="true">
+					<p:pipe step="rename" port="result.fileset"/>
+				</p:output>
 				<p:output port="in-memory" sequence="true">
-					<p:pipe step="update" port="result.in-memory"/>
+					<p:pipe step="package-doc-without-link" port="result"/>
+					<p:pipe step="html-without-sync-points" port="result"/>
+				</p:output>
+				<p:output port="html-with-sync-points" sequence="true">
+					<p:pipe step="html" port="result"/>
+				</p:output>
+				<p:output port="package-doc" sequence="false">
+					<p:pipe step="package-doc-without-link" port="result"/>
 				</p:output>
 				<p:sink/>
 				<px:fileset-update name="processed-dtbook-original-text">
@@ -624,10 +676,20 @@
 					<!-- fine to use same temp-dir -->
 					<p:with-option name="temp-dir" select="$temp-dir"/>
 				</px:dtbook-to-epub3>
-				<p:documentation>Filter HTML and OPF files and move to other folder</p:documentation>
-				<px:fileset-filter media-types="application/oebps-package+xml application/xhtml+xml" name="filter">
+				<p:documentation>Delete zedai-mods.xml from fileset</p:documentation>
+				<px:fileset-filter href="ebraille/zedai-mods.xml" name="filter-mods">
 					<p:input port="source.in-memory">
 						<p:pipe step="original-epub3" port="result.in-memory"/>
+					</p:input>
+				</px:fileset-filter>
+				<p:sink/>
+				<p:documentation>Filter HTML and OPF files and move to other folder</p:documentation>
+				<px:fileset-filter media-types="application/oebps-package+xml application/xhtml+xml" name="filter">
+					<p:input port="source">
+						<p:pipe step="filter-mods" port="not-matched"/>
+					</p:input>
+					<p:input port="source.in-memory">
+						<p:pipe step="filter-mods" port="not-matched.in-memory"/>
 					</p:input>
 				</px:fileset-filter>
 				<px:fileset-move flatten="true" name="move">
@@ -639,10 +701,10 @@
 				<p:sink/>
 				<px:epub-rename-files name="rename">
 					<p:input port="source.fileset">
-						<p:pipe step="original-epub3" port="result.fileset"/>
+						<p:pipe step="filter-mods" port="not-matched"/>
 					</p:input>
 					<p:input port="source.in-memory">
-						<p:pipe step="original-epub3" port="result.in-memory"/>
+						<p:pipe step="filter-mods" port="not-matched.in-memory"/>
 					</p:input>
 					<p:input port="mapping">
 						<p:pipe step="move" port="mapping"/>
@@ -656,21 +718,70 @@
 				</px:fileset-load>
 				<p:delete match="opf:link[@href='../ebraille/zedai-mods.xml']" name="package-doc-without-link"/>
 				<p:sink/>
-				<px:fileset-update name="update">
-					<p:input port="source.fileset">
+				<p:documentation>
+					Extract synchronization points from HTML documents
+				</p:documentation>
+				<px:fileset-load media-types="application/xhtml+xml">
+					<p:input port="fileset">
 						<p:pipe step="rename" port="result.fileset"/>
 					</p:input>
-					<p:input port="source.in-memory">
+					<p:input port="in-memory">
 						<p:pipe step="rename" port="result.in-memory"/>
 					</p:input>
-					<p:input port="update.fileset">
-						<p:pipe step="package-doc" port="result.fileset"/>
-					</p:input>
-					<p:input port="update.in-memory">
-						<p:pipe step="package-doc-without-link" port="result"/>
-					</p:input>
-				</px:fileset-update>
+				</px:fileset-load>
+				<p:for-each>
+					<!-- perform a unity XSL transformation because otherwise for some reason the
+					     base URI of the documents is not available within resource-map.xsl -->
+					<p:xslt>
+						<p:input port="stylesheet">
+							<p:inline>
+								<xsl:stylesheet version="2.0">
+									<xsl:template match="@*|node()">
+										<xsl:copy>
+											<xsl:apply-templates select="@*|node()"/>
+										</xsl:copy>
+									</xsl:template>
+								</xsl:stylesheet>
+							</p:inline>
+						</p:input>
+						<p:input port="parameters">
+							<p:empty/>
+						</p:input>
+					</p:xslt>
+				</p:for-each>
+				<p:identity name="html"/>
+				<p:for-each>
+					<p:delete match="*[@class='__tmp__sync__']"/>
+				</p:for-each>
+				<p:identity name="html-without-sync-points"/>
+				<p:sink/>
 			</p:group>
+			<p:sink/>
+			<p:documentation>Generate resource-map document</p:documentation>
+			<p:xslt template-name="main">
+				<p:input port="source">
+					<p:empty/>
+				</p:input>
+				<p:input port="stylesheet">
+					<p:document href="resource-map.xsl"/>
+				</p:input>
+				<p:with-param name="ebraille-package-doc" select="/">
+					<p:pipe step="update-package-doc" port="package-doc"/>
+				</p:with-param>
+				<p:with-param name="ebraille-html" select="collection()">
+					<p:pipe step="process-html" port="html-with-sync-points"/>
+				</p:with-param>
+				<p:with-param name="original-package-doc" select="/">
+					<p:pipe step="original-text" port="package-doc"/>
+				</p:with-param>
+				<p:with-param name="original-html" select="collection()">
+					<p:pipe step="original-text" port="html-with-sync-points"/>
+				</p:with-param>
+				<p:with-param name="output-base-uri" select="concat($output-dir,'original/renditionMapping.html')"/>
+			</p:xslt>
+			<px:set-base-uri name="resource-map">
+				<p:with-option name="base-uri" select="concat($output-dir,'original/renditionMapping.html')"/>
+			</px:set-base-uri>
 			<p:sink/>
 			<p:documentation>Generate new container file</p:documentation>
 			<p:group name="container-with-secondary-rendition">
@@ -699,6 +810,12 @@
 						                     rend:accessMode="textual"/></p:inline>
 					</p:input>
 				</p:insert>
+				<p:insert position="last-child" match="/ocf:container">
+					<p:input port="insertion">
+						<p:inline exclude-inline-prefixes="#all" xmlns="urn:oasis:names:tc:opendocument:xmlns:container"
+							><link href="original/renditionMapping.html" rel="mapping" media-type="application/xhtml+xml"/></p:inline>
+					</p:input>
+				</p:insert>
 				<p:delete match="/*/@rend:tmp"/>
 			</p:group>
 			<p:sink/>
@@ -720,6 +837,14 @@
 					<p:pipe step="container-with-secondary-rendition" port="result"/>
 				</p:input>
 			</px:fileset-update>
+			<px:fileset-add-entry media-type="application/xhtml+xml" name="add-resource-map">
+				<p:input port="source.in-memory">
+					<p:pipe step="update-container" port="result.in-memory"/>
+				</p:input>
+				<p:input port="entry">
+					<p:pipe step="resource-map" port="result"/>
+				</p:input>
+			</px:fileset-add-entry>
 		</p:otherwise>
 	</p:choose>
 

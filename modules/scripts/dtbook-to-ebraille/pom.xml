@@ -6,20 +6,32 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.15.2-SNAPSHOT</version>
+    <version>1.15.3-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <artifactId>dtbook-to-ebraille</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.1.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: DTBook to eBraille</name>
   
   <dependencies>
     <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>common-utils</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>framework-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>calabash-adapter</artifactId>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
@@ -85,7 +97,8 @@
     <expose-services>
       org.daisy.pipeline.modules.impl.Module_dtbook_to_ebraille,
       org.daisy.pipeline.script.impl.XProcScript_dtbook_to_ebraille,
-      org.daisy.pipeline.datatypes.impl.Datatype_px_dtbook_to_ebraille_script_validation
+      org.daisy.pipeline.datatypes.impl.Datatype_px_dtbook_to_ebraille_script_validation,
+      org.daisy.pipeline.dtbook_to_ebraille.calabash.impl.DTBookInsertSyncPointsStep$Provider
     </expose-services>
   </properties>
 

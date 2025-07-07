@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog"
+         xmlns:px="http://www.daisy.org/ns/pipeline">
   <uri name="http://www.daisy.org/pipeline/modules/braille/dotify-utils/library.xpl" uri="../xml/library.xpl"/>
+  <uri uri="../xml/obfl-to-pef.script.xpl" px:content-type="script" px:id="obfl-to-pef"
+       px:extends="../../../../../../scripts/common-options.xpl
+                   ../../../../../../scripts/html-to-pef/src/main/resources/css/dotify.params"/>
   <!-- internal dependencies of Java code -->
   <uri uri="../xml/transform/dotify-transform.xpl"/> <!-- DotifyCSSStyledDocumentTransform -->
 </catalog>

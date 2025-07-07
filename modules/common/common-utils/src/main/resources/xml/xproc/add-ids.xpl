@@ -24,6 +24,14 @@
 			<p>If omitted, no IDs are added, only duplicates fixed.</p>
 		</p:documentation>
 	</p:option>
+	<p:option name="prefix" select="''">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<p>Prefix to be used for new IDs.</p>
+			<!-- Note that this prefix is used for all new IDs, including those that replace
+			     duplicate IDs. If this is not desired, execute the step once without a "match"
+			     value, and a second time with a "match" value. -->
+		</p:documentation>
+	</p:option>
 	<p:output port="result" sequence="true" primary="true">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<p>The processed documents</p>
@@ -54,6 +62,7 @@
 			<p:pipe step="result" port="mappings"/>
 		</p:output>
 		<p:option name="next-doc" cx:as="xs:string" select="1"/>
+		<p:option name="prefix" cx:as="xs:string" select="''"/>
 		<p:count/>
 		<p:choose name="result">
 			<p:when test="/*&gt;0">
@@ -76,6 +85,7 @@
 						<p:document href="add-ids.xsl"/>
 					</p:input>
 					<p:with-param name="next-doc" select="$next-doc"/>
+					<p:with-param name="prefix" select="$prefix"/>
 					<p:with-option name="output-base-uri" select="base-uri(/)"/>
 				</p:xslt>
 				<p:sink/>
@@ -92,6 +102,7 @@
 						<p:pipe step="xslt" port="secondary"/>
 					</p:input>
 					<p:with-option name="next-doc" select="$next-doc + 1"/>
+					<p:with-option name="prefix" select="$prefix"/>
 				</pxi:iterate>
 			</p:when>
 			<p:otherwise>
@@ -125,7 +136,9 @@
 		</p:otherwise>
 	</p:choose>
 
-	<pxi:iterate name="result"/>
+	<pxi:iterate name="result">
+		<p:with-option name="prefix" select="$prefix"/>
+	</pxi:iterate>
 	<p:sink/>
 
 	<p:wrap-sequence wrapper="d:fileset">

@@ -520,11 +520,7 @@
 										)">
 										<xsl:variable name="endNoteId" as="xs:integer" select="./w:endnoteReference/@w:id"/>
 										<xsl:if test="$endNoteId &gt; 0">
-											<note>
-												<!--Creating attribute ID for Note element-->
-												<xsl:attribute name="id">
-													<xsl:value-of select="concat('endnote-',$endNoteId)"/>
-												</xsl:attribute>
+											<note id="{concat('endnote-',$endNoteId)}">
 												<!--Creating attribute class for Note element-->
 												<xsl:attribute name="class">
 													<xsl:value-of select="'Endnote'"/>

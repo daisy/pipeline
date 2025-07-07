@@ -237,20 +237,27 @@ public class Medium {
 							return (float)getExpressionInteger(e);
 						}
 						@Override
-						public boolean matches(MediaExpression e) {
+						protected boolean matchesIgnoreNegation(MediaExpression e) {
 							String f = e.getFeature();
 							if (knownFeatures.contains(f) || knownFeatures.contains(f.replaceAll("^(min|max)-", "")))
-								return super.matches(e);
+								return super.matchesIgnoreNegation(e);
 							else {
-								if (e.size() != 1)
-									return false;
-								Term<?> v = e.get(0);
-								if (!(v instanceof TermIdent || v instanceof TermInteger))
+								if (e.size() > 1)
 									return false;
 								if (!nonStandardFeatures.isEmpty())
 									for (String ff : nonStandardFeatures.keySet())
-										if (ff.equals(f))
-											return nonStandardFeatures.get(ff).equals(v.toString());
+										if (ff.equals(f)) {
+											String vv = nonStandardFeatures.get(ff);
+											if (e.size() == 0) {
+												// boolean context (https://drafts.csswg.org/mediaqueries-5/#mq-boolean-context)
+												return !(vv.startsWith("0") || vv.equals("none"));
+											} else {
+												Term<?> v = e.get(0);
+												if (!(v instanceof TermIdent || v instanceof TermInteger))
+													return false;
+												return vv.equals(v.toString());
+											}
+										}
 								return false;
 							}
 						}
@@ -263,20 +270,27 @@ public class Medium {
 			default:
 				mediaSpec = new MediaSpec(type.toString()) {
 						@Override
-						public boolean matches(MediaExpression e) {
+						protected boolean matchesIgnoreNegation(MediaExpression e) {
 							String f = e.getFeature();
 							if (knownFeatures.contains(f) || knownFeatures.contains(f.replaceAll("^(min|max)-", "")))
-								return super.matches(e);
+								return super.matchesIgnoreNegation(e);
 							else {
-								if (e.size() != 1)
-									return false;
-								Term<?> v = e.get(0);
-								if (!(v instanceof TermIdent || v instanceof TermInteger))
+								if (e.size() > 1)
 									return false;
 								if (!nonStandardFeatures.isEmpty())
 									for (String ff : nonStandardFeatures.keySet())
-										if (ff.equals(f))
-											return nonStandardFeatures.get(ff).equals(v.toString());
+										if (ff.equals(f)) {
+											String vv = nonStandardFeatures.get(ff);
+											if (e.size() == 0) {
+												// boolean context (https://drafts.csswg.org/mediaqueries-5/#mq-boolean-context)
+												return !(vv.startsWith("0") || vv.equals("none"));
+											} else {
+												Term<?> v = e.get(0);
+												if (!(v instanceof TermIdent || v instanceof TermInteger))
+													return false;
+												return vv.equals(v.toString());
+											}
+										}
 								return false;
 							}
 						}

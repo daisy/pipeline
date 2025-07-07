@@ -48,12 +48,30 @@ public class Voice {
 		     gender);
 	}
 
+	public Voice(String engine, String name, Locale locale, Gender gender, MarkSupport markSupport)
+			throws IllegalArgumentException {
+		this(engine,
+		     name,
+		     locale != null ? new LanguageRange(locale) : null,
+		     gender,
+		     markSupport);
+	}
+
 	public Voice(String engine, String name, LanguageRange locale, Gender gender) throws IllegalArgumentException {
+		this(engine,
+		     name,
+		     locale,
+		     gender,
+		     MarkSupport.DEFAULT);
+	}
+
+	public Voice(String engine, String name, LanguageRange locale, Gender gender, MarkSupport markSupport)
+			throws IllegalArgumentException {
 		this(engine,
 		     name,
 		     Optional.ofNullable(locale).map(x -> listOf(x)).orElseGet(Collections::emptyList),
 		     gender,
-		     MarkSupport.DEFAULT);
+		     markSupport);
 	}
 
 	public Voice(String engine, String name, Collection<Locale> locale, Gender gender) throws IllegalArgumentException {

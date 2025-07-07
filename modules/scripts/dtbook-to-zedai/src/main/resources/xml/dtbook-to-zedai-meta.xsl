@@ -6,62 +6,50 @@
 
     <xsl:output indent="yes" method="xml"/>
 
+    <xsl:template match="/">
+         <head>
+             <xsl:apply-templates/>
+         </head>
+    </xsl:template>
+
+    <xsl:template match="@*|node()">
+        <xsl:apply-templates select="@*|node()"/>
+    </xsl:template>
+
     <xsl:template match="//dtb:head">
         <xsl:for-each select="dtb:meta">
             <xsl:choose>
-                <xsl:when test="@name = 'dc:Title'">
-                    <meta property="dc:title" content="{@content}"/>
+                <xsl:when test="@name='dc:Date'">
+                    <meta property="{lower-case(@name)}" content="{@content}" xml:id="meta-dcdate"/>
                 </xsl:when>
-                <xsl:when test="@name = 'dc:Creator'">
-                    <meta property="dc:creator" content="{@content}"/>
+                <xsl:when test="@name=('dc:Title',
+                                       'dc:Creator',
+                                       'dc:Publisher',
+                                       'dc:Language',
+                                       'dc:Subject',
+                                       'dc:Description',
+                                       'dc:Contributor',
+                                       'dc:Type',
+                                       'dc:Format',
+                                       'dc:Source',
+                                       'dc:Relation',
+                                       'dc:Coverage',
+                                       'dc:Rights'
+                                       )">
+                    <meta property="{lower-case(@name)}" content="{@content}"/>
                 </xsl:when>
-                <xsl:when test="@name = 'dc:Date'">
-                    <meta property="dc:date" content="{@content}" xml:id="meta-dcdate"/>
-                </xsl:when>
-                <xsl:when test="@name = 'dc:Publisher'">
-                    <meta property="dc:publisher" content="{@content}"/>
-                </xsl:when>
-                <xsl:when test="@name = 'dc:Language'">
-                    <meta property="dc:language" content="{@content}"/>
-                </xsl:when>
-                <xsl:when test="@name = 'dc:Subject'">
-                    <meta property="dc:subject" content="{@content}"/>
-                </xsl:when>
-                <xsl:when test="@name = 'dc:Description'">
-                    <meta property="dc:description" content="{@content}"/>
-                </xsl:when>
-                <xsl:when test="@name = 'dc:Contributor'">
-                    <meta property="dc:contributor" content="{@content}"/>
-                </xsl:when>
-                <xsl:when test="@name = 'dc:Type'">
-                    <meta property="dc:type" content="{@content}"/>
-                </xsl:when>
-                <xsl:when test="@name = 'dc:Format'">
-                    <meta property="dc:format" content="{@content}"/>
-                </xsl:when>
-                <xsl:when test="@name = 'dc:Source'">
-                    <meta property="dc:source" content="{@content}"/>
-                </xsl:when>
-                <xsl:when test="@name = 'dc:Relation'">
-                    <meta property="dc:relation" content="{@content}"/>
-                </xsl:when>
-                <xsl:when test="@name = 'dc:Coverage'">
-                    <meta property="dc:coverage" content="{@content}"/>
-                </xsl:when>
-                <xsl:when test="@name = 'dc:Rights'">
-                    <meta property="dc:rights" content="{@content}"/>
-                </xsl:when>
-                <xsl:when test="@name = 'dtb:revisionDescription'">
+                <xsl:when test="@name='dtb:revisionDescription'">
                     <meta property="dc:description" content="{@content}"
                           about="#meta-dcdate"/>
                 </xsl:when>
+                <xsl:when test="contains(@name,':')">
+                    <!-- Allow custom metadata if the vocabulary can be guessed from the
+                         prefix. Unknown metadata is discarded. (See the px:epub3-merge-prefix that
+                         follows px:dtbook-to-zedai-meta.) -->
+                    <meta property="{@name}" content="{@content}"/>
+                </xsl:when>
             </xsl:choose>
         </xsl:for-each>
-    </xsl:template>
-
-    <!-- discard everything else -->
-    <xsl:template match="@*|node()">
-        <xsl:apply-templates select="@*|node()"/>
     </xsl:template>
 
 </xsl:stylesheet>

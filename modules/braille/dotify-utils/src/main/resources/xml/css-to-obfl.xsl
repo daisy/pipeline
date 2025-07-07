@@ -1142,16 +1142,32 @@
             <xsl:apply-templates select="$pxi:print-mode" mode="#current"/>
         </xsl:variable>
         <xsl:choose>
+            <!--
+                The @css:volume-break-inside in this expression was added because we want to avoid
+                inserting a <block><span id="..."/></block> in between a <block break-before="page">
+                and a <block volume-keep-priority="...">, as this may trigger a volume breaking bug in
+                Dotify (may cause the volume to be broken one page too early).
+                (Note that this was the simplest way to achieve that, but there are probably better
+                ways that do not compromise as much on the goal of moving markers before margin,
+                border and padding.)
+            -->
             <xsl:when test="($string-set-on-first-inline or $id-on-first-inline)
                             and (descendant-or-self::css:box[@type='block'] intersect $first-inline/ancestor::*)
-                                /(@css:margin-top|@css:margin-top-skip-if-top-of-page|@css:border-top-pattern|@css:padding-top)
-                            and not((descendant::css:box[@type='block'] intersect $first-inline/ancestor::*)/@css:page-break-before)">
+                                /(@css:margin-top
+                                 |@css:margin-top-skip-if-top-of-page
+                                 |@css:border-top-pattern
+                                 |@css:padding-top)
+                            and not((descendant::css:box[@type='block'] intersect $first-inline/ancestor::*)
+                                    /(@css:page-break-before
+                                     |@css:volume-break-inside))">
                 <xsl:element name="{$block-tag}">
-                    <xsl:apply-templates mode="block-attr" select="@css:page-break-before"/>
+                    <xsl:apply-templates mode="block-attr" select="@css:page-break-before|
+                                                                   @css:volume-break-inside"/>
                     <xsl:apply-templates mode="marker" select="$string-set-on-first-inline"/>
                     <xsl:apply-templates mode="#current" select="$id-on-first-inline"/>
                     <xsl:next-match>
                         <xsl:with-param name="page-break-before-handled" tunnel="yes" select="@css:page-break-before"/>
+                        <xsl:with-param name="volume-break-inside-handled" tunnel="yes" select="@css:volume-break-inside"/>
                         <xsl:with-param name="string-set-handled" tunnel="yes" select="$string-set-on-first-inline"/>
                         <xsl:with-param name="id-handled" tunnel="yes" select="$id-on-first-inline"/>
                     </xsl:next-match>
@@ -1170,6 +1186,14 @@
                   match="css:box[@type='block']/@css:page-break-before">
         <xsl:param name="page-break-before-handled" as="attribute()*" tunnel="yes" select="()"/>
         <xsl:if test="not(. intersect $page-break-before-handled)">
+            <xsl:next-match/>
+        </xsl:if>
+    </xsl:template>
+    <xsl:template priority="0.73"
+                  mode="block-attr"
+                  match="css:box[@type='block']/@css:volume-break-inside">
+        <xsl:param name="volume-break-inside-handled" as="attribute()*" tunnel="yes" select="()"/>
+        <xsl:if test="not(. intersect $volume-break-inside-handled)">
             <xsl:next-match/>
         </xsl:if>
     </xsl:template>

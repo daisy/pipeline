@@ -17,52 +17,42 @@
          <doctitle>Document</doctitle>
          <docauthor>Balandin Vyacheslav</docauthor>
       </frontmatter>
-      <bodymatter id="bodymatter_0001"><level1><h1>  Document name
-</h1><p xml:lang="ru-RU">Change history:</p>
-<table border="1">
+      <bodymatter id="bodymatter_0001"><level1><h1>  Document name</h1><p xml:lang="ru-RU">Change history:</p><table border="1">
             <tbody>
-               <tr><td ><p xml:lang="ru-RU">Date</p>
-</td><td ><p xml:lang="ru-RU">Author</p>
-</td><td ><p xml:lang="ru-RU">Change / State</p>
-</td></tr>
-               <tr><td ><p xml:lang="ru-RU">2009-01-01</p>
-</td><td ><p xml:lang="ru-RU">Last_name N.</p>
-</td><td ><p></p>
-</td></tr>
-               <tr><td ><p></p>
-</td><td ><p></p>
-</td><td ><p></p>
-</td></tr>
+               <tr>
+                  <td><p xml:lang="ru-RU">Date</p></td>
+                  <td><p xml:lang="ru-RU">Author</p></td>
+                  <td><p xml:lang="ru-RU">Change / State</p></td>
+               </tr>
+               <tr>
+                  <td><p xml:lang="ru-RU">2009-01-01</p></td>
+                  <td><p xml:lang="ru-RU">Last_name N.</p></td>
+                  <td><p></p></td>
+               </tr>
+               <tr>
+                  <td><p></p></td>
+                  <td><p></p></td>
+                  <td><p></p></td>
+               </tr>
             </tbody>
-         </table><p></p>
-<p></p>
-</level1><level1><h1>1. Section 1
-</h1><level2><h2 xml:lang="ru-RU">1.1. Subsection 1.1
-</h2><p></p>
-<p>Table</p>
-<table border="1">
+         </table><p></p><p></p></level1><level1><h1>1. Section 1</h1><level2><h2 xml:lang="ru-RU">1.1. Subsection 1.1</h2><p></p><p>Table</p><table border="1">
             <tbody>
-               <tr><td ><p></p>
-</td><td ><p></p>
-</td><td ><p></p>
-</td></tr>
-               <tr><td ><p></p>
-</td><td ><p></p>
-</td><td ><p></p>
-</td></tr>
-               <tr><td ><p></p>
-</td><td ><p></p>
-</td><td ><p></p>
-</td></tr>
+               <tr>
+                  <td><p></p></td>
+                  <td><p></p></td>
+                  <td><p></p></td>
+               </tr>
+               <tr>
+                  <td><p></p></td>
+                  <td><p></p></td>
+                  <td><p></p></td>
+               </tr>
+               <tr>
+                  <td><p></p></td>
+                  <td><p></p></td>
+                  <td><p></p></td>
+               </tr>
             </tbody>
-         </table><p></p>
-<p></p>
-</level2></level1><level1><h1>2. Section 2
-</h1><p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-</level1></bodymatter>
+         </table><p></p><p></p></level2></level1><level1><h1>2. Section 2</h1><p></p><p></p><p></p><p></p><p></p></level1></bodymatter>
    </book>
 </dtbook>

@@ -86,7 +86,7 @@
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl">
         <p:documentation>
-            pef:add-metadata
+            px:pef-add-metadata
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/html-to-epub3/library.xpl">
@@ -194,9 +194,8 @@
                                  'embossed',
                                  ' AND (width: ',($parameter-map('page-width'),40)[1],')',
                                  ' AND (height: ',($parameter-map('page-height'),25)[1],')',
-                                 if ($parameter-map('duplex'))
-                                   then ' AND (-daisy-duplex: 1)'
-                                   else ())"/>
+                                 ' AND (-daisy-duplex: ',if ($parameter-map('duplex')) then '1' else '0',')'
+                                 )"/>
         <p:input port="parameters">
             <p:empty/>
         </p:input>
@@ -426,14 +425,14 @@
                 </p:input>
             </p:identity>
             <px:html-to-opf-metadata name="metadata" px:message="Extracting metadata from HTML" px:progress="1/2"/>
-            <pef:add-metadata px:message="Adding metadata to PEF" px:progress="1/2">
+            <px:pef-add-metadata px:message="Adding metadata to PEF" px:progress="1/2">
                 <p:input port="source">
                     <p:pipe step="pef" port="result"/>
                 </p:input>
                 <p:input port="metadata">
                     <p:pipe step="metadata" port="result"/>
                 </p:input>
-            </pef:add-metadata>
+            </px:pef-add-metadata>
         </p:when>
         <p:otherwise>
             <p:identity/>

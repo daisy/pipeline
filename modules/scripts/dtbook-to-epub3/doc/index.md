@@ -4,7 +4,7 @@
 
 # DTBook to EPUB3
 
-Converts multiple dtbooks to epub3 format
+Transforms multiple DTBooks into EPUB 3 format
 
 ## Synopsis
 

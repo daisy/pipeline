@@ -10,12 +10,17 @@
 
 	<p:input port="source">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			<p>OPF or HTML document that may have more than one <code>prefix</code>
+			<p>OPF, HTML or ZedAI document that may have more than one <code>prefix</code>
 			(<code>epub:prefix</code>) attribute.</p>
-			<p><code>prefix</code> attributes are allowed on any element, not only on
-			<code>package</code> or <code>html</code>.</p>
+			<p><code>prefix</code> attributes are allowed on any element, not only on the roote
+			element (<code>package</code>, <code>html</code> or <code>document</code>).</p>
 			<p>If an element has more than one ancestor element with a <code>prefix</code>, all
 			except the closest one are ignored.</p>
+			<p>In case of ZedAI input, unprefixed CURIEs resolve to the URI
+			<code>http://www.daisy.org/z3998/2012/vocab/structure/#</code> (which is the default
+			vocabulary as defined by the <a
+			href="http://www.daisy.org/z3998/2012/vocab/context/default/">default RDFa
+			context</a>).</p>
 		</p:documentation>
 	</p:input>
 
@@ -44,12 +49,12 @@
 
 	<p:output port="result">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			<p>The result document has at most one <code>prefix</code> attribute, on the root
-			element. The different <code>prefix</code> attributes in the input document are merged
-			in such a way that every prefix is unique and no two prefixes are mapped to the same
-			URI. The document is updated at the places where a prefix is used that was
-			renamed. Prefixes that are not used anywhere inside the document are skipped from the
-			declaration.</p>
+			<p>The result document has at most one <code>prefix</code> (<code>epub:prefix</code>)
+			attribute, on the root element. The different <code>prefix</code> attributes in the
+			input document are merged in such a way that every prefix is unique and no two prefixes
+			are mapped to the same URI. The document is updated at the places where a prefix is used
+			that was renamed. Prefixes that are not used anywhere inside the document are skipped
+			from the declaration.</p>
 		</p:documentation>
 	</p:output>
 

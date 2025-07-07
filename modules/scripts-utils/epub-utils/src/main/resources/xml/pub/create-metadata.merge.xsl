@@ -515,7 +515,15 @@
         <xsl:variable name="reference" select="replace($property,'(.+:)','')" as="xs:string"/>
         <xsl:variable name="vocab" as="xs:string"
                       select="($vocabs[@prefix=$prefix]/@uri,
-                               if ($prefix='' and $reference!='') then $vocab-package-uri else (),
+                               if ($prefix='' and $reference!='')
+                                 then (
+                                        if ($property/parent::meta and name($property)='property')    then $vocab-package-meta-uri
+                                   else if ($property/parent::link and name($property)='rel')         then $vocab-package-link-uri
+                                   else if ($property/parent::item and name($property)='properties')  then $vocab-package-item-uri
+                                   else if ($property/parent::itemref and name($property)='property') then $vocab-package-itemref-uri
+                                   else () (:should not happen:)
+                                 )
+                                 else (),
                                ''
                               )[1]"/>
         <f:property prefix="{$prefix}"

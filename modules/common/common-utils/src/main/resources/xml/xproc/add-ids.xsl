@@ -9,6 +9,7 @@
     <xsl:include href="../xslt/generate-id.xsl"/>
 
     <xsl:param name="next-doc" as="xs:integer"/>
+    <xsl:param name="prefix" as="xs:string" select="''"/>
 
     <xsl:variable name="all-docs" select="collection()"/>
 
@@ -31,7 +32,7 @@
 
     <xsl:template match="/*" priority="1">
         <xsl:call-template name="pf:next-match-with-generated-ids">
-            <xsl:with-param name="prefix" select="'id_'"/>
+            <xsl:with-param name="prefix" select="($prefix,'id_')[not(.='')][1]"/>
             <xsl:with-param name="for-elements"
                             select="//*[@id][not(pf:first-element-in-all-docs(@id) is .)]|
                                     //*[@pxi:need-id][not(@id)]"/>

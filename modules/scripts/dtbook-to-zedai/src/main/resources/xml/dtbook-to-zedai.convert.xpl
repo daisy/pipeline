@@ -179,6 +179,11 @@
             px:validate-mods
         </p:documentation>
     </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl">
+        <p:documentation>
+            px:epub3-merge-prefix
+        </p:documentation>
+    </p:import>
 
 
     <p:variable name="output-dir-with-slash"
@@ -531,7 +536,7 @@
         <p:output port="result"/>
         <p:documentation>Insert metadata into the head of ZedAI</p:documentation>
         <p:insert match="/z:document/z:head" position="last-child">
-            <p:input port="insertion">
+            <p:input port="insertion" select="/z:head/*">
                 <p:pipe port="result" step="generate-zedai-metadata"/>
             </p:input>
             <p:input port="source">
@@ -540,6 +545,35 @@
         </p:insert>
         <p:documentation>Generate UUID for ZedAI identifier</p:documentation>
         <p:uuid match="/z:document/z:head//z:meta[@property='dc:identifier']/@content"/>
+        <p:documentation>
+            If any properties are defined with a prefix that is a reserved prefix in EPUB 3, assume they
+            are from those vocabularies, and define the prefix in a "prefix" attribute on the root
+            element. Discard properties with an unknown prefix.
+        </p:documentation>
+        <px:epub3-merge-prefix
+            implicit-input-prefixes=" dc:        http://purl.org/dc/elements/1.1/
+                                      dcterms:   http://purl.org/dc/terms/
+                                      z3998:     http://www.daisy.org/z3998/2012/vocab/decl/#
+                                      diagram:   http://www.daisy.org/z3998/2012/vocab/descriptions/#
+                                      a11y:      http://www.idpf.org/epub/vocab/package/a11y/#
+                                      marc:      http://id.loc.gov/vocabulary/
+                                      media:     http://www.idpf.org/epub/vocab/overlays/#
+                                      onix:      http://www.editeur.org/ONIX/book/codelists/current.html#
+                                      rendition: http://www.idpf.org/vocab/rendition/#
+                                      schema:    http://schema.org/
+                                      xsd:       http://www.w3.org/2001/XMLSchema#"
+            implicit-output-prefixes="dc:        http://purl.org/dc/elements/1.1/
+                                      dcterms:   http://purl.org/dc/terms/
+                                      z3998:     http://www.daisy.org/z3998/2012/vocab/decl/#
+                                      diagram:   http://www.daisy.org/z3998/2012/vocab/descriptions/#">
+            <!--
+                "implicit-output-prefixes" are the vocabularies defined in the default RDFa context
+                document (http://www.daisy.org/z3998/2012/vocab/context/default/). This matches the RDFa
+                context as hard-coded in translate-elems-attrs-to-zedai.xsl. "implicit-input-prefixes"
+                is the union of "implicit-output-prefixes" and EPUB's reserved prefixes.
+            -->
+        </px:epub3-merge-prefix>
+        <p:delete match="z:head/z:meta[empty(@property)]"/>
     </p:group>
 
     <p:documentation>Create a meta element for the MODS file reference and insert it into the head
@@ -574,9 +608,6 @@
             </p:insert>
         </p:otherwise>
     </p:choose>
-
-    <!-- unwrap the meta list that was wrapped with tmp:wrapper -->
-    <p:unwrap name="unwrap-meta-list" match="//z:head/tmp:wrapper"/>
 
     <p:documentation>Set new base URI</p:documentation>
     <px:set-base-uri>
