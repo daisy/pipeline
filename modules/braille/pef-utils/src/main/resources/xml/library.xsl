@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:pef="http://www.daisy.org/ns/2008/pef"
                 xmlns:java="implemented-in-java">
 
@@ -32,5 +33,28 @@
             Implemented in ../../java/org/daisy/pipeline/braille/pef/saxon/impl/DecodeDefinition.java
         -->
     </java:function>
+
+	<doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+		<desc>
+		</desc>
+	</doc>
+	</xsl:function>
+
+	<doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+		<desc>
+			<p>Assert that the given medium is a braille file format.</p>
+			<p>Raises an error if the condition is not met.</p>
+			<p>Returns the gived medium if the condition is met.</p>
+		</desc>
+	</doc>
+	<xsl:function name="pf:pef-assert-embossable" as="item()"
+	              xmlns:PefMediaFunctions="org.daisy.pipeline.braille.pef.saxon.impl.PefMediaFunctionProvider$PefMediaFunctions">
+		<xsl:param name="medium" as="item()"/>
+		<xsl:sequence select="PefMediaFunctions:assertEmbossable($medium)">
+			<!--
+			    Implemented in ../../java/org/daisy/pipeline/braille/pef/saxon/impl/PefMediaFunctionProvider.java
+			-->
+		</xsl:sequence>
+	</xsl:function>
 
 </xsl:stylesheet>

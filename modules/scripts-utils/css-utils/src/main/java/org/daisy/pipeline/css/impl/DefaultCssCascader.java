@@ -70,10 +70,12 @@ import org.w3c.dom.Node;
 public class DefaultCssCascader implements CssCascader {
 
 	public boolean supportsMedium(Medium medium) {
+		if (medium.getType() == null)
+			return false;
 		switch (medium.getType()) {
 		case PRINT:
 		case SCREEN:
-			return "none".equals(medium.getCustomFeatures().get("counter-support"));
+			return medium.matches("(counter-support: none)");
 		default:
 			return false;
 		}

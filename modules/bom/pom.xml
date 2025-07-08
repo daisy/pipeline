@@ -53,12 +53,12 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>braille-css-utils</artifactId>
-        <version>4.1.0</version>
+        <version>4.2.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>dotify-utils</artifactId>
-        <version>6.4.1-SNAPSHOT</version>
+        <version>6.5.0-SNAPSHOT</version>
       </dependency>
       <!-- list main libhyphen-utils first because this determines the version of the 'doc' artifact picked for the website -->
       <dependency>
@@ -111,7 +111,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>pef-utils</artifactId>
-        <version>7.0.1-SNAPSHOT</version>
+        <version>8.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
@@ -140,7 +140,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>html-utils</artifactId>
-        <version>6.4.3</version>
+        <version>6.4.4-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -223,7 +223,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>css-utils</artifactId>
-        <version>6.1.2-SNAPSHOT</version>
+        <version>7.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -238,7 +238,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>dtbook-utils</artifactId>
-        <version>5.1.2</version>
+        <version>5.1.3-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -273,7 +273,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>zedai-utils</artifactId>
-        <version>1.2.3</version>
+        <version>1.2.4-SNAPSHOT</version>
       </dependency>
       
       <!--
@@ -317,7 +317,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>dtbook-to-daisy3</artifactId>
-        <version>3.5.3</version>
+        <version>3.5.4-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -327,7 +327,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>dtbook-to-epub3</artifactId>
-        <version>2.7.0</version>
+        <version>2.7.1-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -342,7 +342,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>dtbook-to-pef</artifactId>
-        <version>11.2.1</version>
+        <version>12.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -382,12 +382,12 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>epub3-to-epub3</artifactId>
-        <version>5.0.1</version>
+        <version>5.0.2-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>epub3-to-pef</artifactId>
-        <version>8.2.1</version>
+        <version>9.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -407,7 +407,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>html-to-pef</artifactId>
-        <version>8.2.1</version>
+        <version>9.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -422,7 +422,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>zedai-to-epub3</artifactId>
-        <version>2.6.0</version>
+        <version>2.6.1-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -432,7 +432,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>zedai-to-pef</artifactId>
-        <version>6.2.3</version>
+        <version>7.0.0-SNAPSHOT</version>
       </dependency>
       
       <!--
@@ -441,12 +441,12 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>dtbook-tts</artifactId>
-        <version>5.1.2</version>
+        <version>5.1.3-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>epub3-tts</artifactId>
-        <version>4.1.2</version>
+        <version>4.1.3-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -556,7 +556,7 @@
       <dependency>
         <groupId>org.daisy.libs</groupId>
         <artifactId>jstyleparser</artifactId>
-        <version>1.20-p24</version>
+        <version>1.20-p25-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.unbescape</groupId>

@@ -68,11 +68,11 @@ public class CssCascadeStep extends DefaultStep implements XProcStep {
 	private static final QName _parameters = new QName("parameters");
 	private static final QName _type = new QName("type");
 	private static final QName _content_type = new QName("content-type");
-	private static final QName _media = new QName("media");
+	private static final QName _medium = new QName("medium");
 	private static final QName _attribute_name = new QName("attribute-name");
 	private static final QName _multiple_attributes = new QName("multiple-attributes");
 
-	private static final String DEFAULT_MEDIUM = "embossed";
+	private static final Medium DEFAULT_MEDIUM = Medium.EMBOSSED;
 	private static final String DEFAULT_TYPES = "text/css text/x-scss";
 	private static final QName DEFAULT_ATTRIBUTE_NAME = new QName("style");
 
@@ -114,11 +114,13 @@ public class CssCascadeStep extends DefaultStep implements XProcStep {
 		super.run();
 		try {
 			Medium medium; {
-				try {
-					medium = Medium.parse(getOption(_media, DEFAULT_MEDIUM));
-				} catch (Throwable e) {
-					throw new IllegalArgumentException("Could not parse media: " + getOption(_media, DEFAULT_MEDIUM), e);
-				}
+				RuntimeValue mediumOption = getOption(_medium);
+				if (mediumOption != null)
+					medium = SaxonHelper.objectFromItem(
+						SaxonHelper.getSingleItem(mediumOption.getValue().getUnderlyingValue()),
+						Medium.class);
+				else
+					medium = DEFAULT_MEDIUM;
 			}
 			List<String> types = Arrays.asList(getOption(_type, DEFAULT_TYPES).trim().split("\\s+"));
 			if (!types.contains("text/css"))

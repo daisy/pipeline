@@ -34,7 +34,7 @@ import org.xml.sax.InputSource;
 
 public class SpeechCssCascaderTest {
 
-	private static final Medium SPEECH = Medium.parse("speech");
+	private static final Medium SPEECH = Medium.SPEECH;
 	private static final QName TTS_NS = new QName("http://www.daisy.org/ns/pipeline/tts", "_", "tts");
 
 	private static Processor proc;

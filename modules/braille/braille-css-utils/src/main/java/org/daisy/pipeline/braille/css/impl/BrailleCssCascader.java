@@ -93,6 +93,8 @@ public class BrailleCssCascader implements CssCascader {
 	 * properties color, font-style, font-weight, text-decoration.
 	 */
 	public boolean supportsMedium(Medium medium) {
+		if (medium.getType() == null)
+			return false;
 		switch (medium.getType()) {
 		case EMBOSSED:
 		case BRAILLE:

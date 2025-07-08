@@ -1,18 +1,12 @@
-import java.util.ArrayList;
-import java.util.List;
 import javax.inject.Inject;
 
-import org.daisy.dotify.api.embosser.FileFormat;
 import org.daisy.dotify.api.table.Table;
-import org.daisy.pipeline.braille.common.Provider;
-import static org.daisy.pipeline.braille.common.Provider.util.dispatch;
-import org.daisy.pipeline.braille.common.Query;
 import org.daisy.pipeline.braille.common.Query.MutableQuery;
 import static org.daisy.pipeline.braille.common.Query.util.mutableQuery;
 import static org.daisy.pipeline.braille.common.Query.util.query;
-import org.daisy.pipeline.braille.pef.FileFormatRegistry;
 import org.daisy.pipeline.braille.pef.TableRegistry;
-
+import org.daisy.pipeline.css.MediaQueryParser;
+import org.daisy.pipeline.css.MediumProvider;
 import org.daisy.pipeline.junit.AbstractTest;
 
 import org.junit.Test;
@@ -24,7 +18,7 @@ public class PefCoreTest extends AbstractTest {
 	public TableRegistry tableProvider;
 	
 	@Test
-	public void testBrailleUtilsTableCatalog() {
+	public void testTableCatalog() {
 		MutableQuery q = mutableQuery();
 		q.add("id", "org.daisy.braille.impl.table.DefaultTableProvider.TableType.EN_US");
 		Table table = tableProvider.get(q).iterator().next();
@@ -44,25 +38,28 @@ public class PefCoreTest extends AbstractTest {
 	}
 	
 	@Inject
-	public FileFormatRegistry formatProvider;
+	public MediumProvider formatProvider;
 	
 	@Test
-	public void testBrailleUtilsFileFormatCatalog() {
+	public void testFileFormatCatalog() {
 		formatProvider.get(
-			mutableQuery().add("format", "org_daisy.BrailleEditorsFileFormatProvider.FileType.BRF")
-			              .add("table", "org_daisy.EmbosserTableProvider.TableType.MIT")
+			MediaQueryParser.parse(
+				"(format: org_daisy\\.BrailleEditorsFileFormatProvider\\.FileType\\.BRF) AND " +
+				"(table: org_daisy\\.EmbosserTableProvider\\.TableType\\.MIT)")
 		).iterator().next();
 	}
 	
 	@Test
-	public void testBrailleUtilsEmbosserAsFileFormatCatalog() {
+	public void testEmbosserAsFileFormatCatalog() {
 		formatProvider.get(
-			mutableQuery().add("embosser", "com_braillo.BrailloEmbosserProvider.EmbosserType.BRAILLO_200")
-			              .add("locale", "nl")
+			MediaQueryParser.parse(
+				"(embosser: com_braillo\\.BrailloEmbosserProvider\\.EmbosserType\\.BRAILLO_200) AND " +
+				"(locale: nl)")
 		).iterator().next();
 		formatProvider.get(
-			mutableQuery().add("embosser", "com_braillo.BrailloEmbosserProvider.EmbosserType.BRAILLO_200")
-			              .add("table", "nl")
+			MediaQueryParser.parse(
+				"(embosser: com_braillo\\.BrailloEmbosserProvider\\.EmbosserType\\.BRAILLO_200) AND " +
+				"(table: nl)")
 		).iterator().next();
 	}
 	

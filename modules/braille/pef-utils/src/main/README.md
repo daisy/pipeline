@@ -11,7 +11,7 @@
 
 ## PEF tables ([`org.daisy.pipeline.braille.pef.TableProvider`](java/org/daisy/pipeline/braille/pef/TableProvider.java))
 
-- [`(id:...)`](java/org/daisy/pipeline/braille/pef/impl/BrailleUtilsTableCatalog.java)
+- [`(id:...)`](java/org/daisy/pipeline/braille/pef/impl/TableCatalog.java)
 
   Provides [PEF
   tables](https://mtmse.github.io/dotify.api/latest/javadoc/org/daisy/dotify/api/table/Table.html)

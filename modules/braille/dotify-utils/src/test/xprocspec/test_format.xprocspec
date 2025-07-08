@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
-               xmlns:dotify="http://code.google.com/p/dotify/"
+               xmlns:cx="http://xmlcalabash.com/ns/extensions"
                xmlns:p="http://www.w3.org/ns/xproc"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+               xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+               xmlns:pef="http://www.daisy.org/ns/2008/pef"
                xmlns:daisy="http://www.daisy.org/ns/pipeline/"
                xmlns:obfl="http://www.daisy.org/ns/2011/obfl"
-               xmlns:pef="http://www.daisy.org/ns/2008/pef">
+               xmlns:dotify="http://code.google.com/p/dotify/">
   
   <x:script>
     <p:declare-step type="dotify:format" name="main" version="1.0">
@@ -26,8 +28,9 @@
       <p:import href="../../main/resources/xml/obfl-normalize-space.xpl"/>
       <p:import href="http://www.daisy.org/pipeline/modules/braille/dotify-utils/library.xpl"/>
       <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
-      <pxi:css-to-obfl px:message="css-to-obfl" px:progress=".89"
-                       duplex="true">
+      <cx:import type="application/xslt+xml" href="http://www.daisy.org/pipeline/modules/css-utils/library.xsl"/>
+      <pxi:css-to-obfl px:message="css-to-obfl" px:progress=".89">
+        <p:with-option name="medium" select="pf:css-parse-medium('(width:40) AND (height:25) AND (-daisy-duplex)')"/>
         <p:with-option name="document-locale" select="$document-locale"/>
         <p:with-option name="text-transform" select="$text-transform"/>
         <p:with-option name="braille-charset" select="$braille-charset"/>
@@ -3752,17 +3755,6 @@
             <daisy:style-type>text/css</daisy:style-type>
           </meta>
           <layout-master name="a" page-width="40" page-height="25" duplex="true">
-            <template use-when="(= (% $page 2) 1)">
-              <header>
-                <field>
-                  <string value=""/>
-                </field>
-                <field>
-                  <string value=""/>
-                </field>
-              </header>
-              <footer/>
-            </template>
             <template use-when="(= (% $page 2) 0)">
               <header>
                 <field>
@@ -3783,7 +3775,14 @@
               <footer/>
             </template>
             <default-template>
-              <header/>
+              <header>
+                <field>
+                  <string value=""/>
+                </field>
+                <field>
+                  <string value=""/>
+                </field>
+              </header>
               <footer/>
             </default-template>
           </layout-master>
@@ -4826,7 +4825,35 @@
             <daisy:style-type>text/css</daisy:style-type>
           </meta>
           <layout-master name="a" page-width="20" page-height="7" duplex="true">
-            <template use-when="(= (% $page 2) 1)">
+            <template use-when="(= (% $page 2) 0)">
+              <header>
+                <field>
+                  <marker-reference marker="print-page-dash/prev" direction="forward" scope="page-content"/>
+                  <marker-reference marker="print-page" direction="backward" scope="document"/>
+                </field>
+                <field>
+                  <string value=""/>
+                </field>
+              </header>
+              <footer>
+                <!--
+                <field>
+                  <compound-marker-reference>
+                    <marker-reference marker="print-page/prev" direction="forward" scope="page-content"/>
+                    <marker-reference marker="print-page" direction="backward" scope="document"/>
+                  </compound-marker-reference>
+                  <marker-reference marker="dash-print-page" direction="backward" scope="page"/>
+                </field>
+                -->
+                <field>
+                  <string value=""/>
+                </field>
+                <field>
+                  <string value=""/>
+                </field>
+              </footer>
+            </template>
+            <default-template>
               <header>
                 <field>
                   <marker-reference marker="print-page-dash/prev" direction="forward" scope="page-content"/>
@@ -4863,38 +4890,6 @@
                   <string value=""/>
                 </field>
               </footer>
-            </template>
-            <template use-when="(= (% $page 2) 0)">
-              <header>
-                <field>
-                  <marker-reference marker="print-page-dash/prev" direction="forward" scope="page-content"/>
-                  <marker-reference marker="print-page" direction="backward" scope="document"/>
-                </field>
-                <field>
-                  <string value=""/>
-                </field>
-              </header>
-              <footer>
-                <!--
-                <field>
-                  <compound-marker-reference>
-                    <marker-reference marker="print-page/prev" direction="forward" scope="page-content"/>
-                    <marker-reference marker="print-page" direction="backward" scope="document"/>
-                  </compound-marker-reference>
-                  <marker-reference marker="dash-print-page" direction="backward" scope="page"/>
-                </field>
-                -->
-                <field>
-                  <string value=""/>
-                </field>
-                <field>
-                  <string value=""/>
-                </field>
-              </footer>
-            </template>
-            <default-template>
-              <header/>
-              <footer/>
             </default-template>
           </layout-master>
           <sequence master="a">
@@ -6058,21 +6053,22 @@
                         size: 15 10;
                         margin-left: 2;
                         @left {
-                          content: -obfl-marker-indicator(pagenum, '⠿');
+                          content: -obfl-marker-indicator(foo, ' ⠿ ')
+                                   -obfl-marker-indicator(bar, ' ⠶ ');
                           text-transform: none; }}">
             <body style="display: block">
               <section style="display: block">
-                <pagenum style="display: none; -obfl-marker: pagenum">1</pagenum>
+                <span style="display: none; -obfl-marker: foo">1</span><span style="display: none; -obfl-marker: bar">1</span>
                 ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
                 ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
-                <pagenum style="display: none; -obfl-marker: pagenum">2</pagenum>
+                <span style="display: none; -obfl-marker: bar">2</span>
                 ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
                 ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
                 ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
-                <pagenum style="display: none; -obfl-marker: pagenum">3</pagenum>
+                <span style="display: none; -obfl-marker: foo">2</span>
               </section>
               <section style="display: block">
-                <pagenum style="display: none; -obfl-marker: pagenum">3</pagenum>
+                <span style="display: none; -obfl-marker: foo">3</span>
                 <h style="display: block;
                           margin-top: 1">
                   ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
@@ -6100,7 +6096,8 @@
               <footer/>
               <margin-region align="left" width="2">
                 <indicators>
-                  <marker-indicator markers="indicator/pagenum" indicator="⠿" text-style="text-transform: none"/>
+                  <marker-indicator markers="indicator/foo" indicator="⠿" text-style="text-transform: none"/>
+                  <marker-indicator markers="indicator/bar" indicator="⠶" text-style="text-transform: none"/>
                 </indicators>
               </margin-region>
             </default-template>
@@ -6108,18 +6105,19 @@
           <sequence master="body">
             <block>
               <block>
-                <marker class="indicator/pagenum" value="x"/>
+                <marker class="indicator/foo" value="x"/>
+                <marker class="indicator/bar" value="x"/>
                 ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
                 ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
-                <marker class="indicator/pagenum" value="x"/>
+                <marker class="indicator/bar" value="x"/>
                 ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
                 ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
                 ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
-                <marker class="indicator/pagenum" value="x"/>
+                <marker class="indicator/foo" value="x"/>
               </block>
               <block>
                 <block margin-top="1">
-                  <marker class="indicator/pagenum" value="x"/>
+                  <marker class="indicator/foo" value="x"/>
                   ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
                 </block>
                 <block>
@@ -6148,7 +6146,7 @@
               <section>
                 <page>
                   <row>⠿⠀⠤⠤⠤⠀⠤⠤⠤⠀⠤⠤⠤</row>
-                  <row>⠿⠀⠤⠤⠤⠀⠤⠤⠤⠀⠤⠤⠤</row>
+                  <row>⠶⠀⠤⠤⠤⠀⠤⠤⠤⠀⠤⠤⠤</row>
                   <row>⠀⠀⠤⠤⠤⠀⠤⠤⠤⠀⠤⠤⠤</row>
                   <row>⠀⠀⠤⠤⠤⠀⠤⠤⠤⠀⠤⠤⠤</row>
                   <row>⠿⠀⠤⠤⠤⠀⠤⠤⠤⠀⠤⠤⠤</row>
@@ -6168,9 +6166,6 @@
   <x:scenario label="test_57">
     <x:documentation>
       Tests -obfl-marker-indicator() in @left when @page has no margin-left.
-
-      Also tests that content in left margin is trimmed when needed. (Note that if
-      allow-text-overflow-trimming is set to false, this would result in an error.)
     </x:documentation>
     <x:call step="dotify:format">
       <x:input port="source">
@@ -6216,7 +6211,7 @@
             <default-template>
               <header/>
               <footer/>
-              <margin-region align="left" width="1">
+              <margin-region align="left" width="3">
                 <indicators>
                   <marker-indicator markers="indicator/pagenum" indicator="⠿⠿⠿"/>
                 </indicators>
@@ -6263,8 +6258,8 @@
               </section>
               <section>
                 <page>
-                  <row>⠀⠤⠤⠤⠀⠤⠤⠤⠀⠤⠤⠤</row>
-                  <row>⠿⠤⠤⠤⠀⠤⠤⠤⠀⠤⠤⠤</row>
+                  <row>⠀⠀⠀⠤⠤⠤⠀⠤⠤⠤⠀⠤⠤⠤</row>
+                  <row>⠿⠿⠿⠤⠤⠤⠀⠤⠤⠤⠀⠤⠤⠤</row>
                 </page>
               </section>
             </volume>

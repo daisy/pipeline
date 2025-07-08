@@ -54,6 +54,8 @@ import org.w3c.dom.Element;
 public class SpeechCssCascader implements CssCascader {
 
 	public boolean supportsMedium(Medium medium) {
+		if (medium.getType() == null)
+			return false;
 		switch (medium.getType()) {
 		case SPEECH:
 			return true;

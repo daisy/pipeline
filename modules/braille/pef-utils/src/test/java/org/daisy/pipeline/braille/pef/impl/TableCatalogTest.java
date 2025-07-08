@@ -10,11 +10,11 @@ import org.daisy.dotify.api.table.TableProvider;
 import org.junit.Test;
 import org.junit.Assert;
 
-public class BrailleUtilsTableCatalogTest {
+public class TableCatalogTest {
 	
 	@Test
 	public void listAllTables() {
-		BrailleUtilsTableCatalog catalog = new BrailleUtilsTableCatalog();
+		TableCatalog catalog = new TableCatalog();
 		Iterator<TableProvider> providers = ServiceLoader.load(TableProvider.class).iterator();
 		while (providers.hasNext()) catalog.addTableProvider(providers.next());
 		catalog.list();

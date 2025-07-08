@@ -79,9 +79,9 @@ public class CssAnalyzeStep extends DefaultStep implements XProcStep {
 		= new net.sf.saxon.s9api.QName("include-user-agent-stylesheet");
 	private static final net.sf.saxon.s9api.QName _parameters = new net.sf.saxon.s9api.QName("parameters");
 	private static final net.sf.saxon.s9api.QName _content_type = new net.sf.saxon.s9api.QName("content-type");
-	private static final net.sf.saxon.s9api.QName _media = new net.sf.saxon.s9api.QName("media");
+	private static final net.sf.saxon.s9api.QName _medium = new net.sf.saxon.s9api.QName("medium");
 
-	private static final String DEFAULT_MEDIUM = "embossed";
+	private static final Medium DEFAULT_MEDIUM = Medium.EMBOSSED;
 
 	private CssAnalyzeStep(XProcRuntime runtime, XAtomicStep step,
 	                       URIResolver resolver, UserAgentStylesheetRegistry userAgentStylesheets) {
@@ -124,7 +124,16 @@ public class CssAnalyzeStep extends DefaultStep implements XProcStep {
 				               Object.class
 				           ).entrySet())
 					params.put(e.getKey(), "" + e.getValue());
-			List<Medium> media = Medium.parseMultiple(getOption(_media, DEFAULT_MEDIUM));
+			Medium medium; {
+				RuntimeValue mediumOption = getOption(_medium);
+				if (mediumOption != null)
+					medium = SaxonHelper.objectFromItem(
+						SaxonHelper.getSingleItem(mediumOption.getValue().getUnderlyingValue()),
+						Medium.class);
+				else
+					medium = DEFAULT_MEDIUM;
+			}
+			List<Medium> media = Collections.singletonList(medium);
 			inMemoryResolver.setContext(contextPipe);
 			Node doc = XMLCalabashInputValue.of(sourcePipe).ensureSingleItem().asNodeIterator().next();
 			if (!(doc instanceof Document))

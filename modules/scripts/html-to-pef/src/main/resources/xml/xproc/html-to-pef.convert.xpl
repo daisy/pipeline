@@ -10,7 +10,6 @@
                 xmlns:c="http://www.w3.org/ns/xproc-step"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                xmlns:map="http://www.w3.org/2005/xpath-functions/map"
                 exclude-inline-prefixes="#all"
                 type="px:html-to-pef" name="main">
     
@@ -57,6 +56,11 @@
     <p:option name="stylesheet" select="''"/>
     <p:option name="stylesheet-parameters" select="map{}"/> <!-- (map(xs:string,item()) | xs:string)* -->
     <p:option name="transform" select="'(translator:liblouis)(formatter:dotify)'"/>
+    <p:option name="medium" select="'embossed'"> <!-- (xs:string | map(xs:string,item()) | item())* -->
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>The target medium</p>
+        </p:documentation>
+    </p:option>
     <p:option name="include-obfl" select="'false'" cx:as="xs:string"/>
     
     <!-- Empty temporary directory dedicated to this conversion -->
@@ -188,14 +192,8 @@
     <px:css-cascade name="html-with-css" px:message="Applying style sheets" px:progress=".12"
                     include-user-agent-stylesheet="true" content-type="application/xhtml+xml">
         <p:with-option name="user-stylesheet" select="$stylesheet"/>
+        <p:with-option name="media" select="$medium"/>
         <p:with-option name="parameters" select="$parameter-map"/>
-        <p:with-option name="media"
-                       select="concat(
-                                 'embossed',
-                                 ' AND (width: ',($parameter-map('page-width'),40)[1],')',
-                                 ' AND (height: ',($parameter-map('page-height'),25)[1],')',
-                                 ' AND (-daisy-duplex: ',if ($parameter-map('duplex')) then '1' else '0',')'
-                                 )"/>
         <p:input port="parameters">
             <p:empty/>
         </p:input>
@@ -238,6 +236,7 @@
                         <px:transform px:progress="1">
                             <p:with-option name="query" select="concat('(input:mathml)',$locale-query)"/>
                             <p:with-param port="parameters" name="temp-dir" select="$temp-dir"/>
+                            <p:with-param port="parameters" name="medium" select="$medium"/>
                             <p:input port="parameters">
                                 <p:pipe step="html-with-css" port="result.parameters"/>
                             </p:input>
@@ -276,6 +275,7 @@
                     <p:variable name="transform-query" select="concat('(input:css)(output:obfl)',$transform,$locale-query)"/>
                     <px:transform px:progress="1" px:message-severity="DEBUG" px:message="px:transform query={$transform-query}">
                         <p:with-option name="query" select="$transform-query"/>
+                        <p:with-param port="parameters" name="medium" select="$medium"/>
                         <p:with-param port="parameters" name="temp-dir" select="$temp-dir"/>
                         <p:input port="parameters">
                             <p:pipe step="html-with-css" port="result.parameters"/>
@@ -369,6 +369,7 @@
                     </p:output>
                     <px:transform px:progress="1">
                         <p:with-option name="query" select="$transform-query"/>
+                        <p:with-param port="parameters" name="medium" select="$medium"/>
                         <p:with-param port="parameters" name="temp-dir" select="$temp-dir"/>
                         <p:input port="parameters">
                             <p:pipe step="html-with-css" port="result.parameters"/>

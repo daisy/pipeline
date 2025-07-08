@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>pef-utils</artifactId>
-  <version>7.0.1-SNAPSHOT</version>
+  <version>8.0.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: pef-utils</name>
@@ -74,37 +74,24 @@
       <artifactId>liblouis-java</artifactId>
       <scope>runtime</scope>
     </dependency>
-    <!--
-        for processing org.daisy.pipeline.braille.pef.impl.TableCatalog_SPI in generate-spi-classes
-        FIXME: in generate-spi-classes, skip compilation of excluded classes completely (currently
-        only the processing of annotations is skipped)
-    -->
-    <dependency>
-      <groupId>biz.aQute.bnd</groupId>
-      <artifactId>annotation</artifactId>
-      <version>2.3.0</version>
-      <scope>provided</scope>
-    </dependency>
   </dependencies>
   
   <properties>
     <expose-services>
       org.daisy.pipeline.modules.impl.Module_pef_utils,
-      org.daisy.pipeline.braille.pef.FileFormatRegistry,
       org.daisy.pipeline.braille.pef.TableRegistry,
-      org.daisy.pipeline.braille.pef.impl.BrailleUtilsFileFormatCatalog,
-      org.daisy.pipeline.braille.pef.impl.BrailleUtilsTableCatalog,
-      org.daisy.pipeline.braille.pef.impl.ConfigurableFileFormat$Provider,
+      org.daisy.pipeline.braille.pef.impl.FileFormatCatalog,
       org.daisy.pipeline.braille.pef.impl.LocaleBasedTableProvider,
+      org.daisy.pipeline.braille.pef.impl.TableCatalog,
       org.daisy.pipeline.braille.pef.impl.TableDatatypeService,
-      org.daisy.pipeline.braille.pef.impl.PEFFileFormat$Provider,
       org.daisy.pipeline.braille.pef.calabash.impl.pdf.PEF2PDFStep$Provider,
       org.daisy.pipeline.braille.pef.calabash.impl.PEF2TextStep$Provider,
       org.daisy.pipeline.braille.pef.calabash.impl.Text2PEFStep$Provider,
       org.daisy.pipeline.braille.pef.calabash.impl.ValidateStep$Provider,
       org.daisy.pipeline.braille.pef.saxon.impl.DecodeDefinition,
       org.daisy.pipeline.braille.pef.saxon.impl.EncodeDefinition,
-      org.daisy.pipeline.braille.pef.saxon.impl.GetTableIdDefinition
+      org.daisy.pipeline.braille.pef.saxon.impl.GetTableIdDefinition,
+      org.daisy.pipeline.braille.pef.saxon.impl.PefMediaFunctionProvider
     </expose-services>
   </properties>
 

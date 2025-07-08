@@ -21,16 +21,17 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 
-// Note that although the name suggests it, this class doesn't use instances
-// of the TableCatalog interface. It uses instances of the more low-level
-// org.daisy.dotify.api.table.TableProvider directly. The name was chosen
-// because it more or less provides the same functionality as a TableCatalog,
-// except that it's based on the query syntax instead of ID's.
+// Note that this class doesn't use instances of the
+// org.daisy.dotify.api.table.TableCatalog interface. It uses instances of the
+// more low-level org.daisy.dotify.api.table.TableProvider directly. The name
+// was chosen because it more or less provides the same functionality as a
+// org.daisy.dotify.api.table.TableCatalog, except that it's based on the
+// query syntax instead of ID's.
 @Component(
-	name = "org.daisy.pipeline.braille.pef.impl.BrailleUtilsTableCatalog",
+	name = "org.daisy.pipeline.braille.pef.impl.TableCatalog",
 	service = { org.daisy.pipeline.braille.pef.TableProvider.class }
 )
-public class BrailleUtilsTableCatalog extends AbstractTableProvider {
+public class TableCatalog extends AbstractTableProvider {
 
 	@Override
 	protected Iterable<Table> _get(Query query) {

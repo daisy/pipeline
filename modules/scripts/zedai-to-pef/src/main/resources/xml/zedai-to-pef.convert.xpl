@@ -24,6 +24,11 @@
     </p:option>
     <p:option name="stylesheet" required="false" select="''"/>
     <p:option name="transform" required="false" select="''"/>
+    <p:option name="medium" select="'embossed'"> <!-- (xs:string | map(xs:string,item()) | item())* -->
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>The target medium</p>
+        </p:documentation>
+    </p:option>
     
     <p:option name="temp-dir" required="true">
         <p:documentation>
@@ -71,7 +76,7 @@
     <px:assert message="More than one ZedAI document found in the fileset." test-count-max="1" error-code="PEZE00"/>
     <p:identity name="zedai"/>
     
-    <px:css-cascade media="embossed">
+    <px:css-cascade>
         <p:with-option name="user-stylesheet"
                        select="concat(
                                  if ($default-stylesheet!='#default')
@@ -79,6 +84,7 @@
                                    else resolve-uri('../css/default.css'),
                                  ' ',
                                  $stylesheet)"/>
+        <p:with-option name="media" select="$medium"/>
     </px:css-cascade>
     
     <p:viewport match="math:math">
@@ -86,12 +92,14 @@
             <p:with-option name="query" select="concat('(input:mathml)(locale:',(/*/@xml:lang,'und')[1],')')">
                 <p:pipe step="zedai" port="result"/>
             </p:with-option>
+            <p:with-param port="parameters" name="medium" select="$medium"/>
             <p:with-param port="parameters" name="temp-dir" select="$temp-dir"/>
         </px:transform>
     </p:viewport>
     
     <px:transform name="pef">
         <p:with-option name="query" select="concat('(input:css)(output:pef)',$transform,'(document-locale:',(/*/@xml:lang,'und')[1],')')"/>
+        <p:with-param port="parameters" name="medium" select="$medium"/>
         <p:with-param port="parameters" name="temp-dir" select="$temp-dir"/>
     </px:transform>
     <p:sink/>

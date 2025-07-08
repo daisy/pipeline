@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.zip.ZipFile;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -35,10 +36,13 @@ import com.google.common.base.Supplier;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Iterators;
 
+import cz.vutbr.web.css.MediaQuery;
+
 import org.daisy.common.file.URLs;
 import org.daisy.pipeline.css.CssAnalyzer;
 import org.daisy.pipeline.css.CssAnalyzer.SassVariable;
 import org.daisy.pipeline.css.Medium;
+import org.daisy.pipeline.css.MediumProvider;
 import org.daisy.pipeline.css.UserAgentStylesheetRegistry;
 import org.daisy.pipeline.datatypes.DatatypeRegistry;
 import org.daisy.pipeline.job.ZippedJobResources;
@@ -68,6 +72,7 @@ public class StylesheetParametersResource extends AuthenticatedResource {
 	static final String URI_RESOLVER_KEY = "uri-resolver";
 	static final String DATATYPE_REGISTRY_KEY = "datatype-registry";
 	static final String USER_AGENT_STYLESHEET_REGISTRY_KEY = "user-agent-stylesheet-registry";
+	static final String MEDIUM_PROVIDER_REGISTRY_KEY = "medium-provider-registry";
 
 	private static final String STYLESHEET_PARAMETERS_DATA_FIELD = "stylesheet-parameters-data";
 	private static final String STYLESHEET_PARAMETERS_REQUEST_FIELD = "stylesheet-parameters-request";
@@ -76,6 +81,7 @@ public class StylesheetParametersResource extends AuthenticatedResource {
 	private URIResolver uriResolver;
 	private DatatypeRegistry datatypeRegistry;
 	private UserAgentStylesheetRegistry userAgentStylesheetRegistry;
+	private MediumProvider mediumProvider;
 
 	@Override
 	public void doInit() {
@@ -86,6 +92,7 @@ public class StylesheetParametersResource extends AuthenticatedResource {
 		datatypeRegistry = (DatatypeRegistry)getContext().getAttributes().get(DATATYPE_REGISTRY_KEY);
 		userAgentStylesheetRegistry
 			= (UserAgentStylesheetRegistry)getContext().getAttributes().get(USER_AGENT_STYLESHEET_REGISTRY_KEY);
+		mediumProvider = (MediumProvider)getContext().getAttributes().get(MEDIUM_PROVIDER_REGISTRY_KEY);
 	}
 
 	/**
@@ -201,7 +208,13 @@ public class StylesheetParametersResource extends AuthenticatedResource {
 			}
 			inputs = builder.build();
 		}
-		List<Medium> media = req.getMedia();
+		List<Medium> media = new ArrayList<>(); {
+			for (MediaQuery q : req.getMedia())
+				try {
+					media.add(mediumProvider.get(q).iterator().next());
+				} catch (NoSuchElementException e) {
+				}
+		}
 		URI contextBase = URI.create("context:/");
 		uriResolver = fallback(uriResolver, simpleURIResolver);
 		URIResolver resolver = data == null

@@ -40,7 +40,6 @@ import org.slf4j.LoggerFactory;
 	name = "org.daisy.pipeline.braille.pef.impl.LocaleTableProvider",
 	service = {
 		TableProvider.class
-		// org.daisy.dotify.api.table.TableProvider.class
 	}
 )
 public class LocaleBasedTableProvider extends AbstractTableProvider {

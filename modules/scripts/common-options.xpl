@@ -450,15 +450,15 @@ with the "Braille code" option this determines the transformer that is selected.
 	    epub3-to-pef
 	    zedai-to-pef
 	-->
-	<p:option name="output-file-format" required="false" px:type="transform-query" select="''">
+	<p:option name="output-file-format" required="false" px:type="medium" select="''">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Output file format</h2>
 			<p px:role="desc" xml:space="preserve">The file format in which to store the braille result.
 
-The file format must be expressed as a list of parenthesis enclosed key-value pairs. For example, to
-select a file format suited for the U.S., set the option to `(locale:en-US)`. To use the braille
-character set used in the Netherlands and store to a file with extension ".brl", set the option to
-`(locale:nl)(file-extension:'.brl')`.
+The file format must be expressed in the media query syntax. For example, to select a file format
+suited for the U.S., set the option to `(-daisy-locale: en-US)`. To use the braille character set
+used in the Netherlands and store to a file with extension ".brl", set the option to
+`(-daisy-locale: nl) AND (-daisy-file-extension: \.brl)`.
 
 If left blank, the braille will be stored in PEF format.</p>
 		</p:documentation>

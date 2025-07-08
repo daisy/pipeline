@@ -7,7 +7,9 @@ import java.util.Iterator;
 import javax.xml.transform.stream.StreamSource;
 
 import org.daisy.pipeline.css.CssAnalyzer.SassVariable;
+import org.daisy.pipeline.css.MediaQueryParser;
 import org.daisy.pipeline.css.Medium;
+import org.daisy.pipeline.css.MediumProvider;
 import org.daisy.pipeline.datatypes.DatatypeService;
 
 import org.junit.Assert;
@@ -15,7 +17,7 @@ import org.junit.Test;
 
 public class CssAnalyzerTest {
 
-	private final static Medium SCREEN = Medium.parse("screen");
+	private final static Medium SCREEN = Medium.SCREEN;
 	@Test
 	public void testVariableNameHyphen() throws Exception {
 		Iterator<SassVariable> variables = new CssAnalyzer(SCREEN, null, null).analyze(
@@ -265,12 +267,16 @@ public class CssAnalyzerTest {
 
 	@Test
 	public void testVariableInsideMediaRule() throws Exception {
-		Iterator<SassVariable> variables = new CssAnalyzer(Medium.parse("embossed AND (duplex:1)"), null, null).analyze(
+		Iterator<SassVariable> variables = new CssAnalyzer(
+			Collections.singleton(
+				MediumProvider.GENERIC_MEDIUM_PROVIDER.get(MediaQueryParser.parse("embossed AND (duplex:1)")).iterator().next()),
+			null, null
+		).analyze(
 			Collections.singletonList(new StreamSource(new StringReader("@media embossed {"                   + "\n" +
-			                                                            "    @media (duplex:1) {"             + "\n" +
+			                                                            "    @media (duplex) {"               + "\n" +
 			                                                            "        $my-var: true !default;"     + "\n" +
 			                                                            "    }"                               + "\n" +
-			                                                            "    @media (duplex:0) {"             + "\n" +
+			                                                            "    @media not (duplex) {"           + "\n" +
 			                                                            "        $other-var: true !default;"  + "\n" +
 			                                                            "    }"                               + "\n" +
 			                                                            "}"                                   + "\n" +

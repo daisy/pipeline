@@ -168,11 +168,35 @@ public interface DotifyCSSStyledDocumentTransform {
 									Mult<? extends InputValue<?>> m = params.mult(2); // multiply params input
 									paramsCopy = m.get();
 									Map paramsMap = m.get().asObject(Map.class);
-									// get value of preview-table parameter
-									Object v = paramsMap.get(new QName("preview-table"));
+									// turn medium parameter into an option
+									Object v = paramsMap.get(new QName("medium"));
 									if (v != null)
 										if (v instanceof InputValue) {
-											m = ((InputValue<?>)v).mult(2); // multiply preview-table value
+											m = ((InputValue<?>)v).mult(2); // multiply value
+											try {
+												options.put(new QName("medium"), m.get());
+												paramsMap.remove(new QName("medium"));
+											} catch (UnsupportedOperationException e) {
+												paramsMap.put(new QName("medium"), m.get());
+											}
+										}
+									// turn skip-margin-top-of-page parameter into an option
+									v = paramsMap.get(new QName("skip-margin-top-of-page"));
+									if (v != null)
+										if (v instanceof InputValue) {
+											m = ((InputValue<?>)v).mult(2); // multiply value
+											try {
+												options.put(new QName("skip-margin-top-of-page"), m.get());
+												paramsMap.remove(new QName("skip-margin-top-of-page"));
+											} catch (UnsupportedOperationException e) {
+												paramsMap.put(new QName("skip-margin-top-of-page"), m.get());
+											}
+										}
+									// get value of preview-table parameter
+									v = paramsMap.get(new QName("preview-table"));
+									if (v != null)
+										if (v instanceof InputValue) {
+											m = ((InputValue<?>)v).mult(2); // multiply value
 											paramsMap.put(new QName("preview-table"), m.get());
 											try {
 												v = m.get().asObject();

@@ -55,6 +55,11 @@
     <p:option name="stylesheet-parameters" select="map{}"/> <!-- map(xs:string,item()) | xs:string -->
     <p:option name="apply-document-specific-stylesheets" select="'false'" cx:as="xs:string"/>
     <p:option name="transform" select="'(translator:liblouis)(formatter:dotify)'"/>
+    <p:option name="medium" select="'embossed'"> <!-- (xs:string | map(xs:string,item()) | item())* -->
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>The target medium</p>
+        </p:documentation>
+    </p:option>
     <p:option name="include-obfl" select="'false'" cx:as="xs:string"/>
     <p:option name="content-media-types" select="'application/xhtml+xml'">
         <!--
@@ -169,14 +174,8 @@
                     <p:with-option name="message" select="concat('Inlining document-specific CSS for ',replace(base-uri(/*),'.*/',''),'')"/>
                 </px:message>
                 <px:css-cascade px:progress="1">
+                    <p:with-option name="media" select="$medium"/>
                     <p:with-option name="parameters" select="$parameter-map"/>
-                    <p:with-option name="media"
-                                   select="concat(
-                                             'embossed',
-                                             ' AND (width: ',($parameter-map('page-width'),40)[1],')',
-                                             ' AND (height: ',($parameter-map('page-height'),25)[1],')',
-                                             ' AND (-daisy-duplex: ',if ($parameter-map('duplex')) then '1' else '0',')'
-                                             )"/>
                     <p:input port="parameters">
                         <p:empty/>
                     </p:input>
@@ -233,15 +232,8 @@
                                                         for $s in tokenize($stylesheet,'\s+')[not(.='')]
                                                           return resolve-uri($s,$epub),
                                                         ' ')"/>
+        <p:with-option name="media" select="$medium"/>
         <p:with-option name="parameters" select="$parameter-map"/>
-        <p:with-option name="media"
-                       select="concat(
-                                 'embossed',
-                                 ' AND (width: ',($parameter-map('page-width'),40)[1],')',
-                                 ' AND (height: ',($parameter-map('page-height'),25)[1],')',
-                                 if ($parameter-map('duplex'))
-                                   then ' AND (-daisy-duplex: 1)'
-                                   else ())"/>
         <p:input port="parameters">
             <p:empty/>
         </p:input>
@@ -258,6 +250,7 @@
                     match="math:math">
             <px:transform>
                 <p:with-option name="query" select="concat('(input:mathml)',$locale-query)"/>
+                <p:with-param port="parameters" name="medium" select="$medium"/>
                 <p:with-param port="parameters" name="temp-dir" select="$temp-dir"/>
             </px:transform>
         </p:viewport>
@@ -281,6 +274,7 @@
                 <p:variable name="transform-query" select="concat('(input:css)(output:obfl)',$transform,$locale-query)"/>
                 <px:transform px:progress="1" px:message-severity="DEBUG" px:message="px:transform query={$transform-query}">
                     <p:with-option name="query" select="$transform-query"/>
+                    <p:with-param port="parameters" name="medium" select="$medium"/>
                     <p:with-param port="parameters" name="temp-dir" select="$temp-dir"/>
                     <p:input port="parameters">
                         <p:pipe step="html-with-css" port="result.parameters"/>
@@ -342,6 +336,7 @@
             <p:variable name="transform-query" select="concat('(input:css)(output:pef)',$transform,$locale-query)"/>
             <px:transform px:progress="1" px:message-severity="DEBUG" px:message="px:transform query={$transform-query}">
                 <p:with-option name="query" select="$transform-query"/>
+                <p:with-param port="parameters" name="medium" select="$medium"/>
                 <p:with-param port="parameters" name="temp-dir" select="$temp-dir"/>
                 <p:input port="parameters">
                     <p:pipe step="html-with-css" port="result.parameters"/>

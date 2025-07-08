@@ -1,7 +1,11 @@
 package org.daisy.pipeline.css.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.transform.URIResolver;
 
+import org.daisy.pipeline.css.MediumProvider;
 import org.daisy.pipeline.css.UserAgentStylesheetRegistry;
 import org.daisy.pipeline.datatypes.DatatypeRegistry;
 import org.daisy.pipeline.webservice.restlet.WebServiceExtension;
@@ -60,10 +64,24 @@ public class StylesheetParametersWebServiceExtension implements WebServiceExtens
 		userAgentStylesheetRegistry = registry;
 	}
 
+	private final List<MediumProvider> mediumProviders = new ArrayList<>();
+
+	@Reference(
+		name = "MediumProvider",
+		unbind = "-",
+		service = MediumProvider.class,
+		cardinality = ReferenceCardinality.MULTIPLE,
+		policy = ReferencePolicy.STATIC
+	)
+	protected void bindMediumProvider(MediumProvider provider) {
+		mediumProviders.add(provider);
+	}
+
 	public void attachTo(Router router) {
 		router.getContext().getAttributes().put(StylesheetParametersResource.URI_RESOLVER_KEY, uriResolver);
 		router.getContext().getAttributes().put(StylesheetParametersResource.DATATYPE_REGISTRY_KEY, datatypeRegistry);
 		router.getContext().getAttributes().put(StylesheetParametersResource.USER_AGENT_STYLESHEET_REGISTRY_KEY, userAgentStylesheetRegistry);
+		router.getContext().getAttributes().put(StylesheetParametersResource.MEDIUM_PROVIDER_REGISTRY_KEY, MediumProvider.dispatch(mediumProviders, true));
 		router.attach(STYLESHEET_PARAMETERS_ROUTE, StylesheetParametersResource.class);
 	}
 }

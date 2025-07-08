@@ -38,7 +38,6 @@ import org.slf4j.LoggerFactory;
 	name = "org.daisy.pipeline.braille.liblouis.pef.impl.LiblouisDisplayTableProvider",
 	service = {
 		TableProvider.class
-		// org.daisy.dotify.api.table.TableProvider.class
 	}
 )
 public class LiblouisDisplayTableProvider extends AbstractTableProvider {

@@ -6,6 +6,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,7 +23,10 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 
+import cz.vutbr.web.css.MediaQuery;
+
 import org.daisy.common.file.URLs;
+import org.daisy.pipeline.css.MediaQueryParser;
 import org.daisy.pipeline.css.Medium;
 import org.daisy.pipeline.webservice.request.Request;
 import org.daisy.pipeline.webservice.xml.XmlUtils;
@@ -36,7 +40,7 @@ import org.w3c.dom.NodeList;
 
 public class StylesheetParametersRequest extends Request {
 
-	public List<Medium> getMedia() { return media.list; }
+	public List<MediaQuery> getMedia() { return media.list; }
 	public List<String> getMediaTypes() { return mediaTypes.list; }
 	public Optional<URI> getSourceDocument() { return Optional.ofNullable(sourceDocument); }
 	public List<URI> getUserStylesheets() { return userStylesheets.list; }
@@ -77,7 +81,7 @@ public class StylesheetParametersRequest extends Request {
 			}
 			nodes = xml.getElementsByTagNameNS(XmlUtils.NS_DAISY, "media");
 			if (nodes.getLength() > 0)
-				req.media = new Media(Medium.parseMultiple(((Element)nodes.item(0)).getAttribute("value")));
+				req.media = new Media(MediaQueryParser.parseList(((Element)nodes.item(0)).getAttribute("value")));
 			nodes = xml.getElementsByTagNameNS(XmlUtils.NS_DAISY, "userAgentStylesheet");
 			if (nodes.getLength() > 0)
 				req.mediaTypes = new MediaTypes(
@@ -124,9 +128,9 @@ public class StylesheetParametersRequest extends Request {
 	private UserStylesheets userStylesheets = UserStylesheets.EMPTY;
 
 	private static class Media {
-		private static final Media SCREEN = new Media(Medium.parseMultiple("screen"));
-		private final ImmutableList<Medium> list;
-		private Media(List<Medium> list) {
+		private static final Media SCREEN = new Media(Collections.singletonList(MediaQueryParser.SCREEN));
+		private final ImmutableList<MediaQuery> list;
+		private Media(List<MediaQuery> list) {
 			this.list = ImmutableList.copyOf(list);
 		}
 	}
@@ -159,7 +163,7 @@ public class StylesheetParametersRequest extends Request {
 				JsonPrimitive j = json.getAsJsonPrimitive();
 				if (!j.isString())
 					throw new JsonParseException("invalid media: not a string");
-				return new Media(Medium.parseMultiple(j.getAsString()));
+				return new Media(MediaQueryParser.parseList(j.getAsString()));
 			} catch (IllegalStateException e) {
 				throw new JsonParseException("invalid media: not a string", e);
 			} catch (IllegalArgumentException e) {
