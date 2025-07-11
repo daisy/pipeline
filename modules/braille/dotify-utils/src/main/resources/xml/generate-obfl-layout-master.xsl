@@ -5,7 +5,6 @@
                 xmlns:map="http://www.w3.org/2005/xpath-functions/map"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
-                xmlns:pef="http://www.daisy.org/ns/2008/pef"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                 xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
                 xmlns:obfl="http://www.daisy.org/ns/2011/obfl"
@@ -16,6 +15,7 @@
     <xsl:include href="http://www.daisy.org/pipeline/modules/common-utils/library.xsl"/>
     <xsl:include href="http://www.daisy.org/pipeline/modules/css-utils/library.xsl"/>
     <xsl:include href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xsl"/>
+    <xsl:include href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xsl"/>
     <xsl:include href="marker-reference.xsl"/>
     
     <xsl:param name="medium" as="item()?" required="yes"/>
@@ -281,7 +281,7 @@
                                 <xsl:variable name="pattern"
                                               select="if ($braille-charset-table='')
                                                       then $footnotes-border-top
-                                                      else pef:encode(concat('(id:&quot;',$braille-charset-table,'&quot;)'),
+                                                      else pf:pef-encode(concat('(id:&quot;',$braille-charset-table,'&quot;)'),
                                                                       $footnotes-border-top)"/>
                                 <leader pattern="{$pattern}" position="100%" align="right"/>
                                 <!-- We add a single instance of the pattern in order to have some

@@ -109,13 +109,6 @@
               com.openhtmltopdf.*;resolution:=optional,
               *
             </Import-Package>
-            <Provide-Capability>
-              xpath.function;name="{http://www.daisy.org/ns/2008/pef}encode",
-              xpath.function;name="{http://www.daisy.org/ns/2008/pef}decode",
-              xproc.step;name="{http://www.daisy.org/ns/2008/pef}pef2text",
-              xproc.step;name="{http://www.daisy.org/ns/2008/pef}text2pef",
-              xproc.step;name="{http://www.daisy.org/ns/2008/pef}validate"
-            </Provide-Capability>
           </instructions>
         </configuration>
       </plugin>
