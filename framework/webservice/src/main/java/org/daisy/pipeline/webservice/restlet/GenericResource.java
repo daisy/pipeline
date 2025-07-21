@@ -1,6 +1,8 @@
 package org.daisy.pipeline.webservice.restlet;
 
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.WebserviceStorage;
@@ -17,13 +19,12 @@ import org.daisy.pipeline.webservice.xml.ErrorWriter;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
-import org.restlet.engine.header.Header;
+import org.restlet.data.Warning;
 import org.restlet.engine.header.HeaderConstants;
 import org.restlet.ext.xml.DomRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.Request;
 import org.restlet.resource.ServerResource;
-import org.restlet.util.Series;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,9 +86,12 @@ public abstract class GenericResource extends ServerResource {
 		return dom;
 	}
 
+	// Only use this method when there is no stack trace information. Use the
+	// getErrorRepresentation(Throwable) method if possible, so that the stack trace is included in
+	// the logs. ErrorWriter does not include the stack trace in the XML representation anyway.
 	protected Representation getErrorRepresentation(String error) {
 		logger.debug("Error in fulfilling request: " + error);
-		ErrorWriter.ErrorWriterBuilder builder=new ErrorWriter.ErrorWriterBuilder()
+		ErrorWriter.ErrorWriterBuilder builder = new ErrorWriter.ErrorWriterBuilder()
 		                                                        .withError(new Throwable(error))
 		                                                        .withUri(this.getStatus().getUri());
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, builder.build().getXmlDocument());
@@ -126,12 +130,20 @@ public abstract class GenericResource extends ServerResource {
 	}
 
 	protected void addWarningHeader(int code, String description) {
-		Series<Header> headers = (Series<Header>)getResponse().getAttributes().get(HeaderConstants.ATTRIBUTE_HEADERS);
-		if (headers == null) {
-			headers = new Series<>(Header.class);
-			getResponse().getAttributes().put(HeaderConstants.ATTRIBUTE_HEADERS, headers);
+		addWarningHeader(code, "-", description);
+	}
+
+	protected void addWarningHeader(int code, String agent, String description) {
+		List<Warning> warnings = getResponse().getWarnings();
+		if (warnings == null) {
+			warnings = new ArrayList<Warning>();
+			getResponse().setWarnings(warnings);
 		}
-		headers.add(new Header("Warning", "" + code + " - " + description));
+		Warning w = new Warning();
+		w.setStatus(new Status(code));
+		w.setAgent(agent);
+		w.setText(description);
+		warnings.add(w);
 	}
 
 	private static boolean shouldEnableCORS = Properties.CORS.get("false").equalsIgnoreCase("true");
@@ -142,11 +154,6 @@ public abstract class GenericResource extends ServerResource {
 	}
 
 	private void enableCORS(String domain) {
-		Series<Header> headers = (Series<Header>)getResponse().getAttributes().get(HeaderConstants.ATTRIBUTE_HEADERS);
-		if (headers == null) {
-			headers = new Series<>(Header.class);
-			getResponse().getAttributes().put(HeaderConstants.ATTRIBUTE_HEADERS, headers);
-		}
-		headers.add(new Header("Access-Control-Allow-Origin", domain));
+		getResponse().setAccessControlAllowOrigin(domain);
 	}
 }

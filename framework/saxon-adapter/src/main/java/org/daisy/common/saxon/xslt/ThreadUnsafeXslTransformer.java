@@ -91,9 +91,7 @@ public class ThreadUnsafeXslTransformer {
 			transformer.transform();
 		} finally {
 			if (parameters != null)
-				//cancel the parameters
-				for (Map.Entry<String,Object> param : parameters.entrySet())
-					transformer.setParameter(new QName(null, param.getKey()), null);
+				transformer.clearParameters();
 		}
 	}
 

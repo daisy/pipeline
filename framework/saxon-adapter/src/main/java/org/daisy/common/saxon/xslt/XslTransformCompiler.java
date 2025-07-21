@@ -1,53 +1,59 @@
 package org.daisy.common.saxon.xslt;
 
 import java.io.InputStream;
+import java.util.Map;
 
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamSource;
 
 import net.sf.saxon.Configuration;
 import net.sf.saxon.s9api.Processor;
+import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
+import net.sf.saxon.s9api.XdmValue;
 import net.sf.saxon.s9api.XsltCompiler;
+
+import org.daisy.common.saxon.SaxonHelper;
 
 /**
  * Immutable XSLT compiler with an optional URIResolver.
  */
 public class XslTransformCompiler {
 
-	private URIResolver uriResolver;
-	private XsltCompiler xsltCompiler;
+	private final URIResolver uriResolver;
+	private final XsltCompiler compiler;
 
 	public XslTransformCompiler(Configuration config) {
-		setConfiguration(config);
+		this(config, null);
 	}
 
 	public XslTransformCompiler(Configuration config, URIResolver uriResolver) {
 		this.uriResolver = uriResolver;
-		setConfiguration(config);
+		compiler = new Processor(config).newXsltCompiler();
+		if (uriResolver != null)
+			compiler.setURIResolver(uriResolver);
 	}
 
-	public CompiledStylesheet compileStylesheet(InputStream stylesheet)
-	        throws SaxonApiException {
-
-		CompiledStylesheet cs = new CompiledStylesheet(this.xsltCompiler
-		        .compile(new StreamSource(stylesheet)));
-
-		if (this.uriResolver != null)
-			cs.setURIResolver(this.uriResolver);
-
-		return cs;
+	public CompiledStylesheet compileStylesheet(InputStream stylesheet) throws SaxonApiException {
+		return compileStylesheet(stylesheet, null);
 	}
 
-	private void setConfiguration(Configuration config) {
-		initCompiler(config);
-	}
-
-	private void initCompiler(Configuration config) {
-		this.xsltCompiler = new Processor(config).newXsltCompiler();
-		if (this.uriResolver != null) {
-			//this resolver is used for xsl:include and xsl:import
-			this.xsltCompiler.setURIResolver(this.uriResolver);
+	public CompiledStylesheet compileStylesheet(InputStream stylesheet, Map<String,Object> parameters)
+			throws SaxonApiException {
+		try {
+			if (parameters != null)
+				for (Map.Entry<String,Object> param : parameters.entrySet())
+					compiler.setParameter(
+						new QName(null, param.getKey()),
+						XdmValue.wrap(SaxonHelper.sequenceFromObject(param.getValue())));
+			CompiledStylesheet cs = new CompiledStylesheet(
+				compiler.compile(new StreamSource(stylesheet)));
+			if (uriResolver != null)
+				cs.setURIResolver(uriResolver);
+			return cs;
+		} finally {
+			if (parameters != null)
+				compiler.clearParameters();
 		}
 	}
 }

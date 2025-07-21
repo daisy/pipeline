@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.15.2-SNAPSHOT</version>
+    <version>1.15.3</version>
     <relativePath>../parent/</relativePath>
   </parent>
 
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>pipeline1-adapter</artifactId>
-  <version>1.1.0-SNAPSHOT</version>
+  <version>1.1.0</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 :: Pipeline 1 backend</name>
@@ -61,17 +61,22 @@
       <groupId>org.daisy</groupId>
       <artifactId>pipeline</artifactId>
       <version>${pipeline1.version}</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/src/main/resources/pipeline-${pipeline1.version}.jar</systemPath>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.daisy</groupId>
       <artifactId>org.daisy.util</artifactId>
       <version>${pipeline1.version}</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/src/main/resources/org.daisy.util-${pipeline1.version}.jar</systemPath>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
+
+  <repositories>
+    <repository>
+      <id>compile-only-system-dependencies</id>
+      <url>file://${project.basedir}/src/main/resources/lib/</url>
+    </repository>
+  </repositories>
 
   <build>
     <resources>
@@ -79,9 +84,7 @@
         <directory>src/main/resources</directory>
         <excludes>
           <exclude>maven.properties</exclude>
-          <exclude>pipeline-*.zip</exclude>
-          <exclude>pipeline-*.jar</exclude>
-          <exclude>org.daisy.util-*.jar</exclude>
+          <exclude>lib/**/*</exclude>
         </excludes>
       </resource>
       <resource>
@@ -103,7 +106,7 @@
             <phase>generate-resources</phase>
             <configuration>
               <tasks>
-                <unzip src="src/main/resources/pipeline-${pipeline1.version}.zip" dest="${project.build.directory}/generated-resources/pipeline1">
+                <unzip src="src/main/resources/lib/org/daisy/pipeline/${pipeline1.version}/pipeline-${pipeline1.version}.zip" dest="${project.build.directory}/generated-resources/pipeline1">
                   <patternset>
                     <exclude name="pipeline-${pipeline1.version}/pipeline.sh" />
                     <exclude name="pipeline-${pipeline1.version}/pipeline.bat" />
@@ -111,12 +114,12 @@
                     <exclude name="pipeline-${pipeline1.version}/licenses/**" />
                     <exclude name="pipeline-${pipeline1.version}/rmi/**" />
                     <exclude name="pipeline-${pipeline1.version}/transformers/**" />
-                    <exclude name="pipeline-${pipeline1.version}/lib/slf4j-api-1.5.6.jar"/>
-                    <exclude name="pipeline-${pipeline1.version}/lib/slf4j-log4j12-1.5.6.jar"/>
+                    <exclude name="pipeline-${pipeline1.version}/lib/slf4j-api-1.5.6.jar" />
+                    <exclude name="pipeline-${pipeline1.version}/lib/slf4j-log4j12-1.5.6.jar" />
                   </patternset>
                   <cutdirsmapper dirs="1" />
                 </unzip>
-                <unzip src="src/main/resources/pipeline-${pipeline1.version}.zip" dest="${project.build.directory}/tmp/unzip-pipeline-${pipeline1.version}/">
+                <unzip src="src/main/resources/lib/org/daisy/pipeline/${pipeline1.version}/pipeline-${pipeline1.version}.zip" dest="${project.build.directory}/tmp/unzip-pipeline-${pipeline1.version}/">
                   <patternset>
                     <include name="pipeline-${pipeline1.version}/transformers/**" />
                   </patternset>
