@@ -21,8 +21,9 @@ if [ $1 == "libs/com.xmlcalabash" ]; then
     echo ": update version in gradle.properties to $version and distVersion to $distVersion"
     echo "git commit -m \"XML Calabash $version released\""
     echo "$ROOT_DIR/$MY_DIR/gradlew uploadArchives"
-    echo "open \"https://oss.sonatype.org\""
-    echo ": login and close stage"
+    echo 'curl -i -X POST https://ossrh-staging-api.central.sonatype.com/manual/upload/defaultRepository/org.daisy -H "Authorization: Bearer $(echo <user>:<pass> | openssl base64)"'
+    echo "open \"https://central.sonatype.com/publishing/deployments\""
+    echo ": login and publish"
     echo ": checkout subrepo and cherry-pick commit"
     echo "git tag -as -m \"XML Calabash $version\" $distVersion"
 elif [ $1 == "libs/jsass" ]; then
@@ -45,6 +46,7 @@ elif [ $1 == "libs/jsass" ]; then
     echo "./gradlew clean release && \\"
     echo ": make sure you enter a SNAPSHOT version as the next version && \\"
     echo "git checkout \$(git describe --abbrev=0) && \\"
+    # FIXME: this needs updating
     echo ": edit ossrhUsername and ossrhPassword in gradle.properties && \\"
     echo "./gradlew clean publish && \\"
     echo ": go to https://oss.sonatype.org, login and close and release stage"

@@ -181,7 +181,7 @@ if [ ${#modules[@]} -gt 0 ]; then
 fi
 
 echo
-echo "# stage artifacts"
+echo "# release artifacts"
 echo
 
 # work around a Maven bug: https://issues.apache.org/jira/browse/MNG-4979
@@ -200,14 +200,11 @@ fi
 # skipping tests during perform: they were run during prepare step, no need to run them again
 echo "mvn release:perform -DlocalCheckout=true \\
                     -Dgoals=\"verify \\
-                             org.sonatype.plugins:nexus-staging-maven-plugin:1.6.8:deploy\" \\
+                             org.sonatype.central:central-publishing-maven-plugin:0.8.0:publish\" \\
                     -Darguments=\"-Psonatype-oss-release \\
                                  -Ddocumentation \\
                                  -DskipTests -Dinvoker.skip=true \\
-                                 -DnexusUrl=https://oss.sonatype.org/ \\
-                                 -DserverId=sonatype-nexus-staging \\
-                                 -DstagingDescription='$release_dir $version' \\
-                                 -DkeepStagingRepositoryOnCloseRuleFailure=true\" && \\"
+                                 -DpublishingServerId=central\" && \\"
 echo -n "git checkout HEAD -- pom.xml"
 if [ $release_dir == "assembly" ]; then
 	echo -n " .mvn/maven.config"
@@ -238,24 +235,17 @@ if [ $github_owner == "daisy" ]; then
     else
         title="Release v$version"
     fi
-    if [ $release_dir != $gitrepo_dir ]; then
-        nexus_staging_props_file="target/checkout/${release_dir#${gitrepo_dir}/}/target/nexus-staging/staging/*.properties"
-    else
-        nexus_staging_props_file="target/checkout/target/nexus-staging/staging/*.properties"
-    fi
-    echo "staging_repo_id=\$(cat $nexus_staging_props_file \\"
-    echo "                  | grep 'stagingRepository.id' | sed 's/^stagingRepository\.id=//g') && \\"
     echo "credentials=\$( \\"
     
     # export GITHUB_USER=bertfrees
     # export GITHUB_ASK_PASS="pass github.com | head -1"
     
     if [[ -n ${GITHUB_USER+x} ]]; then
-		:
-	else
-		echo "WARNING: GITHUB_USER variable not set" >&2
-		echo "  echo -n \"Enter Github user name: \" >&2 && read user && \\"
-	fi
+        :
+    else
+        echo "WARNING: GITHUB_USER variable not set" >&2
+        echo "  echo -n \"Enter Github user name: \" >&2 && read user && \\"
+    fi
     if [[ -n ${GITHUB_ASK_PASS+x} ]]; then
         echo -n "  pass=\$($GITHUB_ASK_PASS)"
     else
@@ -267,7 +257,7 @@ if [ $github_owner == "daisy" ]; then
     echo ") && \\"
     echo "pr_number=\$("
     echo "    echo \"{\\\"title\\\": \\\"$title\\\", \\"
-    echo "           \\\"body\\\":  \\\"staged: https://oss.sonatype.org/content/repositories/\$staging_repo_id\\\", \\"
+    echo "           \\\"body\\\":  \\\"deployed\\\", \\"
     echo "           \\\"head\\\":  \\\"$release_branch\\\", \\"
     echo "           \\\"base\\\":  \\\"master\\\"}\" \\"
     echo "    | curl -u \"\$credentials\" -X POST --data @- \\"
