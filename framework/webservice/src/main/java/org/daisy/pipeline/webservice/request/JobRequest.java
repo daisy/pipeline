@@ -1,14 +1,17 @@
 package org.daisy.pipeline.webservice.request;
 
-import java.io.StringReader;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.transform.Source;
 import javax.xml.transform.sax.SAXSource;
 
 import com.google.common.collect.ImmutableList;
@@ -27,6 +30,7 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
+import org.daisy.common.file.Resource;
 import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.job.JobBatchId;
 import org.daisy.pipeline.job.JobIdFactory;
@@ -50,7 +54,7 @@ public class JobRequest extends Request {
 	public String getNiceName() { return nicename; }
 	public JobBatchId getBatchId() { return batchId; }
 	public Priority getPriority() { return priority; }
-	public Map<String,List<SAXSource>> getInputs() { return inputs.map; }
+	public Map<String,List<Source>> getInputs() { return inputs.map; }
 	public Map<String,List<String>> getOptions() { return options.map; }
 	public List<Callback> getCallbacks() { return callbacks.list; }
 	public boolean isOutputElementUsed() { return outputElementUsed; }
@@ -80,10 +84,10 @@ public class JobRequest extends Request {
 				req.priority = Priority.valueOf(elems.item(0).getTextContent().toUpperCase());
 			NodeList nodes = xml.getElementsByTagNameNS(XmlUtils.NS_DAISY, "input");
 			if (nodes.getLength() > 0) {
-				Map<String,List<SAXSource>> inputs = new HashMap<>();
+				Map<String,List<Source>> inputs = new HashMap<>();
 				for (int i = 0; i < nodes.getLength(); i++) {
 					elem = (Element)nodes.item(i);
-					List<SAXSource> files = new ArrayList<>();
+					List<Source> files = new ArrayList<>();
 					NodeList fileNodes = elem.getElementsByTagNameNS(XmlUtils.NS_DAISY, "item");
 					if (fileNodes.getLength() > 0) {
 						for (int j = 0; j < fileNodes.getLength(); j++) {
@@ -103,10 +107,18 @@ public class JobRequest extends Request {
 									}
 								}
 							}
-							SAXSource source = new SAXSource();
-							InputSource is = new InputSource(new StringReader(XmlUtils.nodeToString(content)));
-							source.setInputSource(is);
-							files.add(source);
+							// FIXME: would be good if DOMSource would be supported
+							try {
+								files.add(
+									Resource.load(
+										new ByteArrayInputStream(
+											XmlUtils.nodeToString(content).getBytes(StandardCharsets.UTF_8)),
+										URI.create(""), // name will be generated
+										Resource.MEDIA_TYPE_UNKNOWN)
+									.readAsSource());
+							} catch (IOException e) {
+								throw new IllegalStateException(); // should not happen
+							}
 						}
 					}
 					if (files.size() > 0)
@@ -229,8 +241,8 @@ public class JobRequest extends Request {
 
 	private static class Inputs {
 		private static final Inputs EMPTY = new Inputs(ImmutableMap.of());
-		private final ImmutableMap<String,List<SAXSource>> map;
-		private Inputs(Map<String,List<SAXSource>> map) {
+		private final ImmutableMap<String,List<Source>> map;
+		private Inputs(Map<String,List<Source>> map) {
 			this.map = ImmutableMap.copyOf(Maps.transformValues(map, ImmutableList::copyOf));
 		}
 	}
@@ -269,7 +281,7 @@ public class JobRequest extends Request {
 		                   .registerTypeAdapter(Inputs.class, new InputsAdapter())
 		                   .registerTypeAdapter(Options.class, new OptionsAdapter())
 		                   .registerTypeAdapter(Callbacks.class, new CallbacksAdapter())
-		                   .registerTypeAdapter(SAXSource.class, new SAXSourceSerializer())
+		                   .registerTypeAdapter(Source.class, new SourceSerializer())
 		                   .setPrettyPrinting()
 		                   .create();
 
@@ -362,7 +374,7 @@ public class JobRequest extends Request {
 			return GSON.toJsonTree(inputs.map);
 		}
 
-		private static SAXSource parseInput(JsonPrimitive json) throws JsonParseException {
+		private static Source parseInput(JsonPrimitive json) throws JsonParseException {
 			if (!json.isString())
 				throw new JsonParseException("invalid input: not a string");
 			try {
@@ -407,11 +419,12 @@ public class JobRequest extends Request {
 		}
 	}
 
-	private static class SAXSourceSerializer implements JsonSerializer<SAXSource> {
-		public JsonElement serialize(SAXSource src, Type typeOfSrc, JsonSerializationContext context) {
-			InputSource is = src.getInputSource();
-			if (is.getCharacterStream() != null || is.getByteStream() != null)
-				throw new UnsupportedOperationException("toJSON() not supported for job request that was created from XML");
+	private static class SourceSerializer implements JsonSerializer<Source> {
+		public JsonElement serialize(Source src, Type typeOfSrc, JsonSerializationContext context) {
+			InputSource is = SAXSource.sourceToInputSource(src);
+			if (is != null && (is.getCharacterStream() != null || is.getByteStream() != null))
+				throw new UnsupportedOperationException(
+					"toJSON() not supported for job request that was created from XML");
 			else
 				return new JsonPrimitive(src.getSystemId());
 		}

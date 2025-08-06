@@ -8,8 +8,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.daisy.pipeline.job.Job;
-import org.daisy.pipeline.job.JobId;
-import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.webservice.restlet.AuthenticatedResource;
 import org.restlet.data.MediaType;
@@ -41,18 +39,13 @@ public class JobConfigurationResource extends AuthenticatedResource {
 		if (!isAuthenticated()) {
 			return;
 		}
-
 		JobManager jobMan = getJobManager(this.getClient());
 		String idParam = (String) getRequestAttributes().get("id");
-
 		try {
-			JobId id = JobIdFactory.newIdFromString(idParam);
-			job = jobMan.getJob(id); 
-                }
-		catch(Exception e) {
+			job = jobMan.findJob(idParam);
+		} catch(Exception e) {
 			logger.error(e.getMessage());
 		}
-
 	}
 
 	/*

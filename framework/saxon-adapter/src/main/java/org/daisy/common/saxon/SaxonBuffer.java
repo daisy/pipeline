@@ -13,6 +13,10 @@ public class SaxonBuffer extends Buffer<Void,Void> {
 	private SaxonOutputValue output = null;
 	private ItemBuffer<XdmItem> xdmItemBuffer = null;
 
+	public SaxonBuffer() {
+		this(new Configuration());
+	}
+
 	public SaxonBuffer(Configuration config) {
 		configuration = config;
 	}

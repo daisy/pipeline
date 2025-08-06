@@ -21,27 +21,25 @@ import org.daisy.pipeline.job.JobResult;
 @Table(name="job_port_results")
 public class PersistentPortResult   {
 
-	
-	
 	@EmbeddedId
 	private PK id;
 
 	String portName;
-        @Column(length=32672)
+	@Column(length=32672)
 	String path;
 
 	String mediaType;
 
-	public PersistentPortResult(JobId jobId, JobResult result,String port) {
+	public PersistentPortResult(JobId jobId, JobResult result, String port) {
 		String idx = null;
 		try {
-			idx = result.getIdx();
+			idx = result.getPath().toString();
 		} catch (Exception e) {
 			throw new IllegalArgumentException("The result can not be persisted", e);
 		}
 		this.id = new PK(jobId, idx);
-		this.path=result.getPath().toURI().toString();
-		this.mediaType=result.getMediaType();
+		this.path = result.getFile().toURI().toString();
+		this.mediaType = result.getMediaType().orElse(null);
 		this.portName=port;
 	}
 
@@ -177,6 +175,5 @@ public class PersistentPortResult   {
 		public String getIdx() {
 			return this.idx;
 		}
-
 	}
 }

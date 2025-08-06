@@ -3,7 +3,6 @@ package org.daisy.pipeline.webservice.restlet.impl;
 import org.daisy.pipeline.job.JobQueue;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobId;
-import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.webservice.restlet.AuthenticatedResource;
 import org.daisy.pipeline.webservice.xml.QueueXmlWriter;
@@ -27,7 +26,7 @@ public abstract class QueueMoveResource extends AuthenticatedResource {
                 }
                 String idParam = (String) getRequestAttributes().get("jobId");
                 JobManager manager = getJobManager(this.getClient());
-                this.job= manager.getJob(JobIdFactory.newIdFromString(idParam));
+                this.job = manager.findJob(idParam);
                 this.queue= manager.getExecutionQueue();
 
         }

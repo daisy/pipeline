@@ -32,6 +32,14 @@ public interface ScriptPort {
 	public boolean isRequired();
 
 	/**
+	 * Whether inputs are suitable for being remembered by user
+	 * interfaces, for reuse in future jobs.
+	 */
+	public default boolean isReusable() {
+		return false;
+	}
+
+	/**
 	 * The nice name.
 	 */
 	public String getNiceName();

@@ -22,23 +22,21 @@ import org.daisy.pipeline.job.JobResult;
 @Table(name="job_option_results")
 public class PersistentOptionResult{
 
-	
-	
 	@EmbeddedId
 	private PK id;
 
 	String optionName;
 
-        @Column(length=32672)
+	@Column(length=32672)
 	String path;
 
 	String mediaType;
 
-	public PersistentOptionResult(JobId jobId, JobResult result,QName option) {
-		this.id=new PK(jobId,result.getIdx());
-		this.path=result.getPath().toURI().toString();
-		this.optionName=option.toString();
-		this.mediaType=result.getMediaType();
+	public PersistentOptionResult(JobId jobId, JobResult result, QName option) {
+		this.id = new PK(jobId,result.getPath().toString());
+		this.path = result.getFile().toURI().toString();
+		this.optionName = option.toString();
+		this.mediaType = result.getMediaType().orElse(null);
 	}
 
 	

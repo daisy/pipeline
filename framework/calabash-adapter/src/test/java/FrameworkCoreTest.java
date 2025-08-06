@@ -77,7 +77,7 @@ public class FrameworkCoreTest extends AbstractTest {
 				job.getResults().getResults("result").iterator(),
 				r -> {
 					try {
-						return CharStreams.toString(new InputStreamReader(r.asStream(), "UTF-8")); }
+						return CharStreams.toString(new InputStreamReader(r.read(), "UTF-8")); }
 					catch (IOException e) {
 						throw new RuntimeException(e); }});
 			Assert.assertTrue(results.hasNext());
@@ -197,7 +197,7 @@ public class FrameworkCoreTest extends AbstractTest {
 				job.getResults().getResults("result").iterator(),
 				r -> {
 					try {
-						return CharStreams.toString(new InputStreamReader(r.asStream(), "UTF-8")); }
+						return CharStreams.toString(new InputStreamReader(r.read(), "UTF-8")); }
 					catch (IOException e) {
 						throw new RuntimeException(e); }});
 			Assert.assertTrue(results.hasNext());

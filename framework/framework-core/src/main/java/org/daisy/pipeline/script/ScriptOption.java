@@ -57,6 +57,7 @@ public interface ScriptOption {
 	/**
 	 * Whether the option is a primary output.
 	 */
+	@Deprecated
 	public boolean isPrimary();
 
 	/**
@@ -68,6 +69,14 @@ public interface ScriptOption {
 	 * Whether the order in a sequence matters.
 	 */
 	public boolean isOrdered();
+
+	/**
+	 * Whether values are suitable for being remembered by user
+	 * interfaces, for reuse in future jobs.
+	 */
+	public default boolean isReusable() {
+		return true;
+	}
 
 	/**
 	 * Whether the option is used for determining/selecting the output medium

@@ -17,12 +17,14 @@ import java.nio.file.FileVisitOption;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
 import java.nio.file.NoSuchFileException;
+import java.nio.file.ProviderNotFoundException;
 import java.nio.file.SimpleFileVisitor;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Optional;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterators;
@@ -33,6 +35,9 @@ import org.osgi.framework.FrameworkUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * A collection of URI related utility functions.
+ */
 public final class URLs {
 
 	private URLs() {
@@ -99,6 +104,41 @@ public final class URLs {
 	}
 	
 	/**
+	 * Convert an absolute file URI to a {@link Path} denoting a file or an entry in a zip file.
+	 */
+	public static Path asPath(URI uri) throws IllegalArgumentException, URISyntaxException {
+		if (!uri.isAbsolute())
+			throw new IllegalArgumentException("expected absolute URI");
+		String protocol = uri.getScheme();
+		if (!"file".equals(protocol))
+			throw new IllegalArgumentException("expected file URI");
+		String query = uri.getQuery();
+		if (query != null && !query.isEmpty())
+			throw new IllegalArgumentException("expected URI without query");
+		String fragment = uri.getFragment();
+		if (fragment != null && !fragment.isEmpty())
+			throw new IllegalArgumentException("expected URI without fragment");
+		String path = uri.getPath();
+		String zipPath = null;
+		if (path.contains("!/")) {
+			// it is a path to a ZIP entry
+			zipPath = path.substring(path.indexOf("!/")+1);
+			path = path.substring(0, path.indexOf("!/"));
+		}
+		File file = new File(new URI(protocol, null, path, null, null));
+		if (file.exists() && zipPath != null)
+			try {
+				return FileSystems.newFileSystem(file.toPath(), null).getPath(zipPath);
+			} catch (ProviderNotFoundException e) {
+				throw new RuntimeException(e); // file is not a zip file
+			} catch (IOException e) {
+				throw new RuntimeException(e); // should not happen
+			}
+		else
+			return file.toPath();
+	}
+	
+	/**
 	 * @param url An unencoded absolute URL
 	 * @return An encoded absolute URL
 	 */
@@ -130,16 +170,155 @@ public final class URLs {
 	}
 	
 	/**
+	 * Relativize a URI against a base URI.
+	 *
+	 * This functions differs from {@link URI#relativize} in that it is also able to find
+	 * relative paths when the URI does not start with the base URI (in which case the
+	 * resulting URI will contain ".." segments).
+	 *
 	 * @param base An encoded absolute or relative URL
 	 * @param url An encoded absolute or relative URL
 	 * @return An encoded absolute or relative URL
 	 */
-	public static URI relativize(URI base, URI url) {
-		if (base.toString().startsWith("jar:") && url.toString().startsWith("jar:")) {
+	public static URI relativize(URI base, URI uri) {
+		if (base.toString().startsWith("jar:") && uri.toString().startsWith("jar:")) {
 			base = asURI(base.toASCIIString().substring(4));
-			url = asURI(url.toASCIIString().substring(4));
+			uri = asURI(uri.toASCIIString().substring(4));
+			return relativize(base, uri);
 		}
-		return base.relativize(url);
+		try {
+			if (base.isOpaque() || uri.isOpaque()
+			    || !Optional.ofNullable(base.getScheme()).orElse("").equalsIgnoreCase(Optional.ofNullable(uri.getScheme()).orElse(""))
+			    || !Optional.ofNullable(base.getAuthority()).equals(Optional.ofNullable(uri.getAuthority())))
+				return uri;
+			else {
+				String up = uri.normalize().getPath();
+				String bp = base.normalize().getPath();
+				String relativizedPath;
+				if (up.startsWith("/")) {
+					String[] upSegments = up.split("/", -1);
+					String[] bpSegments = bp.split("/", -1);
+					int i = bpSegments.length - 1;
+					int j = 0;
+					while (i > 0) {
+						if (bpSegments[j].equals(upSegments[j])) {
+							i--;
+							j++; }
+						else
+							break; }
+					relativizedPath = "";
+					while (i > 0) {
+						relativizedPath += "../";
+						i--; }
+					while (j < upSegments.length) {
+						relativizedPath += upSegments[j] + "/";
+						j++; }
+					relativizedPath = relativizedPath.substring(0, relativizedPath.length() - 1); }
+				else
+					relativizedPath = up;
+				if (relativizedPath.isEmpty())
+					relativizedPath = "./";
+				return new URI(null, null, relativizedPath, uri.getQuery(), uri.getFragment()); }
+		} catch (URISyntaxException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static URI normalize(URI uri) {
+		return normalize(uri, false);
+	}
+
+	public static URI normalize(URI uri, boolean dropFragment) {
+		try {
+			if (uri.isOpaque())
+				return uri;
+			if ("jar".equals(uri.getScheme()))
+				return URLs.asURI("jar:" + normalize(URLs.asURI(uri.toASCIIString().substring(4))).toASCIIString());
+			uri = uri.normalize();
+			String scheme = uri.getScheme();
+			if (scheme != null) scheme = scheme.toLowerCase();
+			String authority = uri.getAuthority();
+			if (authority != null) authority = authority.toLowerCase();
+			if (authority != null && "http".equals(scheme) && authority.endsWith(":80"))
+				authority = authority.substring(0, authority.length() - 3);
+			uri = new URI(scheme, authority, uri.getPath(), uri.getQuery(), dropFragment ? null : uri.getFragment());
+			// fix path
+			String path = uri.getPath(); {
+				// add "/" after trailing ".."
+				path = path.replaceAll("(^|/)\\.\\.$", "$1../");
+				// remove leading "/.."
+				path = path.replaceAll("^/(\\.\\./)+", "/");
+			}
+			uri = new URI(uri.getScheme(), uri.getAuthority(), path, uri.getQuery(), uri.getFragment());
+			uri = expand83(uri);
+			return uri;
+		} catch (URISyntaxException e) {
+			throw new RuntimeException(e);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * Expand 8.3 encoded path segments.
+	 *
+	 * For instance `C:\DOCUME~1\file.xml` will become `C:\Documents and
+	 * Settings\file.xml`
+	 */
+	public static String expand83(String uri) throws URISyntaxException, IOException {
+		if (uri == null || !uri.startsWith("file:/")) {
+			return uri;
+		}
+		return expand83(URLs.asURI(uri)).toASCIIString();
+	}
+
+	private static URI expand83(URI uri) throws URISyntaxException, IOException {
+		if (uri == null || !"file".equals(uri.getScheme())) {
+			return uri;
+		}
+		String protocol = "file";
+		String path = uri.getPath();
+		String zipPath = null;
+		if (path.contains("!/")) {
+			// it is a path to a ZIP entry
+			zipPath = path.substring(path.indexOf("!/")+1);
+			path = path.substring(0, path.indexOf("!/"));
+		}
+		String query = uri.getQuery();
+		String fragment = uri.getFragment();
+		File file = new File(new URI(protocol, null, path, null, null));
+		URI expandedUri = expand83(file, path.endsWith("/"));
+		if (expandedUri == null) {
+			return uri;
+		} else {
+			path = expandedUri.getPath();
+			if (zipPath != null)
+				path = path + "!" + new URI(null, null, zipPath, null, null).getPath();
+			return new URI(protocol, null, path, query, fragment);
+		}
+	}
+
+	public static URI expand83(File file) throws URISyntaxException, IOException {
+		return expand83(file, false);
+	}
+
+	private static URI expand83(File file, boolean isDir) throws URISyntaxException, IOException {
+		if (file.exists()) {
+			return URLs.asURI(file.getCanonicalFile());
+		} else {
+			// if the file does not exist a parent directory may exist which can be canonicalized
+			String relPath = file.getName();
+			if (isDir)
+				relPath += "/";
+			File dir = file.getParentFile();
+			while (dir != null) {
+				if (dir.exists())
+					return URLs.resolve(URLs.asURI(dir.getCanonicalFile()), new URI(null, null, relPath, null, null));
+				relPath = dir.getName() + "/" + relPath;
+				dir = dir.getParentFile();
+			}
+			return URLs.asURI(file);
+		}
 	}
 	
 	private static final Map<String,Object> fsEnv = Collections.<String,Object>emptyMap();

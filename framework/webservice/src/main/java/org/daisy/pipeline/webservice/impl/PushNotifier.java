@@ -13,6 +13,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+import com.google.common.collect.Maps;
 
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.MessageAccessor;
@@ -38,9 +41,9 @@ public class PushNotifier implements CallbackHandler {
 
         private JobManager jobManager;
         private Map<JobId,List<Callback>> callbacks;
-        private Map<MessageAccessor,JobId> jobForAccessor;
-        private Map<MessageAccessor,Runnable> unlistenMessagesFunctions;
-        private Map<StatusNotifier,Runnable> unlistenStatusFunctions;
+        private BiMap<JobId,MessageAccessor> accessors;
+        private Map<JobId,Runnable> unlistenMessagesFunctions;
+        private Map<JobId,Runnable> unlistenStatusFunctions;
 
         /** The logger. */
         private static Logger logger = LoggerFactory.getLogger(PushNotifier.class); 
@@ -50,7 +53,7 @@ public class PushNotifier implements CallbackHandler {
         // track the sequence numbers of the first and last message for the next timed push
         private Map<Callback,Integer> lastPushedMessage = new HashMap<>();
         private Map<Callback,BigDecimal> currentProgress = new HashMap<>();
-        private Map<MessageAccessor,Integer> lastUnpushedMessage = Collections.synchronizedMap(new HashMap<>());
+        private Map<JobId,Integer> lastUnpushedMessage = Collections.synchronizedMap(new HashMap<>());
 
         // track the last status of each job
         private Map<JobId,Status> lastUnpushedStatus = Collections.synchronizedMap(new HashMap<>());
@@ -61,7 +64,7 @@ public class PushNotifier implements CallbackHandler {
                 logger.debug("Activating push notifier");
                 jobManager = jobManagerFactory.create();
                 callbacks = new HashMap<>();
-                jobForAccessor = Collections.synchronizedMap(new HashMap<>());
+                accessors = Maps.synchronizedBiMap(HashBiMap.create());
                 unlistenMessagesFunctions = new HashMap<>();
                 unlistenStatusFunctions = new HashMap<>();
                 startTimer();
@@ -75,6 +78,7 @@ public class PushNotifier implements CallbackHandler {
                 timer = new Timer();
                 timer.schedule(new NotifyTask(), 0, PUSH_INTERVAL);
         }
+
         private synchronized void cancelTimer() {
                 if (timer != null) {
                         timer.cancel();
@@ -82,50 +86,30 @@ public class PushNotifier implements CallbackHandler {
                 }
         }
 
+        /**
+         * @throws UnsupportedOperationException if the job is closed
+         */
         @Override
-        public void addCallback(Callback callback) {
+        public void addCallback(Callback callback) throws UnsupportedOperationException {
                 logger.debug("Adding callback: " + callback);
                 synchronized (callbacks) {
                         Job job = callback.getJob();
-                        List<Callback> list = callbacks.get(job.getId());
+                        JobId id = job.getId();
+                        List<Callback> list = callbacks.get(id);
                         if (list == null) {
                                 list = new ArrayList<Callback>();
-                                callbacks.put(job.getId(), Collections.synchronizedList(list));
+                                callbacks.put(id, Collections.synchronizedList(list));
                         }
                         switch (callback.getType()) {
-                        case STATUS: {
-                                // push current status when callback is registered
-                                Status status = job.getStatus();
-                                lastUnpushedStatus.put(job.getId(), status);
-                                if (status == Status.SUCCESS
-                                    || status == Status.ERROR
-                                    || status == Status.FAIL)
-                                        ; // don't listen for updates if the job has already finished
-                                else {
-                                        boolean alreadyListening = false;
-                                        for (Callback c : list)
-                                                if (c.getType() == CallbackType.STATUS) {
-                                                        alreadyListening = true;
-                                                        break; }
-                                        if (!alreadyListening) {
-                                                JobMonitor monitor = job.getMonitor();
-                                                StatusNotifier statusNotifier = monitor.getStatusUpdates();
-                                                Consumer<Status> statusListener = s -> update(job.getId(), s);
-                                                statusNotifier.listen(statusListener);
-                                                unlistenStatusFunctions.put(statusNotifier, () -> statusNotifier.unlisten(statusListener));
-                                        }
-                                }
-                                break;
-                        }
                         case PROGRESS:
                         case MESSAGES: {
                                 Status status = job.getStatus();
                                 if (status == Status.SUCCESS
                                     || status == Status.ERROR
                                     || status == Status.FAIL) {
-                                        // if the job has already finished when the callback is registered, push all messages
-                                        lastUnpushedMessage.put(job.getMonitor().getMessageAccessor(),
-                                                                Integer.MAX_VALUE);
+                                        // if the job has already finished when the callback is registered,
+                                        // push all messages
+                                        lastUnpushedMessage.put(id, Integer.MAX_VALUE);
                                 } else {
                                         // otherwise push the initial messages on the first new message event
                                         boolean alreadyListening = false;
@@ -137,12 +121,31 @@ public class PushNotifier implements CallbackHandler {
                                         if (!alreadyListening) {
                                                 JobMonitor monitor = job.getMonitor();
                                                 MessageAccessor accessor = monitor.getMessageAccessor();
-                                                jobForAccessor.put(accessor, job.getId());
+                                                accessors.put(id, accessor);
                                                 Consumer<Integer> messageListener = i -> update(accessor, i);
                                                 accessor.listen(messageListener);
-                                                unlistenMessagesFunctions.put(accessor, () -> accessor.unlisten(messageListener));
+                                                unlistenMessagesFunctions.put(
+                                                        id, () -> accessor.unlisten(messageListener));
                                         }
                                 }
+                        }
+                        case STATUS: {
+                                // push current status when callback is registered
+                                Status status = job.getStatus();
+                                lastUnpushedStatus.put(job.getId(), status);
+                                if (status == Status.SUCCESS
+                                                || status == Status.ERROR
+                                                || status == Status.FAIL)
+                                        ; // don't listen for updates if the job has already finished
+                                else
+                                        if (list.isEmpty()) {
+                                                JobMonitor monitor = job.getMonitor();
+                                                StatusNotifier statusNotifier = monitor.getStatusUpdates();
+                                                Consumer<Status> statusListener = s -> update(id, s);
+                                                statusNotifier.listen(statusListener);
+                                                unlistenStatusFunctions.put(id,
+                                                                () -> statusNotifier.unlisten(statusListener));
+                                        }
                                 break;
                         }
                         default:
@@ -155,7 +158,8 @@ public class PushNotifier implements CallbackHandler {
         public void removeCallback(Callback callback) {
                 synchronized (callbacks) {
                         Job job = callback.getJob();
-                        List<Callback> list = callbacks.get(job.getId());
+                        JobId id = job.getId();
+                        List<Callback> list = callbacks.get(id);
                         if (list == null || !list.remove(callback))
                                 // already removed
                                 return;
@@ -171,20 +175,17 @@ public class PushNotifier implements CallbackHandler {
                                         break;
                         }
                         if (!keepListeningForMessages || !keepListeningForStatusUpdates) {
-                                JobMonitor monitor = job.getMonitor();
                                 if (!keepListeningForMessages) {
-                                        MessageAccessor accessor = monitor.getMessageAccessor();
-                                        jobForAccessor.remove(accessor);
-                                        Runnable unlistenMessages = unlistenMessagesFunctions.remove(accessor);
+                                        Runnable unlistenMessages = unlistenMessagesFunctions.remove(id);
                                         if (unlistenMessages != null) unlistenMessages.run();
                                 }
                                 if (!keepListeningForStatusUpdates) {
-                                        Runnable unlistenStatus = unlistenStatusFunctions.remove(monitor.getStatusUpdates());
+                                        Runnable unlistenStatus = unlistenStatusFunctions.remove(id);
                                         if (unlistenStatus != null) unlistenStatus.run();
                                 }
                         }
                         if (list.isEmpty())
-                                callbacks.remove(job.getId());
+                                callbacks.remove(id);
                         synchronized (lastPushedMessage) {
                                 lastPushedMessage.remove(callback);
                         }
@@ -208,12 +209,10 @@ public class PushNotifier implements CallbackHandler {
                                 job = c.getJob();
                                 break;
                         }
-                        JobMonitor monitor = job.getMonitor();
-                        MessageAccessor accessor = monitor.getMessageAccessor();
-                        jobForAccessor.remove(accessor);
-                        Runnable unlistenMessages = unlistenMessagesFunctions.remove(accessor);
+                        JobId id = job.getId();
+                        Runnable unlistenMessages = unlistenMessagesFunctions.remove(id);
                         if (unlistenMessages != null) unlistenMessages.run();
-                        Runnable unlistenStatus = unlistenStatusFunctions.remove(monitor.getStatusUpdates());
+                        Runnable unlistenStatus = unlistenStatusFunctions.remove(id);
                         if (unlistenStatus != null) unlistenStatus.run();
                         synchronized (lastPushedMessage) {
                                 for (Callback c : callbacks)
@@ -228,8 +227,9 @@ public class PushNotifier implements CallbackHandler {
 
         // get notified of message updates
         private void update(MessageAccessor accessor, Integer sequence) {
-                logger.trace("handling message update: [job: " + jobForAccessor.get(accessor) + ", event: " + sequence + "]");
-                lastUnpushedMessage.put(accessor, sequence);
+                JobId job = accessors.inverse().get(accessor);
+                logger.trace("handling message update: [job: " + job + ", event: " + sequence + "]");
+                lastUnpushedMessage.put(job, sequence);
         }
 
         // get notified of status updates
@@ -250,58 +250,35 @@ public class PushNotifier implements CallbackHandler {
                 @Override
                 public synchronized void run() {
                         Set<JobId> finishedJobs = new HashSet<>(this.finishedJobs);
-                        this.finishedJobs.clear();
-                        postMessages();
-                        postStatus();
-                        for (JobId j : finishedJobs) unlistenJob(j);
+                        finishedJobs.clear();
+                        postStatusAndMessages();
+                        for (JobId j : finishedJobs)
+                                try {
+                                        unlistenJob(j);
+                                } catch (Throwable e) {
+                                        // if for any reason this results in an exception, don't escalate as this would
+                                        // stop the timer
+                                }
                 }
 
-                private void postStatus() {
+                private void postStatusAndMessages() {
                         Map<JobId,Status> lastUnpushedStatus; {
                                 synchronized (PushNotifier.this.lastUnpushedStatus) {
                                         lastUnpushedStatus = new HashMap<JobId,Status>(PushNotifier.this.lastUnpushedStatus);
                                         PushNotifier.this.lastUnpushedStatus.clear();
                                 }
                         }
-                        for (JobId job : lastUnpushedStatus.keySet()) {
-                                Status status = lastUnpushedStatus.get(job);
-                                logger.debug("Posting status '" + status + "' for job " + job);
-                                List<Callback> callbacks; {
-                                        synchronized (PushNotifier.this.callbacks) {
-                                                callbacks = PushNotifier.this.callbacks.get(job);
-                                                if (callbacks != null)
-                                                        callbacks = new ArrayList<>(callbacks);
-                                        }
-                                }
-                                if (callbacks != null) {
-                                        for (Callback callback : callbacks) {
-                                                if (callback.getType() == CallbackType.STATUS) {
-                                                        callback.postStatusUpdate(status);
-                                                }
-                                        }
-                                }
-                                // check if the job still exists and has not finished, otherwise stop listening
-                                if (status == Status.SUCCESS
-                                    || status == Status.ERROR
-                                    || status == Status.FAIL
-                                    || !jobManager.getJob(job).isPresent())
-                                        finishedJobs.add(job);
-                        }
-                }
-
-                private synchronized void postMessages() {
-                        Map<MessageAccessor,Integer> lastUnpushedMessage; {
+                        Map<JobId,Integer> lastUnpushedMessage; {
                                 synchronized (PushNotifier.this.lastUnpushedMessage) {
-                                        lastUnpushedMessage = new HashMap<MessageAccessor,Integer>(PushNotifier.this.lastUnpushedMessage);
+                                        lastUnpushedMessage = new HashMap<JobId,Integer>(PushNotifier.this.lastUnpushedMessage);
                                         PushNotifier.this.lastUnpushedMessage.clear();
                                 }
                         }
-                        for (MessageAccessor accessor : lastUnpushedMessage.keySet()) {
-                                // Note that a new callback will only receive the initial messages
-                                // after the first new message event (first event after the callback has
-                                // been registered) has arrived.
-                                JobId job = jobForAccessor.get(accessor);
-                                if (job == null) continue;
+                        Set<JobId> jobsWithUpdates = new HashSet<>(); {
+                                jobsWithUpdates.addAll(lastUnpushedStatus.keySet());
+                                jobsWithUpdates.addAll(lastUnpushedMessage.keySet());
+                        }
+                        for (JobId job : jobsWithUpdates) {
                                 List<Callback> callbacks; {
                                         synchronized (PushNotifier.this.callbacks) {
                                                 callbacks = PushNotifier.this.callbacks.get(job);
@@ -309,54 +286,100 @@ public class PushNotifier implements CallbackHandler {
                                                         callbacks = new ArrayList<>(callbacks);
                                         }
                                 }
+                                Status status = null;
                                 if (callbacks != null) {
-                                        BigDecimal progress = accessor.getProgress();
-                                        int to = lastUnpushedMessage.get(accessor);
-                                        // The same sequence number may appear twice (once to close a message and once to open a message).
-                                        // By subtracting 1 from the sequence number we make sure that we never try to access a message
-                                        // that does not exist yet when a message is closed.
-                                        if (to > 0) to--;
-                                        Map<Integer,List<Message>> messagesFrom = new HashMap<>();
-                                        for (Callback callback : callbacks) {
-                                                switch (callback.getType()) {
-                                                case PROGRESS: {
-                                                        BigDecimal from = currentProgress.get(callback);
-                                                        if (from == null || progress.compareTo(from) > 0) {
-                                                                callback.postProgress(progress);
-                                                                currentProgress.put(callback, progress);
-                                                        }
-                                                        break; }
-                                                case MESSAGES: {
-                                                        int from = lastPushedMessage.containsKey(callback)
-                                                                ? lastPushedMessage.get(callback) + 1
-                                                                : callback.getFirstMessage();
-                                                        List<Message> messages = messagesFrom.get(from);
-                                                        if (messages == null) {
-                                                                if (to >= from) {
-                                                                        logger.debug("Posting messages starting from " + from + " for job " + job);
-                                                                        messages = accessor.createFilter().inRange(from, to).getMessages();
-                                                                } else {
-                                                                        messages = Collections.<Message>emptyList();
-                                                                }
-                                                                messagesFrom.put(from, messages);
-                                                        }
-                                                        callback.postMessages(messages, from - 1, progress);
-                                                        lastPushedMessage.put(callback, to);
-                                                        break; }
+                                        MessageAccessor accessor = null;
+                                        BigDecimal progress = null;
+                                        Integer to = null;
+                                        Map<Integer,List<Message>> messagesFrom = null; {
+                                                if (lastUnpushedMessage.containsKey(job)) {
+                                                        accessor = accessors.get(job);
+                                                        if (accessor == null) continue; // should not happen
+                                                        progress = accessor.getProgress();
+                                                        to = lastUnpushedMessage.get(job);
+                                                        // The same sequence number may appear twice (once to close a
+                                                        // message and once to open a message).  By subtracting 1 from
+                                                        // the sequence number we make sure that we never try to access
+                                                        // a message that does not exist yet when a message is closed.
+                                                        if (to > 0) to--;
+                                                        messagesFrom = new HashMap<>();
                                                 }
+                                                if (lastUnpushedStatus.containsKey(job))
+                                                        status = lastUnpushedStatus.get(job);
                                         }
+                                        for (Callback callback : callbacks)
+                                                try {
+                                                        switch (callback.getType()) {
+                                                        case MESSAGES:
+                                                                // Note that a new callback will only receive the initial messages
+                                                                // after the first new message event (first event after the callback has
+                                                                // been registered) has arrived.
+                                                                if (lastUnpushedMessage.containsKey(job)) {
+                                                                        int from = lastPushedMessage.containsKey(callback)
+                                                                                ? lastPushedMessage.get(callback) + 1
+                                                                                : callback.getFirstMessage();
+                                                                        List<Message> messages = messagesFrom.get(from);
+                                                                        if (messages == null) {
+                                                                                if (to >= from) {
+                                                                                        messages = accessor.createFilter()
+                                                                                                           .inRange(from, to)
+                                                                                                           .getMessages();
+                                                                                } else {
+                                                                                        messages = Collections.<Message>emptyList();
+                                                                                }
+                                                                                messagesFrom.put(from, messages);
+                                                                        }
+                                                                        logger.debug(
+                                                                                "Posting messages starting from " + from + " for job " + job);
+                                                                        callback.postMessages(messages, from - 1, progress);
+                                                                        lastPushedMessage.put(callback, to);
+                                                                        continue;
+                                                                }
+                                                        case PROGRESS:
+                                                                if (lastUnpushedMessage.containsKey(job)) {
+                                                                        BigDecimal from = currentProgress.get(callback);
+                                                                        if (from == null || progress.compareTo(from) > 0) {
+                                                                                logger.debug(
+                                                                                        "Posting progress " + progress + " for job " + job);
+                                                                                callback.postProgress(progress);
+                                                                                currentProgress.put(callback, progress);
+                                                                                continue;
+                                                                        }
+                                                                        break;
+                                                                }
+                                                        case STATUS:
+                                                                if (lastUnpushedStatus.containsKey(job)) {
+                                                                        logger.debug("Posting status '" + status
+                                                                                        + "' for job " + job);
+                                                                        callback.postStatusUpdate(status);
+                                                                }
+                                                        default:
+                                                        }
+                                                } catch (Throwable e) {
+                                                        // if for any reason the callback results in an exception, don't
+                                                        // escalate as this would stop the timer
+                                                }
                                 }
+
                                 // check if the job still exists and has not finished, otherwise stop listening
-                                Optional<Job> j = jobManager.getJob(job);
-                                if (!j.isPresent())
-                                        finishedJobs.add(job);
-                                else {
-                                        Status status = j.get().getStatus();
-                                        if (status == Status.SUCCESS
-                                            || status == Status.ERROR
-                                            || status == Status.FAIL)
+                                if (status == null) {
+                                        Optional<Job> j = jobManager.getJob(job);
+                                        if (!j.isPresent()) {
                                                 finishedJobs.add(job);
+                                                continue;
+                                        }
+                                        try {
+                                                status = j.get().getStatus();
+                                        } catch (Throwable e) {
+                                                // if for any reason this results in an exception, don't escalate as
+                                                // this would stop the timer
+                                        }
+
                                 }
+                                if (status == Status.SUCCESS
+                                    || status == Status.ERROR
+                                    || status == Status.FAIL)
+                                        finishedJobs.add(job);
                         }
                 }
         }

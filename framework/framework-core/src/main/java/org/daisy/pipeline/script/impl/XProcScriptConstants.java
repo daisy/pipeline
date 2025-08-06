@@ -87,6 +87,8 @@ public final class XProcScriptConstants {
 
 		public static final QName PX_ROLE = new QName(PX_NS, "role");
 
+		public static final QName PX_REUSABLE = new QName(PX_NS, "reusable");
+
 		public static final QName XML_SPACE = new QName(XML_NS, "space");
 
 		public static final QName HREF = new QName("href");

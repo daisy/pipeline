@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.util.List;
 import java.util.concurrent.CompletionService;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
@@ -25,12 +26,25 @@ public class CommandRunner {
 		: new File("/dev/null");
 
 	private final String[] command;
+	private File directory = null;
 	private Consumer<InputStream> outputConsumer;
 	private Consumer<InputStream> errorConsumer;
 	private Consumer<OutputStream> inputFeeder;
 
 	public CommandRunner(String... command) {
 		this.command = command;
+	}
+
+	public CommandRunner(List<String> command) {
+		this(command.toArray(new String[command.size()]));
+	}
+
+	/**
+	 * Change the working directory.
+	 */
+	public CommandRunner cd(File directory) {
+		this.directory = directory;
+		return this;
 	}
 
 	/**
@@ -97,6 +111,8 @@ public class CommandRunner {
 
 	public int run(Supplier<Long> timeout) throws TimeoutException, InterruptedException, Throwable {
 		ProcessBuilder pb = new ProcessBuilder();
+		if (directory != null)
+			pb.directory(directory);
 		pb.command(command);
 		if (outputConsumer == null)
 			pb.redirectOutput(devNull);

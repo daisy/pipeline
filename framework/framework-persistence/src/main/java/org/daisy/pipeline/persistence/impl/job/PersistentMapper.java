@@ -22,7 +22,7 @@ public class PersistentMapper {
 			this.inputBase = "";
 		else {
 			if (!(resources instanceof JobResourcesDir))
-				throw new IllegalArgumentException(); // could happen if ScriptInput.storeToDisk was not called
+				throw new IllegalArgumentException(); // would happen if ScriptInput.storeToDisk was not called
 			this.inputBase = ((JobResourcesDir)resources).getBaseDir().toURI().toString();
 		}
 	}

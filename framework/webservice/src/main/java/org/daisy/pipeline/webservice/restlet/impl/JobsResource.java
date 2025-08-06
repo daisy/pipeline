@@ -13,6 +13,7 @@ import java.util.zip.ZipFile;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Source;
 import javax.xml.transform.sax.SAXSource;
 
 import org.daisy.common.priority.Priority;
@@ -289,15 +290,15 @@ public class JobsResource extends AuthenticatedResource {
                 }
         }
 
-        private void addInputsToJob(Map<String,List<SAXSource>> inputs, Script script, BoundScript.Builder builder, boolean zippedContext)
+        private void addInputsToJob(Map<String,List<Source>> inputs, Script script, BoundScript.Builder builder, boolean zippedContext)
                         throws LocalInputException, FileNotFoundException {
 
                 for (ScriptPort input : script.getInputPorts()) {
                         String name = input.getName();
                         if (inputs.containsKey(name)) {
-                                for (SAXSource src : inputs.get(name)) {
-                                        InputSource is = src.getInputSource();
-                                        if (is.getCharacterStream() != null || is.getByteStream() != null)
+                                for (Source src : inputs.get(name)) {
+                                        InputSource is = SAXSource.sourceToInputSource(src);
+                                        if (is != null && (is.getCharacterStream() != null || is.getByteStream() != null))
                                                 builder.withInput(name, src);
                                         else {
                                                 URI uri = URI.create(src.getSystemId());

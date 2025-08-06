@@ -116,14 +116,14 @@ public class ScriptXmlWriter {
 		for (ScriptPort port : ports) {
 			Element inputElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "input");
 			inputElm.setAttribute("name", port.getName());
-	                inputElm.setAttribute("nicename", port.getNiceName());
+			inputElm.setAttribute("nicename", port.getNiceName());
 			inputElm.setAttribute("required", Boolean.toString(port.isRequired()));
 			inputElm.setAttribute("sequence", Boolean.toString(port.isSequence()));
 			if (port.getMediaType() != null && !port.getMediaType().isEmpty()) {
 				inputElm.setAttribute("mediaType", port.getMediaType());
 			}
 			inputElm.setAttribute("desc", port.getDescription());
-
+			inputElm.setAttribute("reusable", Boolean.toString(port.isReusable()));
 			parent.appendChild(inputElm);
 		}
 	}
@@ -151,6 +151,7 @@ public class ScriptXmlWriter {
 			}
 			if (option.getRole() != null)
 				optionElm.setAttribute("role", option.getRole().toString());
+			optionElm.setAttribute("reusable", Boolean.toString(option.isReusable()));
 			parent.appendChild(optionElm);
 		}
 	}

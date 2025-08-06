@@ -78,7 +78,10 @@ public class JobXmlWriter {
                         MSG_LEVELS.add(Level.DEBUG);
         }
 
-        public Document getXmlDocument() {
+        /**
+         * @throws UnsupportedOperationException if the job is closed
+         */
+        public Document getXmlDocument() throws UnsupportedOperationException {
                 if (job == null) {
                         logger.warn("Could not create XML for null job.");
                         return null;
@@ -87,7 +90,10 @@ public class JobXmlWriter {
         }
 
         // instead of creating a standalone XML document, add an element to an existing document
-        public void addAsElementChild(Element parent) {
+        /**
+         * @throws UnsupportedOperationException if the job is closed
+         */
+        public void addAsElementChild(Element parent) throws UnsupportedOperationException {
                 Document doc = parent.getOwnerDocument();
                 Element jobElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "job");
                 addElementData(job, jobElm);
@@ -153,7 +159,7 @@ public class JobXmlWriter {
         public void overwriteStatus(Job.Status status) {
                 this.statusOverWrite=status;
         }
-        private Document jobToXmlDocument() {
+        private Document jobToXmlDocument() throws UnsupportedOperationException {
                 Document doc = XmlUtils.createDom("job");
                 Element jobElm = doc.getDocumentElement();
                 addElementData(job, jobElm);
@@ -165,8 +171,11 @@ public class JobXmlWriter {
 
                 return doc;
         }
-        
-        private void addElementData(Job job, Element element) {
+
+        /**
+         * @throws UnsupportedOperationException if the jobs is closed
+         */
+        private void addElementData(Job job, Element element) throws UnsupportedOperationException {
                 Document doc = element.getOwnerDocument();
                 Job.Status status = (this.statusOverWrite==null)?job.getStatus():this.statusOverWrite;
                 String jobPath = Routes.JOB_ROUTE.replaceFirst("\\{id\\}", job.getId().toString());
@@ -306,12 +315,12 @@ public class JobXmlWriter {
                         resultsElm.appendChild(portResultElm);
                         for (JobResult result : this.job.getResults().getResults(portName)) {
                                 Element resultElm= doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "result");
-                                resultElm.setAttribute("href", String.format("%s/port/%s/idx/%s",resultHref, portName, result.getIdx()));
-                                if(result.getMediaType()!= null && !result.getMediaType().isEmpty()){
-                                        resultElm.setAttribute("mime-type", result.getMediaType());
+                                resultElm.setAttribute("href", String.format("%s/port/%s/idx/%s",resultHref, portName, result.getPath()));
+                                if(result.getMediaType().isPresent() && !result.getMediaType().get().isEmpty()){
+                                        resultElm.setAttribute("mime-type", result.getMediaType().get());
                                 }
                                 if ( this.localPaths){
-                                        resultElm.setAttribute("file", result.getPath().toURI().toString());
+                                        resultElm.setAttribute("file", result.getFile().toURI().toString());
                                 }
                                 resultElm.setAttribute("size",
                                                 String.format("%s", result.getSize()));

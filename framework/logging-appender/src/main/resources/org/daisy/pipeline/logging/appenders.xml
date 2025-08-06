@@ -20,6 +20,8 @@
                 com.xmlcalabash.library.XSLT=ERROR
                 com.xmlcalabash.io=ERROR
                 org.liblouis.Louis=OFF
+                org.daisy.pipeline.pandoc=OFF
+                org.apache.pdfbox.contentstream.operator.graphics=OFF
             </loggerLevels>
         </filter>
     </appender>

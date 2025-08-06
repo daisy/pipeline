@@ -82,6 +82,18 @@ public class DefaultJobManager implements JobManager {
                 return (Optional<Job>)(Optional<?>)job;
         }
 
+        @Override
+        public Optional<Job> findJob(String id) {
+                Job singleJob = null;
+                for (Job j : storage)
+                        if (j.getId().toString().startsWith(id))
+                                if (singleJob != null)
+                                        return Optional.absent();
+                                else
+                                        singleJob = j;
+                return Optional.fromNullable(singleJob);
+        }
+
         @SuppressWarnings("unchecked") // safe cast to Iterable<Job>
         @Override
         public Iterable<Job> deleteAll() {

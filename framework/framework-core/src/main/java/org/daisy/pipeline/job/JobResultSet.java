@@ -27,16 +27,41 @@ public final class JobResultSet {
         public static class Builder {
 
                 private final Script script;
+                private final File resultDir;
 
                 public Builder() {
-                        this(null);
+                        this(null, null);
                 }
 
                 public Builder(Script script) {
+                        this(script, null);
+                }
+
+                public Builder(Script script, File resultDir) {
                         this.script = script;
+                        this.resultDir = resultDir;
                 }
 
                 private final Multimap<String,JobResult> outputPorts = LinkedListMultimap.create();
+
+                /**
+                 * @throws IllegalArgumentException if the script does not have the specified output
+                 *         port, or the port can not produce a sequence of documents and multiple
+                 *         documents are supplied.
+                 */
+                public Builder addResult(String port, File file, String mediaType) throws IllegalArgumentException {
+                        return addResult(port,
+                                         resultDir != null
+                                                 ? resultDir.toURI().relativize(file.toURI())
+                                                 : file.toURI(),
+                                         file,
+                                         mediaType);
+                }
+
+                public Builder addResult(String port, URI path, File file, String mediaType) throws IllegalArgumentException {
+                        addResult(port, new JobResult(path, file, mediaType));
+                        return this;
+                }
 
                 protected void addResult(String port, JobResult result) throws IllegalArgumentException {
                         if (script != null) {
@@ -50,16 +75,6 @@ public final class JobResultSet {
                                                               port, script.getId()));
                         }
                         outputPorts.put(port, result);
-                }
-
-                /**
-                 * @throws IllegalArgumentException if the script does not have the specified output
-                 *         port, or the port can not produce a sequence of documents and multiple
-                 *         documents are supplied.
-                 */
-                public Builder addResult(String port, String idx, File path, String mediaType) throws IllegalArgumentException {
-                        addResult(port, new JobResult(idx, path, mediaType));
-                        return this;
                 }
 
                 public JobResultSet build() {
@@ -103,9 +118,9 @@ public final class JobResultSet {
                                                         return 0;
                                                 }
                                                 JobResult result = resultsIt.next();
-                                                ZipEntry entry = new ZipEntry(URI.create(result.getIdx()).getPath());
+                                                ZipEntry entry = new ZipEntry(result.getPath().getPath());
                                                 zipos.putNextEntry(entry);
-                                                InputStream is = result.asStream();
+                                                InputStream is = result.read();
                                                 IOHelper.dump(is, zipos);
                                                 is.close();
                                                 if (!resultsIt.hasNext())

@@ -199,7 +199,12 @@ public class XMLInputValue<V> extends InputValue<V> {
 			@Override
 			public int next() throws XMLStreamException, NoSuchElementException {
 				int event = super.next();
-				switch (event) {
+				updateState();
+				return event;
+			}
+
+			private void updateState() throws XMLStreamException {
+				switch (getEventType()) {
 				case START_DOCUMENT:
 					if (elementDepth != 0)
 						throw new XMLStreamException();
@@ -259,7 +264,14 @@ public class XMLInputValue<V> extends InputValue<V> {
 					if (!seenStartDocument && firstNode == null)
 						throw new XMLStreamException(); // not supported for now
 				}
-				return event;
+			}
+
+			@Override
+			public String getElementText() throws XMLStreamException {
+				String text = super.getElementText();
+				// the current event is now END_ELEMENT
+				updateState();
+				return text;
 			}
 		};
 	}

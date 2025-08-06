@@ -1,123 +1,79 @@
 package org.daisy.pipeline.job;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.io.IOException;
+import java.net.URI;
+import java.util.Optional;
+
+import org.daisy.common.file.Resource;
 
 /**
- * The Class JobResult.
+ * A job result
  */
-public class JobResult {
+public class JobResult extends Resource {
 
-        @Override
-        public int hashCode() {
-                return this.idx.toString().hashCode()+this.path.hashCode();
-        }
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null || !(obj instanceof JobResult))
+			return false;
+		JobResult other = (JobResult)obj;
+		return getPath().toString().equals(other.getPath().toString())
+			&& getFile().equals(other.getFile());
+	}
 
-        @Override
-        public boolean equals(Object obj) {
-                if(obj==null || !(obj instanceof JobResult))
-                        return false;
-                JobResult other=(JobResult) obj;
-                return this.idx.toString().equals(other.idx.toString())&&this.path.equals(other.path);
+	@Override
+	public int hashCode() {
+		return getPath().toString().hashCode() + getFile().hashCode();
+	}
 
-        }
+	@Override
+	public String toString() {
+		return String.format("JobResult [#=%s file='%s']", getPath(), getFile());
+	}
 
-        @Override
-        public String toString() {
-                return String.format("JobResult [#=%s path='%s']", this.idx,this.path);
-        }
+	/**
+	 * @param path The short (relative) path
+	 * @param file The file path
+	 * @param mediaType The media type
+	 */
+	protected JobResult(URI path, File file, String mediaType) {
+		super(file, path, Optional.ofNullable(mediaType));
+	}
 
-        //short index for the result 
-        private String idx;
+	public File getFile() {
+		try {
+			return readAsFile();
+		} catch (UnsupportedOperationException e) {
+			throw new IllegalStateException("coding error");
+		}
+	}
 
-        // path to the file
-        private File path;
+	/**
+	 * Strip the first path level
+	 */
+	public JobResult strip() {
+		return new JobResult(stripPrefix(getPath()), getFile(), getMediaType().orElse(null));
+	}
 
-        //media type
-        private String mediaType;
+	private static URI stripPrefix(URI path) {
+		int idx = path.toString().indexOf('/');
+		if (idx != 0)
+			return URI.create(path.toString().substring(idx + 1));
+		else
+			return path;
+	}
 
-        /**
-         * Constructs a new instance.
-         *
-         * @param idx The idx for this instance.
-         * @param path The path for this instance.
-         * @param mediaType The mediaType for this instance.
-         */
-        protected JobResult(String idx, File path, String mediaType) {
-                if (path == null)
-                        throw new NullPointerException();
-                if (!path.exists())
-                        throw new IllegalArgumentException("the document was not stored to disk: " + path);
-                this.path = path;
-                this.idx = idx;
-                this.mediaType = mediaType;
-        }
-
-        /**
-         * Gets a result without the first index level 
-         *
-         *
-         */
-        public JobResult strip(){
-                return new JobResult(stripPrefix(idx), path, mediaType);
-        }
-
-        private static String stripPrefix(String index) {
-                int idx = index.indexOf('/');
-                if (idx != 0)
-                        return index.substring(idx + 1);
-                else
-                        return index;
-        }
-
-        /**
-         * Gets the idx for this instance.
-         *
-         * @return The idx.
-         */
-        public String getIdx() {
-                return idx;
-        }
-
-        /**
-         * Gets the path for this instance.
-         *
-         * @return The path.
-         */
-        public File getPath() {
-                return path;
-        }
-
-        /**
-         * Gets the mediaType for this instance.
-         *
-         * @return The mediaType.
-         */
-        public String getMediaType() {
-                return this.mediaType;
-        }
-
-        /**
-         * Get the contents of the resource as an {@link InputStream}.
-         */
-        public InputStream asStream() throws IOException {
-                return new FileInputStream(path);
-        }
-
-        /**
-         * Returns the size of the file pointed by path in bytes
-         * @return the size
-         */
-        public long getSize() {
-                try{
-                        if (!path.exists()) {
-                                throw new IOException(String.format("File not found: ", path.getAbsolutePath()));
-                        }
-                        return path.length();
-                }catch (Exception e){
-                        throw new RuntimeException("Error calculating result size",e);
-                }
-        }
+	/**
+	 * The size of the file in bytes
+	 */
+	public long getSize() {
+		try {
+			File file = getFile();
+			if (!file.exists())
+				throw new IOException(String.format("File not found: ", file.getAbsolutePath()));
+			return file.length();
+		} catch (Exception e){
+			throw new RuntimeException("Error calculating result size", e);
+		}
+	}
 }

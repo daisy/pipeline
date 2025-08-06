@@ -1,10 +1,12 @@
 package org.daisy.pipeline.webservice.impl;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import javax.websocket.CloseReason;
+import javax.websocket.CloseReason.CloseCodes;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
@@ -17,7 +19,6 @@ import com.google.common.base.Optional;
 
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.Job;
-import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobManagerFactory;
 import org.daisy.pipeline.webservice.Callback;
@@ -58,7 +59,7 @@ public class JobsWebSocketEndpoint {
 		Client client = ((ClientPrincipal)session.getUserPrincipal()).getClient();
 		//            = (Client)session.getUserProperties().get(Client.class.getName());
 		JobManager jobManager = jobManagerFactory.createFor(client);
-		Optional<Job> job = jobManager.getJob(JobIdFactory.newIdFromString(jobId));
+		Optional<Job> job = jobManager.findJob(jobId);
 		if (!job.isPresent())
 			// this wouldn't happen if the code in modifyHandshake() would work
 			throw new RuntimeException("No job with ID " + jobId);
@@ -79,8 +80,17 @@ public class JobsWebSocketEndpoint {
 				callbackType = CallbackType.PROGRESS;}
 		Callback callback = new WebSocketCallback(
 			job.get(), callbackType, 1, firstMessage, session, routes);
+		try {
+			callbackHandler.addCallback(callback);
+		} catch (UnsupportedOperationException e) {
+			try {
+				session.close(new CloseReason(CloseCodes.GOING_AWAY, "Job was closed"));
+			} catch (IOException ioe) {
+				logger.error(ioe.getMessage());
+			}
+			return;
+		}
 		callbacks.put(session.getId(), callback);
-		callbackHandler.addCallback(callback);
 	}
 
 	@OnMessage

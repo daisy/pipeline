@@ -8,8 +8,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 
 import org.daisy.pipeline.job.Job;
-import org.daisy.pipeline.job.JobId;
-import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.job.JobResultSet;
@@ -51,8 +49,7 @@ public class ResultResource extends AuthenticatedResource {
                 JobManager jobMan = getJobManager(this.getClient());
                 String idParam = (String) getRequestAttributes().get("id");
                 try {
-                        JobId id = JobIdFactory.newIdFromString(idParam);
-                        job = jobMan.getJob(id);
+                        job = jobMan.findJob(idParam);
                 } catch (Exception e) {
                         logger.debug("Job Id malformed - Job not found: " + idParam);
                 }

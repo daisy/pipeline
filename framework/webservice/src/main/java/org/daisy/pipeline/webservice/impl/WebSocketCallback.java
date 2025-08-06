@@ -6,13 +6,14 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
+import javax.websocket.CloseReason;
+import javax.websocket.CloseReason.CloseCodes;
 import javax.websocket.Session;
 
 import org.daisy.common.messaging.Message;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.Job.Status;
 import org.daisy.pipeline.webservice.Callback;
-import org.daisy.pipeline.webservice.Callback.CallbackType;
 import org.daisy.pipeline.webservice.Routes;
 import org.daisy.pipeline.webservice.xml.JobXmlWriter;
 import org.daisy.pipeline.webservice.xml.XmlUtils;
@@ -63,14 +64,13 @@ public class WebSocketCallback extends Callback {
 				if (status == Status.SUCCESS || status == Status.ERROR || status == Status.FAIL)
 					// this was the last message
 					try {
-						socket.close();
+						socket.close(new CloseReason(CloseCodes.GOING_AWAY, "Job finished"));
 					} catch (IOException ioe) {
 						logger.error(ioe.getMessage());
 					}
 			} catch (UnsupportedOperationException e) {
-				// job is closed
 				try {
-					socket.close();
+					socket.close(new CloseReason(CloseCodes.GOING_AWAY, "Job was closed"));
 				} catch (IOException ioe) {
 					logger.error(ioe.getMessage());
 				}
@@ -81,9 +81,31 @@ public class WebSocketCallback extends Callback {
 	@Override
 	public boolean postProgress(BigDecimal progress) {
 		logger.debug("Posting status and progress to socket: " + socket.getId());
-		JobXmlWriter writer = new JobXmlWriter( getJob(), uri);
+		JobXmlWriter writer = new JobXmlWriter(getJob(), uri);
 		writer.withProgress(progress);
-		return postXml(writer.getXmlDocument());
+		try {
+			return postXml(writer.getXmlDocument());
+		} catch (UnsupportedOperationException e) {
+			// can happen if job is closed
+			return false;
+		} finally {
+			try {
+				Status status = getJob().getStatus();
+				if (status == Status.SUCCESS || status == Status.ERROR || status == Status.FAIL)
+					// this was the last message
+					try {
+						socket.close(new CloseReason(CloseCodes.GOING_AWAY, "Job finished"));
+					} catch (IOException ioe) {
+						logger.error(ioe.getMessage());
+					}
+			} catch (UnsupportedOperationException e) {
+				try {
+					socket.close(new CloseReason(CloseCodes.GOING_AWAY, "Job was closed"));
+				} catch (IOException ioe) {
+					logger.error(ioe.getMessage());
+				}
+			}
+		}
 	}
 
 	@Override
@@ -93,11 +115,14 @@ public class WebSocketCallback extends Callback {
 		writer.overwriteStatus(status);
 		try {
 			return postXml(writer.getXmlDocument());
+		} catch (UnsupportedOperationException e) {
+			// can happen if job is closed
+			return false;
 		} finally {
 			if (status == Status.SUCCESS || status == Status.ERROR || status == Status.FAIL)
 				// this was the last status update
 				try {
-					socket.close();
+					socket.close(new CloseReason(CloseCodes.GOING_AWAY, "Job finished"));
 				} catch (IOException e) {
 					logger.error(e.getMessage());
 				}

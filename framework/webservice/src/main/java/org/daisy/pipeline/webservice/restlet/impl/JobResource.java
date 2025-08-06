@@ -1,13 +1,7 @@
 package org.daisy.pipeline.webservice.restlet.impl;
 
-import java.util.Collection;
-
 import org.daisy.common.priority.Priority;
-import org.daisy.common.priority.Prioritizable;
-import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.Job;
-import org.daisy.pipeline.job.JobId;
-import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.webservice.restlet.AuthenticatedResource;
 import org.daisy.pipeline.webservice.xml.JobXmlWriter;
@@ -57,8 +51,7 @@ public class JobResource extends AuthenticatedResource {
                         msgSeq = Integer.parseInt(msgSeqParam);
                 }
                 try {
-                        JobId id = JobIdFactory.newIdFromString(idParam);
-                        job = jobMan.getJob(id);
+                        job = jobMan.findJob(idParam);
                 } catch (Exception e) {
                         logger.error(e.getMessage());
                         job = Optional.absent();
@@ -107,8 +100,14 @@ public class JobResource extends AuthenticatedResource {
                         writer.withQueuePosition(pos);
                 }
 
-                Document doc = writer.withScriptDetails().getXmlDocument();
-                
+                Document doc; {
+                        try {
+                                doc = writer.withScriptDetails().getXmlDocument();
+                        } catch (UnsupportedOperationException e) {
+                                setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+                                return this.getErrorRepresentation("Job was closed");
+                        }
+                }
                 DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, doc);
                 logResponse(dom);
                 return dom;

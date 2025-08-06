@@ -54,8 +54,13 @@ public class PosterCallback extends Callback {
 		JobXmlWriter writer = new JobXmlWriter(getJob(), requestRootUrl);
 		writer.withMessages(messages, newerThan);
 		writer.withProgress(progress);
-		Document doc = writer.getXmlDocument();
-		return postXml(doc, url, client);
+		try {
+			Document doc = writer.getXmlDocument();
+			return postXml(doc, url, client);
+		} catch (UnsupportedOperationException e) {
+			// can happen if job is closed
+			return false;
+		}
 	}
 
 	@Override
@@ -63,8 +68,13 @@ public class PosterCallback extends Callback {
 		logger.debug("Posting progress to " + url);
 		JobXmlWriter writer = new JobXmlWriter(getJob(), requestRootUrl);
 		writer.withProgress(progress);
-		Document doc = writer.getXmlDocument();
-		return postXml(doc, url, client);
+		try {
+			Document doc = writer.getXmlDocument();
+			return postXml(doc, url, client);
+		} catch (UnsupportedOperationException e) {
+			// can happen if job is closed
+			return false;
+		}
 	}
 
 	@Override
@@ -72,8 +82,13 @@ public class PosterCallback extends Callback {
 		logger.debug("Posting status '" + status + "' to " + url);
 		JobXmlWriter writer = new JobXmlWriter(getJob(), requestRootUrl);
 		writer.overwriteStatus(status);
-		Document doc = writer.getXmlDocument();
-		return postXml(doc, url, client);
+		try {
+			Document doc = writer.getXmlDocument();
+			return postXml(doc, url, client);
+		} catch (UnsupportedOperationException e) {
+			// can happen if job is closed
+			return false;
+		}
 	}
 
 	private static boolean postXml(Document doc, URI url, Client client) {

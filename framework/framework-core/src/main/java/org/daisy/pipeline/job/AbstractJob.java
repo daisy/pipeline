@@ -161,7 +161,7 @@ public abstract class AbstractJob implements Job {
                         // are not added to the execution queue upon launching Pipeline.
                         throw new IllegalStateException();
                 try {
-                        JobResultSet.Builder resultBuilder = newResultSetBuilder(script);
+                        JobResultSet.Builder resultBuilder = newResultSetBuilder(script, ctxt.resultDir);
                         Job.Status status = script.run(ctxt.input, ctxt.properties, ctxt.messageBus, resultBuilder, ctxt.resultDir);
                         ctxt.results = resultBuilder.build();
                         onResultsChanged();
@@ -225,7 +225,7 @@ public abstract class AbstractJob implements Job {
                         this.getId().equals(((Job) object).getId());
         }
 
-        protected JobResultSet.Builder newResultSetBuilder(Script script) {
-                return new JobResultSet.Builder(script);
+        protected JobResultSet.Builder newResultSetBuilder(Script script, File resultDir) {
+                return new JobResultSet.Builder(script, resultDir);
         }
 }

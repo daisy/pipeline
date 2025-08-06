@@ -9,14 +9,19 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.NoSuchElementException;
 
+import javax.xml.stream.XMLStreamException;
 import javax.xml.transform.Result;
+import javax.xml.transform.stax.StAXResult;
 import javax.xml.transform.stream.StreamResult;
 
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.Serializer;
 import net.sf.saxon.s9api.XdmNode;
 
+import org.daisy.common.saxon.SaxonInputValue;
+import org.daisy.common.stax.XMLStreamWriterHelper;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcResult;
 
@@ -81,42 +86,7 @@ public final class CalabashXProcResult implements XProcResult {
 					} catch (SaxonApiException e) {
 						throw new RuntimeException(e); // should not happen
 					}
-					Serializer serializer = SerializationUtils.newSerializer(
-							xpipeline.getSerialization(port), configuration);
 					Result result = resultProvider.get();
-					if (result instanceof StreamResult) {
-						StreamResult streamResult = (StreamResult) result;
-						OutputStream os = streamResult.getOutputStream();
-						if (os != null)
-							serializer.setOutputStream(os);
-						else {
-							Writer w = streamResult.getWriter();
-							if (w != null)
-								serializer.setOutputWriter(w);
-						}
-					} else {
-						URI uri = null;
-						try {
-							uri = new URI(result.getSystemId());
-						} catch (URISyntaxException e) {
-							throw new RuntimeException(String.format("Malformed uri while writing results: %s",result.getSystemId()),e);
-						}
-						if ("file".equals(uri.getScheme())) {
-							serializer.setOutputFile(new File(uri));
-						} else {
-							URL url;
-							try {
-								url = uri.toURL();
-								final URLConnection conn = url.openConnection();
-								conn.setDoOutput(true);
-								serializer.setOutputStream(conn.getOutputStream());
-							} catch (MalformedURLException e) {
-								throw new RuntimeException(String.format("Malformed url while writing results: %s",uri),e);
-							} catch (IOException e) {
-								throw new RuntimeException("IOError caught when writing results",e);
-							}
-						}
-					}
 					XdmNode node; {
 						try {
 							node = rpipe.read();
@@ -124,10 +94,56 @@ public final class CalabashXProcResult implements XProcResult {
 							throw new RuntimeException(e); // should not happen
 						}
 					}
-					try {
-						serializer.serializeNode(node);
-					} catch (SaxonApiException e) {
-						throw new RuntimeException("Error caught when writing results", e);
+					if (result instanceof StAXResult) {
+						try {
+							XMLStreamWriterHelper.writeDocument(
+								((StAXResult)result).getXMLStreamWriter(),
+								new SaxonInputValue(node).asXMLStreamReader());
+						} catch (XMLStreamException|NoSuchElementException e) {
+							throw new RuntimeException("Error caught when writing results", e);
+						}
+					} else {
+						Serializer serializer = SerializationUtils.newSerializer(
+							xpipeline.getSerialization(port), configuration);
+						if (result instanceof StreamResult) {
+							StreamResult streamResult = (StreamResult) result;
+							OutputStream os = streamResult.getOutputStream();
+							if (os != null)
+								serializer.setOutputStream(os);
+							else {
+								Writer w = streamResult.getWriter();
+								if (w != null)
+									serializer.setOutputWriter(w);
+							}
+							
+						} else {
+							URI uri = null;
+							try {
+								uri = new URI(result.getSystemId());
+							} catch (URISyntaxException e) {
+								throw new RuntimeException(String.format("Malformed uri while writing results: %s",result.getSystemId()),e);
+							}
+							if ("file".equals(uri.getScheme())) {
+								serializer.setOutputFile(new File(uri));
+							} else {
+								URL url;
+								try {
+									url = uri.toURL();
+									final URLConnection conn = url.openConnection();
+									conn.setDoOutput(true);
+									serializer.setOutputStream(conn.getOutputStream());
+								} catch (MalformedURLException e) {
+									throw new RuntimeException(String.format("Malformed url while writing results: %s",uri),e);
+								} catch (IOException e) {
+									throw new RuntimeException("IOError caught when writing results",e);
+								}
+							}
+						}
+						try {
+							serializer.serializeNode(node);
+						} catch (SaxonApiException e) {
+							throw new RuntimeException("Error caught when writing results", e);
+						}
 					}
 				}
 			}

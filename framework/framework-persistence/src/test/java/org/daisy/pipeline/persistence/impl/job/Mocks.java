@@ -6,10 +6,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.Set;
 
 import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
 
+import org.daisy.common.file.Resource;
 import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.priority.Priority;
 import org.daisy.common.xproc.XProcOptionInfo;
@@ -37,8 +39,7 @@ import org.daisy.pipeline.script.XProcPortMetadata;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.script.XProcScriptService;
 
-import com.google.common.base.Supplier;
-import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 public class Mocks   {
 
@@ -184,11 +185,11 @@ public class Mocks   {
 	public static AbstractJobContext buildContext(Client client, JobBatchId batchId, File contextDir) {
 		final Script script = Mocks.buildScript();
 		JobResources resources = new JobResources() {
-				public Iterable<String> getNames() {
-					return Lists.newArrayList(file1, file2);
+				public Set<URI> getNames() {
+					return Sets.newHashSet(URI.create(file1), URI.create(file2));
 				}
-				public Supplier<InputStream> getResource(String name) {
-					return () -> new ByteArrayInputStream("foo".getBytes());
+				public Resource getResource(URI name) {
+					return Resource.load(() -> new ByteArrayInputStream("foo".getBytes()), name, Resource.MEDIA_TYPE_UNKNOWN);
 				}
 			};
 		ScriptInput input;
@@ -208,8 +209,8 @@ public class Mocks   {
 				throw new RuntimeException(e);
 			}
 		final JobResultSet rSet = new JobResultSet.Builder(script)
-		                                          .addResult(portResult, result1.getName(), result1, null)
-		                                          .addResult(opt1Name, result2.getName(), result2, null)
+		                                          .addResult(portResult, result1, null)
+		                                          .addResult(opt1Name, result2, null)
 		                                          .build();
                 //add to the db
                 if ( client ==null){

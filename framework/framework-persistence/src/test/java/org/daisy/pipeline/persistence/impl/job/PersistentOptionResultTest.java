@@ -1,6 +1,7 @@
 package org.daisy.pipeline.persistence.impl.job;
 
 import java.io.File;
+import java.net.URI;
 
 import javax.xml.namespace.QName;
 
@@ -15,31 +16,33 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class PersistentOptionResultTest {
+
 	Database db;
 	PersistentOptionResult pi1;
-	String name="result";
-	File path = Mocks.result1;
-	String idx="file.xml";
+	String name = "result";
+	File file = Mocks.result1;
+	URI path = URI.create("file.xml");
 	JobResult result;
 	JobId id1;
-	@Before	
+
+	@Before
 	public void setUp(){
-		db=DatabaseProvider.getDatabase();
-		id1= new JobUUIDGenerator().generateId();
-		pi1=new PersistentOptionResult(id1, new JobResult(idx, path, null) {}, new QName(name));
+		db = DatabaseProvider.getDatabase();
+		id1 = new JobUUIDGenerator().generateId();
+		pi1 =new PersistentOptionResult(id1, new JobResult(path, file, null) {}, new QName(name));
 		db.addObject(pi1);
-	}	
+	}
 
 	@After
 	public void tearDown(){
 		db.deleteObject(pi1);
-	}	
+	}
 
 	@Test
 	public void testPersistOptionResult() throws Exception{
-		PersistentOptionResult stored=db.getEntityManager().find(PersistentOptionResult.class,new PersistentOptionResult.PK(id1, idx));
+		PersistentOptionResult stored = db.getEntityManager().find(PersistentOptionResult.class,new PersistentOptionResult.PK(id1, path.toString()));
 		Assert.assertEquals(name,stored.getOptionName().toString());
-		Assert.assertEquals(idx, stored.getIdx());
-		Assert.assertEquals(path, stored.getPath());
+		Assert.assertEquals(path.toString(), stored.getIdx());
+		Assert.assertEquals(file, stored.getPath());
 	}
 }

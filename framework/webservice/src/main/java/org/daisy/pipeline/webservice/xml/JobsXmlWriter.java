@@ -65,7 +65,11 @@ public class JobsXmlWriter {
 			if (job.getStatus() == Job.Status.IDLE) {
 				writer.withPriority(queue.getJobPriority(job.getId()));
 			}
-			writer.addAsElementChild(jobsElm);
+			try {
+				writer.addAsElementChild(jobsElm);
+			} catch (UnsupportedOperationException e) {
+				// job is closed
+			}
 		}
 		
 		// for debugging only

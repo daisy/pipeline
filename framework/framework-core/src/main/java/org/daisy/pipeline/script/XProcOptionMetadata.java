@@ -37,32 +37,45 @@ public class XProcOptionMetadata {
         final private boolean primary;
         final private boolean isSequence;
         final private boolean isOrdered;
+        final private boolean isReusable;
         final private String separator;
         final private ScriptOption.Role role;
+
+        // FIXME: delete all constructors except for the last one
+        // (which is the only one actually used, StaxXProcScriptParser)
 
         public XProcOptionMetadata(String niceName, String description, String type, String mediaType) {
                 this(niceName, description, type, mediaType,
                      Output.NA, true,
-                     false, true, DEFAULT_SEPARATOR, null);
+                     false, true, true, DEFAULT_SEPARATOR, null);
         }
 
         public XProcOptionMetadata(String niceName, String description, String type, String mediaType,
                                    Output output, boolean primary) {
                 this(niceName, description, type, mediaType,
                      output, primary,
-                     false, true, DEFAULT_SEPARATOR, null);
+                     false, true, true, DEFAULT_SEPARATOR, null);
         }
 
         public XProcOptionMetadata(String niceName, String description, String type, String mediaType,
                                    boolean sequence, boolean ordered, String separator) {
                 this(niceName, description, type, mediaType,
                      Output.NA, true,
-                     sequence, ordered, separator, null);
+                     sequence, ordered, true, separator, null);
         }
 
         public XProcOptionMetadata(String niceName, String description, String type, String mediaType,
                                    Output output, boolean primary,
-                                   boolean sequence, boolean ordered, String separator, ScriptOption.Role role) {
+                                   boolean sequence, boolean ordered,
+                                   String separator, ScriptOption.Role role) {
+                this(niceName, description, type, mediaType,
+                     output, primary, sequence, ordered, true, separator, role);
+        }
+
+        public XProcOptionMetadata(String niceName, String description, String type, String mediaType,
+                                   Output output, boolean primary,
+                                   boolean sequence, boolean ordered, boolean reusable,
+                                   String separator, ScriptOption.Role role) {
                 this.niceName = niceName;
                 this.description = description;
                 this.type = type;
@@ -71,6 +84,7 @@ public class XProcOptionMetadata {
                 this.primary = primary;
                 this.isSequence = sequence;
                 this.isOrdered = ordered;
+                this.isReusable = reusable;
                 this.separator = separator;
                 this.role = role;
         }
@@ -143,5 +157,13 @@ public class XProcOptionMetadata {
          */
         public ScriptOption.Role getRole() {
                 return role;
+        }
+
+        /**
+         * Whether values are suitable for being remembered by user interfaces,
+         * for reuse in future jobs.
+         */
+        public boolean isReusable() {
+                return isReusable;
         }
 }

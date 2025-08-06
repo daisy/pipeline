@@ -32,19 +32,25 @@ public interface JobManager extends JobFactory {
 	 */
 	public Optional<Job> deleteJob(JobId id);
 
-
 	/**
 	 * Deletes all jobs.
 	 *
 	 */
 	public Iterable<Job> deleteAll();
+
 	/**
-	 * Gets the job.
-	 *
-	 * @param id the id
-	 * @return the job
+	 * Get the job with the given job ID
 	 */
 	public Optional<Job> getJob(JobId id);
+
+	/**
+	 * Get the single job that matches the given (partial) job ID.
+	 *
+	 * Don't return any jobs if multiple jobs match the argument.
+	 *
+	 * @param prefix The job ID of the returned job must start with this string
+	 */
+	public Optional<Job> findJob(String prefix);
 
 	public JobQueue getExecutionQueue();
 

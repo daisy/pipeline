@@ -98,7 +98,7 @@ public final class XProcScript extends Script {
 		XProcResult xprocResult = pipeline.run(xprocInput, () -> messages, properties);
 		XProcOutput xprocOutput = decorator.decorate(new XProcOutput.Builder().build());
 		xprocResult.writeTo(xprocOutput); // writes to files and/or streams specified in output
-		buildResultSet(xprocInput, xprocOutput, resultDir, resultBuilder);
+		buildResultSet(xprocInput, xprocOutput, resultBuilder);
 		if (checkStatusPort(xprocOutput))
 			return Status.SUCCESS;
 		else
@@ -166,6 +166,10 @@ public final class XProcScript extends Script {
 								return false;
 							}
 							@Override
+							public boolean isReusable() {
+								return metadata.isReusable();
+							}
+							@Override
 							public String getNiceName() {
 								return metadata.getNiceName();
 							}
@@ -204,6 +208,10 @@ public final class XProcScript extends Script {
 							@Override
 							public boolean isRequired() {
 								return info.isRequired();
+							}
+							@Override
+							public boolean isReusable() {
+								return metadata.isReusable();
 							}
 							@Override
 							public String getNiceName() {
@@ -660,6 +668,11 @@ public final class XProcScript extends Script {
 			return metadata.getRole();
 		}
 
+		@Override
+		public boolean isReusable() {
+			return metadata.isReusable();
+		}
+
 		/**
 		 * Convert a sequence of string values in order to pass it to
 		 * {@link org.daisy.common.xproc.XProcInput.Builder#withOption()}.
@@ -739,6 +752,11 @@ public final class XProcScript extends Script {
 		}
 
 		@Override
+		public boolean isReusable() {
+			return metadata.isReusable();
+		}
+
+		@Override
 		public String getNiceName() {
 			return metadata.getNiceName();
 		}
@@ -755,7 +773,7 @@ public final class XProcScript extends Script {
 	}
 
 	private void buildResultSet(XProcInput inputs, XProcOutput outputs,
-	                            File resultDir, JobResultSet.Builder builder) throws IOException {
+	                            JobResultSet.Builder builder) throws IOException {
 
 		// iterate over output ports
 		for (ScriptPort port : getOutputPorts()) {
@@ -781,7 +799,6 @@ public final class XProcScript extends Script {
 					File f = new File(path);
 					if (f.exists()) {
 						builder = builder.addResult(port.getName(),
-						                            resultDir.toURI().relativize(path).toString(),
 						                            f,
 						                            mediaType);
 					}
@@ -800,7 +817,6 @@ public final class XProcScript extends Script {
 					for (File f : IOHelper.treeFileList(new File(URI.create(dir)))) {
 						URI path = f.toURI();
 						builder = builder.addResult(port.getName(),
-						                            resultDir.toURI().relativize(path).toString(),
 						                            f,
 						                            mediaType);
 					}
@@ -822,7 +838,6 @@ public final class XProcScript extends Script {
 							"Result is expected to be a DynamicResult but got: " + result);
 					URI path = URI.create(sysId);
 					builder = builder.addResult(port.getName(),
-					                            resultDir.toURI().relativize(path).toString(),
 					                            new File(path),
 					                            mediaType);
 				}
@@ -832,8 +847,8 @@ public final class XProcScript extends Script {
 
 	// for unit tests
 	JobResultSet buildResultSet(XProcInput inputs, XProcOutput outputs, File resultDir) throws IOException {
-		JobResultSet.Builder builder = new JobResultSet.Builder(this);
-		buildResultSet(inputs, outputs, resultDir, builder);
+		JobResultSet.Builder builder = new JobResultSet.Builder(this, resultDir);
+		buildResultSet(inputs, outputs, builder);
 		return builder.build();
 	}
 

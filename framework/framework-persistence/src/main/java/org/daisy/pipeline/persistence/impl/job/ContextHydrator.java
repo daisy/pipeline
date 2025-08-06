@@ -1,9 +1,8 @@
 package org.daisy.pipeline.persistence.impl.job;
 
 import java.io.FileNotFoundException;
+import java.net.URI;
 import java.util.List;
-
-import javax.xml.transform.Source;
 
 import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.JobId;
@@ -34,7 +33,7 @@ class ContextHydrator {
 
 	static void hydrateResultPorts(JobResultSet.Builder builder,List<PersistentPortResult> portResults){
 		for(PersistentPortResult pRes: portResults){
-			builder.addResult(pRes.getPortName(), pRes.getIdx(), pRes.getPath(), pRes.getMediaType());
+			builder.addResult(pRes.getPortName(), URI.create(pRes.getIdx()), pRes.getPath(), pRes.getMediaType());
 		}
 	}
 	
@@ -42,8 +41,8 @@ class ContextHydrator {
 		List<PersistentInputPort> inputPorts = Lists.newLinkedList();
 		for (ScriptPort port : script.getInputPorts()) {
 			PersistentInputPort anon = new PersistentInputPort(id, port.getName());
-			for (Source src : input.getInput(port.getName())) {
-				anon.addSource(new PersistentSource(src.getSystemId()));
+			for (URI src : input.getInput(port.getName())) {
+				anon.addSource(new PersistentSource(src.toASCIIString()));
 			}
 			inputPorts.add(anon);
 		}

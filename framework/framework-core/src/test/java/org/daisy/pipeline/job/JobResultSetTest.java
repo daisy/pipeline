@@ -34,8 +34,8 @@ public class JobResultSetTest   {
 	@Before
 	public void setUp() throws IOException {
 		URI tmp=new File(System.getProperty("java.io.tmpdir")).toURI();
-		uri1= URI.create("file1.xml");
-		uri2= URI.create("file2.xml");
+		uri1 = URI.create("file1.xml");
+		uri2 = URI.create("file2.xml");
 		File res1 = new File(tmp.resolve(uri1));
 		File res2 = new File(tmp.resolve(uri2));
 		res1.createNewFile();
@@ -49,8 +49,8 @@ public class JobResultSetTest   {
 		pw2.append(content2);
 		pw2.close();
 
-		Collection<JobResult> results = new JobResultSet.Builder().addResult("foo", uri1.toString(), res1, null)
-		                                                          .addResult("foo", uri2.toString(), res2, null)
+		Collection<JobResult> results = new JobResultSet.Builder().addResult("foo", uri1, res1, null)
+		                                                          .addResult("foo", uri2, res2, null)
 		                                                          .build()
 		                                                          .getResults("foo");
 

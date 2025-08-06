@@ -23,7 +23,6 @@ import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.webservice.CallbackHandler;
 import org.daisy.pipeline.webservice.jetty.impl.WebSocketServer;
 import org.daisy.pipeline.webservice.PipelineWebServiceConfiguration;
-import org.daisy.pipeline.webservice.Properties;
 import org.daisy.pipeline.webservice.restlet.WebServiceExtension;
 import org.daisy.pipeline.webservice.Routes;
 import org.daisy.pipeline.webservice.impl.PushNotifier;
@@ -160,8 +159,10 @@ public class PipelineWebService extends Application {
                         }
                         return;
                 }
-                //get rid of stale jobs
+                // get rid of stale jobs
                 this.cleanUp();
+                // wait for all scripts before becoming "alive"
+                scriptRegistry.getScripts();
                 Routes routes = new Routes();
                 logger.info(String.format("Starting webservice on port %d",
                                 routes.getPort()));

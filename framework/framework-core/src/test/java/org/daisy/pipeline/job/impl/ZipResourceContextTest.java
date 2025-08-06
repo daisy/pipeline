@@ -3,29 +3,30 @@ package org.daisy.pipeline.job.impl;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
+import org.daisy.common.file.Resource;
 import org.daisy.pipeline.job.ZippedJobResources;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.common.base.Supplier;
-
 public class ZipResourceContextTest {
 	ZipFile mFile;
 	private ZippedJobResources ctxt;
-	private Supplier<InputStream> res;
+	private Resource res;
 
 	@Before
 	public void setUp() throws ZipException, IOException, URISyntaxException {
 		mFile = new ZipFile(new File(this.getClass().getClassLoader()
 				.getResource("test.zip").toURI()));
 		ctxt = new ZippedJobResources(mFile);
-		res = ctxt.getResource("1.txt");
+		res = ctxt.getResource(URI.create("1.txt"));
 	}
 
 	@Test
@@ -47,7 +48,7 @@ public class ZipResourceContextTest {
 	@Test
 	public void resourceAsInputStream() throws IOException {
 
-		InputStream is = res.get();
+		InputStream is = res.read();
 		byte buff[] = new byte[256];
 		int read = is.read(buff);
 		Assert.assertTrue(read > 0);

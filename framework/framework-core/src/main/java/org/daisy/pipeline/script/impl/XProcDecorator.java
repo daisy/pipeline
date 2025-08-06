@@ -67,9 +67,7 @@ public class XProcDecorator {
 		XProcInput.Builder decorated = new XProcInput.Builder();
 		try {
 			// Store everything to disk just in case it hasn't been done before.
-			// We need this for two reasons:
-			// - to make sure documents on input ports have a non-empty system ID (they don't need to be stored on disk per se though)
-			// - to make sure documents can be passed as a file path to XProc options
+			// We need this to make sure documents can be passed as a file path to XProc options
 			input = input.storeToDisk();
 			decorateInputPorts(script, input, decorated);
 			decorateOptions(script, input, decorated);
@@ -127,31 +125,22 @@ public class XProcDecorator {
 	void decorateInputPorts(final XProcScript script, final ScriptInput input, XProcInput.Builder builder) throws IOException {
 		for (ScriptPort port : script.getInputPorts()) {
 			if (script.getInputOption(port.getName()) == null) {
-				for (Source src : input.getInput(port.getName())) {
-					InputSource is = SAXSource.sourceToInputSource(src);
-					// make sure documents on input ports have a non-empty base URI
-					if (src.getSystemId() == null
-					    || "".equals(src.getSystemId())
-					    || (is != null && (is.getByteStream() != null || is.getCharacterStream() != null)))
-						throw new IllegalStateException(); // should not happen because ScripInput.storeToDisk() was called
-					// make relative file paths absolute
+				for (URI uri : input.getInput(port.getName())) {
+					// make sure documents on input ports are stored on disk and have an absolute base URI
 					try {
-						URI baseURI = URI.create(src.getSystemId());
-						baseURI = resolveRelativePath(baseURI, input);
-						src.setSystemId(baseURI.toString());
+						uri = resolveRelativePath(uri, input);
 					} catch (Exception e) {
 						throw new RuntimeException(
 							"Error parsing URI when building the input port" + port.getName(), e);
 					}
+					InputSource src = new InputSource(uri.toASCIIString());
 					String mediaType = port.getMediaType();
-					if (mediaType != null && !(src instanceof DOMSource)) {
+					if (mediaType != null) {
 						mediaType = mediaType.trim();
 						if (!mediaType.isEmpty()) {
 							List<String> types = Lists.newArrayList(mediaType.split("\\s+"));
 							if (!Iterables.all(types, t -> t.matches("[^ ]*(/|\\+)xml"))) {
 								// input might be non-XML: transform to XML
-								if (is == null)
-									throw new IOException("Error reading input on port " + port.getName() + ": " + src.getClass());
 								Document doc = null; {
 									if (inputParsers != null)
 										for (DocumentBuilder p : inputParsers)
@@ -159,7 +148,7 @@ public class XProcDecorator {
 												break;
 											else if (types.removeIf(p::supportsContentType))
 												try {
-													doc = p.parse(is);
+													doc = p.parse(src);
 													break;
 												} catch (SAXException|IllegalArgumentException e) {
 													// ignore: if non of the parsers can handle the input, throw new error (see below)
@@ -174,7 +163,8 @@ public class XProcDecorator {
 							}
 						}
 					}
-					builder.withInput(port.getName(), () -> src);
+					Source saxSrc = new SAXSource(src);
+					builder.withInput(port.getName(), () -> saxSrc);
 				}
 			}
 		}
@@ -195,23 +185,15 @@ public class XProcDecorator {
 			XProcScriptOption option = script.getInputOption(port.getName());
 			if (option != null) {
 				List<String> value = new ArrayList<>();
-				for (Source src : input.getInput(port.getName())) {
-					InputSource is = SAXSource.sourceToInputSource(src);
-					// make sure documents are stored on disk so we can pass a file path to the XProc option
-					if (src.getSystemId() == null
-					    || "".equals(src.getSystemId())
-					    || (is != null && (is.getByteStream() != null || is.getCharacterStream() != null)))
-						throw new IllegalStateException(); // should not happen because ScripInput.storeToDisk() was called
-					// make relative file paths absolute
+				for (URI uri : input.getInput(port.getName())) {
+					// make sure documents are stored on disk so we can pass an (absolute) file path to the XProc option
 					try {
-						URI baseURI = URI.create(src.getSystemId());
-						baseURI = resolveRelativePath(baseURI, input);
-						src.setSystemId(baseURI.toString());
+						uri = resolveRelativePath(uri, input);
 					} catch (Exception e) {
 						throw new RuntimeException(
 							"Error parsing URI for option %s: %s" + option.getName(), e);
 					}
-					value.add(src.getSystemId());
+					value.add(uri.toASCIIString());
 				}
 				resolvedInput.withOption(
 					option.getXProcOptionName(),

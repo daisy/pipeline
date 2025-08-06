@@ -13,7 +13,6 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHandler;
 import org.eclipse.jetty.websocket.api.UpgradeResponse;
 import org.eclipse.jetty.websocket.jsr356.server.deploy.WebSocketServerContainerInitializer;
 import org.eclipse.jetty.websocket.jsr356.server.JsrHandshakeResponse;
@@ -22,7 +21,6 @@ import org.restlet.data.Status;
 
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.WebserviceStorage;
-import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobManagerFactory;
 import org.daisy.pipeline.webservice.CallbackHandler;
 import org.daisy.pipeline.webservice.impl.JobsWebSocketEndpoint;
@@ -89,7 +87,7 @@ public class WebSocketServer {
 									String jobId = path.substring(path.lastIndexOf('/') + 1);
 									Client client = ((ClientPrincipal)request.getUserPrincipal()).getClient();
 									//sec.getUserProperties().put(Client.class.getName(), client);
-									if (!jobManagerFactory.createFor(client).getJob(JobIdFactory.newIdFromString(jobId)).isPresent()) {
+									if (!jobManagerFactory.createFor(client).findJob(jobId).isPresent()) {
 										// see https://stackoverflow.com/questions/53405281/websocket-pathparam-validation
 										UpgradeResponse r = toUpgradeResponse((JsrHandshakeResponse)response);
 										// FIXME: the code below doesn't work: the JobsWebSocketEndPoint.onOpen() method is still called

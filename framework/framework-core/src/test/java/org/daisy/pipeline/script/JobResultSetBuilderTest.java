@@ -91,8 +91,8 @@ public class JobResultSetBuilderTest {
                         f = writeResult(res.get());
                         JobResultSet rSet = script.buildResultSet(input, output, resultDir);
                         List<JobResult> jobs=Lists.newLinkedList(rSet.getResults(outName));
-                        Assert.assertEquals(new File(resultDir, "output-0/output-0.xml"), jobs.get(0).getPath());
-                        Assert.assertEquals("output-0/output-0.xml", jobs.get(0).getIdx().toString());
+                        Assert.assertEquals(new File(resultDir, "output-0/output-0.xml"), jobs.get(0).getFile());
+                        Assert.assertEquals("output-0/output-0.xml", jobs.get(0).getPath().toString());
                 } finally {
                         if (f != null) f.delete();
                 }
@@ -118,10 +118,10 @@ public class JobResultSetBuilderTest {
                         f2 = writeResult(res.get());
                         JobResultSet rSet = script.buildResultSet(input, output, resultDir);
                         List<JobResult> jobs=Lists.newLinkedList(rSet.getResults(outName));
-                        Assert.assertEquals(jobs.size(),2);
-                        Assert.assertEquals(new File(resultDir, "sequence/sequence.xml"), jobs.get(0).getPath());
-                        Assert.assertEquals("sequence/sequence.xml", jobs.get(0).getIdx().toString());
-                        Assert.assertEquals("xml",jobs.get(0).getMediaType());
+                        Assert.assertEquals(jobs.size(), 2);
+                        Assert.assertEquals(new File(resultDir, "sequence/sequence.xml"), jobs.get(0).getFile());
+                        Assert.assertEquals("sequence/sequence.xml", jobs.get(0).getPath().toString());
+                        Assert.assertEquals("xml",jobs.get(0).getMediaType().orElse(null));
                 } finally {
                         if (f1 != null) f1.delete();
                         if (f2 != null) f2.delete();
@@ -142,8 +142,8 @@ public class JobResultSetBuilderTest {
                 JobResultSet rSet = script.buildResultSet(input, output, resultDir);
                 List<JobResult> jobs = Lists.newLinkedList(rSet.getResults(optName.getLocalPart()));
                 Assert.assertEquals(1, jobs.size());
-                Assert.assertEquals(new File(resultDir, "option-output-file-0.xml"), jobs.get(0).getPath());
-                Assert.assertEquals("option-output-file-0.xml", jobs.get(0).getIdx().toString());
+                Assert.assertEquals(new File(resultDir, "option-output-file-0.xml"), jobs.get(0).getFile());
+                Assert.assertEquals("option-output-file-0.xml", jobs.get(0).getPath().toString());
         }
 
         @Test
@@ -164,13 +164,13 @@ public class JobResultSetBuilderTest {
                 uris.add(new File(resultDir, "option-output-dir-0/dos.xml"));
                 uris.add(new File(resultDir, "option-output-dir-0/uno.xml"));
                 uris.add(new File(resultDir, "option-output-dir-0/tres.xml"));
-                Assert.assertTrue(uris.contains(jobs.get(0).getPath()));
-                Assert.assertTrue(uris.contains(jobs.get(1).getPath()));
-                Assert.assertTrue(uris.contains(jobs.get(2).getPath()));
+                Assert.assertTrue(uris.contains(jobs.get(0).getFile()));
+                Assert.assertTrue(uris.contains(jobs.get(1).getFile()));
+                Assert.assertTrue(uris.contains(jobs.get(2).getFile()));
         }
 
         @Test
-        public void optionsOutputIdx() throws Exception{
+        public void optionsOutputPath() throws Exception{
                 QName optName=Mock.ScriptGenerator.getOptionOutputDirName(0);
                 JobResultSet rSet = script.buildResultSet(input, output, resultDir);
                 List<JobResult> jobs=Lists.newLinkedList(rSet.getResults(optName.getLocalPart()));
@@ -179,9 +179,9 @@ public class JobResultSetBuilderTest {
                 uris.add("option-output-dir-0/dos.xml");
                 uris.add("option-output-dir-0/uno.xml");
                 uris.add("option-output-dir-0/tres.xml");
-                Assert.assertTrue(uris.contains(jobs.get(0).getIdx().toString()));
-                Assert.assertTrue(uris.contains(jobs.get(1).getIdx().toString()));
-                Assert.assertTrue(uris.contains(jobs.get(2).getIdx().toString()));
+                Assert.assertTrue(uris.contains(jobs.get(0).getPath().toString()));
+                Assert.assertTrue(uris.contains(jobs.get(1).getPath().toString()));
+                Assert.assertTrue(uris.contains(jobs.get(2).getPath().toString()));
         }
 
         @Test

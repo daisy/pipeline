@@ -366,6 +366,8 @@ public class StaxXProcScriptParser {
 					.getAttributeByName(XProcScriptConstants.Attributes.PX_PRIMARY);
 			Attribute role = optionElement
 					.getAttributeByName(XProcScriptConstants.Attributes.PX_ROLE);
+			Attribute reusable = optionElement
+					.getAttributeByName(XProcScriptConstants.Attributes.PX_REUSABLE);
 
 			if (mediaType != null) {
 				optionBuilder.mediaType = mediaType.getValue();
@@ -399,6 +401,11 @@ public class StaxXProcScriptParser {
 					optionBuilder.role = ScriptOption.Role.valueOf(role.getValue().toUpperCase().replace('-', '_'));
 				} catch (IllegalArgumentException e) {
 				}
+			}
+			if (reusable != null) {
+				optionBuilder.reusable = !reusable.getValue().equalsIgnoreCase("false");
+			} else if (type != null && XProcOptionMetadata.ANY_FILE_URI.equals(type.getValue())) {
+				optionBuilder.reusable = false;
 			}
 		}
 
@@ -530,9 +537,15 @@ public class StaxXProcScriptParser {
 				throws XMLStreamException {
 
 			Attribute mediaType = portElement
-					.getAttributeByName(XProcScriptConstants.Attributes.PX_MEDIA_TYPE);
+				.getAttributeByName(XProcScriptConstants.Attributes.PX_MEDIA_TYPE);
+			Attribute reusable = portElement
+				.getAttributeByName(XProcScriptConstants.Attributes.PX_REUSABLE);
+
 			if (mediaType != null) {
 				portBuilder.mediaType = mediaType.getValue();
+			}
+			if (reusable != null) {
+				portBuilder.reusable = !reusable.getValue().equalsIgnoreCase("false");
 			}
 		}
 	}
@@ -567,13 +580,14 @@ public class StaxXProcScriptParser {
 		boolean primary = true;
 		boolean sequence = false;
 		boolean ordered = true;
+		boolean reusable = true;
 		String separator = XProcOptionMetadata.DEFAULT_SEPARATOR;
 		ScriptOption.Role role = null;
 
 		XProcOptionMetadata build() {
 			return new XProcOptionMetadata(niceName, description, type, mediaType,
 			                               output, primary,
-			                               sequence, ordered, separator, role);
+			                               sequence, ordered, reusable, separator, role);
 		}
 	}
 
@@ -591,9 +605,10 @@ public class StaxXProcScriptParser {
 		String niceName;
 		String description;
 		String mediaType;
+		boolean reusable = false;
 
 		XProcPortMetadata build() {
-			return new XProcPortMetadata(niceName, description, mediaType);
+			return new XProcPortMetadata(niceName, description, mediaType, reusable);
 		}
 	}
 }

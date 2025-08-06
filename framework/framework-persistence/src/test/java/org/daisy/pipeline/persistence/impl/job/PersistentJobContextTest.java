@@ -7,8 +7,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.xml.transform.Source;
-
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 
@@ -81,9 +79,9 @@ public class PersistentJobContextTest  {
 	public void inputPortsTest(){
 		PersistentJobContext jCtxt= db.getEntityManager().find(PersistentJobContext.class,id.toString());
 		ScriptInput inputs = jCtxt.getInput();
-		HashSet<String> expectedSrcs=new HashSet<String>();
-		for (Source psrc : inputs.getInput("source")) {
-			expectedSrcs.add(psrc.getSystemId());
+		HashSet<String> expectedSrcs = new HashSet<String>();
+		for (URI psrc : inputs.getInput("source")) {
+			expectedSrcs.add(psrc.toASCIIString());
 		}
 		Assert.assertTrue(expectedSrcs.contains(Mocks.file1));
 		Assert.assertTrue(expectedSrcs.contains(Mocks.file2));

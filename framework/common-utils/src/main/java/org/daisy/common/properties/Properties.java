@@ -250,9 +250,12 @@ public final class Properties {
 		/**
 		 * Set the value
 		 */
-		public synchronized void setValue(String value) {
-			synchronized (settableProperties) {
-				this.value = value;
+		public void setValue(String value) {
+			synchronized (settableProperties) { // not sure if this synchronized block is really needed
+				synchronized (this) { // use synchronized (this) instead of synchronized method, so that
+				                      // the order of the locks is always the same, to avoid deadlocks
+					this.value = value;
+				}
 			}
 		}
 

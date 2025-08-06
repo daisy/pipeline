@@ -15,7 +15,6 @@ import java.util.concurrent.TimeoutException;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
@@ -48,50 +47,50 @@ public class ScriptRegistry {
 	private static final Logger logger = LoggerFactory.getLogger(ScriptRegistry.class);
 
 	private final ConcurrentMap<String,ScriptService<?>> scripts = new ConcurrentHashMap<>();
-	private final AtomicReference<Future<Boolean>> initialized = new AtomicReference<>();
+	private final AtomicReference<Future<Boolean>> updated = new AtomicReference<>();
 
 	public ScriptRegistry() {
 	}
 
-	private synchronized Future<Boolean> init() {
-		return initialized.updateAndGet(
+	private synchronized Future<Boolean> update() {
+		return updated.updateAndGet(
 			prev -> {
-				if (prev != null)
+				if (prev != null && !prev.isDone())
 					return prev;
-				else {
+				if (prev == null)
 					// this code is called only once
-					CompletableFuture<Boolean> initialized = new CompletableFuture<>();
 					for (ScriptService<?> script : OSGiHelper.inOSGiContext() ? OSGiHelper.getScripts()
-						                                                      : SPIHelper.getScripts())
-						registerScript(script);
-					List<ScriptServiceProvider> nextScriptProviders
-						= Lists.newArrayList(OSGiHelper.inOSGiContext() ? OSGiHelper.getScriptProviders()
-						                                                : SPIHelper.getScriptProviders());
-					if (nextScriptProviders.size() > 0) {
-						// handle the case where ScriptRegistry.getScript() is called from
-						// ScriptServiceProvider.getScripts() or from the returned Iterable/Iterator, by running
-						// the ScriptServiceProvider.getScripts() asynchronously
-						CompletionService<Boolean> threadPool = new ExecutorCompletionService(
-								Executors.newFixedThreadPool(nextScriptProviders.size()));
-						AtomicInteger remaining = new AtomicInteger(nextScriptProviders.size());
-						for (ScriptServiceProvider provider : nextScriptProviders)
-							threadPool.submit(
-									() -> {
-										if (initialized.isCancelled())
-											return;
-										logger.debug("Registering scripts from {}", provider);
-										for (ScriptService<?> script : provider.getScripts())
-											if (initialized.isCancelled())
-												return;
-											else
-												registerScript(script);
-										if (remaining.decrementAndGet() == 0)
-											initialized.complete(true);
+					                                                          : SPIHelper.getScripts())
+						registerScriptIfNew(script);
+				List<ScriptServiceProvider> nextScriptProviders
+					= Lists.newArrayList(OSGiHelper.inOSGiContext() ? OSGiHelper.getScriptProviders()
+					                                                : SPIHelper.getScriptProviders());
+				if (nextScriptProviders.size() == 0)
+					return CompletableFuture.completedFuture(true);
+				else {
+					CompletableFuture<Boolean> updated = new CompletableFuture<>();
+					// handle the case where ScriptRegistry.getScript() is called from
+					// ScriptServiceProvider.getScripts() or from the returned Iterable/Iterator, by running
+					// the ScriptServiceProvider.getScripts() asynchronously
+					CompletionService<Boolean> threadPool = new ExecutorCompletionService(
+							Executors.newFixedThreadPool(nextScriptProviders.size()));
+					AtomicInteger remaining = new AtomicInteger(nextScriptProviders.size());
+					for (ScriptServiceProvider provider : nextScriptProviders)
+						threadPool.submit(
+								() -> {
+									if (updated.isCancelled())
 										return;
-									},
-									true);
-					}
-					return initialized;
+									for (ScriptService<?> script : provider.getScripts())
+										if (updated.isCancelled())
+											return;
+										else
+											registerScriptIfNew(script);
+									if (remaining.decrementAndGet() == 0)
+										updated.complete(true);
+									return;
+								},
+								true);
+					return updated;
 				}
 			}
 		);
@@ -101,19 +100,19 @@ public class ScriptRegistry {
 	 * Get all the scripts.
 	 */
 	public Iterable<ScriptService<?>> getScripts() {
-		Future<Boolean> initialized = init();
+		Future<Boolean> updated = update();
 		try {
-			initialized.get(10, SECONDS); // always returns true
+			updated.get(10, SECONDS); // always returns true
 		} catch (InterruptedException e) {
 			// not likely to happen, but if for some reason next() was
 			// interrupted while waiting for ScriptServiceProvider.getScripts()
 			// to finish, restore the interrupt status and abort the iteration
 			Thread.currentThread().interrupt();
-			initialized.cancel(false);
+			updated.cancel(false);
 		} catch (TimeoutException e) {
 			// either script providers are waiting for each other (deadlock), or take
 			// too long to provide the scripts
-			initialized.cancel(false);
+			updated.cancel(false);
 		} catch (CancellationException e) {
 		} catch (ExecutionException e) {
 			throw new RuntimeException(e); // should not happen
@@ -127,32 +126,43 @@ public class ScriptRegistry {
 	// note that this method may be called from ScriptServiceProvider.getScripts(), from one of
 	// the threads created in init()
 	public ScriptService<?> getScript(String name) {
-		Future<Boolean> initialized = init();
+		ScriptService<?> script = scripts.get(name);
+		if (script != null)
+			return script;
+		Future<Boolean> updated = update();
 		do {
-			ScriptService<?> script = scripts.get(name);
+			script = scripts.get(name);
 			if (script != null)
 				return script;
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
-				initialized.cancel(false);
+				updated.cancel(false);
 				break;
 			}
-		} while (!(initialized.isDone() || initialized.isCancelled()));
-		// try one last time just in case registerScript() was called from another thread at a
+		} while (!(updated.isDone() || updated.isCancelled()));
+		// try one last time just in case registerScriptIfNew() was called from another thread at a
 		// bad time
-		ScriptService<?> script = scripts.get(name);
+		script = scripts.get(name);
 		if (script == null)
 			logger.warn("Script {} does not exist", name);
 		return script;
 	}
 
-	private void registerScript(ScriptService<?> script) {
-		logger.debug("Registering script {}", script.getId());
-		if (script instanceof XProcScriptService)
-			((XProcScriptService)script).setParser(parser);
-		scripts.put(script.getId(), script);
+	/*
+	 * Script list can grow dynamically, but no scripts are ever removed or replaced
+	 */
+	private void registerScriptIfNew(ScriptService<?> script) {
+		scripts.computeIfAbsent(
+			script.getId(),
+			id -> {
+				logger.debug("Registering script {}", id);
+				if (script instanceof XProcScriptService)
+					((XProcScriptService) script).setParser(parser);
+				return script;
+			}
+		);
 	}
 
 	/**

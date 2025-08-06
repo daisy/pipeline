@@ -16,22 +16,21 @@ public class XProcPortMetadata {
 	final private String niceName;
 	final private String description;
 	final private String mediaType;
+	final private boolean reusable;
 
-	/**
-	 * Instantiates a new {@link XProcPortMetadata}.
-	 *
-	 * @param niceName
-	 *            the nice name
-	 * @param description
-	 *            the description
-	 * @param mediaType
-	 *            the media type
-	 */
+	// FIXME: delete all constructors except for the last one
+	// (which is the only one actually used, StaxXProcScriptParser)
+
 	public XProcPortMetadata(String niceName, String description, String mediaType) {
+		this(niceName, description, mediaType, false);
+	}
+
+	public XProcPortMetadata(String niceName, String description, String mediaType, boolean reusable) {
 		super();
 		this.niceName = niceName;
 		this.description = description;
 		this.mediaType = mediaType;
+		this.reusable = reusable;
 	}
 
 	public String getNiceName() {
@@ -44,5 +43,13 @@ public class XProcPortMetadata {
 
 	public String getMediaType() {
 		return mediaType;
+	}
+
+	/**
+	 * Whether inputs are suitable for being remembered by user interfaces, for reuse
+	 * in future jobs.
+	 */
+	public boolean isReusable() {
+		return reusable;
 	}
 }

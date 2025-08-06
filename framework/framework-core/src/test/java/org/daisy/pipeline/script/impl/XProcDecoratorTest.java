@@ -3,10 +3,10 @@ package org.daisy.pipeline.script.impl;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.StringReader;
 import java.net.URI;
 import java.util.List;
+import java.util.Set;
 
 import javax.xml.namespace.QName;
 import javax.xml.transform.Result;
@@ -15,6 +15,7 @@ import javax.xml.transform.Source;
 
 import org.apache.commons.io.FileUtils;
 
+import org.daisy.common.file.Resource;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.pipeline.job.impl.IOHelper;
@@ -33,6 +34,7 @@ import org.xml.sax.InputSource;
 
 import com.google.common.base.Supplier;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 public class XProcDecoratorTest   {
 
@@ -42,11 +44,11 @@ public class XProcDecoratorTest   {
 	File contextDir = new File(tmpDir, "inputs");
 	File resultDir = new File(tmpDir, "outputs");
 	JobResources resources = new JobResources() {
-			public Iterable<String> getNames() {
-				return Lists.newArrayList(testFile, testFile2);
+			public Set<URI> getNames() {
+				return Sets.newHashSet(URI.create(testFile), URI.create(testFile2));
 			}
-			public Supplier<InputStream> getResource(String name) {
-				return () -> new ByteArrayInputStream("".getBytes());
+			public Resource getResource(URI name) {
+				return Resource.load(() -> new ByteArrayInputStream("".getBytes()), name, Resource.MEDIA_TYPE_UNKNOWN);
 			}};
 	String testDir = "dir";
 

@@ -3,6 +3,7 @@ package org.daisy.pipeline.job;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URI;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -29,21 +30,21 @@ public class JobResultTest {
 
         @Test
         public void stripPrefix() {
-                String idx = "mything/file.xml";
-                String idxStripped = "file.xml";
-                Assert.assertEquals(idxStripped,
-                                    new JobResult(idx, resultFile, null).strip().getIdx());
+                URI path = URI.create("mything/file.xml");
+                URI pathStripped = URI.create("file.xml");
+                Assert.assertEquals(pathStripped,
+                                    new JobResult(path, resultFile, null).strip().getPath());
         }
 
         @Test
         public void getSize() throws Exception {
-                JobResult res = new JobResult(resultFile.toString(), resultFile, null);
+                JobResult res = new JobResult(resultFile.toURI(), resultFile, null);
                 Assert.assertEquals("wrong result size", 1024l, res.getSize());
         }
 
         @Test(expected = RuntimeException.class)
         public void creatJobResultFromNonExistingFile() throws Exception {
             File fake = new File("/Idontexist.txt");
-            new JobResult(fake.toString(), fake, null);
+            new JobResult(fake.toURI(), fake, null);
         }
 }
