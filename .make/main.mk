@@ -466,7 +466,7 @@ clean-eclipse :
 
 ifneq (,$(filter clean clean-eclipse,$(MAKECMDGOALS)))
 include $(shell for (String f : "$(addsuffix /.deps.mk,$(addprefix $(TARGET_DIR)/mk/,$(MODULES) $(MAVEN_AGGREGATORS)))".trim().split("\\s+")) \
-                    if (new File(f).exists()) println(f);
+                    if (new File(f).exists()) println(f); \
                 for (String f : "$(addsuffix /.sources.mk,$(addprefix $(TARGET_DIR)/mk/,$(MODULES)))".trim().split("\\s+")) \
                     if (new File(f).exists()) println(f);)
 else
