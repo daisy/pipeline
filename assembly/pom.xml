@@ -9,7 +9,7 @@
   </parent>
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>assembly</artifactId>
-  <version>1.15.2-SNAPSHOT</version>
+  <version>1.15.2</version>
   <packaging>jar</packaging>
   <name>DAISY Pipeline 2 :: Assembly</name>
   <description>Builds the main distribution of the DAISY Pipeline 2.</description>
@@ -17,7 +17,7 @@
     <connection>scm:git:git@github.com:daisy/pipeline-assembly.git</connection>
     <url>scm:git:git@github.com:daisy/pipeline-assembly.git</url>
     <developerConnection>scm:git:git@github.com:daisy/pipeline-assembly.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>v1.15.2</tag>
   </scm>
   <properties>
     <cli.version>2.3.0</cli.version>
@@ -2451,18 +2451,6 @@
                   <groupId>org.eclipse.jetty.websocket</groupId>
                   <artifactId>websocket-servlet</artifactId>
                 </artifactItem>
-              </artifactItems>
-            </configuration>
-          </execution>
-          <execution>
-            <id>copy-webservice-no-osgi</id>
-            <phase>process-sources</phase>
-            <goals>
-              <goal>copy</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}/jars/no-osgi/webservice</outputDirectory>
-              <artifactItems>
                 <artifactItem>
                   <groupId>javax.websocket</groupId>
                   <artifactId>javax.websocket-api</artifactId>
@@ -4267,7 +4255,7 @@
               <!-- FIXME: websockets are currently broken under OSGi (and the solution in
                    https://stackoverflow.com/questions/39740531/jetty-websocket-java-lang-runtimeexception-cannot-load-platform-configurator
                    does not seem to work: could this be because spifly does not work)
-              --><!--
+              -->
               <execution>
                 <id>copy-webservice-osgi</id>
                 <phase>process-sources</phase>
@@ -4281,6 +4269,7 @@
                       <groupId>org.eclipse.jetty</groupId>
                       <artifactId>jetty-util-ajax</artifactId>
                     </artifactItem>
+                    <!--
                     <artifactItem>
                       <groupId>org.apache.servicemix.bundles</groupId>
                       <artifactId>org.apache.servicemix.bundles.javax-websocket-api</artifactId>
@@ -4296,9 +4285,10 @@
                       <artifactId>org.apache.aries.util</artifactId>
                       <version>1.0.0</version>
                     </artifactItem>
+                    -->
                   </artifactItems>
                 </configuration>
-              </execution>-->
+              </execution>
             </executions>
           </plugin>
         </plugins>
@@ -4317,10 +4307,6 @@
               </execution>
               <execution>
                 <id>copy-webservice-osgi</id>
-                <phase>none</phase>
-              </execution>
-              <execution>
-                <id>copy-webservice-no-osgi</id>
                 <phase>none</phase>
               </execution>
             </executions>

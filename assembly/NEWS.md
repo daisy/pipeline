@@ -1,3 +1,32 @@
+Changes in release v1.15.2
+===========================
+
+## Framework
+
+- **NEW** Web API: support for POST/PUT requests (jobs, clients, properties, stylesheet-parameters) through query strings
+
+## Modules
+
+- **NEW** Text-to-speech adapter for Amazon Polly
+- **NEW** Synchronization between renditions when original text is included in DTBook to eBraille
+- **NEW** Allow pretty name of TTS engines in `voice-family` property
+- **NEW** Handle new styles for creating sidebar elements in Word to DTBook:
+  - Sidebar - Optional (DAISY)
+  - Sidebar - Required (DAISY)
+  - Sidebar header - Optional (DAISY)
+  - Sidebar header - Required (DAISY)
+- **FIX** Support for Google Chirp voices
+- **FIX** Improved metadata handling in DTBook to eBraille
+  - `dtb:producer` used as `a11y:producer`
+  - DTBook metadata from a vocabulary that can be guessed from the prefix, is preserved
+- **FIX** Fix images export from Word
+- **FIX** EPUB 3 to DAISY 2.02 has been made more robust w.r.t. parts of headings missing from SMILs
+- **FIX** Fixed support for media queries on `@import` rules
+- **FIX** Support for value-less media features in media queries
+- Changes to braille production scripts, see release notes of braille modules [v1.15.2](https://github.com/daisy/pipeline-modules/blob/master/braille/NEWS.md#v1152)
+- Various other bugfixes and improvements
+
+
 Changes in release v1.15.1
 ===========================
 
