@@ -137,8 +137,8 @@ dp2 : $(dp2)
 run : $(dev_launcher)
 	exec("$<", "local");
 
-ifeq ($(MAKECMDGOALS),run-with-osgi)
-unexport JAVA_REPL_PORT
+ifneq ($(OS), WINDOWS)
+run-with-osgi : export JAVA_REPL_PORT =
 endif
 .PHONY : run-with-osgi
 run-with-osgi : $(dev_launcher)
@@ -236,7 +236,7 @@ cli-$(cli/VERSION)-linux_386.deb \
 comma:= ,
 
 $(dev_launcher) : assembly/.compile-dependencies | .maven-init .group-eval
-	+$(EVAL) $(call make-assembly, "dev-launcher"$(comma) "--"$(comma) "--without-persistence")
+	+$(EVAL) $(call make-assembly, "dev-launcher"$(comma) "--"$(comma) "--without-persistence"$(comma) "--with-osgi")
 
 .SECONDARY : assembly/.install.deb
 assembly/.install.deb : | .maven-init .group-eval
