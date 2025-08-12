@@ -9,7 +9,7 @@
   </parent>
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>assembly</artifactId>
-  <version>1.15.2</version>
+  <version>1.15.3-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>DAISY Pipeline 2 :: Assembly</name>
   <description>Builds the main distribution of the DAISY Pipeline 2.</description>
@@ -17,7 +17,6 @@
     <connection>scm:git:git@github.com:daisy/pipeline-assembly.git</connection>
     <url>scm:git:git@github.com:daisy/pipeline-assembly.git</url>
     <developerConnection>scm:git:git@github.com:daisy/pipeline-assembly.git</developerConnection>
-    <tag>v1.15.2</tag>
   </scm>
   <properties>
     <cli.version>2.3.0</cli.version>
@@ -71,7 +70,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>modules-bom</artifactId>
-        <version>1.15.2</version>
+        <version>1.15.3-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
