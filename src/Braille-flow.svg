@@ -1127,13 +1127,13 @@
          style="font-size:16px;text-decoration: underline;text-decoration-line: underline">Dotify</text>
     </a>
     <a
-       xlink:href="modules/braille/pef-utils/src/main/resources/xml/pef2text.xpl"
+       xlink:href="modules/braille/pef-utils/src/main/resources/xml/store.xpl"
        id="a6231"
        class="apidoc"
        transform="translate(326.6172,1057.7447)">
       <text
          id="text6229"
-         style="font-size:16px;text-decoration: underline;text-decoration-line: underline">pef:pef2text</text>
+         style="font-size:16px;text-decoration: underline;text-decoration-line: underline">px:pef-store</text>
     </a>
     <a
        xlink:href="modules/braille/braille-common/src/main/java/org/daisy/pipeline/braille/common/impl/CSSBlockTransform.java"
