@@ -372,14 +372,20 @@ website :
 
 .PHONY : serve-website publish-website clean-website
 serve-website publish-website clean-website :
-	exec("$(MAKE)", "-C", "website", "$(patsubst %-website,%,$@)");
+	exec(env("CLASSPATH", "$(addprefix $(ROOT_DIR)/,$(CLASSPATH))", \
+	         "MVN", "$(call eval-java, mvn(commandLineArgs);) --", \
+	         "MVN_LOCAL_REPOSITORY", "$(CURDIR)/$(MVN_LOCAL_REPOSITORY)"), \
+	     "$(MAKE)", "-C", "website", "$(patsubst %-website,%,$@)");
 
 # this dependency is also defined in website/Makefile, but we need to repeat it here to enable the transitive dependency below
 website serve-website publish-website : | $(addprefix website/target/maven/,javadoc doc sources xprocdoc)
 
 $(addprefix website/target/maven/,javadoc doc sources xprocdoc) : website/target/maven/.compile-dependencies
 	rm("$@"); \
-	exec("$(MAKE)", "-C", "website", "$(patsubst website/%,%,$@)");
+	exec(env("CLASSPATH", "$(addprefix $(ROOT_DIR)/,$(CLASSPATH))", \
+	         "MVN", "$(call eval-java, mvn(commandLineArgs);) --", \
+	         "MVN_LOCAL_REPOSITORY", "$(CURDIR)/$(MVN_LOCAL_REPOSITORY)"), \
+	     "$(MAKE)", "-C", "website", "$(patsubst website/%,%,$@)");
 
 .PHONY : dump-maven-cmd
 dump-maven-cmd :
