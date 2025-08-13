@@ -1,3 +1,12 @@
+v1.15.2
+==========
+
+Changes
+-------
+
+- New OBFL to braille script
+- Bugfixes
+
 v1.15.1
 =======
 

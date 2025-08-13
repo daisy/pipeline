@@ -25,10 +25,6 @@
 
 ## Saxon XPath functions ([`net.sf.saxon.lib.ExtensionFunctionDefinition`](https://www.saxonica.com/html/documentation9.8/javadoc/net/sf/saxon/lib/ExtensionFunctionDefinition.html))
 
-- [`{http://www.daisy.org/ns/pipeline/braille-css}parse-stylesheet`](java/org/daisy/pipeline/braille/css/saxon/impl/ParseStylesheetDefinition.java)
-
-  Parse a style sheet, see [XSLT documentation](resources/xml/library.xsl)
-
 - [`{http://www.daisy.org/ns/pipeline/braille-css}render-table-by`](java/org/daisy/pipeline/braille/css/saxon/impl/RenderTableByDefinition.java)
 
   Render a table as a (nested) list, see [XSLT documentation](resources/xml/library.xsl)

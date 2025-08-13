@@ -68,15 +68,7 @@
 
 ## XMLCalabash XProc steps ([`org.daisy.common.xproc.calabash.XProcStepProvider`](http://daisy.github.io/pipeline/api/org/daisy/common/xproc/calabash/XProcStepProvider.html))
 
-- [`{http://www.daisy.org/ns/pipeline/xproc/internal}pef2text`](java/org/daisy/pipeline/braille/pef/calabash/impl/PEF2TextStep.java)
-
-  Convert a PEF document into a textual (ASCII-based) format, see [XProc documentation](resources/xml/pef2text.xpl)
-
-- [`{http://www.daisy.org/ns/2008/pef}text2pef`](java/org/daisy/pipeline/braille/pef/calabash/impl/Text2PEFStep.java)
-
-  Convert an ASCII-based braille format into PEF, see [XProc documentation](resources/xml/text2pef.xpl)
-
-- [`{http://www.daisy.org/ns/2008/pef}validate`](java/org/daisy/pipeline/braille/pef/calabash/impl/ValidateStep.java)
+- [`{http://www.daisy.org/ns/pipeline/xproc}pef-validate`](java/org/daisy/pipeline/braille/pef/calabash/impl/ValidateStep.java)
 
   Validate a PEF document, see [XProc documentation](resources/xml/validate.xpl)
 
