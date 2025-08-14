@@ -81,8 +81,8 @@ public class DTBookInsertSyncPointsStep extends DefaultStep implements XProcStep
 		try {
 			new DTBookInsertSyncPoints()
 				.transform(
-					new XMLCalabashInputValue(sourcePipe),
-					new XMLCalabashOutputValue(resultPipe, runtime))
+					XMLCalabashInputValue.of(sourcePipe),
+					XMLCalabashOutputValue.of(resultPipe, runtime))
 				.run();
 		} catch (Throwable e) {
 			throw XProcStep.raiseError(e, step);

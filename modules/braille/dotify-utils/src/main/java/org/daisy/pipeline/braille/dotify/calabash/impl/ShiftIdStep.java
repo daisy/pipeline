@@ -110,8 +110,8 @@ public class ShiftIdStep extends DefaultStep implements XProcStep {
 			         new SaxonBuffer(runtime.getProcessor().getUnderlyingConfiguration()),
 			         false)
 			.transform(
-				new XMLCalabashInputValue(sourcePipe),
-				new XMLCalabashOutputValue(resultPipe, runtime))
+				XMLCalabashInputValue.of(sourcePipe),
+				XMLCalabashOutputValue.of(resultPipe, runtime))
 			.run(); }
 		catch (Throwable e) {
 			throw XProcStep.raiseError(e, step); }

@@ -152,10 +152,10 @@ public class AudioRearrangeStep extends DefaultStep implements XProcStep {
 		try {
 			new AudioRearrange()
 				.transform(
-					ImmutableMap.of(_SOURCE, new XMLCalabashInputValue(sourcePipe),
-					                _DESIRED, new XMLCalabashInputValue(desiredPipe)),
-					ImmutableMap.of(_RESULT, new XMLCalabashOutputValue(resultPipe, runtime),
-					                _TEMP_FILES, new XMLCalabashOutputValue(tempFilesPipe, runtime)))
+					ImmutableMap.of(_SOURCE, XMLCalabashInputValue.of(sourcePipe),
+					                _DESIRED, XMLCalabashInputValue.of(desiredPipe)),
+					ImmutableMap.of(_RESULT, XMLCalabashOutputValue.of(resultPipe, runtime),
+					                _TEMP_FILES, XMLCalabashOutputValue.of(tempFilesPipe, runtime)))
 				.run();
 		} catch (Throwable e) {
 			throw XProcStep.raiseError(e, step);

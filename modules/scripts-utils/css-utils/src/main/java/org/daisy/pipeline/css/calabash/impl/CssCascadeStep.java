@@ -169,8 +169,8 @@ public class CssCascadeStep extends DefaultStep implements XProcStep {
 						attributeName != null ? SaxonHelper.jaxpQName(attributeName) : null,
 						multipleAttrs
 					).transform(
-						new XMLCalabashInputValue(sourcePipe),
-						new XMLCalabashOutputValue(resultPipe, runtime)
+					    XMLCalabashInputValue.of(sourcePipe),
+						XMLCalabashOutputValue.of(resultPipe, runtime)
 					).run();
 					return; }
 			throw new XProcException(step, "No CSS inliner implementation found for medium " + medium); }

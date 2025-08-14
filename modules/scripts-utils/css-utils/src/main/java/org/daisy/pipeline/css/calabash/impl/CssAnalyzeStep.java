@@ -126,7 +126,7 @@ public class CssAnalyzeStep extends DefaultStep implements XProcStep {
 					params.put(e.getKey(), "" + e.getValue());
 			List<Medium> media = Medium.parseMultiple(getOption(_media, DEFAULT_MEDIUM));
 			inMemoryResolver.setContext(contextPipe);
-			Node doc = new XMLCalabashInputValue(sourcePipe).ensureSingleItem().asNodeIterator().next();
+			Node doc = XMLCalabashInputValue.of(sourcePipe).ensureSingleItem().asNodeIterator().next();
 			if (!(doc instanceof Document))
 				throw new IllegalArgumentException();
 			URI baseURI = new URI(doc.getBaseURI());
@@ -154,7 +154,7 @@ public class CssAnalyzeStep extends DefaultStep implements XProcStep {
 					continue;
 				params.put(v.getName(), v.getValue());
 			}
-			XMLStreamWriter writer = new XMLCalabashOutputValue(resultPipe, runtime).asXMLStreamWriter();
+			XMLStreamWriter writer = XMLCalabashOutputValue.of(resultPipe, runtime).asXMLStreamWriter();
 			writer.writeStartDocument();
 			writeStartElement(writer, c_param_set);
 			for (String p : params.keySet()) {

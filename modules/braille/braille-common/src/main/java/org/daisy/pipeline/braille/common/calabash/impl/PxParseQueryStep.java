@@ -54,8 +54,8 @@ public class PxParseQueryStep extends DefaultStep implements XProcStep {
 	@Override
 	public void run() throws SaxonApiException {
 		try {
-			marshallQuery(query(new XMLCalabashOptionValue(getOption(_QUERY)).toString()),
-			              new XMLCalabashOutputValue(result, runtime).asXMLStreamWriter());
+			marshallQuery(query(XMLCalabashOptionValue.of(getOption(_QUERY)).toString()),
+			              XMLCalabashOutputValue.of(result, runtime).asXMLStreamWriter());
 		} catch (Throwable e) {
 			throw XProcStep.raiseError(e, step);
 		}

@@ -155,7 +155,7 @@ public class PEF2PDFStep extends DefaultStep implements XProcStep {
 			}
 			logger.debug("Storing PEF to PDF using table: " + table);
 			new PEF2PDF(pdfFile, table).transform(
-				ImmutableMap.of(_SOURCE, new XMLCalabashInputValue(source)),
+				ImmutableMap.of(_SOURCE, XMLCalabashInputValue.of(source)),
 				ImmutableMap.of()
 			).run();
 			result.write(runtime.getProcessor().newDocumentBuilder().build(new StreamSource(cResultDocument(pdfFile.toURI().toString()))));

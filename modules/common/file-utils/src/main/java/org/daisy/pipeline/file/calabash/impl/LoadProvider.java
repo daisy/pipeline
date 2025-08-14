@@ -102,7 +102,7 @@ public class LoadProvider implements XProcStepProvider {
 					if (xmlParser != null) throw new RuntimeException(); // coding error
 					throw new TransformerException(new IllegalStateException("No XML parser found"));
 				}
-				new XMLCalabashOutputValue(result, runtime).asNodeConsumer().accept(doc);
+				XMLCalabashOutputValue.of(result, runtime).asNodeConsumer().accept(doc);
 			} catch (Throwable e) {
 				throw XProcStep.raiseError(e, step);
 			}

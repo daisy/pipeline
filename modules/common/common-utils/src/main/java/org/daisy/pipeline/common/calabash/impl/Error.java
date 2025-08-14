@@ -71,7 +71,7 @@ public class Error implements XProcStepProvider {
 				lastError = null;
 				new ErrorReporter(this::report)
 					.transform(
-						ImmutableMap.of(new QName("source"), new XMLCalabashInputValue(errorPipe)),
+						ImmutableMap.of(new QName("source"), XMLCalabashInputValue.of(errorPipe)),
 						ImmutableMap.of())
 					.run();
 				if (lastError != null)

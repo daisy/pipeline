@@ -98,8 +98,8 @@ public class ChunkerStep extends DefaultStep implements XProcStep {
 				getOption(MAX_CHUNK_SIZE, -1),
 				runtime.getProcessor().getUnderlyingConfiguration())
 			.transform(
-				new XMLCalabashInputValue(sourcePipe),
-				new XMLCalabashOutputValue(
+				XMLCalabashInputValue.of(sourcePipe),
+				XMLCalabashOutputValue.of(
 					new WritablePipe() {
 						private int count = 0;
 						public void write(XdmNode doc) {

@@ -97,8 +97,8 @@ public class ShiftObflMarkerStep extends DefaultStep implements XProcStep {
 		try {
 			new ShiftObflMarkerTransform()
 			.transform(
-				new XMLCalabashInputValue(sourcePipe),
-				new XMLCalabashOutputValue(resultPipe, runtime))
+				XMLCalabashInputValue.of(sourcePipe),
+				XMLCalabashOutputValue.of(resultPipe, runtime))
 			.run(); }
 		catch (Throwable e) {
 			throw XProcStep.raiseError(e, step); }
