@@ -44,7 +44,9 @@ element in the OPF namespace. If not specified, metadata is extracted from the H
         </p:documentation>
     </p:option>
 
-    <p:option name="temp-dir" required="true"/>
+    <p:option name="temp-dir" required="true" px:output="temp" px:type="anyDirURI">
+        <!-- directory used for temporary files -->
+    </p:option>
 
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
         <p:documentation>
