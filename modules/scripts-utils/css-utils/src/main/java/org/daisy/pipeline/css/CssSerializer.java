@@ -10,8 +10,10 @@ import cz.vutbr.web.css.Term;
 import cz.vutbr.web.css.TermFunction;
 import cz.vutbr.web.css.TermIdent;
 import cz.vutbr.web.css.TermInteger;
+import cz.vutbr.web.css.TermLength;
 import cz.vutbr.web.css.TermList;
 import cz.vutbr.web.css.TermNumber;
+import cz.vutbr.web.css.TermNumeric.Unit;
 import cz.vutbr.web.css.TermPair;
 import cz.vutbr.web.css.TermPercent;
 import cz.vutbr.web.css.TermString;
@@ -19,15 +21,15 @@ import cz.vutbr.web.css.TermURI;
 
 import org.daisy.common.file.URLs;
 
-public final class CssSerializer {
+public class CssSerializer {
 
-	private CssSerializer() {}
+	private static CssSerializer INSTANCE = new CssSerializer();
 
-	public static String toString(Term<?> term) {
-		return toString(term, t -> toString(t));
+	public static CssSerializer getInstance() {
+		return INSTANCE;
 	}
 
-	public static String toString(Term<?> term, Function<Term<?>,String> toStringFunction) {
+	public String toString(Term<?> term) {
 		if (term instanceof TermInteger) {
 			TermInteger integer = (TermInteger)term;
 			return "" + integer.getIntValue(); }
@@ -38,6 +40,18 @@ public final class CssSerializer {
 				return "" + value.intValue();
 			else
 				return "" + value; }
+		else if (term instanceof TermLength) {
+			TermLength length = (TermLength)term;
+			Double value = length.getValue().doubleValue();
+			Unit unit = length.getUnit();
+			StringBuilder s = new StringBuilder();
+			if (value == Math.floor(value))
+				s.append("" + value.intValue());
+			else
+				s.append("" + value);
+			if (unit != null)
+				s.append(unit.value());
+			return s.toString(); }
 		else if (term instanceof TermPercent) {
 			TermPercent percent = (TermPercent)term;
 			Double value = percent.getValue().doubleValue();
@@ -47,7 +61,7 @@ public final class CssSerializer {
 				return "" + value + "%"; }
 		else if (term instanceof TermList
 		         || term instanceof Declaration) {
-			String s = serializeTermList((List<Term<?>>)term, toStringFunction);
+			String s = serializeTermList((List<Term<?>>)term);
 			if (term instanceof TermFunction) {
 				TermFunction function = (TermFunction)term;
 				s = function.getFunctionName() + "(" + s + ")"; }
@@ -55,7 +69,7 @@ public final class CssSerializer {
 		else if (term instanceof TermPair) {
 			TermPair<?,?> pair = (TermPair<?,?>)term;
 			Object val = pair.getValue();
-			return "" + pair.getKey() + " " + (val instanceof Term ? toStringFunction.apply((Term<?>)val) : val.toString()); }
+			return "" + pair.getKey() + " " + (val instanceof Term ? toString((Term<?>)val) : val.toString()); }
 		else if (term instanceof TermURI) {
 			TermURI termURI = (TermURI)term;
 			URI uri = URLs.asURI(termURI.getValue());
@@ -72,11 +86,7 @@ public final class CssSerializer {
 			return term.toString().replaceAll("^[,/ ]+", "");
 	}
 
-	public static String serializeTermList(Collection<? extends Term<?>> termList) {
-		return serializeTermList(termList, t -> toString(t));
-	}
-
-	public static String serializeTermList(Collection<? extends Term<?>> termList, Function<Term<?>,String> toStringFunction) {
+	public String serializeTermList(Collection<? extends Term<?>> termList) {
 		String s = "";
 		for (Term<?> t : termList) {
 			if (!s.isEmpty()) {
@@ -86,7 +96,7 @@ public final class CssSerializer {
 					case COMMA:
 						s += ","; }
 				s += " "; }
-			s += toStringFunction.apply(t); }
+			s += toString(t); }
 		return s;
 	}
 }

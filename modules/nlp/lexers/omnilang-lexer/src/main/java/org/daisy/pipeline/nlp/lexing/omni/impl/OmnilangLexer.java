@@ -134,4 +134,21 @@ public class OmnilangLexer implements LexService {
 	public int getOverallQuality() {
 		return 5;
 	}
+
+	@Override
+	public int hashCode() {
+		return getName().hashCode();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (!(o instanceof LexService))
+			return false;
+		LexService that = (LexService)o;
+		if (!this.getName().equals(that.getName()))
+			return false;
+		return true;
+	}
 }

@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>dotify-utils</artifactId>
-  <version>6.4.1-SNAPSHOT</version>
+  <version>6.5.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: dotify-utils</name>
@@ -134,7 +134,8 @@
       org.daisy.pipeline.braille.dotify.impl.DotifyCSSExtension,
       org.daisy.pipeline.braille.dotify.impl.OBFLExtension,
       org.daisy.pipeline.braille.dotify.impl.PreTranslatedBrailleTranslatorProvider,
-      org.daisy.pipeline.braille.dotify.saxon.impl.ObflStyle$ObflStyleFunctionProvider
+      org.daisy.pipeline.braille.dotify.saxon.impl.ObflStyle$ObflStyleFunctionProvider,
+      org.daisy.pipeline.braille.dotify.saxon.impl.EmbossedMediumFunctions$Provider
     </expose-services>
   </properties>
   
@@ -188,9 +189,6 @@
               !org.daisy.common.spi,
               *
             </Import-Package>
-            <Provide-Capability>
-              xproc.step;name="{http://code.google.com/p/dotify/}obfl-to-pef"
-            </Provide-Capability>
           </instructions>
         </configuration>
       </plugin>

@@ -61,7 +61,7 @@ public class StringSetList extends AbstractList<Term<?>> implements Term<StringS
 		}
 		@Override
 		public String toString() {
-			return BrailleCssSerializer.toString(this);
+			return BrailleCssSerializer.getInstance().toString(this);
 		}
 		/**
 		 * Evaluate <code>attr()</code> and <code>content()</code> values.

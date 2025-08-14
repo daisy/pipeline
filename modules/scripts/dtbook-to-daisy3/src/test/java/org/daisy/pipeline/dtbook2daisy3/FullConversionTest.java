@@ -306,7 +306,7 @@ public class FullConversionTest extends AbstractTest implements DifferenceListen
 
 		Builder xprocInput = new XProcInput.Builder()
 			.withInput("source", Suppliers.ofInstance(source))
-			.withOption(new QName("output-dir"), outputDir.toURI().toString());
+			.withOption(new QName("result"), outputDir.toURI().toString());
 		if (audio) {
 			xprocInput = xprocInput
 				.withOption(new QName("audio"), "true")

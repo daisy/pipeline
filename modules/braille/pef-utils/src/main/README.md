@@ -11,7 +11,7 @@
 
 ## PEF tables ([`org.daisy.pipeline.braille.pef.TableProvider`](java/org/daisy/pipeline/braille/pef/TableProvider.java))
 
-- [`(id:...)`](java/org/daisy/pipeline/braille/pef/impl/BrailleUtilsTableCatalog.java)
+- [`(id:...)`](java/org/daisy/pipeline/braille/pef/impl/TableCatalog.java)
 
   Provides [PEF
   tables](https://mtmse.github.io/dotify.api/latest/javadoc/org/daisy/dotify/api/table/Table.html)
@@ -56,11 +56,11 @@
 
 ## Saxon XPath functions ([`net.sf.saxon.lib.ExtensionFunctionDefinition`](https://www.saxonica.com/html/documentation9.8/javadoc/net/sf/saxon/lib/ExtensionFunctionDefinition.html))
 
-- [`{http://www.daisy.org/ns/2008/pef}encode`](java/org/daisy/pipeline/braille/pef/saxon/impl/EncodeDefinition.java)
+- [`{http://www.daisy.org/ns/pipeline/functions}pef-encode`](java/org/daisy/pipeline/braille/pef/saxon/impl/EncodeDefinition.java)
 
   Encode a (Unicode) braille string using the specified character set, see [XSLT documentation](resources/xml/library.xsl)
 
-- [`{http://www.daisy.org/ns/2008/pef}decode`](java/org/daisy/pipeline/braille/pef/saxon/impl/DecodeDefinition.java)
+- [`{http://www.daisy.org/ns/pipeline/functions}pef-decode`](java/org/daisy/pipeline/braille/pef/saxon/impl/DecodeDefinition.java)
 
   Decode a braille string in the specified character set (to Unicode braille), see [XSLT documentation](resources/xml/library.xsl)
 

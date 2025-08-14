@@ -82,7 +82,7 @@ public class CSSStyledText implements Cloneable {
 	public String toString() {
 		String s = text;
 		if (style != null && !style.isEmpty())
-			s += "{" + BrailleCssSerializer.serializeDeclarationList(style) + "}";
+			s += "{" + BrailleCssSerializer.getInstance().serializeDeclarationList(style) + "}";
 		if (language != null && !"und".equals(language.toLanguageTag()))
 			s += "{" + language.toLanguageTag() + "}";
 		return s;

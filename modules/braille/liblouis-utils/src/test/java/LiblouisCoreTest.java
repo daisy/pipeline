@@ -13,7 +13,6 @@ import com.google.common.collect.ImmutableMap;
 
 import org.daisy.dotify.api.table.BrailleConverter;
 import org.daisy.dotify.api.table.Table;
-import org.daisy.dotify.api.table.TableCatalogService;
 
 import static org.daisy.common.file.URLs.asURI;
 import org.daisy.pipeline.braille.common.BrailleTranslator;
@@ -63,9 +62,6 @@ public class LiblouisCoreTest extends AbstractTest {
 	
 	@Inject
 	public LiblouisTableResolver resolver;
-	
-	@Inject
-	public TableCatalogService tableCatalog;
 	
 	private static final Logger messageBus = LoggerFactory.getLogger("JOB_MESSAGES");
 	
@@ -691,7 +687,6 @@ public class LiblouisCoreTest extends AbstractTest {
 		// (id: ...)
 		String id = table.getIdentifier();
 		assertEquals(table, tableProvider.get(query("(id:'" + id + "')")).iterator().next());
-		// assertEquals(table, tableCatalog.newTable(id));
 	}
 	
 	@Test//(expected=ComparisonFailure.class)

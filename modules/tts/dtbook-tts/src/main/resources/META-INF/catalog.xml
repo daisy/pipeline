@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
-  <uri name="http://www.daisy.org/pipeline/modules/dtbook-tts/library.xpl" uri="../xml/library.xpl"/>
-  <uri uri="../css/default-speech.scss" px:content-type="user-agent-stylesheet"
-                                        px:stylesheet-for-content-type="application/x-dtbook+xml"
-                                        px:stylesheet-for-media="speech"/>
-</catalog>

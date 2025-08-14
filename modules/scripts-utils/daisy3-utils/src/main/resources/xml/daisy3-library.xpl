@@ -32,5 +32,7 @@
     <p:import href="internal/audio-transcode.xpl"/>
     <p:import href="internal/update-links.xpl"/>
     <p:import href="internal/upgrade.xpl"/>
+    <p:import href="internal/tts/dtbook-to-ssml.xpl"/>
+    <p:import href="internal/tts/tts-for-dtbook.xpl"/>
 
 </p:library>

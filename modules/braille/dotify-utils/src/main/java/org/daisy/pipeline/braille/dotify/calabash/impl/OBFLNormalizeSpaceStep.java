@@ -70,8 +70,8 @@ public class OBFLNormalizeSpaceStep extends DefaultStep implements XProcStep {
 		try {
 			new OBFLSpaceNormalizer()
 			.transform(
-				new XMLCalabashInputValue(source),
-				new XMLCalabashOutputValue(result, runtime))
+				XMLCalabashInputValue.of(source),
+				XMLCalabashOutputValue.of(result, runtime))
 			.run(); }
 		catch (Throwable e) {
 			throw XProcStep.raiseError(e, step); }

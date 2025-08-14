@@ -149,7 +149,7 @@
 			<p:pipe step="main" port="source.in-memory"/>
 		</p:input>
 	</px:fileset-load>
-	<p:group name="dtbook-to-epub3">
+	<p:group name="dtbook-to-epub3" px:progress="1">
 		<p:output port="fileset" primary="true"/>
 		<p:output port="in-memory" sequence="true">
 			<p:pipe step="zedai-to-epub3" port="in-memory.out"/>
@@ -199,7 +199,7 @@
 		<p:identity name="dtbook-with-css"/>
 		<p:sink/>
 
-		<px:dtbook-to-zedai name="dtbook-to-zedai" px:message="Converting DTBook to ZedAI" px:progress="4/10">
+		<px:dtbook-to-zedai name="dtbook-to-zedai" px:message="Converting DTBook to ZedAI" px:progress=".2">
 			<p:input port="source.fileset">
 				<p:pipe step="main" port="source.fileset"/>
 			</p:input>
@@ -263,7 +263,7 @@
 			</p:otherwise>
 		</p:choose>
 
-		<px:zedai-to-epub3 name="zedai-to-epub3" process-css="false" px:message="Converting ZedAI to EPUB 3" px:progress="5/10">
+		<px:zedai-to-epub3 name="zedai-to-epub3" process-css="false" px:message="Converting ZedAI to EPUB 3" px:progress=".7">
 			<p:input port="in-memory.in">
 				<p:pipe step="zedai" port="in-memory"/>
 			</p:input>

@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<component name="generic-embossed-medium-provider">
+  <implementation class="GenericEmbossedMediumProvider"/>
+  <service>
+    <provide interface="org.daisy.pipeline.css.MediumProvider"/>
+  </service>
+</component>

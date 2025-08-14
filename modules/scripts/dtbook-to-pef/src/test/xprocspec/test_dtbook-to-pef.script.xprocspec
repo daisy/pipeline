@@ -943,10 +943,10 @@
         <x:option name="result" select="resolve-uri('ascii-table/output-dir',$temp-dir)"/>
         <x:option name="preview" select="resolve-uri('ascii-table/output-dir',$temp-dir)"/>
         <x:option name="temp-dir" select="resolve-uri('ascii-table/temp-dir',$temp-dir)"/>
-        <x:option name="output-file-format" select="'(table:&quot;com_braillo.BrailloTableProvider.TableType.BRAILLO_6DOT_031_01&quot;)
-                                                     (line-breaks:DOS)
-                                                     (page-breaks:&quot;---&quot;)
-                                                     (pad:BOTH)'"/>
+        <x:option name="output-file-format" select="'(-daisy-table: com_braillo\.BrailloTableProvider\.TableType\.BRAILLO_6DOT_031_01) AND
+                                                     (-daisy-line-breaks: DOS) AND
+                                                     (-daisy-page-breaks: \-\-\-) AND
+                                                     (-daisy-pad: BOTH)'"/>
       </x:call>
       <x:context label="brf">
         <x:document type="file" method="text" base-uri="temp-dir" href="ascii-table/output-dir/test_dtbook-to-pef.script.brf"/>
@@ -978,9 +978,9 @@
         <x:option name="result" select="resolve-uri('default-ascii-table/output-dir',$temp-dir)"/>
         <x:option name="preview" select="resolve-uri('default-ascii-table/output-dir',$temp-dir)"/>
         <x:option name="temp-dir" select="resolve-uri('default-ascii-table/temp-dir',$temp-dir)"/>
-        <x:option name="output-file-format" select="'(line-breaks:DOS)
-                                                     (page-breaks:&quot;---&quot;)
-                                                     (pad:BOTH)'"/>
+        <x:option name="output-file-format" select="'(-daisy-line-breaks: DOS) AND
+                                                     (-daisy-page-breaks: \-\-\-) AND
+                                                     (-daisy-pad: BOTH)'"/>
       </x:call>
       <x:context label="brf">
         <x:document type="file" method="text" base-uri="temp-dir" href="default-ascii-table/output-dir/test_dtbook-to-pef.script.brf"/>
@@ -1054,14 +1054,17 @@
     </x:expect>
   </x:scenario>
 
-  <x:scenario label="set duplex from Sass">
+  <x:scenario label="set parameter from Sass">
     <x:call step="px:dtbook-to-pef.script">
       <x:input port="source">
         <x:document type="inline">
           <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en-US" version="2005-3">
             <head>
               <style type="text/x-scss">
-                $duplex: false;
+                $skip-margin-top-of-page: true;
+                h1 {
+                  margin-top: 1
+                }
               </style>
             </head>
             <book>
@@ -1091,7 +1094,7 @@
             </meta>
           </head>
           <body>
-            <volume cols="40" rows="25" rowgap="0" duplex="false">
+            <volume cols="40" rows="25" rowgap="0" duplex="true">
               <section>
                 <page>
                   <row>⠎⠊⠍⠏⠇⠑⠀⠞⠑⠌</row>

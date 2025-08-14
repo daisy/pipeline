@@ -11,7 +11,7 @@
   </parent>
 
   <artifactId>zedai-utils</artifactId>
-  <version>1.2.4-SNAPSHOT</version>
+  <version>1.3.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: ZedAI Utilities</name>
@@ -36,6 +36,10 @@
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>css-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+       <artifactId>nlp-common</artifactId>
     </dependency>
   </dependencies>
   

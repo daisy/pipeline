@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <p:option name="page-width" required="false" select="()" cx:as="xs:string?" px:role="media-feature">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Page width</h2>
+            <p px:role="desc" xml:space="preserve">The width of the targeted medium.
+
+Sets the default page width, and affects media queries that use the 'width' and 'device-width' media
+features. The 'width' media feature describes the width of the targeted display area, i.e. the
+printable area of the page. The 'device-width' media feature describes the total width of the
+rendering surface, i.e. the page width.
+
+Note that the default page width may be overwritten with `@page` rules, but this does not
+affect media queries.
+
+The width may be specified in an absolute (`mm`, `cm`, `in`, ...) or cell-relative (`ch`)
+length. A dimension without a unit is interpreted as a multiple of the braille cell width.
+
+See the CSS specification for more info:
+
+- the [`@page`](http://braillespecs.github.io/braille-css/#h4_the-page-rule) rule
+- the [`size`](http://braillespecs.github.io/braille-css/#the-size-property) property
+- the [page dimensions media features](https://www.w3.org/TR/mediaqueries-4/#mf-dimensions)
+</p>
+        </p:documentation>
+        <p:pipeinfo>
+            <px:type>
+                <data type="string" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+                    <a:documentation xml:lang="en" xml:space="preserve">A length
+
+The syntax is as follows (described in terms of [CSS grammar](https://www.w3.org/TR/CSS21/grammar.html)):
+
+    length
+     : number unit?
+     ;
+    unit
+     : 'mm' | 'cm' | 'in' | 'px' | 'ch'
+     ;
+</a:documentation>
+                    <param name="pattern">^+?([0-9]*\\.)?[0-9]+([eE][+-]?[0-9]+)?(mm|cm|in|px|ch)?$</param>
+                </data>
+            </px:type>
+        </p:pipeinfo>
+    </p:option>
+
+    <p:option name="page-height" required="false" select="()" cx:as="xs:string?" px:role="media-feature">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Page height</h2>
+            <p px:role="desc" xml:space="preserve">The height of the targeted medium.
+
+Sets the default page height, and affects media queries that use the 'height' and 'device-height'
+media features. The 'height' media feature describes the height of the targeted display area,
+i.e. the printable area of the page. The 'device-height' media feature describes the total height of
+the rendering surface, i.e. the page height.
+
+The height may be specified in an absolute (`mm`, `cm`, `in`, ...) or cell-relative (`em`)
+length. A dimension without a unit is interpreted as a multiple of the braille cell height.
+
+See the CSS specification for more info:
+
+- the [`@page`](http://braillespecs.github.io/braille-css/#h4_the-page-rule) rule
+- the [`size`](http://braillespecs.github.io/braille-css/#the-size-property) property
+- the [page dimensions media features](https://www.w3.org/TR/mediaqueries-4/#mf-dimensions)
+</p>
+        </p:documentation>
+        <p:pipeinfo>
+            <px:type>
+                <data type="string" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+                    <a:documentation xml:lang="en" xml:space="preserve">A length
+
+The syntax is as follows (described in terms of [CSS grammar](https://www.w3.org/TR/CSS21/grammar.html)):
+
+    length
+     : number unit?
+     ;
+    unit
+     : 'mm' | 'cm' | 'in' | 'px' | 'em'
+     ;
+</a:documentation>
+                    <param name="pattern">^+?([0-9]*\\.)?[0-9]+([eE][+-]?[0-9]+)?(mm|cm|in|px|em)?$</param>
+                </data>
+            </px:type>
+        </p:pipeinfo>
+    </p:option>
+
+    <p:option name="duplex" required="false" select="()" cx:as="xs:boolean?" px:role="media-feature">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Duplex</h2>
+            <p px:role="desc" xml:space="preserve">Whether to print on both sides of the leaves.
+
+Sets the number of printed sides per leaf, and affects media queries that use the '-daisy-duplex'
+media feature.</p>
+        </p:documentation>
+    </p:option>
+
+    <p:option name="saddle-stitch" required="false" select="()" cx:as="xs:boolean?" px:role="media-feature">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Saddle stitch (folio binding)</h2>
+            <p px:role="desc" xml:space="preserve">Whether the targeted medium is bound in folios.
+
+In this mode, sheets of paper are folded once to produce two leaves (four pages). This option
+affects media queries that use the '-daisy-saddle-stitch' media feature.</p>
+        </p:documentation>
+    </p:option>
+
+</p:declare-step>

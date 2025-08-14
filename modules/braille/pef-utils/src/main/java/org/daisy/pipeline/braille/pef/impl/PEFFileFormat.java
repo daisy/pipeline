@@ -1,37 +1,47 @@
 package org.daisy.pipeline.braille.pef.impl;
 
 import java.io.OutputStream;
-import java.util.Collections;
 
-import com.google.common.base.Optional;
-
+import org.daisy.dotify.api.embosser.EmbosserFeatures;
 import org.daisy.dotify.api.embosser.EmbosserWriter;
 import org.daisy.dotify.api.embosser.FileFormat;
 import org.daisy.dotify.api.table.Table;
 import org.daisy.dotify.api.table.TableFilter;
 
-import org.daisy.pipeline.braille.common.Query;
-import org.daisy.pipeline.braille.common.Query.MutableQuery;
-import static org.daisy.pipeline.braille.common.Query.util.mutableQuery;
-import org.daisy.pipeline.braille.pef.FileFormatProvider;
-
-import org.osgi.service.component.annotations.Component;
-
 public class PEFFileFormat implements FileFormat {
 
-	private PEFFileFormat() {}
+	private boolean duplexEnabled = true;
+	private boolean saddleStitchEnabled = false;
 
-	public final static PEFFileFormat INSTANCE = new PEFFileFormat();
+	public PEFFileFormat() {}
 
 	public Object getProperty(String key) {
 		throw new UnsupportedOperationException();
 	}
 
 	public Object getFeature(String key) {
-		throw new IllegalArgumentException("Unsupported feature: " + key);
+		if (EmbosserFeatures.DUPLEX.equals(key))
+			return duplexEnabled;
+		else if (EmbosserFeatures.SADDLE_STITCH.equals(key))
+			return saddleStitchEnabled;
+		return null;
 	}
 
 	public void setFeature(String key, Object value) {
+		if (EmbosserFeatures.DUPLEX.equals(key))
+			try {
+				duplexEnabled = (Boolean)value;
+				return;
+			} catch (ClassCastException e) {
+				throw new IllegalArgumentException("Unsupported value for duplex: " + value, e);
+			}
+		else if (EmbosserFeatures.SADDLE_STITCH.equals(key))
+			try {
+				saddleStitchEnabled = (Boolean)value;
+				return;
+			} catch (ClassCastException e) {
+				throw new IllegalArgumentException("Unsupported value for saddle stitch: " + value, e);
+			}
 		throw new IllegalArgumentException("Unsupported feature: " + key);
 	}
 
@@ -77,22 +87,5 @@ public class PEFFileFormat implements FileFormat {
 		// before we can implement this method, the EmbosserWriter API needs to be enhanced if we
 		// want to retain the PEF metadata.
 		throw new UnsupportedOperationException();
-	}
-
-	@Component(
-		name = "org.daisy.pipeline.braille.pef.impl.PEFFileFormat$Provider",
-		service = { FileFormatProvider.class }
-	)
-	public static class Provider implements FileFormatProvider {
-
-		public Iterable<FileFormat> get(Query query) {
-			final MutableQuery q = mutableQuery(query);
-			q.removeAll("document-locale");
-			if (q.containsKey("format") && "pef".equalsIgnoreCase(q.removeOnly("format").getValue().get()) && q.isEmpty())
-				return Collections.singleton(PEFFileFormat.INSTANCE);
-			return empty;
-		}
-
-		private final static Iterable<FileFormat> empty = Optional.<FileFormat>absent().asSet();
 	}
 }

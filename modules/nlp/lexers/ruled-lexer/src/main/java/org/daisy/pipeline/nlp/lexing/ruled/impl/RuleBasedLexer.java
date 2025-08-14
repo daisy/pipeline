@@ -268,6 +268,23 @@ public class RuleBasedLexer implements LexService {
 		return -1; //cannot handle all the languages
 	}
 
+	@Override
+	public int hashCode() {
+		return getName().hashCode();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (!(o instanceof LexService))
+			return false;
+		LexService that = (LexService)o;
+		if (!this.getName().equals(that.getName()))
+			return false;
+		return true;
+	}
+
 	private static Set<String> okLanguages;
 	static {
 		okLanguages = new HashSet<String>();

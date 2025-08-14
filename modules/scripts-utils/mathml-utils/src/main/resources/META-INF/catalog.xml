@@ -10,5 +10,7 @@
 	<uri name="http://www.daisy.org/pipeline/modules/mathml-utils/mathml3-content.rng" uri="../xml/mathml3/mathml3-content.rng"/>
 	<uri name="http://www.daisy.org/pipeline/modules/mathml-utils/mathml3-presentation.rng" uri="../xml/mathml3/mathml3-presentation.rng"/>
 
+	<uri name="http://www.daisy.org/pipeline/modules/mathml-utils/library.xpl" uri="../xml/xproc/library.xpl"/>
+
 </catalog>
 

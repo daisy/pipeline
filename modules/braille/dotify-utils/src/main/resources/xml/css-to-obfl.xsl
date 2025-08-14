@@ -8,7 +8,6 @@
                 xmlns:functx="http://www.functx.com"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
-                xmlns:pef="http://www.daisy.org/ns/2008/pef"
                 xmlns:obfl="http://www.daisy.org/ns/2011/obfl"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                 xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
@@ -20,6 +19,7 @@
     
     <xsl:include href="http://www.daisy.org/pipeline/modules/common-utils/library.xsl"/>
     <xsl:include href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xsl"/>
+    <xsl:include href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xsl"/>
     <xsl:include href="marker-reference.xsl"/>
     
     <xsl:param name="document-locale" as="xs:string" required="yes"/>
@@ -393,7 +393,7 @@
                                         </xsl:variable>
                                         <xsl:variable name="volume-area-page-style" as="xs:string?" select="s:get($volume-area-style,'@page')"/>
                                         <xsl:variable name="default-page-style" as="xs:string" select="($volume-area-page-style,$default-page-style)[1]"/>
-                                        <xsl:variable name="default-page-counter-name" as="xs:string" select="concat($space,'-page')"/>
+                                        <xsl:variable name="default-page-counter-name" as="xs:string" select="concat('--',$space,'-page')"/>
                                         <xsl:variable name="volume-area-content" as="array(element()*)">
                                             <!-- no xsl:array in XSLT 3.0, so using this convoluted xsl:map workaround -->
                                             <xsl:variable name="groups" as="map(xs:integer,map(xs:integer,element()*))">
@@ -2277,7 +2277,7 @@
                   match="css:box[@type='block']/@css:_obfl-underline">
         <xsl:attribute name="underline-pattern" select="if ($braille-charset-table='')
                                                         then .
-                                                        else pef:encode(concat('(id:&quot;',$braille-charset-table,'&quot;)'),.)"/>
+                                                        else pf:pef-encode(concat('(id:&quot;',$braille-charset-table,'&quot;)'),.)"/>
     </xsl:template>
     
     <xsl:template mode="block-attr assert-nil-attr"
@@ -2592,7 +2592,7 @@
             <xsl:otherwise>
                 <leader pattern="{if ($braille-charset-table='')
                                   then @pattern
-                                  else pef:encode(concat('(id:&quot;',$braille-charset-table,'&quot;)'),@pattern)}"
+                                  else pf:pef-encode(concat('(id:&quot;',$braille-charset-table,'&quot;)'),@pattern)}"
                         position="{(@position,'100%')[1]}"
                         align="{(@alignment,'right')[1]}"/>
             </xsl:otherwise>

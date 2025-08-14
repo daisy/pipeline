@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.daisy.pipeline.modules</groupId>
+    <artifactId>modules-parent</artifactId>
+    <version>1.15.3-SNAPSHOT</version>
+    <relativePath>../../parent</relativePath>
+  </parent>
+
+  <version>1.3.1-SNAPSHOT</version>
+  <artifactId>tts-adapter-google</artifactId>
+  <packaging>bundle</packaging>
+
+  <name>DAISY Pipeline 2 module :: TTS Adapter for Google Cloud TTS</name>
+  <description>Implementation of the TTS API for the Google Cloud TTS</description>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>tts-common</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>saxon-he</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+    </dependency>
+    <!-- test dependencies -->
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>tts-mocks</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.tts.google.impl.GoogleTTSService
+    </expose-services>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <configuration>
+          <instructions>
+            <Import-Package>
+              net.sf.saxon.*;version="${saxon.versionRange}",
+              !org.daisy.common.spi,
+              *
+            </Import-Package>
+          </instructions>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <systemPropertyVariables>
+            <org.daisy.pipeline.tts.google.address>http://localhost:8080</org.daisy.pipeline.tts.google.address>
+            <org.daisy.pipeline.tts.google.apikey>mykey</org.daisy.pipeline.tts.google.apikey>
+          </systemPropertyVariables>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

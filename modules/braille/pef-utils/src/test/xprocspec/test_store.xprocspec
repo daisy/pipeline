@@ -31,7 +31,7 @@
       </x:input>
       <x:option name="pef-href" select="resolve-uri('test_02/pef_3.pef',$temp-dir)"/>
       <x:option name="output-dir" select="resolve-uri('test_02/',$temp-dir)"/>
-      <x:option name="file-format" select="'(table:&quot;org.daisy.braille.impl.table.DefaultTableProvider.TableType.EN_US&quot;)'"/>
+      <x:option name="medium" select="'(table: org\.daisy\.braille\.impl\.table\.DefaultTableProvider\.TableType\.EN_US)'"/>
       <x:option name="name-pattern" select="'pef_3-{}'"/>
     </x:call>
     <x:context label="result fileset">
@@ -54,9 +54,9 @@
       <x:option name="pef-href" select="resolve-uri('test_03/pef_3.pef',$temp-dir)"/>
       <x:option name="output-dir" select="resolve-uri('test_03/',$temp-dir)"/>
       <x:option name="name-pattern" select="'pef_3-{}'"/>
-      <x:option name="file-format" select="'(line-breaks:DOS)
-                                            (page-breaks:&quot;---&quot;)
-                                            (pad:BOTH)'"/>
+      <x:option name="medium" select="'(line-breaks: DOS) AND
+                                       (page-breaks: \-\-\-) AND
+                                       (pad: BOTH)'"/>
     </x:call>
     <x:context label="result file">
       <x:document type="file" method="text" base-uri="temp-dir" href="test_03/pef_3-1.brf"/>
@@ -74,10 +74,10 @@
       <x:option name="pef-href" select="resolve-uri('test_04/pef_3.pef',$temp-dir)"/>
       <x:option name="output-dir" select="resolve-uri('test_04/',$temp-dir)"/>
       <x:option name="name-pattern" select="'pef_3-{}'"/>
-      <x:option name="file-format" select="'(table:&quot;com_braillo.BrailloTableProvider.TableType.BRAILLO_6DOT_031_01&quot;)
-                                            (line-breaks:DOS)
-                                            (page-breaks:&quot;---&quot;)
-                                            (pad:BOTH)'"/>
+      <x:option name="medium" select="'(table: com_braillo\.BrailloTableProvider\.TableType\.BRAILLO_6DOT_031_01) AND
+                                       (line-breaks: DOS) AND
+                                       (page-breaks: \-\-\-) AND
+                                       (pad: BOTH)'"/>
     </x:call>
     <x:context label="result file">
       <x:document type="file" method="text" base-uri="temp-dir" href="test_04/pef_3-1.brf"/>
@@ -89,7 +89,7 @@
 
   <x:scenario label="test_05">
     <x:documentation>
-      Tests that a custom file format can be specified using the "file-format" and "pad" options.
+      Tests that a custom file format can be specified using the "medium" option.
     </x:documentation>
     <x:call step="px:pef-store">
       <x:input port="source">
@@ -110,10 +110,10 @@
           </pef>
         </x:document>
       </x:input>
-      <x:option name="file-format" select="'(line-breaks:UNIX)
-                                            (page-breaks:&quot;---&quot;)
-                                            (table:&quot;org.daisy.braille.impl.table.DefaultTableProvider.TableType.EN_US&quot;)
-                                            (pad:BOTH)'"/>
+      <x:option name="medium" select="'(line-breaks: UNIX) AND
+                                       (page-breaks: \-\-\-) AND
+                                       (table: org\.daisy\.braille\.impl\.table\.DefaultTableProvider\.TableType\.EN_US) AND
+                                       (pad: BOTH)'"/>
       <x:option name="output-dir" select="resolve-uri('test_05/', $temp-dir)"/>
       <x:option name="single-volume-name" select="'text'"/>
     </x:call>
@@ -127,7 +127,7 @@
   
   <x:scenario label="test_06">
     <x:documentation>
-      Tests the "blank-last-page" feature of the "file-format" option.
+      Tests the "blank-last-page" feature of the "medium" option.
     </x:documentation>
     <x:call step="px:pef-store">
       <x:input port="source">
@@ -148,11 +148,11 @@
           </pef>
         </x:document>
       </x:input>
-      <x:option name="file-format" select="'(line-breaks:UNIX)
-                                            (page-breaks:&quot;---&quot;)
-                                            (table:&quot;org.daisy.braille.impl.table.DefaultTableProvider.TableType.EN_US&quot;)
-                                            (pad:BOTH)
-                                            (blank-last-page)'"/>
+      <x:option name="medium" select="'(line-breaks: UNIX) AND
+                                       (page-breaks: \-\-\-) AND
+                                       (table: org\.daisy\.braille\.impl\.table\.DefaultTableProvider\.TableType\.EN_US) AND
+                                       (pad: BOTH) AND
+                                       (blank-last-page)'"/>
       <x:option name="output-dir" select="resolve-uri('test_06/', $temp-dir)"/>
       <x:option name="single-volume-name" select="'text'"/>
     </x:call>
@@ -166,7 +166,7 @@
 
   <x:scenario label="test_07">
     <x:documentation>
-      Tests the "sheets-multiple-of-two" feature of the "file-format" option.
+      Tests the "sheets-multiple-of-two" feature of the "medium" option.
     </x:documentation>
     <x:call step="px:pef-store">
       <x:input port="source">
@@ -184,11 +184,11 @@
           </pef>
         </x:document>
       </x:input>
-      <x:option name="file-format" select="'(line-breaks:UNIX)
-                                            (page-breaks:&quot;---&quot;)
-                                            (table:&quot;org.daisy.braille.impl.table.DefaultTableProvider.TableType.EN_US&quot;)
-                                            (pad:BOTH)
-                                            (sheets-multiple-of-two)'"/>
+      <x:option name="medium" select="'(line-breaks: UNIX) AND
+                                       (page-breaks: \-\-\-) AND
+                                       (table: org\.daisy\.braille\.impl\.table\.DefaultTableProvider\.TableType\.EN_US) AND
+                                       (pad: BOTH) AND
+                                       (sheets-multiple-of-two)'"/>
       <x:option name="output-dir" select="resolve-uri('test_07/', $temp-dir)"/>
       <x:option name="single-volume-name" select="'text'"/>
     </x:call>

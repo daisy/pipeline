@@ -20,7 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Component(
-	name = "TextTransform",
+	name = "pf:text-transform",
 	service = { ExtensionFunctionProvider.class }
 )
 public class TextTransformDefinition extends ReflexiveExtensionFunctionProvider {

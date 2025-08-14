@@ -193,10 +193,10 @@
     <!--=========================================================================-->
     <!-- CSS INLINING                                                            -->
     <!--=========================================================================-->
-    <p:choose>
+    <p:choose px:progress=".1">
         <p:when test="$audio='true' and $process-css='true'">
             <p:sink/>
-            <px:css-speech-cascade content-type="application/z3998-auth+xml" name="cascade">
+            <px:css-speech-cascade content-type="application/z3998-auth+xml" name="cascade" px:progress="1">
                 <p:input port="source.fileset">
                     <p:pipe step="load-zedai" port="result.fileset"/>
                 </p:input>
@@ -252,7 +252,7 @@
         </p:input>
     </px:fileset-update>
 
-    <px:zedai-to-html chunk="true" name="zedai-to-html">
+    <px:zedai-to-html chunk="true" name="zedai-to-html" px:progress=".2">
         <p:input port="in-memory.in">
             <p:pipe step="fileset-with-css" port="result.in-memory"/>
         </p:input>
@@ -272,7 +272,7 @@
         </p:input>
     </px:epub3-safe-uris>
 
-    <px:html-to-epub3 name="html-to-epub3" skip-cleanup="true" process-css="false">
+    <px:html-to-epub3 name="html-to-epub3" skip-cleanup="true" process-css="false" px:progress=".7">
         <p:input port="input.in-memory">
             <p:pipe step="safe-uris" port="result.in-memory"/>
         </p:input>

@@ -67,7 +67,7 @@ public class LogError implements XProcStepProvider {
 			try {
 				new ErrorReporter(e -> log(severity, e))
 					.transform(
-						ImmutableMap.of(new QName("source"), new XMLCalabashInputValue(errorPipe)),
+						ImmutableMap.of(new QName("source"), XMLCalabashInputValue.of(errorPipe)),
 						ImmutableMap.of())
 					.run();
 			} catch (Throwable e) {

@@ -505,13 +505,13 @@ class CounterStyleImpl implements CounterStyle {
 
 	private static TermIdent readSingleIdent(String property, List<Term<?>> terms) throws IllegalArgumentException {
 		if (terms.size() != 1 || !(terms.get(0) instanceof TermIdent))
-			throw new IllegalArgumentException("Invalid " + property + ": " + CssSerializer.serializeTermList(terms));
+			throw new IllegalArgumentException("Invalid " + property + ": " + CssSerializer.getInstance().serializeTermList(terms));
 		return (TermIdent)terms.get(0);
 	}
 
 	private static TermString readSingleString(String property, List<Term<?>> terms) throws IllegalArgumentException {
 		if (terms.size() != 1 || !(terms.get(0) instanceof TermString))
-			throw new IllegalArgumentException("Invalid " + property + ": " + CssSerializer.serializeTermList(terms));
+			throw new IllegalArgumentException("Invalid " + property + ": " + CssSerializer.getInstance().serializeTermList(terms));
 		return (TermString)terms.get(0);
 	}
 

@@ -76,7 +76,7 @@ public class VoiceFamilyList extends AbstractList<Term<?>> implements TermList {
 				}
 			}
 			if (!extra) {
-				String oldSyntax = CssSerializer.serializeTermList(l);
+				String oldSyntax = CssSerializer.getInstance().serializeTermList(l);
 				l.clear();
 				if (age != null && gender == null) {
 					// Handle age without gender:
@@ -87,7 +87,7 @@ public class VoiceFamilyList extends AbstractList<Term<?>> implements TermList {
 				} else {
 					l.add(new VoiceFamily(name, age, gender, null, null));
 				}
-				logger.warn("Use `font-family: " + CssSerializer.serializeTermList(l)
+				logger.warn("Use `font-family: " + CssSerializer.getInstance().serializeTermList(l)
 				            + "` instead of `font-family: " + oldSyntax + "`");
 			}
 		}
@@ -120,7 +120,7 @@ public class VoiceFamilyList extends AbstractList<Term<?>> implements TermList {
 
 	@Override
 	public String toString() {
-		return CssSerializer.toString(this);
+		return CssSerializer.getInstance().toString(this);
 	}
 
 	@Override

@@ -10,7 +10,6 @@
                 xmlns:c="http://www.w3.org/ns/xproc-step"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                xmlns:map="http://www.w3.org/2005/xpath-functions/map"
                 exclude-inline-prefixes="#all"
                 type="px:html-to-pef" name="main">
     
@@ -57,6 +56,11 @@
     <p:option name="stylesheet" select="''"/>
     <p:option name="stylesheet-parameters" select="map{}"/> <!-- (map(xs:string,item()) | xs:string)* -->
     <p:option name="transform" select="'(translator:liblouis)(formatter:dotify)'"/>
+    <p:option name="medium" select="'embossed'"> <!-- (xs:string | map(xs:string,item()) | item())* -->
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>The target medium</p>
+        </p:documentation>
+    </p:option>
     <p:option name="include-obfl" select="'false'" cx:as="xs:string"/>
     
     <!-- Empty temporary directory dedicated to this conversion -->
@@ -167,7 +171,7 @@
     </p:variable>
 
     <!-- Parse transform query to a c:param-set -->
-    <px:parse-query name="parsed-transform-query">
+    <px:parse-query name="transform-query">
         <p:with-option name="query" select="$transform"/>
     </px:parse-query>
     <p:sink/>
@@ -188,14 +192,8 @@
     <px:css-cascade name="html-with-css" px:message="Applying style sheets" px:progress=".12"
                     include-user-agent-stylesheet="true" content-type="application/xhtml+xml">
         <p:with-option name="user-stylesheet" select="$stylesheet"/>
+        <p:with-option name="media" select="$medium"/>
         <p:with-option name="parameters" select="$parameter-map"/>
-        <p:with-option name="media"
-                       select="concat(
-                                 'embossed',
-                                 ' AND (width: ',($parameter-map('page-width'),40)[1],')',
-                                 ' AND (height: ',($parameter-map('page-height'),25)[1],')',
-                                 ' AND (-daisy-duplex: ',if ($parameter-map('duplex')) then '1' else '0',')'
-                                 )"/>
         <p:input port="parameters">
             <p:empty/>
         </p:input>
@@ -207,11 +205,8 @@
     <p:choose px:progress=".10">
         <p:when px:message="Transforming MathML" test="//math:math or
                                                        //html:object[@type='application/mathml+xml']">
-            <p:variable name="lang" select="(/*/@xml:lang,/*/@lang,'und')[1]">
+            <p:variable name="document-locale" select="concat('(document-locale:',(/*/@xml:lang,/*/@lang,'und')[1],')')">
                 <p:pipe step="html" port="result"/>
-            </p:variable>
-            <p:variable name="locale-query" select="concat('(locale:',(//c:param[@name='locale']/@value,$lang)[1],')')">
-                <p:pipe step="parsed-transform-query" port="result"/>
             </p:variable>
             <p:label-elements match="html:object[@data]" attribute="data" replace="true"
                               label="resolve-uri(@data,pf:html-base-uri(.))"/>
@@ -236,8 +231,13 @@
                 <p:choose px:progress="1">
                     <p:when test="/math:math">
                         <px:transform px:progress="1">
-                            <p:with-option name="query" select="concat('(input:mathml)',$locale-query)"/>
+                            <p:with-option name="query" select="('(input:mathml)',
+                                                                 //c:param[@name=('locale','math-code','math-translator')],
+                                                                 $document-locale)">
+                                <p:pipe step="transform-query" port="result"/>
+                            </p:with-option>
                             <p:with-param port="parameters" name="temp-dir" select="$temp-dir"/>
+                            <p:with-param port="parameters" name="medium" select="$medium"/>
                             <p:input port="parameters">
                                 <p:pipe step="html-with-css" port="result.parameters"/>
                             </p:input>
@@ -255,10 +255,9 @@
     </p:choose>
     
     <p:choose name="transform" px:progress=".76">
-        <p:variable name="lang" select="(/*/@xml:lang,/*/@lang,'und')[1]">
+        <p:variable name="document-locale" select="concat('(document-locale:',(/*/@xml:lang,/*/@lang,'und')[1],')')">
             <p:pipe step="html" port="result"/>
         </p:variable>
-        <p:variable name="locale-query" select="concat('(document-locale:',$lang,')')"/>
         <p:when test="$include-obfl='true'">
             <p:output port="result" primary="true" sequence="true"/>
             <p:output port="obfl" sequence="true">
@@ -273,9 +272,13 @@
                     <p:output port="status">
                         <p:inline><d:status result="ok"/></p:inline>
                     </p:output>
-                    <p:variable name="transform-query" select="concat('(input:css)(output:obfl)',$transform,$locale-query)"/>
-                    <px:transform px:progress="1" px:message-severity="DEBUG" px:message="px:transform query={$transform-query}">
-                        <p:with-option name="query" select="$transform-query"/>
+                    <px:transform px:progress="1">
+                        <p:with-option name="query" select="('(input:css)(output:obfl)',
+                                                             //c:param[not(@name=('math-code','math-translator'))],
+                                                             $document-locale)">
+                            <p:pipe step="transform-query" port="result"/>
+                        </p:with-option>
+                        <p:with-param port="parameters" name="medium" select="$medium"/>
                         <p:with-param port="parameters" name="temp-dir" select="$temp-dir"/>
                         <p:input port="parameters">
                             <p:pipe step="html-with-css" port="result.parameters"/>
@@ -306,11 +309,9 @@
                     <p:output port="status">
                         <p:pipe step="try-obfl" port="status"/>
                     </p:output>
-                    <p:variable name="transform-query" select="'(input:obfl)(input:text-css)(output:pef)'"/>
                     <p:for-each px:progress="1">
-                        <p:identity px:message="Transforming from OBFL to PEF"/>
-                        <px:transform px:progress="1" px:message-severity="DEBUG" px:message="px:transform query={$transform-query}">
-                            <p:with-option name="query" select="$transform-query"/>
+                        <px:transform query="(input:obfl)(input:text-css)(output:pef)"
+                                      px:message="Transforming from OBFL to PEF" px:progress="1">
                             <p:with-param port="parameters" name="temp-dir" select="$temp-dir"/>
                             <p:input port="parameters">
                                 <p:pipe step="html-with-css" port="result.parameters"/>
@@ -360,15 +361,19 @@
             <p:output port="status">
                 <p:pipe step="try-pef" port="status"/>
             </p:output>
-            <p:variable name="transform-query" select="concat('(input:css)(output:pef)',$transform,$locale-query)"/>
-            <p:try name="try-pef" px:progress="1" px:message-severity="DEBUG" px:message="px:transform query={$transform-query}">
+            <p:try name="try-pef" px:progress="1">
                 <p:group>
                     <p:output port="result" primary="true"/>
                     <p:output port="status">
                         <p:inline><d:status result="ok"/></p:inline>
                     </p:output>
                     <px:transform px:progress="1">
-                        <p:with-option name="query" select="$transform-query"/>
+                        <p:with-option name="query" select="('(input:css)(output:pef)',
+                                                             //c:param[not(@name=('math-code','math-translator'))],
+                                                             $document-locale)">
+                            <p:pipe step="transform-query" port="result"/>
+                        </p:with-option>
+                        <p:with-param port="parameters" name="medium" select="$medium"/>
                         <p:with-param port="parameters" name="temp-dir" select="$temp-dir"/>
                         <p:input port="parameters">
                             <p:pipe step="html-with-css" port="result.parameters"/>

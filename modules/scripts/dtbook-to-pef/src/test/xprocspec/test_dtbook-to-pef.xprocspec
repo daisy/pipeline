@@ -26,11 +26,9 @@
           </dtbook>
         </x:document>
       </x:input>
-      <x:param port="parameters" name="page-width" select="35"/>
-      <x:param port="parameters" name="page-height" select="20"/>
+      <x:option name="medium" select="'(width: 35) AND (height: 20) AND (-daisy-duplex)'"/>
       <x:param port="parameters" name="toc-depth" select="0"/>
       <!--
-      <x:param port="parameters" name="page-height" select="20"/>
       <x:param port="parameters" name="include-line-groups" select="true()"/>
       <x:param port="parameters" name="include-captions" select="true()"/>
       <x:param port="parameters" name="accented-letters" select="true()"/>
@@ -40,7 +38,6 @@
       <x:param port="parameters" name="footnotes-placement" select="''"/>
       <x:param port="parameters" name="maximum-number-of-sheets" select="70"/>
       <x:param port="parameters" name="rear-cover-placement" select="''"/>
-      <x:param port="parameters" name="duplex" select="true()"/>
       <x:param port="parameters" name="include-note-references" select="true()"/>
       <x:param port="parameters" name="number-of-sheets" select="50"/>
       <x:param port="parameters" name="main-document-language" select="''"/>

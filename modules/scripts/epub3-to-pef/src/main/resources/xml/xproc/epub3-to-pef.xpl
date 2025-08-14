@@ -2,11 +2,14 @@
 <p:declare-step type="px:epub3-to-pef.script" version="1.0"
                 xmlns:p="http://www.w3.org/ns/xproc"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:pef="http://www.daisy.org/ns/2008/pef"
                 xmlns:ocf="urn:oasis:names:tc:opendocument:xmlns:container"
                 xmlns:dc="http://purl.org/dc/elements/1.1/"
                 xmlns:opf="http://www.idpf.org/2007/opf"
+                xmlns:map="http://www.w3.org/2005/xpath-functions/map"
                 exclude-inline-prefixes="#all"
                 name="main"
                 px:input-filesets="epub3"
@@ -39,7 +42,7 @@ You may alternatively use the EPUB package document (the OPF-file) if your input
     <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
         <!-- when `include-obfl` is set to true, the conversion may fail but still output a document
              on the "obfl" port -->
-        <p:pipe step="convert" port="status"/>
+        <p:pipe step="convert-and-store" port="status"/>
     </p:output>
 
     <p:option name="stylesheet">
@@ -139,6 +142,16 @@ even though the provided CSS is more specific.
             px:fileset-load
         </p:documentation>
     </p:import>
+    <cx:import href="http://www.daisy.org/pipeline/modules/css-utils/library.xsl" type="application/xslt+xml">
+        <p:documentation>
+            pf:css-parse-medium
+        </p:documentation>
+    </cx:import>
+    <cx:import href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xsl" type="application/xslt+xml">
+        <p:documentation>
+            pf:pef-assert-embossable
+        </p:documentation>
+    </cx:import>
     
     <!-- ================================================= -->
     <!-- Create a <c:param-set/> of the options            -->
@@ -161,6 +174,7 @@ even though the provided CSS is more specific.
                                            include-obfl
                                            result
                                            pef
+                                           pdf
                                            preview
                                            obfl
                                            temp-dir">
@@ -185,64 +199,83 @@ even though the provided CSS is more specific.
     </px:fileset-load>
     <p:sink/>
     
-    <!-- ============= -->
-    <!-- EPUB 3 TO PEF -->
-    <!-- ============= -->
-    <p:identity>
-        <p:input port="source">
-            <p:pipe port="fileset.out" step="load"/>
-        </p:input>
-    </p:identity>
-    <px:epub3-to-pef name="convert" px:message="Converting from EPUB to PEF" px:progress=".90">
-        <p:with-option name="epub" select="$source"/>
-        <p:input port="in-memory.in">
-            <p:pipe port="in-memory.out" step="load"/>
-        </p:input>
-        <p:with-option name="temp-dir" select="concat($temp-dir,'convert/')"/>
-        <p:with-option name="stylesheet" select="$stylesheet"/>
-        <p:with-option name="stylesheet-parameters" select="$stylesheet-parameters"/>
-        <p:with-option name="apply-document-specific-stylesheets" select="$apply-document-specific-stylesheets"/>
-        <p:with-option name="transform"
-                       select="concat($braille-code,($transform,'(translator:liblouis)(formatter:dotify)')[not(.='')][1])"/>
-        <p:with-option name="include-obfl" select="$include-obfl"/>
-        <p:input port="parameters">
-            <p:pipe port="result" step="input-options"/>
-        </p:input>
-    </px:epub3-to-pef>
-    <p:sink/>
-    
-    <!-- ========= -->
-    <!-- STORE PEF -->
-    <!-- ========= -->
-    <p:identity>
-        <p:input port="source">
-            <p:pipe step="convert" port="in-memory.out"/>
-        </p:input>
-    </p:identity>
-    <p:for-each>
-        <p:delete match="/*/@xml:base"/>
-    </p:for-each>
-    <px:epub3-to-pef.store px:message="Storing results" px:progress=".05">
-        <p:with-option name="epub" select="$source"/>
-        <p:input port="opf">
-            <p:pipe step="opf" port="result"/>
-        </p:input>
-        <p:input port="obfl">
-            <p:pipe step="convert" port="obfl"/>
-        </p:input>
-        <p:input port="css">
-            <p:pipe step="convert" port="css"/>
-        </p:input>
-        <p:with-option name="include-pef" select="$include-pef"/>
-        <p:with-option name="include-preview" select="$include-preview"/>
-        <p:with-option name="include-css" select="$include-css"/>
-        <p:with-option name="output-file-format" select="$output-file-format"/>
-        <p:with-option name="preview-table" select="$preview-table"/>
-        <p:with-option name="output-dir" select="$result"/>
-        <p:with-option name="pef-output-dir" select="$pef"/>
-        <p:with-option name="preview-output-dir" select="$preview"/>
-        <p:with-option name="obfl-output-dir" select="$obfl"/>
-        <p:with-option name="css-output-dir" select="$html-with-css"/>
-    </px:epub3-to-pef.store>
+    <p:group name="convert-and-store" px:progress=".95">
+        <p:output port="status">
+            <p:pipe step="convert" port="status"/>
+        </p:output>
+
+        <p:variable name="medium"
+                    select="pf:pef-assert-embossable(
+                              pf:css-parse-medium((
+                                ($output-file-format,'embossed AND (-daisy-format:pef)')[not(.='')][1],
+                                map:merge((
+                                  map:entry('width',$page-width),
+                                  map:entry('height',$page-height),
+                                  map:entry('-daisy-duplex',$duplex),
+                                  map:entry('-daisy-document-locale',(/*/opf:metadata/dc:language[not(@refines)])[1]/string(text())))))))">
+            <p:pipe port="result" step="opf"/>
+        </p:variable>
+        
+        <!-- ============= -->
+        <!-- EPUB 3 TO PEF -->
+        <!-- ============= -->
+        <p:identity>
+            <p:input port="source">
+                <p:pipe port="fileset.out" step="load"/>
+            </p:input>
+        </p:identity>
+        <px:epub3-to-pef name="convert" px:message="Converting from EPUB to PEF" px:progress="90/95">
+            <p:with-option name="epub" select="$source"/>
+            <p:input port="in-memory.in">
+                <p:pipe port="in-memory.out" step="load"/>
+            </p:input>
+            <p:with-option name="temp-dir" select="concat($temp-dir,'convert/')"/>
+            <p:with-option name="stylesheet" select="$stylesheet"/>
+            <p:with-option name="stylesheet-parameters" select="$stylesheet-parameters"/>
+            <p:with-option name="apply-document-specific-stylesheets" select="$apply-document-specific-stylesheets"/>
+            <p:with-option name="transform"
+                           select="concat($braille-code,($transform,'(translator:liblouis)(formatter:dotify)')[not(.='')][1])"/>
+            <p:with-option name="medium" select="$medium"/>
+            <p:with-option name="include-obfl" select="$include-obfl"/>
+            <p:input port="parameters">
+                <p:pipe port="result" step="input-options"/>
+            </p:input>
+        </px:epub3-to-pef>
+        <p:sink/>
+        
+        <!-- ========= -->
+        <!-- STORE PEF -->
+        <!-- ========= -->
+        <p:identity>
+            <p:input port="source">
+                <p:pipe step="convert" port="in-memory.out"/>
+            </p:input>
+        </p:identity>
+        <p:for-each>
+            <p:delete match="/*/@xml:base"/>
+        </p:for-each>
+        <px:epub3-to-pef.store px:message="Storing results" px:progress="5/95">
+            <p:with-option name="epub" select="$source"/>
+            <p:input port="opf">
+                <p:pipe step="opf" port="result"/>
+            </p:input>
+            <p:input port="obfl">
+                <p:pipe step="convert" port="obfl"/>
+            </p:input>
+            <p:input port="css">
+                <p:pipe step="convert" port="css"/>
+            </p:input>
+            <p:with-option name="include-pef" select="$include-pef"/>
+            <p:with-option name="include-preview" select="$include-preview"/>
+            <p:with-option name="include-css" select="$include-css"/>
+            <p:with-option name="medium" select="$medium"/>
+            <p:with-option name="preview-table" select="$preview-table"/>
+            <p:with-option name="output-dir" select="$result"/>
+            <p:with-option name="pef-output-dir" select="$pef"/>
+            <p:with-option name="preview-output-dir" select="$preview"/>
+            <p:with-option name="obfl-output-dir" select="$obfl"/>
+            <p:with-option name="css-output-dir" select="$html-with-css"/>
+        </px:epub3-to-pef.store>
+    </p:group>
     
 </p:declare-step>

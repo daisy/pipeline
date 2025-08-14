@@ -149,7 +149,7 @@
         <plugin>
           <groupId>org.daisy.pipeline.build</groupId>
           <artifactId>modules-build-helper</artifactId>
-          <version>3.0.0</version>
+          <version>3.0.1</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -189,12 +189,12 @@
         <plugin>
           <groupId>org.daisy.maven</groupId>
           <artifactId>xspec-maven-plugin</artifactId>
-          <version>1.0.0</version>
+          <version>1.0.1</version>
           <dependencies>
             <dependency>
               <groupId>org.daisy.maven</groupId>
               <artifactId>xspec-runner</artifactId>
-              <version>1.0.2</version>
+              <version>1.0.5</version>
             </dependency>
           </dependencies>
         </plugin>
@@ -432,7 +432,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.15.3</version>
+        <version>1.15.4</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -472,7 +472,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>tts-mocks</artifactId>
-        <version>1.0.4</version>
+        <version>1.0.5-SNAPSHOT</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -1024,6 +1024,18 @@
       </releases>
       <snapshots>
         <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <!-- for rococoa -->
+    <repository>
+      <id>maven.cyberduck.io-release</id>
+      <url>https://s3.eu-west-1.amazonaws.com/repo.maven.cyberduck.io/releases</url>
+      <layout>default</layout>
+      <releases>
+          <enabled>true</enabled>
+      </releases>
+      <snapshots>
+          <enabled>false</enabled>
       </snapshots>
     </repository>
   </repositories>

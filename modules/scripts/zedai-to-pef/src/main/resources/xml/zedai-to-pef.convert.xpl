@@ -3,17 +3,18 @@
                 xmlns:p="http://www.w3.org/ns/xproc"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pef="http://www.daisy.org/ns/2008/pef"
+                xmlns:c="http://www.w3.org/ns/xproc-step"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                 xmlns:math="http://www.w3.org/1998/Math/MathML"
                 exclude-inline-prefixes="#all"
                 name="main">
-    
+
     <p:input port="source.fileset" primary="true"/>
     <p:input port="source.in-memory" sequence="true">
         <p:empty/>
     </p:input>
     <p:output port="result" px:media-type="application/x-pef+xml"/>
-    
+
     <p:option name="default-stylesheet" required="false" select="'#default'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p>The user agent's <a href="https://www.w3.org/TR/CSS2/cascade.html#cascade">default
@@ -24,13 +25,18 @@
     </p:option>
     <p:option name="stylesheet" required="false" select="''"/>
     <p:option name="transform" required="false" select="''"/>
-    
+    <p:option name="medium" select="'embossed'"> <!-- (xs:string | map(xs:string,item()) | item())* -->
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>The target medium</p>
+        </p:documentation>
+    </p:option>
+
     <p:option name="temp-dir" required="true">
         <p:documentation>
             Empty temporary directory dedicated to this conversion
         </p:documentation>
     </p:option>
-    
+
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
         <p:documentation>
             px:assert
@@ -49,6 +55,7 @@
     <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl">
         <p:documentation>
             px:transform
+            px:parse-query
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/css-utils/library.xpl">
@@ -61,8 +68,16 @@
             px:pef-add-metadata
         </p:documentation>
     </p:import>
-    
+
+    <px:parse-query name="transform-query">
+        <p:with-option name="query" select="$transform"/>
+    </px:parse-query>
+    <p:sink/>
+
     <px:fileset-load media-types="application/z3998-auth+xml">
+        <p:input port="fileset">
+            <p:pipe step="main" port="source.fileset"/>
+        </p:input>
         <p:input port="in-memory">
             <p:pipe step="main" port="source.in-memory"/>
         </p:input>
@@ -70,8 +85,8 @@
     <px:assert message="No ZedAI document found in the fileset." test-count-min="1" error-code="PEZE00"/>
     <px:assert message="More than one ZedAI document found in the fileset." test-count-max="1" error-code="PEZE00"/>
     <p:identity name="zedai"/>
-    
-    <px:css-cascade media="embossed">
+
+    <px:css-cascade>
         <p:with-option name="user-stylesheet"
                        select="concat(
                                  if ($default-stylesheet!='#default')
@@ -79,37 +94,52 @@
                                    else resolve-uri('../css/default.css'),
                                  ' ',
                                  $stylesheet)"/>
+        <p:with-option name="media" select="$medium"/>
     </px:css-cascade>
-    
-    <p:viewport match="math:math">
-        <px:transform>
-            <p:with-option name="query" select="concat('(input:mathml)(locale:',(/*/@xml:lang,'und')[1],')')">
-                <p:pipe step="zedai" port="result"/>
+
+    <p:group>
+        <p:variable name="document-locale" select="concat('(document-locale:',(/*/@xml:lang,'und')[1],')')">
+            <p:pipe step="zedai" port="result"/>
+        </p:variable>
+
+        <p:viewport match="math:math">
+            <px:transform>
+                <p:with-option name="query" select="('(input:mathml)',
+                                                     //c:param[@name=('locale','math-code','math-translator')],
+                                                     $document-locale)">
+                    <p:pipe step="transform-query" port="result"/>
+                </p:with-option>
+                <p:with-param port="parameters" name="medium" select="$medium"/>
+                <p:with-param port="parameters" name="temp-dir" select="$temp-dir"/>
+            </px:transform>
+        </p:viewport>
+
+        <px:transform name="pef">
+            <p:with-option name="query" select="('(input:css)(output:pef)',
+                                                 //c:param[not(@name=('math-code','math-translator'))],
+                                                 $document-locale)">
+                <p:pipe step="transform-query" port="result"/>
             </p:with-option>
+            <p:with-param port="parameters" name="medium" select="$medium"/>
             <p:with-param port="parameters" name="temp-dir" select="$temp-dir"/>
         </px:transform>
-    </p:viewport>
-    
-    <px:transform name="pef">
-        <p:with-option name="query" select="concat('(input:css)(output:pef)',$transform,'(document-locale:',(/*/@xml:lang,'und')[1],')')"/>
-        <p:with-param port="parameters" name="temp-dir" select="$temp-dir"/>
-    </px:transform>
-    <p:sink/>
+        <p:sink/>
 
-    <px:zedai-to-opf-metadata name="metadata">
-        <p:input port="source">
-            <p:pipe step="zedai" port="result"/>
-        </p:input>
-    </px:zedai-to-opf-metadata>
-    <p:sink/>
-    
-    <px:pef-add-metadata>
-        <p:input port="source">
-            <p:pipe step="pef" port="result"/>
-        </p:input>
-        <p:input port="metadata">
-            <p:pipe step="metadata" port="result"/>
-        </p:input>
-    </px:pef-add-metadata>
-    
+        <px:zedai-to-opf-metadata name="metadata">
+            <p:input port="source">
+                <p:pipe step="zedai" port="result"/>
+            </p:input>
+        </px:zedai-to-opf-metadata>
+        <p:sink/>
+
+        <px:pef-add-metadata>
+            <p:input port="source">
+                <p:pipe step="pef" port="result"/>
+            </p:input>
+            <p:input port="metadata">
+                <p:pipe step="metadata" port="result"/>
+            </p:input>
+        </px:pef-add-metadata>
+    </p:group>
+
 </p:declare-step>

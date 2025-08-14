@@ -21,6 +21,7 @@ import org.daisy.common.transform.Mult;
 import org.daisy.common.transform.SingleInSingleOutXMLTransformer;
 import org.daisy.common.transform.XMLInputValue;
 import org.daisy.common.transform.XMLOutputValue;
+import org.daisy.common.xproc.calabash.XProcBasedTransformer;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 import org.daisy.common.xproc.XProcMonitor;
@@ -28,7 +29,6 @@ import org.daisy.dotify.api.table.Table;
 import org.daisy.pipeline.braille.common.AbstractTransform;
 import org.daisy.pipeline.braille.common.AbstractTransformProvider;
 import org.daisy.pipeline.braille.common.AbstractTransformProvider.util.Iterables;
-import org.daisy.pipeline.braille.common.calabash.CxEvalBasedTransformer;
 import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.logCreate;
 import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.logSelect;
 import org.daisy.pipeline.braille.common.BrailleTranslator;
@@ -160,18 +160,44 @@ public interface DotifyCSSStyledDocumentTransform {
 					new SingleInSingleOutXMLTransformer() {
 						public Runnable transform(XMLInputValue<?> source, XMLOutputValue<?> result, InputValue<?> params) {
 							return () -> {
-								Map<String,String> options = TransformImpl.this.options;
+								Map<QName,InputValue<?>> options = new HashMap<>();
+								for (String option : TransformImpl.this.options.keySet())
+									options.put(new QName(option), new InputValue<>(TransformImpl.this.options.get(option)));
 								InputValue<?> paramsCopy = params;
-								// get value of preview-table parameter
 								try {
 									Mult<? extends InputValue<?>> m = params.mult(2); // multiply params input
 									paramsCopy = m.get();
-									Map map = m.get().asObject(Map.class);
-									Object v = map.get(new QName("preview-table"));
+									Map paramsMap = m.get().asObject(Map.class);
+									// turn medium parameter into an option
+									Object v = paramsMap.get(new QName("medium"));
 									if (v != null)
 										if (v instanceof InputValue) {
-											m = ((InputValue<?>)v).mult(2); // multiply preview-table value
-											map.put(new QName("preview-table"), m.get());
+											m = ((InputValue<?>)v).mult(2); // multiply value
+											try {
+												options.put(new QName("medium"), m.get());
+												paramsMap.remove(new QName("medium"));
+											} catch (UnsupportedOperationException e) {
+												paramsMap.put(new QName("medium"), m.get());
+											}
+										}
+									// turn skip-margin-top-of-page parameter into an option
+									v = paramsMap.get(new QName("skip-margin-top-of-page"));
+									if (v != null)
+										if (v instanceof InputValue) {
+											m = ((InputValue<?>)v).mult(2); // multiply value
+											try {
+												options.put(new QName("skip-margin-top-of-page"), m.get());
+												paramsMap.remove(new QName("skip-margin-top-of-page"));
+											} catch (UnsupportedOperationException e) {
+												paramsMap.put(new QName("skip-margin-top-of-page"), m.get());
+											}
+										}
+									// get value of preview-table parameter
+									v = paramsMap.get(new QName("preview-table"));
+									if (v != null)
+										if (v instanceof InputValue) {
+											m = ((InputValue<?>)v).mult(2); // multiply value
+											paramsMap.put(new QName("preview-table"), m.get());
 											try {
 												v = m.get().asObject();
 												if (v instanceof String) {
@@ -183,16 +209,15 @@ public interface DotifyCSSStyledDocumentTransform {
 														                                                      previewTable.getIdentifier());
 														if (logSelect(q, translatorRegistry).apply(NOP_LOGGER).iterator().hasNext()) {
 															q.removeAll("document-locale");
-															options = new HashMap<>(); {
-																options.putAll(TransformImpl.this.options);
-																options.put("css-block-transform",
-																            blockTransformQuery != null
-																                ? mutableQuery(blockTransformQuery)
-																                      .add("braille-charset", previewTable.getIdentifier())
-																                      .toString()
-																                : "");
-																options.put("braille-charset", previewTable.getIdentifier());
-															}
+															options.put(new QName("css-block-transform"),
+															            new InputValue<>(
+															                blockTransformQuery != null
+															                    ? mutableQuery(blockTransformQuery)
+															                          .add("braille-charset", previewTable.getIdentifier())
+															                          .toString()
+															                    : ""));
+															options.put(new QName("braille-charset"),
+															            new InputValue<>(previewTable.getIdentifier()));
 														}
 													} catch (NoSuchElementException e) {
 													}
@@ -202,9 +227,8 @@ public interface DotifyCSSStyledDocumentTransform {
 										}
 								} catch (UnsupportedOperationException e) {
 								}
-								new CxEvalBasedTransformer(
+								new XProcBasedTransformer(
 									href,
-									null,
 									options
 								).newStep(runtime, step, monitor, properties).transform(
 									ImmutableMap.of(

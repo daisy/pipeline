@@ -33,6 +33,7 @@ import org.daisy.braille.utils.pef.PEFFileSplitter;
 import org.daisy.braille.utils.pef.PEFHandler;
 import org.daisy.braille.utils.pef.PEFHandler.Alignment;
 import org.daisy.braille.utils.pef.UnsupportedWidthException;
+import org.daisy.common.saxon.SaxonHelper;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 import org.daisy.common.xproc.XProcMonitor;
@@ -42,7 +43,7 @@ import org.daisy.pipeline.braille.common.Query;
 import org.daisy.pipeline.braille.common.Query.MutableQuery;
 import static org.daisy.pipeline.braille.common.Query.util.mutableQuery;
 import static org.daisy.pipeline.braille.common.Query.util.query;
-import org.daisy.pipeline.braille.pef.FileFormatRegistry;
+import org.daisy.pipeline.css.Medium;
 
 import org.xml.sax.SAXException;
 
@@ -57,24 +58,16 @@ import org.slf4j.LoggerFactory;
 public class PEF2TextStep extends DefaultStep implements XProcStep {
 	
 	private static final QName _output_dir = new QName("output-dir");
-	private static final QName _file_format = new QName("file-format");
-	private static final QName _line_breaks = new QName("line-breaks");
-	private static final QName _page_breaks = new QName("page-breaks");
-	private static final QName _pad = new QName("pad");
-	private static final QName _charset = new QName("charset");
+	private static final QName _medium = new QName("medium");
 	private static final QName _name_pattern = new QName("name-pattern");
 	private static final QName _number_width = new QName("number-width");
 	private static final QName _single_volume_name = new QName("single-volume-name");
-	
-	private final FileFormatRegistry fileFormatRegistry;
-	
+
 	private ReadablePipe source = null;
 	
 	private PEF2TextStep(XProcRuntime runtime,
-	                     XAtomicStep step,
-	                     FileFormatRegistry fileFormatRegistry) {
+	                     XAtomicStep step) {
 		super(runtime, step);
-		this.fileFormatRegistry = fileFormatRegistry;
 	}
 	
 	@Override
@@ -90,108 +83,105 @@ public class PEF2TextStep extends DefaultStep implements XProcStep {
 	@Override
 	public void run() throws SaxonApiException {
 		super.run();
-		MutableQuery q = mutableQuery(query(getOption(_file_format, "")));
-		q.removeAll("blank-last-page"); // has been handled in pef2text.xpl
-		q.removeAll("sheets-multiple-of-two"); // has been handled in pef2text.xpl
-		addOption(_line_breaks, q);
-		addOption(_page_breaks, q);
-		addOption(_pad, q);
-		addOption(_charset, q);
-		logger.debug("Finding file format for query: " + q);
-		Iterable<FileFormat> fileFormats = fileFormatRegistry.get(q);
-		if (!fileFormats.iterator().hasNext()) {
-			throw new XProcException(step, "No file format found for query: " + q); }
-		for (FileFormat fileFormat : fileFormats) {
-			try {
-				logger.debug("Storing PEF to file format: " + fileFormat);
-				
-				// Initialize output directory
-				File textDir = new File(new URI(getOption(_output_dir).getString()));
-				textDir.mkdirs();
-				
-				// Read source PEF
-				ByteArrayOutputStream s = new ByteArrayOutputStream();
-				Serializer serializer = runtime.getProcessor().newSerializer();
-				serializer.setOutputStream(s);
-				serializer.setCloseOnCompletion(true);
-				serializer.setOutputProperty(Serializer.Property.INDENT, "yes");
-				serializer.serializeNode(source.read());
-				serializer.close();
-				InputStream pefStream = new ByteArrayInputStream(s.toByteArray());
-				s.close();
-				
-				// Parse pattern
-				String singleVolumeName = getOption(_single_volume_name, "");
-				String pattern = getOption(_name_pattern, "");
-				if (pattern.isEmpty())
-					pattern = "volume-{}";
-				int match = pattern.indexOf("{}");
-				if (match < 0 || match != pattern.lastIndexOf("{}")) {
-					logger.error("name-pattern is invalid: '" + pattern + "'");
-					if (singleVolumeName.isEmpty())
-						throw new RuntimeException("name-pattern and single-volume-name may not both be empty");
-				}
-				if ((fileFormat.supportsVolumes() && !singleVolumeName.isEmpty())
-				    || match < 0 || match != pattern.lastIndexOf("{}")) {
-					// Output to single file
-					convertPEF2Text(pefStream,
-							new File(textDir, singleVolumeName + fileFormat.getFileExtension()), fileFormat);
-				} else {
-					// Split PEF
-					pattern = pattern.replaceAll("'", "''")
-							.replaceAll("([0#\\.,;%\u2030\u00A4-]+)", "'$1'");
-					// Recalculate after replacement
-					match = pattern.indexOf("{}");
-					File splitDir = new File(textDir, "split");
-					splitDir.mkdir();
-					// FIXME: to validating the result PEFs, get a PEFValidator instance
-					// (implemented in dotify.task.impl) through the streamline API.
-					PEFFileSplitter splitter = new PEFFileSplitter(x -> true);
-					String prefix = PEFFileSplitter.PREFIX;
-					String postfix = PEFFileSplitter.POSTFIX;
-					splitter.split(pefStream, splitDir, prefix, postfix);
-					File[] pefFiles = splitDir.listFiles();
-					String formatPattern = pattern.substring(0, match);
-					int nWidth; {
-						try {
-							nWidth = Integer.parseInt(getOption(_number_width, "")); }
-						catch (NumberFormatException e) {
-							nWidth = 0; }}
-					if (nWidth == 0)
-						formatPattern += "###"; // Assume max 999 volumes
-					else
-						while (nWidth > 0) { formatPattern += "0"; nWidth--; }
-					formatPattern += pattern.substring(match + 2);
-					NumberFormat format = new DecimalFormat(formatPattern);
-					for (File pefFile : pefFiles) {
-						InputStream is = new FileInputStream(pefFile);
-						if (pefFiles.length == 1 && !singleVolumeName.isEmpty()) {
-							// Output to single file
-							convertPEF2Text(is, new File(textDir, singleVolumeName + fileFormat.getFileExtension()), fileFormat);
-						} else {
-							String pefName = pefFile.getName();
-							if (pefName.length() <= prefix.length() + postfix.length()
-							    || !pefName.substring(0, prefix.length()).equals(prefix)
-							    || !pefName.substring(pefName.length() - postfix.length()).equals(postfix)) {
-								is.close();
-								throw new RuntimeException("Coding error");
-							}
-							String textName = format.format(
-									Integer.parseInt(pefName.substring(prefix.length(), pefName.length() - postfix.length())));
-							convertPEF2Text(is,
-									new File(textDir, textName + fileFormat.getFileExtension()),
-									fileFormat);
+		try {
+			Medium medium = SaxonHelper.objectFromItem(
+				SaxonHelper.getSingleItem(getOption(_medium).getValue().getUnderlyingValue()),
+				Medium.class);
+			if (medium.getType() != Medium.Type.EMBOSSED)
+				throw new IllegalArgumentException(
+					"Can not store PEF to medium: must be of type 'embossed': " + medium);
+			if (!(medium instanceof FileFormat))
+				throw new IllegalArgumentException(
+					"Can not store PEF to medium: a file format is expected: " + medium);
+			FileFormat fileFormat = (FileFormat)medium;
+			logger.debug("Storing PEF to file format: " + fileFormat);
+
+			// Initialize output directory
+			File textDir = new File(new URI(getOption(_output_dir).getString()));
+			textDir.mkdirs();
+
+			// Read source PEF
+			ByteArrayOutputStream s = new ByteArrayOutputStream();
+			Serializer serializer = runtime.getProcessor().newSerializer();
+			serializer.setOutputStream(s);
+			serializer.setCloseOnCompletion(true);
+			serializer.setOutputProperty(Serializer.Property.INDENT, "yes");
+			serializer.serializeNode(source.read());
+			serializer.close();
+			InputStream pefStream = new ByteArrayInputStream(s.toByteArray());
+			s.close();
+
+			// Parse pattern
+			String singleVolumeName = getOption(_single_volume_name, "");
+			String pattern = getOption(_name_pattern, "");
+			if (pattern.isEmpty())
+				pattern = "volume-{}";
+			int match = pattern.indexOf("{}");
+			if (match < 0 || match != pattern.lastIndexOf("{}")) {
+				logger.error("name-pattern is invalid: '" + pattern + "'");
+				if (singleVolumeName.isEmpty())
+					throw new RuntimeException("name-pattern and single-volume-name may not both be empty");
+			}
+			if ((fileFormat.supportsVolumes() && !singleVolumeName.isEmpty())
+			    || match < 0 || match != pattern.lastIndexOf("{}")) {
+				// Output to single file
+				convertPEF2Text(pefStream,
+						new File(textDir, singleVolumeName + fileFormat.getFileExtension()), fileFormat);
+			} else {
+				// Split PEF
+				pattern = pattern.replaceAll("'", "''")
+						.replaceAll("([0#\\.,;%\u2030\u00A4-]+)", "'$1'");
+				// Recalculate after replacement
+				match = pattern.indexOf("{}");
+				File splitDir = new File(textDir, "split");
+				splitDir.mkdir();
+				// FIXME: to validating the result PEFs, get a PEFValidator instance
+				// (implemented in dotify.task.impl) through the streamline API.
+				PEFFileSplitter splitter = new PEFFileSplitter(x -> true);
+				String prefix = PEFFileSplitter.PREFIX;
+				String postfix = PEFFileSplitter.POSTFIX;
+				splitter.split(pefStream, splitDir, prefix, postfix);
+				File[] pefFiles = splitDir.listFiles();
+				String formatPattern = pattern.substring(0, match);
+				int nWidth; {
+					try {
+						nWidth = Integer.parseInt(getOption(_number_width, "")); }
+					catch (NumberFormatException e) {
+						nWidth = 0; }}
+				if (nWidth == 0)
+					formatPattern += "###"; // Assume max 999 volumes
+				else
+					while (nWidth > 0) { formatPattern += "0"; nWidth--; }
+				formatPattern += pattern.substring(match + 2);
+				NumberFormat format = new DecimalFormat(formatPattern);
+				for (File pefFile : pefFiles) {
+					InputStream is = new FileInputStream(pefFile);
+					if (pefFiles.length == 1 && !singleVolumeName.isEmpty()) {
+						// Output to single file
+						convertPEF2Text(is, new File(textDir, singleVolumeName + fileFormat.getFileExtension()), fileFormat);
+					} else {
+						String pefName = pefFile.getName();
+						if (pefName.length() <= prefix.length() + postfix.length()
+						    || !pefName.substring(0, prefix.length()).equals(prefix)
+						    || !pefName.substring(pefName.length() - postfix.length()).equals(postfix)) {
+							is.close();
+							throw new RuntimeException("Coding error");
 						}
-						is.close();
-						if (!pefFile.delete()) pefFile.deleteOnExit();
+						String textName = format.format(
+								Integer.parseInt(pefName.substring(prefix.length(), pefName.length() - postfix.length())));
+						convertPEF2Text(is,
+								new File(textDir, textName + fileFormat.getFileExtension()),
+								fileFormat);
 					}
-					pefStream.close();
-					if (!splitDir.delete()) splitDir.deleteOnExit();
+					is.close();
+					if (!pefFile.delete()) pefFile.deleteOnExit();
 				}
-				return; }
-			catch (Exception e) {
-				logger.error("Storing PEF to file format '" + fileFormat + "' failed", e); }}
-		throw new XProcException(step, "pef:pef2text failed");
+				pefStream.close();
+				if (!splitDir.delete()) splitDir.deleteOnExit();
+			}
+		} catch (Throwable e) {
+			throw XProcStep.raiseError(e, step);
+		}
 	}
 	
 	private void convertPEF2Text(InputStream pefStream, File textFile, FileFormat fileFormat)
@@ -228,22 +218,8 @@ public class PEF2TextStep extends DefaultStep implements XProcStep {
 		
 		@Override
 		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties) {
-			return new PEF2TextStep(runtime, step, fileFormatRegistry);
+			return new PEF2TextStep(runtime, step);
 		}
-		
-		@Reference(
-			name = "FileFormatRegistry",
-			unbind = "-",
-			service = FileFormatRegistry.class,
-			cardinality = ReferenceCardinality.MANDATORY,
-			policy = ReferencePolicy.STATIC
-		)
-		protected void bindFileFormatRegistry(FileFormatRegistry registry) {
-			fileFormatRegistry = registry;
-		}
-		
-		private FileFormatRegistry fileFormatRegistry;
-		
 	}
 	
 	// copied from org.daisy.braille.facade.PEFConverterFacade because it is no longer static

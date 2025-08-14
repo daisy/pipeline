@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>dtbook-to-pef</artifactId>
-  <version>11.2.2-SNAPSHOT</version>
+  <version>12.0.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: DTBook to PEF</name>
@@ -96,6 +96,8 @@
       org.daisy.pipeline.modules.impl.Module_dtbook_to_pef,
       org.daisy.pipeline.css.impl.UserAgentStylesheet_application_x_dtbook_xml_embossed__braille,
       org.daisy.pipeline.script.impl.XProcScript_dtbook_to_pef,
+      org.daisy.pipeline.datatypes.impl.Datatype_px_dtbook_to_pef_script_page_width,
+      org.daisy.pipeline.datatypes.impl.Datatype_px_dtbook_to_pef_script_page_height,
       org.daisy.pipeline.datatypes.impl.Datatype_px_dtbook_to_pef_script_line_spacing,
       org.daisy.pipeline.datatypes.impl.Datatype_px_dtbook_to_pef_script_notes_placement,
       org.daisy.pipeline.datatypes.impl.Datatype_px_dtbook_to_pef_script_hyphenation,

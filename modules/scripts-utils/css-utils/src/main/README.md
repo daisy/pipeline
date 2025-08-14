@@ -12,7 +12,7 @@
 
 ## Saxon XPath functions ([`net.sf.saxon.lib.ExtensionFunctionDefinition`](https://www.saxonica.com/html/documentation9.8/javadoc/net/sf/saxon/lib/ExtensionFunctionDefinition.html))
 
-- [`{http://www.daisy.org/ns/pipeline/functions}media-query-matches`](java/org/daisy/pipeline/css/saxon/impl/MediaQueryMatchesDefinition.java)
+- [`{http://www.daisy.org/ns/pipeline/functions}media-query-matches`](java/org/daisy/pipeline/css/saxon/impl/CssMediaFunctionProvider.java)
 
   Test whether a media query matches a medium, see [XSLT documentation](resources/xml/library.xsl)
 

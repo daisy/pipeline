@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                xmlns:c="http://www.w3.org/ns/xproc-step"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 type="px:word-to-dtbook.script" name="main"
@@ -13,6 +15,14 @@
 		<a px:role="homepage" href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/word-to-dtbook/">
 			Online documentation
 		</a>
+		<dl px:role="author">
+			<dt>Name:</dt>
+			<dd px:role="name">Nicolas Pavie</dd>
+			<dt>E-mail:</dt>
+			<dd><a px:role="contact" href="mailto:pavie.nicolas@gmail.com">pavie.nicolas@gmail.com</a></dd>
+			<dt>Organisation:</dt>
+			<dd px:role="organization">DAISY Consortium</dd>
+		</dl>
 	</p:documentation>
 
 	<p:option name="source" required="true" px:type="anyFileURI" px:media-type="application/vnd.openxmlformats-officedocument.wordprocessingml.document">
@@ -41,6 +51,7 @@
 	<p:option name="publisher" select="''" required="false">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Document publisher</h2>
+			<p px:role="desc">Publisher metadata (dc:Publisher) to be added</p>
 		</p:documentation>
 	</p:option>
 	<p:option name="uid" select="''">
@@ -69,8 +80,8 @@
 	                                    'wdMainTextStory':[]
 	                                    }" />-->
 	<!-- cx:as="map(xs:string,xs:string*)" -->
-	<p:option name="MasterSub" px:hidden="true" select="false()" cx:as="xs:boolean" />
-	<!-- from settings  -->
+	<p:option name="MasterSub" px:hidden="true" select="false()" cx:as="xs:boolean"/>
+	<!-- from settings -->
 	<p:option name="pagination" select="'custom'">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Pagination mode</h2>
@@ -178,7 +189,7 @@
 	</p:option>
 
 	<!-- hidden option for tests -->
-	<p:option name="disableDateGeneration" cx:as="xs:boolean" select="false()" px:hidden="true" />
+	<p:option name="disableDateGeneration" cx:as="xs:boolean" select="false()" px:hidden="true"/>
 
 	<!-- hidden option to allow saveasdaisy to deactivate shapes extraction
 	     This is to avoid word being blocked by one or more dialog managed by the addin.
@@ -193,7 +204,107 @@
 		</p:documentation>
 	</p:option>
 
-	<p:xslt template-name="main" name="convert-to-dtbook" cx:serialize="true">
+	<!--
+	    Options for to DTBook cleanup (options that are not exposed in the Word add-in are marked hidden)
+	-->
+
+	<p:option name="repair" select="false()" cx:as="xs:boolean">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<h2 px:role="name">Repair the DTBook</h2>
+			<p px:role="desc" xml:space="preserve">Apply repair routines on the DTBook.</p>
+		</p:documentation>
+	</p:option>
+	<p:option name="tidy" select="false()" cx:as="xs:boolean">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<h2 px:role="name">Tidy up the DTBook</h2>
+			<p px:role="desc" xml:space="preserve">Apply tidying routines on the DTBook.</p>
+		</p:documentation>
+	</p:option>
+	<p:option name="simplifyHeadingLayout" select="false()" cx:as="xs:boolean" px:hidden="true">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<h2 px:role="name">Tidy - Simplify headings layout</h2>
+			<p px:role="desc" xml:space="preserve">Simplify the level structure
+
+Redundant level structure is sometimes used to mimic the original layout, but can pose a problem in
+some circumstances. By selecting this option the script simplifies the level structure by removing
+redundant levels (subordinate levels will be moved upwards). Note that the headings of the affected
+levels will also change, which will alter the appearance of the layout.</p>
+		</p:documentation>
+	</p:option>
+	<p:option name="externalizeWhitespace" select="false()" cx:as="xs:boolean" px:hidden="true">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<h2 px:role="name">Tidy - Externalize whitespaces</h2>
+			<p px:role="desc" xml:space="preserve">Externalize leading and trailing whitespace
+
+from em, strong, sub, sup, pagenum, noteref.</p>
+		</p:documentation>
+	</p:option>
+	<p:option name="documentLanguage" select="''" px:hidden="true">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<h2 px:role="name">Tidy - Document language</h2>
+			<p px:role="desc">Set a document language</p>
+		</p:documentation>
+	</p:option>
+	<p:option name="narrator" select="false()" cx:as="xs:boolean">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<h2 px:role="name">Cleanup the document for audio synthesis</h2>
+			<p px:role="desc" xml:space="preserve">Apply cleaning routines on the document to prepare it for text-to-speech processes.</p>
+		</p:documentation>
+	</p:option>
+	<p:option name="ApplySentenceDetection" select="false()" cx:as="xs:boolean">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<h2 px:role="name">Apply sentences detection</h2>
+			<p px:role="desc">Encapsulate sentences within the document</p>
+		</p:documentation>
+	</p:option>
+	<p:option name="WithDoctype" select="true()" cx:as="xs:boolean" px:hidden="true">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<h2 px:role="name">Include doctype in resulting DTBook(s)</h2>
+			<p px:role="desc" xml:space="preserve">Include doctype in resulting DTBook(s)
+
+The resulting DTBook will have a standard DTBook 2005-3 doctype, optionally with MathML declaration
+if MathML is present in the document.</p>
+		</p:documentation>
+	</p:option>
+
+	<p:option name="temp-dir" required="true" px:output="temp" px:type="anyDirURI">
+		<!-- directory used for temporary files -->
+	</p:option>
+
+	<p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+		<p:documentation>
+			px:error
+			px:log-error
+		</p:documentation>
+	</p:import>
+	<p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+		<p:documentation>
+			px:fileset-add-entry
+			px:fileset-copy
+			px:fileset-filter
+			px:fileset-store
+		</p:documentation>
+	</p:import>
+	<p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl">
+		<p:documentation>
+			px:dtbook-break-detect
+			px:dtbook-unwrap-words
+			px:dtbook-upgrade
+			px:dtbook-load
+		</p:documentation>
+	</p:import>
+	<p:import href="fix-dtbook/fix-dtbook.xpl">
+		<p:documentation>
+			pxi:dtbook-fix
+		</p:documentation>
+	</p:import>
+	<p:import href="fix-dtbook/doctyping.xpl">
+		<p:documentation>
+			pxi:dtbook-doctyping
+		</p:documentation>
+	</p:import>
+
+	<p:xslt template-name="main" cx:serialize="true" px:message="Converting DOCX to DTBook" px:progess="1/2">
 		<p:input port="source">
 			<p:empty/>
 		</p:input>
@@ -201,7 +312,7 @@
 			<p:document href="oox2Daisy.xsl"/>
 		</p:input>
 		<p:with-param name="InputFile" select="$source"/>
-		<p:with-param name="OutputDir" select="$result"/>
+		<p:with-param name="OutputDir" select="$temp-dir"/>
 		<p:with-param name="title" select="$title"/>
 		<p:with-param name="creator" select="$creator"/>
 		<p:with-param name="publisher" select="$publisher"/>
@@ -223,12 +334,110 @@
 		<p:with-param name="disableDateGeneration" select="$disableDateGeneration"/>
 		<p:with-param name="extractShapes" select="$extract-shapes"/>
 	</p:xslt>
-	<p:store name="store-xml">
-		<p:with-option name="href" select="concat(
-		$result,
-		replace(replace($source,'^.*/([^/]*?)(\.[^/\.]*)?$','$1.xml'),',','_')
-	)"/>
-	</p:store>
+	<p:group>
+		<p:documentation>Store plain text file and load as XML</p:documentation>
+		<p:variable name="path" select="concat(
+		                                  $temp-dir,
+		                                  replace(replace($source,'^.*/([^/]*?)(\.[^/\.]*)?$','$1.xml'),',','_'))"/>
+		<p:store name="store">
+			<p:with-option name="href" select="$path"/>
+		</p:store>
+		<p:try>
+			<p:group>
+				<p:load cx:depends-on="store">
+					<p:with-option name="href" select="$path"/>
+				</p:load>
+			</p:group>
+			<p:catch name="catch">
+				<p:choose>
+					<p:xpath-context>
+						<p:pipe step="catch" port="error"/>
+					</p:xpath-context>
+					<p:when test="/c:errors/c:error/@code='err:XD0011'">
+						<px:log-error severity="DEBUG">
+							<p:input port="source">
+								<p:empty/>
+							</p:input>
+							<p:input port="error">
+								<p:pipe step="catch" port="error"/>
+							</p:input>
+						</px:log-error>
+						<px:error code="BUG" message="An unexpected error happened. Please contact maintainer."/>
+					</p:when>
+					<p:otherwise>
+						<!-- re-throw error -->
+						<px:error>
+							<p:input port="error">
+								<p:pipe step="catch" port="error"/>
+							</p:input>
+						</px:error>
+					</p:otherwise>
+				</p:choose>
+			</p:catch>
+		</p:try>
+	</p:group>
 
+	<!-- ******************************************************************* -->
+	<!-- DTBOOK CLEANUP: apply cleanup routines and optionally tag sentences -->
+	<!-- ******************************************************************* -->
+
+	<p:for-each px:message="Cleaning DTBook(s)" px:progess="1/2">
+		<p:variable name="output-name" select="concat(replace(replace(base-uri(.),'^.*/([^/]+)$','$1'),'\.[^\.]*$',''),'.xml')"/>
+		<p:group name="cleaned" px:message="Cleaning '{$output-name}' ...">
+			<p:output port="result"/>
+			<!-- Update the DTBook -->
+			<px:dtbook-upgrade/>
+			<!-- Apply routines -->
+			<pxi:dtbook-fix>
+				<p:with-option name="repair" select="$repair"/>
+				<p:with-option name="tidy" select="$tidy"/>
+				<p:with-option name="simplifyHeadingLayout" select="$simplifyHeadingLayout"/>
+				<p:with-option name="externalizeWhitespace" select="$externalizeWhitespace"/>
+				<p:with-option name="documentLanguage" select="$documentLanguage"/>
+				<p:with-option name="narrator" select="$narrator"/>
+				<p:with-option name="publisher" select="$publisher"/>
+			</pxi:dtbook-fix>
+			<p:choose>
+				<p:when test="$ApplySentenceDetection">
+					<px:dtbook-break-detect/>
+					<px:dtbook-unwrap-words/>
+				</p:when>
+				<p:otherwise>
+					<p:identity/>
+				</p:otherwise>
+			</p:choose>
+			<p:choose>
+				<p:when test="$WithDoctype">
+					<!-- DTBook with doctype (result is serialized) -->
+					<!--
+					    FIXME: this should be handled with px:fileset-store
+					-->
+					<pxi:dtbook-doctyping/>
+				</p:when>
+				<p:otherwise>
+					<p:identity/>
+				</p:otherwise>
+			</p:choose>
+		</p:group>
+		<p:store px:message="Storing the cleaned DTBook and its resources ...">
+			<p:with-option name="href" select="concat(resolve-uri($result),$output-name)"/>
+		</p:store>
+		<!-- Copying dtbook side resources -->
+		<px:fileset-add-entry media-type="application/x-dtbook+xml" name="dtbook">
+			<p:input port="entry">
+				<p:pipe step="cleaned" port="result"/>
+			</p:input>
+		</px:fileset-add-entry>
+		<px:dtbook-load name="load" />
+		<px:fileset-filter not-media-types="application/x-dtbook+xml"/>
+		<px:fileset-copy name="copy">
+			<p:with-option name="target" select="resolve-uri($result)"/>
+		</px:fileset-copy>
+		<px:fileset-store>
+			<p:input port="in-memory.in">
+				<p:pipe step="copy" port="result.in-memory"/>
+			</p:input>
+		</px:fileset-store>
+	</p:for-each>
 
 </p:declare-step>

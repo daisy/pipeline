@@ -30,7 +30,11 @@
     <p:option name="include-preview" select="'false'"/>
     <p:option name="include-pef" select="'false'"/>
     <p:option name="include-css" select="false()" cx:as="xs:boolean"/>
-    <p:option name="output-file-format" select="''"/>
+    <p:option name="medium" select="'embossed AND (-daisy-file-format:pef)'"> <!-- (xs:string | map(xs:string,item()) | item())* -->
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>The target medium</p>
+        </p:documentation>
+    </p:option>
     <p:option name="preview-table" select="''"/>
     
     <p:import href="xml-to-pef.store.xpl">
@@ -85,7 +89,7 @@
         </p:with-option>
         <p:with-option name="include-pef" select="$include-pef"/>
         <p:with-option name="include-preview" select="$include-preview"/>
-        <p:with-option name="output-file-format" select="$output-file-format"/>
+        <p:with-option name="medium" select="$medium"/>
         <p:with-option name="preview-table" select="$preview-table"/>
         <p:with-option name="output-dir" select="$output-dir"/>
         <p:with-option name="pef-output-dir" select="$pef-output-dir"/>

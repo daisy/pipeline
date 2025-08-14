@@ -30,8 +30,7 @@
           </html>
         </x:document>
       </x:input>
-      <x:param port="parameters" name="page-width" select="35"/>
-      <x:param port="parameters" name="page-height" select="20"/>
+      <x:option name="medium" select="'(width: 35) AND (height: 20) AND (-daisy-duplex)'"/>
       <x:option name="transform" select="'(translator:liblouis)(formatter:dotify)(grade:2)'"/>
       <x:option name="include-obfl" select="true()"/>
       <x:option name="temp-dir" select="$temp-dir"/>
@@ -112,8 +111,7 @@
           </html>
         </x:document>
       </x:input>
-      <x:param port="parameters" name="page-width" select="35"/>
-      <x:param port="parameters" name="page-height" select="20"/>
+      <x:option name="medium" select="'(width: 35) AND (height: 20) AND (-daisy-duplex)'"/>
       <x:option name="temp-dir" select="$temp-dir"/>
     </x:call>
     <x:context label="the result port">
@@ -164,8 +162,7 @@
           </html>
         </x:document>
       </x:input>
-      <x:param port="parameters" name="page-width" select="35"/>
-      <x:param port="parameters" name="page-height" select="20"/>
+      <x:option name="medium" select="'(width: 35) AND (height: 20) AND (-daisy-duplex)'"/>
       <x:option name="temp-dir" select="$temp-dir"/>
     </x:call>
     <x:context label="the result port">

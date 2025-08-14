@@ -161,8 +161,8 @@ public class AddEntriesStep extends DefaultStep implements XProcStep {
 			boolean first = getOption(_FIRST, false);
 			boolean replace = getOption(_REPLACE, false);
 			boolean replaceAttributes = getOption(_REPLACE_ATTRIBUTES, false);
-			List<File> added = addEntries(new XMLCalabashInputValue(sourceFilesetPipe).asXMLStreamReader(),
-			                              new XMLCalabashOutputValue(resultFilesetPipe, runtime).asXMLStreamWriter(),
+			List<File> added = addEntries(XMLCalabashInputValue.of(sourceFilesetPipe).asXMLStreamReader(),
+			                              XMLCalabashOutputValue.of(resultFilesetPipe, runtime).asXMLStreamWriter(),
 			                              entries, first, replace, replaceAttributes, logger);
 			if (first)
 				for (File f : added)

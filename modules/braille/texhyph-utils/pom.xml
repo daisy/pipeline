@@ -104,9 +104,6 @@
               !org.daisy.common.spi,
               *
             </Import-Package>
-            <Provide-Capability>
-              xpath.function;name="{http://code.google.com/p/texhyphj/}hyphenate"
-            </Provide-Capability>
           </instructions>
         </configuration>
       </plugin>

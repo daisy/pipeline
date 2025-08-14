@@ -70,10 +70,12 @@ import org.w3c.dom.Node;
 public class DefaultCssCascader implements CssCascader {
 
 	public boolean supportsMedium(Medium medium) {
+		if (medium.getType() == null)
+			return false;
 		switch (medium.getType()) {
 		case PRINT:
 		case SCREEN:
-			return "none".equals(medium.getCustomFeatures().get("counter-support"));
+			return medium.matches("(counter-support: none)");
 		default:
 			return false;
 		}
@@ -283,8 +285,8 @@ public class DefaultCssCascader implements CssCascader {
 			throw new UnsupportedOperationException(); // not needed
 		}
 
-		protected String serializeValue(Term<?> value) {
-			return CssSerializer.toString(value);
+		protected String serializeValue(Term<?> value, String property) {
+			return CssSerializer.getInstance().toString(value);
 		}
 	}
 

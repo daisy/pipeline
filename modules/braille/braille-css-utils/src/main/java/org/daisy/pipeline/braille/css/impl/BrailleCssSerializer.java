@@ -57,15 +57,20 @@ import org.daisy.braille.css.LanguageRange;
 import org.daisy.braille.css.PropertyValue;
 import org.daisy.pipeline.css.CssSerializer;
 
-public final class BrailleCssSerializer {
+public class BrailleCssSerializer extends CssSerializer {
 
-	private BrailleCssSerializer() {}
+	private static BrailleCssSerializer INSTANCE = new BrailleCssSerializer();
+
+	public static BrailleCssSerializer getInstance() {
+		return INSTANCE;
+	}
 
 	/* =================================================== */
 	/* toString                                            */
 	/* =================================================== */
 
-	public static String toString(Term<?> term) {
+	@Override
+	public String toString(Term<?> term) {
 		if (term instanceof TextTransformList ||
 		    term instanceof ContentList ||
 		    term instanceof StringSetList ||
@@ -125,17 +130,17 @@ public final class BrailleCssSerializer {
 			s += ")";
 			return s; }
 		else
-			return CssSerializer.toString(term, t -> toString(t));
+			return super.toString(term);
 	}
 
-	public static String toString(Declaration declaration) {
+	public String toString(Declaration declaration) {
 		if (declaration instanceof PropertyValue)
 			return declaration.getProperty() + ": " + serializePropertyValue((PropertyValue)declaration);
 		else
 			return declaration.getProperty() + ": " + serializeTermList(declaration);
 	}
 
-	public static String toString(BrailleCssStyle style) {
+	public String toString(BrailleCssStyle style) {
 		if (style.serialized == null) {
 			style.serialized = toString(style, null, null);
 			// cache
@@ -154,7 +159,7 @@ public final class BrailleCssSerializer {
 	 *                   to reconstruct {@code style} with {@code relativeTo} as the parent
 	 *                   style. Relativizes even if the parent style is empty.
 	 */
-	public static String toString(BrailleCssStyle style, BrailleCssStyle relativeTo) {
+	public String toString(BrailleCssStyle style, BrailleCssStyle relativeTo) {
 		if (relativeTo == null)
 			return toString(style);
 		String s = toString(style.relativize(relativeTo));
@@ -170,14 +175,14 @@ public final class BrailleCssSerializer {
 		return s;
 	}
 
-	public static String toString(BrailleCssStyle style, String indentation) {
+	public String toString(BrailleCssStyle style, String indentation) {
 		// this function does update the cache, nor does it store the string in the style object, as
 		// it's meant to pretty print a style (for the purpose of showing in temporary files or log
 		//messages)
 		return toString(style, null, indentation);
 	}
 
-	private static String toString(BrailleCssStyle style, String base, String indent) {
+	String toString(BrailleCssStyle style, String base, String indent) {
 		StringBuilder b = new StringBuilder();
 		StringBuilder rel = new StringBuilder();
 		if ("".equals(indent)) indent = null;
@@ -219,7 +224,7 @@ public final class BrailleCssSerializer {
 		return b.toString();
 	}
 
-	public static String toString(NodeData style) {
+	public String toString(NodeData style) {
 		List<String> declarations = new ArrayList<>();
 		for (String p : style.getPropertyNames()) {
 			String v = serializePropertyValue(style, p);
@@ -236,11 +241,11 @@ public final class BrailleCssSerializer {
 		return s.toString();
 	}
 
-	public static String serializePropertyValue(NodeData style, String property) {
+	public String serializePropertyValue(NodeData style, String property) {
 		return serializePropertyValue(style, property, true);
 	}
 
-	public static String serializePropertyValue(NodeData style, String property, boolean includeInherited) {
+	public String serializePropertyValue(NodeData style, String property, boolean includeInherited) {
 		Term<?> value = style.getValue(property, includeInherited);
 		if (value != null)
 			return toString(value);
@@ -250,7 +255,7 @@ public final class BrailleCssSerializer {
 		}
 	}
 
-	public static String serializePropertyValue(PropertyValue propValue) {
+	public String serializePropertyValue(PropertyValue propValue) {
 		if (propValue instanceof ParsedDeclaration)
 			return ((ParsedDeclaration)propValue).valueToString(); // this may trigger caching
 		else {
@@ -262,11 +267,11 @@ public final class BrailleCssSerializer {
 		}
 	}
 
-	public static String toString(RuleMainBlock rule) {
+	public String toString(RuleMainBlock rule) {
 		return serializeDeclarationList(rule);
 	}
 
-	public static String toString(RuleRelativeBlock rule) {
+	public String toString(RuleRelativeBlock rule) {
 		StringBuilder b = new StringBuilder();
 		boolean first = true;
 		for (Selector s : rule.getSelector()) {
@@ -287,7 +292,7 @@ public final class BrailleCssSerializer {
 		return b.toString();
 	}
 
-	public static String toString(RuleBlock<? extends Rule<?>> ruleBlock) {
+	public String toString(RuleBlock<? extends Rule<?>> ruleBlock) {
 		StringBuilder b = new StringBuilder();
 		b.append(serializeDeclarationList(Iterables.filter(ruleBlock, Declaration.class)));
 		for (Rule<?> r : ruleBlock)
@@ -299,20 +304,20 @@ public final class BrailleCssSerializer {
 		return b.toString();
 	}
 
-	public static String toString(RulePage page, BrailleCssParser parser) {
+	public String toString(RulePage page, BrailleCssParser parser) {
 		return toString(BrailleCssStyle.of(parser, page));
 	}
 
-	public static String serializeRuleBlockList(Iterable<? extends RuleBlock<? extends Rule<?>>> ruleBlocks) {
+	public String serializeRuleBlockList(Iterable<? extends RuleBlock<? extends Rule<?>>> ruleBlocks) {
 		String b = null;
 		for (RuleBlock<? extends Rule<?>> r : ruleBlocks) {
 			String s;
 			if (r instanceof RuleMainBlock)
-				s = BrailleCssSerializer.toString((RuleMainBlock)r);
+				s = toString((RuleMainBlock)r);
 			else if (r instanceof RuleRelativeBlock)
-				s = BrailleCssSerializer.toString((RuleRelativeBlock)r);
+				s = toString((RuleRelativeBlock)r);
 			else
-				s = BrailleCssSerializer.toString(r);
+				s = toString(r);
 			if (!s.isEmpty())
 				if (b == null)
 					b = s;
@@ -325,22 +330,18 @@ public final class BrailleCssSerializer {
 		return b;
 	}
 
-	public static String serializeTermList(Collection<? extends Term<?>> termList) {
-		return CssSerializer.serializeTermList(termList, t -> toString(t));
-	}
-
-	public static String serializeLanguageRanges(List<LanguageRange> languageRanges) {
+	public String serializeLanguageRanges(List<LanguageRange> languageRanges) {
 		return OutputUtil.appendList(new StringBuilder(), languageRanges, OutputUtil.SELECTOR_DELIM).toString();
 	}
 
-	public static String serializeDeclarationList(Iterable<? extends Declaration> declarations) {
+	public String serializeDeclarationList(Iterable<? extends Declaration> declarations) {
 		return serializeDeclarationList(declarations, "; ");
 	}
 
-	private static String serializeDeclarationList(Iterable<? extends Declaration> declarations, String separator) {
+	private String serializeDeclarationList(Iterable<? extends Declaration> declarations, String separator) {
 		List<String> sortedDeclarations = new ArrayList<>();
 		for (Declaration d : declarations)
-			sortedDeclarations.add(BrailleCssSerializer.toString(d));
+			sortedDeclarations.add(toString(d));
 		Collections.sort(sortedDeclarations);
 		StringBuilder s = new StringBuilder();
 		Iterator<String> it = sortedDeclarations.iterator();
@@ -353,14 +354,14 @@ public final class BrailleCssSerializer {
 
 	/* = PRIVATE ========================================= */
 
-	private static String toString(URL url) {
+	private String toString(URL url) {
 		if (url.url != null)
 			return toString(url.url);
 		else
 			return toString(url.urlAttr);
 	}
 
-	private static String toString(CounterStyle style) {
+	private String toString(CounterStyle style) {
 		if (style.name != null)
 			return style.name;
 		else if (style.symbol != null)
@@ -375,7 +376,7 @@ public final class BrailleCssSerializer {
 	/* toAttributes                                        */
 	/* =================================================== */
 
-	public static void toAttributes(BrailleCssStyle style, XMLStreamWriter writer) throws XMLStreamException {
+	public void toAttributes(BrailleCssStyle style, XMLStreamWriter writer) throws XMLStreamException {
 		if (style.nestedStyles != null)
 			throw new UnsupportedOperationException();
 		if (style.declarations != null)
@@ -388,7 +389,7 @@ public final class BrailleCssSerializer {
 	 *                   to reconstruct {@code style} with {@code relativeTo} as the parent
 	 *                   style. Relativizes even if the parent style is empty.
 	 */
-	public static void toAttributes(BrailleCssStyle style, BrailleCssStyle relativeTo, XMLStreamWriter writer)
+	public void toAttributes(BrailleCssStyle style, BrailleCssStyle relativeTo, XMLStreamWriter writer)
 			throws XMLStreamException {
 		if (relativeTo == null)
 			toAttributes(style, writer);
@@ -396,7 +397,7 @@ public final class BrailleCssSerializer {
 			toAttributes(style.relativize(relativeTo), writer);
 	}
 
-	private static void toAttribute(Declaration declaration, XMLStreamWriter writer) throws XMLStreamException {
+	private void toAttribute(Declaration declaration, XMLStreamWriter writer) throws XMLStreamException {
 		writeAttribute(writer,
 		               new QName(XMLNS_CSS, declaration.getProperty().replaceAll("^-", "_"), "css"),
 		               declaration instanceof PropertyValue
@@ -433,13 +434,13 @@ public final class BrailleCssSerializer {
 	private static final QName ALIGNMENT        = new QName("alignment");
 	private static final QName FROM             = new QName("from");
 
-	public static void toXml(BrailleCssStyle style, XMLStreamWriter writer) throws XMLStreamException {
+	public void toXml(BrailleCssStyle style, XMLStreamWriter writer) throws XMLStreamException {
 		toXml(style, writer, false);
 	}
 
-	private static void toXml(BrailleCssStyle style,
-	                          XMLStreamWriter w,
-	                          boolean recursive) throws XMLStreamException {
+	private void toXml(BrailleCssStyle style,
+	                   XMLStreamWriter w,
+	                   boolean recursive) throws XMLStreamException {
 		if (style.declarations != null && !Iterables.isEmpty(style.declarations)) {
 			if (!recursive || style.nestedStyles != null)
 				writeStartElement(w, CSS_RULE);
@@ -460,7 +461,7 @@ public final class BrailleCssSerializer {
 			}
 	}
 
-	public static void toXml(Declaration declaration, XMLStreamWriter writer) throws XMLStreamException {
+	public void toXml(Declaration declaration, XMLStreamWriter writer) throws XMLStreamException {
 		if (declaration instanceof PropertyValue)
 			toXml((PropertyValue)declaration, writer);
 		else {
@@ -471,7 +472,7 @@ public final class BrailleCssSerializer {
 		}
 	}
 
-	public static void toXml(PropertyValue value, XMLStreamWriter writer) throws XMLStreamException {
+	public void toXml(PropertyValue value, XMLStreamWriter writer) throws XMLStreamException {
 		writeStartElement(writer, CSS_PROPERTY);
 		writeAttribute(writer, NAME, value.getProperty());
 		CSSProperty p = value.getCSSProperty();
@@ -513,7 +514,7 @@ public final class BrailleCssSerializer {
 		writer.writeEndElement();
 	}
 
-	public static void toXml(ContentList list, XMLStreamWriter w) throws XMLStreamException {
+	public void toXml(ContentList list, XMLStreamWriter w) throws XMLStreamException {
 		for (Term<?> i : list)
 			if (i instanceof TermString || i instanceof TermURI) {
 				Term<String> s = (Term<String>)i;
@@ -611,7 +612,7 @@ public final class BrailleCssSerializer {
 				throw new RuntimeException("coding error");
 	}
 
-	public static void toXml(StringSetList list, XMLStreamWriter w) throws XMLStreamException {
+	public void toXml(StringSetList list, XMLStreamWriter w) throws XMLStreamException {
 		for (Term<?> i : list) {
 			if (i instanceof StringSetList.StringSet) {
 				StringSetList.StringSet s = (StringSetList.StringSet)i;
@@ -624,7 +625,7 @@ public final class BrailleCssSerializer {
 		}
 	}
 
-	public static void toXml(CounterSetList list, XMLStreamWriter w) throws XMLStreamException {
+	public void toXml(CounterSetList list, XMLStreamWriter w) throws XMLStreamException {
 		for (Term<?> i : list) {
 			if (i instanceof CounterSetList.CounterSet) {
 				CounterSetList.CounterSet s = (CounterSetList.CounterSet)i;

@@ -2,9 +2,12 @@
 <p:declare-step type="px:zedai-to-pef.script" version="1.0"
                 xmlns:p="http://www.w3.org/ns/xproc"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+                xmlns:pef="http://www.daisy.org/ns/2008/pef"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
-                xmlns:pef="http://www.daisy.org/ns/2008/pef"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:map="http://www.w3.org/2005/xpath-functions/map"
                 exclude-inline-prefixes="#all"
                 name="main"
                 px:input-filesets="zedai"
@@ -66,6 +69,16 @@
             px:zedai-load
         </p:documentation>
     </p:import>
+    <cx:import href="http://www.daisy.org/pipeline/modules/css-utils/library.xsl" type="application/xslt+xml">
+        <p:documentation>
+            pf:css-parse-medium
+        </p:documentation>
+    </cx:import>
+    <cx:import href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xsl" type="application/xslt+xml">
+        <p:documentation>
+            pf:pef-assert-embossable
+        </p:documentation>
+    </cx:import>
     
     <!-- ========== -->
     <!-- LOAD ZEDAI -->
@@ -77,32 +90,43 @@
     <!-- ZEDAI TO PEF -->
     <!-- ============ -->
     
-    <px:zedai-to-pef>
-        <p:input port="source.in-memory">
-            <p:pipe step="load" port="in-memory.out"/>
-        </p:input>
-        <p:with-option name="stylesheet" select="$stylesheet"/>
-        <p:with-option name="transform" select="$transform"/>
-        <p:with-option name="temp-dir" select="$temp-dir"/>
-    </px:zedai-to-pef>
-    
-    <!-- ========= -->
-    <!-- STORE PEF -->
-    <!-- ========= -->
-    <px:xml-to-pef.store>
-        <p:input port="obfl">
-            <p:empty/>
-        </p:input>
-        <p:with-option name="name" select="replace(p:base-uri(/),'^.*/([^/]*)\.[^/\.]*$','$1')">
+    <p:group>
+        <p:variable name="medium"
+                    select="pf:pef-assert-embossable(
+                              pf:css-parse-medium((
+                                ($output-file-format,'embossed AND (-daisy-format:pef)')[not(.='')][1],
+                                map:entry('-daisy-document-locale',(/*/@xml:lang,'und')[1]))))">
             <p:pipe step="main" port="source"/>
-        </p:with-option>
-        <p:with-option name="include-pef" select="$include-pef"/>
-        <p:with-option name="include-preview" select="$include-preview"/>
-        <p:with-option name="output-file-format" select="$output-file-format"/>
-        <p:with-option name="preview-table" select="$preview-table"/>
-        <p:with-option name="output-dir" select="$result"/>
-        <p:with-option name="pef-output-dir" select="$pef"/>
-        <p:with-option name="preview-output-dir" select="$preview"/>
-    </px:xml-to-pef.store>
+        </p:variable>
+        
+        <px:zedai-to-pef>
+            <p:input port="source.in-memory">
+                <p:pipe step="load" port="in-memory.out"/>
+            </p:input>
+            <p:with-option name="stylesheet" select="$stylesheet"/>
+            <p:with-option name="transform" select="$transform"/>
+            <p:with-option name="medium" select="$medium"/>
+            <p:with-option name="temp-dir" select="$temp-dir"/>
+        </px:zedai-to-pef>
+        
+        <!-- ========= -->
+        <!-- STORE PEF -->
+        <!-- ========= -->
+        <px:xml-to-pef.store>
+            <p:input port="obfl">
+                <p:empty/>
+            </p:input>
+            <p:with-option name="name" select="replace(p:base-uri(/),'^.*/([^/]*)\.[^/\.]*$','$1')">
+                <p:pipe step="main" port="source"/>
+            </p:with-option>
+            <p:with-option name="include-pef" select="$include-pef"/>
+            <p:with-option name="include-preview" select="$include-preview"/>
+            <p:with-option name="medium" select="$medium"/>
+            <p:with-option name="preview-table" select="$preview-table"/>
+            <p:with-option name="output-dir" select="$result"/>
+            <p:with-option name="pef-output-dir" select="$pef"/>
+            <p:with-option name="preview-output-dir" select="$preview"/>
+        </px:xml-to-pef.store>
+    </p:group>
     
 </p:declare-step>

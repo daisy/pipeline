@@ -5,7 +5,7 @@
   <uri name="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/dtbook-to-pef.xpl" uri="../xml/xproc/dtbook-to-pef.xpl"
        px:content-type="script" px:id="dtbook-to-pef"
        px:extends="../../../../../common-options.xpl
-                   ../css/page-layout.params
+                   ../css/medium.params
                    ../css/dotify.params"/>
   
   <!-- xproc library -->

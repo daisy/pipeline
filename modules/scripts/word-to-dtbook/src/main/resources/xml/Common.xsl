@@ -2285,44 +2285,6 @@
 		<xsl:param name="dpiStyle" as="xs:float?"/>
 		<xsl:param name="characterStyle" as="xs:boolean"/>
 		<xsl:choose>
-			<!--Checking for List in Blockquote-->
-			<xsl:when test="w:pPr/w:pStyle[substring(@w:val,1,5)='Block']">
-				<xsl:if test="count(preceding-sibling::node()[1]/w:pPr/w:pStyle[substring(@w:val,1,5)='Block'])=0">
-					<xsl:value-of disable-output-escaping="yes" select="'&lt;blockquote&gt;'"/>
-				</xsl:if>
-				<xsl:choose>
-					<!--Checking for 'Blockquote-AuthorDAISY' style-->
-					<xsl:when test="w:pPr/w:pStyle[@w:val='Blockquote-AuthorDAISY']">
-						<author>
-							<xsl:call-template name="ParaHandler">
-								<xsl:with-param name="flag" select="'0'"/>
-								<xsl:with-param name="pagination" select="$pagination"/>
-								<xsl:with-param name="charparahandlerStyle" select="$characterStyle"/>
-							</xsl:call-template>
-						</author>
-					</xsl:when>
-					<!--Checking for List in BlockQuote Element-->
-					<xsl:when test="((w:pPr/w:numPr/w:ilvl) and (w:pPr/w:numPr/w:numId))">
-						<!--variable checkilvl holds level(w:ilvl) value of the List-->
-						<xsl:call-template name="List">
-							<xsl:with-param name="listcharStyle" select="$characterStyle"/>
-						</xsl:call-template>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:if test="not(w:pPr/pStyle/@w:val='List-HeadingDAISY')">
-							<!--Calling ParagraphStyle Template-->
-							<xsl:call-template name="ParagraphStyle">
-								<xsl:with-param name="pagination" select="$pagination"/>
-								<xsl:with-param name="characterparaStyle" select="$characterStyle"/>
-							</xsl:call-template>
-						</xsl:if>
-					</xsl:otherwise>
-				</xsl:choose>
-				<xsl:if test="count(following-sibling::node()[1]/w:pPr/w:pStyle[substring(@w:val,1,5)='Block'])=0">
-					<!--Closing blockquote element-->
-					<xsl:value-of disable-output-escaping="yes" select="'&lt;/blockquote &gt;'"/>
-				</xsl:if>
-			</xsl:when>
 			<!-- TOC starting paragraphe -->
 			<xsl:when test="(
 					w:pPr/w:pStyle[substring(@w:val,1,3)='TOC']
@@ -3049,7 +3011,10 @@
 									and count(preceding-sibling::node()[1]/w:pPr/w:pStyle[substring(@w:val,1,4)='Poem'])=1">
 			<xsl:value-of disable-output-escaping="yes" select="'&lt;/poem&gt;'"/>
 		</xsl:if>
-
+		<xsl:if test="not(w:pPr/w:pStyle[substring(@w:val,1,5)='Block'])
+									and count(preceding-sibling::node()[1]/w:pPr/w:pStyle[substring(@w:val,1,5)='Block'])=1">
+			<xsl:value-of disable-output-escaping="yes" select="'&lt;/blockquote&gt;'"/>
+		</xsl:if>
 		<xsl:if test="not(w:pPr/w:pStyle[contains(@w:val,'Prodnote-RequiredDAISY')])
 									and count(preceding-sibling::node()[1]/w:pPr/w:pStyle[contains(@w:val,'Prodnote-RequiredDAISY')])=1">
 			<xsl:value-of disable-output-escaping="yes" select="'&lt;/prodnote &gt;'"/>
@@ -3223,6 +3188,64 @@
 				<!--<xsl:if test="count(following-sibling::node()[1]/w:pPr/w:pStyle[contains(@w:val,'Prodnote-RequiredDAISY')])=0">
 					<xsl:value-of disable-output-escaping="yes" select="'&lt;/prodnote&gt;'"/>
 				</xsl:if>-->
+			</xsl:when>
+			<!--Checking for Blockquote/Blockquote-AuthorDAISY custom paragraph styles-->
+			<xsl:when test="w:pPr/w:pStyle[substring(@w:val,1,5)='Block']">
+				<xsl:if test="($flagNote='footnote' or $flagNote='endnote') and d:NoteFlag($myObj)=1">
+					<p>
+						<xsl:value-of select="$FootnotesNumberingPrefix"/>
+						<xsl:choose>
+								<xsl:when test="$FootnotesNumbering = 'number'">
+										<xsl:value-of select="$checkid + number($FootnotesStartValue)"/>
+								</xsl:when>
+						</xsl:choose>
+						<xsl:value-of select="$FootnotesNumberingSuffix"/>
+					</p>
+				</xsl:if>
+				<xsl:if test="count(preceding-sibling::node()[1]/w:pPr/w:pStyle[substring(@w:val,1,5)='Block'])=0">
+					<xsl:variable name="lang">
+							<xsl:call-template name="GetParagraphLanguage">
+									<xsl:with-param name="paragraphNode" select="." />
+							</xsl:call-template>
+					</xsl:variable>
+					<xsl:value-of disable-output-escaping="yes" select="concat('&lt;blockquote xml:lang=&quot;',$lang,'&quot;&gt;')"/>
+				</xsl:if>
+				<xsl:choose>
+						<!--Checking for 'Blockquote-AuthorDAISY' style-->
+						<xsl:when test="w:pPr/w:pStyle[@w:val='Blockquote-AuthorDAISY']">
+							<author>
+								<xsl:call-template name="Paracharacterstyle">
+										<xsl:with-param name="characterStyle" select="$characterparaStyle"/>
+										<xsl:with-param name="txt" select="$txt"/>
+										<xsl:with-param name="flag" select="'0'"/>
+								</xsl:call-template>
+							</author>
+						</xsl:when>
+						<!--Checking for List in BlockQuote Element-->
+						<xsl:when test="((w:pPr/w:numPr/w:ilvl) and (w:pPr/w:numPr/w:numId))">
+							<!--variable checkilvl holds level(w:ilvl) value of the List-->
+							<xsl:call-template name="List">
+									<xsl:with-param name="listcharStyle" select="$characterparaStyle"/>
+							</xsl:call-template>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:call-template name="Paracharacterstyle">
+									<xsl:with-param name="characterStyle" select="$characterparaStyle"/>
+									<xsl:with-param name="txt" select="$txt"/>
+									<xsl:with-param name="flag" select="'1'"/>
+							</xsl:call-template>
+							<!--<xsl:if test="not(w:pPr/pStyle/@w:val='List-HeadingDAISY')">
+									<xsl:call-template name="Paracharacterstyle">
+											<xsl:with-param name="characterStyle" select="$characterparaStyle"/>
+											<xsl:with-param name="txt" select="$txt"/>
+											<xsl:with-param name="flag" select="'0'"/>
+									</xsl:call-template>
+							</xsl:if>-->
+						</xsl:otherwise>
+				</xsl:choose>
+				<xsl:if test="not(following-sibling::w:p)">
+					<xsl:value-of disable-output-escaping="yes" select="'&lt;/blockquote&gt;'"/>
+				</xsl:if>
 			</xsl:when>
 			<!--Checking for PoemDAISY/Poem-TitleDAISY/Poem-HeadingDAISY/Poem-AuthorDAISY/Poem-BylineDAISY custom paragraph styles-->
 			<xsl:when test="w:pPr/w:pStyle[substring(@w:val,1,4)='Poem']">

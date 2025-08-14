@@ -32,8 +32,8 @@ import org.slf4j.LoggerFactory;
 @SuppressWarnings("serial")
 public class EncodeDefinition extends ExtensionFunctionDefinition {
 	
-	private static final StructuredQName funcname = new StructuredQName("pef",
-			"http://www.daisy.org/ns/2008/pef", "encode");
+	private static final StructuredQName funcname = new StructuredQName("pf",
+			"http://www.daisy.org/ns/pipeline/functions", "pef-encode");
 	
 	@Reference(
 		name = "TableRegistry",
@@ -96,7 +96,7 @@ public class EncodeDefinition extends ExtensionFunctionDefinition {
 				catch (XPathException e) {
 					throw e; }
 				catch (Throwable e) {
-					throw new XPathException("Unexpected error in pef:encode", e); }
+					throw new XPathException("Unexpected error in pf:pef-encode", e); }
 			}
 		};
 	}

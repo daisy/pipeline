@@ -10,7 +10,10 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 		  pipelineModule("fileset-utils"),
 		  pipelineModule("smil-utils"),
 		  pipelineModule("dtbook-utils"),
+		  pipelineModule("css-utils"),
+		  pipelineModule("mathml-utils"),
 		  pipelineModule("audio-common"),
+		  pipelineModule("tts-common"),
 		};
 	}
 }

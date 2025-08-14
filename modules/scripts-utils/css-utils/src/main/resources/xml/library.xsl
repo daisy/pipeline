@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- <xsl:package version="3.0" -->
 <!--              name="http://www.daisy.org/pipeline/modules/css-utils/library.xsl" -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"
              xmlns:xs="http://www.w3.org/2001/XMLSchema"
              xmlns:map="http://www.w3.org/2005/xpath-functions/map"
              xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
              xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions"
              xmlns:d="http://www.daisy.org/ns/pipeline/data"
              xmlns:c="http://www.w3.org/ns/xproc-step"
-             xmlns:java="implemented-in-java"
              exclude-result-prefixes="#all"
              >
 
@@ -125,13 +124,35 @@
 			<p>Test whether a media query matches a medium.</p>
 		</desc>
 	</doc>
-	<java:function name="pf:media-query-matches" as="xs:boolean">
+	<xsl:function name="pf:media-query-matches" as="xs:boolean"
+	              xmlns:CssMediaFunctions="org.daisy.pipeline.css.saxon.impl.CssMediaFunctionProvider$CssMediaFunctions">
 		<xsl:param name="media-query" as="xs:string"/>
-		<xsl:param name="medium" as="xs:string"/>
-		<!--
-		    Implemented in ../../java/org.daisy/pipeline/css/saxon/impl/MediaQueryMatchesDefinition.java
-		-->
-	</java:function>
+		<xsl:param name="medium" as="item()*"/> <!-- xs:string | map() | item() -->
+		<xsl:sequence select="CssMediaFunctions:matches($media-query,$medium)">
+			<!--
+			    Implemented in ../../java/org.daisy/pipeline/css/saxon/impl/CssMediaFunctionProvider.java
+			-->
+		</xsl:sequence>
+	</xsl:function>
+
+	<doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+		<desc>
+			<p>Parse a media query and select a Medium object based on it.</p>
+			<p>The argument may also be a map, or an already parsed medium in the form of a Medium
+			object.</p>
+			<p>If a sequence of arguments is provided, a single medium combining all the features is
+			returned. Duplicate features are not allowed.</p>
+		</desc>
+	</doc>
+	<xsl:function name="pf:css-parse-medium" as="item()"
+	              xmlns:CssMediaFunctions="org.daisy.pipeline.css.saxon.impl.CssMediaFunctionProvider$CssMediaFunctions">
+		<xsl:param name="medium" as="item()*"/> <!-- xs:string | map() | item() -->
+		<xsl:sequence select="CssMediaFunctions:parse($medium)">
+			<!--
+			    Implemented in ../../java/org/daisy/pipeline/css/saxon/impl/CssMediaFunctionProvider.java
+			-->
+		</xsl:sequence>
+	</xsl:function>
 
 	<doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
 		<desc>
@@ -176,7 +197,7 @@
 					<xsl:when test=". castable as xs:string">
 						<xsl:sequence select="StylesheetParametersParser:parse(string(.))">
 							<!--
-							    Implemented in ../../java/org/daisy/pipeline/css/saxon/impl/CssParseParamSetDefinition.java
+							    Implemented in ../../java/org/daisy/pipeline/css/saxon/impl/CssParseParamSetFunctionProvider.java
 							-->
 						</xsl:sequence>
 					</xsl:when>

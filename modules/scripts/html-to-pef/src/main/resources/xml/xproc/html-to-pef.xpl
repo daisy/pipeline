@@ -2,10 +2,12 @@
 <p:declare-step type="px:html-to-pef.script" version="1.0"
                 xmlns:p="http://www.w3.org/ns/xproc"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:map="http://www.w3.org/2005/xpath-functions/map"
                 xmlns:pef="http://www.daisy.org/ns/2008/pef"
                 exclude-inline-prefixes="#all"
                 name="main"
@@ -41,7 +43,7 @@
     <p:output port="status" px:media-type="application/vnd.pipeline.status+xml">
         <!-- when `include-obfl` is set to true, the conversion may fail but still output a document
              on the "obfl" port -->
-        <p:pipe step="convert" port="status"/>
+        <p:pipe step="convert-and-store" port="status"/>
     </p:output>
     
     <p:option name="stylesheet">
@@ -136,6 +138,16 @@ sheet modules) are available for use in Sass style sheets:
             px:html-load
         </p:documentation>
     </p:import>
+    <cx:import href="http://www.daisy.org/pipeline/modules/css-utils/library.xsl" type="application/xslt+xml">
+        <p:documentation>
+            pf:css-parse-medium
+        </p:documentation>
+    </cx:import>
+    <cx:import href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xsl" type="application/xslt+xml">
+        <p:documentation>
+            pf:pef-assert-embossable
+        </p:documentation>
+    </cx:import>
     
     <!-- ================================================= -->
     <!-- Create a <c:param-set/> of the options            -->
@@ -144,7 +156,7 @@ sheet modules) are available for use in Sass style sheets:
     <!-- pass all the variables all the time.              -->
     <!-- ================================================= -->
     <p:in-scope-names name="in-scope-names"/>
-    <px:delete-parameters name="input-options" px:message="Collecting parameters" px:message-severity="DEBUG" px:progress=".01"
+    <px:delete-parameters name="input-options" px:message="Collecting parameters" px:message-severity="DEBUG"
                           parameter-names="html
                                            stylesheet
                                            stylesheet-parameters
@@ -159,6 +171,7 @@ sheet modules) are available for use in Sass style sheets:
                                            result
                                            pef
                                            preview
+                                           pdf
                                            obfl
                                            html-with-css
                                            temp-dir">
@@ -179,56 +192,75 @@ sheet modules) are available for use in Sass style sheets:
             <p:pipe step="main" port="source"/>
         </p:input>
     </px:fileset-add-entry>
-    <px:html-load name="html" px:message="Loading HTML" px:progress=".03">
+    <px:html-load name="html" px:message="Loading HTML" px:progress=".04">
         <p:input port="source.in-memory">
             <p:pipe step="source" port="result.in-memory"/>
         </p:input>
         <p:with-option name="handle-xinclude" select="$handle-xinclude='true'"/>
     </px:html-load>
     
-    <!-- ============ -->
-    <!-- HTML TO PEF -->
-    <!-- ============ -->
-    <px:html-to-pef name="convert" px:message="Converting from HTML to PEF" px:progress=".90">
-        <p:input port="source.in-memory">
-            <p:pipe step="html" port="result.in-memory"/>
-        </p:input>
-        <p:with-option name="temp-dir" select="concat($temp-dir,'convert/')"/>
-        <p:with-option name="stylesheet" select="$stylesheet"/>
-        <p:with-option name="stylesheet-parameters" select="$stylesheet-parameters"/>
-        <p:with-option name="transform"
-                       select="concat($braille-code,($transform,'(translator:liblouis)(formatter:dotify)')[not(.='')][1])"/>
-        <p:with-option name="include-obfl" select="$include-obfl"/>
-        <p:input port="parameters">
-            <p:pipe port="result" step="input-options"/>
-        </p:input>
-    </px:html-to-pef>
-    
-    <!-- ========= -->
-    <!-- STORE PEF -->
-    <!-- ========= -->
-    <px:html-to-pef.store px:progress=".05">
-        <p:input port="obfl">
-            <p:pipe step="convert" port="obfl"/>
-        </p:input>
-        <p:input port="html">
-            <p:pipe step="html" port="result.in-memory"/>
-        </p:input>
-        <p:input port="css">
-            <p:pipe step="convert" port="css"/>
-        </p:input>
-        <p:with-option name="include-pef" select="$include-pef"/>
-        <p:with-option name="include-preview" select="$include-preview"/>
-        <p:with-option name="include-pdf" select="$include-pdf"/>
-        <p:with-option name="include-css" select="$include-css"/>
-        <p:with-option name="output-file-format" select="$output-file-format"/>
-        <p:with-option name="preview-table" select="$preview-table"/>
-        <p:with-option name="output-dir" select="$result"/>
-        <p:with-option name="pef-output-dir" select="$pef"/>
-        <p:with-option name="preview-output-dir" select="$preview"/>
-        <p:with-option name="pdf-output-dir" select="$pdf"/>
-        <p:with-option name="obfl-output-dir" select="$obfl"/>
-        <p:with-option name="css-output-dir" select="$html-with-css"/>
-    </px:html-to-pef.store>
+    <p:group name="convert-and-store" px:progress=".96">
+        <p:output port="status">
+            <p:pipe step="convert" port="status"/>
+        </p:output>
+        
+        <p:variable name="medium"
+                    select="pf:pef-assert-embossable(
+                              pf:css-parse-medium((
+                                ($output-file-format,'embossed AND (-daisy-format:pef)')[not(.='')][1],
+                                map:merge((
+                                  map:entry('width',$page-width),
+                                  map:entry('height',$page-height),
+                                  map:entry('-daisy-duplex',$duplex),
+                                  map:entry('-daisy-document-locale',(/*/@xml:lang,/*/@lang,'und')[1]))))))">
+            <p:pipe step="main" port="source"/>
+        </p:variable>
+        
+        <!-- ============ -->
+        <!-- HTML TO PEF -->
+        <!-- ============ -->
+        <px:html-to-pef name="convert" px:message="Converting from HTML to PEF" px:progress="90/96">
+            <p:input port="source.in-memory">
+                <p:pipe step="html" port="result.in-memory"/>
+            </p:input>
+            <p:with-option name="temp-dir" select="concat($temp-dir,'convert/')"/>
+            <p:with-option name="stylesheet" select="$stylesheet"/>
+            <p:with-option name="stylesheet-parameters" select="$stylesheet-parameters"/>
+            <p:with-option name="transform"
+                           select="concat($braille-code,($transform,'(translator:liblouis)(formatter:dotify)')[not(.='')][1])"/>
+            <p:with-option name="medium" select="$medium"/>
+            <p:with-option name="include-obfl" select="$include-obfl"/>
+            <p:input port="parameters">
+                <p:pipe port="result" step="input-options"/>
+            </p:input>
+        </px:html-to-pef>
+        
+        <!-- ========= -->
+        <!-- STORE PEF -->
+        <!-- ========= -->
+        <px:html-to-pef.store px:progress="6/96">
+            <p:input port="obfl">
+                <p:pipe step="convert" port="obfl"/>
+            </p:input>
+            <p:input port="html">
+                <p:pipe step="html" port="result.in-memory"/>
+            </p:input>
+            <p:input port="css">
+                <p:pipe step="convert" port="css"/>
+            </p:input>
+            <p:with-option name="include-pef" select="$include-pef"/>
+            <p:with-option name="include-preview" select="$include-preview"/>
+            <p:with-option name="include-pdf" select="$include-pdf"/>
+            <p:with-option name="include-css" select="$include-css"/>
+            <p:with-option name="medium" select="$medium"/>
+            <p:with-option name="preview-table" select="$preview-table"/>
+            <p:with-option name="output-dir" select="$result"/>
+            <p:with-option name="pef-output-dir" select="$pef"/>
+            <p:with-option name="preview-output-dir" select="$preview"/>
+            <p:with-option name="pdf-output-dir" select="$pdf"/>
+            <p:with-option name="obfl-output-dir" select="$obfl"/>
+            <p:with-option name="css-output-dir" select="$html-with-css"/>
+        </px:html-to-pef.store>
+    </p:group>
     
 </p:declare-step>

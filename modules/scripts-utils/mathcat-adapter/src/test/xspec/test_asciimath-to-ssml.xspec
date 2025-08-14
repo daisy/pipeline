@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+               stylesheet="http://www.daisy.org/pipeline/modules/asciimath-utils/library.xsl">
+
+  <x:scenario label="Test 1">
+    <x:call function="pf:asciimath-to-ssml">
+      <x:param select="//text()">
+        <span class="asciimath">x = (-b +- sqrt(b^2-4ac))/(2a)</span>
+      </x:param>
+      <x:param select="'en'"/>
+    </x:call>
+    <x:expect label="SSML" xmlns="http://www.w3.org/2001/10/synthesis">
+      <speak version="1.1">
+        <say-as interpret-as="characters">x</say-as>  is equal to <break time="384ms"/> the fraction with numerator <break time="400ms"/> negative <say-as interpret-as="characters">b</say-as>  plus or minus <break time="128ms"/> the square root of <say-as interpret-as="characters">b</say-as> squared  minus  4   <say-as interpret-as="characters">a</say-as>   <say-as interpret-as="characters">c</say-as> <break time="200ms"/> end root <break time="400ms"/>and denominator 2   <say-as interpret-as="characters">a</say-as> <break time="800ms"/>end fraction <break time="200ms"/>
+      </speak>
+    </x:expect>
+  </x:scenario>
+
+</x:description>

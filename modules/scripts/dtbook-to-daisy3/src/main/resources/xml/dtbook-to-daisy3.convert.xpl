@@ -178,6 +178,7 @@
       px:daisy3-create-opf
       px:daisy3-create-res-file
       px:daisy3-create-smils
+      px:tts-for-dtbook
     </p:documentation>
   </p:import>
   <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
@@ -190,11 +191,6 @@
       px:fileset-add-entry
       px:fileset-join
       px:fileset-filter
-    </p:documentation>
-  </p:import>
-  <p:import href="http://www.daisy.org/pipeline/modules/dtbook-tts/library.xpl">
-    <p:documentation>
-      px:tts-for-dtbook
     </p:documentation>
   </p:import>
   <p:import href="http://www.daisy.org/pipeline/modules/smil-utils/library.xpl">

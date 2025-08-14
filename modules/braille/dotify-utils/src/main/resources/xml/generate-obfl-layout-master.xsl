@@ -5,20 +5,20 @@
                 xmlns:map="http://www.w3.org/2005/xpath-functions/map"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
-                xmlns:pef="http://www.daisy.org/ns/2008/pef"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                 xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
                 xmlns:obfl="http://www.daisy.org/ns/2011/obfl"
+                xmlns:medium="org.daisy.pipeline.braille.dotify.saxon.impl.EmbossedMediumFunctions"
                 exclude-result-prefixes="#all"
                 version="3.0">
     
     <xsl:include href="http://www.daisy.org/pipeline/modules/common-utils/library.xsl"/>
+    <xsl:include href="http://www.daisy.org/pipeline/modules/css-utils/library.xsl"/>
     <xsl:include href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xsl"/>
+    <xsl:include href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xsl"/>
     <xsl:include href="marker-reference.xsl"/>
     
-    <xsl:param name="page-width" as="xs:string" required="yes"/>
-    <xsl:param name="page-height" as="xs:string" required="yes"/>
-    <xsl:param name="duplex" as="xs:string" required="yes"/>
+    <xsl:param name="medium" as="item()?" required="yes"/>
     <xsl:param name="braille-charset-table" as="xs:string" required="yes"/>
     <xsl:param name="page-and-volume-styles" as="item()*" required="no"/>
     <xsl:param name="counter-styles" as="item()?" required="no"/>
@@ -152,16 +152,16 @@
         <xsl:param name="name" as="xs:string"/>
         <xsl:param name="default-page-counter-name" as="xs:string"/> <!-- "page"|"pre-page"|"post-page" -->
         <xsl:variable name="page-style" as="item()" select="($page-style,$empty-page-style)[1]"/>
-        <xsl:variable name="duplex" as="xs:boolean" select="$duplex='true'"/>
+        <xsl:variable name="page-style" as="item()" select="medium:getPrintablePageStyle($medium,$page-style)"/>
         <xsl:variable name="right-page-style" as="item()?" select="s:get($page-style,'&amp;:right')"/>
         <xsl:variable name="left-page-style" as="item()?" select="s:get($page-style,'&amp;:left')"/>
         <xsl:variable name="size" as="xs:string"
-                      select="string((s:get($page-style,'size')[not(string(.)='auto')],
-                                      concat($page-width,' ',$page-height)
-                                     )[1])"/>
-        <xsl:variable name="page-width" as="xs:integer" select="xs:integer(number(tokenize($size, '\s+')[1]))"/>
-        <xsl:variable name="page-height" as="xs:integer" select="xs:integer(number(tokenize($size, '\s+')[2]))"/>
-
+                      select="string(s:get($page-style,'size')[not(string(.)='auto')])"/>
+        <xsl:variable name="page-width" as="xs:integer" select="xs:integer(number(tokenize($size,'\s+')[1]))"/>
+        <xsl:variable name="page-height" as="xs:integer" select="xs:integer(number(tokenize($size,'\s+')[2]))"/>
+        <xsl:variable name="duplex" as="xs:boolean" select="if (exists($medium))
+                                                            then pf:media-query-matches('(-daisy-duplex)',$medium)
+                                                            else true()"/>
         <xsl:if test="exists(s:get($page-style,'counter-set')[not(string(.)='none')])">
             <xsl:message>
                 <xsl:value-of select="string(s:get($page-style,'counter-set'))"/>
@@ -196,32 +196,42 @@
         </xsl:variable>
         <xsl:variable name="footnotes-style" as="item()?" select="s:get($page-style,'@footnotes')"/>
         <xsl:variable name="footnotes-content" as="element()*" select="s:toXml(s:get($footnotes-style,'content'))"/>
-        <layout-master name="{$name}" duplex="{$duplex}"
-                       page-width="{$page-width}" page-height="{$page-height}">
-            <xsl:if test="exists(s:iterate($right-page-style))">
+        <layout-master name="{$name}" duplex="{$duplex}" page-width="{$page-width}" page-height="{$page-height}">
+            <xsl:variable name="has-right-page-style" as="xs:boolean" select="exists(s:iterate($right-page-style))"/>
+            <xsl:variable name="has-left-page-style" as="xs:boolean" select="exists(s:iterate($left-page-style))"/>
+            <xsl:variable name="template" as="item()?"
+                          select="if ($has-left-page-style) then $left-page-style
+                                  else if ($has-right-page-style) then $right-page-style
+                                  else ()"/>
+            <xsl:variable name="template-side" as="xs:string?"
+                          select="if ($has-left-page-style) then 'left'
+                                  else if ($has-right-page-style) then 'right'
+                                  else ()"/>
+            <xsl:variable name="default-template" as="item()"
+                          select="if ($has-right-page-style and $has-left-page-style)
+                                  then $right-page-style
+                                  else $page-style"/>
+            <xsl:variable name="default-template-side" as="xs:string"
+				          select="if ($has-right-page-style and $has-left-page-style)
+                                  then 'right'
+                                  else 'both'"/>
+            <xsl:if test="$template[not(string(.)=string(s:remove($default-template,
+                                                                  ('&amp;:left','&amp;:right'))))]">
                 <!--
                     FIXME: need better way to determine whether we are on right or left page: https://github.com/mtmse/obfl/issues/22
                 -->
-                <template use-when="(= (% $page 2) 1)">
+                <template use-when="(= (% $page 2) {if ($template-side='left') then '0' else '1'})">
                     <xsl:call-template name="template">
-                        <xsl:with-param name="style" select="$right-page-style"/>
-                        <xsl:with-param name="page-side" tunnel="yes" select="'right'"/>
-                        <xsl:with-param name="page-counter-name" tunnel="yes" select="$page-counter-name"/>
-                    </xsl:call-template>
-                </template>
-            </xsl:if>
-            <xsl:if test="exists(s:iterate($left-page-style))">
-                <template use-when="(= (% $page 2) 0)">
-                    <xsl:call-template name="template">
-                        <xsl:with-param name="style" select="$left-page-style"/>
-                        <xsl:with-param name="page-side" tunnel="yes" select="'left'"/>
+                        <xsl:with-param name="style" select="$template"/>
+                        <xsl:with-param name="page-side" tunnel="yes" select="$template-side"/>
                         <xsl:with-param name="page-counter-name" tunnel="yes" select="$page-counter-name"/>
                     </xsl:call-template>
                 </template>
             </xsl:if>
             <default-template>
                 <xsl:call-template name="template">
-                    <xsl:with-param name="style" select="$page-style"/>
+                    <xsl:with-param name="style" select="$default-template"/>
+                    <xsl:with-param name="page-side" tunnel="yes" select="$default-template-side"/>
                     <xsl:with-param name="page-counter-name" tunnel="yes" select="$page-counter-name"/>
                 </xsl:call-template>
             </default-template>
@@ -235,7 +245,7 @@
                     <xsl:with-param name="msg">not more than one flow() function supported in footnotes area</xsl:with-param>
                 </xsl:call-template>
             </xsl:if>
-             <xsl:if test="$footnotes-content[self::css:flow[@from]][1][not(@scope)]">
+            <xsl:if test="$footnotes-content[self::css:flow[@from]][1][not(@scope)]">
                 <xsl:call-template name="pf:warn">
                     <xsl:with-param name="msg">flow() function without scope argument not allowed within footnotes area</xsl:with-param>
                 </xsl:call-template>
@@ -268,10 +278,10 @@
                     <xsl:if test="$footnotes-border-top!='none'">
                         <before>
                             <block translate="pre-translated-text-css">
-	                            <xsl:variable name="pattern"
-	                                          select="if ($braille-charset-table='')
+                                <xsl:variable name="pattern"
+                                              select="if ($braille-charset-table='')
                                                       then $footnotes-border-top
-                                                      else pef:encode(concat('(id:&quot;',$braille-charset-table,'&quot;)'),
+                                                      else pf:pef-encode(concat('(id:&quot;',$braille-charset-table,'&quot;)'),
                                                                       $footnotes-border-top)"/>
                                 <leader pattern="{$pattern}" position="100%" align="right"/>
                                 <!-- We add a single instance of the pattern in order to have some
@@ -292,31 +302,37 @@
         <xsl:variable name="top-left" as="element()*">
             <xsl:call-template name="fields">
                 <xsl:with-param name="properties" select="s:get($style,'@top-left')"/>
+                <xsl:with-param name="side" select="'top'"/>
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="top-center" as="element()*">
             <xsl:call-template name="fields">
                 <xsl:with-param name="properties" select="s:get($style,'@top-center')"/>
+                <xsl:with-param name="side" select="'top'"/>
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="top-right" as="element()*">
             <xsl:call-template name="fields">
                 <xsl:with-param name="properties" select="s:get($style,'@top-right')"/>
+                <xsl:with-param name="side" select="'top'"/>
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="bottom-left" as="element()*">
             <xsl:call-template name="fields">
                 <xsl:with-param name="properties" select="s:get($style,'@bottom-left')"/>
+                <xsl:with-param name="side" select="'bottom'"/>
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="bottom-center" as="element()*">
             <xsl:call-template name="fields">
                 <xsl:with-param name="properties" select="s:get($style,'@bottom-center')"/>
+                <xsl:with-param name="side" select="'bottom'"/>
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="bottom-right" as="element()*">
             <xsl:call-template name="fields">
                 <xsl:with-param name="properties" select="s:get($style,'@bottom-right')"/>
+                <xsl:with-param name="side" select="'bottom'"/>
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="margin-top" as="xs:integer"
@@ -409,13 +425,26 @@
     
     <xsl:template name="fields" as="element()*"> <!-- obfl:field* -->
         <xsl:param name="properties" as="item()?"/>
+        <xsl:param name="side" as="xs:string" required="yes"/>
         <xsl:variable name="white-space" as="item()?" select="s:getOrDefault($properties,'white-space')"/>
         <xsl:variable name="text-transform" as="item()?" select="s:getOrDefault($properties,'text-transform')"/>
+        <!-- assume that no other padding is specified (ensured by EmbossedMediumFunctions.java) -->
+        <xsl:variable name="padding" as="item()?" select="s:getOrDefault($properties,concat('padding-',$side))"/>
         <xsl:variable name="content" as="element()*">
+            <xsl:if test="exists($padding) and $side='top'">
+                <xsl:for-each select="1 to xs:integer(number(string($padding)))">
+                    <br/>
+                </xsl:for-each>
+            </xsl:if>
             <xsl:apply-templates select="s:toXml(s:get($properties,'content'))" mode="eval-content-list-top-bottom">
                 <xsl:with-param name="white-space" select="$white-space"/>
                 <xsl:with-param name="text-transform" select="$text-transform"/>
             </xsl:apply-templates>
+            <xsl:if test="exists($padding) and $side='bottom'">
+                <xsl:for-each select="1 to xs:integer(number(string($padding)))">
+                    <br/>
+                </xsl:for-each>
+            </xsl:if>
         </xsl:variable>
         <xsl:for-each-group select="$content" group-ending-with="obfl:br">
             <field>
@@ -432,14 +461,27 @@
         <xsl:param name="min-width" as="xs:integer" required="yes"/>
         <xsl:variable name="white-space" as="item()?" select="s:getOrDefault($properties,'white-space')"/>
         <xsl:variable name="text-transform" as="item()?" select="s:getOrDefault($properties,'text-transform')"/>
+        <!-- assume that no other padding is specified (ensured by EmbossedMediumFunctions.java) -->
+        <xsl:variable name="padding" as="item()?" select="s:getOrDefault($properties,concat('padding-',$side))"/>
         <xsl:variable name="indicators" as="element()*">
             <xsl:apply-templates select="s:toXml(s:get($properties,'content'))" mode="eval-content-list-left-right">
+                <xsl:with-param name="side" select="$side"/>
                 <xsl:with-param name="white-space" select="$white-space"/>
                 <xsl:with-param name="text-transform" select="$text-transform"/>
+                <xsl:with-param name="padding" select="$padding"/>
             </xsl:apply-templates>
         </xsl:variable>
         <xsl:if test="exists($indicators) or $min-width &gt; 0">
-            <margin-region align="{$side}" width="{max((count($indicators),$min-width))}">
+            <!--
+                Note that left and right margin content, unlike top and bottom, will not extend into
+                the page area if it doesn't fit in the margin, but will be truncated or result in an
+                error (depending on the "allow-text-overflow-trimming" setting). We do a best effort
+                here to set the minimum required width of the margin based on the indicator value,
+                but it could be inaccurate (and even on overestimation). Ultimately we should
+                require that the user sets the margin to a high enough value, and not not attempt to
+                do an estimation of the required width.
+            -->
+            <margin-region align="{$side}" width="{max(($indicators/@indicator/string-length(.),$min-width))}">
                 <indicators>
                     <xsl:sequence select="$indicators"/>
                 </indicators>
@@ -579,8 +621,29 @@
     
     <xsl:template match="css:custom-func[@name='-obfl-marker-indicator']"
                   mode="eval-content-list-left-right" priority="1">
+        <xsl:param name="side" as="xs:string"/>
         <xsl:param name="white-space" as="item()?"/>
         <xsl:param name="text-transform" as="item()?"/>
+        <xsl:param name="padding" as="item()?"/>
+        <xsl:variable name="text" as="xs:string" select="substring(@arg2,2,string-length(@arg2)-2)"/>
+        <xsl:variable name="text" as="xs:string*">
+            <xsl:if test="exists($padding) and $side='left'">
+                <xsl:sequence select="string-join(for $x in 1 to xs:integer(number(string($padding))) return '&#x00A0;')"/>
+            </xsl:if>
+            <xsl:choose>
+                <xsl:when test="$white-space[string(.)=('pre-wrap')]">
+                    <xsl:sequence select="replace($text,'\s','&#x00A0;')"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <!-- normalize white space here because Dotify does not do it -->
+                    <xsl:sequence select="normalize-space($text)"/>
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:if test="exists($padding) and $side='left'">
+                <xsl:sequence select="string-join(for $x in 1 to xs:integer(number(string($padding))) return '&#x00A0;')"/>
+            </xsl:if>
+        </xsl:variable>
+        <xsl:variable name="text" as="xs:string" select="string-join($text)"/>
         <xsl:variable name="text-style" as="xs:string*">
             <xsl:if test="$text-transform[not(string(.)='auto')]">
                 <xsl:sequence select="concat('text-transform: ',string($text-transform))"/>
@@ -589,7 +652,7 @@
                 <xsl:sequence select="concat('white-space: ',string($white-space))"/>
             </xsl:if>
         </xsl:variable>
-        <marker-indicator markers="indicator/{@arg1}" indicator="{substring(@arg2,2,string-length(@arg2)-2)}">
+        <marker-indicator markers="indicator/{@arg1}" indicator="{$text}">
             <xsl:if test="exists($text-style)">
                 <xsl:attribute name="text-style" select="string-join($text-style,'; ')"/>
             </xsl:if>
@@ -620,6 +683,7 @@
         </xsl:call-template>
     </xsl:template>
     
+    <!-- we assume that white space only strings have been converted to padding in EmbossedMediumFunctions.java -->
     <xsl:template match="css:string[@value]" mode="eval-content-list-left-right">
         <xsl:call-template name="pf:warn">
             <xsl:with-param name="msg">strings not supported in left and right page margin</xsl:with-param>

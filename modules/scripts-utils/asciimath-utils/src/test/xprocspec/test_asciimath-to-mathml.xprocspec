@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:math="http://www.w3.org/1998/Math/MathML"
+               script="../../main/resources/xml/library.xpl">
+
+  <x:scenario label="The quadratic formula">
+    <x:call step="px:asciimath-to-mathml">
+      <x:option name="asciimath" select="'x = (-b +- sqrt(b^2-4ac))/(2a)'"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <semantics>
+            <mrow>
+              <mi>x</mi>
+              <mo>=</mo>
+              <mfrac>
+                <mrow>
+                  <mo>-</mo>
+                  <mi>b</mi>
+                  <mo>&#xB1;</mo>
+                  <msqrt>
+                    <mrow>
+                      <msup>
+                        <mi>b</mi>
+                        <mn>2</mn>
+                      </msup>
+                      <mo>-</mo>
+                      <mn>4</mn>
+                      <mi>a</mi>
+                      <mi>c</mi>
+                    </mrow>
+                  </msqrt>
+                </mrow>
+                <mrow>
+                  <mn>2</mn>
+                  <mi>a</mi>
+                </mrow>
+              </mfrac>
+            </mrow>
+            <annotation encoding="ASCIIMath">x = (-b +- sqrt(b^2-4ac))/(2a)</annotation>
+          </semantics>
+        </math>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

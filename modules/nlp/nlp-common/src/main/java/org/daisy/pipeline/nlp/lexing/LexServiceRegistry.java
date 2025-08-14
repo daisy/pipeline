@@ -20,7 +20,8 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 	service = { LexServiceRegistry.class }
 )
 public class LexServiceRegistry {
-	private Map<LexService, List<LexerToken>> mLexerToTokens = new ConcurrentHashMap<LexService, List<LexerToken>>();
+
+	private Map<LexService,List<LexerToken>> mLexerToTokens = new ConcurrentHashMap<>();
 
 	/**
 	 * Component callback
@@ -34,19 +35,6 @@ public class LexServiceRegistry {
 	)
 	public void addLexService(LexService lexer) {
 		mLexerToTokens.put(lexer, new CopyOnWriteArrayList<LexService.LexerToken>());
-	}
-
-	/**
-	 * Component callback
-	 */
-	public void removeLexService(LexService lexer) {
-		List<LexerToken> tokens = mLexerToTokens.get(lexer);
-		synchronized (this) {
-			if (tokens.size() > 0) {
-				lexer.globalRelease();
-			}
-		}
-		mLexerToTokens.remove(lexer);
 	}
 
 	/**

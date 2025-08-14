@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:pef="http://www.daisy.org/ns/2008/pef"
                 xmlns:dc="http://purl.org/dc/elements/1.1/"
                 xmlns:dp2="http://www.daisy.org/ns/pipeline/"
@@ -108,7 +109,7 @@
                                                 <xsl:sequence select="@rowgap"/>
                                                 <xsl:sequence select="if ($table-matches-braille-charset and exists(@dp2:ascii))
                                                                       then string(@dp2:ascii)
-                                                                      else pef:encode($table,string(.))"/>
+                                                                      else pf:pef-encode($table,string(.))"/>
                                             </div>
                                         </xsl:for-each>
                                     </div>

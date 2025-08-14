@@ -23,7 +23,7 @@ import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 
 @Component(
-	name = "pef:get-table-id",
+	name = "pef:get-table-id", // used in pef-preview.xsl
 	service = { ExtensionFunctionDefinition.class }
 )
 public class GetTableIdDefinition extends ExtensionFunctionDefinition {

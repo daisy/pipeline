@@ -29,7 +29,7 @@
 	<xsl:template match="html:head">
 		<xsl:copy>
 			<xsl:apply-templates select="@*|node()"/>
-			<xsl:variable name="base" select="base-uri(/*)"/>
+			<xsl:variable name="base" select="pf:base-uri(/*)"/>
 			<xsl:for-each select="$stylesheet-links">
 				<link rel="stylesheet" type="text/css">
 					<xsl:attribute name="href" select="pf:relativize-uri(.,$base)"/>

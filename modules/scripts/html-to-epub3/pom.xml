@@ -45,10 +45,6 @@
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>zedai-to-html</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>epub3-tts</artifactId>
-    </dependency>
   </dependencies>
 
   <properties>

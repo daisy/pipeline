@@ -19,7 +19,7 @@
 			</x:input>
 			<x:option name="include-tts-log" select="'true'"/> <!-- log can be found in "tts-log" output -->
 			<x:option name="audio" select="'false'"/>
-			<x:option name="output-dir" select="resolve-uri('shuffled_7019_xmldtbook_1/output-dir/',$temp-dir)"/>
+			<x:option name="result" select="resolve-uri('shuffled_7019_xmldtbook_1/output-dir/',$temp-dir)"/>
 		</x:call>
 		<x:context label="the status">
 			<x:document type="port" port="validation-status"/>

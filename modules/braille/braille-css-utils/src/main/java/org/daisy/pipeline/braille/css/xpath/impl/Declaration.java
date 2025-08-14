@@ -60,7 +60,7 @@ public class Declaration extends Style {
 	protected String toString(Style parent) {
 		if (parent != null)
 			throw new UnsupportedOperationException();
-		return BrailleCssSerializer.toString(declaration);
+		return BrailleCssSerializer.getInstance().toString(declaration);
 	}
 
 	@Override
@@ -71,6 +71,6 @@ public class Declaration extends Style {
 	@Override
 	protected void toXml(XMLStreamWriter writer) throws XMLStreamException {
 		// <css:property>
-		BrailleCssSerializer.toXml(declaration, writer);
+		BrailleCssSerializer.getInstance().toXml(declaration, writer);
 	}
 }

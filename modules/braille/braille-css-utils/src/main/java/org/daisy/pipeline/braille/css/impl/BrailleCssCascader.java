@@ -37,6 +37,8 @@ import cz.vutbr.web.css.StyleSheet;
 import cz.vutbr.web.css.SupportedCSS;
 import cz.vutbr.web.css.Term;
 import cz.vutbr.web.css.TermIdent;
+import cz.vutbr.web.css.TermLength;
+import cz.vutbr.web.css.TermNumeric;
 import cz.vutbr.web.css.TermURI;
 import cz.vutbr.web.csskit.antlr.CSSParserFactory;
 import cz.vutbr.web.csskit.DeclarationImpl;
@@ -49,6 +51,7 @@ import org.daisy.braille.css.BrailleCSSParserFactory;
 import org.daisy.braille.css.BrailleCSSParserFactory.Context;
 import org.daisy.braille.css.BrailleCSSProperty;
 import org.daisy.braille.css.BrailleCSSRuleFactory;
+import org.daisy.braille.css.PropertyValue;
 import org.daisy.braille.css.RuleCounterStyle;
 import org.daisy.braille.css.RuleHyphenationResource;
 import org.daisy.braille.css.RuleTextTransform;
@@ -64,6 +67,8 @@ import org.daisy.pipeline.braille.css.impl.BrailleCssParser;
 import org.daisy.pipeline.braille.css.impl.BrailleCssSerializer;
 import org.daisy.pipeline.css.CssCascader;
 import org.daisy.pipeline.css.CssPreProcessor;
+import org.daisy.pipeline.css.Dimension;
+import org.daisy.pipeline.css.Dimension.RelativeDimensionBase;
 import org.daisy.pipeline.css.JStyleParserCssCascader;
 import org.daisy.pipeline.css.Medium;
 import org.daisy.pipeline.css.XsltProcessor;
@@ -93,6 +98,8 @@ public class BrailleCssCascader implements CssCascader {
 	 * properties color, font-style, font-weight, text-decoration.
 	 */
 	public boolean supportsMedium(Medium medium) {
+		if (medium.getType() == null)
+			return false;
 		switch (medium.getType()) {
 		case EMBOSSED:
 		case BRAILLE:
@@ -140,7 +147,6 @@ public class BrailleCssCascader implements CssCascader {
 	private BrailleCSSParserFactory brailleParserFactory = null;
 	private BrailleCssParser brailleCSSParser = null;
 
-
 	@Reference(
 		name = "BrailleCSSExtension",
 		unbind = "-",
@@ -182,6 +188,7 @@ public class BrailleCssCascader implements CssCascader {
 
 		private final QName attributeName;
 		private final boolean isBrailleCss;
+		private final RelativeDimensionBase medium;
 
 		private Transformer(URIResolver resolver, CssPreProcessor preProcessor, XsltProcessor xsltProcessor,
 		                    String userAndUserAgentStyleSheets, Medium medium, QName attributeName,
@@ -191,6 +198,7 @@ public class BrailleCssCascader implements CssCascader {
 			      parserFactory, ruleFactory, supportedCss, declarationTransformer);
 			this.attributeName = attributeName;
 			this.isBrailleCss = medium.getType() == Medium.Type.EMBOSSED || medium.getType() == Medium.Type.BRAILLE;
+			this.medium = medium;
 		}
 
 		private Map<String,Map<String,RulePage>> pageRules = null;
@@ -200,6 +208,7 @@ public class BrailleCssCascader implements CssCascader {
 		private Iterable<RuleCounterStyle> counterStyleRules = null;
 		private Iterable<VendorAtRule<? extends Rule<?>>> otherAtRules = null;
 
+		@Override
 		protected Map<QName,String> serializeStyle(NodeData mainStyle, Map<PseudoElement,NodeData> pseudoStyles, Element context) {
 			if (isBrailleCss && pageRules == null) {
 				StyleSheet styleSheet = getParsedStyleSheet();
@@ -279,13 +288,13 @@ public class BrailleCssCascader implements CssCascader {
 			return ImmutableMap.of(attributeName, style.toString().trim());
 		}
 
-		protected String serializeValue(Term<?> value) {
-			return BrailleCssSerializer.toString(value);
+		@Override
+		protected String serializeValue(Term<?> value, String property) {
+			return serializer.serializePropertyValue(value, property);
 		}
-	}
 
 	@SuppressWarnings("unused")
-	private static <T extends Comparable<? super T>> Iterable<T> sort(Iterable<T> iterable) {
+	private <T extends Comparable<? super T>> Iterable<T> sort(Iterable<T> iterable) {
 		List<T> list = new ArrayList<T>();
 		for (T x : iterable)
 			list.add(x);
@@ -293,7 +302,7 @@ public class BrailleCssCascader implements CssCascader {
 		return list;
 	}
 
-	private static <T> Iterable<T> sort(Iterable<T> iterable, Comparator<? super T> comparator) {
+	private <T> Iterable<T> sort(Iterable<T> iterable, Comparator<? super T> comparator) {
 		List<T> list = new ArrayList<T>();
 		for (T x : iterable)
 			list.add(x);
@@ -301,7 +310,7 @@ public class BrailleCssCascader implements CssCascader {
 		return list;
 	}
 
-	private static Comparator<PseudoElement> pseudoElementComparator = new Comparator<PseudoElement>() {
+	private Comparator<PseudoElement> pseudoElementComparator = new Comparator<PseudoElement>() {
 		public int compare(PseudoElement e1, PseudoElement e2) {
 			return e1.toString().compareTo(e2.toString());
 		}
@@ -309,18 +318,111 @@ public class BrailleCssCascader implements CssCascader {
 
 	// FIXME: make more use of BrailleCssSerializer
 
-	private static void insertStyle(StringBuilder builder, NodeData nodeData) {
+	private NormalizingBrailleCssSerializer serializer = new NormalizingBrailleCssSerializer();
+
+	// Note that makes more sense to do the normalization during parsing, but it was easier to implement it in the serializer.
+	private class NormalizingBrailleCssSerializer extends BrailleCssSerializer {
+
+		/**
+		 * Normalize to values without unit and round to the nearest integer to make it easier for subsequent
+		 * steps to process the styles.
+		 */
+		public String serializePropertyValue(Term<?> value, String property) {
+			if (value instanceof TermLength) {
+				TermLength length = (TermLength)value;
+				TermNumeric.Unit unit = length.getUnit();
+				if (unit != null && unit != TermNumeric.Unit.none) {
+					Dimension.Unit newUnit = null; {
+						if (property.equals("margin-top")
+						    || property.equals("margin-bottom")
+						    || property.equals("padding-top")
+						    || property.equals("padding-bottom")
+						    || property.equals("border-top-width")
+						    || property.equals("border-bottom-width")
+						    || property.equals("line-height")
+						    || property.equals("height") // phony property to represent height part of size property
+						)
+							// vertical dimension
+							newUnit = Dimension.Unit.EM;
+						else if (property.equals("margin-left")
+						         || property.equals("margin-right")
+						         || property.equals("padding-left")
+						         || property.equals("padding-right")
+						         || property.equals("border-left-width")
+						         || property.equals("border-right-width")
+						         || property.equals("text-indent")
+						         || property.equals("letter-spacing")
+						         || property.equals("word-spacing")
+						         || property.equals("width") // phony property to represent width part of size property
+						)
+							// horizontal dimension
+							newUnit = Dimension.Unit.CH;
+					}
+					if (newUnit != null)
+						try {
+							double doubleValue = new Dimension(length.getValue(),
+							                                   Dimension.Unit.parse(unit.value()))
+								.toUnit(newUnit, medium)
+								.getValue()
+								.doubleValue();
+							boolean round = property.equals("line-height");
+							if (!round)
+								return "" + doubleValue;
+							else
+								return "" + (int)Math.round(doubleValue);
+						} catch (IllegalArgumentException | UnsupportedOperationException e) {
+							throw new UnsupportedOperationException(
+								"don't know how to convert " + property + ": "
+								+ super.toString(value) + " to an " + newUnit + " value");
+						}
+				}
+			}
+			return super.toString(value);
+		}
+
+		@Override
+		public String serializePropertyValue(NodeData style, String property, boolean includeInherited) {
+			Term<?> value = style.getValue(property, includeInherited);
+			if (value != null)
+				return serializePropertyValue(value, property);
+			return super.serializePropertyValue(style, property, includeInherited);
+		}
+
+		@Override
+		public String serializePropertyValue(PropertyValue propValue) {
+			Term<?> value = propValue.getValue();
+			if (value != null)
+				return serializePropertyValue(value, propValue.getProperty());
+			return super.serializePropertyValue(propValue);
+		}
+
+		@Override
+		public String serializeTermList(Collection<? extends Term<?>> termList) {
+			if (termList instanceof Declaration && "size".equals(((Declaration)termList).getProperty())) {
+				String s = "";
+				for (Term<?> t : termList)
+					if (s.isEmpty())
+						s += serializePropertyValue(t, "width");
+					else
+						s += (" " + serializePropertyValue(t, "height"));
+				return s;
+			}
+			return super.serializeTermList(termList);
+		}
+	}
+
+	private void insertStyle(StringBuilder builder, NodeData nodeData) {
 		List<String> properties = new ArrayList<String>(nodeData.getPropertyNames());
 		properties.remove("page");
 		Collections.sort(properties);
 		for (String prop : properties) {
-			String val = BrailleCssSerializer.serializePropertyValue(nodeData, prop, false);
+			String val = serializer.serializePropertyValue(nodeData, prop, false);
 			if (val != null) // can be null for unspecified inherited properties
 				builder.append(prop).append(": ").append(val).append("; ");
 		}
 	}
 
-	private static void pseudoElementToString(StringBuilder builder, PseudoElement elem) {
+	private void pseudoElementToString(StringBuilder builder, PseudoElement elem) {
 		if (elem instanceof PseudoElementImpl) {
 			builder.append("&").append(elem);
 			return; }
@@ -355,7 +457,7 @@ public class BrailleCssCascader implements CssCascader {
 	}
 
 	private void insertPageStyle(StringBuilder builder, RulePage pageRule) {
-		builder.append(BrailleCssSerializer.toString(pageRule, brailleCSSParser)).append(" ");
+		builder.append(serializer.toString(pageRule, brailleCSSParser)).append(" ");
 	}
 
 	private Map<String,RulePage> getPageRule(NodeData nodeData, Map<String,Map<String,RulePage>> pageRules) {
@@ -436,14 +538,14 @@ public class BrailleCssCascader implements CssCascader {
 		return pageRule;
 	}
 
-	private static Declaration getDeclaration(Collection<? extends Rule<?>> rule, String property) {
+	private Declaration getDeclaration(Collection<? extends Rule<?>> rule, String property) {
 		for (Declaration d : Iterables.filter(rule, Declaration.class))
 			if (d.getProperty().equals(property))
 				return d;
 		return null;
 	}
 
-	private static RuleMargin getRuleMargin(Collection<? extends Rule<?>> rule, String marginArea) {
+	private RuleMargin getRuleMargin(Collection<? extends Rule<?>> rule, String marginArea) {
 		for (RuleMargin m : Iterables.filter(rule, RuleMargin.class))
 			if (m.getMarginArea().equals(marginArea))
 				return m;
@@ -461,7 +563,7 @@ public class BrailleCssCascader implements CssCascader {
 		if (pseudo != null && !"".equals(pseudo))
 			builder.append(":").append(pseudo);
 		builder.append(" { ");
-		String declarations = BrailleCssSerializer.serializeDeclarationList(Iterables.filter(volumeRule.getValue(), Declaration.class));
+		String declarations = serializer.serializeDeclarationList(Iterables.filter(volumeRule.getValue(), Declaration.class));
 		if (!declarations.isEmpty())
 			builder.append(declarations).append("; ");
 		for (RuleVolumeArea volumeArea : Iterables.filter(volumeRule.getValue(), RuleVolumeArea.class))
@@ -481,13 +583,13 @@ public class BrailleCssCascader implements CssCascader {
 				StringBuilder s = new StringBuilder();
 				Iterator<Term<?>> it = decl.iterator();
 				while (it.hasNext()) {
-					s.append(BrailleCssSerializer.toString(it.next()));
+					s.append(serializer.toString(it.next()));
 					if (it.hasNext()) s.append(" "); }
 				pageRule = getPageRule(s.toString(), pageRules); }
 			else
 				declarations.add(decl);
 		if (!declarations.isEmpty())
-			innerStyle.append(BrailleCssSerializer.serializeDeclarationList(declarations)).append("; ");
+			innerStyle.append(serializer.serializeDeclarationList(declarations)).append("; ");
 		if (pageRule != null)
 			insertPageStyle(innerStyle, pageRule);
 		if (innerStyle.length() > 1 && innerStyle.substring(innerStyle.length() - 2).equals("; "))
@@ -495,7 +597,7 @@ public class BrailleCssCascader implements CssCascader {
 		builder.append(innerStyle).append("} ");
 	}
 
-	private static void insertTextTransformDefinition(StringBuilder builder, RuleTextTransform rule) {
+	private void insertTextTransformDefinition(StringBuilder builder, RuleTextTransform rule) {
 		builder.append("@text-transform");
 		String name = rule.getName();
 		if (name != null) builder.append(' ').append(name);
@@ -525,15 +627,15 @@ public class BrailleCssCascader implements CssCascader {
 			}
 			declarationList.add(d);
 		}
-		String declarations = BrailleCssSerializer.serializeDeclarationList(declarationList);
+		String declarations = serializer.serializeDeclarationList(declarationList);
 		if (!declarations.isEmpty())
 			builder.append(declarations).append(" ");
 		builder.append("} ");
 	}
 
-	private static void insertHyphenationResourceDefinition(StringBuilder builder, RuleHyphenationResource rule) {
+	private void insertHyphenationResourceDefinition(StringBuilder builder, RuleHyphenationResource rule) {
 		builder.append("@hyphenation-resource");
-		builder.append(":lang(").append(BrailleCssSerializer.serializeLanguageRanges(rule.getLanguageRanges())).append(")");
+		builder.append(":lang(").append(serializer.serializeLanguageRanges(rule.getLanguageRanges())).append(")");
 		builder.append(" { ");
 		List<Declaration> declarationList = new ArrayList<>();
 		for (Declaration d : rule) {
@@ -565,37 +667,37 @@ public class BrailleCssCascader implements CssCascader {
 			}
 			declarationList.add(d);
 		}
-		String declarations = BrailleCssSerializer.serializeDeclarationList(declarationList);
+		String declarations = serializer.serializeDeclarationList(declarationList);
 		if (!declarations.isEmpty())
 			builder.append(declarations).append(" ");
 		builder.append("} ");
 	}
 
-	private static Declaration createDeclaration(String prop, Term<?> val) {
+	private Declaration createDeclaration(String prop, Term<?> val) {
 		return new DeclarationImpl() {{
 			this.property = prop;
 			this.list = ImmutableList.of(val);
 		}};
 	}
 
-	private static TermURI createTermURI(URI uri) {
+	private TermURI createTermURI(URI uri) {
 		return new TermURIImpl() {{
 			this.value = uri.toString();
 		}};
 	}
 
-	private static void insertCounterStyleDefinition(StringBuilder builder, RuleCounterStyle rule) {
+	private void insertCounterStyleDefinition(StringBuilder builder, RuleCounterStyle rule) {
 		String name = rule.getName();
 		builder.append("@counter-style ").append(name).append(" { ");
-		String declarations = BrailleCssSerializer.serializeDeclarationList(rule);
+		String declarations = serializer.serializeDeclarationList(rule);
 		if (!declarations.isEmpty())
 			builder.append(declarations).append(" ");
 		builder.append("} ");
 	}
 
-	private static void insertAtRule(StringBuilder builder, VendorAtRule<? extends Rule<?>> rule) {
+	private void insertAtRule(StringBuilder builder, VendorAtRule<? extends Rule<?>> rule) {
 		builder.append("@").append(rule.getName()).append(" { ");
-		String declarations = BrailleCssSerializer.serializeDeclarationList(Iterables.filter(rule, Declaration.class));
+		String declarations = serializer.serializeDeclarationList(Iterables.filter(rule, Declaration.class));
 		if (!declarations.isEmpty())
 			builder.append(declarations).append("; ");
 		for (VendorAtRule<? extends Rule<?>> r : Iterables.filter(rule, VendorAtRule.class))
@@ -605,7 +707,7 @@ public class BrailleCssCascader implements CssCascader {
 		builder.append("} ");
 	}
 
-	private static Map<String,RuleVolume> getVolumeRule(String name, Map<String,Map<String,RuleVolume>> volumeRules) {
+	private Map<String,RuleVolume> getVolumeRule(String name, Map<String,Map<String,RuleVolume>> volumeRules) {
 		Map<String,RuleVolume> auto = volumeRules.get("auto");
 		Map<String,RuleVolume> named = null;
 		if (!name.equals("auto"))
@@ -659,9 +761,9 @@ public class BrailleCssCascader implements CssCascader {
 		return result;
 	}
 
-	private static final Pattern FUNCTION = Pattern.compile("(nth|nth-last)\\(([1-9][0-9]*)\\)");
+	private final Pattern FUNCTION = Pattern.compile("(nth|nth-last)\\(([1-9][0-9]*)\\)");
 
-	private static RuleVolume makeVolumeRule(String pseudo, List<RuleVolume> from) {
+	private RuleVolume makeVolumeRule(String pseudo, List<RuleVolume> from) {
 		String arg = null;
 		if (pseudo != null) {
 			Matcher m = FUNCTION.matcher(pseudo);
@@ -691,10 +793,11 @@ public class BrailleCssCascader implements CssCascader {
 		return volumeRule;
 	}
 
-	private static RuleVolumeArea getRuleVolumeArea(Collection<? extends Rule<?>> rule, String volumeArea) {
+	private RuleVolumeArea getRuleVolumeArea(Collection<? extends Rule<?>> rule, String volumeArea) {
 		for (RuleVolumeArea m : Iterables.filter(rule, RuleVolumeArea.class))
 			if (m.getVolumeArea().value.equals(volumeArea))
 				return m;
 		return null;
+	}
 	}
 }

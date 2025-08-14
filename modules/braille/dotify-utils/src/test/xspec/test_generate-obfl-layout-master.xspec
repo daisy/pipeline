@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
                xmlns:obfl="http://www.daisy.org/ns/2011/obfl"
                stylesheet="../../main/resources/xml/generate-obfl-layout-master.xsl">
   
-  <x:param name="duplex" select="'true'"/>
-  <x:param name="page-width" select="'40'"/>
-  <x:param name="page-height" select="'25'"/>
+  <x:param name="medium" select="pf:css-parse-medium('(width:40) AND (height:25) AND (-daisy-duplex)')"/>
   <x:param name="braille-charset-table" select="''"/>
   
   <x:scenario label="test_01">
@@ -95,17 +94,6 @@
     </x:call>
     <x:expect label="layout-master">
       <layout-master xmlns="http://www.daisy.org/ns/2011/obfl" name="x" page-width="15" page-height="15" duplex="true">
-        <template use-when="(= (% $page 2) 1)">
-          <header>
-            <field>
-              <string value=""/>
-            </field>
-            <field>
-              <current-page number-format="default"/>
-            </field>
-          </header>
-          <footer/>
-        </template>
         <template use-when="(= (% $page 2) 0)">
           <header>
             <field>
@@ -126,7 +114,14 @@
           <footer/>
         </template>
         <default-template>
-          <header/>
+          <header>
+            <field>
+              <string value=""/>
+            </field>
+            <field>
+              <current-page number-format="default"/>
+            </field>
+          </header>
           <footer/>
         </default-template>
       </layout-master>
@@ -473,10 +468,6 @@
     </x:call>
     <x:expect label="layout-master">
       <layout-master xmlns="http://www.daisy.org/ns/2011/obfl" name="x" page-width="15" page-height="15" duplex="true">
-        <template use-when="(= (% $page 2) 0)">
-          <header/>
-          <footer/>
-        </template>
         <default-template>
           <header/>
           <footer/>

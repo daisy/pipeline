@@ -251,16 +251,6 @@
         </configuration>
         <executions>
           <execution>
-            <id>bundle-before-test</id>
-            <configuration>
-              <instructions>
-                <Provide-Capability>
-                  xpath.function;name="{http://hunspell.sourceforge.net/Hyphen}hyphenate"
-                </Provide-Capability>
-              </instructions>
-            </configuration>
-          </execution>
-          <execution>
             <id>linux-bundle</id>
             <phase>generate-test-resources</phase>
             <goals>

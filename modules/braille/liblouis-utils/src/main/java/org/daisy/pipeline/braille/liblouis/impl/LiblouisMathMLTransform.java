@@ -1,30 +1,34 @@
 package org.daisy.pipeline.braille.liblouis.impl;
 
 import java.net.URI;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.xml.namespace.QName;
+
 import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.runtime.XAtomicStep;
 
 import org.daisy.common.file.URLs;
+import org.daisy.common.transform.InputValue;
+import org.daisy.common.xproc.calabash.XProcBasedTransformer;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.pipeline.braille.common.AbstractTransform;
 import org.daisy.pipeline.braille.common.AbstractTransformProvider;
 import org.daisy.pipeline.braille.common.AbstractTransformProvider.util.Iterables;
-import org.daisy.pipeline.braille.common.calabash.CxEvalBasedTransformer;
 import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.Iterables.of;
 import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.logCreate;
 import org.daisy.pipeline.braille.common.Query;
 import org.daisy.pipeline.braille.common.Query.Feature;
+import org.daisy.pipeline.braille.common.Query.MutableQuery;
+import static org.daisy.pipeline.braille.common.Query.util.mutableQuery;
 import org.daisy.pipeline.braille.common.Transform;
 import org.daisy.pipeline.braille.common.TransformProvider;
 import static org.daisy.pipeline.braille.common.util.Locales.parseLocale;
@@ -58,25 +62,52 @@ public interface LiblouisMathMLTransform {
 		
 		private final static Iterable<Transform> empty = Iterables.<Transform>empty();
 		
-		private final static List<String> supportedOutput = ImmutableList.of("braille");
-		
 		protected Iterable<Transform> _get(final Query query) {
+			MutableQuery q = mutableQuery(query);
 			try {
-				if ("mathml".equals(query.getOnly("input").getValue().get())) {
-					for (Feature f : query.get("output"))
-						if (!supportedOutput.contains(f.getValue().get()))
+				if ("mathml".equals(q.removeOnly("input").getValue().get())) {
+					if (q.containsKey("math-translator"))
+						if (!"liblouis".equals(q.removeOnly("math-translator").getValue().get()))
 							return empty;
-					if (query.containsKey("locale")) {
-						Locale locale; {
+					for (Feature f : q.removeAll("output"))
+						if (!"braille".equals(f.getValue().get()))
+							return empty;
+					Locale locale = null; {
+						if (q.containsKey("locale")) {
 							try {
-								locale = parseLocale(query.getOnly("locale").getValue().get()); }
+								locale = parseLocale(q.removeOnly("locale").getValue().get()); }
 							catch (IllegalArgumentException e) {
-								return empty; }
+								return empty;
+							}
 						}
-						MathCode code = mathCodeFromLocale(locale);
-						if (code != null)
-							return of(logCreate((Transform)new TransformImpl(code))); }}}
-			catch (IllegalStateException e) {}
+						if (q.containsKey("document-locale")) {
+							if (locale == null)
+								try {
+									locale = parseLocale(q.removeOnly("document-locale").getValue().get()); }
+								catch (IllegalArgumentException e) {
+									return empty;
+								}
+							else
+								q.removeAll("document-locale");
+						}
+					}
+					MathCode code = null; {
+						if (q.containsKey("math-code"))
+							try {
+								code = MathCode.valueOf(MathCode.class, q.removeOnly("math-code").getValue().get().toUpperCase());
+							} catch (IllegalArgumentException e) {
+								return empty;
+							}
+						else if (locale != null)
+							code = mathCodeFromLocale(locale);
+					}
+					if (q.isEmpty()) {
+						if (code == null)
+							code = MathCode.NEMETH;
+						return of(logCreate((Transform)new TransformImpl(code)));
+					}
+				}
+			} catch (IllegalStateException e) {}
 			return empty;
 		}
 		
@@ -92,7 +123,10 @@ public interface LiblouisMathMLTransform {
 			
 			@Override
 			public XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties) {
-				return new CxEvalBasedTransformer(href, null, options).newStep(runtime, step, monitor, properties);
+				Map<QName,InputValue<?>> options = new HashMap<>();
+				for (String option : this.options.keySet())
+					options.put(new QName(option), new InputValue<>(this.options.get(option)));
+				return new XProcBasedTransformer(href, options).newStep(runtime, step, monitor, properties);
 			}
 			
 			@Override

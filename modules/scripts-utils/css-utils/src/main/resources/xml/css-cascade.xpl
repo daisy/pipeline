@@ -126,15 +126,18 @@
 		</p:documentation>
 	</p:option>
 	
-	<p:option name="media" required="false" select="'embossed'">
+	<p:option name="media" required="false" select="'embossed'"> <!-- (xs:string | map(xs:string,item()) | item())* -->
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			<p>The target medium type as a <a href="https://www.w3.org/TR/mediaqueries-4/">media
-			query</a>. All rules that are contained in a style sheet that matches the specified
-			medium are included. Supported media types are "braille", "embossed", "speech" and
-			"print". When the target medium is "braille" or "embossed", CSS is interpreted according
-			to the rules of <a href="http://braillespecs.github.io/braille-css">braille
-			CSS</a>. Supported media features are '<a
-			href="https://www.w3.org/TR/mediaqueries-4/#width">width</a>' and '<a
+			<p>The target medium</p>
+			<p>If specified as a string or map, it is interpreted as a <a
+			href="https://www.w3.org/TR/mediaqueries-3/">media query</a> and used to select a
+			matching medium. If specified as an other item, it is expected to be a
+			<code>Medium</code> object.</p>
+			<p>All rules that are contained in a style sheet that matches the specified medium are
+			included. Supported media types are "braille", "embossed", "speech" and "print". When
+			the target medium is "braille" or "embossed", CSS is interpreted according to the rules
+			of <a href="http://braillespecs.github.io/braille-css">braille CSS</a>. Supported media
+			features are '<a href="https://www.w3.org/TR/mediaqueries-4/#width">width</a>' and '<a
 			href="https://www.w3.org/TR/mediaqueries-4/#height">height</a>' In addition,
 			'<code>(counter-support: none)</code>' can be used to transform lists to preformatted
 			lists.</p>
@@ -171,7 +174,7 @@
 		<p:option name="include-user-agent-stylesheet"/>
 		<p:option name="parameters"/>
 		<p:option name="content-type"/>
-		<p:option name="media"/>
+		<p:option name="medium"/>
 		<p:option name="type"/>
 		<p:option name="attribute-name"/>
 		<p:option name="multiple-attributes"/>
@@ -196,7 +199,7 @@
 		<p:option name="include-user-agent-stylesheet"/>
 		<p:option name="parameters"/>
 		<p:option name="content-type"/>
-		<p:option name="media"/>
+		<p:option name="medium"/>
 		<!--
 		    Implemented in ../../java/org/daisy/pipeline/css/calabash/impl/CssAnalyzeStep.java
 		-->
@@ -217,6 +220,7 @@
 	<cx:import href="library.xsl" type="application/xslt+xml">
 		<p:documentation>
 			pf:css-parse-param-set
+			pf:media-query-matches
 		</p:documentation>
 	</cx:import>
 	
@@ -225,6 +229,7 @@
 		<!-- pf:css-parse-param-set takes first in case of duplicates -->
 		<p:pipe step="main" port="parameters"/>
 	</p:variable>
+	<p:variable name="medium" select="pf:css-parse-medium($media)"/>
 	
 	<!-- load CSS files to memory so that pxi:css-cascade can take them into account -->
 	<p:choose name="css">
@@ -281,7 +286,7 @@
 		<p:group px:progress=".95">
 			<p:variable name="stylesheets-from-xml-stylesheet-instructions" cx:as="xs:string*"
 			            select="/d:fileset/d:file
-			                       [not(@stylesheet-media) or pf:media-query-matches(@stylesheet-media,$media)]
+			                       [not(@stylesheet-media) or pf:media-query-matches(@stylesheet-media,$medium)]
 			                       [(@media-type=('text/css','text/x-scss') and @media-type=tokenize($type,'\s+'))]
 			                     /string(@href)">
 				<p:pipe step="xml-stylesheet-instructions" port="fileset"/>
@@ -297,11 +302,11 @@
 				              or $include-user-agent-stylesheet
 				              or exists($stylesheets-from-xml-stylesheet-instructions)
 				              or //*[local-name()='style']
-				                    [not(@media) or pf:media-query-matches(@media,$media)]
+				                    [not(@media) or pf:media-query-matches(@media,$medium)]
 				                    [(@type=('text/css','text/x-scss') and @type=tokenize($type,'\s+'))
 				                     or ('text/css'=tokenize($type,'\s+') and not(@type))]
 				              or //*[local-name()='link' and @rel='stylesheet']
-				                    [not(@media) or pf:media-query-matches($media,@media)]
+				                    [not(@media) or pf:media-query-matches(@media,$medium)]
 				                    [(@type=('text/css','text/x-scss') and @type=tokenize($type,'\s+'))
 				                     or ('text/css'=tokenize($type,'\s+') and not(@type) and matches(@href,'\.css$'))
 				                     or ('text/x-scss'=tokenize($type,'\s+') and not(@type) and matches(@href,'\.scss$'))]
@@ -315,7 +320,7 @@
 						<p:with-option name="include-user-agent-stylesheet" select="$include-user-agent-stylesheet"/>
 						<p:with-option name="parameters" select="$parameter-map"/>
 						<p:with-option name="content-type" select="$content-type"/>
-						<p:with-option name="media" select="$media"/>
+						<p:with-option name="medium" select="$medium"/>
 						<p:with-option name="type" select="$type"/>
 						<p:with-option name="attribute-name" select="$attribute-name"/>
 						<p:with-option name="multiple-attributes" select="$multiple-attributes"/>
@@ -347,7 +352,7 @@
 		<p:group>
 			<p:variable name="stylesheets-from-xml-stylesheet-instructions" cx:as="xs:string*"
 			            select="/d:fileset/d:file
-			                       [not(@stylesheet-media) or pf:media-query-matches(@stylesheet-media,$media)]
+			                       [not(@stylesheet-media) or pf:media-query-matches(@stylesheet-media,$medium)]
 			                       [(@media-type=('text/css','text/x-scss') and @media-type=tokenize($type,'\s+'))]
 			                     /string(@href)">
 				<p:pipe step="xml-stylesheet-instructions" port="fileset"/>
@@ -364,11 +369,11 @@
 				              or $include-user-agent-stylesheet
 				              or exists($stylesheets-from-xml-stylesheet-instructions)
 				              or //*[local-name()='style']
-				                    [not(@media) or pf:media-query-matches(@media,$media)]
+				                    [not(@media) or pf:media-query-matches(@media,$medium)]
 				                    [(@type=('text/css','text/x-scss') and @type=tokenize($type,'\s+'))
 				                     or ('text/css'=tokenize($type,'\s+') and not(@type))]
 				              or //*[local-name()='link' and @rel='stylesheet']
-				                    [not(@media) or pf:media-query-matches($media,@media)]
+				                    [not(@media) or pf:media-query-matches(@media,$medium)]
 				                    [(@type=('text/css','text/x-scss') and @type=tokenize($type,'\s+'))
 				                     or ('text/css'=tokenize($type,'\s+') and not(@type) and matches(@href,'\.css$'))
 				                     or ('text/x-scss'=tokenize($type,'\s+') and not(@type) and matches(@href,'\.scss$'))]">
@@ -382,7 +387,7 @@
 						<p:with-option name="include-user-agent-stylesheet" select="$include-user-agent-stylesheet"/>
 						<p:with-option name="parameters" select="$parameter-map"/>
 						<p:with-option name="content-type" select="$content-type"/>
-						<p:with-option name="media" select="$media"/>
+						<p:with-option name="medium" select="$medium"/>
 					</pxi:css-analyze>
 				</p:when>
 				<p:otherwise>

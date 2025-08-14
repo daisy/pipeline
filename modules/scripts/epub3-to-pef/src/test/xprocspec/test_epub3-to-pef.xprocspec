@@ -21,8 +21,7 @@
         </x:document>
       </x:input>
       <x:input port="in-memory.in"/>
-      <x:param port="parameters" name="page-width" select="35"/>
-      <x:param port="parameters" name="page-height" select="20"/>
+      <x:option name="medium" select="'(width: 35) AND (height: 20) AND (-daisy-duplex)'"/>
       <x:param port="parameters" name="allow-volume-break-inside-leaf-section-factor" select="3"/>
       <x:param port="parameters" name="prefer-volume-break-before-higher-level-factor" select="1"/>
       <!--

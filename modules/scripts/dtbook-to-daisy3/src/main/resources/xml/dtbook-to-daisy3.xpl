@@ -47,7 +47,7 @@
     </p:documentation>
   </p:option>
 
-  <p:option name="output-dir" required="true" px:output="result" px:type="anyDirURI">
+  <p:option name="result" required="true" px:output="result" px:type="anyDirURI">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
       <h2 px:role="name">DAISY 3</h2>
       <p px:role="desc">The resulting DAISY 3 publication.</p>
@@ -115,7 +115,7 @@ reading systems can't handle the word tags.</p>
   <p:import href="dtbook-to-daisy3.convert.xpl"/>
 
   <px:normalize-uri name="output-dir-uri">
-    <p:with-option name="href" select="concat($output-dir,'/')"/>
+    <p:with-option name="href" select="concat($result,'/')"/>
   </px:normalize-uri>
   <p:sink/>
   

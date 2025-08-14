@@ -28,10 +28,8 @@
     </p:option>
     <p:option name="text-transform" select="''"/>
     <p:option name="braille-charset" select="''"/>
-    <p:option name="page-width" select="'40'"/>
-    <p:option name="page-height" select="'25'"/>
-    <p:option name="duplex" select="'true'"/>
-    <p:option name="skip-margin-top-of-page" select="'false'" cx:as="xs:string"/>
+    <p:option name="medium" select="()"/>
+    <p:option name="skip-margin-top-of-page" select="false()" cx:as="xs:boolean"/>
     
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
       <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -520,16 +518,16 @@
                               (for $p in s:get($s,'counter-increment') return tokenize(string($p),'\s+'),'page')[1]
                           ,
                           if (empty($volume-begin-page-styles)) then
-                            'pre-page'
+                            '--pre-page'
                           else
                             for $s in $volume-begin-page-styles return
-                              (for $p in s:get($s,'counter-increment') return tokenize(string($p),'\s+'),'pre-page')[1]
+                              (for $p in s:get($s,'counter-increment') return tokenize(string($p),'\s+'),'--pre-page')[1]
                           ,
                           if (empty($volume-end-page-styles)) then
-                            'post-page'
+                            '--post-page'
                           else
                             for $s in $volume-end-page-styles return
-                              (for $p in s:get($s,'counter-increment') return tokenize(string($p),'\s+'),'post-page')[1]
+                              (for $p in s:get($s,'counter-increment') return tokenize(string($p),'\s+'),'--post-page')[1]
                         ))"/>
     
     <pxi:eval-counter px:progress=".17">
@@ -908,7 +906,7 @@
                 css:margin-bottom of their preceding block, and rename other css:margin-top to
                 css:margin-top-skip-if-top-of-page.
             </p:documentation>
-            <p:when test="$skip-margin-top-of-page='true'">
+            <p:when test="$skip-margin-top-of-page">
                 <p:label-elements px:progress=".20"
                                   match="css:box
                                            [@type='block']
@@ -982,13 +980,7 @@
         <p:input port="stylesheet">
             <p:document href="generate-obfl-layout-master.xsl"/>
         </p:input>
-        <p:with-param name="page-width" select="$page-width">
-            <p:empty/>
-        </p:with-param>
-        <p:with-param name="page-height" select="$page-height">
-            <p:empty/>
-        </p:with-param>
-        <p:with-param name="duplex" select="$duplex">
+        <p:with-param name="medium" select="$medium">
             <p:empty/>
         </p:with-param>
         <p:with-param name="braille-charset-table" select="$braille-charset">

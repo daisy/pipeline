@@ -29,6 +29,22 @@
 
     <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
         <desc>
+            <p>Apply an XML transformer to a node sequence.</p>
+        </desc>
+    </doc>
+    <xsl:function name="pf:transform" as="item()*">
+        <xsl:param name="query" as="xs:string"/>
+        <xsl:param name="source" as="node()*"/>
+        <xsl:sequence select="Transform:transform($query,$source)"
+                      xmlns:Transform="org.daisy.pipeline.braille.common.saxon.impl.TransformDefinition$Transform">
+            <!--
+                Implemented in ../../java/org/daisy/pipeline/braille/common/saxon/impl/TransformDefinition.java
+            -->
+        </xsl:sequence>
+    </xsl:function>
+
+    <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+        <desc>
             <p>Get braille code from language tag.</p>
         </desc>
     </doc>

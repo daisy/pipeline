@@ -1,3 +1,13 @@
+v1.15.3
+==========
+
+Changes
+-------
+- Support length units in braille CSS
+- MathCAT integration for math to braille conversion
+- New "Saddle stitch (folio binding)" option for DTBook to braille
+- The "Output file format" option should now be expressed in the media query syntax.
+
 v1.15.2
 ==========
 

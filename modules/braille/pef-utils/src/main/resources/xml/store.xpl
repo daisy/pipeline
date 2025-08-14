@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
-                xmlns:cx="http://xmlcalabash.com/ns/extensions"
-                xmlns:daisy="http://www.daisy.org/ns/pipeline/"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:pef="http://www.daisy.org/ns/2008/pef"
+                xmlns:daisy="http://www.daisy.org/ns/pipeline/"
                 xmlns:html="http://www.w3.org/1999/xhtml"
                 exclude-inline-prefixes="#all"
                 type="px:pef-store" name="store" version="1.0">
@@ -18,19 +19,32 @@
     <p:input port="source" primary="true" px:media-type="application/x-pef+xml"/>
     
     <p:option name="output-dir" required="false" select="''"/> <!-- URI -->
-    <p:option name="file-format" required="false" select="''"/> <!-- query format -->
-    <!--
-        the name for multiple volumes, {} is replaced by the volume number
-        if empty, then the PEF is not split
-    -->
-    <p:option name="name-pattern" required="false" select="''"/>
-    <!-- the name for a single volume -->
-    <p:option name="single-volume-name" required="false" select="''"/>
-    <!--
-        the width of the volume number,
-        if 0, then the volume number is not padded with zeroes
-    -->
-    <p:option name="number-width" required="false" select="''"/>
+    <p:option name="medium" required="false" select="'embossed AND (-daisy-file-format:pef)'"> <!-- (xs:string | map(xs:string,item()) | item())* -->
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>The target medium</p>
+            <p>If specified as a string or map, it is interpreted as a <a
+            href="https://www.w3.org/TR/mediaqueries-3/">media query</a>, and used to select a
+            matching medium. If specified as an other item, it is expected to be an
+            <code>EmbossedMedium</code> object.</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="name-pattern" required="false" select="''">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>The name for multiple volumes</p>
+            <p><code>{}</code> is replaced by the volume number. If empty, the PEF is not split.</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="single-volume-name" required="false" select="''">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>The name for a single volume</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="number-width" required="false" select="''">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>The width of the volume number</p>
+            <p>If 0, then the volume number is not padded with zeroes</p>
+        </p:documentation>
+    </p:option>
     <p:option name="pef-href" required="false" select="''"/> <!-- URI -->
     <p:option name="preview-href" required="false" select="''"/> <!-- URI -->
     <p:option name="preview-table" required="false" select="''"/> <!-- query -->
@@ -42,28 +56,25 @@
             px:copy-resource
         </p:documentation>
     </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl">
-        <p:documentation>
-            px:parse-query
-        </p:documentation>
-    </p:import>
     <p:import href="pef-to-html.convert.xpl">
         <p:documentation>
             px:pef-to-html.convert
         </p:documentation>
     </p:import>
-    
+    <cx:import href="http://www.daisy.org/pipeline/modules/css-utils/library.xsl" type="application/xslt+xml">
+        <p:documentation>
+            pf:media-query-matches
+            pf:css-parse-medium
+        </p:documentation>
+    </cx:import>
+
     <p:declare-step type="pxi:pef2text">
         <p:input port="source" sequence="false" primary="true"/>
         <p:option name="output-dir"/>
-        <p:option name="file-format"/>
-        <p:option name="line-breaks"/>
-        <p:option name="page-breaks"/>
-        <p:option name="pad"/>
-        <p:option name="charset"/>
-        <p:option name="single-volume-name"/>
+        <p:option name="medium"/>
         <p:option name="name-pattern"/>
         <p:option name="number-width"/>
+        <p:option name="single-volume-name"/>
         <!--
             Implemented in ../../java/org/daisy/pipeline/braille/pef/calabash/impl/PEF2TextStep.java
         -->
@@ -113,7 +124,7 @@
             <p:documentation>
                 Convert PEF document into a textual (ASCII-based) format.
             </p:documentation>
-            <p:variable name="format" select="if (not($file-format='')) then $file-format else '(format:pef)'"/>
+            <p:variable name="parsed-medium" select="pf:css-parse-medium($medium)"/>
             <p:identity>
                 <p:input port="source">
                     <p:pipe step="store" port="source"/>
@@ -149,10 +160,7 @@
                 </p:input>
             </p:xslt>
             <p:choose>
-                <p:xpath-context>
-                    <p:pipe step="file-format" port="result"/>
-                </p:xpath-context>
-                <p:when test="//c:param[@name='blank-last-page'][lower-case(@value)=('true','yes')]">
+                <p:when test="pf:media-query-matches('(-daisy-blank-last-page)',$parsed-medium)">
                     <!--
                         ensure each volume has a blank backside
                     -->
@@ -170,10 +178,7 @@
                 </p:otherwise>
             </p:choose>
             <p:choose>
-                <p:xpath-context>
-                    <p:pipe step="file-format" port="result"/>
-                </p:xpath-context>
-                <p:when test="//c:param[@name='sheets-multiple-of-two'][lower-case(@value)=('true','yes')]">
+                <p:when test="pf:media-query-matches('(-daisy-sheets-multiple-of-two)',$parsed-medium)">
                     <!--
                         ensure volumes have a number of sheets that is a multiple of 2
                     -->
@@ -190,21 +195,13 @@
                     <p:identity/>
                 </p:otherwise>
             </p:choose>
-            <pxi:pef2text px:progress="1" px:message="Storing braille file to '{$output-dir}' in format '{$format}'" px:message-severity="DEBUG">
+            <pxi:pef2text px:progress="1" px:message="Storing braille file to '{$output-dir}' in format '{$medium}'" px:message-severity="DEBUG">
                 <p:with-option name="output-dir" select="$output-dir"/>
                 <p:with-option name="name-pattern" select="$name-pattern"/>
                 <p:with-option name="single-volume-name" select="$single-volume-name"/>
                 <p:with-option name="number-width" select="$number-width"/>
-                <p:with-option name="file-format" select="$format"/>
-                <p:with-option name="line-breaks" select="''"/>
-                <p:with-option name="page-breaks" select="''"/>
-                <p:with-option name="pad" select="''"/>
-                <p:with-option name="charset" select="''"/>
+                <p:with-option name="medium" select="$parsed-medium"/>
             </pxi:pef2text>
-            <px:parse-query name="file-format">
-                <p:with-option name="query" select="$file-format"/>
-            </px:parse-query>
-            <p:sink/>
         </p:when>
         <p:otherwise>
             <p:sink>

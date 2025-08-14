@@ -40,6 +40,8 @@
 		<p>Steps related to EPUB 3 Media Overlays.</p>
 	</p:documentation>
 	<p:import href="mo/create-mediaoverlays.xpl"/>
+	<p:import href="mo/tts/tts-for-epub3.xpl"/>
+	<p:import href="mo/tts/epub3-to-ssml.xpl"/>
 	<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 		<p>Validation with EpubCheck and Ace.</p>
 	</p:documentation>

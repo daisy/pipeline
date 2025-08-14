@@ -477,10 +477,6 @@
               <instructions>
                 <Bundle-Activator>org.daisy.pipeline.braille.liblouis.impl.LiblouisExternalNativePath$Activator</Bundle-Activator>
                 <SPI-Provider>javax.imageio.spi.ServiceRegistry</SPI-Provider>
-                <Provide-Capability>
-                  xpath.function;name="{http://liblouis.org/liblouis}hyphenate",
-                  xproc.step;name="{http://liblouis.org/liblouis}translate-file"
-                </Provide-Capability>
               </instructions>
             </configuration>
           </execution>

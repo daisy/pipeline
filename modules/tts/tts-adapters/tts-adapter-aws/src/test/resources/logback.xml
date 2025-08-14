@@ -1,6 +1,0 @@
-<configuration>
-  <include file="../../../logback.xml"/>
-  <root level="DEBUG"/>
-  <logger name="org.apache.http" level="WARN"/>
-  <logger name="software.amazon.awssdk.auth" level="INFO"/>
-</configuration>

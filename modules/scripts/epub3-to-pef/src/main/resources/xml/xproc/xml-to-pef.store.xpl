@@ -34,10 +34,14 @@
     <p:option name="include-preview" select="'false'"/>
     <p:option name="include-pdf" select="'false'"/>
     <p:option name="include-pef" select="'false'"/>
-    <p:option name="output-file-format" select="''"/>
+    <p:option name="medium" select="'embossed AND (-daisy-file-format:pef)'"/>
     <p:option name="preview-table" select="''"/>
     
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl">
+        <p:documentation>
+            px:pef-store
+        </p:documentation>
+    </p:import>
 
     <!-- store OBFL first so that if something goes wrong in px:pef-store we still have OBFL -->
     <p:group>
@@ -92,10 +96,7 @@
                     <p:with-option name="output-dir" select="$output-dir"/>
                     <p:with-option name="name-pattern" select="concat($name,'_vol-{}')"/>
                     <p:with-option name="single-volume-name" select="$name"/>
-                    <p:with-option name="file-format" select="concat(($output-file-format,'(format:pef)')[not(.='')][1],
-                                                                     '(document-locale:',(//pef:meta/dc:language,'und')[1],')')">
-                        <p:pipe step="main" port="pef"/>
-                    </p:with-option>
+                    <p:with-option name="medium" select="$medium"/>
                     <p:with-option name="preview-table" select="if ($preview-table!='') then $preview-table
                                                                 else concat('(document-locale:',(//pef:meta/dc:language,'und')[1],')')">
                         <p:pipe step="main" port="pef"/>

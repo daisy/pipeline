@@ -10,7 +10,6 @@
     <relativePath>../../parent/</relativePath>
   </parent>
 
-  <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>word-to-dtbook</artifactId>
   <version>1.1.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
@@ -18,6 +17,18 @@
   <name>DAISY Pipeline 2 module :: Word to DTBook</name>
 
   <dependencies>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>common-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>fileset-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>dtbook-utils</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>framework-core</artifactId>
@@ -45,6 +56,15 @@
     <dependency>
       <groupId>org.apache.poi</groupId>
       <artifactId>poi-ooxml</artifactId>
+      <!-- exclude this dependency to make sure that the URIResolver service
+           it exposes (org.apache.xmlgraphics.util.uri.DataURIResolver) is not
+           used instead of our ModuleUriResolver -->
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.xmlgraphics</groupId>
+          <artifactId>batik-all</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.apache.poi</groupId>
@@ -59,30 +79,61 @@
       <artifactId>unoloader</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>ds-to-spi-runtime</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <!--
-        runtime dependencies
-    -->
-    <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>dtbook-utils</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>mathml-utils</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <!--
-        test dependencies
-    -->
-    <dependency>
-      <groupId>org.daisy.maven</groupId>
-      <artifactId>xproc-engine-daisy-pipeline</artifactId>
+      <artifactId>nlp-omnilang-lexer</artifactId>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>audio-encoder-lame</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>tts-mocks</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <!--
+        word-to-daisy3, word-to-mp3
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>dtbook-to-daisy3</artifactId>
+    </dependency>
+    <!--
+        word-to-mp3
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>daisy3-to-mp3</artifactId>
+    </dependency>
+    <!--
+        word-to-epub3, word-to-daisy202
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>dtbook-to-epub3</artifactId>
+    </dependency>
+    <!--
+        word-to-ebraille
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>dtbook-to-ebraille</artifactId>
+    </dependency>
+    <!--
+        word-to-html
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>dtbook-to-html</artifactId>
+    </dependency>
+    <!--
+        word-to-daisy202
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>epub3-to-daisy202</artifactId>
     </dependency>
   </dependencies>
 
@@ -90,29 +141,97 @@
     <expose-services>
       org.daisy.pipeline.modules.impl.Module_word_to_dtbook,
       org.daisy.pipeline.script.impl.XProcScript_word_to_dtbook,
+      org.daisy.pipeline.script.impl.WordToDAISY202Script,
+      org.daisy.pipeline.script.impl.WordToDAISY3Script,
+      org.daisy.pipeline.script.impl.WordToEBrailleScript,
+      org.daisy.pipeline.script.impl.WordToEPUB3Script,
+      org.daisy.pipeline.script.impl.WordToHTMLScript,
+      org.daisy.pipeline.script.impl.WordToMP3Script,
       org.daisy.pipeline.datatypes.impl.Datatype_px_word_to_dtbook_script_pagination,
       org.daisy.pipeline.datatypes.impl.Datatype_px_word_to_dtbook_script_image_size,
       org.daisy.pipeline.datatypes.impl.Datatype_px_word_to_dtbook_script_footnotes_numbering,
       org.daisy.pipeline.datatypes.impl.Datatype_px_word_to_dtbook_script_footnotes_position,
-      org.daisy.pipeline.word_to_dtbook.impl.DaisyClass$Provider
+      org.daisy.pipeline.word_to_dtbook.impl.DaisyClass$Provider,
+      org.daisy.pipeline.word_to_dtbook.impl.DTBookCleanerLibrary$Provider
     </expose-services>
   </properties>
 
   <build>
-    <plugins>
-      <plugin>
-        <groupId>org.daisy.maven</groupId>
-        <artifactId>xproc-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <phase>test</phase>
-            <goals>
-              <goal>xprocspec</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <excludes>
+          <exclude>maven.properties</exclude>
+        </excludes>
+      </resource>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+        <includes>
+          <include>maven.properties</include>
+        </includes>
+      </resource>
+    </resources>
   </build>
+
+  <profiles>
+    <profile>
+      <id>mac</id>
+      <activation>
+        <os>
+          <family>mac</family>
+        </os>
+      </activation>
+      <dependencies>
+        <!--
+            for word-to-ebraille
+        -->
+        <dependency>
+          <groupId>org.daisy.pipeline.modules.braille</groupId>
+          <artifactId>liblouis-utils</artifactId>
+          <classifier>mac</classifier>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+    <profile>
+      <id>linux</id>
+      <activation>
+        <os>
+          <name>linux</name>
+        </os>
+      </activation>
+      <dependencies>
+        <!--
+            for word-to-ebraille
+        -->
+        <dependency>
+          <groupId>org.daisy.pipeline.modules.braille</groupId>
+          <artifactId>liblouis-utils</artifactId>
+          <classifier>linux</classifier>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+    <profile>
+      <id>win</id>
+      <activation>
+        <os>
+          <family>windows</family>
+        </os>
+      </activation>
+      <dependencies>
+        <!--
+            for word-to-ebraille
+        -->
+        <dependency>
+          <groupId>org.daisy.pipeline.modules.braille</groupId>
+          <artifactId>liblouis-utils</artifactId>
+          <classifier>windows</classifier>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+  </profiles>
 
 </project>

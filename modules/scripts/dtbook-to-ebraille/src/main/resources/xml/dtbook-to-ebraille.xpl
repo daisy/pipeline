@@ -430,7 +430,7 @@
 				<p:input port="stylesheet">
 					<p:document href="process-html.xsl"/>
 				</p:input>
-				<p:with-param name="stylesheet-links" select="//d:file[role='stylesheet']/resolve-uri(@href,base-uri(.))">
+				<p:with-param name="stylesheet-links" select="//d:file[@role='stylesheet']/resolve-uri(@href,base-uri(.))">
 					<p:pipe step="add-css" port="fileset"/>
 				</p:with-param>
 			</p:xslt>
