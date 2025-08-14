@@ -298,7 +298,7 @@ public class XProcDecorator {
 			if (XProcOptionMetadata.ANY_DIR_URI.equals(option.getType().getId())) {
 				uri = option.getName() + "/";
 			} else {
-				uri = option.getName() + ".xml";
+				uri = option.getName() + ScriptPort.getFileExtension(option.getMediaType());
 			}
 			if (generatedOutputs.contains(uri)) {
 				// should not happen because option names are unique

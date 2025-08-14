@@ -2,26 +2,24 @@ package org.daisy.common.xproc.calabash.impl;
 
 import java.net.URI;
 
-import javax.xml.transform.URIResolver;
-
 import org.daisy.common.xproc.XProcErrorException;
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcPipeline;
 import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcResult;
-import org.daisy.common.xproc.calabash.XProcConfigurationFactory;
+import org.daisy.common.xproc.calabash.XProcRuntimeFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.xml.sax.EntityResolver;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
+
+import org.xml.sax.EntityResolver;
 
 //TODO check thread safety
 /**
@@ -33,19 +31,7 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 )
 public class CalabashXProcEngine implements XProcEngine {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(CalabashXProcEngine.class);
-
-	private URIResolver uriResolver = null;
-	private EntityResolver entityResolver = null;
-	private XProcConfigurationFactory configFactory = null;
-
-	/**
-	 * Instantiates a new calabash x proc engine.
-	 */
-	public CalabashXProcEngine() {
-
-	}
+	private static final Logger logger = LoggerFactory.getLogger(CalabashXProcEngine.class);
 
 	/**
 	 * Activate (to be used by OSGI)
@@ -55,58 +41,38 @@ public class CalabashXProcEngine implements XProcEngine {
 		logger.trace("Activating XProc Engine");
 	}
 
-	/* (non-Javadoc)
-	 * @see org.daisy.common.xproc.XProcEngine#load(java.net.URI)
-	 */
 	@Override
 	public XProcPipeline load(URI uri) {
-		if (configFactory == null) {
-			throw new IllegalStateException(
-					"Calabash configuration factory unavailable");
-		}
-
-		return new CalabashXProcPipeline(uri, configFactory, uriResolver, entityResolver);
+		if (runtimeFactory == null)
+			throw new IllegalStateException("Calabash runtime factory unavailable");
+		return new CalabashXProcPipeline(uri, runtimeFactory, entityResolver);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.daisy.common.xproc.XProcEngine#getInfo(java.net.URI)
-	 */
 	@Override
 	public XProcPipelineInfo getInfo(URI uri) {
 		return load(uri).getInfo();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.daisy.common.xproc.XProcEngine#run(java.net.URI, org.daisy.common.xproc.XProcInput)
-	 */
 	@Override
 	public XProcResult run(URI uri, XProcInput data) throws XProcErrorException {
 		return load(uri).run(data);
 	}
 
-	/**
-	 * Sets the configuration factory to this engine
-	 *
-	 * @param configFactory the new configuration factory
-	 */
 	@Reference(
-		name = "calabash-config-factory",
+		name = "XProcRuntimeFactory",
 		unbind = "-",
-		service = XProcConfigurationFactory.class,
+		service = XProcRuntimeFactory.class,
 		cardinality = ReferenceCardinality.MANDATORY,
 		policy = ReferencePolicy.STATIC
 	)
-	public void setConfigurationFactory(XProcConfigurationFactory configFactory) {
-		this.configFactory = configFactory;
+	public void setRuntimeFactory(XProcRuntimeFactory factory) {
+		this.runtimeFactory = factory;
 	}
 
-	/**
-	 * Sets the entity resolver to this engine
-	 *
-	 * @param entityResolver the new entity resolver
-	 */
+	private XProcRuntimeFactory runtimeFactory = null;
+
 	@Reference(
-		name = "entity-resolver",
+		name = "EntityResolver",
 		unbind = "-",
 		service = EntityResolver.class,
 		cardinality = ReferenceCardinality.MANDATORY,
@@ -116,19 +82,6 @@ public class CalabashXProcEngine implements XProcEngine {
 		this.entityResolver = entityResolver;
 	}
 
-	/**
-	 * Sets the uri resolver to this engine, the uri resolver is thought to be able to handle component uris
-	 *
-	 * @param uriResolver the new uri resolver
-	 */
-	@Reference(
-		name = "uri-resolver",
-		unbind = "-",
-		service = URIResolver.class,
-		cardinality = ReferenceCardinality.MANDATORY,
-		policy = ReferencePolicy.STATIC
-	)
-	public void setUriResolver(URIResolver uriResolver) {
-		this.uriResolver = uriResolver;
-	}
+	private EntityResolver entityResolver = null;
+
 }

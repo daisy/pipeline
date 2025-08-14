@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.15.3</version>
+    <version>1.15.5-SNAPSHOT</version>
     <relativePath>../parent</relativePath>
   </parent>
   
   <artifactId>saxon-adapter</artifactId>
-  <version>5.7.0</version>
+  <version>5.8.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
   
   <name>DAISY Pipeline 2 :: Adapter for Saxon</name>

@@ -7,12 +7,12 @@
     <groupId>org.daisy</groupId>
     <artifactId>daisy</artifactId>
     <version>4</version>
-    <relativePath />
+    <relativePath/>
   </parent>
 
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>framework-parent</artifactId>
-  <version>1.15.3</version>
+  <version>1.15.5-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Framework Parent POM</name>
@@ -110,7 +110,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.15.3</version>
+        <version>1.15.5-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -246,7 +246,7 @@
         <plugin>
           <groupId>org.daisy.pipeline.build</groupId>
           <artifactId>modules-build-helper</artifactId>
-          <version>2.6.0</version>
+          <version>3.0.0</version>
         </plugin>
         <plugin>
           <groupId>org.daisy.pipeline.build</groupId>
@@ -271,7 +271,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <execute />
+                    <execute/>
                   </action>
                 </pluginExecution>
               </pluginExecutions>
@@ -356,8 +356,4 @@
       </snapshots>
     </repository>
   </repositories>
-
-  <scm>
-    <tag>v1.15.3</tag>
-  </scm>
 </project>

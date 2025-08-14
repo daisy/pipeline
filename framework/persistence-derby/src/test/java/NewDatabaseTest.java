@@ -11,7 +11,8 @@ import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobManagerFactory;
 import org.daisy.pipeline.job.JobStorage;
 import org.daisy.pipeline.script.BoundScript;
-import org.daisy.pipeline.script.XProcScriptService;
+import org.daisy.pipeline.script.ScriptService;
+import org.daisy.pipeline.script.ScriptRegistry;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -25,7 +26,7 @@ public class NewDatabaseTest extends TestBase {
 	public WebserviceStorage webserviceStorage;
 	
 	@Inject
-	public XProcScriptService script;
+	public ScriptRegistry scripts;
 	
 	@Test
 	public void testClientStorage() {
@@ -46,7 +47,8 @@ public class NewDatabaseTest extends TestBase {
 		ClientStorage clientStorage = webserviceStorage.getClientStorage();
 		Optional<Client> client = clientStorage.addClient("my-client", "my-secret", Client.Role.CLIENTAPP, "me@daisy.org");
 		Assert.assertTrue(client.isPresent());
-		Assert.assertEquals("my-script", script.getId());
+		ScriptService<?> script = scripts.getScript("my-script");
+		Assert.assertTrue(script != null);
 		BoundScript boundScript = new BoundScript.Builder(script.load()).build();
 		JobManager jobManager; {
 			JobManagerFactory factory = new JobManagerFactory() {{

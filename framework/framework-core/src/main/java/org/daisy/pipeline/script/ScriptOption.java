@@ -7,18 +7,30 @@ import org.daisy.pipeline.datatypes.DatatypeService;
  */
 public interface ScriptOption {
 
+	public enum Role {
+		/**
+		 * Option used for determining/selecting the output medium
+		 */
+		MEDIA_FEATURE;
+
+		@Override
+		public String toString() {
+			return name().toLowerCase().replace('_', '-');
+		}
+	}
+
 	/**
 	 * The name.
 	 */
 	public String getName();
 
 	/**
-	 * Whether the option is required.
+	 * Whether a (at least one) value is required.
 	 */
 	public boolean isRequired();
 
 	/**
-	 * The default value.
+	 * The default value, or {@code null} if there is no default value.
 	 */
 	public String getDefault();
 
@@ -48,7 +60,7 @@ public interface ScriptOption {
 	public boolean isPrimary();
 
 	/**
-	 * Whether this option takes a sequence of values.
+	 * Whether this option takes a sequence of values (zero or more).
 	 */
 	public boolean isSequence();
 
@@ -56,5 +68,10 @@ public interface ScriptOption {
 	 * Whether the order in a sequence matters.
 	 */
 	public boolean isOrdered();
+
+	/**
+	 * Whether the option is used for determining/selecting the output medium
+	 */
+	public ScriptOption.Role getRole();
 
 }

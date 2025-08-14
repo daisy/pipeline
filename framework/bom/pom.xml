@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>framework-bom</artifactId>
-  <version>1.15.3</version>
+  <version>1.15.5-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Framework BoM</name>
@@ -44,27 +44,27 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>calabash-adapter</artifactId>
-        <version>6.2.1</version>
+        <version>7.0.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>common-utils</artifactId>
-        <version>6.3.0</version>
+        <version>6.4.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-core</artifactId>
-        <version>10.0.1</version>
+        <version>11.0.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-persistence</artifactId>
-        <version>2.1.11</version>
+        <version>2.1.12</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>logging-appender</artifactId>
-        <version>2.1.5</version>
+        <version>2.1.6</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
@@ -79,17 +79,17 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>pipeline1-adapter</artifactId>
-        <version>1.1.0</version>
+        <version>1.1.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>saxon-adapter</artifactId>
-        <version>5.7.0</version>
+        <version>5.8.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>webservice</artifactId>
-        <version>3.7.0</version>
+        <version>3.8.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
@@ -142,7 +142,7 @@
       <dependency>
         <groupId>org.daisy.libs</groupId>
         <artifactId>com.xmlcalabash</artifactId>
-        <version>1.1.20-p18-98</version>
+        <version>1.1.20-p19-98</version>
         <exclusions>
           <exclusion>
             <groupId>org.apache.logging.log4j</groupId>
@@ -155,6 +155,18 @@
           <exclusion>
             <groupId>org.slf4j</groupId>
             <artifactId>log4j-over-slf4j</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.restlet.jee</groupId>
+            <artifactId>org.restlet</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.restlet.jee</groupId>
+            <artifactId>org.restlet.ext.fileupload</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.restlet.jee</groupId>
+            <artifactId>org.restlet.ext.slf4j</artifactId>
           </exclusion>
         </exclusions>
       </dependency>
@@ -495,8 +507,4 @@
 
     </dependencies>
   </dependencyManagement>
-
-  <scm>
-    <tag>v1.15.3</tag>
-  </scm>
 </project>

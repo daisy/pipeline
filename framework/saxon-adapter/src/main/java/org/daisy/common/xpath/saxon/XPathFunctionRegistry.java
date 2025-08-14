@@ -1,7 +1,11 @@
 package org.daisy.common.xpath.saxon;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.xml.namespace.QName;
@@ -23,9 +27,10 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 )
 public class XPathFunctionRegistry  {
 
-	private static final Logger mLogger = LoggerFactory.getLogger(XPathFunctionRegistry.class);
+	private static final Logger logger = LoggerFactory.getLogger(XPathFunctionRegistry.class);
 
-	HashMap<QName,ExtensionFunctionDefinition> mFunctions = new HashMap<QName, ExtensionFunctionDefinition>();
+	private final List<ExtensionFunctionDefinition> definitions = new ArrayList<>();
+	private final List<ExtensionFunctionProvider> providers = new ArrayList<>();
 
 	@Reference(
 		name = "ExtensionFunctionDefinition",
@@ -34,14 +39,9 @@ public class XPathFunctionRegistry  {
 		cardinality = ReferenceCardinality.MULTIPLE,
 		policy = ReferencePolicy.STATIC
 	)
-	public void addFunction(ExtensionFunctionDefinition functionDefinition) throws XPathException {
-		mLogger.info("Adding extension function definition to registry {}", functionDefinition.getFunctionQName().toString());
-		mFunctions.put(functionDefinition.getFunctionQName().toJaxpQName(), functionDefinition);
-	}
-
-	public void removeFunction(ExtensionFunctionDefinition functionDefinition) {
-		mLogger.info("Deleting extension function definition to registry {}",functionDefinition.getFunctionQName().toString());
-		mFunctions.remove(functionDefinition.getFunctionQName().toJaxpQName());
+	public void addFunction(ExtensionFunctionDefinition definition) throws XPathException {
+		logger.info("Adding extension function definition to registry {}", definition.getFunctionQName().toString());
+		definitions.add(definition);
 	}
 
 	@Reference(
@@ -51,17 +51,23 @@ public class XPathFunctionRegistry  {
 		cardinality = ReferenceCardinality.MULTIPLE,
 		policy = ReferencePolicy.STATIC
 	)
-	public void addFunctionProvider(ExtensionFunctionProvider functionProvider) throws XPathException {
-		for (ExtensionFunctionDefinition f : functionProvider.getDefinitions())
-			addFunction(f);
-	}
-
-	public void removeFunctionProvider(ExtensionFunctionProvider functionProvider) {
-		for (ExtensionFunctionDefinition f : functionProvider.getDefinitions())
-			removeFunction(f);
+	public void addFunctionProvider(ExtensionFunctionProvider provider) throws XPathException {
+		logger.info("Adding extension function provider to registry {}", provider.toString());
+		providers.add(provider);
 	}
 
 	public Set<ExtensionFunctionDefinition> getFunctions() {
-		return new HashSet<ExtensionFunctionDefinition>(mFunctions.values());
+		return getFunctions(null);
+	}
+
+	public Set<ExtensionFunctionDefinition> getFunctions(Collection<Object> context) {
+		// to make sure there are no two functions with the same name, we make a map
+		Map<QName,ExtensionFunctionDefinition> functions = new HashMap<>();
+		for (ExtensionFunctionDefinition definition : definitions)
+			functions.put(definition.getFunctionQName().toJaxpQName(), definition);
+		for (ExtensionFunctionProvider provider : providers)
+			for (ExtensionFunctionDefinition definition : provider.getDefinitions(context))
+				functions.put(definition.getFunctionQName().toJaxpQName(), definition);
+		return new HashSet<ExtensionFunctionDefinition>(functions.values());
 	}
 }

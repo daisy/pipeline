@@ -1,5 +1,6 @@
 package org.daisy.common.transform;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.xml.namespace.QName;
@@ -58,5 +59,56 @@ public abstract class SingleInSingleOutXMLTransformer implements XMLTransformer 
 					};
 			}
 		};
+	}
+
+	/**
+	 * Create a {@link SingleInSingleOutXMLTransformer} from a {@link XMLTransformer}. The {@link
+	 * XMLTransformer} is assumed to have one XML input, one parameter input, and one XML output.
+	 */
+	public static SingleInSingleOutXMLTransformer from(XMLTransformer transformer) {
+		if (transformer instanceof SingleInSingleOutXMLTransformer)
+			return (SingleInSingleOutXMLTransformer)transformer;
+		else
+			return from(transformer, _SOURCE, _RESULT, _PARAMETERS);
+	}
+
+	public static SingleInSingleOutXMLTransformer from(XMLTransformer transformer,
+	                                                   QName inputPort, QName outputPort, QName parameterPort) {
+		return new SingleInSingleOutXMLTransformer() {
+			@Override
+			public Runnable transform(XMLInputValue<?> source, XMLOutputValue<?> result, InputValue<?> params) {
+				ImmutableMap.Builder<QName,InputValue<?>> input = new ImmutableMap.Builder<>();
+				input.put(inputPort, source);
+				if (params != null)
+					input.put(parameterPort, params);
+				return transformer.transform(input.build(),
+				                             ImmutableMap.of(outputPort, result));
+			}
+		};
+	}
+
+	/* Utility functions */
+
+	protected static Map<QName,InputValue<?>> getParameterMap(InputValue<?> parameters) {
+		Map<QName,InputValue<?>> parameterMap = new HashMap<>();
+		Map<?,?> map; {
+			try {
+				map = parameters.asObject(Map.class);
+			} catch (UnsupportedOperationException e) {
+				throw new IllegalArgumentException("unsupported interface for parameter input", e);
+			}
+		}
+		for (Object k : map.keySet()) {
+			QName name; {
+				if (!(k instanceof QName))
+					throw new IllegalArgumentException("unsupported interface for parameter input");
+				name = (QName)k;
+			}
+			Object value = map.get(k);
+			if (!(value instanceof InputValue))
+				throw new IllegalArgumentException("unsupported interface for parameter input");
+			parameterMap.put(name, (InputValue<?>)value);
+		}
+		return parameterMap;
 	}
 }

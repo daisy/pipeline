@@ -32,6 +32,11 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
 import org.osgi.framework.VersionRange;
 
+// FIXME: This class uses a rather complex approach for allowing modules to depend on other modules
+// at registration time. An alternative approach that uses threads, is used in ScriptRegistry (for
+// allowing scripts to depend on other scripts at registration time), and could possibly applied
+// here as well.
+
 @org.osgi.service.component.annotations.Component(
 	name = "module-registry",
 	service = { ModuleRegistry.class }

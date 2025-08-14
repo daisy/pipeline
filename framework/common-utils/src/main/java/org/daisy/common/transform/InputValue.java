@@ -90,7 +90,7 @@ public class InputValue<V> {
 				limit);
 			int supplied = 0;
 			public InputValue<V> get() throws NoSuchElementException {
-				if (supplied >= limit) {
+				if (limit >= 0 && supplied >= limit) {
 					cache = null;
 					throw new NoSuchElementException();
 				}

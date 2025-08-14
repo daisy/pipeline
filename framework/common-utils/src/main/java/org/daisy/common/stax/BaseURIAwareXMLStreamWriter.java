@@ -5,7 +5,7 @@ import java.net.URI;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
-public interface BaseURIAwareXMLStreamWriter extends XMLStreamWriter {
+public interface BaseURIAwareXMLStreamWriter extends XMLStreamWriter, AutoCloseable {
 	
 	public URI getBaseURI() throws XMLStreamException;
 	

@@ -38,30 +38,31 @@ public class XProcOptionMetadata {
         final private boolean isSequence;
         final private boolean isOrdered;
         final private String separator;
+        final private ScriptOption.Role role;
 
         public XProcOptionMetadata(String niceName, String description, String type, String mediaType) {
                 this(niceName, description, type, mediaType,
                      Output.NA, true,
-                     false, true, DEFAULT_SEPARATOR);
+                     false, true, DEFAULT_SEPARATOR, null);
         }
 
         public XProcOptionMetadata(String niceName, String description, String type, String mediaType,
                                    Output output, boolean primary) {
                 this(niceName, description, type, mediaType,
                      output, primary,
-                     false, true, DEFAULT_SEPARATOR);
+                     false, true, DEFAULT_SEPARATOR, null);
         }
 
         public XProcOptionMetadata(String niceName, String description, String type, String mediaType,
                                    boolean sequence, boolean ordered, String separator) {
                 this(niceName, description, type, mediaType,
                      Output.NA, true,
-                     sequence, ordered, separator);
+                     sequence, ordered, separator, null);
         }
 
         public XProcOptionMetadata(String niceName, String description, String type, String mediaType,
                                    Output output, boolean primary,
-                                   boolean sequence, boolean ordered, String separator) {
+                                   boolean sequence, boolean ordered, String separator, ScriptOption.Role role) {
                 this.niceName = niceName;
                 this.description = description;
                 this.type = type;
@@ -71,6 +72,7 @@ public class XProcOptionMetadata {
                 this.isSequence = sequence;
                 this.isOrdered = ordered;
                 this.separator = separator;
+                this.role = role;
         }
 
         /**
@@ -134,5 +136,12 @@ public class XProcOptionMetadata {
          */
         public String getSeparator() {
                 return separator;
+        }
+
+        /**
+         * Whether the option is used for determining/selecting the output medium
+         */
+        public ScriptOption.Role getRole() {
+                return role;
         }
 }

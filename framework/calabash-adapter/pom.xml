@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.15.3-SNAPSHOT</version>
+    <version>1.15.5-SNAPSHOT</version>
     <relativePath>../parent</relativePath>
   </parent>
 
   <artifactId>calabash-adapter</artifactId>
-  <version>6.2.2-SNAPSHOT</version>
+  <version>7.0.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 :: Calabash adapter for the XProc API</name>
@@ -113,7 +113,7 @@
             </Import-Package>
             <_dsannotations>
               org.daisy.common.xproc.calabash.impl.CalabashXProcEngine,
-              org.daisy.common.xproc.calabash.impl.DynamicXProcConfigurationFactory
+              org.daisy.common.xproc.calabash.impl.XProcRuntimeFactoryImpl
             </_dsannotations>
           </instructions>
         </configuration>
@@ -178,7 +178,7 @@
             <configuration>
               <includes>
                 org.daisy.common.xproc.calabash.impl.CalabashXProcEngine,
-                org.daisy.common.xproc.calabash.impl.DynamicXProcConfigurationFactory
+                org.daisy.common.xproc.calabash.impl.XProcRuntimeFactoryImpl
               </includes>
             </configuration>
           </execution>

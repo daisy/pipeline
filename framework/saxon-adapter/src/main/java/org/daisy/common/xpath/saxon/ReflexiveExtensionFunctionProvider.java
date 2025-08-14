@@ -20,13 +20,11 @@ import java.util.Optional;
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
+import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 import javax.xml.xpath.XPath;
 
-import org.daisy.common.saxon.SaxonHelper;
-import org.daisy.common.saxon.SaxonOutputValue;
-import org.daisy.common.transform.TransformerException;
-
+import net.sf.saxon.Configuration;
 import net.sf.saxon.dom.DocumentBuilderImpl;
 import net.sf.saxon.expr.XPathContext;
 import net.sf.saxon.lib.ExtensionFunctionCall;
@@ -35,11 +33,21 @@ import net.sf.saxon.om.Item;
 import net.sf.saxon.om.NodeInfo;
 import net.sf.saxon.om.Sequence;
 import net.sf.saxon.om.StructuredQName;
+import net.sf.saxon.s9api.XdmItem;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.trans.XPathException;
 import net.sf.saxon.value.SequenceExtent;
 import net.sf.saxon.value.SequenceType;
 import net.sf.saxon.xpath.XPathFactoryImpl;
+
+import org.daisy.common.saxon.SaxonHelper;
+import org.daisy.common.saxon.SaxonInputValue;
+import org.daisy.common.saxon.SaxonOutputValue;
+import org.daisy.common.transform.TransformerException;
+import org.daisy.common.transform.XMLInputValue;
+import org.daisy.common.transform.XMLOutputValue;
+
+import org.w3c.dom.Node;
 
 /**
  * Poor man's implementation of Saxon's <a
@@ -50,6 +58,7 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 
 	private final List<ExtensionFunctionDefinition> definitions;
 
+	@Override
 	public Collection<ExtensionFunctionDefinition> getDefinitions() {
 		return definitions;
 	}
@@ -216,9 +225,11 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 				&& !Modifier.isStatic(declaringClass.getModifiers());
 			boolean isConstructor = method instanceof Constructor;
 			boolean isStatic = isConstructor || Modifier.isStatic(method.getModifiers());
+			boolean requiresXMLOutputValue = false;
 			boolean requiresXMLStreamWriter = false;
 			boolean requiresXPath = false;
 			boolean requiresDocumentBuilder = false;
+			boolean requiresConfiguration = false;
 			for (Class<?> t : method.getParameterTypes()) {
 				if (t.equals(XPath.class)) {
 					if (requiresXPath)
@@ -229,9 +240,17 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 						throw new IllegalArgumentException(); // only one DocumentBuilder argument allowed
 					requiresDocumentBuilder = true;
 				} else if (t.equals(XMLStreamWriter.class)) {
-					if (requiresXMLStreamWriter)
-						throw new IllegalArgumentException(); // only one XMLStreamWriter argument allowed
+					if (requiresXMLOutputValue || requiresXMLStreamWriter)
+						throw new IllegalArgumentException(); // only one XMLStreamWriter or XMLOutputValue argument allowed
 					requiresXMLStreamWriter = true;
+				} else if (t.equals(XMLOutputValue.class)) {
+					if (requiresXMLOutputValue || requiresXMLStreamWriter)
+						throw new IllegalArgumentException(); // only one XMLStreamWriter or XMLOutputValue argument allowed
+					requiresXMLOutputValue = true;
+				} else if (t.equals(Configuration.class)) {
+					if (requiresConfiguration)
+						throw new IllegalArgumentException(); // only one Configuration argument allowed
+					requiresConfiguration = true;
 				}
 			}
 			Type[] javaArgumentTypes; { // arguments of Java method/constructor
@@ -244,28 +263,33 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 			SequenceType[] argumentTypes = new SequenceType[ // arguments of XPath function
 				javaArgumentTypes.length
 				+ ((isStatic || object != null) ? 0 : 1)
+				- (requiresXMLOutputValue ? 1 : 0)
 				- (requiresXMLStreamWriter ? 1 : 0)
 				- (requiresXPath ? 1 : 0)
 				- (requiresDocumentBuilder ? 1 : 0)
+				- (requiresConfiguration ? 1 : 0)
 			];
 			int i = 0;
 			if (!isStatic && object == null)
 				argumentTypes[i++] = SequenceType.SINGLE_ITEM; // must be special wrapper item
 			for (Type t : javaArgumentTypes)
-				if (!t.equals(XMLStreamWriter.class) &&
+				if (!(t instanceof ParameterizedType && ((ParameterizedType)t).getRawType().equals(XMLOutputValue.class)) &&
+				    !t.equals(XMLOutputValue.class) &&
+				    !t.equals(XMLStreamWriter.class) &&
 				    !t.equals(XPath.class) &&
-				    !t.equals(DocumentBuilder.class))
+				    !t.equals(DocumentBuilder.class) &&
+				    !t.equals(Configuration.class))
 					argumentTypes[i++] = SaxonHelper.sequenceTypeFromType(t);
 			SequenceType resultType; {
 				if (isConstructor) {
-					if (requiresXMLStreamWriter)
-						throw new IllegalArgumentException(); // no XMLStreamWriter argument allowed in case of constructor
+					if (requiresXMLStreamWriter || requiresXMLOutputValue)
+						throw new IllegalArgumentException(); // no XMLStreamWriter or XMLOutputValue argument allowed in case of constructor
 					resultType = SequenceType.SINGLE_ITEM; // special wrapper item
 				} else {
 					Type t = ((Method)method).getGenericReturnType();
-					if (requiresXMLStreamWriter) {
+					if (requiresXMLStreamWriter || requiresXMLOutputValue) {
 						if (!t.equals(Void.TYPE))
-							throw new IllegalArgumentException(); // XMLStreamWriter argument only allowed when return type is void
+							throw new IllegalArgumentException(); // XMLStreamWriter or XMLOutputValue argument only allowed when return type is void
 						resultType = SequenceType.NODE_SEQUENCE;
 					} else
 						resultType = SaxonHelper.sequenceTypeFromType(t);
@@ -309,7 +333,7 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 										}
 									}
 								}
-								List<NodeInfo> nodeListFromXMLStreamWriter = null;
+								List<NodeInfo> nodeListFromXMLOutputValue = null;
 								Object[] javaArgs = new Object[ // arguments passed to Method.invoke() in addition to instance,
 								                                // or to Constructor.newInstance()
 									method.getParameterCount()
@@ -319,10 +343,21 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 									// in case of constructor of inner class, first argument is enclosing instance
 									javaArgs[j++] = ReflexiveExtensionFunctionProvider.this;
 								for (Type type : javaArgumentTypes) {
-									if (type.equals(XMLStreamWriter.class)) {
+									if (type.equals(XMLStreamReader.class) ||
+									    (type instanceof ParameterizedType
+									     && ((ParameterizedType)type).getRawType().equals(XMLInputValue.class))) {
+										XMLInputValue xmlInputValueArg = new SaxonInputValue(
+											(Iterator<XdmNode>)SaxonHelper.iteratorFromSequence(args[i++], XdmNode.class));
+										if (type.equals(XMLStreamReader.class))
+											javaArgs[j++] = xmlInputValueArg.asXMLStreamReader();
+										else
+											javaArgs[j++] = xmlInputValueArg;
+									} else if (type.equals(XMLStreamWriter.class) ||
+									           (type instanceof ParameterizedType
+									            && ((ParameterizedType)type).getRawType().equals(XMLOutputValue.class))) {
 										List<NodeInfo> list = new ArrayList<>();
-										nodeListFromXMLStreamWriter = list;
-										XMLStreamWriter xmlStreamWriterArg = new SaxonOutputValue(
+										nodeListFromXMLOutputValue = list;
+										XMLOutputValue xmlOutputValueArg = new SaxonOutputValue(
 											item -> {
 												if (item instanceof XdmNode)
 													list.add(((XdmNode)item).getUnderlyingNode());
@@ -330,10 +365,15 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 													throw new RuntimeException(); // should not happen
 											},
 											ctxt.getConfiguration()
-										).asXMLStreamWriter();
-										javaArgs[j++] = xmlStreamWriterArg;
+										);
+										if (type.equals(XMLStreamWriter.class))
+											javaArgs[j++] = xmlOutputValueArg.asXMLStreamWriter();
+										else
+											javaArgs[j++] = xmlOutputValueArg;
 									} else if (type.equals(XPath.class))
 										javaArgs[j++] = new XPathFactoryImpl(ctxt.getConfiguration()).newXPath();
+									else if (type.equals(Configuration.class))
+										javaArgs[j++] = ctxt.getConfiguration();
 									else if (type.equals(DocumentBuilder.class)) {
 										DocumentBuilderImpl b = new DocumentBuilderImpl();
 										b.setConfiguration(ctxt.getConfiguration());
@@ -379,9 +419,10 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 											// XProcErrorException, unwrapping it will yield an XProcException.
 											XPathException xpe = new XPathException(cause.getMessage(), cause.getCause());
 											QName code = ((TransformerException)cause).getCode();
-											xpe.setErrorCodeQName(new StructuredQName(code.getPrefix(),
-											                                          code.getNamespaceURI(),
-											                                          code.getLocalPart()));
+											if (code != null)
+												xpe.setErrorCodeQName(new StructuredQName(code.getPrefix(),
+												                                          code.getNamespaceURI(),
+												                                          code.getLocalPart()));
 											throw xpe;
 										} else
 											throw new XPathException(cause);
@@ -389,10 +430,12 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 										throw new RuntimeException(e); // should not happen
 									}
 								}
-								if (nodeListFromXMLStreamWriter != null)
-									return new SequenceExtent(nodeListFromXMLStreamWriter);
+								if (nodeListFromXMLOutputValue != null)
+									return new SequenceExtent(nodeListFromXMLOutputValue);
 								if (result instanceof Optional)
 									return SaxonHelper.sequenceFromObject(((Optional<?>)result).orElse(null));
+								else if (result instanceof Node)
+									return SaxonHelper.nodeInfoFromNode((Node)result, ctxt.getConfiguration());
 								else
 									return SaxonHelper.sequenceFromObject(result);
 							} catch (RuntimeException e) {

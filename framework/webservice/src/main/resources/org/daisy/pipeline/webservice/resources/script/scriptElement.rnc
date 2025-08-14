@@ -31,6 +31,7 @@ script =
             & attribute type { text } # XSD type or custom data type
             & mediatype.attr? # use if option references a file
             & attribute default { text }?
+            & attribute role { "media-feature" }?
         }*
         
         & element output {
@@ -48,6 +49,3 @@ script =
 
 mediatype.attr = 
     attribute mediaType { text }
-
-output.type = "result" | "temp"
-    

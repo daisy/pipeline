@@ -141,17 +141,17 @@ public interface XProcStep extends com.xmlcalabash.core.XProcStep, XMLTransforme
 					Map<QName,InputValue<?>> input = new HashMap<>();
 					if (inputs != null)
 						for (String port : inputs.keySet())
-							input.put(new QName(port), new XMLCalabashInputValue(inputs.get(port)));
+							input.put(new QName(port), XMLCalabashInputValue.of(inputs.get(port)));
 					if (options != null)
 						for (QName name : options.keySet())
-							input.put(name, new XMLCalabashOptionValue(options.get(name)));
+							input.put(name, (InputValue<?>)XMLCalabashOptionValue.of(options.get(name)));
 					if (parameters != null)
 						for (String port : parameters.keySet())
-							input.put(new QName(port), new XMLCalabashParameterInputValue(parameters.get(port)));
+							input.put(new QName(port), XMLCalabashParameterInputValue.of(parameters.get(port)));
 					Map<QName,OutputValue<?>> output = new HashMap<>();
 					if (outputs != null)
 						for (String port : outputs.keySet())
-							output.put(new QName(port), new XMLCalabashOutputValue(outputs.get(port), runtime));
+							output.put(new QName(port), XMLCalabashOutputValue.of(outputs.get(port), runtime));
 					transformer.transform(input, output).run();
 				} catch (Throwable e) {
 					throw raiseError(e, step);
@@ -180,7 +180,7 @@ public interface XProcStep extends com.xmlcalabash.core.XProcStep, XMLTransforme
 						? CalabashExceptionFromXProcError.from(((XProcErrorException)e.getCause()).getXProcError())
 						: e.getCause() != null
 							? XProcException.fromException(e.getCause())
-							                .rebase(step.getLocation(), stackTrace)
+							                .rebase(step != null ? step.getLocation() : null, stackTrace)
 							: null;
 				QName code = ((TransformerException)e).getCode();
 				return new XProcException(
@@ -194,10 +194,13 @@ public interface XProcStep extends com.xmlcalabash.core.XProcStep, XMLTransforme
 				 * IllegalArgumentException should not happen (indicates a bug in the XProc
 				 * step). Because no other exceptions are mentioned in the contract of this method
 				 * we treat them as unexpected exceptions as well. */
-				return new XProcException(step,
-				                          "Unexpected error in " + step.getType(),
-				                          XProcException.fromException(e)
-				                                        .rebase(step.getLocation(), stackTrace));
+				if (step != null)
+					return new XProcException(step,
+					                          "Unexpected error in " + step.getType(),
+					                          XProcException.fromException(e)
+					                                        .rebase(step.getLocation(), stackTrace));
+				else
+					return XProcException.fromException(e).rebase(null, stackTrace);
 			}
 		}
 	}
