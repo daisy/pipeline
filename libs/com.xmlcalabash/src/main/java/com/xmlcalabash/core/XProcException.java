@@ -357,6 +357,8 @@ public class XProcException extends RuntimeException {
      * becomes the error cause (and this recursively).
      */
     public static XProcException fromException(Throwable throwable) {
+        if (throwable instanceof XProcException)
+            return (XProcException)throwable;
         XProcException cause = throwable.getCause() != null
             ? fromException(throwable.getCause())
             : null;
@@ -428,6 +430,8 @@ public class XProcException extends RuntimeException {
             }
             if (newLength == 0)
                 newLocation = NO_LOCATION;
+            else if (newBase == NO_LOCATION && newLength == location.length)
+                newLocation = location;
             else {
                 newLocation = new SourceLocator[newLength];
                 int i = 0;
@@ -446,7 +450,10 @@ public class XProcException extends RuntimeException {
         XProcException newErrorCause = errorCause != null
             ? errorCause.rebase(newBase, oldBase)
             : null;
-        return new XProcException(errorCode, newLocation, this, newErrorCause);
+        if (newLocation == location && newErrorCause == errorCause)
+            return this;
+        else
+            return new XProcException(errorCode, newLocation, this, newErrorCause);
     }
 
     public QName getErrorCode() {

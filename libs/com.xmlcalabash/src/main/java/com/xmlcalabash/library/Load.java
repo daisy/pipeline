@@ -79,7 +79,8 @@ public class Load extends DefaultStep {
                 RuntimeValue href = getOption(_href);
                 String baseURI = href.getBaseURI().toASCIIString();
                 boolean validate = getOption(_dtd_validate, false);
-                throw XProcException.stepError(11, "Could not load " + href.getString() + " (" + baseURI + ") dtd-validate=" + validate);
+                throw XProcException.dynamicError(
+                    11, step, "Could not load " + href.getString() + " (" + baseURI + ") dtd-validate=" + validate);
             }
             throw e;
         } catch (Exception e) {

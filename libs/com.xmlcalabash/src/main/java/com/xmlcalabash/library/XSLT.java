@@ -314,6 +314,14 @@ public class XSLT extends DefaultStep {
                     if (cause != null) {
                         XProcException errorCause = XProcException.fromException(cause)
                                                                   .rebase(null, new RuntimeException().getStackTrace());
+                        if (errorCause == cause) {
+                            // If for some reason cause is already an XProcException, and the rebase had no effect, assume
+                            // that the XProcException can be based onto the location of the containing TransformerException.
+                            errorCause = errorCause.rebase(location);
+                            if ((message == null || message.equals(errorCause.getMessage()))
+                                && (code == null || code.equals(errorCause.getErrorCode())))
+                                throw errorCause;
+                        }
                         if (message != null)
                             throw new XProcException(code, location, message, errorCause);
                         else

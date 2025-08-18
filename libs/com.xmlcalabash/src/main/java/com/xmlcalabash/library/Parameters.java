@@ -23,6 +23,7 @@ import java.util.Hashtable;
 
 import com.xmlcalabash.core.XMLCalabash;
 import com.xmlcalabash.core.XProcConstants;
+import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.util.TreeWriter;
 import com.xmlcalabash.model.RuntimeValue;
@@ -138,9 +139,11 @@ public class Parameters extends DefaultStep {
                         if (next.isAtomicValue()) {
                             treeWriter.addAttribute(_value, next.getStringValue());
                             treeWriter.startContent();
-                        } else {
+                        } else if (next instanceof XdmNode) {
                             treeWriter.startContent();
                             treeWriter.addSubtree((XdmNode) next);
+                        } else { // could e.g. be XdmExternalObject
+                            throw new XProcException(step, "Parameter value must be an atomic value or a node");
                         }
                         
                         treeWriter.addEndElement();
