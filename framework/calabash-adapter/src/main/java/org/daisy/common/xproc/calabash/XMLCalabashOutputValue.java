@@ -19,17 +19,8 @@ import org.daisy.common.transform.TransformerException;
 
 public class XMLCalabashOutputValue extends SaxonOutputValue {
 
-	private final WritablePipe pipe;
-
-	public XMLCalabashOutputValue(WritablePipe value, XProcRuntime runtime) {
-		super(itemConsumer(value::write),
-		      runtime.getProcessor().getUnderlyingConfiguration());
-		this.pipe = value;
-	}
-
-	public XMLCalabashOutputValue(SaxonOutputValue value) {
-		super(value);
-		pipe = createWritablePipe(value.asXdmItemConsumer());
+	public static XMLCalabashOutputValue of(WritablePipe value, XProcRuntime runtime) {
+		return new XMLCalabashOutputValue(value, runtime);
 	}
 
 	public static XMLCalabashOutputValue of(OutputValue<?> value) throws IllegalArgumentException {
@@ -39,6 +30,19 @@ public class XMLCalabashOutputValue extends SaxonOutputValue {
 			return new XMLCalabashOutputValue((SaxonOutputValue)value);
 		else
 			throw new IllegalArgumentException("can not create XMLCalabashOutputValue from " + value);
+	}
+
+	private final WritablePipe pipe;
+
+	protected XMLCalabashOutputValue(WritablePipe value, XProcRuntime runtime) {
+		super(itemConsumer(value::write),
+		      runtime.getProcessor().getUnderlyingConfiguration());
+		this.pipe = value;
+	}
+
+	protected XMLCalabashOutputValue(SaxonOutputValue value) {
+		super(value);
+		pipe = createWritablePipe(value.asXdmItemConsumer());
 	}
 
 	public WritablePipe asWritablePipe() {

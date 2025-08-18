@@ -17,9 +17,22 @@ import org.daisy.common.transform.TransformerException;
 
 public class XMLCalabashInputValue extends SaxonInputValue {
 
+	public static XMLCalabashInputValue of(ReadablePipe pipe)  {
+		return new XMLCalabashInputValue(pipe);
+	}
+
+	public static XMLCalabashInputValue of(InputValue<?> value) throws IllegalArgumentException, NoSuchElementException {
+		if (value instanceof XMLCalabashInputValue)
+			return (XMLCalabashInputValue)value;
+		else if (value instanceof SaxonInputValue)
+			return new XMLCalabashInputValue((SaxonInputValue)value);
+		else
+			throw new IllegalArgumentException("can not create XMLCalabashInputValue from " + value);
+	}
+
 	private final ReadablePipe pipe;
 
-	public XMLCalabashInputValue(ReadablePipe value) {
+	protected XMLCalabashInputValue(ReadablePipe value) {
 		super(
 			new Iterator<XdmNode>() {
 				public boolean hasNext() {
@@ -45,18 +58,9 @@ public class XMLCalabashInputValue extends SaxonInputValue {
 		this.pipe = value;
 	}
 
-	public XMLCalabashInputValue(SaxonInputValue value) {
+	protected XMLCalabashInputValue(SaxonInputValue value) throws NoSuchElementException {
 		super(value, true);
 		pipe = createReadablePipe(asXdmItemIterator());
-	}
-
-	public static XMLCalabashInputValue of(InputValue<?> value) throws IllegalArgumentException {
-		if (value instanceof XMLCalabashInputValue)
-			return (XMLCalabashInputValue)value;
-		else if (value instanceof SaxonInputValue)
-			return new XMLCalabashInputValue((SaxonInputValue)value);
-		else
-			throw new IllegalArgumentException("can not create XMLCalabashInputValue from " + value);
 	}
 
 	public ReadablePipe asReadablePipe() {

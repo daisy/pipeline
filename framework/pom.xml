@@ -31,8 +31,8 @@
     <!--<module>utils/xproc-engine-daisy-pipeline</module>-->
     <!--<module>utils/xproc-engine-daisy-pipeline-logging</module>-->
     <module>saxon-adapter</module>
-    <!--<module>calabash-adapter</module>-->
-    <!--<module>common-utils</module>-->
+    <module>calabash-adapter</module>
+    <module>common-utils</module>
     <!--<module>framework-core</module>-->
     <!--<module>framework-persistence</module>-->
     <!--<module>logging-appender</module>-->

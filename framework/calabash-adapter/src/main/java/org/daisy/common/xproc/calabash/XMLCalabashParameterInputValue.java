@@ -11,20 +11,13 @@ import org.daisy.common.transform.InputValue;
 
 import com.xmlcalabash.model.RuntimeValue;
 
-public class XMLCalabashParameterInputValue extends InputValue<Map<QName,XMLCalabashOptionValue>> {
+public class XMLCalabashParameterInputValue extends InputValue<Map<QName,InputValue<?>>> {
 
-	private final Map<net.sf.saxon.s9api.QName,RuntimeValue> runtimeValueMap;
-
-	public XMLCalabashParameterInputValue(Map<net.sf.saxon.s9api.QName,RuntimeValue> value) {
-		super(value.entrySet()
-		           .stream()
-		           .collect(Collectors.toMap(
-		                        e -> SaxonHelper.jaxpQName(e.getKey()),
-		                        e -> new XMLCalabashOptionValue(e.getValue()))));
-		runtimeValueMap = value;
+	public static XMLCalabashParameterInputValue of(Map<net.sf.saxon.s9api.QName,RuntimeValue> value) throws IllegalArgumentException {
+		return new XMLCalabashParameterInputValue(value);
 	}
 
-	public static XMLCalabashParameterInputValue of(InputValue<?> value) {
+	public static XMLCalabashParameterInputValue of(InputValue<?> value) throws IllegalArgumentException {
 		if (value instanceof XMLCalabashParameterInputValue)
 			return (XMLCalabashParameterInputValue)value;
 		Map<net.sf.saxon.s9api.QName,RuntimeValue> runtimeValueMap = new HashMap<>();
@@ -41,7 +34,7 @@ public class XMLCalabashParameterInputValue extends InputValue<Map<QName,XMLCala
 					throw new IllegalArgumentException("unsupported interface for parameter input");
 				name = (QName)k;
 			}
-			// note that XMLCalabash converts parameter values to strings
+			// note that in XProc, parameter values have been converted to strings
 			RuntimeValue val; {
 				Object v = map.get(k);
 				if (!(v instanceof InputValue))
@@ -55,6 +48,17 @@ public class XMLCalabashParameterInputValue extends InputValue<Map<QName,XMLCala
 			runtimeValueMap.put(new net.sf.saxon.s9api.QName(name), val);
 		}
 		return new XMLCalabashParameterInputValue(runtimeValueMap);
+	}
+
+	private final Map<net.sf.saxon.s9api.QName,RuntimeValue> runtimeValueMap;
+
+	protected XMLCalabashParameterInputValue(Map<net.sf.saxon.s9api.QName,RuntimeValue> value) throws IllegalArgumentException {
+		super(value.entrySet()
+		           .stream()
+		           .collect(Collectors.toMap(
+		                        e -> SaxonHelper.jaxpQName(e.getKey()),
+		                        e -> (InputValue<?>)XMLCalabashOptionValue.of(e.getValue()))));
+		runtimeValueMap = value;
 	}
 
 	public Map<net.sf.saxon.s9api.QName,RuntimeValue> asRuntimeValueMap() {
