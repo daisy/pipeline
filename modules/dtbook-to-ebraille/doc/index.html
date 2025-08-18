@@ -966,6 +966,33 @@ if (window.addEventListener) {
   <ul class="synopsis-inputs">
 <li class="synopsis-input details-on">
 <div class="toggle-details"></div>
+<div class="synopsis-input-name">Attach CSS style sheets</div>
+<div class="synopsis-input-desc">
+<div class="shortdesc">CSS style sheet(s) to be attached with the HTML documents of the eBraille publication.
+</div>
+<div class="longdesc">CSS style sheet(s) to be attached with the HTML documents of the eBraille publication.
+
+<p>The style sheets are associated with each HTML file through <code>link</code>
+elements. This script does not allow specifying <code>media</code> attributes on
+the <code>link</code> elements. If media queries are needed, they must be
+specified in the CSS itself, through <code>@media</code> and <code>@import</code> rules.</p>
+
+<p>The style sheets are included as-is, and should therefore apply to
+HTML, not DTBook.</p>
+</div>
+</div>
+<div class="synopsis-input-media-type">
+<b>Media-type</b>:
+<ul class="media-types">
+<li>text/css</li>
+<li>text/x-scss</li>
+</ul>
+</div>
+<div class="synopsis-input-sequence">
+<b>Sequence</b>: yes</div>
+</li>
+<li class="synopsis-input details-on">
+<div class="toggle-details"></div>
 <div class="synopsis-input-name"></div>
 <div class="synopsis-input-desc">
 
@@ -993,33 +1020,6 @@ The 2005-3 DTBook or NIMAS file to be transformed.
 </div>
 <div class="synopsis-input-sequence">
 <b>Sequence</b>: no</div>
-</li>
-<li class="synopsis-input details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-input-name">Attach CSS style sheets</div>
-<div class="synopsis-input-desc">
-<div class="shortdesc">CSS style sheet(s) to be attached with the HTML documents of the eBraille publication.
-</div>
-<div class="longdesc">CSS style sheet(s) to be attached with the HTML documents of the eBraille publication.
-
-<p>The style sheets are associated with each HTML file through <code>link</code>
-elements. This script does not allow specifying <code>media</code> attributes on
-the <code>link</code> elements. If media queries are needed, they must be
-specified in the CSS itself, through <code>@media</code> and <code>@import</code> rules.</p>
-
-<p>The style sheets are included as-is, and should therefore apply to
-HTML, not DTBook.</p>
-</div>
-</div>
-<div class="synopsis-input-media-type">
-<b>Media-type</b>:
-<ul class="media-types">
-<li>text/css</li>
-<li>text/x-scss</li>
-</ul>
-</div>
-<div class="synopsis-input-sequence">
-<b>Sequence</b>: yes</div>
 </li>
 </ul>
 
@@ -1058,32 +1058,35 @@ The resulting eBraille publication.
   <ul class="synopsis-options">
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Braille transcription style sheet parameters</div>
+<div class="synopsis-option-name">Package in EPUB container</div>
 <div class="synopsis-option-desc">
-<div class="shortdesc">A list of parameters passed to the braille transcription style sheets.
+<div class="shortdesc">Whether to package the eBraille publication in an EPUB 3-compatible container, or store it unzipped.
 </div>
-<div class="longdesc">A list of parameters passed to the braille transcription style sheets.
+<div class="longdesc">Whether to package the eBraille publication in an EPUB 3-compatible container, or store it unzipped.
 
-<p>Style sheets, whether they’re user style sheets (specified with the “Braille transcription style
-sheets” option) or author style sheets (associated with the source), may have parameters (Sass
-variables). This option, which takes a comma-separated list of key-value pairs enclosed in
-parenthesis, can be used to set these variables.</p>
-
-<p>For example, if a style sheet uses the Sass variable “foo”:</p>
-
-<pre><code class="language-sass">@if $foo {
-   /* some style that should only be enabled when "foo" is truthy */
-}
-</code></pre>
-
-<p>you can control that variable with the following parameters list: <code>(foo:true)</code>.</p>
+<p>When packaged in an EPUB container, the output is a single file with
+file extension <code>.ebrl</code>. When stored unzipped, the eBraille file set is
+contained in a directory.</p>
 </div>
 </div>
 <div class="synopsis-option-data-type">
-<b>Possible values</b>: <var>&lt;stylesheet-parameters&gt;</var>
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
 </div>
 <div class="synopsis-option-default">
-<b>Default value</b>: <code>()</code>
+<b>Default value</b>: <code>false()</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">NIMAS input</div>
+<div class="synopsis-option-desc">
+Whether the input DTBook is a NIMAS 1.1-conformant XML content file.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
 </div>
 </li>
 <li class="synopsis-option details-on">
@@ -1149,52 +1152,6 @@ manual</a>.</p>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">NIMAS input</div>
-<div class="synopsis-option-desc">
-Whether the input DTBook is a NIMAS 1.1-conformant XML content file.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Include original text</div>
-<div class="synopsis-option-desc">
-Include the original text as a secondary rendition.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;string&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>false()</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Package in EPUB container</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">Whether to package the eBraille publication in an EPUB 3-compatible container, or store it unzipped.
-</div>
-<div class="longdesc">Whether to package the eBraille publication in an EPUB 3-compatible container, or store it unzipped.
-
-<p>When packaged in an EPUB container, the output is a single file with
-file extension <code>.ebrl</code>. When stored unzipped, the eBraille file set is
-contained in a directory.</p>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;string&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>false()</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
 <div class="synopsis-option-name">Braille code</div>
 <div class="synopsis-option-desc">
 <div class="shortdesc">Braille code to be used for braille transcription.
@@ -1212,6 +1169,49 @@ rules.</p>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code></code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Include original text</div>
+<div class="synopsis-option-desc">
+Include the original text as a secondary rendition.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false()</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Braille transcription style sheet parameters</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">A list of parameters passed to the braille transcription style sheets.
+</div>
+<div class="longdesc">A list of parameters passed to the braille transcription style sheets.
+
+<p>Style sheets, whether they’re user style sheets (specified with the “Braille transcription style
+sheets” option) or author style sheets (associated with the source), may have parameters (Sass
+variables). This option, which takes a comma-separated list of key-value pairs enclosed in
+parenthesis, can be used to set these variables.</p>
+
+<p>For example, if a style sheet uses the Sass variable “foo”:</p>
+
+<pre><code class="language-sass">@if $foo {
+   /* some style that should only be enabled when "foo" is truthy */
+}
+</code></pre>
+
+<p>you can control that variable with the following parameters list: <code>(foo:true)</code>.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <var>&lt;stylesheet-parameters&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>()</code>
 </div>
 </li>
 </ul>
@@ -1258,6 +1258,12 @@ if (window.addEventListener) {
 Options:</pre>
   <table>
 <tr>
+<td>--attach-stylesheet <span style="text-transform: uppercase">attach-stylesheet</span>
+</td>
+<td>CSS style sheet(s) to be attached with the HTML documents of the eBraille publication.
+</td>
+</tr>
+<tr>
 <td>--metadata <span style="text-transform: uppercase">metadata</span>
 </td>
 <td></td>
@@ -1268,14 +1274,12 @@ Options:</pre>
 <td>The 2005-3 DTBook or NIMAS file to be transformed.</td>
 </tr>
 <tr>
-<td>--attach-stylesheet <span style="text-transform: uppercase">attach-stylesheet</span>
-</td>
-<td>CSS style sheet(s) to be attached with the HTML documents of the eBraille publication.
-</td>
+<td>--epub-package [<span style="text-transform: uppercase">epub-package</span>]</td>
+<td>Package in EPUB container (default: <span class="synopsis-option-default"><code>false()</code></span>)</td>
 </tr>
 <tr>
-<td>--braille-translator-stylesheet-parameters [<span style="text-transform: uppercase">braille-translator-stylesheet-parameters</span>]</td>
-<td>Braille transcription style sheet parameters (default: <span class="synopsis-option-default"><code>()</code></span>)</td>
+<td>--nimas [<span style="text-transform: uppercase">nimas</span>]</td>
+<td>NIMAS input (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
 </tr>
 <tr>
 <td>--validation [<span style="text-transform: uppercase">validation</span>]</td>
@@ -1286,20 +1290,16 @@ Options:</pre>
 <td>Braille transcription style sheets (default: <span class="synopsis-option-default"><code></code></span>)</td>
 </tr>
 <tr>
-<td>--nimas [<span style="text-transform: uppercase">nimas</span>]</td>
-<td>NIMAS input (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+<td>--braille-code [<span style="text-transform: uppercase">braille-code</span>]</td>
+<td>Braille code (default: <span class="synopsis-option-default"><code></code></span>)</td>
 </tr>
 <tr>
 <td>--include-original-text [<span style="text-transform: uppercase">include-original-text</span>]</td>
 <td>Include original text (default: <span class="synopsis-option-default"><code>false()</code></span>)</td>
 </tr>
 <tr>
-<td>--epub-package [<span style="text-transform: uppercase">epub-package</span>]</td>
-<td>Package in EPUB container (default: <span class="synopsis-option-default"><code>false()</code></span>)</td>
-</tr>
-<tr>
-<td>--braille-code [<span style="text-transform: uppercase">braille-code</span>]</td>
-<td>Braille code (default: <span class="synopsis-option-default"><code></code></span>)</td>
+<td>--braille-translator-stylesheet-parameters [<span style="text-transform: uppercase">braille-translator-stylesheet-parameters</span>]</td>
+<td>Braille transcription style sheet parameters (default: <span class="synopsis-option-default"><code>()</code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>

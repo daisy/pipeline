@@ -190,14 +190,19 @@
 </td>
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code">'embossed'</td>
-<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">The target medium type as a <a href="https://www.w3.org/TR/mediaqueries-4/" class="external-link" target="_blank">media
-			query</a>. All rules that are contained in a style sheet that matches the specified
-			medium are included. Supported media types are "braille", "embossed", "speech" and
-			"print". When the target medium is "braille" or "embossed", CSS is interpreted according
-			to the rules of <a href="http://braillespecs.github.io/braille-css" class="external-link" target="_blank">braille
-			CSS</a>. Supported media features are '<a href="https://www.w3.org/TR/mediaqueries-4/#width" class="external-link" target="_blank">width</a>' and '<a href="https://www.w3.org/TR/mediaqueries-4/#height" class="external-link" target="_blank">height</a>' In addition,
+<td>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">The target medium</p>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">If specified as a string or map, it is interpreted as a <a href="https://www.w3.org/TR/mediaqueries-3/" class="external-link" target="_blank">media query</a> and used to select a
+			matching medium. If specified as an other item, it is expected to be a
+			<code>Medium</code> object.</p>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">All rules that are contained in a style sheet that matches the specified medium are
+			included. Supported media types are "braille", "embossed", "speech" and "print". When
+			the target medium is "braille" or "embossed", CSS is interpreted according to the rules
+			of <a href="http://braillespecs.github.io/braille-css" class="external-link" target="_blank">braille CSS</a>. Supported media
+			features are '<a href="https://www.w3.org/TR/mediaqueries-4/#width" class="external-link" target="_blank">width</a>' and '<a href="https://www.w3.org/TR/mediaqueries-4/#height" class="external-link" target="_blank">height</a>' In addition,
 			'<code>(counter-support: none)</code>' can be used to transform lists to preformatted
-			lists.</p></td>
+			lists.</p>
+</td>
 </tr>
 <tr>
 <td width="150px;" class="nowrap name">

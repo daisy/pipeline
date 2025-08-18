@@ -209,8 +209,8 @@
     <a xlink:href="https://github.com/mtmse/dotify.formatter.impl/" id="a6227" transform="translate(508.09184,781.39391)" class="external-link" target="_blank">
       <text id="text6225" style="font-size:16px;text-decoration: underline;text-decoration-line: underline">Dotify</text>
     </a>
-    <a xlink:href="/pipeline/api/d774e75.html" id="a6231" class="apidoc" transform="translate(326.6172,1057.7447)">
-      <text id="text6229" style="font-size:16px;text-decoration: underline;text-decoration-line: underline">pef:pef2text</text>
+    <a xlink:href="/pipeline/api/d571e40.html" id="a6231" class="apidoc" transform="translate(326.6172,1057.7447)">
+      <text id="text6229" style="font-size:16px;text-decoration: underline;text-decoration-line: underline">px:pef-store</text>
     </a>
     <a xlink:href="/pipeline/modules/braille/braille-common/src/main/README.html" id="a6235" class="apidoc" transform="translate(152.92117,601.12567)">
       <text id="text6233" style="font-size:16px;text-decoration: underline;text-decoration-line: underline" x="142.625" y="0"><tspan style="text-align:center;text-anchor:middle" id="tspan9039">CSSBlockTransform</tspan></text>

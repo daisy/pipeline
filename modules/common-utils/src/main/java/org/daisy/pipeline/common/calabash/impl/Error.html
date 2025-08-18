@@ -80,7 +80,7 @@
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  				lastError = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  				<strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/common-utils/src/main/java/org/daisy/pipeline/common/calabash/impl/ErrorReporter.html">ErrorReporter</a>(<strong class="jxr_keyword">this</strong>::report)
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  					.transform(
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  						ImmutableMap.of(<strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"source"</span>), <strong class="jxr_keyword">new</strong> XMLCalabashInputValue(errorPipe)),
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  						ImmutableMap.of(<strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"source"</span>), XMLCalabashInputValue.of(errorPipe)),
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  						ImmutableMap.of())
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  					.run();
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  				<strong class="jxr_keyword">if</strong> (lastError != <strong class="jxr_keyword">null</strong>)

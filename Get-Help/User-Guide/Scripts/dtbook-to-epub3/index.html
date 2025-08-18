@@ -955,7 +955,7 @@ if (window.addEventListener) {
 
 <h1 id="dtbook-to-epub3">DTBook to EPUB3</h1>
 
-<p>Converts multiple dtbooks to epub3 format</p>
+<p>Transforms multiple DTBooks into EPUB 3 format</p>
 
 <h2 id="synopsis">Synopsis</h2>
 
@@ -979,6 +979,38 @@ One or more DTBook files to be transformed. In the case of multiple files, a mer
 <div class="synopsis-input-sequence">
 <b>Sequence</b>: yes</div>
 </li>
+<li class="synopsis-input details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-input-name">Text-to-speech configuration file</div>
+<div class="synopsis-input-desc">
+<div class="shortdesc">Configuration file for text-to-speech.
+</div>
+<div class="longdesc">Configuration file for text-to-speech.
+
+<p><a href="/pipeline/Get-Help/User-Guide/Text-To-Speech">More details on the configuration file format</a>.</p>
+</div>
+</div>
+<div class="synopsis-input-media-type">
+<b>Media-type</b>:
+<ul class="media-types">
+<li>application/vnd.pipeline.tts-config+xml</li>
+</ul>
+</div>
+<div class="synopsis-input-sequence">
+<b>Sequence</b>: no</div>
+</li>
+</ul>
+
+  <h3 id="reports">Reports</h3>
+
+  <ul class="synopsis-reports">
+<li class="synopsis-report details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-report-name">Validation reports</div>
+<div class="synopsis-report-desc">
+
+</div>
+</li>
 </ul>
 
   <h3 id="outputs">Outputs</h3>
@@ -991,11 +1023,173 @@ One or more DTBook files to be transformed. In the case of multiple files, a mer
 Log file with information about text-to-speech process.
 </div>
 </li>
+<li class="synopsis-output details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-output-name">EPUB</div>
+<div class="synopsis-output-desc">
+The resulting EPUB 3 publication.
+</div>
+<div class="synopsis-output-media-type">
+<b>Media-type</b>:
+<ul class="media-types">
+<li>text</li>
+</ul>
+</div>
+</li>
 </ul>
 
   <h3 id="options">Options</h3>
 
   <ul class="synopsis-options">
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Validation</div>
+<div class="synopsis-option-desc">
+Whether to abort on validation issues.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: One of the following:<dl class="choice">
+<dt><code>off</code></dt>
+<dd>No validation</dd>
+<dt><code>report</code></dt>
+<dd>Report validation issues</dd>
+<dt><code>abort</code></dt>
+<dd>Abort on validation issues</dd>
+</dl>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>abort</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Lexicons</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">A list of PLS lexicons to take into account.
+</div>
+<div class="longdesc">A list of PLS lexicons to take into account.
+
+<p>Must be a space separated list of URIs, absolute or relative to the input.</p>
+
+<p>Lexicons can also be attached to the source document, using a <a href="http://kb.daisy.org/publishing/docs/text-to-speech/pls.html#ex-07" class="external-link" target="_blank">‘link’
+element</a>.</p>
+
+<p>PLS lexicons allow you to define custom pronunciations of words. It is
+meant to help TTS processors deal with ambiguous abbreviations and
+pronunciation of proper names. When a word is defined in a lexicon,
+the processor will use the provided pronunciation instead of the
+default rendering.</p>
+
+<p>The syntax of a PLS lexicon is defined in <a href="https://www.w3.org/TR/pronunciation-lexicon" class="external-link" target="_blank">Pronunciation Lexicon
+Specification (PLS) Version
+1.0</a>, extended with
+regular expression matching. To enable regular expression matching,
+add the “regex” attribute, as follows:</p>
+
+<pre><code class="language-xml">&lt;lexicon xmlns="http://www.w3.org/2005/01/pronunciation-lexicon" version="1.0"
+         alphabet="ipa" xml:lang="en"&gt;
+  &lt;lexeme regex="true"&gt;
+    &lt;grapheme&gt;([0-9]+)-([0-9]+)&lt;/grapheme&gt;
+    &lt;alias&gt;between $1 and $2&lt;/alias&gt;
+  &lt;/lexeme&gt;
+&lt;/lexicon&gt;
+</code></pre>
+
+<p>The regex feature works only with alias-based substitutions. The regex
+syntax used is that from <a href="https://www.w3.org/TR/xpath-functions/#regex-syntax" class="external-link" target="_blank">XQuery 1.0 and XPath
+2.0</a>.</p>
+
+<p>Whether or not the regex attribute is set to “true”, the grapheme
+matching can be made more accurate by specifying the
+“positive-lookahead” and “negative-lookahead” attributes:</p>
+
+<pre><code class="language-xml">&lt;lexicon version="1.0" xmlns="http://www.w3.org/2005/01/pronunciation-lexicon"
+         alphabet="ipa" xml:lang="en"&gt;
+  &lt;lexeme&gt;
+    &lt;grapheme positive-lookahead="[ ]+is"&gt;SB&lt;/grapheme&gt;
+    &lt;alias&gt;somebody&lt;/alias&gt;
+  &lt;/lexeme&gt;
+  &lt;lexeme&gt;
+    &lt;grapheme&gt;SB&lt;/grapheme&gt;
+    &lt;alias&gt;should be&lt;/alias&gt;
+  &lt;/lexeme&gt;
+  &lt;lexeme xml:lang="fr"&gt;
+    &lt;grapheme positive-lookahead="[ ]+[cC]ity"&gt;boston&lt;/grapheme&gt;
+    &lt;phoneme&gt;bɔstøn&lt;/phoneme&gt;
+  &lt;/lexeme&gt;
+&lt;/lexicon&gt;
+</code></pre>
+
+<p>Graphemes with “positive-lookahead” will match if the beginning of
+what follows matches the “position-lookahead” pattern. Graphemes with
+“negative-lookahead” will match if the beginning of what follows does
+not match the “negative-lookahead” pattern. The lookaheads are
+case-sensitive while the grapheme contents are not.</p>
+
+<p>The lexemes are matched in this order:</p>
+
+<ol>
+  <li>Graphemes with regex=”false” come first, no matter if there is a lookahead or not;</li>
+  <li>then come graphemes with regex=”true” and no lookahead;</li>
+  <li>then graphemes with regex=”true” and one or two lookaheads.</li>
+</ol>
+
+<p>Within these categories, lexemes are matched in the same order as they
+appear in the lexicons.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <var>&lt;anyURI&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>p:system-property('d:org.daisy.pipeline.tts.default-lexicon')</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">NIMAS input</div>
+<div class="synopsis-option-desc">
+Whether the input DTBook is a NIMAS 1.1-conformant XML content file.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Enable text-to-speech</div>
+<div class="synopsis-option-desc">
+Whether to use a speech synthesizer to produce audio files.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Chunk size</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">The maximum size of HTML files in kB. Specify "-1" for no maximum.
+</div>
+<div class="longdesc">The maximum size of HTML files in kB. Specify "-1" for no maximum.
+
+<p>Top-level sections in the DTBook become separate HTML files in the resulting EPUB, and are further
+split up if they exceed the given maximum size.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>-1</code>
+</div>
+</li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
 <div class="synopsis-option-name">Style sheets</div>
@@ -1009,11 +1203,63 @@ Log file with information about text-to-speech process.
 <p>Style sheets specified through this option are called “<a href="https://www.w3.org/TR/CSS2/cascade.html#cascade" class="external-link" target="_blank">user style
 sheets</a>”. Style sheets can also be attached to the
 source document. These are referred to as “<a href="https://www.w3.org/TR/CSS2/cascade.html#cascade" class="external-link" target="_blank">author style
-sheets</a>”. They can be linked (using an</p>
+sheets</a>”. They can be linked (using an
+<a href="https://www.w3.org/TR/xml-stylesheet" class="external-link" target="_blank">‘xml-stylesheet’ processing instruction</a> or a <a href="https://www.w3.org/Style/styling-XML#External" class="external-link" target="_blank">‘link’
+element</a>), embedded (using a <a href="https://www.w3.org/Style/styling-XML#Embedded" class="external-link" target="_blank">‘style’
+element</a>) and/or inlined (using ‘<a href="https://www.w3.org/TR/css-style-attr/" class="external-link" target="_blank">style’
+attributes</a>). Only author styles that apply to
+“<a href="https://www.w3.org/TR/CSS2/aural.html" class="external-link" target="_blank">speech</a>” media are taken into account.</p>
+
+<p>All style sheets are applied at once, but the order in which they are specified has an influence on
+the <a href="https://www.w3.org/TR/CSS2/cascade.html#cascading-order" class="external-link" target="_blank">cascading order</a>. Author styles take
+precedence over user styles.</p>
 </div>
 </div>
 <div class="synopsis-option-data-type">
 <b>Possible values</b>: <var>&lt;anyURI&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code></code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Style sheet parameters</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">A list of parameters passed to the style sheets.
+</div>
+<div class="longdesc">A list of parameters passed to the style sheets.
+
+<p>Style sheets, whether they’re user style sheets (specified with the “Style sheets” option) or author
+style sheets (associated with the source), may have parameters (Sass variables). This option, which
+takes a comma-separated list of key-value pairs enclosed in parenthesis, can be used to set these
+variables.</p>
+
+<p>For example, if a style sheet uses the Sass variable “foo”:</p>
+
+<pre><code class="language-sass">@if $foo {
+   /* some style that should only be enabled when "foo" is truthy */
+}
+</code></pre>
+
+<p>you can control that variable with the following parameters list: <code>(foo:true)</code>.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <var>&lt;stylesheet-parameters&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>()</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Language code</div>
+<div class="synopsis-option-desc">
+Language code of the input document.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code></code>
@@ -1068,8 +1314,42 @@ Options:</pre>
 <td>One or more DTBook files to be transformed. In the case of multiple files, a merge will be performed.</td>
 </tr>
 <tr>
+<td>--tts-config <span style="text-transform: uppercase">tts-config</span>
+</td>
+<td>Configuration file for text-to-speech.
+</td>
+</tr>
+<tr>
+<td>--validation [<span style="text-transform: uppercase">validation</span>]</td>
+<td>Validation (default: <span class="synopsis-option-default"><code>abort</code></span>)</td>
+</tr>
+<tr>
+<td>--lexicon [<span style="text-transform: uppercase">lexicon</span>]</td>
+<td>Lexicons (default: <span class="synopsis-option-default"><code>p:system-property('d:org.daisy.pipeline.tts.default-lexicon')</code></span>)</td>
+</tr>
+<tr>
+<td>--nimas [<span style="text-transform: uppercase">nimas</span>]</td>
+<td>NIMAS input (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+</tr>
+<tr>
+<td>--audio [<span style="text-transform: uppercase">audio</span>]</td>
+<td>Enable text-to-speech (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+</tr>
+<tr>
+<td>--_:chunk-size [<span style="text-transform: uppercase">_:chunk-size</span>]</td>
+<td>Chunk size (default: <span class="synopsis-option-default"><code>-1</code></span>)</td>
+</tr>
+<tr>
 <td>--_:stylesheet [<span style="text-transform: uppercase">_:stylesheet</span>]</td>
 <td>Style sheets (default: <span class="synopsis-option-default"><code></code></span>)</td>
+</tr>
+<tr>
+<td>--stylesheet-parameters [<span style="text-transform: uppercase">stylesheet-parameters</span>]</td>
+<td>Style sheet parameters (default: <span class="synopsis-option-default"><code>()</code></span>)</td>
+</tr>
+<tr>
+<td>--language [<span style="text-transform: uppercase">language</span>]</td>
+<td>Language code (default: <span class="synopsis-option-default"><code></code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>

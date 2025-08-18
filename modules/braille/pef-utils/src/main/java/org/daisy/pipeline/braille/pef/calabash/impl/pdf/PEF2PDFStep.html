@@ -164,7 +164,7 @@
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 			}
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 			logger.debug(<span class="jxr_string">"Storing PEF to PDF using table: "</span> + table);
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 			<strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/calabash/impl/pdf/PEF2PDFStep.html">PEF2PDF</a>(pdfFile, table).transform(
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 				ImmutableMap.of(_SOURCE, <strong class="jxr_keyword">new</strong> XMLCalabashInputValue(source)),
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 				ImmutableMap.of(_SOURCE, XMLCalabashInputValue.of(source)),
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 				ImmutableMap.of()
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 			).run();
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 			result.write(runtime.getProcessor().newDocumentBuilder().build(<strong class="jxr_keyword">new</strong> StreamSource(cResultDocument(pdfFile.toURI().toString()))));

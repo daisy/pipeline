@@ -1031,27 +1031,6 @@ Log file with information about text-to-speech process.
   <ul class="synopsis-options">
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Style sheets</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">A list of CSS style sheets to take into account.
-</div>
-<div class="longdesc">A list of CSS style sheets to take into account.
-
-<p>Must be a space separated list of URIs, absolute or relative to the input.</p>
-
-<p>Style sheets specified through this option are called “<a href="https://www.w3.org/TR/CSS2/cascade.html#cascade" class="external-link" target="_blank">user style
-sheets</a>”. Style sheets can also be attached to the</p>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <var>&lt;anyURI&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code></code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
 <div class="synopsis-option-name">Enable TTS log</div>
 <div class="synopsis-option-desc">
 <div class="shortdesc">Whether or not to make the TTS log available.
@@ -1072,6 +1051,27 @@ property.</p>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>p:system-property('d:org.daisy.pipeline.tts.log')</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Style sheets</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">A list of CSS style sheets to take into account.
+</div>
+<div class="longdesc">A list of CSS style sheets to take into account.
+
+<p>Must be a space separated list of URIs, absolute or relative to the input.</p>
+
+<p>Style sheets specified through this option are called “<a href="https://www.w3.org/TR/CSS2/cascade.html#cascade" class="external-link" target="_blank">user style
+sheets</a>”. Style sheets can also be attached to the</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <var>&lt;anyURI&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code></code>
 </div>
 </li>
 </ul>
@@ -1129,12 +1129,12 @@ Options:</pre>
 <td>Input ZedAI.</td>
 </tr>
 <tr>
-<td>--_:stylesheet [<span style="text-transform: uppercase">_:stylesheet</span>]</td>
-<td>Style sheets (default: <span class="synopsis-option-default"><code></code></span>)</td>
-</tr>
-<tr>
 <td>--include-tts-log [<span style="text-transform: uppercase">include-tts-log</span>]</td>
 <td>Enable TTS log (default: <span class="synopsis-option-default"><code>p:system-property('d:org.daisy.pipeline.tts.log')</code></span>)</td>
+</tr>
+<tr>
+<td>--_:stylesheet [<span style="text-transform: uppercase">_:stylesheet</span>]</td>
+<td>Style sheets (default: <span class="synopsis-option-default"><code></code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>

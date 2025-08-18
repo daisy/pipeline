@@ -76,7 +76,7 @@
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  				<strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/common-utils/src/main/java/org/daisy/pipeline/common/calabash/impl/ErrorReporter.html">ErrorReporter</a>(e -&gt; log(severity, e))
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  					.transform(
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  						ImmutableMap.of(<strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"source"</span>), <strong class="jxr_keyword">new</strong> XMLCalabashInputValue(errorPipe)),
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  						ImmutableMap.of(<strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"source"</span>), XMLCalabashInputValue.of(errorPipe)),
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  						ImmutableMap.of())
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  					.run();
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  			} <strong class="jxr_keyword">catch</strong> (Throwable e) {

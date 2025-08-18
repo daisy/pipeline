@@ -98,7 +98,7 @@
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  					} <strong class="jxr_keyword">catch</strong> (IOException|SaxonApiException e) {
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  						logger.error(<span class="jxr_string">"bad request:"</span>, e);
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  						setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  						<strong class="jxr_keyword">return</strong> getErrorRepresentation(e.getMessage());
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  						<strong class="jxr_keyword">return</strong> getErrorRepresentation(e);
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  					}
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  				}
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  			}
@@ -125,7 +125,7 @@
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 				TTSEngine e = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 				Throwable error = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 				<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 				    e = s.newEngine(properties);
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 					e = s.newEngine(properties);
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> 					engineElem.setAttribute(<span class="jxr_string">"status"</span>, <span class="jxr_string">"available"</span>);
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 				} <strong class="jxr_keyword">catch</strong> (ServiceDisabledException ex) {
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 					logger.debug(name + <span class="jxr_string">" is disabled"</span>, ex);
@@ -151,7 +151,7 @@
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 					String shortMessage = error.getMessage();
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 					error = error.getCause();
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 					String detailedMessage = error != <strong class="jxr_keyword">null</strong> ? error.getMessage() : <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 					<strong class="jxr_keyword">if</strong> (shortMessage.endsWith(detailedMessage))
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 					<strong class="jxr_keyword">if</strong> (detailedMessage != <strong class="jxr_keyword">null</strong> &amp;&amp; shortMessage.endsWith(detailedMessage))
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 						detailedMessage = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 					<strong class="jxr_keyword">if</strong> (shortMessage.length() &gt; 80) {
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 						<em class="jxr_comment">// Use the heuristic that if a message is longer than 80 characters, it is possible</em>
@@ -191,7 +191,7 @@
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 				setStatus(Status.SUCCESS_OK);
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 			} <strong class="jxr_keyword">catch</strong> (Exception e) {
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 				setStatus(Status.SERVER_ERROR_INTERNAL);
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 				<strong class="jxr_keyword">return</strong> getErrorRepresentation(e.getMessage());
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 				<strong class="jxr_keyword">return</strong> getErrorRepresentation(e);
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 			}
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 		}
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 		logResponse(dom);

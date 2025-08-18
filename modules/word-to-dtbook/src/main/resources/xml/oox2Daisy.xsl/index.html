@@ -396,11 +396,7 @@
 									&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"(            $documentXml//w:document/w:body/w:p/w:r[             ./w:rPr/w:rStyle[@w:val='EndnoteReference']              or ./w:endnoteReference            ]           )"</span>&gt;
 										&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"endNoteId"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:integer"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"./w:endnoteReference/@w:id"</span>/&gt;
 										&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$endNoteId &gt; 0"</span>&gt;
-											&lt;<span class="code-xml-element-local-name">note</span>&gt;
-												
-												&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"id"</span>&gt;
-													&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"concat('endnote-',$endNoteId)"</span>/&gt;
-												&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span>&gt;
+											&lt;<span class="code-xml-element-local-name">note</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"{concat('endnote-',$endNoteId)}"</span>&gt;
 												
 												&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"class"</span>&gt;
 													&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'Endnote'"</span>/&gt;

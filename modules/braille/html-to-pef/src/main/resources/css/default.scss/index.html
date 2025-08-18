@@ -1110,8 +1110,12 @@ if (window.addEventListener) {
         }
 }
 
-<span class="directive">@import</span> <span class="string"><span class="delimiter">"</span><span class="content">_volume-breaking.scss</span><span class="delimiter">"</span></span> <span class="include">embossed;</span>
-<span class="directive">@import</span> <span class="string"><span class="delimiter">"</span><span class="content">_notes.scss</span><span class="delimiter">"</span></span> <span class="include">embossed;</span>
+<span class="comment"><span class="delimiter">//</span><span class="content"> Not using SASS imports because medium would be ignored.</span></span>
+<span class="comment"><span class="delimiter">//</span><span class="content"> Note that having a media query should in theory be enough to make it a plain CSS import (see</span></span>
+<span class="comment"><span class="delimiter">//</span><span class="content"> https://sass-lang.com/documentation/at-rules/import/#plain-css-imports), but the url() function</span></span>
+<span class="comment"><span class="delimiter">//</span><span class="content"> appears to be also needed in practice.</span></span>
+<span class="directive">@import</span> <span class="include">url(</span><span class="string"><span class="delimiter">"</span><span class="content">_volume-breaking.scss</span><span class="delimiter">"</span></span><span class="include">)</span> <span class="include">embossed;</span>
+<span class="directive">@import</span> <span class="include">url(</span><span class="string"><span class="delimiter">"</span><span class="content">_notes.scss</span><span class="delimiter">"</span></span><span class="include">)</span> <span class="include">embossed;</span>
 </pre></div>
 </div>
 </div>

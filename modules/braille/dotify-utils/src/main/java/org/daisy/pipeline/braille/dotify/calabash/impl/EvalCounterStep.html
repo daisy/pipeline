@@ -153,8 +153,8 @@
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 				         <strong class="jxr_keyword">new</strong> SaxonBuffer(runtime.getProcessor().getUnderlyingConfiguration()),
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 				         false)
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 				.transform(
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 					<strong class="jxr_keyword">new</strong> XMLCalabashInputValue(sourcePipe),
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 					<strong class="jxr_keyword">new</strong> XMLCalabashOutputValue(resultPipe, runtime))
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 					XMLCalabashInputValue.of(sourcePipe),
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 					XMLCalabashOutputValue.of(resultPipe, runtime))
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 				.run();
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 		} <strong class="jxr_keyword">catch</strong> (Throwable e) {
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 			<strong class="jxr_keyword">throw</strong> XProcStep.raiseError(e, step);

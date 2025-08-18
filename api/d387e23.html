@@ -1,0 +1,201 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns="http://www.w3.org/1999/xhtml">
+<head prefix="dc: http://purl.org/dc/elements/1.1/                   dp2: http://www.daisy.org/ns/pipeline/">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title property="dc:title">obfl-to-pef.script {http://www.daisy.org/ns/pipeline/xproc}</title>
+<link rev="dp2:doc" href="">
+<link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/apidoc">
+<style type="text/css" prefix="">
+        
+                 table                   { width: 100%; empty-cells: show; }
+                 thead                   { background-color: 184882; color: white; font-weight: bold; }
+                 td                      { vertical-align: top; padding: 2px; }
+                 .name                   { /* font-family: sans-serif; */ }
+                 .uri, .code             { font-family: monospace; }
+                 .primary, .required     { font-weight: bold; }
+                 .details                { display:block; text-align:right; font-size: x-small; font-style: italic; }
+                 .nowrap                 { white-space: nowrap; }
+                 .small                  { font-size: x-small; }
+        
+      </style>
+</head>
+<body>
+<h2>
+            Step <span class="name">obfl-to-pef.script</span> <span class="uri">{http://www.daisy.org/ns/pipeline/xproc}</span>
+</h2>
+<h1 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">OBFL to braille</h1>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">Transforms an Open Braille Formatting Language (OBFL) document into an embosser ready braille document.</p>
+<a xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="homepage" href="/pipeline/Get-Help/User-Guide/Scripts/obfl-to-pef">
+            Online documentation
+        </a><address xmlns:xd="http://github.com/vojtechtoman/xprocdoc">
+            Authors:
+            </address>
+<dl xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="author">
+                <dt>Name:</dt>
+                <dd px:role="name">Bert Frees</dd>
+                <dt>E-mail:</dt>
+                <dd><a px:role="contact" href="mailto:bertfrees@gmail.com">bertfrees@gmail.com</a></dd>
+            </dl>
+        <div>Defined in:
+          <span class="uri"></span>
+</div>
+<h3>Input Ports</h3>
+<table border="1">
+<thead><tr>
+<td>Port</td>
+<td>Description</td>
+</tr></thead>
+<tbody><tr>
+<td width="150px" class="nowrap name">
+<span class="primary">source</span><span class="details"> primary</span>
+</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Input OBFL</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">The OBFL document to convert.
+
+The OBFL document describes how the text is to be formatted and
+transcribed to braille. The text may also have been transcribed to
+braille already.
+
+A typical use case is when the "OBFL" output of one of the braille
+production scripts has been edited, and needs to be transformed to a
+formatted braille document.
+
+The following special metadata
+([`meta`](https://braillespecs.github.io/obfl/obfl-specification.html#L587))
+fields in the "http://www.daisy.org/ns/pipeline/" namespace are
+supported:
+
+- `style-type` (supported value: "text/css"): specifies the media type of
+  [`style`](https://braillespecs.github.io/obfl/obfl-specification.html#L8491)
+  elements. The value "text/css" indicates that the styles (`name`
+  attributes) are to be interpreted according to [braille
+  CSS](http://braillespecs.github.io/braille-css) rules.
+- `css-text-transform-definitions`: zero or more
+  `@-daisy-text-transform` at-rules containing custom text
+  transformation definitions, available for use in
+  [`-daisy-text-transform`](https://braillespecs.github.io/braille-css/#dfn-text-transform)
+  properties in CSS styles. May be used e.g. to switch between braille
+  codes, or to apply emphasis.
+- `css-hyphenation-resource-definitions`: zero or more
+  `@-daisy-hyphenation-resource` at-rules containing custom hyphenation
+  resource definitions for specific languages.
+- `css-counter-style-definitions`: zero or more
+  [`@counter-style`](https://braillespecs.github.io/braille-css/#dfn-counter-style)
+  at-rules containing custom counter style definitions, available for
+  use in `-dotify-counter-style` properties.
+- `default-mode`: specifies the overall braille transcription
+  mode/policy, i.e. the mode to be used when no
+  [`translate`](https://braillespecs.github.io/obfl/obfl-specification.html#L2462)
+  attribute has been set, or when it has been set to the empty
+  value. Both the `default-mode` meta field and the `translate`
+  attribute support the [braille transformer
+  query](http://daisy.github.io/pipeline/Get-Help/User-Guide/Braille/)
+  syntax.
+- `braille-charset`: specifies the braille character set that is used
+  to encode braille present in the OBFL. If not specified, Unicode
+  braille is assumed.</p>
+</td>
+</tr></tbody>
+</table>
+<h3>Options</h3>
+<table border="1">
+<thead><tr>
+<td class="nowrap">Local Name</td>
+<td class="nowrap">Namespace URI</td>
+<td class="nowrap">Default</td>
+<td>Description</td>
+</tr></thead>
+<tbody>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">include-preview</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code"></td>
+<td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">include-pdf</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code"></td>
+<td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">include-pef</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code"></td>
+<td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">output-file-format</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code"></td>
+<td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">preview-table</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code"></td>
+<td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">result</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code"></td>
+<td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">pef</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code"></td>
+<td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">preview</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code"></td>
+<td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">pdf</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code"></td>
+<td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">hyphenation-at-page-breaks</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code"></td>
+<td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">allow-text-overflow-trimming</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code"></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

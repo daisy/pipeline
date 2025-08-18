@@ -7,112 +7,112 @@
 </head>
 <body>
 <pre>
-<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <strong class="jxr_keyword">package</strong> org.daisy.pipeline.braille.pef.saxon.impl;
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">package org.daisy.pipeline.braille.pef.saxon.impl;</em>
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   
-<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> java.util.NoSuchElementException;
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment">import java.util.NoSuchElementException;</em>
 <a class="jxr_linenumber" name="L4" href="#L4">4</a>   
-<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> net.sf.saxon.expr.XPathContext;
-<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> net.sf.saxon.lib.ExtensionFunctionCall;
-<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> net.sf.saxon.lib.ExtensionFunctionDefinition;
-<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> net.sf.saxon.om.Sequence;
-<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> net.sf.saxon.om.StructuredQName;
-<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">import</strong> net.sf.saxon.trans.XPathException;
-<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> net.sf.saxon.value.SequenceType;
-<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">import</strong> net.sf.saxon.value.StringValue;
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment">import net.sf.saxon.expr.XPathContext;</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment">import net.sf.saxon.lib.ExtensionFunctionCall;</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment">import net.sf.saxon.lib.ExtensionFunctionDefinition;</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment">import net.sf.saxon.om.Sequence;</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment">import net.sf.saxon.om.StructuredQName;</em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment">import net.sf.saxon.trans.XPathException;</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment">import net.sf.saxon.value.SequenceType;</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment">import net.sf.saxon.value.StringValue;</em>
 <a class="jxr_linenumber" name="L13" href="#L13">13</a>  
-<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <strong class="jxr_keyword">import</strong> org.daisy.dotify.api.table.Table;
-<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> org.daisy.pipeline.braille.common.Query;
-<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.daisy.pipeline.braille.common.Query.util.mutableQuery;
-<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.daisy.pipeline.braille.common.Query.util.query;
-<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> org.daisy.pipeline.braille.pef.TableRegistry;
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment">import org.daisy.dotify.api.table.Table;</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment">import org.daisy.pipeline.braille.common.Query;</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment">import static org.daisy.pipeline.braille.common.Query.util.mutableQuery;</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <em class="jxr_comment">import static org.daisy.pipeline.braille.common.Query.util.query;</em>
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <em class="jxr_comment">import org.daisy.pipeline.braille.pef.TableRegistry;</em>
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.osgi.service.component.annotations.Component;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.osgi.service.component.annotations.Reference;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.osgi.service.component.annotations.ReferenceCardinality;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.osgi.service.component.annotations.ReferencePolicy;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <em class="jxr_comment">import org.osgi.service.component.annotations.Component;</em>
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <em class="jxr_comment">import org.osgi.service.component.annotations.Reference;</em>
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <em class="jxr_comment">import org.osgi.service.component.annotations.ReferenceCardinality;</em>
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <em class="jxr_comment">import org.osgi.service.component.annotations.ReferencePolicy;</em>
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.slf4j.Logger;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.slf4j.LoggerFactory;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_comment">import org.slf4j.Logger;</em>
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_comment">import org.slf4j.LoggerFactory;</em>
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  @Component(
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  	name = <span class="jxr_string">"pef:encode"</span>,
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  	service = { ExtensionFunctionDefinition.<strong class="jxr_keyword">class</strong> }
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  )
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  @SuppressWarnings(<span class="jxr_string">"serial"</span>)
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/saxon/impl/EncodeDefinition.html">EncodeDefinition</a> <strong class="jxr_keyword">extends</strong> ExtensionFunctionDefinition {
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  	
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> StructuredQName funcname = <strong class="jxr_keyword">new</strong> StructuredQName(<span class="jxr_string">"pef"</span>,
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  			<span class="jxr_string">"http://www.daisy.org/ns/2008/pef"</span>, <span class="jxr_string">"encode"</span>);
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  	
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	@Reference(
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  		name = <span class="jxr_string">"TableRegistry"</span>,
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  		unbind = <span class="jxr_string">"-"</span>,
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		service = TableRegistry.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  		cardinality = ReferenceCardinality.MANDATORY,
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		policy = ReferencePolicy.STATIC
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	)
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> bindTableRegistry(<a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/TableRegistry.html">TableRegistry</a> registry) {
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		tableRegistry = registry;
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  	}
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  	
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	<strong class="jxr_keyword">private</strong> <a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/TableRegistry.html">TableRegistry</a> tableRegistry;
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Query fallbackQuery = mutableQuery()
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		.add(<span class="jxr_string">"id"</span>, <span class="jxr_string">"org.daisy.braille.impl.table.DefaultTableProvider.TableType.EN_US"</span>);
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  	
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  	@Override
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	<strong class="jxr_keyword">public</strong> StructuredQName getFunctionQName() {
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		<strong class="jxr_keyword">return</strong> funcname;
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	}
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  	
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  	@Override
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getMinimumNumberOfArguments() {
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		<strong class="jxr_keyword">return</strong> 2;
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	}
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	@Override
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getMaximumNumberOfArguments() {
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">return</strong> 2;
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  	}
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  	@Override
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  	<strong class="jxr_keyword">public</strong> SequenceType[] getArgumentTypes() {
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> SequenceType[] {
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  				SequenceType.SINGLE_STRING,
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  				SequenceType.SINGLE_STRING};
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	}
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	@Override
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	<strong class="jxr_keyword">public</strong> SequenceType getResultType(SequenceType[] suppliedArgumentTypes) {
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">return</strong> SequenceType.SINGLE_STRING;
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	}
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  	
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	@Override
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  	<strong class="jxr_keyword">public</strong> ExtensionFunctionCall makeCallExpression() {
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ExtensionFunctionCall() {
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  			<strong class="jxr_keyword">public</strong> Sequence call(XPathContext context, Sequence[] arguments) <strong class="jxr_keyword">throws</strong> XPathException {
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  				<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  					Query tableQuery = query(arguments[0].head().getStringValue());
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  					String braille = arguments[1].head().getStringValue();
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  					Table table;
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  					<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  						table = tableRegistry.get(tableQuery).iterator().next(); }
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  					<strong class="jxr_keyword">catch</strong> (NoSuchElementException e) {
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  						<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  							table = tableRegistry.get(fallbackQuery).iterator().next(); }
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  						<strong class="jxr_keyword">catch</strong> (NoSuchElementException e2) {
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> XPathException(<span class="jxr_string">"Could not find a table for query: "</span> + tableQuery); }}
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> StringValue(table.newBrailleConverter().toText(braille)); }
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  				<strong class="jxr_keyword">catch</strong> (XPathException e) {
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  					<strong class="jxr_keyword">throw</strong> e; }
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  				<strong class="jxr_keyword">catch</strong> (Throwable e) {
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> XPathException(<span class="jxr_string">"Unexpected error in pef:encode"</span>, e); }
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 			}
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		};
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	}
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Logger logger = LoggerFactory.getLogger(EncodeDefinition.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 	
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> }
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_comment">@Component(</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_comment">	name = "pef:encode",</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_comment">	service = { ExtensionFunctionDefinition.class }</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_comment">)</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_comment">@SuppressWarnings("serial")</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_comment">public class EncodeDefinition extends ExtensionFunctionDefinition {</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_comment">	</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_comment">	private static final StructuredQName funcname = new StructuredQName("pf",</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_comment">			"<a href="http://www.daisy.org/ns/pipeline/functions" class="external-link" target="_blank">http://www.daisy.org/ns/pipeline/functions</a>", "pef-encode");</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_comment">	</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_comment">	@Reference(</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_comment">		name = "TableRegistry",</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_comment">		unbind = "-",</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_comment">		service = TableRegistry.class,</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_comment">		cardinality = ReferenceCardinality.MANDATORY,</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_comment">		policy = ReferencePolicy.STATIC</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_comment">	)</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_comment">	protected void bindTableRegistry(TableRegistry registry) {</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_comment">		tableRegistry = registry;</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_comment">	}</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_comment">	</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_comment">	private TableRegistry tableRegistry;</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_comment">	private final Query fallbackQuery = mutableQuery()</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_comment">		.add("id", "org.daisy.braille.impl.table.DefaultTableProvider.TableType.EN_US");</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_comment">	</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_comment">	@Override</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_comment">	public StructuredQName getFunctionQName() {</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_comment">		return funcname;</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_comment">	}</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_comment">	</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_comment">	@Override</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_comment">	public int getMinimumNumberOfArguments() {</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_comment">		return 2;</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_comment">	}</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_comment">	</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_comment">	@Override</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_comment">	public int getMaximumNumberOfArguments() {</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_comment">		return 2;</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_comment">	}</em>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_comment">	</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_comment">	@Override</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_comment">	public SequenceType[] getArgumentTypes() {</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_comment">		return new SequenceType[] {</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_comment">				SequenceType.SINGLE_STRING,</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_comment">				SequenceType.SINGLE_STRING};</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_comment">	}</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_comment">	</em>
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_comment">	@Override</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_comment">	public SequenceType getResultType(SequenceType[] suppliedArgumentTypes) {</em>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_comment">		return SequenceType.SINGLE_STRING;</em>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_comment">	}</em>
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_comment">	</em>
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_comment">	@Override</em>
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_comment">	public ExtensionFunctionCall makeCallExpression() {</em>
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_comment">		return new ExtensionFunctionCall() {</em>
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_comment">			public Sequence call(XPathContext context, Sequence[] arguments) throws XPathException {</em>
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_comment">				try {</em>
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_comment">					Query tableQuery = query(arguments[0].head().getStringValue());</em>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_comment">					String braille = arguments[1].head().getStringValue();</em>
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_comment">					Table table;</em>
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_comment">					try {</em>
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_comment">						table = tableRegistry.get(tableQuery).iterator().next(); }</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_comment">					catch (NoSuchElementException e) {</em>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_comment">						try {</em>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_comment">							table = tableRegistry.get(fallbackQuery).iterator().next(); }</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_comment">						catch (NoSuchElementException e2) {</em>
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_comment">							throw new XPathException("Could not find a table for query: " + tableQuery); }}</em>
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_comment">					return new StringValue(table.newBrailleConverter().toText(braille)); }</em>
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_comment">				catch (XPathException e) {</em>
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_comment">					throw e; }</em>
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_comment">				catch (Throwable e) {</em>
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_comment">					throw new XPathException("Unexpected error in pf:pef-encode", e); }</em>
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> <em class="jxr_comment">			}</em>
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_comment">		};</em>
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> <em class="jxr_comment">	}</em>
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_comment">	</em>
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_comment">	private static final Logger logger = LoggerFactory.getLogger(EncodeDefinition.class);</em>
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_comment">	</em>
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> <em class="jxr_comment">}</em>
 </pre>
 <hr>
 <div id="footer">Copyright © 2010–2025 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>

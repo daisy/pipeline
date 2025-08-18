@@ -79,8 +79,8 @@
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  			<strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/calabash/impl/OBFLNormalizeSpaceStep.html">OBFLSpaceNormalizer</a>()
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  			.transform(
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  				<strong class="jxr_keyword">new</strong> XMLCalabashInputValue(source),
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  				<strong class="jxr_keyword">new</strong> XMLCalabashOutputValue(result, runtime))
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  				XMLCalabashInputValue.of(source),
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  				XMLCalabashOutputValue.of(result, runtime))
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  			.run(); }
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">catch</strong> (Throwable e) {
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  			<strong class="jxr_keyword">throw</strong> XProcStep.raiseError(e, step); }

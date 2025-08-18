@@ -966,6 +966,26 @@ if (window.addEventListener) {
   <ul class="synopsis-inputs">
 <li class="synopsis-input details-on">
 <div class="toggle-details"></div>
+<div class="synopsis-input-name">Text-to-speech configuration file</div>
+<div class="synopsis-input-desc">
+<div class="shortdesc">Configuration file for text-to-speech.
+</div>
+<div class="longdesc">Configuration file for text-to-speech.
+
+<p><a href="/pipeline/Get-Help/User-Guide/Text-To-Speech">More details on the configuration file format</a>.</p>
+</div>
+</div>
+<div class="synopsis-input-media-type">
+<b>Media-type</b>:
+<ul class="media-types">
+<li>application/vnd.pipeline.tts-config+xml</li>
+</ul>
+</div>
+<div class="synopsis-input-sequence">
+<b>Sequence</b>: no</div>
+</li>
+<li class="synopsis-input details-on">
+<div class="toggle-details"></div>
 <div class="synopsis-input-name">EPUB Publication</div>
 <div class="synopsis-input-desc">
 <div class="shortdesc">The EPUB 2 or EPUB 3 you want to transform.
@@ -985,31 +1005,86 @@ if (window.addEventListener) {
 <div class="synopsis-input-sequence">
 <b>Sequence</b>: no</div>
 </li>
-<li class="synopsis-input details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-input-name">Text-to-speech configuration file</div>
-<div class="synopsis-input-desc">
-<div class="shortdesc">Configuration file for text-to-speech.
-</div>
-<div class="longdesc">Configuration file for text-to-speech.
-
-<p><a href="/pipeline/Get-Help/User-Guide/Text-To-Speech">More details on the configuration file format</a>.</p>
-</div>
-</div>
-<div class="synopsis-input-media-type">
-<b>Media-type</b>:
-<ul class="media-types">
-<li>application/vnd.pipeline.tts-config+xml</li>
-</ul>
-</div>
-<div class="synopsis-input-sequence">
-<b>Sequence</b>: no</div>
-</li>
 </ul>
 
   <h3 id="options">Options</h3>
 
   <ul class="synopsis-options">
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Style sheet parameters</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">A list of parameters passed to the style sheets.
+</div>
+<div class="longdesc">A list of parameters passed to the style sheets.
+
+<p>Style sheets, whether they’re user style sheets (specified with the “Style sheets” option) or author
+style sheets (associated with the source), may have parameters (Sass variables). This option, which
+takes a comma-separated list of key-value pairs enclosed in parenthesis, can be used to set these
+variables.</p>
+
+<p>For example, if a style sheet uses the Sass variable “foo”:</p>
+
+<pre><code class="language-sass">@if $foo {
+   /* some style that should only be enabled when "foo" is truthy */
+}
+</code></pre>
+
+<p>you can control that variable with the following parameters list: <code>(foo:true)</code>.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <var>&lt;stylesheet-parameters&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>()</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Validation</div>
+<div class="synopsis-option-desc">
+Whether to abort on validation issues.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: One of the following:<dl class="choice">
+<dt><code>off</code></dt>
+<dd>No validation</dd>
+<dt><code>report</code></dt>
+<dd>Report validation issues</dd>
+<dt><code>abort</code></dt>
+<dd>Abort on validation issues</dd>
+</dl>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>off</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Perform text-to-speech</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">Whether to use a speech synthesizer to produce media overlays.
+</div>
+<div class="longdesc">Whether to use a speech synthesizer to produce media overlays.
+
+<p>This will remove any existing media overlays in the EPUB.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: One of the following:<dl class="choice">
+<dt><code>true</code></dt>
+<dd>Yes</dd>
+<dt><code>false</code></dt>
+<dd>No</dd>
+<dt><code>default</code></dt>
+<dd>If publication has no media overlays yet</dd>
+</dl>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>default</code>
+</div>
+</li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
 <div class="synopsis-option-name">Style sheets</div>
@@ -1074,81 +1149,6 @@ regular expression matching. To enable regular expression matching,</p>
 <b>Default value</b>: <code>p:system-property('d:org.daisy.pipeline.tts.default-lexicon')</code>
 </div>
 </li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Style sheet parameters</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">A list of parameters passed to the style sheets.
-</div>
-<div class="longdesc">A list of parameters passed to the style sheets.
-
-<p>Style sheets, whether they’re user style sheets (specified with the “Style sheets” option) or author
-style sheets (associated with the source), may have parameters (Sass variables). This option, which
-takes a comma-separated list of key-value pairs enclosed in parenthesis, can be used to set these
-variables.</p>
-
-<p>For example, if a style sheet uses the Sass variable “foo”:</p>
-
-<pre><code class="language-sass">@if $foo {
-   /* some style that should only be enabled when "foo" is truthy */
-}
-</code></pre>
-
-<p>you can control that variable with the following parameters list: <code>(foo:true)</code>.</p>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <var>&lt;stylesheet-parameters&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>()</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Perform text-to-speech</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">Whether to use a speech synthesizer to produce media overlays.
-</div>
-<div class="longdesc">Whether to use a speech synthesizer to produce media overlays.
-
-<p>This will remove any existing media overlays in the EPUB.</p>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: One of the following:<dl class="choice">
-<dt><code>true</code></dt>
-<dd>Yes</dd>
-<dt><code>false</code></dt>
-<dd>No</dd>
-<dt><code>default</code></dt>
-<dd>If publication has no media overlays yet</dd>
-</dl>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>default</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Validation</div>
-<div class="synopsis-option-desc">
-Whether to abort on validation issues.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: One of the following:<dl class="choice">
-<dt><code>off</code></dt>
-<dd>No validation</dd>
-<dt><code>report</code></dt>
-<dd>Report validation issues</dd>
-<dt><code>abort</code></dt>
-<dd>Abort on validation issues</dd>
-</dl>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>off</code>
-</div>
-</li>
 </ul>
 
   <script type="text/javascript">
@@ -1193,16 +1193,28 @@ if (window.addEventListener) {
 Options:</pre>
   <table>
 <tr>
+<td>--tts-config <span style="text-transform: uppercase">tts-config</span>
+</td>
+<td>Configuration file for text-to-speech.
+</td>
+</tr>
+<tr>
 <td>--source <span style="text-transform: uppercase">source</span>
 </td>
 <td>The EPUB 2 or EPUB 3 you want to transform.
 </td>
 </tr>
 <tr>
-<td>--tts-config <span style="text-transform: uppercase">tts-config</span>
-</td>
-<td>Configuration file for text-to-speech.
-</td>
+<td>--stylesheet-parameters [<span style="text-transform: uppercase">stylesheet-parameters</span>]</td>
+<td>Style sheet parameters (default: <span class="synopsis-option-default"><code>()</code></span>)</td>
+</tr>
+<tr>
+<td>--validation [<span style="text-transform: uppercase">validation</span>]</td>
+<td>Validation (default: <span class="synopsis-option-default"><code>off</code></span>)</td>
+</tr>
+<tr>
+<td>--tts [<span style="text-transform: uppercase">tts</span>]</td>
+<td>Perform text-to-speech (default: <span class="synopsis-option-default"><code>default</code></span>)</td>
 </tr>
 <tr>
 <td>--_:stylesheet [<span style="text-transform: uppercase">_:stylesheet</span>]</td>
@@ -1211,18 +1223,6 @@ Options:</pre>
 <tr>
 <td>--lexicon [<span style="text-transform: uppercase">lexicon</span>]</td>
 <td>Lexicons (default: <span class="synopsis-option-default"><code>p:system-property('d:org.daisy.pipeline.tts.default-lexicon')</code></span>)</td>
-</tr>
-<tr>
-<td>--stylesheet-parameters [<span style="text-transform: uppercase">stylesheet-parameters</span>]</td>
-<td>Style sheet parameters (default: <span class="synopsis-option-default"><code>()</code></span>)</td>
-</tr>
-<tr>
-<td>--tts [<span style="text-transform: uppercase">tts</span>]</td>
-<td>Perform text-to-speech (default: <span class="synopsis-option-default"><code>default</code></span>)</td>
-</tr>
-<tr>
-<td>--validation [<span style="text-transform: uppercase">validation</span>]</td>
-<td>Validation (default: <span class="synopsis-option-default"><code>off</code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>

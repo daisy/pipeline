@@ -170,8 +170,8 @@
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 			<strong class="jxr_keyword">boolean</strong> first = getOption(_FIRST, false);
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 			<strong class="jxr_keyword">boolean</strong> replace = getOption(_REPLACE, false);
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 			<strong class="jxr_keyword">boolean</strong> replaceAttributes = getOption(_REPLACE_ATTRIBUTES, false);
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 			List&lt;File&gt; added = addEntries(<strong class="jxr_keyword">new</strong> XMLCalabashInputValue(sourceFilesetPipe).asXMLStreamReader(),
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 			                              <strong class="jxr_keyword">new</strong> XMLCalabashOutputValue(resultFilesetPipe, runtime).asXMLStreamWriter(),
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 			List&lt;File&gt; added = addEntries(XMLCalabashInputValue.of(sourceFilesetPipe).asXMLStreamReader(),
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 			                              XMLCalabashOutputValue.of(resultFilesetPipe, runtime).asXMLStreamWriter(),
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 			                              entries, first, replace, replaceAttributes, logger);
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 			<strong class="jxr_keyword">if</strong> (first)
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 				<strong class="jxr_keyword">for</strong> (File f : added)

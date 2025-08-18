@@ -177,6 +177,11 @@
             px:validate-mods
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/epub-utils/src/main/resources/xml/library.xpl" class="source">http://www.daisy.org/pipeline/modules/epub-utils/library.xpl</a>"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+            px:epub3-merge-prefix
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
 
 
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"output-dir-with-slash"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"resolve-uri(if (ends-with($output-dir,'/')) then $output-dir else concat($output-dir,'/'))"</span>/&gt;
@@ -515,7 +520,7 @@
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;Insert metadata into the head of ZedAI&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">insert</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/z:document/z:head"</span> <span class="code-xml-attribute-local-name">position</span>=<span class="code-xml-attribute-value">"last-child"</span>&gt;
-            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"insertion"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"insertion"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"/z:head/*"</span>&gt;
                 &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"generate-zedai-metadata"</span>/&gt;
             &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
@@ -524,6 +529,15 @@
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">insert</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;Generate UUID for ZedAI identifier&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">uuid</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/z:document/z:head//z:meta[@property='dc:identifier']/@content"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+            If any properties are defined with a prefix that is a reserved prefix in EPUB 3, assume they
+            are from those vocabularies, and define the prefix in a "prefix" attribute on the root
+            element. Discard properties with an unknown prefix.
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">epub3-merge-prefix</span> <span class="code-xml-attribute-local-name">implicit-input-prefixes</span>=<span class="code-xml-attribute-value">" dc:        http://purl.org/dc/elements/1.1/                                       dcterms:   http://purl.org/dc/terms/                                       z3998:     http://www.daisy.org/z3998/2012/vocab/decl/#                                       diagram:   http://www.daisy.org/z3998/2012/vocab/descriptions/#                                       a11y:      http://www.idpf.org/epub/vocab/package/a11y/#                                       marc:      http://id.loc.gov/vocabulary/                                       media:     http://www.idpf.org/epub/vocab/overlays/#                                       onix:      http://www.editeur.org/ONIX/book/codelists/current.html#                                       rendition: http://www.idpf.org/vocab/rendition/#                                       schema:    http://schema.org/                                       xsd:       http://www.w3.org/2001/XMLSchema#"</span> <span class="code-xml-attribute-local-name">implicit-output-prefixes</span>=<span class="code-xml-attribute-value">"dc:        http://purl.org/dc/elements/1.1/                                       dcterms:   http://purl.org/dc/terms/                                       z3998:     http://www.daisy.org/z3998/2012/vocab/decl/#                                       diagram:   http://www.daisy.org/z3998/2012/vocab/descriptions/#"</span>&gt;
+            
+        &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">epub3-merge-prefix</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">delete</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"z:head/z:meta[empty(@property)]"</span>/&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">group</span>&gt;
 
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;Create a meta element for the MODS file reference and insert it into the head
@@ -558,9 +572,6 @@
             &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">insert</span>&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">choose</span>&gt;
-
-    
-    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">unwrap</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"unwrap-meta-list"</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"//z:head/tmp:wrapper"</span>/&gt;
 
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;Set new base URI&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
     &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">set-base-uri</span>&gt;

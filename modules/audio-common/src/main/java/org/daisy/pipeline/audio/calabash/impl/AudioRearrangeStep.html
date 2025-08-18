@@ -161,10 +161,10 @@
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 			<strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/audio-common/src/main/java/org/daisy/pipeline/audio/calabash/impl/AudioRearrangeStep.html">AudioRearrange</a>()
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 				.transform(
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 					ImmutableMap.of(_SOURCE, <strong class="jxr_keyword">new</strong> XMLCalabashInputValue(sourcePipe),
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 					                _DESIRED, <strong class="jxr_keyword">new</strong> XMLCalabashInputValue(desiredPipe)),
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 					ImmutableMap.of(_RESULT, <strong class="jxr_keyword">new</strong> XMLCalabashOutputValue(resultPipe, runtime),
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 					                _TEMP_FILES, <strong class="jxr_keyword">new</strong> XMLCalabashOutputValue(tempFilesPipe, runtime)))
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 					ImmutableMap.of(_SOURCE, XMLCalabashInputValue.of(sourcePipe),
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 					                _DESIRED, XMLCalabashInputValue.of(desiredPipe)),
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 					ImmutableMap.of(_RESULT, XMLCalabashOutputValue.of(resultPipe, runtime),
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 					                _TEMP_FILES, XMLCalabashOutputValue.of(tempFilesPipe, runtime)))
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 				.run();
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 		} <strong class="jxr_keyword">catch</strong> (Throwable e) {
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 			<strong class="jxr_keyword">throw</strong> XProcStep.raiseError(e, step);

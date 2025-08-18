@@ -107,8 +107,8 @@
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  				getOption(MAX_CHUNK_SIZE, -1),
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  				runtime.getProcessor().getUnderlyingConfiguration())
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 			.transform(
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 				<strong class="jxr_keyword">new</strong> XMLCalabashInputValue(sourcePipe),
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 				<strong class="jxr_keyword">new</strong> XMLCalabashOutputValue(
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 				XMLCalabashInputValue.of(sourcePipe),
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 				XMLCalabashOutputValue.of(
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 					<strong class="jxr_keyword">new</strong> WritablePipe() {
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 						<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> count = 0;
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 						<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> write(XdmNode doc) {

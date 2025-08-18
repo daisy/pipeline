@@ -38,12 +38,16 @@
 <span class="primary">source</span><span class="details"> primary</span>
 </td>
 <td>
-<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">OPF or HTML document that may have more than one <code>prefix</code>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">OPF, HTML or ZedAI document that may have more than one <code>prefix</code>
 			(<code>epub:prefix</code>) attribute.</p>
-<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc"><code>prefix</code> attributes are allowed on any element, not only on
-			<code>package</code> or <code>html</code>.</p>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc"><code>prefix</code> attributes are allowed on any element, not only on the roote
+			element (<code>package</code>, <code>html</code> or <code>document</code>).</p>
 <p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">If an element has more than one ancestor element with a <code>prefix</code>, all
 			except the closest one are ignored.</p>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">In case of ZedAI input, unprefixed CURIEs resolve to the URI
+			<code>http://www.daisy.org/z3998/2012/vocab/structure/#</code> (which is the default
+			vocabulary as defined by the <a href="http://www.daisy.org/z3998/2012/vocab/context/default/" class="external-link" target="_blank">default RDFa
+			context</a>).</p>
 </td>
 </tr></tbody>
 </table>
@@ -57,12 +61,12 @@
 <td width="150px" class="nowrap name">
 <span class="primary">result</span><span class="details"> primary</span>
 </td>
-<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">The result document has at most one <code>prefix</code> attribute, on the root
-			element. The different <code>prefix</code> attributes in the input document are merged
-			in such a way that every prefix is unique and no two prefixes are mapped to the same
-			URI. The document is updated at the places where a prefix is used that was
-			renamed. Prefixes that are not used anywhere inside the document are skipped from the
-			declaration.</p></td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">The result document has at most one <code>prefix</code> (<code>epub:prefix</code>)
+			attribute, on the root element. The different <code>prefix</code> attributes in the
+			input document are merged in such a way that every prefix is unique and no two prefixes
+			are mapped to the same URI. The document is updated at the places where a prefix is used
+			that was renamed. Prefixes that are not used anywhere inside the document are skipped
+			from the declaration.</p></td>
 </tr></tbody>
 </table>
 <h3>Options</h3>
