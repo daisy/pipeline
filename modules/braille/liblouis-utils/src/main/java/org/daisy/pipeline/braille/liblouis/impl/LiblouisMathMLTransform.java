@@ -1,9 +1,12 @@
 package org.daisy.pipeline.braille.liblouis.impl;
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import javax.xml.namespace.QName;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
@@ -14,13 +17,14 @@ import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.runtime.XAtomicStep;
 
 import org.daisy.common.file.URLs;
+import org.daisy.common.transform.InputValue;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.pipeline.braille.common.AbstractTransform;
 import org.daisy.pipeline.braille.common.AbstractTransformProvider;
 import org.daisy.pipeline.braille.common.AbstractTransformProvider.util.Iterables;
-import org.daisy.pipeline.braille.common.calabash.CxEvalBasedTransformer;
+import org.daisy.pipeline.braille.common.calabash.XProcBasedTransformer;
 import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.Iterables.of;
 import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.logCreate;
 import org.daisy.pipeline.braille.common.Query;
@@ -92,7 +96,10 @@ public interface LiblouisMathMLTransform {
 			
 			@Override
 			public XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties) {
-				return new CxEvalBasedTransformer(href, null, options).newStep(runtime, step, monitor, properties);
+				Map<QName,InputValue<?>> options = new HashMap<>();
+				for (String option : this.options.keySet())
+					options.put(new QName(option), new InputValue<>(this.options.get(option)));
+				return new XProcBasedTransformer(href, options).newStep(runtime, step, monitor, properties);
 			}
 			
 			@Override

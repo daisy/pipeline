@@ -16,7 +16,7 @@ import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.pipeline.braille.common.AbstractBrailleTranslator;
 import org.daisy.pipeline.braille.common.BrailleTranslator;
 import org.daisy.pipeline.braille.common.BrailleTranslatorProvider;
-import org.daisy.pipeline.braille.common.calabash.CxEvalBasedTransformer;
+import org.daisy.pipeline.braille.common.calabash.XProcBasedTransformer;
 import org.daisy.pipeline.braille.common.Query;
 import org.daisy.pipeline.braille.common.TransformProvider;
 import org.daisy.pipeline.braille.css.CSSStyledText;
@@ -108,9 +108,8 @@ public class UppercaseTransform extends AbstractBrailleTranslator implements Bra
 		protected void activate(final Map<?,?> properties) throws RuntimeException {
 			try {
 				Module m = moduleRegistry.getModuleByClass(UppercaseTransform.class);
-				stepProvider = new CxEvalBasedTransformer(
+				stepProvider = new XProcBasedTransformer(
 					URLs.asURI(m.getResource("../uppercase.xpl")),
-					null,
 					null);
 			} catch (NoSuchFileException e) {
 				String errorMessage = e.getMessage();

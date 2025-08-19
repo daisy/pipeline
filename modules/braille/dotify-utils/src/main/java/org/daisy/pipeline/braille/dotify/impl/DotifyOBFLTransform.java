@@ -16,7 +16,7 @@ import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.pipeline.braille.common.AbstractTransform;
 import org.daisy.pipeline.braille.common.AbstractTransformProvider;
 import org.daisy.pipeline.braille.common.AbstractTransformProvider.util.Iterables;
-import org.daisy.pipeline.braille.common.calabash.CxEvalBasedTransformer;
+import org.daisy.pipeline.braille.common.calabash.XProcBasedTransformer;
 import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.logCreate;
 import org.daisy.pipeline.braille.common.Query;
 import org.daisy.pipeline.braille.common.Query.Feature;
@@ -77,7 +77,7 @@ public interface DotifyOBFLTransform {
 			
 			@Override
 			public XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties) {
-				return new CxEvalBasedTransformer(href, null, null).newStep(runtime, step, monitor, properties);
+				return new XProcBasedTransformer(href, null).newStep(runtime, step, monitor, properties);
 			}
 			
 			@Override

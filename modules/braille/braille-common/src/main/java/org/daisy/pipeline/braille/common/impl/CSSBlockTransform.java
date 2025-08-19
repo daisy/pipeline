@@ -1,6 +1,7 @@
 package org.daisy.pipeline.braille.common.impl;
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.xml.namespace.QName;
@@ -33,7 +34,7 @@ import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.l
 import org.daisy.pipeline.braille.common.BrailleTranslator;
 import org.daisy.pipeline.braille.common.BrailleTranslatorProvider;
 import org.daisy.pipeline.braille.common.BrailleTranslatorRegistry;
-import org.daisy.pipeline.braille.common.calabash.CxEvalBasedTransformer;
+import org.daisy.pipeline.braille.common.calabash.XProcBasedTransformer;
 import org.daisy.pipeline.braille.common.Hyphenator;
 import org.daisy.pipeline.braille.common.HyphenatorRegistry;
 import org.daisy.pipeline.braille.common.Query;
@@ -201,14 +202,15 @@ public interface CSSBlockTransform {
 								}
 
 								// run the transformation
-								new CxEvalBasedTransformer(
+								Map<QName,InputValue<?>> options = new HashMap<>();
+								for (String option : TransformImpl.this.options.keySet())
+									options.put(new QName(option), new InputValue<>(TransformImpl.this.options.get(option)));
+								options.put(new QName("text-transform"),
+								            new InputValue<>(
+									            mutableQuery().add("id", compoundTranslator.getIdentifier()).toString()));
+								new XProcBasedTransformer(
 									href,
-									null,
-									ImmutableMap.<String,String>builder()
-									            .putAll(options)
-									            .put("text-transform",
-									                 mutableQuery().add("id", compoundTranslator.getIdentifier()).toString())
-									            .build()
+									options
 								).newStep(runtime, step, monitor, properties).transform(
 									ImmutableMap.of(
 										new QName("source"), mult.get(),
