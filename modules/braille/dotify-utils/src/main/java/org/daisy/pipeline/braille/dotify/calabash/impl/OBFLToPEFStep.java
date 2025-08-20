@@ -82,6 +82,7 @@ public class OBFLToPEFStep extends DefaultStep implements XProcStep {
 	private static final QName _locale = new QName("locale");
 	private static final QName _mode = new QName("mode");
 	private static final QName _braille_charset = new QName("braille-charset");
+	private static final QName _pages_per_sheet = new QName("pages-per-sheet");
 	private static final QName _identifier = new QName("identifier");
 	private static final QName _style_type = new QName("style-type");
 	private static final QName _css_text_transform_definitions = new QName("css-text-transform-definitions");
@@ -180,6 +181,7 @@ public class OBFLToPEFStep extends DefaultStep implements XProcStep {
 			String mode = getOption(_mode).getString();
 			String locale = getOption(_locale).getString();
 			String brailleCharset = getOption(_braille_charset, "");
+			int pagesPerSheet = getOption(_pages_per_sheet, 2);
 
 			if (brailleCharset != null && !"".equals(brailleCharset)) {
 				// if braille-charset is specified we can assume that mode is in query format
@@ -295,7 +297,8 @@ public class OBFLToPEFStep extends DefaultStep implements XProcStep {
 				.hyphenate(hyphenate)
 				.allowsTextOverflowTrimming(allowTextOverflowTrimming)
 				.allowsEndingPageOnHyphen(allowEndingPageOnHyphen)
-				.allowsEndingVolumeOnHyphen(allowEndingVolumeOnHyphen);
+				.allowsEndingVolumeOnHyphen(allowEndingVolumeOnHyphen)
+				.pagesPerSheet(pagesPerSheet);
 			if (removeStyles)
 				config.ignoreStyle("em").ignoreStyle("strong");
 			Table brailleCharsetTable = "".equals(brailleCharset)

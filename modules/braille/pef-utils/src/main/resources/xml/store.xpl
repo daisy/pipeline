@@ -181,6 +181,9 @@
                 <p:when test="pf:media-query-matches('(-daisy-sheets-multiple-of-two)',$parsed-medium)">
                     <!--
                         ensure volumes have a number of sheets that is a multiple of 2
+                        
+                        Note that Dotify prefers volume breaks at a number of sheets that is a multiple of two,
+                        but does not pad the volumes with empty sheets.
                     -->
                     <p:xslt>
                         <p:input port="stylesheet">

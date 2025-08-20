@@ -2,6 +2,8 @@
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:daisy="http://www.daisy.org/ns/pipeline/"
                 xmlns:obfl="http://www.daisy.org/ns/2011/obfl"
                 type="px:obfl-to-pef" name="main">
@@ -17,6 +19,7 @@
 		<p:option name="locale" required="true"/>
 		<p:option name="mode" required="true"/>
 		<p:option name="braille-charset" required="true"/>
+		<p:option name="pages-per-sheet" cx:as="xs:integer" required="false" select="2"/>
 		<p:option name="identifier" required="false" select="''"/>
 		<p:option name="style-type" required="false" select="''"/>
 		<p:option name="css-text-transform-definitions" required="false" select="''"/>
@@ -60,6 +63,9 @@
 	<p:delete match="/obfl:obfl/obfl:meta/daisy:default-mode">
 		<!-- We don't want this to end up in the PEF. -->
 	</p:delete>
+	<p:delete match="/obfl:obfl/obfl:meta/daisy:pages-per-sheet">
+		<!-- We don't want this to end up in the PEF. -->
+	</p:delete>
 	<p:delete match="/obfl:obfl/obfl:meta/daisy:css-text-transform-definitions">
 		<!-- We don't want this to end up in the PEF. -->
 	</p:delete>
@@ -80,6 +86,11 @@
 			<p:pipe step="main" port="source"/>
 		</p:with-option>
 		<p:with-option name="braille-charset" select="/obfl:obfl/obfl:meta/daisy:braille-charset">
+			<p:pipe step="main" port="source"/>
+		</p:with-option>
+		<p:with-option name="pages-per-sheet"
+		               select="(/obfl:obfl/obfl:meta/daisy:pages-per-sheet
+		                        /xs:integer(number(string(.))),2)[1]">
 			<p:pipe step="main" port="source"/>
 		</p:with-option>
 		<p:with-option name="identifier" select="$identifier"/>
