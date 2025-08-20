@@ -77,9 +77,8 @@ public class Medium implements Dimension.RelativeDimensionBase {
 			"cell-width",
 			"cell-height",
 			"duplex",
-			"saddle-stitch",
+			"saddle-stitch", "sheets-multiple-of-two",
 			"z-folding",
-			"sheets-multiple-of-two",
 			"blank-last-page",
 			"pages-in-quire",
 			"number-of-copies",
@@ -445,7 +444,6 @@ public class Medium implements Dimension.RelativeDimensionBase {
 			else if ("-daisy-duplex".equals(feature)
 			         || "-daisy-saddle-stitch".equals(feature)
 			         || "-daisy-z-folding".equals(feature)
-			         || "-daisy-sheets-multiple-of-two".equals(feature)
 			         || "-daisy-blank-last-page".equals(feature))
 				value = parseBoolean(value);
 			else
@@ -566,6 +564,10 @@ public class Medium implements Dimension.RelativeDimensionBase {
 				feature = "-daisy-" + feature;
 			if ("-daisy-file-format".equals(feature))
 				feature = "-daisy-format";
+			if ("-daisy-sheets-multiple-of-two".equals(feature))
+				feature = "-daisy-saddle-stitch"; // not exactly the same, but we want to support
+				                                  // sheets-multiple-of-two for backwards
+				                                  // compatibility
 			return feature;
 		}
 

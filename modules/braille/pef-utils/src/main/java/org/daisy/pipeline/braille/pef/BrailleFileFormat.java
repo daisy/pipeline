@@ -22,7 +22,6 @@ public class BrailleFileFormat extends EmbossedMedium implements FileFormat {
 	private final FileFormat underlyingFormat;
 	private final Area printableArea;
 	private final boolean duplex;
-	private final boolean sheetsMultipleOfTwo;
 	private final boolean blankLastPage;
 	private final boolean overflowAllowed;
 
@@ -32,13 +31,12 @@ public class BrailleFileFormat extends EmbossedMedium implements FileFormat {
 	 * such as a physical sheet of paper and embosser.
 	 *
 	 * @param printableArea The dimensions and position of the printable area of the page
-	 * @param sheetsMultipleOfTwo whether volumes have a number of sheets that is a multiple of 2
 	 * @param blankLastPage whether the last page of each volume should be left blank
 	 */
 	public BrailleFileFormat(FileFormat format, Area printableArea,
 	                         Dimension pageWidth, Dimension pageHeight,
 	                         double cellWidth, double cellHeight,
-	                         boolean duplex, boolean sheetsMultipleOfTwo, boolean blankLastPage, boolean overflowAllowed,
+	                         boolean duplex, boolean blankLastPage, boolean overflowAllowed,
 	                         MediumBuilder parser) {
 		super(new Dimension(printableArea.getWidth(), Unit.MM),
 		      new Dimension(printableArea.getHeight(), Unit.MM),
@@ -51,7 +49,6 @@ public class BrailleFileFormat extends EmbossedMedium implements FileFormat {
 		this.underlyingFormat = format;
 		this.printableArea = printableArea;
 		this.duplex = duplex;
-		this.sheetsMultipleOfTwo = sheetsMultipleOfTwo;
 		this.blankLastPage = blankLastPage;
 		this.overflowAllowed = overflowAllowed;
 	}
@@ -83,8 +80,6 @@ public class BrailleFileFormat extends EmbossedMedium implements FileFormat {
 		// expected to be features of the underlying FileFormat)
 		if ("-daisy-duplex".equals(feature))
 			return duplex;
-		else if ("-daisy-sheets-multiple-of-two".equals(feature))
-			return sheetsMultipleOfTwo;
 		else if ("-daisy-blank-last-page".equals(feature))
 			return blankLastPage;
 		else {

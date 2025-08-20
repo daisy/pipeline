@@ -90,7 +90,6 @@ public class FileFormatCatalog implements MediumProvider {
 		private Boolean duplex = null;
 		private Boolean saddleStitch = null;
 		private Boolean zFolding = null;
-		private Boolean sheetsMultipleOfTwo = null;
 		private Boolean blankLastPage = null;
 		private Map<String,Object> otherFeatures = new HashMap<>();
 
@@ -127,8 +126,6 @@ public class FileFormatCatalog implements MediumProvider {
 				saddleStitch = (Boolean)value;
 			else if ("-daisy-z-folding".equals(feature))
 				zFolding = (Boolean)value;
-			else if ("-daisy-sheets-multiple-of-two".equals(feature))
-				sheetsMultipleOfTwo = (Boolean)value;
 			else if ("-daisy-blank-last-page".equals(feature))
 				blankLastPage = (Boolean)value;
 			else
@@ -233,16 +230,15 @@ public class FileFormatCatalog implements MediumProvider {
 											}
 											Boolean saddleStitch = FileFormatBuilder.this.saddleStitch;
 											if (saddleStitch != null)
-												if (format instanceof EmbosserAsFileFormat) {
-													if (((EmbosserAsFileFormat)format).embosser.supportsPrintMode(PrintMode.MAGAZINE))
-														try {
-															format.setFeature(EmbosserFeatures.SADDLE_STITCH, saddleStitch);
-														} catch (IllegalArgumentException e) {
-															return null;
-														}
-													else if (saddleStitch == true)
+												if ((format instanceof EmbosserAsFileFormat
+												     && ((EmbosserAsFileFormat)format).embosser.supportsPrintMode(PrintMode.MAGAZINE))
+												    || saddleStitch == true)
+													try {
+														format.setFeature(EmbosserFeatures.SADDLE_STITCH, saddleStitch);
+													} catch (IllegalArgumentException e) {
 														return null;
-												} else
+													}
+												else
 													return null;
 											else if (format instanceof EmbosserAsFileFormat)
 												try {
@@ -298,14 +294,6 @@ public class FileFormatCatalog implements MediumProvider {
 												}
 											}
 											// sheets-multiple-of-two and blank-last-page are handled in px:pef-store
-											Boolean sheetsMultipleOfTwo = FileFormatBuilder.this.sheetsMultipleOfTwo;
-											if (sheetsMultipleOfTwo != null) {
-												if (saddleStitch != null && !sheetsMultipleOfTwo.equals(saddleStitch))
-													return null;
-											} else if (Boolean.TRUE.equals(saddleStitch))
-												sheetsMultipleOfTwo = true;
-											else
-												sheetsMultipleOfTwo = false;
 											Boolean blankLastPage = FileFormatBuilder.this.blankLastPage;
 											if (blankLastPage == null)
 												blankLastPage = false;
@@ -389,7 +377,7 @@ public class FileFormatCatalog implements MediumProvider {
 												return new BrailleFileFormat(
 													format, embosser.getPrintableArea(pageFormat),
 													pageWidth, pageHeight, cellWidth, cellHeight,
-													duplex, sheetsMultipleOfTwo, blankLastPage, false,
+													duplex, blankLastPage, false,
 													FileFormatBuilder.this);
 											} else {
 												double cellWidth = 6;
@@ -420,7 +408,7 @@ public class FileFormatCatalog implements MediumProvider {
 														height.toUnit(Unit.MM, fontSize).getValue().doubleValue(),
 														0, 0),
 													pageWidth, pageHeight, cellWidth, cellHeight,
-													duplex, sheetsMultipleOfTwo, blankLastPage, true,
+													duplex, blankLastPage, true,
 													FileFormatBuilder.this);
 											}
 										}

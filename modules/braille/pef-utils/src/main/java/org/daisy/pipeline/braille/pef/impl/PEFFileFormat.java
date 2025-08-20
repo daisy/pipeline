@@ -11,6 +11,7 @@ import org.daisy.dotify.api.table.TableFilter;
 public class PEFFileFormat implements FileFormat {
 
 	private boolean duplexEnabled = true;
+	private boolean saddleStitchEnabled = false;
 
 	public PEFFileFormat() {}
 
@@ -21,6 +22,8 @@ public class PEFFileFormat implements FileFormat {
 	public Object getFeature(String key) {
 		if (EmbosserFeatures.DUPLEX.equals(key))
 			return duplexEnabled;
+		else if (EmbosserFeatures.SADDLE_STITCH.equals(key))
+			return saddleStitchEnabled;
 		return null;
 	}
 
@@ -31,6 +34,13 @@ public class PEFFileFormat implements FileFormat {
 				return;
 			} catch (ClassCastException e) {
 				throw new IllegalArgumentException("Unsupported value for duplex: " + value, e);
+			}
+		else if (EmbosserFeatures.SADDLE_STITCH.equals(key))
+			try {
+				saddleStitchEnabled = (Boolean)value;
+				return;
+			} catch (ClassCastException e) {
+				throw new IllegalArgumentException("Unsupported value for saddle stitch: " + value, e);
 			}
 		throw new IllegalArgumentException("Unsupported feature: " + key);
 	}
