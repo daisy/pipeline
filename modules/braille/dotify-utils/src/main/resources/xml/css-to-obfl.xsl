@@ -31,6 +31,7 @@
     <xsl:param name="hyphenation-resources" as="item()?" required="no"/>
     <xsl:param name="counter-styles" as="item()?" required="no"/>
     <xsl:param name="page-and-volume-styles" as="item()*" required="no"/>
+    <xsl:param name="pages-per-sheet" as="xs:integer" required="no" select="2"/> <!-- 2 | 4 -->
     
     <xsl:variable name="sections" select="collection()"/>
     
@@ -284,6 +285,9 @@
                 </xsl:if>
                 <xsl:if test="$default-text-transform!=''">
                     <daisy:default-mode><xsl:value-of select="$default-text-transform"/></daisy:default-mode>
+                </xsl:if>
+                <xsl:if test="$pages-per-sheet!=2">
+                    <daisy:pages-per-sheet><xsl:value-of select="$pages-per-sheet"/></daisy:pages-per-sheet>
                 </xsl:if>
                 <xsl:if test="exists($text-transforms) and not(string($text-transforms)='')">
                     <daisy:css-text-transform-definitions>

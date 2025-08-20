@@ -3,6 +3,7 @@
                 xmlns:p="http://www.w3.org/ns/xproc"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
@@ -159,6 +160,11 @@
         pxi:obfl-css-definition
       </p:documentation>
     </p:import>
+    <cx:import href="http://www.daisy.org/pipeline/modules/css-utils/library.xsl" type="application/xslt+xml">
+      <p:documentation>
+        pf:media-query-matches
+      </p:documentation>
+    </cx:import>
     <cx:import href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xsl" type="application/xslt+xml">
       <p:documentation>
         css:parse-counter-styles
@@ -960,6 +966,12 @@
             <p:pipe step="assert-volume-transition-only-on-root" port="result"/>
         </p:with-param>
         <p:with-param name="default-text-transform" select="$text-transform">
+            <p:empty/>
+        </p:with-param>
+        <p:with-param name="pages-per-sheet"
+                      select="if (exists($medium) and pf:media-query-matches('(-daisy-saddle-stitch)',$medium))
+                              then 4
+                              else 2">
             <p:empty/>
         </p:with-param>
         <p:with-param name="text-transforms" select="/_/*/@css:text-transform/css:parse-stylesheet(.)">
