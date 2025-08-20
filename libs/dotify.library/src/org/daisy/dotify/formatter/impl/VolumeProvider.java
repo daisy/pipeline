@@ -173,8 +173,13 @@ public class VolumeProvider {
      * @return returns the contents of the next volume
      */
     private SectionBuilder nextBodyContents(int volumeNumber, final int overhead, List<AnchorData> ad) {
+        int pagesPerSheet = context.getFormatterContext().getConfiguration().getPagesPerSheet();
         groups.currentGroup().setOverheadCount(groups.currentGroup().getOverheadCount() + overhead);
-        final int targetSheetsInVolume = splitterLimit.getSplitterLimit(volumeNumber);
+        final int targetSheetsInVolume = pagesPerSheet > 2
+            // round to previous multiple of pagesPerSheet/2, because a higher target would automatically
+            // result in actual values that exceed the limit
+            ? splitterLimit.getSplitterLimit(volumeNumber) * 2 / pagesPerSheet * pagesPerSheet / 2
+            : splitterLimit.getSplitterLimit(volumeNumber);
         //Not using lambda for now, because it's noticeably slower.
         SplitPointCost<Sheet> cost = new SplitPointCost<Sheet>() {
             @Override
@@ -198,6 +203,11 @@ public class VolumeProvider {
                 // including a small preference for bigger volumes
                 double distancePenalty = Math.abs(contentSheetTarget - sheetCount) +
                         (contentSheetTarget - sheetCount) * 0.001;
+                // also take into account empty pages on the last sheet (only in case a sheet can
+                // hold more than 2 pages)
+                if (pagesPerSheet > 2) {
+                    distancePenalty += 0.5 * ((2 * (sheetCount + overhead)) % pagesPerSheet);
+                }
                 int unbreakablePenalty = lastSheet.isBreakable() ? 0 : 100;
                 return distancePenalty + priorityPenalty + unbreakablePenalty;
             }
