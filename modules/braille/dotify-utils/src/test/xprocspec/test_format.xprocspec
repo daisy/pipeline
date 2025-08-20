@@ -873,8 +873,9 @@
   <x:scenario label="test_07">
     <x:documentation>
       Tests page-break-inside:avoid, page-break-after:avoid, orphans and widows, both on text-only
-      blocks and on blocks with nested blocks. Note that widows and orphans do not have a meaning
-      on blocks with nested blocks.
+      blocks and on blocks with nested blocks. Note that in standard CSS, widows and orphans do
+      not have a meaning on blocks with nested blocks, but in braille CSS it does work as expected:
+      the total number of lines of text in a block is taken into account.
     </x:documentation>
     <x:call step="dotify:format">
       <x:input port="source">
@@ -1253,34 +1254,34 @@
                   <row>⠤⠤⠤</row>
                   <row>⠤⠤⠤</row>
                   <row>⠤⠤⠤</row>
-                  <row>⠤⠤⠤</row>
-                  <row>⠤⠤⠤</row>
-                </page>
-                <page>
-                  <row>⠤⠤⠤</row>
-                  <row>⠤⠤⠤</row>
-                </page>
-                <page>
-                  <row>⠤⠤⠤⠤⠤⠤⠤⠤⠤</row>
-                  <row>⠤⠤⠤⠤⠤⠤⠤⠤⠤</row>
-                  <row>⠤⠤⠤⠤⠤⠤⠤⠤⠤</row>
-                  <row>⠤⠤⠤⠤⠤⠤⠤⠤⠤</row>
-                  <row>⠤⠤⠤⠤⠤⠤⠤⠤⠤</row>
-                </page>
-                <page>
-                  <row>⠤⠤⠤⠤⠤⠤⠤⠤⠤</row>
-                  <row>⠤⠤⠤⠤⠤⠤⠤⠤⠤</row>
-                  <row>⠤⠤⠤⠤⠤⠤⠤⠤⠤</row>
                 </page>
                 <page>
                   <row>⠤⠤⠤</row>
                   <row>⠤⠤⠤</row>
                   <row>⠤⠤⠤</row>
                   <row>⠤⠤⠤</row>
+                </page>
+                <page>
+                  <row>⠤⠤⠤⠤⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠤⠤⠤⠤</row>
+                </page>
+                <page>
+                  <row>⠤⠤⠤⠤⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠤⠤⠤⠤</row>
+                </page>
+                <page>
+                  <row>⠤⠤⠤</row>
+                  <row>⠤⠤⠤</row>
+                  <row>⠤⠤⠤</row>
                   <row>⠤⠤⠤</row>
                   <row>⠤⠤⠤</row>
                 </page>
                 <page>
+                  <row>⠤⠤⠤</row>
                   <row>⠤⠤⠤</row>
                   <row>⠤⠤⠤</row>
                 </page>
@@ -10859,6 +10860,7 @@
                   <row>⠿⠿⠿⠿⠿</row>
                   <row>⠿⠿⠿⠿⠿</row>
                 </page>
+				<page/>
               </section>
             </volume>
             <volume cols="10" rows="5" rowgap="0" duplex="true">
@@ -13111,6 +13113,7 @@
                   <row>⠤⠤⠤⠤⠤</row>
                   <row>⠤⠤⠤⠤⠤</row>
                 </page>
+				<page/>
               </section>
             </volume>
             <volume cols="10" rows="5" rowgap="0" duplex="true">
@@ -14586,6 +14589,7 @@
                   <row>⠤⠤⠤⠤⠤</row>
                   <row>⠤⠤⠤⠤⠤</row>
                 </page>
+				<page/>
               </section>
             </volume>
             <volume cols="10" rows="5" rowgap="0" duplex="true">
