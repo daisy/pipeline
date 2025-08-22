@@ -13,6 +13,14 @@
   </xsl:template>
 
   <!-- Create a new TTS sentence which contains the @alt attribute of the images. -->
+  <!--
+      This template is problematic for two reasons:
+      * inclusion of alt text is now handled through a CSS style sheet
+      * the text content of the inserted <s> element may be messed up
+        later in filter-chars.xsl, because this step assumes that all
+        words are wrapped into <token> elements
+  -->
+  <!--
   <xsl:template match="dt:img">
     <xsl:copy>
       <xsl:copy-of select="@* except @id"/>
@@ -22,6 +30,7 @@
       <xsl:apply-templates select="node()"/>
     </xsl:copy>
   </xsl:template>
+  -->
 
   <!-- Add extra white spaces around elements that are sometimes badly juxtaposed. -->
   <xsl:template match="dt:abbr|dt:acronym|dt:br|dt:a">
