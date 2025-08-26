@@ -33,9 +33,9 @@
     <module>saxon-adapter</module>
     <module>calabash-adapter</module>
     <module>common-utils</module>
-    <!--<module>framework-core</module>-->
-    <!--<module>framework-persistence</module>-->
-    <!--<module>logging-appender</module>-->
+    <module>framework-core</module>
+    <module>framework-persistence</module>
+    <module>logging-appender</module>
     <!--<module>modules-registry</module>-->
     <!--<module>persistence-derby</module>-->
     <!--<module>persistence-mysql</module>-->

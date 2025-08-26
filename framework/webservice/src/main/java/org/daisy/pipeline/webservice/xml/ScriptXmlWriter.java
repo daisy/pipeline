@@ -145,6 +145,8 @@ public class ScriptXmlWriter {
 			optionElm.setAttribute("sequence", Boolean.toString(option.isSequence()));
 			if (!option.isRequired())
 				optionElm.setAttribute("default", option.getDefault());
+			if (option.getRole() != null)
+				optionElm.setAttribute("role", option.getRole().toString());
 			parent.appendChild(optionElm);
 		}
 	}

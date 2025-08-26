@@ -24,6 +24,7 @@ import org.daisy.common.xproc.XProcEngine;
 import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.pipeline.datatypes.DatatypeRegistry;
 import org.daisy.pipeline.script.Script;
+import org.daisy.pipeline.script.ScriptOption;
 import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcPortMetadata;
 import org.daisy.pipeline.script.XProcScript;
@@ -363,6 +364,8 @@ public class StaxXProcScriptParser {
 					.getAttributeByName(XProcScriptConstants.Attributes.PX_SEPARATOR);
 			Attribute primary = optionElement
 					.getAttributeByName(XProcScriptConstants.Attributes.PX_PRIMARY);
+			Attribute role = optionElement
+					.getAttributeByName(XProcScriptConstants.Attributes.PX_ROLE);
 
 			if (mediaType != null) {
 				optionBuilder.mediaType = mediaType.getValue();
@@ -390,6 +393,12 @@ public class StaxXProcScriptParser {
 			}
 			if (primary != null) {
 				optionBuilder.primary = !primary.getValue().equalsIgnoreCase("false");
+			}
+			if (role != null) {
+				try {
+					optionBuilder.role = ScriptOption.Role.valueOf(role.getValue().toUpperCase().replace('-', '_'));
+				} catch (IllegalArgumentException e) {
+				}
 			}
 		}
 
@@ -559,11 +568,12 @@ public class StaxXProcScriptParser {
 		boolean sequence = false;
 		boolean ordered = true;
 		String separator = XProcOptionMetadata.DEFAULT_SEPARATOR;
+		ScriptOption.Role role = null;
 
 		XProcOptionMetadata build() {
 			return new XProcOptionMetadata(niceName, description, type, mediaType,
 			                               output, primary,
-			                               sequence, ordered, separator);
+			                               sequence, ordered, separator, role);
 		}
 	}
 

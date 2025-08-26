@@ -7,6 +7,18 @@ import org.daisy.pipeline.datatypes.DatatypeService;
  */
 public interface ScriptOption {
 
+	public enum Role {
+		/**
+		 * Option used for determining/selecting the output medium
+		 */
+		MEDIA_FEATURE;
+
+		@Override
+		public String toString() {
+			return name().toLowerCase().replace('_', '-');
+		}
+	}
+
 	/**
 	 * The name.
 	 */
@@ -56,5 +68,10 @@ public interface ScriptOption {
 	 * Whether the order in a sequence matters.
 	 */
 	public boolean isOrdered();
+
+	/**
+	 * Whether the option is used for determining/selecting the output medium
+	 */
+	public ScriptOption.Role getRole();
 
 }

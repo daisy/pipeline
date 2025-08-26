@@ -616,6 +616,11 @@ public class Pipeline1Script extends Script {
 			return false;
 		}
 
+		@Override
+		public ScriptOption.Role getRole() {
+			return null;
+		}
+
 		public String convertValue(Iterable<String> value) {
 			Iterator<String> i = value.iterator();
 			if (i.hasNext()) {

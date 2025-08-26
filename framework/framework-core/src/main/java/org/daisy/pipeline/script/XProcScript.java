@@ -597,6 +597,11 @@ public final class XProcScript extends Script {
 			return metadata.isOrdered();
 		}
 
+		@Override
+		public Role getRole() {
+			return metadata.getRole();
+		}
+
 		/**
 		 * Convert a sequence of string values in order to pass it to
 		 * {@link org.daisy.common.xproc.XProcInput.Builder#withOption()}.
