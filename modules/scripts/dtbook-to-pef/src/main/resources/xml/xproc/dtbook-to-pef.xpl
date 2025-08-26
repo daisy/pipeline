@@ -86,7 +86,7 @@ sheet modules) are available for use in Sass style sheets:
     <p:option name="output-file-format"/>
     <p:option name="preview-table"/>
 
-    <!-- defined in ../../css/page-layout.params -->
+    <!-- defined in ../../css/medium.params -->
     <p:option name="page-width"/>
     <p:option name="page-height"/>
     <p:option name="duplex"/>

@@ -564,10 +564,14 @@ public class Medium implements Dimension.RelativeDimensionBase {
 				feature = "-daisy-" + feature;
 			if ("-daisy-file-format".equals(feature))
 				feature = "-daisy-format";
-			if ("-daisy-sheets-multiple-of-two".equals(feature))
+			else if ("-daisy-sheets-multiple-of-two".equals(feature))
 				feature = "-daisy-saddle-stitch"; // not exactly the same, but we want to support
 				                                  // sheets-multiple-of-two for backwards
 				                                  // compatibility
+			else if ("page-width".equals(feature))
+				feature = "device-width";
+			else if ("page-height".equals(feature))
+				feature = "device-height";
 			return feature;
 		}
 
