@@ -233,8 +233,20 @@ public class VolumeProvider {
                     groups.currentGroup().getUnits(),
                     cost, StandardSplitOption.ALLOW_FORCE);
         */
-        groups.currentGroup().setUnits(sp.getTail());
+        data = sp.getTail();
         List<Sheet> contents = sp.getHead();
+        // pad with empty sheets if needed
+        if (pagesPerSheet == 4 && !data.isEmpty()) {
+            int emptySheetIndex = 0;
+            contents = new ArrayList<>(contents);
+            while ((contents.size() + overhead) % 2 > 0) {
+                contents.add(data.getEmptySheet(emptySheetIndex++));
+            }
+            if (emptySheetIndex > 0) {
+                data = data.split(emptySheetIndex).tail();
+            }
+        }
+        groups.currentGroup().setUnits(data);
         int pageCount = Sheet.countPages(contents);
         crh.commitPageDetails();
         crh.setVolumeScope(volumeNumber, pageIndex, pageIndex + pageCount);

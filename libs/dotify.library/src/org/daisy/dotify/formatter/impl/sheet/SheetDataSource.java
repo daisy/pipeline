@@ -155,6 +155,46 @@ public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSou
         return sheetBuffer.get(index);
     }
 
+    /**
+     * Create an empty sheet with pages coming from the current underlying {@link PageSequenceBuilder2}
+     * (which is mutated).
+     *
+     * The returned sheet is also appended to the buffer.
+     *
+     * @param index must equal the index of the sheet to be created and buffered next, or in other words,
+     *              one more than the index of the sheet that was created and buffered last
+     * @return the empty sheet
+     */
+    public Sheet getEmptySheet(int index) {
+        if (!allowsSplit) {
+            throw new IllegalStateException("data source has been split already and can no longer be modified");
+        }
+        if (index != sheetBuffer.size()) {
+            if (index < sheetBuffer.size()) {
+                throw new IllegalArgumentException(String.format("sheet at index %d already exists", index));
+            } else {
+                throw new IndexOutOfBoundsException(
+                    String.format("sheet at index %d may not be created before sheet at index %d", index, index - 1));
+            }
+        }
+        if (psb == null) {
+            throw new IllegalStateException();
+        }
+        if (sectionProperties == null) {
+            throw new IllegalStateException();
+        }
+        Sheet.Builder emptySheet = new Sheet.Builder(sectionProperties);
+        emptySheet = emptySheet.add(psb.getEmptyPage(initialPageOffset));
+        pageIndex++;
+        if (sectionProperties.duplex() && pageIndex % 2 != 0) {
+            emptySheet = emptySheet.add(psb.getEmptyPage(initialPageOffset));
+            pageIndex++;
+        }
+        Sheet s = emptySheet.build();
+        sheetBuffer.add(s);
+        return s;
+    }
+
     @Override
     public List<Sheet> getRemaining() throws RestartPaginationException {
         ensureBuffer(-1);
@@ -293,6 +333,8 @@ public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSou
 
                 TransitionContent transition = null;
                 if (context.getTransitionBuilder().getProperties().getApplicationRange() != ApplicationRange.NONE) {
+                    // allowsSplit = false either means that ensureBuffer was called from splitInRange(), or that it
+                    // was called after split() was called. We assume the former.
                     if (!allowsSplit && index - 1 == sheetBuffer.size()) {
                         if ((!sectionProperties.duplex() || pageIndex % 2 == 1)) {
                             transition = context.getTransitionBuilder().getInterruptTransition();
