@@ -129,10 +129,12 @@ ifeq ($(OS), MACOSX)
 	        "net.java.dev.jna.jna-*.jar/com/sun/jna/darwin-*/libjnidispatch.jnilib",                            \
 	        "org.daisy.libs.io.bit3.jsass-*.jar/darwin-*/libjsass.dylib",                                       \
 	        "*.audio-encoder-lame-*.jar/macosx/lame",                                                           \
+	        "onl.mdw.mathcat4j-core-*.jar/META-INF/native/libmathcat4j-darwin-*.dylib",                         \
 	        "mac/*.libhyphen-utils-*-mac.jar/native/macosx/*/libhyphen.dylib",                                  \
 	        "mac/*.liblouis-utils-*-mac.jar/native/macosx/*/liblouis.dylib",                                    \
 	        "mac/*.liblouis-utils-*-mac.jar/native/macosx/*/liblouisutdml/file2brl",                            \
 	        "mac/*.liblouis-utils-*-mac.jar/native/macosx/*/liblouisutdml/*.dylib",                             \
+	        "mac/*.tts-adapter-osx-*.jar/native/librococoa-*.dylib",                                            \
 	        "*.tts-adapter-acapela-*.jar/jnaerator-*.jar/com/sun/jna/darwin/libjnidispatch.jnilib"              \
 	    })                                                                                                      \
 	        paths.add("target/jars/common/" + p);                                                               \

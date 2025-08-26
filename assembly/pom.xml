@@ -9,7 +9,7 @@
   </parent>
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>assembly</artifactId>
-  <version>1.15.2</version>
+  <version>1.15.3</version>
   <packaging>jar</packaging>
   <name>DAISY Pipeline 2 :: Assembly</name>
   <description>Builds the main distribution of the DAISY Pipeline 2.</description>
@@ -17,7 +17,7 @@
     <connection>scm:git:git@github.com:daisy/pipeline-assembly.git</connection>
     <url>scm:git:git@github.com:daisy/pipeline-assembly.git</url>
     <developerConnection>scm:git:git@github.com:daisy/pipeline-assembly.git</developerConnection>
-    <tag>v1.15.2</tag>
+    <tag>v1.15.3</tag>
   </scm>
   <properties>
     <cli.version>2.3.0</cli.version>
@@ -64,14 +64,14 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.15.3</version>
+        <version>1.15.4</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>modules-bom</artifactId>
-        <version>1.15.2</version>
+        <version>1.15.3</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -593,16 +593,6 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>dtbook-break-detection</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>dtbook-to-ebraille</artifactId>
       <exclusions>
         <exclusion>
@@ -664,26 +654,6 @@
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>dtbook-to-zedai</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>dtbook-tts</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>epub3-tts</artifactId>
       <exclusions>
         <exclusion>
           <groupId>*</groupId>
@@ -833,16 +803,6 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>html-break-detection</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>html-to-dtbook</artifactId>
       <exclusions>
         <exclusion>
@@ -883,7 +843,7 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>mathml-utils</artifactId>
+      <artifactId>mathcat-adapter</artifactId>
       <exclusions>
         <exclusion>
           <groupId>*</groupId>
@@ -893,7 +853,7 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>mathml-to-ssml</artifactId>
+      <artifactId>mathml-utils</artifactId>
       <exclusions>
         <exclusion>
           <groupId>*</groupId>
@@ -1454,6 +1414,46 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-compress</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>onl.mdw</groupId>
+      <artifactId>mathcat4j-core</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.jetbrains.kotlin</groupId>
+      <artifactId>kotlin-stdlib</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.rococoa</groupId>
+      <artifactId>rococoa-core</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>net.bytebuddy</groupId>
+      <artifactId>byte-buddy</artifactId>
       <exclusions>
         <exclusion>
           <groupId>*</groupId>
@@ -2525,10 +2525,6 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
-                  <artifactId>dtbook-break-detection</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>dtbook-to-ebraille</artifactId>
                 </artifactItem>
                 <artifactItem>
@@ -2554,14 +2550,6 @@
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>dtbook-to-zedai</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline.modules</groupId>
-                  <artifactId>dtbook-tts</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline.modules</groupId>
-                  <artifactId>epub3-tts</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
@@ -2621,10 +2609,6 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
-                  <artifactId>html-break-detection</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>html-to-dtbook</artifactId>
                 </artifactItem>
                 <artifactItem>
@@ -2645,7 +2629,7 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
-                  <artifactId>mathml-to-ssml</artifactId>
+                  <artifactId>mathcat-adapter</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
@@ -2879,6 +2863,17 @@
                   <artifactId>commons-compress</artifactId>
                 </artifactItem>
                 <!--
+                    for mathcat-adapter
+                -->
+                <artifactItem>
+                  <groupId>onl.mdw</groupId>
+                  <artifactId>mathcat4j-core</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.jetbrains.kotlin</groupId>
+                  <artifactId>kotlin-stdlib</artifactId>
+                </artifactItem>
+                <!--
                     for tts-adapter-azure
 
                     FIXME: does not work with OSGi
@@ -3082,6 +3077,17 @@
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>tts-adapter-osx</artifactId>
+                </artifactItem>
+                <!--
+                    for tts-adapter-osx
+                -->
+                <artifactItem>
+                  <groupId>org.rococoa</groupId>
+                  <artifactId>rococoa-core</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>net.bytebuddy</groupId>
+                  <artifactId>byte-buddy</artifactId>
                 </artifactItem>
               </artifactItems>
             </configuration>
@@ -4412,6 +4418,18 @@
       </releases>
       <snapshots>
         <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <!-- for rococoa -->
+    <repository>
+      <id>maven.cyberduck.io-release</id>
+      <url>https://s3.eu-west-1.amazonaws.com/repo.maven.cyberduck.io/releases</url>
+      <layout>default</layout>
+      <releases>
+          <enabled>true</enabled>
+      </releases>
+      <snapshots>
+          <enabled>false</enabled>
       </snapshots>
     </repository>
   </repositories>

@@ -1,5 +1,32 @@
+Changes in release v1.15.3
+==========================
+
+## Framework
+
+- **NEW** REST API: new `role` attribute to mark script options that correspond to a media feature
+- **NEW** Java API: support for true optional and sequence options
+- **FIX** Improved adaptation of result file extension to media types
+
+## Modules
+
+- **NEW** Experimental DTBook based scripts
+  - Word to EPUB 3
+  - Word to HTML
+  - Word to DAISY 2.02
+  - Word to DAISY 3
+  - Word to eBraille
+  - Word to navigable MP3 file-set
+- **NEW** MathCAT integration for math to speech and braille conversion
+- **NEW** Provide gender info for macOS voices
+- **FIX** A lot of Amazon Polly voices were missing
+- **FIX** Fix broken Google Cloud TTS
+- **FIX** DTBook to eBraille: "Attach style sheet" option didn't add a reference in the HTML
+- **FIX** DTBook to ODT: don't fail when encountering a `hd` inside a `list`
+- Changes to braille production scripts, see release notes of braille modules [v1.15.3](https://github.com/daisy/pipeline-modules/blob/master/braille/NEWS.md#v1153)
+- Various other bugfixes and improvements
+
 Changes in release v1.15.2
-===========================
+==========================
 
 ## Framework
 
@@ -28,7 +55,7 @@ Changes in release v1.15.2
 
 
 Changes in release v1.15.1
-===========================
+==========================
 
 ## Modules
 
@@ -43,7 +70,7 @@ Changes in release v1.15.1
 - Various other bugfixes and improvements
 
 Changes in release v1.15.0
-===========================
+==========================
 
 ## Framework
 
