@@ -76,6 +76,11 @@ public final class SaxonHelper {
 				object instanceof Iterable
 					? ((Iterable<?>)object).iterator()
 					: (Iterator<?>)object);
+		else if (object instanceof Optional)
+			if (!((Optional)object).isPresent())
+				return EmptySequence.getInstance();
+			else
+				return itemFromObject(((Optional)object).get());
 		else if (object.getClass().isArray())
 			return arrayItemFromIterator(Arrays.asList((Object[])object).iterator());
 		else

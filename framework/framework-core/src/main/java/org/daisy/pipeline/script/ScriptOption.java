@@ -25,12 +25,12 @@ public interface ScriptOption {
 	public String getName();
 
 	/**
-	 * Whether the option is required.
+	 * Whether a (at least one) value is required.
 	 */
 	public boolean isRequired();
 
 	/**
-	 * The default value.
+	 * The default value, or {@code null} if there is no default value.
 	 */
 	public String getDefault();
 
@@ -60,7 +60,7 @@ public interface ScriptOption {
 	public boolean isPrimary();
 
 	/**
-	 * Whether this option takes a sequence of values.
+	 * Whether this option takes a sequence of values (zero or more).
 	 */
 	public boolean isSequence();
 

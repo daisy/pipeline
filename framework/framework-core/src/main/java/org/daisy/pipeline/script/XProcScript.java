@@ -343,8 +343,10 @@ public final class XProcScript extends Script {
 		private final String defaultValue;
 		final boolean usesProperty; // whether the default value depends on a (possibly settable) propeprty
 		private final DatatypeService datatype;
+		private final boolean isRequired;
 		private final boolean isSequence;
 		private final boolean typeIsString;
+		private final boolean typeIsOptional;
 		private final boolean typeIsSequence;
 
 		private static final Pattern SYSTEM_PROPERTY = Pattern.compile("^(?<prefix>[a-zA-Z_][\\w.-]*):system-property\\((?<arg>[^)]+)\\)$");
@@ -365,9 +367,11 @@ public final class XProcScript extends Script {
 					typeIsSequence = type.endsWith("*");
 					if (typeIsSequence) {
 						type = type.substring(0, type.length() - 1);
-						isSequence = true; // ignore metadata.isSequence()
+						typeIsOptional = false;
 					} else {
-						isSequence = metadata.isSequence();
+						typeIsOptional = type.endsWith("?");
+						if (typeIsOptional)
+							type = type.substring(0, type.length() - 1);
 					}
 					if (type.contains(":")) {
 						String prefix = type.substring(0, type.indexOf(":"));
@@ -390,7 +394,7 @@ public final class XProcScript extends Script {
 				} else {
 					typeIsString = true;
 					typeIsSequence = false;
-					isSequence = metadata.isSequence();
+					typeIsOptional = false;
 				}
 				if (type == null || "string".equals(type)) // otherwise ignore metadata.getType()
 					type = metadata.getType();
@@ -415,30 +419,33 @@ public final class XProcScript extends Script {
 					throw new IllegalArgumentException(
 						"Invalid px:type '" + type + "': does not match a known data type");
 			}
-			if (info.isRequired()) {
+			// ignore the px:sequence attribute if the cx:as is used to define the option as a sequence
+			// the px:sequence attribute would not be needed if all scripts do this
+			isSequence = typeIsSequence || metadata.isSequence();
+			isRequired = !isSequence && !typeIsOptional && info.isRequired();
+			String select = info.getSelect();
+			if (select != null)
+				select = select.trim();
+			if (isRequired || select == null || "".equals(select)) {
 				defaultValue = null;
 				usesProperty = false;
 			} else {
-				String select = info.getSelect();
-				if (select != null)
-					select = select.trim();
-				if (select == null || "".equals(select)) {
-					// script options must have a default value even if the XProc option does not have one
-					defaultValue = "";
-					usesProperty = false;
-				} else if (typeIsSequence && select.matches("\\(.*\\)")) {
-					logger.debug("Select statement can not be a sequence: " + select); // currently not supported
-					defaultValue = "";
+				boolean selectIsSequence = select.matches("\\(.*\\)");
+				if (selectIsSequence)
+					select = select.substring(1, select.length() - 1).trim();
+				String defaultValue = null;
+				String fallbackDefaultValue
+					= (datatype == DatatypeService.XS_INTEGER || datatype == DatatypeService.XS_NON_NEGATIVE_INTEGER)
+						? "0"
+						: datatype == DatatypeService.XS_BOOLEAN
+							? "false"
+							// FIXME: what about URI types and custom types?
+							: "";
+				if (selectIsSequence && (typeIsOptional || typeIsSequence) && ("".equals(select))) {
+					// empty sequence
+					defaultValue = null;
 					usesProperty = false;
 				} else {
-					String defaultValue = null;
-					String fallbackDefaultValue
-						= (datatype == DatatypeService.XS_INTEGER || datatype == DatatypeService.XS_NON_NEGATIVE_INTEGER)
-							? "0"
-							: datatype == DatatypeService.XS_BOOLEAN
-								? "false"
-								// FIXME: what about URI types and custom types?
-								: "";
 					boolean usesProperty = false;
 					// check if select statement is a p:system-property() function (allows for setting a default
 					// value globally through a Pipeline property)
@@ -497,18 +504,56 @@ public final class XProcScript extends Script {
 					} else if (typeIsString) {
 						char quote = select.charAt(0);
 						if (quote == '"' || quote == '\'') {
-							if (select.charAt(select.length() - 1) == quote) {
-								defaultValue = select.substring(1, select.length() - 1); // FIXME: unescape
+							StringBuilder b = new StringBuilder();
+							boolean escaped = false;
+							boolean closed = false;
+							boolean invalid = false;
+							for (int k = 1; k < select.length(); k++) {
+								char c = select.charAt(k);
+								if (closed) {
+									if (c == ' ')
+										continue;
+									if (c == ',') {
+										if (selectIsSequence)
+											// currently not supported (regardless of "typeIsSequence")
+											logger.debug(String.format("Select statement can not be a sequence: (%s)", select));
+										else
+											logger.debug("Select statement is not a valid string literal: " + select);
+									}
+									invalid = true;
+									break;
+								}
+								if (c == quote) {
+									if (quote == '\'') {
+										if (escaped) {
+											b.append(c);
+											escaped = false;
+										} else
+											escaped = true;
+									} else
+										closed = true;
+								} else
+									b.append(c);
+							}
+							if (!invalid) {
+								if (escaped)
+									closed = true;
+								if (!closed) {
+									logger.debug("Select statement is not a valid string literal: " + select);
+									invalid = true;
+								}
+							}
+							if (!invalid) {
+								defaultValue = b.toString();
 								try {
 									defaultValue = "" + convertValue(defaultValue);
 								} catch (IllegalArgumentException e) {
 									logger.debug(select + " can not be evaluated to a " + datatype.getId());
-									defaultValue = fallbackDefaultValue;
+									invalid = true;
 								}
-							} else {
-								logger.debug("Select statement is not a valid string literal: " + select);
-								defaultValue = fallbackDefaultValue;
 							}
+							if (invalid)
+								defaultValue = fallbackDefaultValue;
 						} else {
 							logger.debug("Select statement is not a string literal or a system-property() function: " + select);
 							defaultValue = fallbackDefaultValue;
@@ -537,9 +582,9 @@ public final class XProcScript extends Script {
 						}
 					} else
 						throw new RuntimeException("coding error");
-					this.defaultValue = defaultValue;
 					this.usesProperty = usesProperty;
 				}
+				this.defaultValue = defaultValue;
 			}
 		}
 
@@ -554,11 +599,24 @@ public final class XProcScript extends Script {
 
 		@Override
 		public boolean isRequired() {
-			return info.isRequired();
+			return isRequired;
 		}
 
 		@Override
 		public String getDefault() {
+			if (defaultValue == null && !isRequired()) {
+				// Return a value whenever it is not a required option, even if there is no default value,
+				// because this is how the web service has worked in the past, and will work for the
+				// foreseeable future. We assume that a good user interface does not include options not
+				// specified by the user, in the job request.
+				String fallbackDefaultValue
+				= (datatype == DatatypeService.XS_INTEGER || datatype == DatatypeService.XS_NON_NEGATIVE_INTEGER)
+					? "0"
+					: datatype == DatatypeService.XS_BOOLEAN
+						? "false"
+						: "";
+				return fallbackDefaultValue;
+			}
 			return defaultValue;
 		}
 
@@ -607,9 +665,11 @@ public final class XProcScript extends Script {
 		 * {@link org.daisy.common.xproc.XProcInput.Builder#withOption()}.
 		 */
 		public Object convertValue(Iterable<String> value) {
-			if (typeIsSequence)
+			if (typeIsSequence || typeIsOptional)
 				return Iterables.transform(value, this::convertValue);
 			else if (typeIsString)
+				// the px:separator attribute would not be needed if all scripts use a cx:as attribute
+				// to define the option as a sequence
 				return Joiner.on(metadata.getSeparator()).skipNulls().join(value);
 			else {
 				Iterator<String> i = value.iterator();
