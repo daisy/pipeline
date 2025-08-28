@@ -226,9 +226,9 @@ files are MP2, MP3 and WAVE. Audio files in other formats are transcoded to MP3.
 	          px:media-type="text/css text/x-scss">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Style sheets</h2>
-			<p px:role="desc" xml:space="preserve">A list of CSS/Sass style sheets to take into account.
+			<p px:role="desc" xml:space="preserve">CSS/Sass style sheets to take into account.
 
-Must be a space separated list of URIs, absolute or relative to the input.
+Each style sheet must be specified as a URI, absolute or relative to the input.
 
 Style sheets specified through this option are called "[user style
 sheets](https://www.w3.org/TR/CSS2/cascade.html#cascade)". Style sheets can also be attached to the
@@ -262,9 +262,9 @@ manual](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).</p>
 	          px:media-type="text/css text/x-scss">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Style sheets</h2>
-			<p px:role="desc" xml:space="preserve">A list of CSS style sheets to take into account.
+			<p px:role="desc" xml:space="preserve">CSS style sheets to take into account.
 
-Must be a space separated list of URIs, absolute or relative to the input.
+Each style sheet must be specified as a URI, absolute or relative to the input.
 
 Style sheets specified through this option are called "[user style
 sheets](https://www.w3.org/TR/CSS2/cascade.html#cascade)". Style sheets can also be attached to the
@@ -294,9 +294,9 @@ precedence over user styles.
 	          px:media-type="application/pls+xml">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Lexicons</h2>
-			<p px:role="desc" xml:space="preserve">A list of PLS lexicons to take into account.
+			<p px:role="desc" xml:space="preserve">PLS lexicons to take into account.
 
-Must be a space separated list of URIs, absolute or relative to the input.
+Each lexicon must be specified as a URI, absolute or relative to the input.
 
 Lexicons can also be attached to the source document, using a ['link'
 element](http://kb.daisy.org/publishing/docs/text-to-speech/pls.html#ex-07).
