@@ -106,12 +106,12 @@
     </xsl:template>
     
     <xsl:template match="cat:uri">
-        <xsl:if test="@name">
-            <xsl:copy>
-                <xsl:apply-templates select="@*|node()" mode="#current"/>
-            </xsl:copy>
-        </xsl:if>
+        <xsl:copy>
+            <xsl:apply-templates select="@*|node()" mode="#current"/>
+        </xsl:copy>
     </xsl:template>
+    
+    <xsl:template match="cat:uri[not(@name)]" priority="0.9"/>
     
     <xsl:template match="cat:uri[@px:content-type='params']" priority="1">
         <xsl:if test="@px:extends">
@@ -124,13 +124,11 @@
     </xsl:template>
     
     <xsl:template match="cat:uri[@px:extends]">
-        <xsl:if test="@name">
-            <xsl:copy>
-                <xsl:apply-templates select="@* except @uri" mode="#current"/>
-                <xsl:attribute name="uri" select="f:generated-href(@uri)"/>
-                <xsl:apply-templates mode="#current"/>
-            </xsl:copy>
-        </xsl:if>
+        <xsl:copy>
+            <xsl:apply-templates select="@* except @uri" mode="#current"/>
+            <xsl:attribute name="uri" select="f:generated-href(@uri)"/>
+            <xsl:apply-templates mode="#current"/>
+        </xsl:copy>
     </xsl:template>
     
     <xsl:template match="cat:uri[not(@px:extends)]">
