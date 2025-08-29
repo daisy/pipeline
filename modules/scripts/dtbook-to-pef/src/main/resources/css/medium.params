@@ -90,7 +90,20 @@ The syntax is as follows (described in terms of [CSS grammar](https://www.w3.org
     <p:option name="duplex" required="false" select="()" cx:as="xs:boolean?" px:role="media-feature">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Duplex</h2>
-            <p px:role="desc" xml:space="preserve">When enabled, will print on both sides of the paper.</p>
+            <p px:role="desc" xml:space="preserve">Whether to print on both sides of the leaves.
+
+Sets the number of printed sides per leaf, and affects media queries that use the '-daisy-duplex'
+media feature.</p>
+        </p:documentation>
+    </p:option>
+
+    <p:option name="saddle-stitch" required="false" select="()" cx:as="xs:boolean?" px:role="media-feature">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Saddle stitch (folio binding)</h2>
+            <p px:role="desc" xml:space="preserve">Whether the targeted medium is bound in folios.
+
+In this mode, sheets of paper are folded once to produce two leaves (four pages). This option
+affects media queries that use the '-daisy-saddle-stitch' media feature.</p>
         </p:documentation>
     </p:option>
 
