@@ -202,9 +202,9 @@ sheet modules) are available for use in Sass style sheets:
                               pf:css-parse-medium((
                                 ($output-file-format,'embossed AND (-daisy-format:pef)')[not(.='')][1],
                                 map:merge((
-                                  map:entry('device-width',$page-width),
-                                  map:entry('device-height',$page-height),
-                                  map:entry('-daisy-duplex',$duplex),
+                                  for $page-width in $page-width return map:entry('device-width',$page-width),
+                                  for $page-height in $page-height return map:entry('device-height',$page-height),
+                                  for $duplex in $duplex return map:entry('duplex',$duplex),
                                   map:entry('-daisy-document-locale',(/*/@xml:lang,'und')[1]))))))">
             <p:pipe step="main" port="source"/>
         </p:variable>

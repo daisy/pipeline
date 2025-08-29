@@ -149,7 +149,7 @@
         <plugin>
           <groupId>org.daisy.pipeline.build</groupId>
           <artifactId>modules-build-helper</artifactId>
-          <version>3.0.0</version>
+          <version>3.0.1-SNAPSHOT</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>

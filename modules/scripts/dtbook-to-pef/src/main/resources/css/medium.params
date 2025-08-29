@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
-                xmlns:px="http://www.daisy.org/ns/pipeline/xproc">
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-    <p:option name="page-width" required="false" select="'40'" px:role="media-feature">
+    <p:option name="page-width" required="false" select="()" cx:as="xs:string?" px:role="media-feature">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Page width</h2>
             <p px:role="desc" xml:space="preserve">The width of the targeted medium.
@@ -45,7 +47,7 @@ The syntax is as follows (described in terms of [CSS grammar](https://www.w3.org
         </p:pipeinfo>
     </p:option>
 
-    <p:option name="page-height" required="false" select="'25'" px:role="media-feature">
+    <p:option name="page-height" required="false" select="()" cx:as="xs:string?" px:role="media-feature">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Page height</h2>
             <p px:role="desc" xml:space="preserve">The height of the targeted medium.
@@ -85,7 +87,7 @@ The syntax is as follows (described in terms of [CSS grammar](https://www.w3.org
         </p:pipeinfo>
     </p:option>
 
-    <p:option name="duplex" required="false" px:type="boolean" select="'true'" px:role="media-feature">
+    <p:option name="duplex" required="false" select="()" cx:as="xs:boolean?" px:role="media-feature">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Duplex</h2>
             <p px:role="desc" xml:space="preserve">When enabled, will print on both sides of the paper.</p>
