@@ -4,6 +4,7 @@
                 xmlns:p="http://www.w3.org/ns/xproc"
                 xmlns:px="http://www.daisy.org/ns/pipeline"
                 xmlns:pxd="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:cat="urn:oasis:names:tc:entity:xmlns:xml:catalog"
                 exclude-result-prefixes="#all" version="2.0">
     
@@ -195,6 +196,14 @@
                               "/>
         <xsl:variable name="new-attributes" as="xs:string*" select="@*/concat('{',namespace-uri(.),'}',name(.))"/>
         <xsl:copy>
+            <xsl:if test="not(@cx:as)">
+                <xsl:for-each select="$original-input-output-option/@cx:as">
+                    <xsl:if test="contains(string(.),':')">
+                        <xsl:namespace name="{substring-before(string(.),':')}"
+                                       select="namespace-uri-for-prefix(substring-before(.,':'),parent::*)"/>
+                    </xsl:if>
+                </xsl:for-each>
+            </xsl:if>
             <xsl:apply-templates select="@*" mode="#current"/>
             <xsl:sequence select="$original-input-output-option
                                   /@*[not(concat('{',namespace-uri(.),'}',name(.))=$new-attributes
