@@ -1026,5 +1026,17 @@
         <enabled>false</enabled>
       </snapshots>
     </repository>
+    <!-- for rococoa -->
+    <repository>
+      <id>maven.cyberduck.io-release</id>
+      <url>https://s3.eu-west-1.amazonaws.com/repo.maven.cyberduck.io/releases</url>
+      <layout>default</layout>
+      <releases>
+          <enabled>true</enabled>
+      </releases>
+      <snapshots>
+          <enabled>false</enabled>
+      </snapshots>
+    </repository>
   </repositories>
 </project>

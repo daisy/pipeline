@@ -1,7 +1,15 @@
 package org.daisy.pipeline.tts.osx.impl;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.file.Files;
 import java.util.Map;
 
+import com.sun.jna.NativeLibrary;
+
+import org.daisy.common.file.URLs;
 import org.daisy.common.properties.Properties;
 import org.daisy.common.properties.Properties.Property;
 import org.daisy.common.spi.ActivationException;
@@ -37,6 +45,35 @@ public class OSXSpeechService implements TTSService {
 			                                            "Priority of macOS voices relative to voices of other engines",
 			                                            false,
 			                                            "2");
+		// unpack dylib
+		File dylibFile; {
+			try {
+				File tmpDirectory; {
+					try {
+						tmpDirectory = Files.createTempDirectory("pipeline-").toFile();
+					} catch (Exception e) {
+						throw new RuntimeException("Could not create temporary directory", e);
+					}
+					tmpDirectory.deleteOnExit();
+				}
+				dylibFile = new File(tmpDirectory, "librococoa.dylib");
+				dylibFile.createNewFile();
+				URL dylibURL = URLs.getResourceFromJAR("/native/librococoa-0.10.0.dylib", OSXSpeechService.class);
+				dylibURL.openConnection();
+				try (FileOutputStream writer = new FileOutputStream(dylibFile);
+				     InputStream reader = dylibURL.openStream()) {
+					byte[] buffer = new byte[153600];
+					int bytesRead = 0;
+					while ((bytesRead = reader.read(buffer)) > 0) {
+						writer.write(buffer, 0, bytesRead);
+						buffer = new byte[153600]; }
+				}
+			} catch (Throwable e) {
+				throw new RuntimeException(
+					"Exception occured during unpacking of librococoa-0.10.0.dylib", e);
+			}
+		}
+		NativeLibrary.addSearchPath("rococoa", dylibFile.getParentFile().getAbsolutePath());
 	}
 
 	@Override

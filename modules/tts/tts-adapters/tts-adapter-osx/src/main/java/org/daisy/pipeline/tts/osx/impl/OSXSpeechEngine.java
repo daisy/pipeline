@@ -10,9 +10,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.IllformedLocaleException;
 import java.util.Locale;
-import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
@@ -25,6 +22,9 @@ import org.daisy.pipeline.tts.TTSService.SynthesisException;
 import org.daisy.pipeline.tts.Voice;
 import org.daisy.pipeline.tts.VoiceInfo;
 import org.daisy.pipeline.tts.VoiceInfo.Gender;
+
+import org.rococoa.contrib.appkit.NSSpeechSynthesizer;
+import org.rococoa.contrib.appkit.NSVoice;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,40 +85,32 @@ public class OSXSpeechEngine extends TTSEngine {
 
 		Collection<Voice> result = new ArrayList<Voice>();
 		try {
-			new CommandRunner(mSayPath, "-v", "?")
-				.consumeOutput(stream -> {
-						Matcher mr = Pattern.compile("(?<name>.*?)\\s+(?<locale>\\w{2}_\\w{2})\\s*(#.*)?").matcher("");
-						try (Scanner scanner = new Scanner(stream)) {
-							while (scanner.hasNextLine()) {
-								String line = scanner.nextLine();
-								mr.reset(line);
-								if (mr.find()) {
-									String name = mr.group("name").trim();
-									try {
-										Locale locale = (new Locale.Builder()).setLanguageTag(mr.group("locale").replace("_", "-")).build();
-										// Note that we could also maintain (hard-code) a mapping from voice to gender
-										Gender unknownGender = Gender.ANY;
-										result.add(new Voice(getProvider().getName(), name, locale, unknownGender));
-									} catch (IllformedLocaleException e) {
-										mLogger.debug("Could not parse line from `say -v ?' output: " + line);
-										mLogger.debug("Reason: could not parse locale: " + mr.group("locale"));
-										result.add(new Voice(getProvider().getName(), name));
-									}
-								} else {
-									mLogger.debug("Could not parse line from `say -v ?' output: " + line);
-								}
-							}
+			for (NSVoice voice : NSSpeechSynthesizer.availableVoices()) {
+				try {
+					Locale locale = (new Locale.Builder()).setLanguageTag(voice.getLocaleIdentifier().replace("_", "-")).build();
+					Gender gender; {
+						switch (voice.getGender()) {
+						case Male:
+							gender = Gender.MALE_ADULT;
+							break;
+						case Female:
+							gender = Gender.FEMALE_ADULT;
+							break;
+						case Neuter:
+						default:
+							gender = Gender.ANY;
+							break;
 						}
 					}
-				)
-				.consumeError(mLogger)
-				.run();
-		} catch (InterruptedException e) {
-			throw e;
+					result.add(new Voice(getProvider().getName(), voice.getName(), locale, gender));
+				} catch (IllformedLocaleException e) {
+					mLogger.debug("Could not parse locale: " + voice.getLocaleIdentifier());
+					result.add(new Voice(getProvider().getName(), voice.getName()));
+				}
+			}
 		} catch (Throwable e) {
 			throw new SynthesisException(e);
 		}
-
 		return result;
 	}
 

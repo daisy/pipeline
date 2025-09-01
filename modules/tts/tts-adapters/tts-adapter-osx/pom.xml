@@ -10,7 +10,7 @@
     <relativePath>../../../parent</relativePath>
   </parent>
 
-  <version>3.1.7-SNAPSHOT</version>
+  <version>3.2.0-SNAPSHOT</version>
   <artifactId>tts-adapter-osx</artifactId>
   <packaging>bundle</packaging>
 
@@ -27,6 +27,14 @@
       <artifactId>saxon-he</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.rococoa</groupId>
+      <artifactId>rococoa-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>net.java.dev.jna</groupId>
+      <artifactId>jna</artifactId>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.12</version>
@@ -41,7 +49,45 @@
   </properties>
 
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <excludes>
+          <exclude>META-INF/catalog.xml</exclude>
+        </excludes>
+      </resource>
+      <!--
+          this is only needed for testing (without OSGi), actual inclusion of resources is handled by maven-bundle-plugin
+      -->
+      <resource>
+        <directory>${project.build.directory}/dependency/librococoa</directory>
+        <targetPath>native/</targetPath>
+      </resource>
+    </resources>
     <plugins>
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>get-librococoa</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/dependency/librococoa</outputDirectory>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.rococoa</groupId>
+                  <artifactId>librococoa</artifactId>
+                  <version>0.10.0</version>
+                  <type>dylib</type>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
@@ -52,6 +98,11 @@
               !org.daisy.common.spi,
               *
             </Import-Package>
+            <Include-Resource>
+              src/main/resources/,
+              target/generated-resources/spi/,
+              native=target/dependency/librococoa
+            </Include-Resource>
           </instructions>
         </configuration>
       </plugin>
