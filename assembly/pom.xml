@@ -1461,6 +1461,26 @@
       </exclusions>
     </dependency>
     <dependency>
+      <groupId>org.rococoa</groupId>
+      <artifactId>rococoa-core</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>net.bytebuddy</groupId>
+      <artifactId>byte-buddy</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
       <groupId>com.microsoft.cognitiveservices.speech</groupId>
       <artifactId>client-sdk</artifactId>
       <exclusions>
@@ -3082,6 +3102,17 @@
                   <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>tts-adapter-osx</artifactId>
                 </artifactItem>
+                <!--
+                    for tts-adapter-osx
+                -->
+                <artifactItem>
+                  <groupId>org.rococoa</groupId>
+                  <artifactId>rococoa-core</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>net.bytebuddy</groupId>
+                  <artifactId>byte-buddy</artifactId>
+                </artifactItem>
               </artifactItems>
             </configuration>
           </execution>
@@ -4411,6 +4442,18 @@
       </releases>
       <snapshots>
         <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <!-- for rococoa -->
+    <repository>
+      <id>maven.cyberduck.io-release</id>
+      <url>https://s3.eu-west-1.amazonaws.com/repo.maven.cyberduck.io/releases</url>
+      <layout>default</layout>
+      <releases>
+          <enabled>true</enabled>
+      </releases>
+      <snapshots>
+          <enabled>false</enabled>
       </snapshots>
     </repository>
   </repositories>

@@ -133,6 +133,7 @@ ifeq ($(OS), MACOSX)
 	        "mac/*.liblouis-utils-*-mac.jar/native/macosx/*/liblouis.dylib",                                    \
 	        "mac/*.liblouis-utils-*-mac.jar/native/macosx/*/liblouisutdml/file2brl",                            \
 	        "mac/*.liblouis-utils-*-mac.jar/native/macosx/*/liblouisutdml/*.dylib",                             \
+	        "mac/*.tts-adapter-osx-*.jar/native/librococoa-*.dylib",                                            \
 	        "*.tts-adapter-acapela-*.jar/jnaerator-*.jar/com/sun/jna/darwin/libjnidispatch.jnilib"              \
 	    })                                                                                                      \
 	        paths.add("target/jars/common/" + p);                                                               \
