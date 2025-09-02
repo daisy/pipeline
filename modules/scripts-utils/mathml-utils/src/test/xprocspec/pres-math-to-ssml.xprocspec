@@ -4,7 +4,7 @@
 	       xmlns:ssml="http://www.w3.org/2001/10/synthesis"
 	       xmlns:m="http://www.w3.org/1998/Math/MathML"
 	       xmlns="http://www.w3.org/1998/Math/MathML"
-	       script="../../main/resources/xml/xproc/mathml-to-ssml/mathml-to-ssml.xpl">
+	       script="../../main/resources/xml/xproc/library.xpl">
 
   <x:scenario label="empty mathml">
     <x:call step="px:mathml-to-ssml">
@@ -393,7 +393,7 @@
     <x:expect label="dtbook with ssml" type="compare">
       <x:document type="inline">
 	<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en">
-	  <ssml:speak version="1.1" xml:lang="en" id="s1">x</ssml:speak>
+	  <ssml:speak version="1.1" id="s1">x</ssml:speak>
 	  <sent id="s2"><w>regular</w></sent>
 	</dtbook>
       </x:document>

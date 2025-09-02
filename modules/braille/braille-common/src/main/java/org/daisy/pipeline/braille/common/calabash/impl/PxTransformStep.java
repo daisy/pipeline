@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-import javax.xml.namespace.QName;
-
 import com.google.common.collect.ImmutableMap;
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
@@ -17,10 +15,11 @@ import com.xmlcalabash.library.DefaultStep;
 import com.xmlcalabash.model.RuntimeValue;
 import com.xmlcalabash.runtime.XAtomicStep;
 
+import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 
+import org.daisy.common.transform.SingleInSingleOutXMLTransformer;
 import org.daisy.common.transform.TransformerException;
-import org.daisy.common.transform.XMLTransformer;
 import org.daisy.common.xproc.calabash.XMLCalabashInputValue;
 import org.daisy.common.xproc.calabash.XMLCalabashOutputValue;
 import org.daisy.common.xproc.calabash.XMLCalabashParameterInputValue;
@@ -50,9 +49,9 @@ public class PxTransformStep extends DefaultStep implements XProcStep {
 	private final TransformProvider<Transform> provider;
 	private ReadablePipe source = null;
 	private WritablePipe result = null;
-	private final Hashtable<net.sf.saxon.s9api.QName,RuntimeValue> params = new Hashtable<>();
+	private final Hashtable<QName,RuntimeValue> params = new Hashtable<>();
 	
-	private static final net.sf.saxon.s9api.QName _query = new net.sf.saxon.s9api.QName("query");
+	private static final QName _query = new QName("query");
 	
 	private PxTransformStep(XProcRuntime runtime,
 	                        XAtomicStep step,
@@ -82,12 +81,12 @@ public class PxTransformStep extends DefaultStep implements XProcStep {
 	}
 	
 	@Override
-	public void setParameter(net.sf.saxon.s9api.QName name, RuntimeValue value) {
+	public void setParameter(QName name, RuntimeValue value) {
 		params.put(name, value);
 	}
 	
 	@Override
-	public void setParameter(String port, net.sf.saxon.s9api.QName name, RuntimeValue value) {
+	public void setParameter(String port, QName name, RuntimeValue value) {
 		setParameter(name, value);
 	}
 	
@@ -95,27 +94,27 @@ public class PxTransformStep extends DefaultStep implements XProcStep {
 	public void run() throws SaxonApiException {
 		try {
 			Query query = query(getOption(_query).getString());
-			XMLTransformer xmlTransformer = null;
+			SingleInSingleOutXMLTransformer xmlTransformer = null;
 			try {
 				for (Transform t : logSelect(query, provider, logger))
 					if (t instanceof XProcStepProvider) {
 						// if the transform is a XProcStepProvider, it is assumed to be declared as a p:pipeline
-						xmlTransformer = ((XProcStepProvider)t).newStep(runtime, step, monitor, properties);
+						xmlTransformer = SingleInSingleOutXMLTransformer.from(
+							((XProcStepProvider)t).newStep(runtime, step, monitor, properties));
 						break; }
 					else if (t instanceof XMLTransform) {
 						// fromXmlToXml() is assumed to have only a "source", a "parameters" and a "result" port
 						// (i.e. the signature of px:transform without the "query" option)
-						xmlTransformer = ((XMLTransform)t).fromXmlToXml();
+						xmlTransformer = SingleInSingleOutXMLTransformer.from(
+							((XMLTransform)t).fromXmlToXml());
 						break; }}
 			catch (NoSuchElementException e) {}
 			if (xmlTransformer == null)
 				throw new XProcException(step, "Could not find a Transform for query: " + query);
 			xmlTransformer.transform(
-				ImmutableMap.of(
-					new QName("source"), XMLCalabashInputValue.of(source),
-					new QName("parameters"), XMLCalabashParameterInputValue.of(params)),
-				ImmutableMap.of(
-					new QName("result"), XMLCalabashOutputValue.of(result, runtime))
+				XMLCalabashInputValue.of(source),
+				XMLCalabashOutputValue.of(result, runtime),
+				XMLCalabashParameterInputValue.of(params)
 			).run();
 		} catch (Throwable e) {
 			if (e instanceof TransformerException && e.getCause() instanceof XProcException)

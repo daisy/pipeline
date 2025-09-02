@@ -633,7 +633,7 @@
 	<x:input port="content.in">
 	  <x:document type="inline" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
 	    <dtbook xml:lang="en">
-	      <ssml:speak version="1.1" id="s1" xml:lang="en">
+	      <ssml:speak version="1.1" id="s1">
 		<ssml:say-as interpret-as="ordinal"> 12 </ssml:say-as>
 		root of  x  over  y
 	      </ssml:speak>
@@ -667,7 +667,7 @@
 	    <dtbook xml:lang="en">
 	      <sent id="s1">
 		<span id="sp1"><w>before</w></span>
-		<ssml:speak version="1.1" id="sk1" xml:lang="en">
+		<ssml:speak version="1.1" id="sk1">
 		  <ssml:say-as interpret-as="ordinal"> 12 </ssml:say-as>
 		  root of  x  over  y
 		</ssml:speak>

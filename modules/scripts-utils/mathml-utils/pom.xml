@@ -18,6 +18,8 @@
 
   <properties>
     <expose-services>
+      org.daisy.pipeline.mathml.tts.impl.FallbackMathMLProcessor,
+      org.daisy.pipeline.mathml.tts.saxon.impl.MathMLToSSMLFunctionProvider,
       org.daisy.pipeline.modules.impl.Module_mathml_utils
     </expose-services>
   </properties>
@@ -26,6 +28,30 @@
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>common-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>tts-common</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>common-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>saxon-adapter</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>calabash-adapter</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>com.xmlcalabash</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>saxon-he</artifactId>
     </dependency>
   </dependencies>
 
