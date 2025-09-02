@@ -59,4 +59,30 @@ public abstract class SingleInSingleOutXMLTransformer implements XMLTransformer 
 			}
 		};
 	}
+
+	/**
+	 * Create a {@link SingleInSingleOutXMLTransformer} from a {@link XMLTransformer}. The {@link
+	 * XMLTransformer} is assumed to have one XML input, one parameter input, and one XML output.
+	 */
+	public static SingleInSingleOutXMLTransformer from(XMLTransformer transformer) {
+		if (transformer instanceof SingleInSingleOutXMLTransformer)
+			return (SingleInSingleOutXMLTransformer)transformer;
+		else
+			return from(transformer, _SOURCE, _RESULT, _PARAMETERS);
+	}
+
+	public static SingleInSingleOutXMLTransformer from(XMLTransformer transformer,
+	                                                   QName inputPort, QName outputPort, QName parameterPort) {
+		return new SingleInSingleOutXMLTransformer() {
+			@Override
+			public Runnable transform(XMLInputValue<?> source, XMLOutputValue<?> result, InputValue<?> params) {
+				ImmutableMap.Builder<QName,InputValue<?>> input = new ImmutableMap.Builder<>();
+				input.put(inputPort, source);
+				if (params != null)
+					input.put(parameterPort, params);
+				return transformer.transform(input.build(),
+				                             ImmutableMap.of(outputPort, result));
+			}
+		};
+	}
 }
