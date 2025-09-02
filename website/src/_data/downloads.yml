@@ -1,7 +1,43 @@
 ## Generate with:
-## curl -u bertfrees:$(pass github-tokens/curl | head -1) https://api.github.com/repos/daisy/pipeline-assembly/releases | jq --arg version 1.15.2 '.[] | select(.tag_name == ("v"+$version))|{group:"main",version:$version,sort:$version,state:"stable",github_tag:("v"+$version),github_url:.html_url,description:"FIXME",files:.assets|map({platform:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|(if .=="zip" then "linux" elif .=="deb" then "debian" else "?" end),package:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|sub("exe";"installer"),content:(if .browser_download_url|endswith(".zip") then ["server", "cli"] else ["server"] end),url:.browser_download_url,size:.size})}' | ruby -ryaml -rjson -e 'puts YAML.dump(JSON.load(ARGF))'
-## curl -u bertfrees:$(pass github-tokens/curl | head -1) https://api.github.com/repos/daisy/pipeline-ui/releases | jq --arg version 1.9.0 '.[] | select(.tag_name == $version)|{app_version:$version,app_github_tag:$version,app_github_url:.html_url,files:.assets|map({platform:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|(if .=="exe" then "windows" elif.=="dmg" then "macosx" else "?" end),package:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|sub("exe";"installer"),content:["gui","server"],url:.browser_download_url,size:.size})}' | ruby -ryaml -rjson -e 'puts YAML.dump(JSON.load(ARGF))'
+## curl -u bertfrees:$(pass github-tokens/curl | head -1) https://api.github.com/repos/daisy/pipeline-assembly/releases | jq --arg version 1.15.3 '.[] | select(.tag_name == ("v"+$version))|{group:"main",version:$version,sort:$version,state:"stable",github_tag:("v"+$version),github_url:.html_url,description:"FIXME",files:.assets|map({platform:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|(if .=="zip" then "linux" elif .=="deb" then "debian" else "?" end),package:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|sub("exe";"installer"),content:(if .browser_download_url|endswith(".zip") then ["server", "cli"] else ["server"] end),url:.browser_download_url,size:.size})}' | ruby -ryaml -rjson -e 'puts YAML.dump(JSON.load(ARGF))'
+## curl -u bertfrees:$(pass github-tokens/curl | head -1) https://api.github.com/repos/daisy/pipeline-ui/releases | jq --arg version 1.10.0 '.[] | select(.tag_name == $version)|{app_version:$version,app_github_tag:$version,app_github_url:.html_url,files:.assets|map({platform:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|(if .=="exe" then "windows" elif.=="dmg" then "macosx" else "?" end),package:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|sub("exe";"installer"),content:["gui","server","cli"],url:.browser_download_url,size:.size})}' | ruby -ryaml -rjson -e 'puts YAML.dump(JSON.load(ARGF))'
 ## curl -u bertfrees:$(pass github-tokens/curl | head -1) https://api.github.com/repos/daisy/pipeline-cli-go/releases | jq --arg version 2.3.0 '.[] | select(.tag_name == ("v"+$version))|{group:"cli",version:$version,state:"stable",github_tag:("v"+$version),github_url:.html_url,files:.assets|map({platform:.browser_download_url|capture("^.+/cli-\\Q"+$version+"\\E-(?<platform>[^\\.]+)\\.zip$")["platform"]|(if .=="windows_amd64" then "windows-64" elif .=="windows_386" then "windows-32" elif .=="linux_amd64" then "linux-64" elif .=="linux_386" then "linux-32" elif .=="darwin_amd64" then "macosx" else "?" end),package:"zip",content: "cli", url:.browser_download_url,size:.size})}' | ruby -ryaml -rjson -e 'puts YAML.dump(JSON.load(ARGF))'
+
+- group: main
+  version: "1.15.3"
+  sort: "1.15.3"
+  state: stable
+  github_tag: "v1.15.3"
+  github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.15.3"
+  app_version: "1.10.0"
+  app_github_tag: "1.10.0"
+  app_github_url: "https://github.com/daisy/pipeline-ui/releases/tag/1.10.0"
+  description: >
+    Includes the standalone desktop application, the web server and the command line
+    tool. Versions available for Windows (an installer EXE) and Mac OS (an installer
+    PKG). The Linux packages (ZIP and DEB files) include only the web server. The ZIP
+    package also includes the command line tool.
+  files:
+  - platform: macosx
+    package: pkg
+    content: [gui, server, cli]
+    url: "https://github.com/daisy/pipeline-ui/releases/download/1.10.0/daisy-pipeline-1.10.0-mac.pkg"
+    size: 309441183
+  - platform: windows
+    package: installer
+    content: [gui, server, cli]
+    url: "https://github.com/daisy/pipeline-ui/releases/download/1.10.0/daisy-pipeline-setup-1.10.0.exe"
+    size: 262119776
+  - platform: debian
+    package: deb
+    content: [server]
+    url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.15.3/pipeline2-1.15.3_debian.deb"
+    size: 147654472
+  - platform: linux
+    package: zip
+    content: [server, cli]
+    url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.15.3/pipeline2-1.15.3_linux.zip"
+    size: 154692333
 
 - group: main
   version: "1.15.2"
