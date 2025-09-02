@@ -26,13 +26,13 @@
 
     <p:import href="http://www.daisy.org/pipeline/modules/tts-common/library.xpl">
       <p:documentation>
-	px:get-tts-annotations
-	px:text-to-ssml
+        px:get-tts-annotations
+        px:text-to-ssml
       </p:documentation>
     </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/mathml-to-ssml/library.xpl">
+    <p:import href="http://www.daisy.org/pipeline/modules/mathml-utils/library.xpl">
       <p:documentation>
-	px:mathml-to-ssml
+        px:mathml-to-ssml
       </p:documentation>
     </p:import>
 

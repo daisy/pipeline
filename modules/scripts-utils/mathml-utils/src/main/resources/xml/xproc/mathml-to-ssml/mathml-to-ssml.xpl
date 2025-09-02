@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step type="px:mathml-to-ssml" version="1.0" name="main"
-		xmlns:p="http://www.w3.org/ns/xproc"
-		xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-		xmlns:m="http://www.w3.org/1998/Math/MathML"
-		exclude-inline-prefixes="#all">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:m="http://www.w3.org/1998/Math/MathML"
+                type="px:mathml-to-ssml"
+                exclude-inline-prefixes="#all">
 
   <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-    <p>Transform MathML to SSML.</p>
+    <p>Transform MathML islands (both Content and Presentation) to SSML.</p>
   </p:documentation>
 
   <p:input port="source">

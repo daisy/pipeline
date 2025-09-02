@@ -40,7 +40,7 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>mathml-to-ssml</artifactId>
+      <artifactId>mathml-utils</artifactId>
     </dependency>
     <!--
         test dependencies

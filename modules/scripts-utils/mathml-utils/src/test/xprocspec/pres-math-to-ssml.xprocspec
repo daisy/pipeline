@@ -4,7 +4,7 @@
 	       xmlns:ssml="http://www.w3.org/2001/10/synthesis"
 	       xmlns:m="http://www.w3.org/1998/Math/MathML"
 	       xmlns="http://www.w3.org/1998/Math/MathML"
-	       script="../../main/resources/xml/mathml-to-ssml.xpl">
+	       script="../../main/resources/xml/xproc/mathml-to-ssml/mathml-to-ssml.xpl">
 
   <x:scenario label="empty mathml">
     <x:call step="px:mathml-to-ssml">
