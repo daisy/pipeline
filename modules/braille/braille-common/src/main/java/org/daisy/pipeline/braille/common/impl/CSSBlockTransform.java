@@ -21,6 +21,7 @@ import org.daisy.common.transform.SingleInSingleOutXMLTransformer;
 import org.daisy.common.transform.TransformerException;
 import org.daisy.common.transform.XMLInputValue;
 import org.daisy.common.transform.XMLOutputValue;
+import org.daisy.common.xproc.calabash.XProcBasedTransformer;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 import org.daisy.common.xproc.XProcMonitor;
@@ -34,7 +35,6 @@ import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.l
 import org.daisy.pipeline.braille.common.BrailleTranslator;
 import org.daisy.pipeline.braille.common.BrailleTranslatorProvider;
 import org.daisy.pipeline.braille.common.BrailleTranslatorRegistry;
-import org.daisy.pipeline.braille.common.calabash.XProcBasedTransformer;
 import org.daisy.pipeline.braille.common.Hyphenator;
 import org.daisy.pipeline.braille.common.HyphenatorRegistry;
 import org.daisy.pipeline.braille.common.Query;

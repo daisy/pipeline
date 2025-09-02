@@ -18,13 +18,13 @@ import com.xmlcalabash.runtime.XAtomicStep;
 
 import org.daisy.common.file.URLs;
 import org.daisy.common.transform.InputValue;
+import org.daisy.common.xproc.calabash.XProcBasedTransformer;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.pipeline.braille.common.AbstractTransform;
 import org.daisy.pipeline.braille.common.AbstractTransformProvider;
 import org.daisy.pipeline.braille.common.AbstractTransformProvider.util.Iterables;
-import org.daisy.pipeline.braille.common.calabash.XProcBasedTransformer;
 import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.Iterables.of;
 import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.logCreate;
 import org.daisy.pipeline.braille.common.Query;

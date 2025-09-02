@@ -10,13 +10,13 @@ import com.xmlcalabash.runtime.XAtomicStep;
 
 import org.daisy.common.file.URLs;
 import org.daisy.common.spi.ActivationException;
+import org.daisy.common.xproc.calabash.XProcBasedTransformer;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.pipeline.braille.common.AbstractBrailleTranslator;
 import org.daisy.pipeline.braille.common.BrailleTranslator;
 import org.daisy.pipeline.braille.common.BrailleTranslatorProvider;
-import org.daisy.pipeline.braille.common.calabash.XProcBasedTransformer;
 import org.daisy.pipeline.braille.common.Query;
 import org.daisy.pipeline.braille.common.TransformProvider;
 import org.daisy.pipeline.braille.css.CSSStyledText;
