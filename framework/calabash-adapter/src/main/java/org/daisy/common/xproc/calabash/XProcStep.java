@@ -180,7 +180,7 @@ public interface XProcStep extends com.xmlcalabash.core.XProcStep, XMLTransforme
 						? CalabashExceptionFromXProcError.from(((XProcErrorException)e.getCause()).getXProcError())
 						: e.getCause() != null
 							? XProcException.fromException(e.getCause())
-							                .rebase(step.getLocation(), stackTrace)
+							                .rebase(step != null ? step.getLocation() : null, stackTrace)
 							: null;
 				QName code = ((TransformerException)e).getCode();
 				return new XProcException(
@@ -194,10 +194,13 @@ public interface XProcStep extends com.xmlcalabash.core.XProcStep, XMLTransforme
 				 * IllegalArgumentException should not happen (indicates a bug in the XProc
 				 * step). Because no other exceptions are mentioned in the contract of this method
 				 * we treat them as unexpected exceptions as well. */
-				return new XProcException(step,
-				                          "Unexpected error in " + step.getType(),
-				                          XProcException.fromException(e)
-				                                        .rebase(step.getLocation(), stackTrace));
+				if (step != null)
+					return new XProcException(step,
+					                          "Unexpected error in " + step.getType(),
+					                          XProcException.fromException(e)
+					                                        .rebase(step.getLocation(), stackTrace));
+				else
+					return XProcException.fromException(e).rebase(null, stackTrace);
 			}
 		}
 	}
