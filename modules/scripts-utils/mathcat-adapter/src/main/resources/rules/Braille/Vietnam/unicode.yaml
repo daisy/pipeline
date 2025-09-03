@@ -1,0 +1,612 @@
+---
+# Definitions for Vietnamese Math Braille. But most of theym are same as UEB.
+# UEB characters
+#
+# Some chars that originally came from an Excel spreadsheet, converted to csv, and the greatly expanded
+# 
+# The UEB translation makes use of some non-braille chars as flags
+#    L -- what follows is a letter
+#    N -- what follows is a digit
+#    C -- precedes L for capital letters
+#    G -- precedes L for Greek Letters (after C for capitals)
+#  Typeface Indicators ("typeforms")
+#    B bold, I Italic, S Sans-serif, T script, D, Fraktur, 𝔹 blackboard-bold
+#    the type face indicators can be combined with B (first) and I (second)
+#  Standing alone chars:
+#    Any character which acts as a standing alone character (e.g, "{") needs each braille symbol to be labeled
+#    o -- opening/left side, c -- closing/right side, b -- both open and close (e.g, '"')
+
+ 
+ - "=": [T: "⠐⠶"]               # 0x003D (Equals)
+ - "≠": [T: "⠐⠾"]             # 0x2260 (Not equal)
+ - "<": [T: "⠐⠪"]               # 0x003C (Less than)
+ - "≤": [T: "⠐⠪⠶"]              # 0x2264 (Less than or equal to)
+ - ">": [T: "⠐⠕"]               # 0x003E (Greater than)
+ - "≥": [T: "⠐⠕⠶"]              # 0x2265 (Greater than or equal to)
+ - "≪": [T: "⠐⠪⠪"]              # 0x226A (Much less than)
+ - "≫": [T: "⠐⠕⠕"]              # 0x226B (Much greater than)
+ - "≮": [T: "⠐⠪⠈"]             # 0x226E (Not less than)
+ - "≯": [T: "⠐⠕⠈"]             # 0x226F (Not greater than)
+ - "≰": [T: "⠸⠐⠪⠈⠐⠾"]            # 0x2270 (Neither less than nor equal to)
+ - "≱": [T: "⠸⠐⠕⠈⠐⠾"]            # 0x2271 (Neither greater than nor equal to)
+ - "∝": [t: "⠸⠐⠶"]              # 0x221D (Proportional to)
+ - "≃": [T: "⠐⠢⠢"]               # 0x2243 (Approximately equal to (tilde over horizontal line))
+ - "≅": [T: "⠐⠢⠢"]               # 0x2245 (Approximately equal to (tilde over equals sign))
+ - "≈": [T: "⠐⠢⠢"]               # 0x2248 (Approximately equal (tilde over tilde))
+ - "≏": [t: "⠘⠐⠶"]              # 0x224F (Equals with bump in top bar (difference between))
+ - "≑": [t: "⠨⠐⠶"]              # 0x2251 (Geometrically equal to (equals dotted above and below))
+ - "≡": [T: "⠐⠿"]               # 0x2261 (Equivalent to (three horizontal lines)) vi: trùng
+ - "≢": [T: "⠐⠿⠈"]             # 0x2262 (Not identical to)
+ - "∈": [T: "⠈⠑"]               # 0x2208 (Element of (member of))
+ - "∉": [T: "⠈⠑⠈"]               # 0x2209 (Element of (not member of))
+ - "+": [T: "⠐⠖"]               # 0x002B (Plus sign)
+ - "∋": [t: "⠈⠘⠑"]              # 0x220B (Contains)
+ - "⊂": [T: "⠘⠣"]              # 0x2282 (Subset of)
+ - "⊃": [T: "⠘⠜"]              # 0x2283 (Superset of)
+ - "⊆": [T: "⠘⠣⠐⠶"]             # 0x2286 (Subset of or equal)
+ - "⊇": [T: "⠘⠜⠐⠶"]             # 0x2287 (Superset of or equal)
+ - "⊊": [t: "⠨⠘⠣"]             # 0x228A (Subset of with not equal)
+ - "⊋": [t: "⠨⠘⠜"]             # 0x228B (Superset of with not equal)
+ - "⊲": [t: "⠈⠸⠣"]             # 0x22B2 (Normal subgroup of)
+ - "⊳": [t: "⠈⠸⠜"]             # 0x22B3 (Contains as normal subgroup)
+ - "⊴": [t: "⠸⠸⠣"]             # 0x22B4 (Normal subgroup of or equal)
+ - "⊵": [t: "⠸⠸⠜"]             # 0x22B5 (Contains as normal subgroup or equal)
+ - "⋬": [t: "⠨⠸⠣"]             # 0x22EC (not normal subgroup) -- this isn't the same as what is in GTM 10, but that similar has no Unicode equiv
+ - "⋭": [t: "⠨⠸⠣"]             # 0x22ED (does not contain as normal subgroup) -- this isn't the same as what is in GTM 10, but that similar has no Unicode equiv
+ - "−": [t: "⠐⠤"]               # 0x2212 (Minus sign)
+ - "·": [T: "⠐⠦"]               # 0x00D7 (Multiplication dot (times))
+ - "×": [T: "⠐⠦"]               # 0x00D7 (Multiplication sign (times))
+ - "÷": [T: "⠐⠲"]               # 0x00F7 (Division sign (divided by))
+ - "±": [T: "⠐⠖⠤"]               # 0x00B1 (Plus or minus)
+ - "∓": [T: "⠐⠤⠖"]               # 0x2213 (Minus or plus)
+ - "∗": [t: "⠐⠦"]               # 0x2217 (Asterisk operator)
+ - "∘": [t: "⠐⠴"]               # 0x2218 (Ring operator)
+ - "◦": [t: "⠐⠴"]               # 0x25E6 (White bullet)
+ - "∼": [t: "⠈⠔"]               # 0x223C (Tilde operator)
+ - "⋅": [t: "⠐⠦"]               # 0x22C5 (Dot operator)
+ - "∧": [t: "⠈⠦"]               # 0x2227 (Logical and)
+ - "∨": [t: "⠈⠖"]               # 0x2228 (Logical or)
+ - "∩": [T: "⠨⠦"]               # 0x2229 (Intersection)
+ - "∪": [T: "⠨⠖"]               # 0x222A (Union)
+ - "∖": [T: "⠸⠡"]               # 0x2216 (Set minus)
+ - "(": [T: "o⠈o⠣"]               # 0x0028 (Left parenthesis)
+ - ")": [T: "c⠈c⠜"]               # 0x0029 (Right parenthesis)
+ - "[": [T: "o⠨o⠣"]               # 0x005B (Left square bracket)
+ - "]": [T: "c⠨c⠜"]               # 0x005D (Right square bracket)
+ - "{": [T: "o⠸o⠣"]               # 0x007B (Left curly bracket)
+ - "}": [T: "c⠸c⠜"]               # 0x007D (Right curly bracket)
+ - "〈": [T: "o⠸⠣⠤"]               # 0x2329 (Left angle bracket)
+ - "〉": [T: "c⠤⠸⠜"]               # 0x232A (Right angle bracket)
+ - "|": [T: "⠸⠳"]                 # 0x007C (Vertical line)
+    # - test:
+    #     if: "preceding-sibling::* and following-sibling::*"
+    #     then: [T: "W⠸⠳W"]        # comparison (e.g., such that -- rule 145)
+    #     else: [T: "⠸⠳"]          # absolute value, others???
+ - "!": [T: "c⠖"]                # 0x21 (Exclamation (factorial))
+ - "#": [T: "⠼"]               # 0x23 (Number sign (hash))
+ - "%": [T: "⠼⠚⠴"]                # 0x25 (Percent sign) No dots 46 before as in UEB
+ - "&": [t: "⠈⠯"]               # 0x26 (Ampersand)
+ - "*": [T: "⠐⠦"]               # 0x002A (Asterisk)
+ - "/": [T: "⠐⠲"]               # 0x002F (Solidus (slash))
+ - ";": [t: "c⠆"]               # 0x003B (Semicolon)
+ - "?": [T: "c⠢"]               # 0x003F (Question mark)
+ - "@": [T: "⠈⠁"]               # 0x0040 (Commercial at sign)
+ - "\\": [t: "⠸⠡"]              # 0x005C (Backslash)
+ - "^": [t: "⠈⠢"]               # 0x005E (Caret (hat, up arrow))
+ - "_": [t: "⠨⠤"]               # 0x005F (Low line (underscore))
+ - "~": [t: "⠈⠔"]               # 0x007E (Tilde (swung dash))
+ - "¢": [t: "⠈⠉"]               # 0x00A2 (Cents sign)
+ - "€": [t: "⠈⠑"]               # 0x20AC (Euro sign)
+ - "₣": [t: "⠈⠋"]               # 0x20A3 (French franc sign)
+ - "£": [t: "⠈⠇"]               # 0x00A3 (Pound sign)
+ - "₦": [t: "⠈⠝"]               # 0x20A6 (Naira sign)
+ - "$": [t: "⠈⠎"]               # 0x0024 (Dollar sign)
+ - "¥": [t: "⠈⠽"]               # 0x00A5 (Yen sign)
+ - "¦": [t: "⠨⠳"]               # 0x00A6 (Broken bar)
+ - "¬": [t: "⠈⠹"]               # 0x00AC (Not sign)
+ - "°": [T: "⠔⠚"]               # 0x00B0 (Degree sign)
+ - "†": [t: "⠈⠠⠹"]              # 0x2020 (Dagger)
+ - "‡": [t: "⠈⠠⠻"]              # 0x2021 (Double dagger)
+ - "…": [T: "c⠄c⠄c⠄"]              # 0x2026 (Ellipsis)
+ - "′": [T: "⠄"]                # 0x2032 (Prime sign)
+ - "″": [T: "⠄⠄"]               # 0x2033 (Double prime sign)
+ - "‴": [T: "⠄⠄⠄"]              # 0x2034 (Triple prime sign)
+ - "Å": [t: "⠠⠘⠫⠁"]             # 0x212B (Angstrom symbol)
+ - "Å": [t: "⠠⠘⠫⠁"]             # 0x00C5 (WIRIS uses this for Angstrom)
+ - "∀": [t: "⠘⠁"]               # 0x2200 (For all)
+ - "∂": [t: "⠈⠙"]               # 0x2202 (Partial differential)
+ - "∃": [T: "⠘⠑"]               # 0x2203 (There exists)
+ - "∄": [T: "⠘⠑⠈"]             # 0x2204 (There does not exist)
+ - "∅": [T: "⠈⠚"]               # 0x2205 (Empty set)
+ - "∇": [t: "⠘⠙"]               # 0x2207 (Nabla (del, inverted capital delta))
+ - "∎": [t: "⠸⠫⠼⠙t"]            # 0x220E (End of proof)
+ - "√": [T: "⠩"]               # 0x221A (Square root (radical) without vinculum)
+ - "∞": [T: "⠼⠕"]               # 0x221E (Infinity)
+ - "∠": [T: "⠫⠛"]               # 0x2220 (Angle)
+ - "∡": [T: "⠨⠫⠛"]              # 0x2221 (Measured angle)
+ - "⊾": [T: "⠼⠫⠛"]              # 0x22BE (Right angle with arc)
+ - "∟": [T: "⠫⠧"]
+ - "∫": [T: "⠾"]               # 0x222B (Integral)
+ - "∮": [T: "⠐⠾"]               # 0x222E (Contour integral (closed line integral))
+ - "∴": [t: "⠠⠡"]               # 0x2234 (Therefore)
+ - "∵": [t: "⠈⠌"]               # 0x2235 (Because (since))
+ - "∶": [t: "⠒"]               # 0x2236 (Ratio)
+ - "∷": [T: "⠒⠒"]              # 0x2237 (Proportion)
+ - "∣": [T: "⠣⠴⠜"]               # 0x2223 (Divides) ueb: ⠸⠳
+ - "∤": [T: "⠣⠼⠜"]             # 0x2224 (Does not divide) ueb: ⠸⠳⠈⠱
+ - "∥": [T: "⠫⠶"]               # 0x2225 (Parallel) VI: AB parallel to CD, should be: ⠫AB⠶CD
+ - "∦": [T: "⠫⠾"]             # 0x2226 (Not parallel) Vi: AB not parallel to CD, should be: ⠫AB⠐⠾CD
+ - "⟂": [T: "⠫⠧"]               # 0x27C2 (Perpendicular)
+ - "⊢": [t: "⠸⠒"]               # 0x22a2 (Right tack)
+ - "⊣": [t: "⠈⠸⠒"]              # 0x22a3 (Left tack)
+ - "⊥": [T: "⠫⠧"]               # 0x22A5 (Up tack (perpendicular))
+ - "⊦": [t: "⠸⠒"]               # 0x22A6 (Assertion (is a theorem))
+ - "⊨": [t: "⠘⠸⠒"]              # 0x22A8 (TRUE (is valid))
+ - "⊬": [t: "⠸⠒⠈⠱"]             # 0x22AC (Does not prove)
+ - "⊭": [t: "⠘⠸⠒⠈⠱"]            # 0x22AD (Not TRUE)
+ - "⫤": [t: "⠨⠸⠒"]              # 0x2AE4 (Vertical bar double left turnstile)
+ - "✓": [t: "⠈⠩"]               # 0x2713 (Check mark (tick))
+ - "⦵": [t: "⠨⠚"]               # 0x29B5 (Plimsoll sign (standard state))
+ - "⮖": [t: "1⠐⠠⠤⠯⠫⠿"]         # 0x2B96 (MEDIUM SMALL WHITE CIRCLE WITH HORIZONTAL BAR (standard state))
+ - "←": [t: "⠳⠪"]              # 0x2190 (Leftwards arrow)
+ - "↑": [t: "⠳⠬"]              # 0x2191 (Upwards arrow)
+ - "→": [t: "⠳⠕"]              # 0x2192 (Rightwards arrow)
+ - "↓": [t: "⠳⠩"]              # 0x2193 (Downwards arrow)
+ - "↔": [T: "⠳⠪⠶⠕"]            # 0x2194 (Left right arrow)
+ - "↕": [t: "⠳⠺⠗⠬"]            # 0x2195 (Up down arrow)
+ - "↖": [t: "⠳⠱"]              # 0x2196 (Northwest arrow)
+ - "↗": [t: "⠳⠎"]              # 0x2197 (Northeast arrow)
+ - "↘": [t: "⠳⠣"]              # 0x2198 (Southeast arrow)
+ - "↙": [t: "⠳⠜"]              # 0x2199 (Southwest arrow)
+ - "↚": [t: "⠳⠪⠈⠱"]            # 0x219A (Leftwards arrow with stroke)
+ - "↛": [t: "⠳⠕⠈⠱"]            # 0x219B (Rightwards arrow with stroke)
+ - "↜": [t: "⠳⠔⠢⠪"]            # 0x219C (Leftwards wave arrow)
+ - "↝": [t: "⠳⠢⠔⠕"]            # 0x219D (Rightwards wave arrow)
+ - "↞": [t: "⠳⠒⠗⠗⠪"]           # 0x219E (Leftwards two headed arrow)
+ - "↟": [t: "⠳⠒⠗⠗⠬"]           # 0x219F (Upwards two headed arrow)
+ - "↠": [t: "⠳⠒⠗⠗⠕"]           # 0x21A0 (Rightwards two headed arrow)
+ - "↡": [t: "⠳⠒⠗⠗⠩"]           # 0x21A1 (Downwards two headed arrow)
+ - "↢": [t: "⠳⠗⠗⠪"]            # 0x21A2 (Leftwards arrow with tail)
+ - "↣": [t: "⠳⠗⠗⠕"]            # 0x21A3 (Rightwards arrow with tail)
+ - "↤": [t: "⠳⠳⠗⠪"]            # 0x21A4 (Leftwards arrow from bar)
+ - "↥": [t: "⠳⠳⠗⠬"]            # 0x21A5 (Upwards arrow from bar)
+ - "↦": [t: "⠳⠳⠗⠕"]            # 0x21A6 (Rightwards arrow from bar)
+ - "↧": [t: "⠳⠳⠗⠩"]            # 0x21A7 (Downwards arrow from bar)
+ - "↭": [t: "⠳⠺⠔⠢⠗⠕"]          # 0x21AD (Left right wave arrow)
+ - "↮": [t: "⠳⠺⠗⠕⠈⠱"]          # 0x21AE (Left right arrow with stroke)
+ - "↰": [t: "⠳⠴⠬"]             # 0x21B0 (Upwards arrow with tip left)
+ - "↱": [t: "⠳⠲⠬"]             # 0x21B1 (Upwards arrow with tip right)
+ - "↲": [t: "⠳⠲⠩"]             # 0x21B2 (Downwards arrow with tip left)
+ - "↳": [t: "⠳⠴⠩"]             # 0x21B3 (Downwards arrow with tip right)
+ - "↶": [t: "⠳⠔⠔⠪"]            # 0x21B6 (Anticlockwise top semicircle arrow)
+ - "↷": [t: "⠳⠢⠢⠕"]            # 0x21B7 (Clockwise top semicircle arrow)
+ - "↼": [t: "⠳⠈⠗⠪"]            # 0x21BC (Leftwards harpoon with barb upwards)
+ - "↽": [t: "⠳⠠⠗⠪"]            # 0x21BD (Leftwards harpoon with barb downwards)
+ - "↾": [t: "⠳⠠⠗⠬"]            # 0x21BE (Upwards harpoon with barb rightwards)
+ - "↿": [t: "⠳⠈⠗⠬"]            # 0x21BF (Upwards harpoon with barb leftwards)
+ - "⇀": [t: "⠳⠈⠗⠕"]            # 0x21C0 (Rightwards harpoon with barb upwards)
+ - "⇁": [t: "⠳⠠⠗⠕"]            # 0x21C1 (Rightwards harpoon with barb downwards)
+ - "⇂": [t: "⠳⠈⠗⠩"]            # 0x21C2 (Downwards harpoon with barb rightwards)
+ - "⇃": [t: "⠳⠠⠗⠩"]            # 0x21C3 (Downwards harpoon with barb leftwards)
+ - "⇄": [t: "⠳⠕⠻⠳⠪"]           # 0x21C4 (Rightwards arrow over leftwards arrow)
+ - "⇅": [t: "⠳⠬⠿⠳⠩"]           # 0x21C5 (Upwards arrow left of Downwards arrow)
+ - "⇌": [T: "⠳⠪⠕"]              # 0x21CC (Rightwards harpoon over leftwards harpoon (equilibrium))
+ - "⇐": [t: "⠳⠶⠪"]             # 0x21D0 (Leftwards double arrow)
+ - "⇑": [t: "⠳⠶⠬"]             # 0x21D1 (Upwards double arrow)
+ - "⇒": [t: "⠳⠶⠕"]             # 0x21D2 (Rightwards double arrow)
+ - "⇓": [t: "⠳⠶⠩"]             # 0x21D3 (Downwards double arrow)
+ - "⇔": [T: "⠳⠪⠶⠕"]           # 0x21D4 (Left right double arrow)
+ - "⇕": [t: "⠳⠺⠶⠗⠬"]           # 0x21D5 (Up down double arrow)
+ - "⇠": [t: "⠳⠂⠪"]             # 0x21E0 (Leftwards dashed arrow)
+ - "⇡": [t: "⠳⠂⠬"]             # 0x21E1 (Upwards dashed arrow)
+ - "⇢": [t: "⠳⠂⠕"]             # 0x21E2 (Rightwards dashed arrow)
+ - "⇣": [t: "⠳⠂⠩"]             # 0x21E3 (Downwards dashed arrow)
+ - "⟵": [t: "⠳⠪"]           # 0x27F5 (Long leftwards arrow)
+ - "⟶": [t: "⠳⠕"]           # 0x27F6 (Long rightwards arrow)
+ - "⥂": [t: "⠸⠶"]               # 0x2942 (Rightwards arrow above short leftwards arrow (equilibrium, trend to the right))
+ - "⥄": [t: "⠈⠸⠶"]              # 0x2944 (Short rightwards arrow above leftwards arrow (equilibrium, trend to the left))
+
+# Mappings for some new Unicode chemistry arrows/symbols
+# These need to be verified -- 0x1f8d1, 0x1f8d2, and 0x1f8d3 conflict with GTM 16 (uses short arrow when really should be long)
+ - "🣐": [t: "⠳⠒⠒⠒⠕⠻⠳⠒⠒⠒⠪"]           # 0x1F8D0 LONG RIGHTWARDS ARROW OVER LONG LEFTWARDS ARROW
+ - "🣑": [t: "⠳⠪⠕"]               # 0x1f8d1 (Long rightwards harpoon over leftwards harpoon (equilibrium))
+ - "🣒": [t: "⠸⠶"]                # 0x1f8d2 (Long rightwards harpoon over leftwards harpoon (equilibrium, trend to the right))
+ - "🣓": [t: "⠈⠸⠶"]               # 0x1f8d3 (Long rightwards harpoon over leftwards harpoon (equilibrium, trend to the left))
+#  - "🣑": [t: "⠳⠒⠒⠒⠈⠗⠕⠻⠳⠒⠒⠒⠠⠗⠪"]     # 0x1F8D1 LONG RIGHTWARDS HARPOON OVER LONG LEFTWARDS HARPOON
+#  - "🣒": [t: "⠳⠒⠒⠒⠈⠗⠕⠻⠳⠒⠠⠗⠪"]         # 0x1F8D2 LONG RIGHTWARDS HARPOON ABOVESHORT LEFTWARDS HARPOON
+#  - "🣓": [t: "⠳⠒⠈⠗⠕⠻⠳⠒⠒⠒⠠⠗⠪"]         # 0x1F8D3 SHORT RIGHTWARDS HARPOON ABOVELONG LEFTWARDS HARPOON
+ - "🣔": [t: "⠳⠒⠒⠒⠈⠗⠪⠻⠳⠒⠠⠗⠕"]         # 0x1F8D4 LONG LEFTWARDS HARPOON ABOVESHORT RIGHTWARDS HARPOON
+ - "🣕": [t: "⠳⠒⠈⠗⠪⠻⠳⠒⠒⠒⠠⠗⠕"]         # 0x1F8D5 SHORT LEFTWARDS HARPOON ABOVELONG RIGHTWARDS HARPOON
+ - "🣖": [t: "⠳⠒⠒⠒⠕⠯⠠⠭"]                # 0x1F8D6 LONG RIGHTWARDS ARROW WITH THROUGH X
+ - "🣗": [t: "⠐⠠⠤⠯⠫⠿"]                    # 0x1F8D7 LONG RIGHTWARDS ARROW WITH DOUBLE SLASH
+
+ - "△": [T: "⠫⠼⠉"]            # 0x25B3 (Triangle)
+ - "□": [T: "⠫⠼⠙"]            # 0x25A1 (Square)
+ - "▤": [T: "⠨⠫⠼⠙"]            # 0x25A4 (Square with horizontal fill)
+ - "▥": [T: "⠨⠫⠼⠙"]            # 0x25A5 (Square with vertical fill)
+ - "▦": [T: "⠨⠫⠼⠙"]            # 0x25A6 (Square with orthogonal crosshatch fill)
+ - "▧": [T: "⠨⠫⠼⠙"]            # 0x25A7 (Square with upper left to lower right fill)
+ - "▨": [T: "⠨⠫⠼⠙"]            # 0x25A8 (Square with upper right to lower left fill)
+ - "▩": [T: "⠨⠫⠼⠙"]            # 0x25A9 (Square with diagonal crosshatch fill)
+ - "○": [t: "⠫⠿"]             # 0x25CB (Circle)
+ - "◍": [T: "⠨⠫⠿"]             # 0x25CD (Circle with vertical fill)
+ - "▱": [T: "⠫⠈⠼⠙"]           # 0x25B1 (Parallelogram)
+ - "▲": [T: "⠸⠫⠼⠉"]            # 0x25B2 (Filled triangle)
+ - "■": [T: "⠸⠫⠼⠙"]            # 0x25A0 (Filled square)
+ - "≜": [T: "⠸⠙⠐⠶"]           # 0x225C (Delta equal to)
+ - "≝": [t: "⠣⠙⠑⠋⠜⠻⠐⠶"]        # 0x225D (Equal to by definition)
+ - "⊕": [t: "⠫⠿⠪⠐⠖t"]          # 0x2295 (Circled plus)
+ - "⊖": [t: "⠫⠿⠪⠐⠤t"]          # 0x2296 (Circled minus)
+ - "⊗": [t: "⠐⠦t"]          # 0x2297 (Circled times)
+ - "⊛": [t: "⠐⠦t"]          # 0x229B (Circled asterisk operator)
+ - "⊞": [t: "⠫⠼⠙⠪⠐⠖t"]         # 0x229E (Squared plus)
+ - "⊟": [t: "⠫⠼⠙⠪⠐⠤t"]         # 0x229F (Squared minus)
+ - "⊠": [t: "⠫⠼⠙⠪⠐⠦t"]         # 0x22A0 (Squared times)
+ - "⋇": [t: "⠌⠯⠦"]             # 0x22C7 (Division times)
+ - "⊩": [t: "⠸⠳⠿⠸⠒"]            # 0x22A9 (Forces)
+ - "˙": [t: "⠲"]               # 0x02D9 ( Dot Above)
+ - "¨": [t: "⠲⠲"]              # 0x00A8 ( Diaeresis/Double Dot Above)
+ - "©": [t: "⠘⠉"]               # 0xa9 (Copyright)
+
+
+ - "\"": [t: "b⠠b⠶"]
+ - "'": [t: "b⠄"]
+ - "“": [t: "o⠘o⠦"]
+ - "”": [t: "c⠘c⠴"]
+ - "‘": [t: "o⠠o⠦"]
+ - "’": [t: "c⠠c⠴"]
+ - "«": [t: "o⠸o⠦"]
+ - "»": [t: "c⠸c⠴"]
+
+ - " ":                        # 0x20 (Space)
+     - test:
+        if: "self::m:mn"
+        then: [t: "N⠐"]
+        else: [t: "W"]
+ - " ":                        # 0xa0 (Non-breaking Space)
+     - test:
+        - if: "self::m:mn"
+          then: [t: "N⠐"]
+        - else_if: "following-sibling::*[1][@class='MathML-unit' or BaseNode(.)[@class='MathML-unit']]"
+          then: [t: "𝐖"]
+          else: [t: "W"]
+ - ",":                        # 0x2c (Comma)
+     - test:
+        if: "self::m:mn"
+        then: [t: "N⠂"]
+        else: [t: ",W"]
+ - ".":                        # 0x2e (Period)
+     - test:
+        if: "self::m:mn"
+        then: [T: "N⠄"]
+        else: [t: "."]
+ - ":":                         # 0x003A (Colon)
+        # Sometimes a colon is meant to be a ratio/mathord and sometimes a map/punct.
+        # The latter has a space after it.
+        # If in an mrow, guess it is infix and checks the operator. This is pretty weak!
+        # Field extensions "[K:F]" and trilinear coordinates "a:b:c" don't want extra space
+        # Time doesn't want an extra space -- the am/pm get wrapped in an mrow with the minutes after the colon
+    - test:
+        if:
+        - "ancestor::*[2][IsBracketed(., '{', '}')] or "       # field extension
+        - "preceding-sibling::*[2][.=':'] or following-sibling::*[2][.=':'] or"  # trilinear form
+          # ratios tend to have similar left and right sides
+        - "name(preceding-sibling::*[1]) = name(following-sibling::*[1]) or"
+          # am/pm test
+        - "(name(preceding-sibling::*[1]) = 'mn' and "
+        - "  following-sibling::*[1][self::m:mrow and count(*)=3 and *[1][self::m:mn] and "
+        - "     *[3][translate(., 'APM\u00A0', 'apm') = 'am' or translate(., 'APM\u00A0', 'apm') = 'pm']"
+        - " ])"
+        then: [t: "⠒"]
+        else: [t: "⠒W"]
+
+ - "-":                        # 0x2d (Minus sign or hyphen)
+    - test:
+        if: "self::m:mo"
+        then: [t: "⠐⠤"]
+        else: [t: "⠤"]
+
+ - "⁡": [t: ""]                         # 0x2061⁡ (invisible function apply)
+    #- test:
+        #if:
+        #- "preceding-sibling::*[1][self::m:mi and substring(., string-length(.), 1)!=' '] and " # avoid scripted function names and one that end with spaces
+        #- "following-sibling::*[1][self::m:mi and translate(., 'abcdefghijklmnopqrstuvwxyz', '') = '']" # GTM 9.3.2
+        #then: [t: "W"]
+        #else: [t: ""]
+
+ - "⁢": [t: ""]                        # 0x2062 (invisible times)
+    #- test:
+        #if: # GTM 9.3.3 (not very clear in rule, but the function name has to start with a lower case latin char ['no indicators'])
+        #- "parent::m:mrow and "
+        #- "preceding-sibling::*[1]["
+        #- "           (self::m:mi and translate(., 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', '') = '') or "
+        #- "           (self::m:mrow and translate(*[last()], 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', '') = '')] and"
+        #- "  following::*[1][self::m:mrow and count(*)=3 and "   # look for function apply
+        #- "     *[2][.='⁡'] and *[1][self::m:mi and translate(., 'abcdefghijklmnopqrstuvwxyz', '') = '']]" 
+        #then: [t: "W"]
+        #else: [t: ""]
+ - "⁣": [t: ""]                 # 0x2063⁡ (invisible separator)
+ - "⁤": [t: ""]                 # 0x2064 (invisible plus)
+ - "0": [t: "N⠚"]               # 0x30 
+ - "1": [t: "N⠁"]               # 0x31 
+ - "2": [t: "N⠃"]               # 0x32 
+ - "3": [t: "N⠉"]               # 0x33 
+ - "4": [t: "N⠙"]               # 0x34 
+ - "5": [t: "N⠑"]               # 0x35 
+ - "6": [t: "N⠋"]               # 0x36 
+ - "7": [t: "N⠛"]               # 0x37 
+ - "8": [t: "N⠓"]               # 0x38 
+ - "9": [t: "N⠊"]               # 0x39 
+
+ # we stick the drop numbers into the private use area for consistency
+ - "\ue000": [t: "N⠴"]               # 0 
+ - "\ue001": [t: "N⠂"]               # 1 
+ - "\ue002": [t: "N⠆"]               # 2 
+ - "\ue003": [t: "N⠒"]               # 3 
+ - "\ue004": [t: "N⠲"]               # 4 
+ - "\ue005": [t: "N⠢"]               # 5 
+ - "\ue006": [t: "N⠖"]               # 6 
+ - "\ue007": [t: "N⠶"]               # 7 
+ - "\ue008": [t: "N⠦"]               # 8 
+ - "\ue009": [t: "N⠔"]               # 9 
+
+ - "a": [t: "L⠁"]               # 0x61 
+ - "b": [t: "L⠃"]               # 0x62 
+ - "c": [t: "L⠉"]               # 0x63 
+ - "d": [t: "L⠙"]               # 0x64 
+ - "e": [t: "L⠑"]               # 0x65 
+ - "f": [t: "L⠋"]               # 0x66 
+ - "g": [t: "L⠛"]               # 0x67 
+ - "h": [t: "L⠓"]               # 0x68 
+ - "i": [t: "L⠊"]               # 0x69 
+ - "j": [t: "L⠚"]               # 0x6a 
+ - "k": [t: "L⠅"]               # 0x6b 
+ - "l": [t: "L⠇"]               # 0x6c 
+ - "m": [t: "L⠍"]               # 0x6d 
+ - "n": [t: "L⠝"]               # 0x6e 
+ - "o": [t: "L⠕"]               # 0x6f 
+ - "p": [t: "L⠏"]               # 0x70 
+ - "q": [t: "L⠟"]               # 0x71 
+ - "r": [t: "L⠗"]               # 0x72 
+ - "s": [t: "L⠎"]               # 0x73 
+ - "t": [t: "L⠞"]               # 0x74 
+ - "u": [t: "L⠥"]               # 0x75 
+ - "v": [t: "L⠧"]               # 0x76 
+ - "w": [t: "L⠺"]               # 0x77 
+ - "x": [t: "L⠭"]               # 0x78 
+ - "y": [t: "L⠽"]               # 0x79 
+ - "z": [t: "L⠵"]               # 0x7a 
+
+ - "đ": [t: "L⠮"]
+ - "á": [t: "L⠔L⠁"]
+ - "à": [t: "L⠰L⠁"]
+ - "ả": [t: "L⠢L⠁"]
+ - "ã": [t: "L⠤L⠁"]
+ - "ạ": [t: "L⠠L⠁"]
+ - "â": [t: "L⠡"]
+ - "ấ": [t: "L⠔L⠡"]
+ - "ầ": [t: "L⠰L⠡"]
+ - "ẩ": [t: "L⠢L⠡"]
+ - "ẫ": [t: "L⠤L⠡"]
+ - "ậ": [t: "L⠠L⠡"]
+ - "ă": [t: "L⠜"]
+ - "ắ": [t: "L⠔L⠜"]
+ - "ằ": [t: "L⠰L⠜"]
+ - "ẳ": [t: "L⠢L⠜"]
+ - "ẵ": [t: "L⠤L⠜"]
+ - "ặ": [t: "L⠠L⠜"]
+ - "é": [t: "L⠔L⠑"]
+ - "è": [t: "L⠰L⠑"]
+ - "ẻ": [t: "L⠢L⠑"]
+ - "ẽ": [t: "L⠤L⠑"]
+ - "ẹ": [t: "L⠠L⠑"]
+ - "ê": [t: "L⠣"]
+ - "ế": [t: "L⠔L⠣"]
+ - "ề": [t: "L⠰L⠣"]
+ - "ể": [t: "L⠢L⠣"]
+ - "ễ": [t: "L⠤L⠣"]
+ - "ệ": [t: "L⠠L⠣"]
+ - "í": [t: "L⠔L⠊"]
+ - "ì": [t: "L⠰L⠊"]
+ - "ỉ": [t: "L⠢L⠊"]
+ - "ĩ": [t: "L⠤L⠊"]
+ - "ị": [t: "L⠠L⠊"]
+ - "ó": [t: "L⠔L⠕"]
+ - "ò": [t: "L⠰L⠕"]
+ - "ỏ": [t: "L⠢L⠕"]
+ - "õ": [t: "L⠤L⠕"]
+ - "ọ": [t: "L⠠L⠕"]
+ - "ô": [t: "L⠹"]
+ - "ố": [t: "L⠔L⠹"]
+ - "ồ": [t: "L⠰L⠹"]
+ - "ổ": [t: "L⠢L⠹"]
+ - "ỗ": [t: "L⠤L⠹"]
+ - "ộ": [t: "L⠠L⠹"]
+ - "ơ": [t: "L⠪"]
+ - "ớ": [t: "L⠔L⠪"]
+ - "ờ": [t: "L⠰L⠪"]
+ - "ở": [t: "L⠢L⠪"]
+ - "ỡ": [t: "L⠤L⠪"]
+ - "ợ": [t: "L⠠L⠪"]
+ - "ú": [t: "L⠔L⠥"]
+ - "ù": [t: "L⠰L⠥"]
+ - "ủ": [t: "L⠢L⠥"]
+ - "ũ": [t: "L⠤L⠥"]
+ - "ụ": [t: "L⠠L⠥"]
+ - "ư": [t: "L⠳"]
+ - "ứ": [t: "L⠔L⠳"]
+ - "ừ": [t: "L⠰L⠳"]
+ - "ử": [t: "L⠢L⠳"]
+ - "ữ": [t: "L⠤L⠳"]
+ - "ự": [t: "L⠠L⠳"]
+ - "ý": [t: "L⠔L⠽"]
+ - "ỳ": [t: "L⠰L⠽"]
+ - "ỷ": [t: "L⠢L⠽"]
+ - "ỹ": [t: "L⠤L⠽"]
+ - "ỵ": [t: "L⠠L⠽"]
+
+ - "Đ": [t: "CL⠮"]
+ - "Á": [t: "CL⠔𝑐L⠁"]
+ - "À": [t: "CL⠰𝑐L⠁"]
+ - "Ả": [t: "CL⠢𝑐L⠁"]
+ - "Ã": [t: "CL⠤𝑐L⠁"]
+ - "Ạ": [t: "CL⠠𝑐L⠁"]
+ - "Â": [t: "CL⠡"]
+ - "Ấ": [t: "CL⠔𝑐L⠡"]
+ - "Ầ": [t: "CL⠰𝑐L⠡"]
+ - "Ẩ": [t: "CL⠢𝑐L⠡"]
+ - "Ẫ": [t: "CL⠤𝑐L⠡"]
+ - "Ậ": [t: "CL⠠𝑐L⠡"]
+ - "Ă": [t: "CL⠜"]
+ - "Ắ": [t: "CL⠔𝑐L⠜"]
+ - "Ằ": [t: "CL⠰𝑐L⠜"]
+ - "Ẳ": [t: "CL⠢𝑐L⠜"]
+ - "Ẵ": [t: "CL⠤𝑐L⠜"]
+ - "Ặ": [t: "CL⠠𝑐L⠜"]
+ - "É": [t: "CL⠔𝑐L⠑"]
+ - "È": [t: "CL⠰𝑐L⠑"]
+ - "Ẻ": [t: "CL⠢𝑐L⠑"]
+ - "Ẽ": [t: "CL⠤𝑐L⠑"]
+ - "Ẹ": [t: "CL⠠𝑐L⠑"]
+ - "Ê": [t: "CL⠣"]
+ - "Ế": [t: "CL⠔𝑐L⠣"]
+ - "Ề": [t: "CL⠰𝑐L⠣"]
+ - "Ể": [t: "CL⠢𝑐L⠣"]
+ - "Ễ": [t: "CL⠤𝑐L⠣"]
+ - "Ệ": [t: "CL⠠𝑐L⠣"]
+ - "Í": [t: "CL⠔𝑐L⠊"]
+ - "Ì": [t: "CL⠰𝑐L⠊"]
+ - "Ỉ": [t: "CL⠢𝑐L⠊"]
+ - "Ĩ": [t: "CL⠤𝑐L⠊"]
+ - "Ị": [t: "CL⠠𝑐L⠊"]
+ - "Ó": [t: "CL⠔𝑐L⠕"]
+ - "Ò": [t: "CL⠰𝑐L⠕"]
+ - "Ỏ": [t: "CL⠢𝑐L⠕"]
+ - "Õ": [t: "CL⠤𝑐L⠕"]
+ - "Ọ": [t: "CL⠠𝑐L⠕"]
+ - "Ô": [t: "CL⠹"]
+ - "Ố": [t: "CL⠔𝑐L⠹"]
+ - "Ồ": [t: "CL⠰𝑐L⠹"]
+ - "Ổ": [t: "CL⠢𝑐L⠹"]
+ - "Ỗ": [t: "CL⠤𝑐L⠹"]
+ - "Ộ": [t: "CL⠠𝑐L⠹"]
+ - "Ơ": [t: "CL⠪"]
+ - "Ớ": [t: "CL⠔𝑐L⠪"]
+ - "Ờ": [t: "CL⠰𝑐L⠪"]
+ - "Ở": [t: "CL⠢𝑐L⠪"]
+ - "Ỡ": [t: "CL⠤𝑐L⠪"]
+ - "Ợ": [t: "CL⠠𝑐L⠪"]
+ - "Ú": [t: "CL⠔𝑐L⠥"]
+ - "Ù": [t: "CL⠰𝑐L⠥"]
+ - "Ủ": [t: "CL⠢𝑐L⠥"]
+ - "Ũ": [t: "CL⠤𝑐L⠥"]
+ - "Ụ": [t: "CL⠠𝑐L⠥"]
+ - "Ư": [t: "CL⠳"]
+ - "Ứ": [t: "CL⠔𝑐L⠳"]
+ - "Ừ": [t: "CL⠰𝑐L⠳"]
+ - "Ử": [t: "CL⠢𝑐L⠳"]
+ - "Ữ": [t: "CL⠤𝑐L⠳"]
+ - "Ự": [t: "CL⠠𝑐L⠳"]
+ - "Ý": [t: "CL⠔𝑐L⠽"]
+ - "Ỳ": [t: "CL⠰𝑐L⠽"]
+ - "Ỷ": [t: "CL⠢𝑐L⠽"]
+ - "Ỹ": [t: "CL⠤𝑐L⠽"]
+ - "Ỵ": [t: "CL⠠𝑐L⠽"]
+
+ - "A": [t: "CL⠁"]              # 0x41 
+ - "B": [t: "CL⠃"]              # 0x42
+ - "C": [t: "CL⠉"]              # 0x43 
+ - "D": [t: "CL⠙"]              # 0x44 
+ - "E": [t: "CL⠑"]              # 0x45 
+ - "F": [t: "CL⠋"]              # 0x46 
+ - "G": [t: "CL⠛"]              # 0x47 
+ - "H": [t: "CL⠓"]              # 0x48 
+ - "I": [t: "CL⠊"]              # 0x49 
+ - "J": [t: "CL⠚"]              # 0x4a 
+ - "K": [t: "CL⠅"]              # 0x4b 
+ - "L": [t: "CL⠇"]              # 0x4c 
+ - "M": [t: "CL⠍"]              # 0x4d 
+ - "N": [t: "CL⠝"]              # 0x4e 
+ - "O": [t: "CL⠕"]              # 0x4f 
+ - "P": [t: "CL⠏"]              # 0x50 
+ - "Q": [t: "CL⠟"]              # 0x51 
+ - "R": [t: "CL⠗"]              # 0x52 
+ - "S": [t: "CL⠎"]              # 0x53 
+ - "T": [t: "CL⠞"]              # 0x54 
+ - "U": [t: "CL⠥"]              # 0x55 
+ - "V": [t: "CL⠧"]              # 0x56 
+ - "W": [t: "CL⠺"]              # 0x57 
+ - "X": [t: "CL⠭"]              # 0x58 
+ - "Y": [t: "CL⠽"]              # 0x59 
+ - "Z": [t: "CL⠵"]              # 0x5a 
+
+ - "α": [t: "GL⠁"]              # 0x3b1 
+ - "β": [t: "GL⠃"]              # 0x3b2 
+ - "γ": [t: "GL⠛"]              # 0x3b3 
+ - "δ": [t: "GL⠙"]              # 0x3b4 
+ - "ε": [t: "GL⠑"]              # 0x3b5 
+ - "ζ": [t: "GL⠵"]              # 0x3b6 
+ - "η": [t: "GL⠱"]             # 0x3b7 
+ - "θ": [t: "GL⠹"]              # 0x3b8 
+ - "ι": [t: "GL⠊"]              # 0x3b9 
+ - "κ": [t: "GL⠅"]              # 0x3ba 
+ - "λ": [t: "GL⠇"]              # 0x3bb 
+ - "μ": [t: "GL⠍"]              # 0x3bc 
+ - "ν": [t: "GL⠝"]              # 0x3bd 
+ - "ξ": [t: "GL⠭"]              # 0x3be 
+ - "ο": [t: "GL⠕"]              # 0x3bf 
+ - "π": [t: "GL⠏"]              # 0x3c0 
+ - "ρ": [t: "GL⠗"]              # 0x3c1 
+ - "ς": [t: "GL⠎"]              # 0x3c2 
+ - "σ": [t: "GL⠎"]              # 0x3c3 
+ - "τ": [t: "GL⠞"]              # 0x3c4 
+ - "υ": [t: "GL⠥"]              # 0x3c5 
+ - "φ": [T: "GL⠋"]              # 0x3c6 
+ - "ϕ": [T: "GL⠋"]              # 0x3c6 
+ - "χ": [T: "GL⠯"]              # 0x3c7 
+ - "ψ": [t: "GL⠽"]              # 0x3c8 
+ - "ω": [t: "GL⠺"]             # 0x3c9
+
+ - "Α": [t: "CGL⠁"]             # 0x391 
+ - "Β": [t: "CGL⠃"]             # 0x392 
+ - "Γ": [t: "CGL⠛"]             # 0x393 
+ - "Δ": [t: "CGL⠙"]             # 0x394 
+ - "Ε": [t: "CGL⠑"]             # 0x395 
+ - "Ζ": [t: "CGL⠵"]             # 0x396 
+ - "Η": [t: "CGL⠱ "]            # 0x397 
+ - "Θ": [t: "CGL⠹"]             # 0x398 
+ - "Ι": [t: "CGL⠊"]             # 0x399 
+ - "Κ": [t: "CGL⠅"]             # 0x39a 
+ - "Λ": [t: "CGL⠇"]             # 0x39b 
+ - "Μ": [t: "CGL⠍"]             # 0x39c 
+ - "Ν": [t: "CGL⠝"]             # 0x39d 
+ - "Ξ": [t: "CGL⠭"]             # 0x39e 
+ - "Ο": [t: "CGL⠕"]             # 0x39f 
+ - "Π": [t: "CGL⠏"]             # 0x3a0 
+ - "Ρ": [t: "CGL⠗"]             # 0x3a1 
+ - "΢": [t: "CGL⠎"]             # 0x3a2 
+ - "Σ": [t: "CGL⠎"]             # 0x3a3 
+ - "Τ": [t: "CGL⠞"]             # 0x3a4 
+ - "Υ": [t: "CGL⠥"]             # 0x3a5 
+ - "Φ": [t: "CGL⠋"]             # 0x3a6 
+ - "Χ": [t: "CGL⠯"]             # 0x3a7 
+ - "Ψ": [t: "CGL⠽"]             # 0x3a8 
+ - "Ω": [T: "CGL⠺"]             # 0x3a9
+
+ - "µ": [t: "GL⠍"]              # 0x00B5 (Micro (Greek mu))
+ - "Ω": [t: "CGL⠺"]             # 0x2126 (Ohm sign (capital Greek omega))
+ - "∆": [t: "CGL⠙"]             # 0x2206 (Increment (capital Greek delta))
+ - "∏": [t: "CGL⠏"]             # 0x220F (Product (capital Greek pi))
+ - "∑": [t: "CGL⠎"]             # 0x2211 (Sum (capital Greek sigma))
+
+
+# Not yet defined symbols
+ - "‰": [T: "⠼⠚⠴⠴"]
+ - "≊": [T: "⠐⠢⠢⠶"]
+ - "⋮": [T: "⠣⠴⠜"]          # 0x22ee (vertical ellipsis used to indicate dividable)
+ - "⧵": [T: "⠸⠡"]          
+ - "∕": [T: "⠐⠲"]
+ - "⊘": [T: "⠐⠲"]
+ - "⁄": [T: "⠐⠲"]
+ - "℃": [T: "⠔⠚⠀⠨⠉"]
+ - "℉": [T: "⠔⠚⠀⠨⠋"]

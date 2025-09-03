@@ -39,6 +39,7 @@
     <module>scripts-utils/epubcheck-adapter</module>
     <module>scripts-utils/epub3-to-html</module>
     <module>scripts-utils/mathml-utils</module>
+    <module>scripts-utils/mathcat-adapter</module>
     <module>scripts-utils/smil-utils</module>
     <module>scripts-utils/metadata-utils</module>
     <module>scripts-utils/odf-utils</module>

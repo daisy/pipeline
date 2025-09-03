@@ -1,0 +1,32 @@
+---
+
+- name: simple-determinant
+  tag: determinant
+  match: "not(*[1][self::m:mtr])"
+  replace:
+  #      if: "$Verbosity='Verbose'"
+  #      then:
+  #      - T: "the" 
+  - T: "định thức"
+    #   - test:
+  - test:
+      if: "$Verbosity!='Terse'"
+      then:
+      - T: "của"
+  - x: "*[1]"
+
+- name: subscripted-norm
+  tag: subscripted-norm
+  match: "."
+  replace:
+  #      if: "$Verbosity='Verbose'"
+  #      then:
+  #      - T: "the" 
+  - T: "định mức"
+    #   - test:
+  - x: "*[2]"
+  - test:
+      if: "$Verbosity!='Terse'"
+      then:
+      - T: "của"
+  - x: "*[1]"

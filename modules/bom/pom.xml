@@ -139,11 +139,6 @@
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
-        <artifactId>html-utils</artifactId>
-        <version>6.4.4-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>image-utils</artifactId>
         <version>1.0.8</version>
       </dependency>
@@ -162,7 +157,6 @@
         <artifactId>zip-utils</artifactId>
         <version>2.1.10-SNAPSHOT</version>
       </dependency>
-      
       <!--
           nlp
       -->
@@ -214,6 +208,21 @@
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>asciimath-utils</artifactId>
         <version>1.0.12-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline.modules</groupId>
+        <artifactId>html-utils</artifactId>
+        <version>6.4.4-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline.modules</groupId>
+        <artifactId>mathml-utils</artifactId>
+        <version>1.1.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline.modules</groupId>
+        <artifactId>mathcat-adapter</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -544,6 +553,19 @@
         <groupId>org.codehaus.jackson</groupId>
         <artifactId>jackson-mapper-asl</artifactId>
         <version>1.9.12</version>
+      </dependency>
+      <!--
+          for mathcat-adapter
+      -->
+      <dependency>
+        <groupId>onl.mdw</groupId>
+        <artifactId>mathcat4j-core</artifactId>
+        <version>0.6.8-1</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jetbrains.kotlin</groupId>
+        <artifactId>kotlin-stdlib</artifactId>
+        <version>2.2.10</version>
       </dependency>
       <!--
           for braille-css-utils and css-speech

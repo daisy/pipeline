@@ -189,12 +189,12 @@
         <plugin>
           <groupId>org.daisy.maven</groupId>
           <artifactId>xspec-maven-plugin</artifactId>
-          <version>1.0.0</version>
+          <version>1.0.1</version>
           <dependencies>
             <dependency>
               <groupId>org.daisy.maven</groupId>
               <artifactId>xspec-runner</artifactId>
-              <version>1.0.2</version>
+              <version>1.0.5</version>
             </dependency>
           </dependencies>
         </plugin>

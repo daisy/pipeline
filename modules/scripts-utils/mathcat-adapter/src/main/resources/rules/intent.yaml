@@ -1,0 +1,118 @@
+---
+-
+  name: intent-exists
+  tag: "!*"     # matches any tag -- runs before specific rules
+  match: "@intent"
+  replace: [x: "process-intent(.)"]     # Warning: this is a special case hack and only "." is allowed
+
+-
+  name: turn-off
+  tag: "!*"     # turn off matching -- runs before specific rules
+  match: "$SpeechStyle = 'LiteralSpeak' or ancestor-or-self::*[contains(@data-intent-property, ':literal:')]"
+  replace:
+  - test:
+      - if: "*"
+        then:
+        - intent:
+            xpath-name: "name(.)"
+            children: [x: "*"]
+      - else_if: "text()"
+        then:
+        - intent:
+            xpath-name: "name(.)"
+            children: [x: "text()"]
+        else:
+        - intent:
+            xpath-name: "name(.)"
+            children: []
+
+- include: "Intent/geometry.yaml"
+- include: "Intent/linear-algebra.yaml"
+- include: "Intent/calculus.yaml"
+
+-
+  # this is last because other rules are/should be(???) more specific
+   include: "Intent/general.yaml"
+
+-
+  # we need to leave "math" here so that there is a parent to all the rules (otherwise we have a special case tests)
+  name: ignore-punctuation
+  tag: math
+  match: "*[1][self::m:mrow and count(*)=2 and *[2][translate(.,'.,;:?', '')='']]"
+  variables: [TableProperty: "''"]
+  replace:
+  - test:
+      if: "*[1]/*[1]"
+      then:
+      - intent:
+          name: "math"
+          children: [x: "*[1]/*[1]"]
+      else: [t: " "]    # empty math -- don't say anything
+
+
+-
+  name: default
+  tag: math
+  match: "."
+  variables: [TableProperty: "''"]
+  replace:
+  - test:
+      if: "*"
+      then:
+      - intent:
+          name: "math"
+          children: [x: "*"]
+      else: [t: " "]    # empty math -- don't say anything
+
+
+-
+  name: default
+  tag: mstyle
+  match: "."
+  replace:
+  - test:
+      if: "*"
+      then: [x: "*"]
+      else: [t: " "]    # empty math -- don't say anything
+
+-
+  name: semantics
+  tag: "semantics"
+  match: "*[@encoding='MathML-Presentation']"
+  replace: 
+  - test:
+      if: "parent::m:math and *[@encoding='MathML-Presentation'][self::m:mrow and count(*)=2 and *[2][translate(.,'.,;:?', '')='']]"
+      then: [x: "*[@encoding='MathML-Presentation']/*[1]"]
+      else: [x: "*[@encoding='MathML-Presentation']"]
+
+-
+  name: semantics-default
+  tag: "semantics"
+  match: .
+  replace:
+  - test:
+      if: "parent::m:math and *[1][self::m:mrow and count(*)=2 and *[2][translate(.,'.,;:?', '')='']]"
+      then: [x: "*[1]/*[1]"]
+      else: [x: "*[1]"]
+
+-
+  # pass uncaught MathML through to the speech rules -- no point to renaming them
+  name: default
+  tag: "*"
+  match: "."
+  replace:
+  - test:
+      - if: "count(*) > 0"
+        then:
+        - intent:
+            xpath-name: "name(.)"
+            children: [x: "*"]
+      - else_if: "text()"
+        then:
+        - intent:
+            xpath-name: "name(.)"
+            children: [x: "text()"]
+        else:
+        - intent:
+            xpath-name: "name(.)"
+            children: []

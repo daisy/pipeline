@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:ssml="http://www.w3.org/2001/10/synthesis"
+               xmlns:m="http://www.w3.org/1998/Math/MathML"
+               xmlns="http://www.w3.org/1998/Math/MathML"
+               script="http://www.daisy.org/pipeline/modules/mathml-utils/library.xpl">
+
+  <x:scenario label="empty mathml">
+    <x:call step="px:mathml-to-ssml">
+      <x:input port="source">
+        <x:document type="inline">
+          <math xml:lang="en" id="m1"/>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="ssml" type="compare">
+      <x:document type="inline" xmlns="http://www.w3.org/2001/10/synthesis">
+        <speak version="1.1" xml:lang="en" id="m1"/>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="mtext only">
+    <x:call step="px:mathml-to-ssml">
+      <x:input port="source">
+        <x:document type="inline">
+          <math xml:lang="en" id="m1">
+            <mtext>text1</mtext>
+            <mtext>text2</mtext>
+          </math>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="ssml" type="compare">
+      <x:document type="inline" xmlns="http://www.w3.org/2001/10/synthesis">
+        <speak version="1.1" xml:lang="en" id="m1"> text1  text2 </speak>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="surrounding mtext">
+    <x:call step="px:mathml-to-ssml">
+      <x:input port="source">
+        <x:document type="inline">
+          <math xml:lang="en" id="m1">
+            <mtext>before1</mtext>
+            <mtext>before2</mtext>
+            <mfrac>
+              <mi> x </mi>
+              <mi> y </mi>
+            </mfrac>
+            <mtext>after1</mtext>
+            <mtext>after2</mtext>
+          </math>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="ssml" type="compare">
+      <x:document type="inline" xmlns="http://www.w3.org/2001/10/synthesis">
+        <speak version="1.1" xml:lang="en" id="m1">
+          before1 before2
+          <say-as interpret-as="characters">x</say-as> over 
+          <say-as interpret-as="characters">y</say-as>
+          <break time="200ms"/> end fraction 
+          <break time="200ms"/> after1 after2
+        </speak>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="Function application">
+    <x:call step="px:mathml-to-ssml">
+      <x:input port="source">
+        <x:document type="inline">
+          <math xml:lang="en" id="m1">
+            <mrow>
+              <mi> sin </mi>
+              <mo> &#8289; </mo>
+              <mi> x </mi>
+            </mrow>
+          </math>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="ssml" type="compare">
+      <x:document type="inline" xmlns="http://www.w3.org/2001/10/synthesis">
+        <speak version="1.1" xml:lang="en" id="m1">
+            sine of  
+            <say-as interpret-as="characters">x</say-as>
+        </speak>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="Addition">
+    <x:call step="px:mathml-to-ssml">
+      <x:input port="source">
+        <x:document type="inline">
+          <math xml:lang="en" id="m1">
+            <mrow>
+              <mi> x </mi>
+              <mo> + </mo>
+              <mi> y </mi>
+            </mrow>
+          </math>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="ssml" type="compare">
+      <x:document type="inline" xmlns="http://www.w3.org/2001/10/synthesis">
+        <speak version="1.1" xml:lang="en" id="m1">
+          <say-as interpret-as="characters">x</say-as> plus  
+          <say-as interpret-as="characters">y</say-as>
+        </speak>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="Fraction [simple]">
+    <x:call step="px:mathml-to-ssml">
+      <x:input port="source">
+        <x:document type="inline">
+          <math xml:lang="en" id="m1">
+            <mfrac>
+              <mi> x </mi>
+              <mi> y </mi>
+            </mfrac>
+          </math>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="ssml" type="compare">
+      <x:document type="inline" xmlns="http://www.w3.org/2001/10/synthesis">
+        <speak version="1.1" xml:lang="en" id="m1">
+          <say-as interpret-as="characters">x</say-as> over 
+          <say-as interpret-as="characters">y</say-as>
+          <break time="200ms"/> end fraction 
+          <break time="200ms"/>
+        </speak>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="Fraction [advanced]">
+    <x:call step="px:mathml-to-ssml">
+      <x:input port="source">
+        <x:document type="inline">
+          <math xml:lang="en" id="m1">
+            <mfrac>
+              <mrow>
+                <mi> x </mi>
+                <mo> - </mo>
+                <mi> y </mi>
+              </mrow>
+              <mi> z </mi>
+            </mfrac>
+          </math>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="ssml" type="compare">
+      <x:document type="inline" xmlns="http://www.w3.org/2001/10/synthesis">
+        <speak version="1.1" xml:lang="en" id="m1">
+          the fraction with numerator 
+          <break time="400ms"/>
+          <say-as interpret-as="characters">x</say-as> minus  
+          <say-as interpret-as="characters">y</say-as>
+          <break time="400ms"/> and denominator
+          <say-as interpret-as="characters">z</say-as>
+          <break time="800ms"/> end fraction 
+          <break time="200ms"/>
+        </speak>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="one half">
+    <x:call step="px:mathml-to-ssml">
+      <x:input port="source">
+        <x:document type="inline">
+          <math xml:lang="en" id="m1">
+            <mfrac>
+              <mn>1</mn>
+              <mn>2</mn>
+            </mfrac>
+          </math>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="ssml" type="compare">
+      <x:document type="inline" xmlns="http://www.w3.org/2001/10/synthesis">
+        <speak version="1.1" xml:lang="en" id="m1">
+        1 half
+        </speak>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="fences">
+    <x:call step="px:mathml-to-ssml">
+      <x:input port="source">
+        <x:document type="inline">
+          <math xml:lang="en" id="m1">
+            <mfenced open="[" separators=",;">
+              <mn>1</mn>
+              <mn>2</mn>
+              <mn>3</mn>
+              <mn>4</mn>
+            </mfenced>
+          </math>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="ssml" type="compare">
+      <x:document type="inline" xmlns="http://www.w3.org/2001/10/synthesis">
+        <speak version="1.1" xml:lang="en" id="m1">
+          open bracket 
+          <break time="128ms"/> 1 comma 
+          <break time="200ms"/> 2 semicolon 3 comma 
+          <break time="200ms"/> 4
+          <break time="128ms"/> close paren
+        </speak>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="regular root">
+    <x:call step="px:mathml-to-ssml">
+      <x:input port="source">
+        <x:document type="inline">
+          <math xml:lang="en" id="m1">
+            <mroot>
+              <mfrac>
+                <mn>3</mn>
+                <mn>4</mn>
+              </mfrac>
+              <mi>n</mi>
+            </mroot>
+          </math>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="ssml" type="compare">
+      <x:document type="inline" xmlns="http://www.w3.org/2001/10/synthesis">
+        <speak version="1.1" xml:lang="en" id="m1">
+          the 
+          <say-as interpret-as="characters">n</say-as>
+          <phoneme alphabet="ipa" ph="θ">-th</phoneme> root of 3 fourths
+          <break time="200ms"/> end root 
+          <break time="400ms"/>
+        </speak>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="regex text node">
+    <x:call step="px:mathml-to-ssml">
+      <x:input port="source">
+        <x:document type="inline">
+          <math xml:lang="en" id="m1">
+            <mroot>
+              <mfrac>
+                <mi>x</mi>
+                <mi>y</mi>
+              </mfrac>
+              <mn>12</mn>
+            </mroot>
+          </math>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="ssml" type="compare">
+      <x:document type="inline" xmlns="http://www.w3.org/2001/10/synthesis">
+        <speak version="1.1" xml:lang="en" id="m1">
+          the twelfth root of
+          <say-as interpret-as="characters">x</say-as> over
+          <say-as interpret-as="characters">y</say-as>
+          <break time="200ms"/> end fraction
+          <break time="200ms"/> end root 
+          <break time="400ms"/>
+        </speak>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="multiscripts">
+    <x:call step="px:mathml-to-ssml">
+      <x:input port="source">
+        <x:document type="inline">
+          <math xml:lang="en" id="m1">
+            <mmultiscripts>
+              <mi>X</mi>      <!-- base expression -->
+              <mi>d</mi>      <!-- postsubscript1 -->
+              <mi>c</mi>      <!-- postsuperscript1 -->
+              <mn>1</mn>      <!-- postsubscript2 -->
+              <mn>2</mn>      <!-- postsuperscript2 -->
+              <mprescripts/>
+              <mi>b</mi>      <!-- presubscript -->
+              <mi>a</mi>      <!-- presuperscript -->
+            </mmultiscripts>
+          </math>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="ssml" type="compare">
+      <x:document type="inline" xmlns="http://www.w3.org/2001/10/synthesis">
+        <speak version="1.1" xml:lang="en" id="m1">
+          cap
+          <say-as interpret-as="characters">x</say-as> pre subscript 
+          <say-as interpret-as="characters">b</say-as> and pre superscript 
+          <say-as interpret-as="characters">a</say-as>
+          <break time="200ms"/> and with 2 postscripts
+          <break time="200ms"/> subscript
+          <say-as interpret-as="characters">d</say-as> and superscript
+          <say-as interpret-as="characters">c</say-as> subscript 1 and superscript 2
+        </speak>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="malformed MathML: empty mi and unsupported lang" pending="error">
+    <x:call step="px:mathml-to-ssml">
+      <x:input port="source">
+        <x:document type="inline">
+          <math xml:lang="zz" id="m1">
+            <mfrac>
+              <mrow>
+                <mi>Plus</mi><mi> </mi><mi>value</mi>
+              </mrow>
+              <mrow>
+                <mi>Valeur</mi><mi> </mi><mi>de</mi><mi> </mi><mi>la</mi><mi> </mi><mi>force</mi><mi> </mi><mi>de</mi><mi> </mi><mi>travail</mi>
+              </mrow>
+            </mfrac>
+          </math>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="ssml" type="compare">
+      <x:document type="inline" xmlns="http://www.w3.org/2001/10/synthesis">
+        <speak version="1.1" xml:lang="zz" id="m1"/>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="mathml without id">
+    <x:call step="px:mathml-to-ssml">
+      <x:input port="source">
+        <x:document type="inline">
+          <math xml:lang="en">
+            <mtext>text1</mtext>
+            <mtext>text2</mtext>
+          </math>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="dtbook with ssml" type="compare">
+      <x:document type="inline" xmlns="http://www.w3.org/2001/10/synthesis">
+        <speak version="1.1" xml:lang="en" id="id_1"> text1  text2 </speak>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="mathml inside dtbook">
+    <x:call step="px:mathml-to-ssml">
+      <x:input port="source">
+        <x:document type="inline">
+          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en">
+            <m:math id="s1"><m:mi>x</m:mi></m:math>
+            <sent id="s2"><w>regular</w></sent>
+          </dtbook>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="dtbook with ssml" type="compare">
+      <x:document type="inline" xmlns="http://www.w3.org/2001/10/synthesis">
+        <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en">
+          <ssml:speak version="1.1" id="s1">
+            <ssml:say-as interpret-as="characters">x</ssml:say-as>
+          </ssml:speak>
+          <sent id="s2"><w>regular</w></sent>
+        </dtbook>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+</x:description>

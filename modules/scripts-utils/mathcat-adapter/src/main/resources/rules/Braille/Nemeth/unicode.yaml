@@ -1,0 +1,408 @@
+---
+# To greatly simplify typeface/language generation, the chars have unique ASCII chars for them:
+# Typeface: S: sans-serif, B: bold, T: script/blackboard, I: italic, R: Roman
+# Language: E: English, D: German, G: Greek, V: Greek variants, H: Hebrew, U: Russian
+# Indicators: C: capital, L: letter, N: number, P: punctuation, M: multipurpose
+# Others: W -- whitespace that should be kept (e.g, in a numeral)
+#  SRE doesn't have H: Hebrew or U: Russian, so not encoded (yet)
+# Some of the weird letters (e.g., circled letters) I didn't translate with the above because
+#   they don't interact with rules since they are enclosed in other chars.
+
+
+  # --- Nemeth Default Alphabet normal chars. ---
+ - "0": [t: "N⠴"]               # 0x30
+ - "1": [t: "N⠂"]               # 0x31
+ - "2": [t: "N⠆"]               # 0x32
+ - "3": [t: "N⠒"]               # 0x33
+ - "4": [t: "N⠲"]               # 0x34
+ - "5": [t: "N⠢"]               # 0x35
+ - "6": [t: "N⠖"]               # 0x36
+ - "7": [t: "N⠶"]               # 0x37
+ - "8": [t: "N⠦"]               # 0x38
+ - "9": [t: "N⠔"]               # 0x39
+ - "A": [t: "CL⠁"]              # 0x41
+ - "B": [t: "CL⠃"]              # 0x42
+ - "C": [t: "CL⠉"]              # 0x43
+ - "D": [t: "CL⠙"]              # 0x44
+ - "E": [t: "CL⠑"]              # 0x45
+ - "F": [t: "CL⠋"]              # 0x46
+ - "G": [t: "CL⠛"]              # 0x47
+ - "H": [t: "CL⠓"]              # 0x48
+ - "I": [t: "CL⠊"]              # 0x49
+ - "J": [t: "CL⠚"]              # 0x4a
+ - "K": [t: "CL⠅"]              # 0x4b
+ - "L": [t: "CL⠇"]              # 0x4c
+ - "M": [t: "CL⠍"]              # 0x4d
+ - "N": [t: "CL⠝"]              # 0x4e
+ - "O": [t: "CL⠕"]              # 0x4f
+ - "P": [t: "CL⠏"]              # 0x50
+ - "Q": [t: "CL⠟"]              # 0x51
+ - "R": [t: "CL⠗"]              # 0x52
+ - "S": [t: "CL⠎"]              # 0x53
+ - "T": [t: "CL⠞"]              # 0x54
+ - "U": [t: "CL⠥"]              # 0x55
+ - "V": [t: "CL⠧"]              # 0x56
+ - "W": [t: "CL⠺"]              # 0x57
+ - "X": [t: "CL⠭"]              # 0x58
+ - "Y": [t: "CL⠽"]              # 0x59
+ - "Z": [t: "CL⠵"]              # 0x5a
+ - "a": [t: "L⠁"]               # 0x61
+ - "b": [t: "L⠃"]               # 0x62
+ - "c": [t: "L⠉"]               # 0x63
+ - "d": [t: "L⠙"]               # 0x64
+ - "e": [t: "L⠑"]               # 0x65
+ - "f": [t: "L⠋"]               # 0x66
+ - "g": [t: "L⠛"]               # 0x67
+ - "h": [t: "L⠓"]               # 0x68
+ - "i": [t: "L⠊"]               # 0x69
+ - "j": [t: "L⠚"]               # 0x6a
+ - "k": [t: "L⠅"]               # 0x6b
+ - "l": [t: "L⠇"]               # 0x6c
+ - "m": [t: "L⠍"]               # 0x6d
+ - "n": [t: "L⠝"]               # 0x6e
+ - "o": [t: "L⠕"]               # 0x6f
+ - "p": [t: "L⠏"]               # 0x70
+ - "q": [t: "L⠟"]               # 0x71
+ - "r": [t: "L⠗"]               # 0x72
+ - "s": [t: "L⠎"]               # 0x73
+ - "t": [t: "L⠞"]               # 0x74
+ - "u": [t: "L⠥"]               # 0x75
+ - "v": [t: "L⠧"]               # 0x76
+ - "w": [t: "L⠺"]               # 0x77
+ - "x": [t: "L⠭"]               # 0x78
+ - "y": [t: "L⠽"]               # 0x79
+ - "z": [t: "L⠵"]               # 0x7a
+ - "Α": [t: "GCL⠁"]             # 0x391
+ - "Β": [t: "GCL⠃"]             # 0x392
+ - "Γ": [t: "GCL⠛"]             # 0x393
+ - "Δ": [t: "GCL⠙"]             # 0x394
+ - "Ε": [t: "GCL⠑"]             # 0x395
+ - "Ζ": [t: "GCL⠵"]             # 0x396
+ - "Η": [t: "GCL⠱"]             # 0x397
+ - "Θ": [t: "GCL⠹"]             # 0x398
+ - "Ι": [t: "GCL⠊"]             # 0x399
+ - "Κ": [t: "GCL⠅"]             # 0x39a
+ - "Λ": [t: "GCL⠇"]             # 0x39b
+ - "Μ": [t: "GCL⠍"]             # 0x39c
+ - "Ν": [t: "GCL⠝"]             # 0x39d
+ - "Ξ": [t: "GCL⠭"]             # 0x39e
+ - "Ο": [t: "GCL⠕"]             # 0x39f
+ - "Π": [t: "GCL⠏"]             # 0x3a0
+ - "Ρ": [t: "GCL⠗"]             # 0x3a1
+ - "ϴ": [t: "GCL⠹"]             # 0x3f4
+ - "Σ": [t: "GCL⠎"]             # 0x3a3
+ - "Τ": [t: "GCL⠞"]             # 0x3a4
+ - "Υ": [t: "GCL⠥"]             # 0x3a5
+ - "Φ": [t: "GCL⠋"]             # 0x3a6
+ - "Χ": [t: "GCL⠯"]             # 0x3a7
+ - "Ψ": [t: "GCL⠽"]             # 0x3a8
+ - "Ω": [t: "GCL⠺"]             # 0x3a9
+ - "∇": [t: "GL⠫"]              # 0x2207
+ - "α": [t: "GL⠁"]              # 0x3b1
+ - "β": [t: "GL⠃"]              # 0x3b2
+ - "γ": [t: "GL⠛"]              # 0x3b3
+ - "δ": [t: "GL⠙"]              # 0x3b4
+ - "ε": [t: "GL⠑"]              # 0x3b5
+ - "ζ": [t: "GL⠵"]              # 0x3b6
+ - "η": [t: "GL⠱"]              # 0x3b7
+ - "θ": [t: "GL⠹"]              # 0x3b8
+ - "ι": [t: "GL⠊"]              # 0x3b9
+ - "κ": [t: "GL⠅"]              # 0x3ba
+ - "λ": [t: "GL⠇"]              # 0x3bb
+ - "μ": [t: "GL⠍"]              # 0x3bc
+ - "ν": [t: "GL⠝"]              # 0x3bd
+ - "ξ": [t: "GL⠭"]              # 0x3be
+ - "ο": [t: "GL⠕"]              # 0x3bf
+ - "π": [t: "GL⠏"]              # 0x3c0
+ - "ρ": [t: "GL⠗"]              # 0x3c1
+ - "ς": [t: "VL⠎"]              # 0x3c2
+ - "σ": [t: "GL⠎"]              # 0x3c3
+ - "τ": [t: "GL⠞"]              # 0x3c4
+ - "υ": [t: "GL⠥"]              # 0x3c5
+ - "φ": [t: "VL⠋"]              # 0x3c6
+ - "χ": [t: "GL⠯"]              # 0x3c7
+ - "ψ": [t: "GL⠽"]              # 0x3c8
+ - "ω": [t: "GL⠺"]              # 0x3c9
+ - "ϵ": [t: "GL⠑"]              # 0x3f5
+ - "ϑ": [t: "VL⠹"]              # 0x3d1
+ - "ϰ": [t: "GL⠅"]              # 0x3f0
+ - "ϕ": [t: "GL⠋"]              # 0x3d5
+ - "ϱ": [t: "GL⠗"]              # 0x3f1
+ - "ϖ": [t: "GL⠏"]              # 0x3d6
+
+
+  # --- Nemeth Default Characters math_symbols chars. ---
+ - "`": [t: "⠈"]                # 0x60
+ - "≟": [t: "⠐⠨⠅⠣⠸⠦⠻"]       # 0x225f
+ - "≠": [t: "⠌⠨⠅"]             # 0x2260
+ - "≡":                         # 0x2261
+    - test:
+        if: "@data-chemical-bond"
+        then: [t: "⠸⠿⠻"]
+        else: [t: "⠸⠇"]
+
+ - "≤": [t: "⠐⠅⠱"]              # 0x2264
+ - "≥": [t: "⠨⠂⠱"]              # 0x2265
+ - "⊂": [t: "⠸⠐⠅"]              # 0x2282
+ - "⊃": [t: "⠸⠨⠂"]              # 0x2283
+ - "⊄": [t: "⠌⠸⠐⠅"]             # 0x2284
+ - "⊅": [t: "⠌⠸⠨⠂"]             # 0x2285
+ - "⊆": [t: "⠸⠐⠅⠱"]             # 0x2286
+ - "⊇": [t: "⠸⠨⠂⠱"]             # 0x2287
+ - "⊥": [t: "⠫⠏"]               # 0x22a5
+ - "⋀": [t: "⠈⠩"]               # 0x22c0
+ - "⋁": [t: "⠈⠬"]               # 0x22c1
+ - "⋂": [t: "⠨⠩"]               # 0x22c2
+ - "⋃": [t: "⠨⠬"]               # 0x22c3
+ - "⋜": [t: "⠱⠐⠅"]              # 0x22dc
+ - "⋝": [t: "⠱⠨⠂"]              # 0x22dd
+ - "⋮":                           # 0x22ee
+    - test:   # if we have a triple bond represented by "⋮⋮", the we output the triple bond for the first but not the second
+        if: "@data-chemical-bond and (preceding-sibling::*[1] = '⋮' or following-sibling::*[1] = '⋮')"
+        then_test:
+            if: "following-sibling::*[1] = '⋮'"
+            then: [t: "⠨⠹"]      # output only the first of the two chars
+        else: [t: "⠣⠄⠄⠄"]
+ - "⋯": [t: "⠄⠄⠄"]              # 0x22ef
+ - "⋰": [t: "⠘⠄⠄⠄"]             # 0x22f0
+ - "⋱": [t: "⠰⠄⠄⠄"]             # 0x22f1
+
+  # --- Nemeth Default Characters rest chars. ---
+ - "←": [t: "⠫⠪⠒⠒"]             # 0x2190
+ - "ⅆ": [t: "⠙"]                # 0x2146
+ - "ⅇ": [t: "⠑"]                # 0x2147
+ - "ⅈ": [t: "⠊"]                # 0x2148
+
+
+ # overwrites from MS
+   # space inside of numbers has special treatment
+ - " ":                        # 0x20 (space)
+    - test:
+        if: "self::m:mn"
+        then: [t: "⠀"]
+        else: [t: "W"]
+
+ - " ":                        # 0xA0 (non-breaking space)
+    - test:
+      - if: "self::m:mn" 
+        then: [t: "⠀"]
+        #   # part of longer string or part of preceeding or following text
+      - else_if: "@data-added='missing-content' or @data-empty-in-2D or @width > 1.1"
+        then: [t: "⠿"]       # omission
+      - else_if: "(string-length(.) > 1 or preceding-sibling::*[1][self::m:mtext and .!=','] or following-sibling::*[1][self::m:mtext])"
+        then: [t: "W"]
+        # treat mo like 0x2061 (function apply)
+      - else_if: "self::m:mo and
+                  (preceding-sibling::*[1][IsInDefinition(., 'Braille', 'GeometryShapes')] or
+                   @data-function-likelihood and
+                   IsInDefinition(BaseNode(.), 'Braille', 'FunctionNames') and
+                   not(following-sibling::*[1][IsBracketed(., '', '')])
+                  )" 
+        then: [t: "w"]      # follows a function name, so lowercase
+
+ - "!":                          # 0x21 (Factorial)
+    - test:
+        if: "self::m:mo"
+        then: [t: "⠯"]
+        else: [t: "P⠖"]
+
+#  - "\"": [t: ""]                # 0x22 (Quotation mark)
+ - "#": [t: "⠨⠼"]               # 0x23 (Number sign)
+ - "$": [t: "⠈⠎"]               # 0x24 (Dollar sign)
+ - "%": [t: "⠈⠴"]               # 0x25 (Percent sign)
+ - "&": [t: "⠸⠯"]               # 0x26 (Ampersand)
+ - "'": [t: "P⠄"]                # 0x27 (Apostrophe)
+ - "(": [t: "⠷"]                # 0x28 (Left parenthesis)
+ - ")": [t: "⠾"]                # 0x29 (Right parenthesis)
+ - "*": [t: "⠈⠼"]               # 0x002A (Asterisk)
+ - "+":                         # 0x002B (Plus sign)
+    - test:
+        # Add multipurpose indicator before prefix '+' to avoid being the same as '∓' 
+        if: "not(preceding-sibling::*) and parent::*[1][name(.)='mrow' and preceding-sibling::*[1][name(.)='mo' and .='-']]"
+        then: [t: "m⠬"]
+        else: [t: "⠬"]
+
+ - ",":                         # 0x002C (Comma)
+    - test:
+          # test if first ancestor that isn't an mrow is a script tag (rule 78)
+      - if: "self::m:mn"
+        then: [t: "⠠"]
+      - else_if: "ancestor-or-self::*[not(parent::m:mrow)][1][parent::m:msub or parent::m:msup or parent::m:msubsup or parent::m:mmultiscripts][preceding-sibling::*]"
+        then: [t: "⠪"]         # Rule 78
+        else: [t: ","]         # ',' used for matching purposes, converted to "⠠⠀"
+ - "-":                        # 0x002D (Hyphen)  (0x2212 normalized to here) -- 38vi says don't use the punctuation indicator
+    - test:
+        # Add multipurpose indicator before prefix '+' to avoid being the same as '±' or a dash
+        if: "@data-chemical-bond"
+        then: [t: "⠸⠒⠻"]
+        else_test:
+            if: "not(preceding-sibling::*) and parent::*[1][name(.)='mrow' and preceding-sibling::*[1][name(.)='mo' and (.='+' or .='-')]]"
+            then: [t: "m⠤"]
+            else: [t: "⠤"] 
+
+ - ".":                          # 0x002E (Full stop or decimal pt)
+      # '.' is particularly tricky because we need to know if it is really numeric or not.
+      # if it is numeric, it might be a on it's own or part of a number.
+      # normally, it is merged with the digits if part of a number, but if the adjacent digit(s) are modified
+      #  by something (e.g., a bar over the digit to signify that it repeats), then it is really part of the number
+      # If it is the last part of the expr, then it is punctuation (for typographic reasons, punctuation is often included in the math)
+    - test:
+        if: "self::m:mn or (self::m:mo and following-sibling::*)"
+        then_test:
+          if: "string-length(text()) = 1 and not(
+                  following-sibling::*[1][BaseNode(.)[self::m:mn]] or
+                  following-sibling::*[1][self::m:menclose and @notation='top' and *[1][self::m:mn]]
+              )"
+          then: [t: "𝑁⠨"]      # example 8c(4) -- lone "." is not considered numeric, but not a period
+          else: [t: "N⠨"]
+        else_test:
+          if: "preceding-sibling::*[1][@data-roman-numeral or
+                  (name(.)='mrow' and *[last()][@data-roman-numeral])]"
+          then: [t: "𝐏⠲"]
+          else: [t: "P⠲"]
+ - "/": [t: "⠸⠌"]               # 0x002F (Solidus)
+ - ":":                         # 0x003A (Colon)
+        # sometimes a colon is meant to be a ratio
+        # we start to see if this is marked as 'ratio' and not marked as something else (but ignoring a literal)
+        # this test is based on what SRE does -- if the "roles" are the same, it guesses "ratio"
+        # MathCAT doesn't have roles, so we do a hack that looks checks mrows if not atomic.
+        # If an mrow, guess it is infix and checks the operator. This is pretty weak!
+        # Need to rule out field extensions "[K:F]" and trilinear coordinates "a:b:c" as they use the punctuation form
+        # When using the punctuation form, there may or may not be a trailing spacing depending on the "print"
+        #   NFB Lesson 5.7 says "Follow print for spacing after the colon."
+        #   We can't normally tell spacing, but it *should* have a space in function mapping and set builder notation if the author used appropriate notation
+        #   The canonicalization code makes this guess and adds "data-space-after"
+    - test:
+        - if: "@intent='ratio' or
+             ( (@intent and starts-with(@intent, '_')) and
+               ../self::m:mrow and
+               not(ancestor::*[2][IsBracketed(., '[', ']')]) and
+               not( preceding-sibling::*[2][.=':'] or following-sibling::*[2][.=':']) and 
+               name(preceding-sibling::*[1]) = name(following-sibling::*[1]) and
+               ( name(preceding-sibling::*[1]) != 'mrow' or
+                 (preceding-sibling::*[1]/*[2][text()] = following-sibling::*[1]/*[2][text()]) )
+             )"
+          then: [t: "W⠐⠂W"]
+        - else_if: "@data-chem-formula-op"    # lewis dots
+          then:
+          - t: "⠹"
+          else:
+          - t: "P⠒"
+          - test:
+              if: "@data-space-after or ancestor::*[2][IsBracketed(., '{', '}')] or following-sibling::*[1]/*[2][IsInDefinition(., 'Braille', 'Arrows')]" # "Arrows" is a bit broad...
+              then: [t: "W"]
+ - ";": [t: "P⠆"]               # 0x003B (Semicolon)
+ - "<": [t: "⠐⠅"]             # 0x003C (Less-than sign)
+ - "=":                        # 0x003D (Equals sign)
+    - test:
+        if: "@data-chemical-bond"
+        then: [t: "⠸⠶⠻"]
+        else: [t: "⠨⠅"]
+
+ - ">": [t: "⠨⠂"]             # 0x003E (Greater-than sign)
+ - "?": [t: "P⠦"]               # 0x003F (Question mark)
+ - "@": [t: "⠈⠁"]               # 0x40 (Commercial at)
+ - "[": [t: "⠈⠷"]               # 0x005B (Left square bracket)
+ - "\\": [t: "⠸⠡"]              # 0x005C (Reverse solidus)
+ - "]": [t: "⠈⠾"]               # 0x005D (Right square bracket)
+ - "^": [t: "⠸⠣"]               # 0x005E (Circumflex accent)
+ - "_": [t: ""]                 # 0x005F (Low line)
+ - "{": [t: "⠨⠷"]               # 0x007B (Left curly bracket)
+ - "|":                # 0x007C (Vertical line)
+     - test:
+        if: "preceding-sibling::* and following-sibling::*"
+        then: [t: "w⠳w"]        # comparison (e.g., such that -- rule 145)
+        else: [t: "⠳"]          # absolute value, others???
+ - "}": [t: "⠨⠾"]               # 0x007D (Right curly bracket)
+ - "~": [t: "⠈⠱"]               # 0x007E (Tilde)
+ - "¬": [t: ""]                 # 0x00AC (Not sign)
+ - "¯": [t: "⠱"]                # 0x00AF (bar)
+ - "°": [t: "⠨⠡"]              # 0x00B0 (Degree sign)
+ - "±": [t: "⠬⠤"]               # 0x00B1 (Plus-minus sign)
+ - "·": [t: "⠡"]                # 0x00B7 (Middle dot)
+ - "×": [t: "⠈⠡"]               # 0x00D7 (Multiplication sign)
+ - "÷": [t: "⠨⠌"]               # 0x00F7 (Division sign)
+ - "—": [t: "P⠤⠤"]               # 0x2014 (Em dash)
+      # rule 43b about spaces (references rule 42)
+      # dashes are 'mo's so no inserted invisible times between it and currency symbols
+ - "―":                          # 0x2015 (Horizontal bar)
+    - test:
+        if:
+          - "not("
+          - "  (not(preceding-sibling::*) and parent::*[1][name(.)='mrow' and preceding-sibling::*[1][IsInDefinition(., 'Braille', 'NemethPunctAndOpenBeforeSymbols')]]) or"
+          - "  (preceding-sibling::*[1][IsInDefinition(., 'Braille', 'NemethCurrencyBeforeSymbols')])"
+          - ")"
+        then: [t: "W"]
+    - t: "⠤⠤⠤⠤"
+    - test:
+        if:
+          - "not("
+          - "  name(parent::*[1])='mrow' and ("
+          - "    (following-sibling::*[1][IsInDefinition(., 'Braille', 'NemethPunctAndOpenAfterSymbols')]) or "
+          - "    (not(following-sibling::*) and parent::*[1][name(.)='mrow' and following-sibling::*[1][IsInDefinition(., 'Braille', 'NemethPunctAndOpenAfterSymbols')]]) or "
+          - "    (following-sibling::*[1][.='\u2062'] and following-sibling::*[2][IsInDefinition(., 'Braille', 'NemethCurrencyAfterSymbols')])"
+          - "  )"
+          - ")"
+        then: [t: "W"]
+
+ - "…":                          # 0x2026 (Ellipsis)
+      # rule 43b about spaces (references rule 42); partly superseded by lesson 2.13
+      # tests are ugly because an invisible times might have been inserted and we need to skip that
+    - test:
+        if:
+          - "not("
+          - "  (not(preceding-sibling::*) and parent::*[1][name(.)='mrow' and preceding-sibling::*[1][IsInDefinition(., 'Braille', 'NemethPunctAndOpenBeforeSymbols')]]) or"
+          - "  (preceding-sibling::*[1][.='\u2062'] and preceding-sibling::*[2][IsInDefinition(., 'Braille', 'NemethCurrencyBeforeSymbols')])"
+          - ")"
+        then: [t: "W"]
+    - t: "⠄⠄⠄"
+    - test:
+        if:
+          - "not("
+          - "  name(parent::*[1])='mrow' and ("
+          - "    (following-sibling::*[1][IsInDefinition(., 'Braille', 'NemethPunctAndOpenAfterSymbols')]) or "
+          - "    (not(following-sibling::*) and parent::*[1][name(.)='mrow' and following-sibling::*[1][IsInDefinition(., 'Braille', 'NemethPunctAndOpenAfterSymbols')]]) or "
+          - "    (following-sibling::*[1][.='\u2062'] and following-sibling::*[2][IsInDefinition(., 'Braille', 'NemethCurrencyAfterSymbols')])"
+          - "  )"
+          - ")"
+        then: [t: "W"]
+ - "‰": [t: "`00"]
+ - "′": [t: "⠄"]                # 0x2032 (Prime)
+ - "″": [t: "⠄⠄"]               # 0x2033 (Double prime)
+ - "⁡":                          # 0x2061⁡ (invisible function apply)
+    # add a space if name doesn't have brackets after it or is in FunctionNames list 
+    - test:
+        if: "not(following-sibling::*[1][IsBracketed(., '', '')]) or preceding-sibling::*[1][IsInDefinition(BaseNode(.), 'Braille', 'FunctionNames')]" 
+        then: [t: "w"]      # follows a function name, so lowercase
+ - "⁢": [t: ""]                 # 0x2062
+ - "⁣":                         # 0x2063 (Invisible Comma -- treat like a normal comma when in a subscript[issue #40]) else ignore
+    - test:
+          # test if first ancestor that isn't an mrow is a script tag (rule 78)
+      - if: "self::m:mn"
+        then: [t: ""]
+      - else_if: "ancestor-or-self::*[not(parent::m:mrow)][1][parent::m:msub or parent::m:msup or parent::m:msubsup or parent::m:mmultiscripts][preceding-sibling::*]"
+        then: [t: "⠪"]        # Rule 78
+        else: [t: ""]
+ - "⁤": [t: ""]                 # 0x2064
+
+ - "ℏ": [t: "⠈⠓"]               # 0x210F (Planck constant over two pi)
+ - "ℓ": [t: "TE⠇"]               # 0x2113 (Script small l (differs from 1d4c1: 4-56-123))
+ - "→":                           # 0x2192 (Rightwards arrow)
+     - test:                      # Rule 96 -- uncontracted form if base of under/over
+        if: "not(preceding-sibling::*) and parent::*[self::m:mover or self::m:munder or self::m:munderover]"
+        then: [t: "⠫⠒⠒⠕"]        # uncontracted version
+        else: [t: "⠫⠕"]        # contracted version
+ - "∀": [t: "⠈⠯"]               # 0x2200 (For all)
+ - "∂": [t: "⠈⠙"]               # 0x2202 (Partial differential)
+ - "∃": [t: "⠈⠿"]               # 0x2203 (There exists)
+ - "∄": [t: "⠌⠈⠿"]              # 0x2204 (There does not exist)
+ - "∅": [t: "⠸⠴"]               # 0x2205 (Empty set)
+ - "∏": [t: "GCL⠏"]              # 0x220F (N-ary product)
+ - "∑": [t: "GCL⠎"]              # 0x2211 (N-ary summation)
+ - "∆": [t: "GCL⠙"]              # 2206
+
+ - "∞": [t: "⠠⠿"]               # 0x221E (Infinity)
+ - "∣": [t: "⠳"]              # 0x2223 (Divides)
+ - "∫": [t: "⠮"]                # 0x222B (Integral)
+ - "℃": [t: "⠘⠨⠡⠀⠰⠠⠉"]          # 0x2103 (Degrees Celsius)
+ - "℉": [t: "⠘⠨⠡⠀⠰⠠⠋"]          # 0x2109 (Degrees Fahrenheit)
