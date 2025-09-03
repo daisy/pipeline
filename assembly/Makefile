@@ -129,6 +129,7 @@ ifeq ($(OS), MACOSX)
 	        "net.java.dev.jna.jna-*.jar/com/sun/jna/darwin-*/libjnidispatch.jnilib",                            \
 	        "org.daisy.libs.io.bit3.jsass-*.jar/darwin-*/libjsass.dylib",                                       \
 	        "*.audio-encoder-lame-*.jar/macosx/lame",                                                           \
+	        "onl.mdw.mathcat4j-core-*.jar/META-INF/native/libmathcat4j-darwin-*.dylib",                         \
 	        "mac/*.libhyphen-utils-*-mac.jar/native/macosx/*/libhyphen.dylib",                                  \
 	        "mac/*.liblouis-utils-*-mac.jar/native/macosx/*/liblouis.dylib",                                    \
 	        "mac/*.liblouis-utils-*-mac.jar/native/macosx/*/liblouisutdml/file2brl",                            \

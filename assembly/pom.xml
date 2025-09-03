@@ -1411,6 +1411,26 @@
       </exclusions>
     </dependency>
     <dependency>
+      <groupId>onl.mdw</groupId>
+      <artifactId>mathcat4j-core</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.jetbrains.kotlin</groupId>
+      <artifactId>kotlin-stdlib</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
       <groupId>org.rococoa</groupId>
       <artifactId>rococoa-core</artifactId>
       <exclusions>
@@ -2826,6 +2846,17 @@
                 <artifactItem>
                   <groupId>org.apache.commons</groupId>
                   <artifactId>commons-compress</artifactId>
+                </artifactItem>
+                <!--
+                    for mathcat-adapter
+                -->
+                <artifactItem>
+                  <groupId>onl.mdw</groupId>
+                  <artifactId>mathcat4j-core</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.jetbrains.kotlin</groupId>
+                  <artifactId>kotlin-stdlib</artifactId>
                 </artifactItem>
                 <!--
                     for tts-adapter-azure
