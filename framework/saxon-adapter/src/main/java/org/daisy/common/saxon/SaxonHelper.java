@@ -21,6 +21,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Vector;
 
+import javax.xml.stream.XMLStreamReader;
+
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -53,6 +55,7 @@ import net.sf.saxon.sxpath.XPathExpression;
 import net.sf.saxon.trans.XPathException;
 import net.sf.saxon.type.ValidationException;
 import net.sf.saxon.value.AnyURIValue;
+import net.sf.saxon.value.AtomicValue;
 import net.sf.saxon.value.BigDecimalValue;
 import net.sf.saxon.value.BooleanValue;
 import net.sf.saxon.value.DateTimeValue;
@@ -65,6 +68,8 @@ import net.sf.saxon.value.ObjectValue;
 import net.sf.saxon.value.SequenceExtent;
 import net.sf.saxon.value.SequenceType;
 import net.sf.saxon.value.StringValue;
+
+import org.daisy.common.transform.XMLInputValue;
 
 public final class SaxonHelper {
 
@@ -188,6 +193,8 @@ public final class SaxonHelper {
 			return SequenceType.OPTIONAL_ANY_URI; // SINGLE_ANY_URI
 		else if (type.equals(Element.class) || type.equals(Node.class) || type.equals(Attr.class))
 			return SequenceType.SINGLE_NODE;
+		else if (type.equals(XMLStreamReader.class))
+			return SequenceType.NODE_SEQUENCE;
 		else if (type.equals(Object.class))
 			return SequenceType.SINGLE_ITEM;
 		else if (type instanceof Class && ((Class<?>)type).isArray()) {
@@ -229,7 +236,8 @@ public final class SaxonHelper {
 					sequenceTypeFromType(valueType);
 					return HashTrieMap.SINGLE_MAP_TYPE;
 				}
-			}
+			} else if (rawType.equals(XMLInputValue.class))
+				return SequenceType.NODE_SEQUENCE;
 		} else
 			return SequenceType.SINGLE_ITEM; // special wrapper item
 		throw new IllegalArgumentException("Unsupported type: " + type);
@@ -344,6 +352,13 @@ public final class SaxonHelper {
 		else if (type.equals(XdmNode.class))
 			if (item instanceof NodeInfo)
 				return (T)new XdmNode((NodeInfo)item);
+			else
+				throw new IllegalArgumentException();
+		else if (type.equals(XdmItem.class))
+			if (item instanceof NodeInfo)
+				return (T)new XdmNode((NodeInfo)item);
+			else if (item instanceof AtomicValue)
+				return (T)new XdmAtomicValue((AtomicValue)item) {};
 			else
 				throw new IllegalArgumentException();
 		else if (type.equals(Element.class))
