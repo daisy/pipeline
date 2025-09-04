@@ -113,7 +113,7 @@
             </Import-Package>
             <_dsannotations>
               org.daisy.common.xproc.calabash.impl.CalabashXProcEngine,
-              org.daisy.common.xproc.calabash.impl.DynamicXProcConfigurationFactory
+              org.daisy.common.xproc.calabash.impl.XProcRuntimeFactoryImpl
             </_dsannotations>
           </instructions>
         </configuration>
@@ -178,7 +178,7 @@
             <configuration>
               <includes>
                 org.daisy.common.xproc.calabash.impl.CalabashXProcEngine,
-                org.daisy.common.xproc.calabash.impl.DynamicXProcConfigurationFactory
+                org.daisy.common.xproc.calabash.impl.XProcRuntimeFactoryImpl
               </includes>
             </configuration>
           </execution>

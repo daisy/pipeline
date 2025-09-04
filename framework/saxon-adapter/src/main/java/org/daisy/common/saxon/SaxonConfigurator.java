@@ -7,7 +7,9 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.xml.transform.sax.SAXSource;
@@ -47,20 +49,17 @@ import org.xml.sax.InputSource;
 public class SaxonConfigurator {
 
 	public Configuration newConfiguration() {
+		return newConfiguration(true, null);
+	}
+
+	public Configuration newConfiguration(boolean registerExtensionFunctions, Collection<Object> context) {
 		try {
 			Configuration config = Configuration.readConfiguration(
 				new SAXSource(new InputSource(getConfigurationAsStream())));
-			if (uriResolver != null)
-				config.setURIResolver(uriResolver);
-			if (xpathExtensionFunctions != null)
-				for (ExtensionFunctionDefinition function : xpathExtensionFunctions.getFunctions())
-					config.registerExtensionFunction(function);
-			if (packages != null && !packages.isEmpty()) {
-				PackageLibrary packageLib = config.getDefaultXsltCompilerInfo().getPackageLibrary();
-				for (PackageDetails pack : packages) {
-					packageLib.addPackage(pack);
-				}
-			}
+			setURIResolver(config);
+			if (registerExtensionFunctions)
+				registerExtensionFunctions(config, context);
+			addXsltPackages(config);
 			return config;
 		} catch (XPathException e) {
 			throw new RuntimeException(e);
@@ -79,17 +78,55 @@ public class SaxonConfigurator {
 			).getBytes(StandardCharsets.UTF_8));
 	}
 
+	public void registerExtensionFunctions(Configuration config, Collection<Object> context) {
+		if (xpathExtensionFunctions != null) {
+			context = context != null ? new HashSet<>(context) : new HashSet<>();
+			context.add(config);
+			for (ExtensionFunctionDefinition function : getExtensionFunctions(context))
+				config.registerExtensionFunction(function);
+		}
+	}
+
+	public void addXsltPackages(Configuration config) {
+		if (packages != null && !packages.isEmpty()) {
+			PackageLibrary packageLib = config.getDefaultXsltCompilerInfo().getPackageLibrary();
+			for (PackageDetails pack : packages)
+				packageLib.addPackage(pack);
+		}
+	}
+
+	public void setURIResolver(Configuration config) {
+		if (uriResolver != null)
+			config.setURIResolver(uriResolver);
+	}
+
+	/**
+	 * @deprecated Use {@link #registerExtensionFunctions()}
+	 */
+	@Deprecated
 	public Iterable<ExtensionFunctionDefinition> getExtensionFunctions() {
+		return getExtensionFunctions(null);
+	}
+
+	private Iterable<ExtensionFunctionDefinition> getExtensionFunctions(Collection<Object> context) {
 		if (xpathExtensionFunctions != null)
-			return Collections.unmodifiableCollection(xpathExtensionFunctions.getFunctions());
+			return Collections.unmodifiableCollection(xpathExtensionFunctions.getFunctions(context));
 		else
 			return Collections.<ExtensionFunctionDefinition>emptySet();
 	}
 
+	/**
+	 * @deprecated Use {@link #setURIResolver()}
+	 */
+	@Deprecated
 	public URIResolver getURIResolver() {
 		return uriResolver;
 	}
 
+	/**
+	 * @deprecated Use {@link #addXsltPackages()}
+	 */
+	@Deprecated
 	public Iterable<PackageDetails> getXsltPackages() {
 		if (packages != null)
 			return Collections.unmodifiableCollection(packages);
@@ -98,7 +135,11 @@ public class SaxonConfigurator {
 	}
 
 	public void configure(Processor processor) {
-		Configuration config = newConfiguration();
+		configure(processor, true, null);
+	}
+
+	public void configure(Processor processor, boolean registerExtensionFunctions, Collection<Object> context) {
+		Configuration config = newConfiguration(registerExtensionFunctions, context);
 		processor.setConfigurationProperty(FeatureKeys.CONFIGURATION, config);
 		config.setProcessor(processor);
 	}

@@ -50,6 +50,7 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 
 	private final List<ExtensionFunctionDefinition> definitions;
 
+	@Override
 	public Collection<ExtensionFunctionDefinition> getDefinitions() {
 		return definitions;
 	}

@@ -25,7 +25,13 @@ public class DynamicXProcConfiguration extends XProcConfiguration {
 	/**
 	 * Instantiates a new DynamicXProcConfiguration which holds the given step registry.
 	 */
-	public DynamicXProcConfiguration(Processor processor, XProcStepRegistry stepRegistry, XProcMonitor monitor, Map<String,String> properties) {
+	public DynamicXProcConfiguration(Processor processor,
+	                                 XProcStepRegistry stepRegistry,
+	                                 XProcMonitor monitor,
+	                                 Map<String,String> properties) {
+		// Note that we create a new Processor for every now XProcConfigration, rather than using a singleton
+		// Processor instance. We do this because XProcConfiguration mutates he Processor (registers XPath
+		// extension functions) and this can't be undone.
 		super(processor);
 		this.stepRegistry = stepRegistry;
 		this.monitor = monitor;
@@ -40,17 +46,11 @@ public class DynamicXProcConfiguration extends XProcConfiguration {
 		setSaxonProperties.add(net.sf.saxon.lib.FeatureKeys.URI_RESOLVER_CLASS);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.xmlcalabash.core.XProcConfiguration#isStepAvailable(net.sf.saxon.s9api.QName)
-	 */
 	@Override
 	public boolean isStepAvailable(QName type) {
 		return stepRegistry.hasStep(type) || super.isStepAvailable(type);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.xmlcalabash.core.XProcConfiguration#newStep(com.xmlcalabash.core.XProcRuntime, com.xmlcalabash.runtime.XAtomicStep)
-	 */
 	@Override
 	public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
 		if (step == null) {

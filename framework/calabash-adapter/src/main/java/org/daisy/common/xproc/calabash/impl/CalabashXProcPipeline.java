@@ -8,14 +8,12 @@ import java.util.stream.StreamSupport;
 
 import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
-import javax.xml.transform.URIResolver;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXSource;
 
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 
-import com.xmlcalabash.core.XProcConfiguration;
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcMessageListener;
 import com.xmlcalabash.core.XProcRuntime;
@@ -50,9 +48,8 @@ import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.common.xproc.XProcResult;
 import org.daisy.common.xproc.calabash.CalabashXProcError;
-import org.daisy.common.xproc.calabash.XProcConfigurationFactory;
+import org.daisy.common.xproc.calabash.XProcRuntimeFactory;
 
-import org.xml.sax.EntityResolver;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
@@ -70,17 +67,8 @@ public class CalabashXProcPipeline implements XProcPipeline {
 
 	private static final Logger logger = LoggerFactory.getLogger(CalabashXProcPipeline.class);
 
-	/** The uri. */
 	private final URI uri;
-
-	/** The config factory. */
-	private final XProcConfigurationFactory configFactory;
-
-	/** The uri resolver. */
-	private final URIResolver uriResolver;
-
-	/** The entity resolver. */
-	private final EntityResolver entityResolver;
+	private final XProcRuntimeFactory runtimeFactory;
 
 	private final boolean AUTO_NAME_STEPS = Boolean.parseBoolean(
 		Properties.getProperty("org.daisy.pipeline.calabash.autonamesteps", "false"));
@@ -92,10 +80,8 @@ public class CalabashXProcPipeline implements XProcPipeline {
 				public XProcPipelineInfo get() {
 					XProcPipelineInfo.Builder builder = new XProcPipelineInfo.Builder();
 					builder.withURI(uri);
-					PipelineInstance pipeline = PipelineInstance.newInstance(uri,
-					                                                         configFactory.newConfiguration(null, null),
-					                                                         uriResolver,
-					                                                         entityResolver);
+					PipelineInstance pipeline = PipelineInstance.newInstance(
+						uri, runtimeFactory.newRuntime(null, null));
 					DeclareStep declaration = pipeline.xpipe.getDeclareStep();
 					// input and parameter ports
 					for (Input input : declaration.inputs()) {
@@ -130,34 +116,15 @@ public class CalabashXProcPipeline implements XProcPipeline {
 	);
 
 	/**
-	 * Instantiates a new calabash x proc pipeline.
+	 * Instantiates a new CalabashXProcPipeline.
 	 *
-	 * @param uri
-	 *            the uri to load the xpl file
-	 * @param configFactory
-	 *            the configuration factory
-	 * @param uriResolver
-	 *            the uri resolver
-	 * @param entityResolver
-	 *            the entity resolver
-	 * @param messageListenerFactory
-	 *            the message listener factory used to process pipeline
-	 *            execution related messages
+	 * @param uri the uri to load the xpl file
 	 */
-	public CalabashXProcPipeline(URI uri,
-			XProcConfigurationFactory configFactory, URIResolver uriResolver,
-			EntityResolver entityResolver) {
+	public CalabashXProcPipeline(URI uri, XProcRuntimeFactory runtimeFactory) {
 		this.uri = uri;
-		this.configFactory = configFactory;
-		this.uriResolver = uriResolver;
-		this.entityResolver = entityResolver;
+		this.runtimeFactory = runtimeFactory;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.daisy.common.xproc.XProcPipeline#getInfo()
-	 */
 	@Override
 	public XProcPipelineInfo getInfo() {
 		return info.get();
@@ -168,23 +135,14 @@ public class CalabashXProcPipeline implements XProcPipeline {
 		return run(data, null, null);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * org.daisy.common.xproc.XProcPipeline#run(org.daisy.common.xproc.XProcInput
-	 * )
-	 */
 	@Override
 	public XProcResult run(XProcInput data, XProcMonitor monitor, Map<String,String> properties) throws XProcErrorException {
 		MessageListenerImpl messageListener = monitor != null
 			? new MessageListenerImpl(monitor.getMessageAppender(), AUTO_NAME_STEPS)
 			: null;
 		try {
-			PipelineInstance pipeline = PipelineInstance.newInstance(uri,
-			                                                         configFactory.newConfiguration(monitor, properties),
-			                                                         uriResolver,
-			                                                         entityResolver);
+			PipelineInstance pipeline = PipelineInstance.newInstance(
+				uri, runtimeFactory.newRuntime(monitor, properties));
 			if (messageListener != null)
 				((XProcMessageListenerAggregator)pipeline.xpipe.getStep().getXProc().getMessageListener())
 					.add(messageListener);
@@ -208,13 +166,13 @@ public class CalabashXProcPipeline implements XProcPipeline {
 				for (Supplier<Source> sourceProvider : data.getInputs(name)) {
 					Source source = sourceProvider.get();
 					// TODO hack to set the entity resolver
-					if (source instanceof SAXSource) {
+					if (source instanceof SAXSource && runtimeFactory instanceof XProcRuntimeFactoryImpl) {
 						XMLReader reader = ((SAXSource) source).getXMLReader();
 						if (reader == null) {
 							try {
 								reader = XMLReaderFactory.createXMLReader();
 								((SAXSource) source).setXMLReader(reader);
-								reader.setEntityResolver(entityResolver);
+								reader.setEntityResolver(((XProcRuntimeFactoryImpl)runtimeFactory).entityResolver);
 							} catch (SAXException se) {
 								// nop?
 							}
@@ -223,7 +181,7 @@ public class CalabashXProcPipeline implements XProcPipeline {
 					// remove possible default connection
 					if (!cleared) pipeline.xpipe.clearInputs(name);
 					pipeline.xpipe.writeTo(name,
-							asXdmNode(pipeline.config.getProcessor(), source));
+					                       asXdmNode(pipeline.runtime.getConfiguration().getProcessor(), source));
 				}
 			}
 			// bind options
@@ -298,7 +256,7 @@ public class CalabashXProcPipeline implements XProcPipeline {
 			} finally {
 				pipeline.runtime.close();
 			}
-			return CalabashXProcResult.newInstance(pipeline.xpipe, pipeline.config);
+			return CalabashXProcResult.newInstance(pipeline.xpipe, pipeline.runtime.getConfiguration());
 		} finally {
 			if (messageListener != null)
 				messageListener.clean();
@@ -356,30 +314,14 @@ public class CalabashXProcPipeline implements XProcPipeline {
 	private static final class PipelineInstance {
 
 		private final XPipeline xpipe;
-		private final XProcConfiguration config;
 		private final XProcRuntime runtime;
 
-		private PipelineInstance(XPipeline xpipe, XProcConfiguration config, XProcRuntime runtime) {
+		private PipelineInstance(XPipeline xpipe, XProcRuntime runtime) {
 			this.xpipe = xpipe;
-			this.config = config;
 			this.runtime = runtime;
 		}
 
-		private static PipelineInstance newInstance(URI uri,
-		                                            XProcConfiguration config,
-		                                            URIResolver uriResolver,
-		                                            EntityResolver entityResolver) {
-			XProcRuntime runtime = new XProcRuntime(config);
-			runtime.setMessageListener(new slf4jXProcMessageListener());
-			if (uriResolver != null) {
-				runtime.setURIResolver(uriResolver);
-			}
-			if (entityResolver != null) {
-				runtime.setEntityResolver(entityResolver);
-			}
-			XProcMessageListenerAggregator listeners = new XProcMessageListenerAggregator();
-			listeners.add(new slf4jXProcMessageListener());
-			runtime.setMessageListener(listeners);
+		private static PipelineInstance newInstance(URI uri, XProcRuntime runtime) {
 			XPipeline xpipe = null; {
 				try {
 					xpipe = runtime.load(new com.xmlcalabash.util.Input(uri.toString()));
@@ -387,7 +329,7 @@ public class CalabashXProcPipeline implements XProcPipeline {
 					throw new RuntimeException(e.getMessage(), e);
 				}
 			}
-			return new PipelineInstance(xpipe, config, runtime);
+			return new PipelineInstance(xpipe, runtime);
 		}
 	}
 }
