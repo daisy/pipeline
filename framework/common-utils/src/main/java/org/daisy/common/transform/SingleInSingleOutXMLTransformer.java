@@ -1,5 +1,6 @@
 package org.daisy.common.transform;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.xml.namespace.QName;
@@ -84,5 +85,30 @@ public abstract class SingleInSingleOutXMLTransformer implements XMLTransformer 
 				                             ImmutableMap.of(outputPort, result));
 			}
 		};
+	}
+
+	/* Utility functions */
+
+	protected static Map<QName,InputValue<?>> getParameterMap(InputValue<?> parameters) {
+		Map<QName,InputValue<?>> parameterMap = new HashMap<>();
+		Map<?,?> map; {
+			try {
+				map = parameters.asObject(Map.class);
+			} catch (UnsupportedOperationException e) {
+				throw new IllegalArgumentException("unsupported interface for parameter input", e);
+			}
+		}
+		for (Object k : map.keySet()) {
+			QName name; {
+				if (!(k instanceof QName))
+					throw new IllegalArgumentException("unsupported interface for parameter input");
+				name = (QName)k;
+			}
+			Object value = map.get(k);
+			if (!(value instanceof InputValue))
+				throw new IllegalArgumentException("unsupported interface for parameter input");
+			parameterMap.put(name, (InputValue<?>)value);
+		}
+		return parameterMap;
 	}
 }
