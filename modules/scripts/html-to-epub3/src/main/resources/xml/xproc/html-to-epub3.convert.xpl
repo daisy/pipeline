@@ -156,6 +156,7 @@
             px:epub3-create-package-doc
             px:epub3-ocf-finalize
             px:epub-validate
+            px:tts-for-epub3
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
@@ -188,11 +189,6 @@
     <p:import href="http://www.daisy.org/pipeline/modules/zedai-to-html/library.xpl">
         <p:documentation>
             px:diagram-to-html
-        </p:documentation>
-    </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/epub3-tts/library.xpl">
-        <p:documentation>
-            px:tts-for-epub3
         </p:documentation>
     </p:import>
     <p:import href="html-to-opf-metadata.xpl">

@@ -11,6 +11,10 @@
                 type="px:tts-for-dtbook" name="main"
                 exclude-inline-prefixes="#all">
 
+  <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+    <p>Enriches a DTBook document with break detection and generates audio clips with TTS.</p>
+  </p:documentation>
+
   <p:input port="source.fileset" primary="true">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
       <p>The source fileset with DTBook documents, lexicons and CSS style sheets.</p>
@@ -114,7 +118,7 @@
       px:dtbook-to-ssml
     </p:documentation>
   </p:import>
-  <p:import href="http://www.daisy.org/pipeline/modules/dtbook-break-detection/library.xpl">
+  <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl">
     <p:documentation>
       px:dtbook-break-detect
       px:dtbook-unwrap-words

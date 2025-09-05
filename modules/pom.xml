@@ -48,16 +48,11 @@
     <module>nlp/lexers/ruled-lexer</module>
     <module>nlp/lexers/light-lexer</module>
     <module>nlp/lexers/omnilang-lexer</module>
-    <module>nlp/zedai-break-detection</module>
-    <module>nlp/html-break-detection</module>
-    <module>nlp/dtbook-break-detection</module>
     <module>audio/audio-common</module>
     <module>audio/audio-encoder-lame</module>
     <!-- att-nar is excluded because it is platform-specific. -->
     <!-- tts-adapter-attnative is excluded because it depends on att-nar which cannot be publicly
          deployed according to the AT&T's license. -->
-    <module>tts/dtbook-tts</module>
-    <module>tts/epub3-tts</module>
     <module>tts/tts-common</module>
     <module>tts/tts-adapters/tts-adapter-espeak</module>
     <module>tts/tts-adapters/tts-adapter-acapela</module>

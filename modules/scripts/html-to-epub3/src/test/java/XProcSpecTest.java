@@ -11,7 +11,6 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 			pipelineModule("file-utils"),
 			pipelineModule("html-utils"),
 			pipelineModule("zedai-to-html"),
-			pipelineModule("epub3-tts"),
 		};
 	}
 }

@@ -18,7 +18,7 @@
 
       <p:xslt>
   	<p:input port="stylesheet">
-  	  <p:document href="../../main/resources/xml/dtbook-semantic-transform.xsl"/>
+  	  <p:document href="../../main/resources/xml/internal/tts/dtbook-semantic-transform.xsl"/>
   	</p:input>
 	<p:input port="parameters">
 	  <p:empty/>

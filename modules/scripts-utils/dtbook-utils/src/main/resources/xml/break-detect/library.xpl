@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:library version="1.0"
-    xmlns:p="http://www.w3.org/ns/xproc"
-    xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-    xmlns:cx="http://xmlcalabash.com/ns/extensions"
-    xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
-    xmlns:math="http://www.w3.org/1998/Math/MathML">
+<p:library xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+           xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+           xmlns:cx="http://xmlcalabash.com/ns/extensions"
+           xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+           xmlns:math="http://www.w3.org/1998/Math/MathML">
 
   <p:declare-step type="px:dtbook-break-detect">
 

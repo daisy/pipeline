@@ -10,6 +10,10 @@
                 exclude-inline-prefixes="#all"
                 type="px:tts-for-epub3" name="main">
 
+  <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+    <p>Enriches an EPUB3 HTML document with break detection and generates audio clips with TTS.</p>
+  </p:documentation>
+
   <p:input port="source.fileset" primary="true"/>
   <p:input port="source.in-memory" sequence="true">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -121,7 +125,7 @@
       px:isolate-skippable
     </p:documentation>
   </p:import>
-  <p:import href="http://www.daisy.org/pipeline/modules/html-break-detection/library.xpl">
+  <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl">
     <p:documentation>
       px:html-break-detect
       px:html-unwrap-words

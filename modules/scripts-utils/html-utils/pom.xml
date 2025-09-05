@@ -11,7 +11,7 @@
   </parent>
 
   <artifactId>html-utils</artifactId>
-  <version>6.4.4-SNAPSHOT</version>
+  <version>6.5.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: HTML Utilities</name>
@@ -49,12 +49,25 @@
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>css-utils</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+       <artifactId>nlp-common</artifactId>
+    </dependency>
+    <!--
+        test dependencies
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>nlp-omnilang-lexer</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   
   <properties>
     <expose-services>
       org.daisy.pipeline.modules.impl.Module_html_utils,
-      org.daisy.pipeline.html.impl.HtmlDocumentBuilder
+      org.daisy.pipeline.html.impl.HtmlDocumentBuilder,
+      org.daisy.pipeline.css.impl.UserAgentStylesheet_application_xhtml_xml_speech
     </expose-services>
   </properties>
   

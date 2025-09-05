@@ -22,6 +22,9 @@ public class XSpecAndXProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 			pipelineModule("odf-utils"),
 			pipelineModule("daisy3-utils"),
 			pipelineModule("validation-utils"),
+			pipelineModule("css-utils"),
+			pipelineModule("mathml-utils"),
+			pipelineModule("tts-common"),
 			pipelineModule("epubcheck-adapter"),
 			pipelineModule("ace-adapter"),
 		};

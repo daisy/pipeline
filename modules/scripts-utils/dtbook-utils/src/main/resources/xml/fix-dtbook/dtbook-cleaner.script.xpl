@@ -117,7 +117,7 @@ if MathML is present in the document.</p>
             px:fileset-store
         </p:documentation>
     </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-break-detection/library.xpl">
+    <p:import href="../break-detect/library.xpl">
         <p:documentation>
             px:dtbook-break-detect
             px:dtbook-unwrap-words

@@ -123,6 +123,8 @@
     <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl">
         <p:documentation>
             px:html-outline
+            px:html-break-detect
+            px:html-unwrap-words
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl">
@@ -133,6 +135,7 @@
             px:epub3-add-metadata
             px:epub3-label-pagebreaks-from-nav
             px:opf-spine-to-fileset
+            px:tts-for-epub3
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl">
@@ -149,17 +152,6 @@
     <p:import href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xpl">
         <p:documentation>
             css:extract
-        </p:documentation>
-    </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/epub3-tts/library.xpl">
-        <p:documentation>
-            px:tts-for-epub3
-        </p:documentation>
-    </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/html-break-detection/library.xpl">
-        <p:documentation>
-            px:html-break-detect
-            px:html-unwrap-words
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/tts-common/library.xpl">
