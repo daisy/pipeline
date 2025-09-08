@@ -407,9 +407,10 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 											// XProcErrorException, unwrapping it will yield an XProcException.
 											XPathException xpe = new XPathException(cause.getMessage(), cause.getCause());
 											QName code = ((TransformerException)cause).getCode();
-											xpe.setErrorCodeQName(new StructuredQName(code.getPrefix(),
-											                                          code.getNamespaceURI(),
-											                                          code.getLocalPart()));
+											if (code != null)
+												xpe.setErrorCodeQName(new StructuredQName(code.getPrefix(),
+												                                          code.getNamespaceURI(),
+												                                          code.getLocalPart()));
 											throw xpe;
 										} else
 											throw new XPathException(cause);
