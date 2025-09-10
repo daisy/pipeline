@@ -32,26 +32,26 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 
 @Component(
-	name = "px:asciimathml",
+	name = "px:asciimath-to-mathml",
 	service = { XProcStepProvider.class },
-	property = { "type:String={http://www.daisy.org/ns/pipeline/xproc}asciimathml" }
+	property = { "type:String={http://www.daisy.org/ns/pipeline/xproc}asciimath-to-mathml" }
 )
-public class ASCIIMathMLProvider implements XProcStepProvider {
+public class ASCIIMathToMathMLProvider implements XProcStepProvider {
 	
 	@Override
 	public XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties) {
-		return new ASCIIMathMLStep(runtime, step);
+		return new ASCIIMathToMathMLStep(runtime, step);
 	}
 	
-	private static class ASCIIMathMLStep extends DefaultStep implements XProcStep {
+	private static class ASCIIMathToMathMLStep extends DefaultStep implements XProcStep {
 		
-		private static final Logger logger = LoggerFactory.getLogger(ASCIIMathMLStep.class);
+		private static final Logger logger = LoggerFactory.getLogger(ASCIIMathToMathMLStep.class);
 		
 		private static final QName _asciimath = new QName("asciimath");
 	
 		private WritablePipe result;
 		
-		private ASCIIMathMLStep(XProcRuntime runtime, XAtomicStep step) {
+		private ASCIIMathToMathMLStep(XProcRuntime runtime, XAtomicStep step) {
 			super(runtime, step);
 		}
 		

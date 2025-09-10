@@ -5,7 +5,7 @@
                script="../../main/resources/xml/xproc/library.xpl">
 
   <x:scenario label="The quadratic formula">
-    <x:call step="px:asciimathml">
+    <x:call step="px:asciimath-to-mathml">
       <x:option name="asciimath" select="'x = (-b +- sqrt(b^2-4ac))/(2a)'"/>
     </x:call>
     <x:context label="result">

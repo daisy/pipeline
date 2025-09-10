@@ -8,7 +8,7 @@
     <relativePath>../../parent/</relativePath>
   </parent>
   <artifactId>asciimath-utils</artifactId>
-  <version>1.0.12-SNAPSHOT</version>
+  <version>2.0.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>DAISY Pipeline 2 module :: ASCIIMath Utils</name>
 
@@ -17,7 +17,7 @@
     <asciimathml.js.sha1>3c31edd313d5f312a5aed3719b7dd6c022111b09</asciimathml.js.sha1>
     <expose-services>
       org.daisy.pipeline.modules.impl.Module_asciimath_utils,
-      org.daisy.pipeline.asciimathml.calabash.impl.ASCIIMathMLProvider
+      org.daisy.pipeline.asciimathml.calabash.impl.ASCIIMathToMathMLProvider
     </expose-services>
   </properties>
 

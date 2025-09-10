@@ -166,9 +166,9 @@
     <p:choose>
         <p:when test="$asciimath=('MATHML', 'BOTH')">
             <p:viewport match="dtb:span[@class='asciimath']">
-                <px:asciimathml>
+                <px:asciimath-to-mathml>
                     <p:with-option name="asciimath" select="string(.)"/>
-                </px:asciimathml>
+                </px:asciimath-to-mathml>
             </p:viewport>
         </p:when>
         <p:otherwise>
