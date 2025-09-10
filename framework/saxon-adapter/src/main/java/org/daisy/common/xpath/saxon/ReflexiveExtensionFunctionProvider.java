@@ -46,6 +46,8 @@ import org.daisy.common.transform.TransformerException;
 import org.daisy.common.transform.XMLInputValue;
 import org.daisy.common.transform.XMLOutputValue;
 
+import org.w3c.dom.Node;
+
 /**
  * Poor man's implementation of Saxon's <a
  * href="https://www.saxonica.com/documentation/index.html#!extensibility/functions">reflexive
@@ -422,6 +424,8 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 									return new SequenceExtent(nodeListFromXMLOutputValue);
 								if (result instanceof Optional)
 									return SaxonHelper.sequenceFromObject(((Optional<?>)result).orElse(null));
+								else if (result instanceof Node)
+									return SaxonHelper.nodeInfoFromNode((Node)result, ctxt.getConfiguration());
 								else
 									return SaxonHelper.sequenceFromObject(result);
 							} catch (RuntimeException e) {

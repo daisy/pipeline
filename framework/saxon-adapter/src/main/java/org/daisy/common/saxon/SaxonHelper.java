@@ -24,6 +24,7 @@ import java.util.Vector;
 import javax.xml.stream.XMLStreamReader;
 
 import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -31,6 +32,8 @@ import com.google.common.collect.ImmutableList;
 
 import net.sf.saxon.Configuration;
 import net.sf.saxon.dom.AttrOverNodeInfo;
+import net.sf.saxon.dom.DocumentWrapper;
+import net.sf.saxon.dom.DOMNodeWrapper;
 import net.sf.saxon.dom.ElementOverNodeInfo;
 import net.sf.saxon.dom.NodeOverNodeInfo;
 import net.sf.saxon.ma.arrays.ArrayItem;
@@ -123,6 +126,18 @@ public final class SaxonHelper {
 			return mapItemFromMap((Map<?,?>)object);
 		else
 			return new ObjectValue<>(object);
+	}
+
+	public static NodeInfo nodeInfoFromNode(Node node, Configuration configuration) {
+		if (node instanceof NodeOverNodeInfo) {
+			NodeInfo nodeInfo = ((NodeOverNodeInfo)node).getUnderlyingNodeInfo();
+			if (configuration.equals(nodeInfo.getConfiguration()))
+				return nodeInfo;
+		}
+		Document doc = node instanceof Document
+			? (Document)node
+			: node.getOwnerDocument();
+		return new DocumentWrapper(doc, doc.getBaseURI(), configuration).wrap(node);
 	}
 
 	private static Sequence sequenceFromIterator(Iterator<?> iterator) {
