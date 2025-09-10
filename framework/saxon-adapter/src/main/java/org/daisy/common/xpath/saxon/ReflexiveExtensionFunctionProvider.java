@@ -24,6 +24,7 @@ import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 import javax.xml.xpath.XPath;
 
+import net.sf.saxon.Configuration;
 import net.sf.saxon.dom.DocumentBuilderImpl;
 import net.sf.saxon.expr.XPathContext;
 import net.sf.saxon.lib.ExtensionFunctionCall;
@@ -228,6 +229,7 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 			boolean requiresXMLStreamWriter = false;
 			boolean requiresXPath = false;
 			boolean requiresDocumentBuilder = false;
+			boolean requiresConfiguration = false;
 			for (Class<?> t : method.getParameterTypes()) {
 				if (t.equals(XPath.class)) {
 					if (requiresXPath)
@@ -245,6 +247,10 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 					if (requiresXMLOutputValue || requiresXMLStreamWriter)
 						throw new IllegalArgumentException(); // only one XMLStreamWriter or XMLOutputValue argument allowed
 					requiresXMLOutputValue = true;
+				} else if (t.equals(Configuration.class)) {
+					if (requiresConfiguration)
+						throw new IllegalArgumentException(); // only one Configuration argument allowed
+					requiresConfiguration = true;
 				}
 			}
 			Type[] javaArgumentTypes; { // arguments of Java method/constructor
@@ -261,6 +267,7 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 				- (requiresXMLStreamWriter ? 1 : 0)
 				- (requiresXPath ? 1 : 0)
 				- (requiresDocumentBuilder ? 1 : 0)
+				- (requiresConfiguration ? 1 : 0)
 			];
 			int i = 0;
 			if (!isStatic && object == null)
@@ -270,7 +277,8 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 				    !t.equals(XMLOutputValue.class) &&
 				    !t.equals(XMLStreamWriter.class) &&
 				    !t.equals(XPath.class) &&
-				    !t.equals(DocumentBuilder.class))
+				    !t.equals(DocumentBuilder.class) &&
+				    !t.equals(Configuration.class))
 					argumentTypes[i++] = SaxonHelper.sequenceTypeFromType(t);
 			SequenceType resultType; {
 				if (isConstructor) {
@@ -364,6 +372,8 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 											javaArgs[j++] = xmlOutputValueArg;
 									} else if (type.equals(XPath.class))
 										javaArgs[j++] = new XPathFactoryImpl(ctxt.getConfiguration()).newXPath();
+									else if (type.equals(Configuration.class))
+										javaArgs[j++] = ctxt.getConfiguration();
 									else if (type.equals(DocumentBuilder.class)) {
 										DocumentBuilderImpl b = new DocumentBuilderImpl();
 										b.setConfiguration(ctxt.getConfiguration());
