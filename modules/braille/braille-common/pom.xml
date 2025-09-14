@@ -89,6 +89,7 @@
       org.daisy.pipeline.braille.common.HyphenatorRegistry,
       org.daisy.pipeline.braille.common.saxon.impl.BrailleCodeFunctionProvider,
       org.daisy.pipeline.braille.common.saxon.impl.TextTransformDefinition,
+      org.daisy.pipeline.braille.common.saxon.impl.TransformDefinition,
       org.daisy.pipeline.braille.common.calabash.impl.PxParseQueryStep$StepProvider,
       org.daisy.pipeline.braille.common.calabash.impl.PxTransformStep$StepProvider,
       org.daisy.pipeline.braille.common.impl.CSSBlockTransform$Provider
