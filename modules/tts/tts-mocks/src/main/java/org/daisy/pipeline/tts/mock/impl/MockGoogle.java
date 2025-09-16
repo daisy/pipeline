@@ -95,8 +95,9 @@ public class MockGoogle {
 					for (Voice v : engine.getAvailableVoices())
 						// only list voices with locale and gender because we don't want to read configuration files
 						if (!v.getLocale().isEmpty() && v.getGender().isPresent()) {
-							voices.put(v.getName(), v);
-							engines.put(v.getName(), engine); }}
+							String name = String.format("%s-%s", v.getLocale().iterator().next(), v.getName());
+							voices.put(name, v);
+							engines.put(name, engine); }}
 				catch (ServiceDisabledException e) {
 					logger.debug(tts.getName() + " is disabled", e);
 					continue; }
@@ -110,7 +111,8 @@ public class MockGoogle {
 					// ignoring "languageCode" parameter
 					try {
 						JSONArray jsonVoices = new JSONArray();
-						for (Voice voice : voices.values()) {
+						for (String voiceName : voices.keySet()) {
+							Voice voice = voices.get(voiceName);
 							Collection<String> locale = Collections2.filter(
 								Collections2.transform(voice.getLocale(), LanguageRange::toString),
 								x -> !x.contains("*")); // only language tags
@@ -133,7 +135,7 @@ public class MockGoogle {
 									gender = "NEUTRAL";
 									break; }}
 							jsonVoices = jsonVoices.put(
-								new JSONObject().put("name", voice.getName())
+								new JSONObject().put("name", voiceName)
 								.put("languageCodes", new JSONArray(locale.toArray(new String[locale.size()])))
 								.put("ssmlGender", gender));
 						}
@@ -163,7 +165,8 @@ public class MockGoogle {
 						XdmNode ssml = saxonProcessor.newDocumentBuilder().build(
 							new StreamSource(new StringReader(request.getJSONObject("input").getString("ssml"))));
 						// assume voice is specified and ignore languageCode and ssmlGender
-						Voice voice = voices.get(request.getJSONObject("voice").getString("name"));
+						String voiceName = request.getJSONObject("voice").getString("name");
+						Voice voice = voices.get(voiceName);
 						if (voice == null) {
 							exchange.sendResponseHeaders(400, -1);
 							return;
@@ -173,7 +176,7 @@ public class MockGoogle {
 						// assume audioEncoding is "LINEAR16" (linear PCM, 16-bit, signed, little-endian)
 						AudioFormat audioFormat = new AudioFormat(sampleRateHertz, 16, 1, true, false);
 						// other settings are ignored
-						TTSEngine engine = engines.get(voice.getName());
+						TTSEngine engine = engines.get(voiceName);
 						TTSResource threadResources = engine.allocateThreadResources();
 						AudioInputStream audio; {
 							try {

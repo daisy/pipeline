@@ -198,6 +198,10 @@ public class GoogleRestTTSEngine extends TTSEngine {
 						JSONObject voice = voices.getJSONObject(i);
 						// assume "name" string is present
 						String name = voice.getString("name");
+						// simple regex to filter out voices that do not start with a language tag
+						// for now because these voices "require a model name to be specified"
+						if (!name.matches("^[a-z]{2,3}-.+"))
+							continue;
 						Gender gender; {
 							// assume "ssmlGender" string is present
 							String g = voice.getString("ssmlGender");

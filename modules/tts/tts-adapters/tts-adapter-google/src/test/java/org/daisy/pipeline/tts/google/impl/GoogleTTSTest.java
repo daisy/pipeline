@@ -45,7 +45,7 @@ public class GoogleTTSTest {
 	private static final Voice DefaultVoice
 		= System.getProperty("org.daisy.pipeline.tts.google.address") != null
 			// assume we're using MockGoogle
-			? new Voice("google", "foo", Locale.forLanguageTag("en"), Gender.of("male"))
+			? new Voice("google", "en-alex", Locale.forLanguageTag("en"), Gender.of("male"))
 			// will default to "en-GB-Standard-A"
 			: null;
 
