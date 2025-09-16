@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -237,21 +238,18 @@ public class TTSRegistry {
 					}
 				}
 			}
-			/* Get a voice for the test*/
-			Voice firstVoice; {
+			// Get a voice for the test
+			Iterator<Voice> testVoices; {
 				int timeoutSecs = 30;
 				timeout.enableForCurrentThread(timeoutSecs);
 				try {
-					firstVoice = null;
-					for (Voice v : engine.getAvailableVoices()) {
-						if (!engine.handlesMarks() || v.getMarkSupport() != MarkSupport.MARK_NOT_SUPPORTED) {
-							firstVoice = v;
-							break;
-						}
-					}
-					if (firstVoice == null) {
+					List<Voice> list = new ArrayList<>(engine.getAvailableVoices());
+					list.removeIf(
+						v -> engine.handlesMarks() && v.getMarkSupport() == MarkSupport.MARK_NOT_SUPPORTED);
+					Collections.shuffle(list);
+					testVoices = list.iterator();
+					if (!testVoices.hasNext())
 						throw new Exception("No voices available");
-					}
 				} catch (InterruptedException e) {
 					throw new Exception("Timeout while retrieving voices (exceeded " + timeoutSecs + " seconds)");
 				} catch (Exception e) {
@@ -275,7 +273,8 @@ public class TTSRegistry {
 				}
 			}
 			// synthesize
-			SynthesisResult result; {
+			Voice testVoice = null;
+			SynthesisResult result = null; {
 				try {
 					XdmNode ssml = engine.handlesMarks() ? testSSMLWithMark : testSSMLWithoutMark;
 					// create a custom interrupter in case the engine hangs
@@ -290,11 +289,28 @@ public class TTSRegistry {
 								engine.interruptCurrentWork(resource);
 							}
 						};
-					result = new TimedTTSExecutor().synthesizeWithTimeout(
-						timeout, interrupter, null, ssml, Sentence.computeSize(ssml),
-						engine, firstVoice, resource);
+					// try with several voices just in case some do not work
+					// note that the list of voices has been shuffled as well, so the result may be
+					// different for different calls of the newEngine() method
+					int tries = 0;
+					int maxTries = 5;
+					Throwable lastException = null;
+					while (testVoices.hasNext() && tries++ < maxTries) {
+						testVoice = testVoices.next();
+						try {
+							result = new TimedTTSExecutor().synthesizeWithTimeout(
+								timeout, interrupter, null, ssml, Sentence.computeSize(ssml),
+								engine, testVoice, resource);
+						} catch (Throwable e) {
+							lastException = e;
+						}
+					}
+					if (result == null)
+						throw lastException;
 				} catch (Exception e) {
-					throw new Exception("Test with voice " + firstVoice.getName() + " failed: " + e.getMessage(), e);
+					throw new Exception("Test"
+					                    + (testVoice != null ? " with voice " + testVoice.getName() : "")
+					                    + " failed: " + e.getMessage(), e);
 				} finally {
 					if (resource != null)
 						timeout.enableForCurrentThread(2);
@@ -319,7 +335,7 @@ public class TTSRegistry {
 			}
 			if (engine.handlesMarks()) {
 				// check that the result contains a single mark
-				String details = " voice: "+ firstVoice;
+				String details = " voice: "+ testVoice;
 				if (result.marks.size() != 1) {
 					msg += "One bookmark event expected, but received " + result.marks.size() + " events instead. " + details;
 				} else {
