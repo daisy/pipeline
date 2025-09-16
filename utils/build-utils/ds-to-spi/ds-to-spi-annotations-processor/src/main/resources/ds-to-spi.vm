@@ -80,13 +80,14 @@ public class ${component.spiClassName}
 				java.util.Iterator<${reference.service}> services
 					= org.daisy.common.spi.ServiceLoader.load(${reference.service}.class).iterator();
 #if( ${reference.filter} )
-				 org.osgi.framework.Filter filter = org.osgi.framework.FrameworkUtil.createFilter(${reference.filter});
+				org.osgi.framework.Filter filter = org.osgi.framework.FrameworkUtil.createFilter(${reference.filter});
 #end
 				while (services.hasNext()) {
 					try {
 						${reference.service} service = services.next();
 #if( ${reference.filter} )
-						if (!filter.matches(((org.daisy.common.spi.ServiceWithProperties)service).spi_getProperties())) {
+						if (!(service instanceof org.daisy.common.spi.ServiceWithProperties
+						      && filter.matches(((org.daisy.common.spi.ServiceWithProperties)service).spi_getProperties()))) {
 							spi_log.trace("Service " + service + " does not match " + ${reference.filter});
 							continue; }
 #end
