@@ -11,7 +11,7 @@
   </parent>
 
   <artifactId>dtbook-utils</artifactId>
-  <version>5.2.0-SNAPSHOT</version>
+  <version>6.0.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: DTBook Utils</name>
@@ -25,11 +25,6 @@
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>saxon-adapter</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>ds-to-spi-runtime</artifactId>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
@@ -80,9 +75,7 @@
   <properties>
     <expose-services>
       org.daisy.pipeline.modules.impl.Module_dtbook_utils,
-      org.daisy.pipeline.dtbook.saxon.impl.DTBookCleanerLibrary$Provider,
-      org.daisy.pipeline.css.impl.UserAgentStylesheet_application_x_dtbook_xml_speech,
-      org.daisy.pipeline.script.impl.XProcScript_dtbook_cleaner
+      org.daisy.pipeline.css.impl.UserAgentStylesheet_application_x_dtbook_xml_speech
     </expose-services>
   </properties>
   

@@ -7,7 +7,4 @@
        px:id="word-to-dtbook"
   />
 
-  <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:mathml-utils"/>
-
 </catalog>

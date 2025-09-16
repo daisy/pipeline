@@ -2,14 +2,14 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
-                xmlns:Library="org.daisy.pipeline.dtbook.saxon.impl.DTBookCleanerLibrary"
+                xmlns:Library="org.daisy.pipeline.word_to_dtbook.impl.DTBookCleanerLibrary"
                 exclude-result-prefixes="#all">
 
     <!-- Get the default locale from the JVM -->
     <xsl:function name="pf:default-locale" as="xs:string">
         <xsl:value-of select="Library:getDefaultLocale()">
             <!--
-                Implemented in ../../../../java/org/daisy/pipeline/dtbook/saxon/impl/DTBookCleanerLibrary.java
+                Implemented in ../../../../java/org/daisy/pipeline/word_to_dtbook/impl/DTBookCleanerLibrary.java
             -->
         </xsl:value-of>
     </xsl:function>

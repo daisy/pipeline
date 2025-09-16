@@ -34,7 +34,7 @@
                             <meta name="dc:Language" content="fr-FR"/>
                         </head>
                         <book>
-                            <frontmatter />
+                            <frontmatter/>
                             <bodymatter>
                                 <level1>
                                     <h1><pagenum>1</pagenum>Test</h1>
@@ -58,8 +58,7 @@
         <x:context label="the processed dtbook 2005-3">
             <x:document type="port" port="result"/>
         </x:context>
-        <x:expect label="the dtbook 2005-3 should be as expected"
-                  type="custom" href="http://www.daisy.org/xprocspec/custom-assertion-steps.xpl" step="x:compare-except-ids">
+        <x:expect label="the dtbook 2005-3 should be as expected" type="compare">
             <x:document type="inline">
                 <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="fr-FR">
                     <head>
@@ -167,8 +166,7 @@
         <x:context label="the processed dtbook 2005-3">
             <x:document type="port" port="result"/>
         </x:context>
-        <x:expect label="the dtbook 2005-3 should be as expected"
-                  type="custom" href="http://www.daisy.org/xprocspec/custom-assertion-steps.xpl" step="x:compare-except-ids">
+        <x:expect label="the dtbook 2005-3 should be as expected" type="compare">
             <x:document type="inline">
                 <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3">
                     <head>
@@ -294,8 +292,7 @@
         <x:context label="the processed dtbook 2005-3">
             <x:document type="port" port="result"/>
         </x:context>
-        <x:expect label="the dtbook 2005-3 should be as expected"
-                  type="custom" href="http://www.daisy.org/xprocspec/custom-assertion-steps.xpl" step="x:compare-except-ids">
+        <x:expect label="the dtbook 2005-3 should be as expected" type="compare">
             <x:document type="inline">
                 <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="fr-FR">
                     <head>

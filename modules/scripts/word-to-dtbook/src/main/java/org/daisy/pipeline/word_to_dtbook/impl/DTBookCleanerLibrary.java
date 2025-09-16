@@ -1,4 +1,4 @@
-package org.daisy.pipeline.dtbook.saxon.impl;
+package org.daisy.pipeline.word_to_dtbook.impl;
 
 import java.util.Locale;
 import java.util.Date;

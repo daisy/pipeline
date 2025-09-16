@@ -10,7 +10,6 @@
     <relativePath>../../parent/</relativePath>
   </parent>
 
-  <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>word-to-dtbook</artifactId>
   <version>1.1.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
@@ -18,6 +17,14 @@
   <name>DAISY Pipeline 2 module :: Word to DTBook</name>
 
   <dependencies>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>fileset-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>dtbook-utils</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>framework-core</artifactId>
@@ -45,6 +52,15 @@
     <dependency>
       <groupId>org.apache.poi</groupId>
       <artifactId>poi-ooxml</artifactId>
+      <!-- exclude this dependency to make sure that the URIResolver service
+           it exposes (org.apache.xmlgraphics.util.uri.DataURIResolver) is not
+           used instead of our ModuleUriResolver -->
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.xmlgraphics</groupId>
+          <artifactId>batik-all</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.apache.poi</groupId>
@@ -58,32 +74,6 @@
       <groupId>org.libreoffice</groupId>
       <artifactId>unoloader</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>ds-to-spi-runtime</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <!--
-        runtime dependencies
-    -->
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>dtbook-utils</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>mathml-utils</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <!--
-        test dependencies
-    -->
-    <dependency>
-      <groupId>org.daisy.maven</groupId>
-      <artifactId>xproc-engine-daisy-pipeline</artifactId>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 
   <properties>
@@ -94,25 +84,9 @@
       org.daisy.pipeline.datatypes.impl.Datatype_px_word_to_dtbook_script_image_size,
       org.daisy.pipeline.datatypes.impl.Datatype_px_word_to_dtbook_script_footnotes_numbering,
       org.daisy.pipeline.datatypes.impl.Datatype_px_word_to_dtbook_script_footnotes_position,
-      org.daisy.pipeline.word_to_dtbook.impl.DaisyClass$Provider
+      org.daisy.pipeline.word_to_dtbook.impl.DaisyClass$Provider,
+      org.daisy.pipeline.word_to_dtbook.impl.DTBookCleanerLibrary$Provider
     </expose-services>
   </properties>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.daisy.maven</groupId>
-        <artifactId>xproc-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <phase>test</phase>
-            <goals>
-              <goal>xprocspec</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
 
 </project>
