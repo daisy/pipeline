@@ -58,7 +58,7 @@ public class ScriptRegistry {
 	@Reference(
 		name = "script-service",
 		unbind = "-",
-		service = XProcScriptService.class,
+		service = ScriptService.class,
 		cardinality = ReferenceCardinality.MULTIPLE,
 		policy = ReferencePolicy.STATIC
 	)
@@ -67,9 +67,18 @@ public class ScriptRegistry {
 		descriptors.put(script.getId(), script);
 	}
 
-	protected void unregister(ScriptService script) {
-		logger.debug("Unregistering script {}", script.getId());
-		descriptors.remove(script.getId());
+	// FIXME: the reason for this seperate method is that most XProc scripts currently implement the
+	// XProcScriptService, but not ScriptService. In case there are scripts that implement both,
+	// they will be registered (and created?) twice, but will only end up in the map once.
+	@Reference(
+		name = "xproc-script-service",
+		unbind = "-",
+		service = XProcScriptService.class,
+		cardinality = ReferenceCardinality.MULTIPLE,
+		policy = ReferencePolicy.STATIC
+	)
+	protected void registerXProcScriptService(ScriptService script) {
+		register(script);
 	}
 
 	@Reference(
@@ -83,12 +92,6 @@ public class ScriptRegistry {
 		logger.debug("Registering scripts from {}", scripts);
 		for (ScriptService<?> s : scripts.getScripts())
 			register(s);
-	}
-
-	protected void unregister(ScriptServiceProvider scripts) {
-		logger.debug("Unregistering scripts from {}", scripts);
-		for (ScriptService<?> s : scripts.getScripts())
-			unregister(s);
 	}
 
 	/**
