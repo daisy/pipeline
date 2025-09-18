@@ -26,8 +26,9 @@ public abstract class Script {
 	/**
 	 * Run the script with an input
 	 *
-	 * @param propertiess Properties that may influence the behavior of the script
-	 * @param resultBuilder For storing the results
+	 * @param properties Properties that may influence the behavior of the script
+	 * @param resultBuilder for storing the results
+	 * @param resultDir must exist
 	 */
 	public abstract Status run(ScriptInput input,
 	                           Map<String,String> properties,
@@ -38,7 +39,7 @@ public abstract class Script {
 	/**
 	 * Builder for {@link Script} objects.
 	 */
-	protected static abstract class Builder {
+	public static abstract class Builder {
 
 		protected String id;
 		protected String version;
