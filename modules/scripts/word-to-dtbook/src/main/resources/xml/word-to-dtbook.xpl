@@ -80,7 +80,7 @@
 	                                    }" />-->
 	<!-- cx:as="map(xs:string,xs:string*)" -->
 	<p:option name="MasterSub" px:hidden="true" select="false()" cx:as="xs:boolean"/>
-	<!-- from settings  -->
+	<!-- from settings -->
 	<p:option name="pagination" select="'custom'">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Pagination mode</h2>

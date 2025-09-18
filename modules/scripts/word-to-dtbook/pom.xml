@@ -74,12 +74,59 @@
       <groupId>org.libreoffice</groupId>
       <artifactId>unoloader</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>nlp-omnilang-lexer</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>audio-encoder-lame</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>tts-mocks</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <!--
+        word-to-daisy3, word-to-mp3
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>dtbook-to-daisy3</artifactId>
+    </dependency>
+    <!--
+        word-to-mp3
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>daisy3-to-mp3</artifactId>
+    </dependency>
+    <!--
+        word-to-epub3, word-to-daisy202
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>dtbook-to-epub3</artifactId>
+    </dependency>
+    <!--
+        word-to-daisy202
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>epub3-to-daisy202</artifactId>
+    </dependency>
   </dependencies>
 
   <properties>
     <expose-services>
       org.daisy.pipeline.modules.impl.Module_word_to_dtbook,
       org.daisy.pipeline.script.impl.XProcScript_word_to_dtbook,
+      org.daisy.pipeline.script.impl.WordToDAISY202Script,
+      org.daisy.pipeline.script.impl.WordToDAISY3Script,
+      org.daisy.pipeline.script.impl.WordToEPUB3Script,
+      org.daisy.pipeline.script.impl.WordToMP3Script,
       org.daisy.pipeline.datatypes.impl.Datatype_px_word_to_dtbook_script_pagination,
       org.daisy.pipeline.datatypes.impl.Datatype_px_word_to_dtbook_script_image_size,
       org.daisy.pipeline.datatypes.impl.Datatype_px_word_to_dtbook_script_footnotes_numbering,
@@ -88,5 +135,23 @@
       org.daisy.pipeline.word_to_dtbook.impl.DTBookCleanerLibrary$Provider
     </expose-services>
   </properties>
+
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <excludes>
+          <exclude>maven.properties</exclude>
+        </excludes>
+      </resource>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+        <includes>
+          <include>maven.properties</include>
+        </includes>
+      </resource>
+    </resources>
+  </build>
 
 </project>
