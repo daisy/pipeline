@@ -146,7 +146,7 @@ run-with-osgi : $(dev_launcher)
 
 .PHONY : run-cli
 run-cli :
-	println("dp2 () { test -e $(dp2) || make $(dp2) && curl http://localhost:8181/ws/alive >/dev/null 2>/dev/null || make $(dev_launcher) && $(dp2) --debug false --starting true --exec_line $(CURDIR)/$(dev_launcher) --ws_timeup 30 \"$$@\"; }"); \
+	println("dp2 () { test -e $(dp2) || make $(dp2) && curl http://localhost:8181/ws/alive >/dev/null 2>/dev/null || make $(dev_launcher) && $(dp2) --debug false \"$$@\"; }"); \
 	println("# Run this command to configure your shell: "); \
 	println("# eval $$(make $@)");
 
