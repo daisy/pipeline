@@ -2,7 +2,7 @@
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                xmlns:math="http://www.w3.org/1998/Math/MathML"
-               script="../../main/resources/xml/xproc/library.xpl">
+               script="../../main/resources/xml/library.xpl">
 
   <x:scenario label="The quadratic formula">
     <x:call step="px:asciimath-to-mathml">
