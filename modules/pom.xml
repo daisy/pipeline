@@ -51,15 +51,15 @@
     <module>audio/audio-common</module>
     <module>audio/audio-encoder-lame</module>
     <module>tts/tts-common</module>
-    <module>tts/tts-adapters/tts-adapter-espeak</module>
-    <module>tts/tts-adapters/tts-adapter-acapela</module>
-    <module>tts/tts-adapters/tts-adapter-osx</module>
-    <module>tts/tts-adapters/tts-adapter-sapinative</module>
-    <module>tts/tts-adapters/tts-adapter-qfrency</module>
-    <module>tts/tts-adapters/tts-adapter-google</module>
-    <module>tts/tts-adapters/tts-adapter-cereproc</module>
-    <module>tts/tts-adapters/tts-adapter-azure</module>
-    <module>tts/tts-adapters/tts-adapter-aws</module>
+    <module>tts/tts-adapter-espeak</module>
+    <module>tts/tts-adapter-acapela</module>
+    <module>tts/tts-adapter-osx</module>
+    <module>tts/tts-adapter-sapinative</module>
+    <module>tts/tts-adapter-qfrency</module>
+    <module>tts/tts-adapter-google</module>
+    <module>tts/tts-adapter-cereproc</module>
+    <module>tts/tts-adapter-azure</module>
+    <module>tts/tts-adapter-aws</module>
     <module>tts/tts-mocks</module>
     <module>braille/braille-common</module>
     <module>braille/braille-css-utils</module>
