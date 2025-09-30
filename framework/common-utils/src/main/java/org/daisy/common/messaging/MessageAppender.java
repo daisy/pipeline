@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 /**
  * An object that can modify an underlying message by appending child messages to it or by closing it.
  */
-public interface MessageAppender {
+public interface MessageAppender extends AutoCloseable {
 
 	/**
 	 * Append a child to the underlying message.
