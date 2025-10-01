@@ -131,11 +131,13 @@ public class AWSPollyTTSEngine extends TTSEngine {
 							.stream()
 							.map(i -> {
 								try {
+									// FIXME: also take into account additionalLanguageCodesAsStrings()
 									return new Voice(getProvider().getName(),
 									                 i.idAsString() + " (" + engine.toString() + ")",
-									                 (new Locale.Builder()).setLanguageTag(i.languageName().replace("_", "-")).build(),
+									                 (new Locale.Builder()).setLanguageTag(i.languageCodeAsString().replace("_", "-")).build(),
 									                 Gender.of(i.genderAsString().toLowerCase()));
 								} catch (IllformedLocaleException e) {
+									LOGGER.debug("Could not parse language tag: " + i.languageCodeAsString());
 									return null;
 								}
 							})
