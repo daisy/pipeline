@@ -802,7 +802,7 @@
 	
 	<xsl:template match="dtb:head" mode="#all"/>
 	
-	<xsl:template match="*" mode="office:text office:annotation text:section text:list-item table:table-cell text:note-body" priority="-1.3">
+	<xsl:template match="*" mode="office:text office:annotation text:section text:list text:list-item table:table-cell text:note-body" priority="-1.3">
 		<xsl:element name="text:p">
 			<xsl:attribute name="text:style-name" select="'ERROR'"/>
 			<xsl:call-template name="FIXME"/>
