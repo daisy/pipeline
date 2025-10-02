@@ -32,6 +32,7 @@ import cz.vutbr.web.css.TermFactory;
 import cz.vutbr.web.css.TermFunction;
 import cz.vutbr.web.css.TermIdent;
 import cz.vutbr.web.css.TermInteger;
+import cz.vutbr.web.css.TermLength;
 import cz.vutbr.web.css.TermList;
 import cz.vutbr.web.css.TermNumber;
 import cz.vutbr.web.css.TermPair;
@@ -414,8 +415,9 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 	@SuppressWarnings("unused")
 	private boolean processBorderBottomWidth(Declaration d,
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
-		return genericOneIdentOrInteger(BorderWidth.class, BorderWidth.integer, true,
-				d, properties, values);
+		return genericOneIdentOrIntegerOrLength(
+			BorderWidth.class, BorderWidth.length, BorderWidth.length, true, d,
+			properties, values);
 	}
 
 	@SuppressWarnings("unused")
@@ -463,8 +465,9 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 	@SuppressWarnings("unused")
 	private boolean processBorderLeftWidth(Declaration d,
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
-		return genericOneIdentOrInteger(BorderWidth.class, BorderWidth.integer, true,
-				d, properties, values);
+		return genericOneIdentOrIntegerOrLength(
+			BorderWidth.class, BorderWidth.length, BorderWidth.length, true, d,
+			properties, values);
 	}
 
 	@SuppressWarnings("unused")
@@ -520,8 +523,9 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 	@SuppressWarnings("unused")
 	private boolean processBorderRightWidth(Declaration d,
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
-		return genericOneIdentOrInteger(BorderWidth.class, BorderWidth.integer, true,
-				d, properties, values);
+		return genericOneIdentOrIntegerOrLength(
+			BorderWidth.class, BorderWidth.length, BorderWidth.length, true, d,
+			properties, values);
 	}
 
 	@SuppressWarnings("unused")
@@ -577,8 +581,9 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 	@SuppressWarnings("unused")
 	private boolean processBorderTopWidth(Declaration d,
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
-		return genericOneIdentOrInteger(BorderWidth.class, BorderWidth.integer, true,
-				d, properties, values);
+		return genericOneIdentOrIntegerOrLength(
+			BorderWidth.class, BorderWidth.length, BorderWidth.length, true, d,
+			properties, values);
 	}
 
 	@SuppressWarnings("unused")
@@ -733,15 +738,17 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 	@SuppressWarnings("unused")
 	private boolean processLeft(Declaration d,
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
-		return genericOneIdentOrInteger(AbsoluteMargin.class, AbsoluteMargin.integer, true,
-				d, properties, values);
+		return genericOneIdentOrIntegerOrLength(
+			AbsoluteMargin.class, AbsoluteMargin.length, AbsoluteMargin.length, true,
+			d, properties, values);
 	}
 
 	@SuppressWarnings("unused")
 	private boolean processLetterSpacing(Declaration d,
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
-		if (genericOneIdentOrInteger(LetterSpacing.class, LetterSpacing.length, true,
-				d, properties, values))
+		if (genericOneIdentOrIntegerOrLength(
+		        LetterSpacing.class, LetterSpacing.length, LetterSpacing.length, true,
+		        d, properties, values))
 			return true;
 		else {
 			log.warn("{} not supported, illegal number", d);
@@ -756,10 +763,12 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 		Term<?> term = d.get(0);
 		return genericTermIdent(LineHeight.class, term, ALLOW_INH, d.getProperty(),
 				properties)
-			|| genericTerm(TermInteger.class, term, d.getProperty(), LineHeight.number,
+			|| genericTerm(TermInteger.class, term, d.getProperty(), LineHeight.length,
 				true, properties, values)
-			|| genericTerm(TermNumber.class, term, d.getProperty(), LineHeight.number,
+			|| genericTerm(TermNumber.class, term, d.getProperty(), LineHeight.length,
 				true, properties, values)
+			|| genericTermLength(term, d.getProperty(), LineHeight.length, true, properties,
+				values)
 			|| genericTerm(TermPercent.class, term, d.getProperty(), LineHeight.percentage,
 				true, properties, values);
 	}
@@ -800,29 +809,33 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 	@SuppressWarnings("unused")
 	private boolean processMarginBottom(Declaration d,
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
-		return genericOneIdentOrInteger(Margin.class, Margin.integer, true,
-				d, properties, values);
+		return genericOneIdentOrIntegerOrLength(
+			Margin.class, Margin.length, Margin.length, true, d, properties,
+			values);
 	}
 
 	@SuppressWarnings("unused")
 	private boolean processMarginLeft(Declaration d,
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
-		return genericOneIdentOrInteger(Margin.class, Margin.integer, false,
-				d, properties, values);
+		return genericOneIdentOrIntegerOrLength(
+			Margin.class, Margin.length, Margin.length, false, d, properties,
+			values);
 	}
 
 	@SuppressWarnings("unused")
 	private boolean processMarginRight(Declaration d,
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
-		return genericOneIdentOrInteger(Margin.class, Margin.integer, false,
-				d, properties, values);
+		return genericOneIdentOrIntegerOrLength(
+			Margin.class, Margin.length, Margin.length, false, d, properties,
+			values);
 	}
 
 	@SuppressWarnings("unused")
 	private boolean processMarginTop(Declaration d,
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
-		return genericOneIdentOrInteger(Margin.class, Margin.integer, true,
-				d, properties, values);
+		return genericOneIdentOrIntegerOrLength(
+			Margin.class, Margin.length, Margin.length, true, d, properties,
+			values);
 	}
 
 	@SuppressWarnings("unused")
@@ -835,8 +848,9 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 	@SuppressWarnings("unused")
 	private boolean processMaxHeight(Declaration d,
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
-		return genericOneIdentOrInteger(MaxHeight.class, MaxHeight.integer, false,
-				d, properties, values);
+		return genericOneIdentOrIntegerOrLength(
+			MaxHeight.class, MaxHeight.length, MaxHeight.length, false, d,
+			properties, values);
 	}
 
 	@SuppressWarnings("unused")
@@ -863,29 +877,33 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 	@SuppressWarnings("unused")
 	private boolean processPaddingBottom(Declaration d,
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
-		return genericOneIdentOrInteger(Padding.class, Padding.integer, true,
-				d, properties, values);
+		return genericOneIdentOrIntegerOrLength(
+			Padding.class, Padding.length, Padding.length, true, d,
+			properties, values);
 	}
 
 	@SuppressWarnings("unused")
 	private boolean processPaddingLeft(Declaration d,
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
-		return genericOneIdentOrInteger(Padding.class, Padding.integer, true,
-				d, properties, values);
+		return genericOneIdentOrIntegerOrLength(
+			Padding.class, Padding.length, Padding.length, true, d,
+			properties, values);
 	}
 
 	@SuppressWarnings("unused")
 	private boolean processPaddingRight(Declaration d,
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
-		return genericOneIdentOrInteger(Padding.class, Padding.integer, true,
-				d, properties, values);
+		return genericOneIdentOrIntegerOrLength(
+			Padding.class, Padding.length, Padding.length, true, d,
+			properties, values);
 	}
 
 	@SuppressWarnings("unused")
 	private boolean processPaddingTop(Declaration d,
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
-		return genericOneIdentOrInteger(Padding.class, Padding.integer, true,
-				d, properties, values);
+		return genericOneIdentOrIntegerOrLength(
+			Padding.class, Padding.length, Padding.length, true, d,
+			properties, values);
 	}
 
 	@SuppressWarnings("unused")
@@ -923,8 +941,9 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 	@SuppressWarnings("unused")
 	private boolean processRight(Declaration d,
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
-		return genericOneIdentOrInteger(AbsoluteMargin.class, AbsoluteMargin.integer, true,
-				d, properties, values);
+		return genericOneIdentOrIntegerOrLength(
+			AbsoluteMargin.class, AbsoluteMargin.length, AbsoluteMargin.length, true,
+			d, properties, values);
 	}
 
 	@SuppressWarnings("unused")
@@ -932,15 +951,15 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
 		if (d.size() == 1 && genericOneIdent(Size.class, d, properties))
 			return true;
-		TermInteger width = null;
-		TermInteger height = null;
+		TermLength width = null;
+		TermLength height = null;
 		for (Term<?> t : d.asList()) {
-			if (height != null || !(t instanceof TermInteger)) {
+			if (height != null || !(t instanceof TermLength)) {
 				return false;
 			} else if (width == null) {
-				width = (TermInteger)t;
+				width = (TermLength)t;
 			} else {
-				height = (TermInteger)t;
+				height = (TermLength)t;
 			}
 		}
 		if (height == null) {
@@ -949,7 +968,7 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 		TermList size = tf.createList(2);
 		size.add(width);
 		size.add(height);
-		properties.put(d.getProperty(), Size.integer_pair);
+		properties.put(d.getProperty(), Size.length_pair);
 		values.put(d.getProperty(), size);
 		return true;
 	}
@@ -1006,8 +1025,9 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 	@SuppressWarnings("unused")
 	private boolean processTextIndent(Declaration d,
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
-		return genericOneIdentOrInteger(TextIndent.class, TextIndent.integer, false,
-				d, properties, values);
+		return genericOneIdentOrIntegerOrLength(
+			TextIndent.class, TextIndent.length, TextIndent.length, false,
+			d, properties, values);
 	}
 
 	protected boolean processTextTransform(Declaration d,
@@ -1101,8 +1121,9 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 	@SuppressWarnings("unused")
 	private boolean processWordSpacing(Declaration d,
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
-		if (genericOneIdentOrInteger(WordSpacing.class, WordSpacing.length, true,
-				d, properties, values))
+		if (genericOneIdentOrIntegerOrLength(
+			    WordSpacing.class, WordSpacing.length, WordSpacing.length, true,
+			    d, properties, values))
 			return true;
 		else {
 			log.warn("{} not supported, illegal number", d);
@@ -1112,6 +1133,18 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 	/****************************************************************
 	 * GENERIC METHODS
 	 ****************************************************************/
+
+	private <T extends CSSProperty> boolean genericOneIdentOrIntegerOrLength(
+		Class<T> type, T integerIdentification, T lengthIdentification, boolean sanify,
+		Declaration d, Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+		if (d.size() != 1)
+			return false;
+		return genericTermIdent(type, d.get(0), ALLOW_INH, d.getProperty(), properties)
+			|| genericTerm(TermInteger.class, d.get(0), d.getProperty(),
+			               integerIdentification, sanify, properties, values)
+			|| genericTermLength(d.get(0), d.getProperty(), lengthIdentification,
+			                     sanify, properties, values);
+	}
 
 	private <T extends CSSProperty> boolean genericOneIdentOrDotPattern(
 			Class<T> type, T dotPatternIdentification, Declaration d,
@@ -1169,9 +1202,11 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 		protected boolean operation(int i,
 		                            Map<String,CSSProperty> properties,
 		                            Map<String,Term<?>> values) {
-			return genericTermIdent(type, terms.get(i), AVOID_INH, names.get(i), properties)
-				|| genericTerm(TermInteger.class, terms.get(i), names.get(i),
-				               Margin.integer, false, properties, values);
+			return genericTermIdent(type, terms.get(i), ALLOW_INH, names.get(i), properties)
+				|| genericTerm(TermInteger.class, terms.get(i), names.get(i), Margin.length,
+				               false, properties, values)
+				|| genericTermLength(terms.get(i), names.get(i), Margin.length,
+				               false, properties, values);
 		}
 	}
 
@@ -1189,9 +1224,11 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 		protected boolean operation(int i,
 		                            Map<String,CSSProperty> properties,
 		                            Map<String,Term<?>> values) {
-			return genericTermIdent(type, terms.get(i), AVOID_INH, names.get(i), properties)
-				|| genericTerm(TermInteger.class, terms.get(i), names.get(i),
-				               Padding.integer, false, properties, values);
+			return genericTermIdent(type, terms.get(i), ALLOW_INH, names.get(i), properties)
+				|| genericTerm(TermInteger.class, terms.get(i), names.get(i), Padding.length,
+				               false, properties, values)
+				|| genericTermLength(terms.get(i), names.get(i), Padding.length,
+				               false, properties, values);
 		}
 	}
 
@@ -1264,7 +1301,9 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 		protected boolean operation(int i, Map<String, CSSProperty> properties,
 		                            Map<String, Term<?>> values) {
 			return genericTermIdent(type, terms.get(i), ALLOW_INH, names.get(i), properties)
-				|| genericTerm(TermInteger.class, terms.get(i), names.get(i), BorderWidth.integer,
+				|| genericTerm(TermInteger.class, terms.get(i), names.get(i), BorderWidth.length,
+				               false, properties, values)
+				|| genericTermLength(terms.get(i), names.get(i), BorderWidth.length,
 				               false, properties, values);
 		}
 	}
@@ -1417,8 +1456,10 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 			case WIDTH:
 				return genericTermIdent(types.get(variant), terms.get(i), AVOID_INH, names.get(variant),
 				                        properties)
-					|| genericTerm(TermInteger.class, terms.get(i), names.get(variant), BorderWidth.integer,
-					               false, properties, values);
+					|| genericTerm(TermInteger.class, terms.get(i), names.get(variant), BorderWidth.length,
+					               false, properties, values)
+					|| genericTermLength(terms.get(i), names.get(i), BorderWidth.length,
+					                     false, properties, values);
 			case ALIGN:
 			case STYLE:
 				return genericTermIdent(types.get(variant), terms.get(i), AVOID_INH, names.get(variant),
@@ -1614,23 +1655,23 @@ class SupportedCSSImpl implements SupportedCSS {
 
 		// text spacing
 		setProperty("text-align", DEFAULT_UA_TEXT_ALIGN);
-		setProperty("text-indent", TextIndent.integer, DEFAULT_UA_TEXT_IDENT);
-		setProperty("line-height", LineHeight.number, DEFAULT_UA_LINE_HEIGHT);
+		setProperty("text-indent", TextIndent.length, DEFAULT_UA_TEXT_IDENT);
+		setProperty("line-height", LineHeight.length, DEFAULT_UA_LINE_HEIGHT);
 
 		// layout box
 		setProperty("left", AbsoluteMargin.AUTO);
 		setProperty("right", AbsoluteMargin.AUTO);
 
-		setProperty("margin-top", Margin.integer, DEFAULT_UA_MARGIN);
-		setProperty("margin-right", Margin.integer, DEFAULT_UA_MARGIN);
-		setProperty("margin-bottom", Margin.integer, DEFAULT_UA_MARGIN);
-		setProperty("margin-left", Margin.integer, DEFAULT_UA_MARGIN);
+		setProperty("margin-top", Margin.length, DEFAULT_UA_MARGIN);
+		setProperty("margin-right", Margin.length, DEFAULT_UA_MARGIN);
+		setProperty("margin-bottom", Margin.length, DEFAULT_UA_MARGIN);
+		setProperty("margin-left", Margin.length, DEFAULT_UA_MARGIN);
 		setProperty("margin", allowShorthandProperties, Margin.component_values);
 
-		setProperty("padding-top", Padding.integer, DEFAULT_UA_PADDING);
-		setProperty("padding-right", Padding.integer, DEFAULT_UA_PADDING);
-		setProperty("padding-bottom", Padding.integer, DEFAULT_UA_PADDING);
-		setProperty("padding-left", Padding.integer, DEFAULT_UA_PADDING);
+		setProperty("padding-top", Padding.length, DEFAULT_UA_PADDING);
+		setProperty("padding-right", Padding.length, DEFAULT_UA_PADDING);
+		setProperty("padding-bottom", Padding.length, DEFAULT_UA_PADDING);
+		setProperty("padding-left", Padding.length, DEFAULT_UA_PADDING);
 		setProperty("padding", allowShorthandProperties, Padding.component_values);
 
 		setProperty("border-top-pattern", allowComponentProperties, BorderPattern.NONE);
@@ -1645,10 +1686,10 @@ class SupportedCSSImpl implements SupportedCSS {
 		setProperty("border-left-style", allowComponentProperties, BorderStyle.NONE);
 		setProperty("border-style", allowShorthandProperties, BorderStyle.component_values);
 
-		setProperty("border-top-width", allowComponentProperties, BorderWidth.integer, DEFAULT_UA_BORDER_WIDTH);
-		setProperty("border-right-width", allowComponentProperties, BorderWidth.integer, DEFAULT_UA_BORDER_WIDTH);
-		setProperty("border-bottom-width", allowComponentProperties, BorderWidth.integer, DEFAULT_UA_BORDER_WIDTH);
-		setProperty("border-left-width", allowComponentProperties, BorderWidth.integer, DEFAULT_UA_BORDER_WIDTH);
+		setProperty("border-top-width", allowComponentProperties, BorderWidth.length, DEFAULT_UA_BORDER_WIDTH);
+		setProperty("border-right-width", allowComponentProperties, BorderWidth.length, DEFAULT_UA_BORDER_WIDTH);
+		setProperty("border-bottom-width", allowComponentProperties, BorderWidth.length, DEFAULT_UA_BORDER_WIDTH);
+		setProperty("border-left-width", allowComponentProperties, BorderWidth.length, DEFAULT_UA_BORDER_WIDTH);
 		setProperty("border-width", allowShorthandProperties, BorderWidth.component_values);
 
 		setProperty("border-top-align", allowComponentProperties, BorderAlign.CENTER);
