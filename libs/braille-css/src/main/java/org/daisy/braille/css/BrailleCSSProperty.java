@@ -9,7 +9,7 @@ public interface BrailleCSSProperty extends CSSProperty {
 	 ************************************************************************/
 	
 	public enum AbsoluteMargin implements BrailleCSSProperty {
-		integer(""), AUTO("auto"), INHERIT("inherit"), INITIAL("initial");
+		length(""), AUTO("auto"), INHERIT("inherit"), INITIAL("initial");
 
 		private String text;
 
@@ -119,7 +119,7 @@ public interface BrailleCSSProperty extends CSSProperty {
 	}
 
 	public enum BorderWidth implements BrailleCSSProperty {
-		integer(""), component_values(""), THIN("thin"), MEDIUM("medium"),
+		length(""), component_values(""), THIN("thin"), MEDIUM("medium"),
 		THICK("thick"), INHERIT("inherit"), INITIAL("initial");
 
 		private String text;
@@ -338,7 +338,7 @@ public interface BrailleCSSProperty extends CSSProperty {
 	}
 	
 	public enum LineHeight implements BrailleCSSProperty {
-		number(""), percentage(""), INHERIT("inherit"), INITIAL("initial");
+		length(""), percentage(""), INHERIT("inherit"), INITIAL("initial");
 
 		private String text;
 
@@ -395,7 +395,7 @@ public interface BrailleCSSProperty extends CSSProperty {
 	}
 
 	public enum Margin implements BrailleCSSProperty {
-		integer(""), component_values(""), INHERIT("inherit"), INITIAL("initial");
+		length(""), component_values(""), INHERIT("inherit"), INITIAL("initial");
 
 		private String text;
 
@@ -422,7 +422,7 @@ public interface BrailleCSSProperty extends CSSProperty {
 	}
 	
 	public enum MaxHeight implements BrailleCSSProperty {
-		integer(""), NONE("none"), INHERIT("inherit"), INITIAL("initial");
+		length(""), NONE("none"), INHERIT("inherit"), INITIAL("initial");
 
 		private String text;
 
@@ -530,7 +530,7 @@ public interface BrailleCSSProperty extends CSSProperty {
 	}
 
 	public enum Padding implements BrailleCSSProperty {
-		integer(""), component_values(""), INHERIT("inherit"), INITIAL("initial");
+		length(""), component_values(""), INHERIT("inherit"), INITIAL("initial");
 
 		private String text;
 
@@ -611,7 +611,7 @@ public interface BrailleCSSProperty extends CSSProperty {
 	}
 
 	public enum Size implements BrailleCSSProperty {
-		integer_pair(""), AUTO("auto"), INHERIT("inherit"), INITIAL("initial");
+		length_pair(""), AUTO("auto"), INHERIT("inherit"), INITIAL("initial");
 
 		private String text;
 
@@ -694,7 +694,7 @@ public interface BrailleCSSProperty extends CSSProperty {
 	}
 
 	public enum TextIndent implements BrailleCSSProperty {
-		integer(""), INHERIT("inherit"), INITIAL("initial");
+		length(""), INHERIT("inherit"), INITIAL("initial");
 
 		private String text;
 
