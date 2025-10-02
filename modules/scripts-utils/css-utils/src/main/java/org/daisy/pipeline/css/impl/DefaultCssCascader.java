@@ -286,7 +286,7 @@ public class DefaultCssCascader implements CssCascader {
 		}
 
 		protected String serializeValue(Term<?> value) {
-			return CssSerializer.toString(value);
+			return CssSerializer.getInstance().toString(value);
 		}
 	}
 

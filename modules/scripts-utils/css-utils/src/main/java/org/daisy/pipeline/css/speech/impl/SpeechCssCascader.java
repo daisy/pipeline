@@ -106,6 +106,7 @@ public class SpeechCssCascader implements CssCascader {
 			this.attributeNamespaceURI = attributeNamespace.getNamespaceURI();
 		}
 
+		@Override
 		protected Map<QName,String> serializeStyle(NodeData mainStyle, Map<PseudoElement,NodeData> pseudoStyles, Element context) {
 			Map<QName,String> style = null;
 			if (mainStyle != null) {
@@ -119,7 +120,7 @@ public class SpeechCssCascader implements CssCascader {
 									continue;
 								s = prop.toString().replace('_', '-');
 							} else {
-								s = serializeTerm(v);
+								s = serializer.toString(v);
 							}
 						}
 						if (style == null)
@@ -181,24 +182,28 @@ public class SpeechCssCascader implements CssCascader {
 			return style;
 		}
 
-		private static String serializeTerm(Term<?> term) {
-			if (term instanceof TermString)
-				return ((TermString)term).getValue();
-			else if (term instanceof TermURI) {
-				TermURI termURI = (TermURI)term;
-				URI uri = URLs.asURI(termURI.getValue());
-				if (termURI.getBase() != null)
-					uri = URLs.resolve(URLs.asURI(termURI.getBase()), uri);
-				return uri.toASCIIString();
-			} else if (term instanceof TermIdent)
-				return CssSerializer.toString(term).replace('_', '-');
-			else
-				return CssSerializer.toString(term, Transformer::serializeTerm);
-		}
-
+		@Override
 		protected String serializeValue(Term<?> value) {
 			throw new UnsupportedOperationException();
 		}
+
+		private final static CssSerializer serializer = new CssSerializer() {
+				@Override
+				public String toString(Term<?> term) {
+					if (term instanceof TermString)
+						return ((TermString)term).getValue();
+					else if (term instanceof TermURI) {
+						TermURI termURI = (TermURI)term;
+						URI uri = URLs.asURI(termURI.getValue());
+						if (termURI.getBase() != null)
+							uri = URLs.resolve(URLs.asURI(termURI.getBase()), uri);
+						return uri.toASCIIString();
+					} else if (term instanceof TermIdent)
+						return super.toString(term).replace('_', '-');
+					else
+						return super.toString(term);
+				}
+			};
 	}
 
 	private final static Logger logger = LoggerFactory.getLogger(SpeechCssCascader.class);

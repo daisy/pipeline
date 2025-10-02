@@ -348,7 +348,7 @@ public class TableAsList extends SingleInSingleOutXMLTransformer {
 													builder.add(ruleblock); }}
 										else
 											throw new RuntimeException("Unexpected style " + block); }
-									newStyle = BrailleCssSerializer.serializeRuleBlockList(builder); }
+									newStyle = BrailleCssSerializer.getInstance().serializeRuleBlockList(builder); }
 								if (!newStyle.isEmpty())
 									writeActions.add(w -> writeAttribute(w, attrName, newStyle)); }
 							else if (isCell && _STYLE.equals(attrName))
@@ -996,7 +996,7 @@ public class TableAsList extends SingleInSingleOutXMLTransformer {
 
 		@Override
 		public String toString() {
-			return BrailleCssSerializer.serializeRuleBlockList(ruleBlocks.values());
+			return BrailleCssSerializer.getInstance().serializeRuleBlockList(ruleBlocks.values());
 		}
 	}
 
@@ -1280,7 +1280,7 @@ public class TableAsList extends SingleInSingleOutXMLTransformer {
 			if (lang != null)
 				writeAttribute(writer, XML_LANG, lang);
 			if (style != null) {
-				String styleAttr = BrailleCssSerializer.toString(style);
+				String styleAttr = BrailleCssSerializer.getInstance().toString(style);
 				if (styleAttr != null && !"".equals(styleAttr))
 					writeAttribute(writer, _STYLE, styleAttr); }
 			for (WriterEvent action : content)

@@ -164,13 +164,13 @@ public class Stylesheet extends Style {
 		else if (relativeTo == null && parent != null)
 			// we may want to remove unneeded declarations
 			relativeTo = BrailleCssStyle.EMPTY;
-		return BrailleCssSerializer.toString(style, relativeTo);
+		return BrailleCssSerializer.getInstance().toString(style, relativeTo);
 	}
 
 	@Override
 	protected String toPrettyString(String indentation) {
 		if (style != null)
-			return BrailleCssSerializer.toString(style, indentation);
+			return BrailleCssSerializer.getInstance().toString(style, indentation);
 		else
 			return "";
 	}
@@ -194,13 +194,13 @@ public class Stylesheet extends Style {
 		else if (relativeTo == null && parent != null)
 			// we may want to remove unneeded declarations
 			relativeTo = BrailleCssStyle.EMPTY;
-		BrailleCssSerializer.toAttributes(style, relativeTo, writer);
+		BrailleCssSerializer.getInstance().toAttributes(style, relativeTo, writer);
 	}
 
 	@Override
 	protected void toXml(XMLStreamWriter writer) throws XMLStreamException {
 		if (style != null)
 			// <css:rule>
-			BrailleCssSerializer.toXml(style, writer);
+			BrailleCssSerializer.getInstance().toXml(style, writer);
 	}
 }

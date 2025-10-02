@@ -65,7 +65,7 @@ public class Rule extends Stylesheet {
 
 	@Override
 	public String toString() {
-		return BrailleCssSerializer.toString(style);
+		return BrailleCssSerializer.getInstance().toString(style);
 	}
 
 	@Override

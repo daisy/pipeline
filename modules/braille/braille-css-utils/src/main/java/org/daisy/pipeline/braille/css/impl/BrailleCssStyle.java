@@ -493,7 +493,7 @@ public final class BrailleCssStyle implements Cloneable {
 
 	@Override
 	public String toString() {
-		return BrailleCssSerializer.toString(this);
+		return BrailleCssSerializer.getInstance().toString(this);
 	}
 
 	// used in BrailleCssSerializer
@@ -602,8 +602,8 @@ public final class BrailleCssStyle implements Cloneable {
 				return false;
 			Term<?> va = a.getValue();
 			Term<?> vb = b.getValue();
-			if (!equal(va != null ? BrailleCssSerializer.toString(va) : null,
-			           vb != null ? BrailleCssSerializer.toString(vb) : null))
+			if (!equal(va != null ? BrailleCssSerializer.getInstance().toString(va) : null,
+			           vb != null ? BrailleCssSerializer.getInstance().toString(vb) : null))
 				return false;
 			if (!ignoreSource && !equal(a.getSource(), b.getSource()))
 				return false;
@@ -899,7 +899,8 @@ public final class BrailleCssStyle implements Cloneable {
 		for (Declaration d : hyphenationResource)
 			style.add(d);
 		Builder relativeRule = new Builder(parser, Context.HYPHENATION_RESOURCE)
-			.add("&:lang(" + BrailleCssSerializer.serializeLanguageRanges(hyphenationResource.getLanguageRanges()) + ")", style);
+			.add("&:lang(" + BrailleCssSerializer.getInstance().serializeLanguageRanges(hyphenationResource.getLanguageRanges()) + ")",
+			     style);
 		if (relative)
 			return relativeRule.build();
 		else

@@ -51,6 +51,7 @@ public abstract class BrailleCssParser implements TextStyleParser {
 	private static final Logger logger = LoggerFactory.getLogger(BrailleCssParser.class);
 
 	private static BrailleCssParser INSTANCE_WITH_EXTENSIONS = null;
+	private static BrailleCssSerializer serializer = BrailleCssSerializer.getInstance();
 
 	public static BrailleCssParser getInstance() {
 		if (INSTANCE_WITH_EXTENSIONS == null) {
@@ -401,7 +402,7 @@ public abstract class BrailleCssParser implements TextStyleParser {
 
 		@Override
 		public String toString() {
-			return BrailleCssSerializer.toString(this);
+			return serializer.toString(this);
 		}
 	}
 
@@ -496,10 +497,10 @@ public abstract class BrailleCssParser implements TextStyleParser {
 			return serialized;
 		}
 
-		// for use in BrailleCssSerializer.serializePropertyValue()
+		// for use in serializer.serializePropertyValue()
 		String valueToString() {
 			if (valueSerialized == null) {
-				valueSerialized = BrailleCssSerializer.serializePropertyValue(new PropertyValue(this));
+				valueSerialized = serializer.serializePropertyValue(new PropertyValue(this));
 				serialized = getProperty() + ": " + valueSerialized;
 				if (enableCaching)
 					parser.declCache.put(serialized, this);
@@ -591,7 +592,7 @@ public abstract class BrailleCssParser implements TextStyleParser {
 				throw new IllegalArgumentException();
 			this.context = context;
 			this.style = style;
-			this.parent = parent != null ? BrailleCssSerializer.toString(parent) : null;
+			this.parent = parent != null ? serializer.toString(parent) : null;
 			this.concretizeInherit = concretizeInherit;
 		}
 		@Override

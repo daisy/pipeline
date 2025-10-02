@@ -142,7 +142,6 @@ public class BrailleCssCascader implements CssCascader {
 	private BrailleCSSParserFactory brailleParserFactory = null;
 	private BrailleCssParser brailleCSSParser = null;
 
-
 	@Reference(
 		name = "BrailleCSSExtension",
 		unbind = "-",
@@ -282,7 +281,7 @@ public class BrailleCssCascader implements CssCascader {
 		}
 
 		protected String serializeValue(Term<?> value) {
-			return BrailleCssSerializer.toString(value);
+			return serializer.toString(value);
 		}
 	}
 
@@ -311,12 +310,14 @@ public class BrailleCssCascader implements CssCascader {
 
 	// FIXME: make more use of BrailleCssSerializer
 
+	private static BrailleCssSerializer serializer = BrailleCssSerializer.getInstance();
+
 	private static void insertStyle(StringBuilder builder, NodeData nodeData) {
 		List<String> properties = new ArrayList<String>(nodeData.getPropertyNames());
 		properties.remove("page");
 		Collections.sort(properties);
 		for (String prop : properties) {
-			String val = BrailleCssSerializer.serializePropertyValue(nodeData, prop, false);
+			String val = serializer.serializePropertyValue(nodeData, prop, false);
 			if (val != null) // can be null for unspecified inherited properties
 				builder.append(prop).append(": ").append(val).append("; ");
 		}
@@ -357,7 +358,7 @@ public class BrailleCssCascader implements CssCascader {
 	}
 
 	private void insertPageStyle(StringBuilder builder, RulePage pageRule) {
-		builder.append(BrailleCssSerializer.toString(pageRule, brailleCSSParser)).append(" ");
+		builder.append(serializer.toString(pageRule, brailleCSSParser)).append(" ");
 	}
 
 	private Map<String,RulePage> getPageRule(NodeData nodeData, Map<String,Map<String,RulePage>> pageRules) {
@@ -463,7 +464,7 @@ public class BrailleCssCascader implements CssCascader {
 		if (pseudo != null && !"".equals(pseudo))
 			builder.append(":").append(pseudo);
 		builder.append(" { ");
-		String declarations = BrailleCssSerializer.serializeDeclarationList(Iterables.filter(volumeRule.getValue(), Declaration.class));
+		String declarations = serializer.serializeDeclarationList(Iterables.filter(volumeRule.getValue(), Declaration.class));
 		if (!declarations.isEmpty())
 			builder.append(declarations).append("; ");
 		for (RuleVolumeArea volumeArea : Iterables.filter(volumeRule.getValue(), RuleVolumeArea.class))
@@ -483,13 +484,13 @@ public class BrailleCssCascader implements CssCascader {
 				StringBuilder s = new StringBuilder();
 				Iterator<Term<?>> it = decl.iterator();
 				while (it.hasNext()) {
-					s.append(BrailleCssSerializer.toString(it.next()));
+					s.append(serializer.toString(it.next()));
 					if (it.hasNext()) s.append(" "); }
 				pageRule = getPageRule(s.toString(), pageRules); }
 			else
 				declarations.add(decl);
 		if (!declarations.isEmpty())
-			innerStyle.append(BrailleCssSerializer.serializeDeclarationList(declarations)).append("; ");
+			innerStyle.append(serializer.serializeDeclarationList(declarations)).append("; ");
 		if (pageRule != null)
 			insertPageStyle(innerStyle, pageRule);
 		if (innerStyle.length() > 1 && innerStyle.substring(innerStyle.length() - 2).equals("; "))
@@ -527,7 +528,7 @@ public class BrailleCssCascader implements CssCascader {
 			}
 			declarationList.add(d);
 		}
-		String declarations = BrailleCssSerializer.serializeDeclarationList(declarationList);
+		String declarations = serializer.serializeDeclarationList(declarationList);
 		if (!declarations.isEmpty())
 			builder.append(declarations).append(" ");
 		builder.append("} ");
@@ -535,7 +536,7 @@ public class BrailleCssCascader implements CssCascader {
 
 	private static void insertHyphenationResourceDefinition(StringBuilder builder, RuleHyphenationResource rule) {
 		builder.append("@hyphenation-resource");
-		builder.append(":lang(").append(BrailleCssSerializer.serializeLanguageRanges(rule.getLanguageRanges())).append(")");
+		builder.append(":lang(").append(serializer.serializeLanguageRanges(rule.getLanguageRanges())).append(")");
 		builder.append(" { ");
 		List<Declaration> declarationList = new ArrayList<>();
 		for (Declaration d : rule) {
@@ -567,7 +568,7 @@ public class BrailleCssCascader implements CssCascader {
 			}
 			declarationList.add(d);
 		}
-		String declarations = BrailleCssSerializer.serializeDeclarationList(declarationList);
+		String declarations = serializer.serializeDeclarationList(declarationList);
 		if (!declarations.isEmpty())
 			builder.append(declarations).append(" ");
 		builder.append("} ");
@@ -589,7 +590,7 @@ public class BrailleCssCascader implements CssCascader {
 	private static void insertCounterStyleDefinition(StringBuilder builder, RuleCounterStyle rule) {
 		String name = rule.getName();
 		builder.append("@counter-style ").append(name).append(" { ");
-		String declarations = BrailleCssSerializer.serializeDeclarationList(rule);
+		String declarations = serializer.serializeDeclarationList(rule);
 		if (!declarations.isEmpty())
 			builder.append(declarations).append(" ");
 		builder.append("} ");
@@ -597,7 +598,7 @@ public class BrailleCssCascader implements CssCascader {
 
 	private static void insertAtRule(StringBuilder builder, VendorAtRule<? extends Rule<?>> rule) {
 		builder.append("@").append(rule.getName()).append(" { ");
-		String declarations = BrailleCssSerializer.serializeDeclarationList(Iterables.filter(rule, Declaration.class));
+		String declarations = serializer.serializeDeclarationList(Iterables.filter(rule, Declaration.class));
 		if (!declarations.isEmpty())
 			builder.append(declarations).append("; ");
 		for (VendorAtRule<? extends Rule<?>> r : Iterables.filter(rule, VendorAtRule.class))

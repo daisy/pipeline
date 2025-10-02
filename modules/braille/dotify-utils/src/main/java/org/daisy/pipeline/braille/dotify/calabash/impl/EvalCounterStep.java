@@ -323,7 +323,7 @@ public class EvalCounterStep extends DefaultStep implements XProcStep {
 
 		private static void writeAttribute(XMLStreamWriter writer, QName name, Collection<CounterSet> value) throws XMLStreamException {
 			if (value != null && !value.isEmpty()) {
-				String v = CssSerializer.serializeTermList(value);
+				String v = CssSerializer.getInstance().serializeTermList(value);
 				if (!v.isEmpty())
 					writeAttribute(writer, name, v);
 			}

@@ -89,9 +89,9 @@ public class Value extends Style {
 		if (parent != null)
 			throw new UnsupportedOperationException();
 		if (value instanceof PropertyValue)
-			return BrailleCssSerializer.serializePropertyValue((PropertyValue)value);
+			return BrailleCssSerializer.getInstance().serializePropertyValue((PropertyValue)value);
 		else if (value != null)
-			return BrailleCssSerializer.serializeTermList(value);
+			return BrailleCssSerializer.getInstance().serializeTermList(value);
 		else
 			return "";
 	}
@@ -104,10 +104,10 @@ public class Value extends Style {
 	@Override
 	protected void toXml(XMLStreamWriter writer) throws XMLStreamException {
 		if (value instanceof ContentList)
-			BrailleCssSerializer.toXml((ContentList)value, writer);
+			BrailleCssSerializer.getInstance().toXml((ContentList)value, writer);
 		else if (value instanceof CounterSetList)
-			BrailleCssSerializer.toXml((CounterSetList)value, writer);
+			BrailleCssSerializer.getInstance().toXml((CounterSetList)value, writer);
 		else if (value instanceof StringSetList)
-			BrailleCssSerializer.toXml((StringSetList)value, writer);
+			BrailleCssSerializer.getInstance().toXml((StringSetList)value, writer);
 	}
 }
