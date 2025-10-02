@@ -576,7 +576,7 @@
       <dependency>
         <groupId>org.daisy.braille</groupId>
         <artifactId>braille-css</artifactId>
-        <version>1.26.1</version>
+        <version>1.27.0-SNAPSHOT</version>
       </dependency>
       <!--
           for css-utils, braille-common and braille-css-utils

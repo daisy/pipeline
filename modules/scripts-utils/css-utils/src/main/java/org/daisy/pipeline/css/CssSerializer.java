@@ -10,8 +10,10 @@ import cz.vutbr.web.css.Term;
 import cz.vutbr.web.css.TermFunction;
 import cz.vutbr.web.css.TermIdent;
 import cz.vutbr.web.css.TermInteger;
+import cz.vutbr.web.css.TermLength;
 import cz.vutbr.web.css.TermList;
 import cz.vutbr.web.css.TermNumber;
+import cz.vutbr.web.css.TermNumeric.Unit;
 import cz.vutbr.web.css.TermPair;
 import cz.vutbr.web.css.TermPercent;
 import cz.vutbr.web.css.TermString;
@@ -38,6 +40,18 @@ public class CssSerializer {
 				return "" + value.intValue();
 			else
 				return "" + value; }
+		else if (term instanceof TermLength) {
+			TermLength length = (TermLength)term;
+			Double value = length.getValue().doubleValue();
+			Unit unit = length.getUnit();
+			StringBuilder s = new StringBuilder();
+			if (value == Math.floor(value))
+				s.append("" + value.intValue());
+			else
+				s.append("" + value);
+			if (unit != null)
+				s.append(unit.value());
+			return s.toString(); }
 		else if (term instanceof TermPercent) {
 			TermPercent percent = (TermPercent)term;
 			Double value = percent.getValue().doubleValue();

@@ -285,7 +285,7 @@ public class DefaultCssCascader implements CssCascader {
 			throw new UnsupportedOperationException(); // not needed
 		}
 
-		protected String serializeValue(Term<?> value) {
+		protected String serializeValue(Term<?> value, String property) {
 			return CssSerializer.getInstance().toString(value);
 		}
 	}

@@ -19,7 +19,10 @@ import cz.vutbr.web.css.TermFactory;
 import cz.vutbr.web.css.TermFunction;
 import cz.vutbr.web.css.TermIdent;
 import cz.vutbr.web.css.TermInteger;
+import cz.vutbr.web.css.TermLength;
 import cz.vutbr.web.css.TermList;
+import cz.vutbr.web.css.TermNumeric;
+import cz.vutbr.web.css.TermNumeric.Unit;
 import cz.vutbr.web.css.TermString;
 
 import org.daisy.braille.css.BrailleCSSProperty;
@@ -253,9 +256,12 @@ public class SupportedOBFLProperties extends SupportedBrailleCSS {
 			String p = d.getProperty();
 			Term<?> v = ((PropertyValue)d).getValue();
 			switch ((BrailleCSSProperty.LineHeight)((PropertyValue)d).getCSSProperty()) {
-			case number:
-				properties.put(p, LineHeight.number);
-				values.put(p, v);
+			case length:
+				if (v instanceof TermNumeric && (((TermNumeric)v).getUnit() == null || ((TermNumeric)v).getUnit() == Unit.none)) {
+					properties.put(p, LineHeight.number);
+					values.put(p, v);
+					return true;
+				}
 				break;
 			case percentage:
 				properties.put(p, LineHeight.percentage);
@@ -294,7 +300,7 @@ public class SupportedOBFLProperties extends SupportedBrailleCSS {
 	private boolean processPreferredEmptySpace(Declaration d, Map<String,CSSProperty> properties, Map<String,Term<?>> values) {
 		if (forTransformer)
 			return copyPropertyValue(d, properties, values);
-		return genericOneIdentOrInteger(AbsoluteMargin.class, AbsoluteMargin.integer, true, d, properties, values);
+		return genericOneIdentOrInteger(AbsoluteMargin.class, AbsoluteMargin.length, true, d, properties, values);
 	}
 
 	@SuppressWarnings("unused")
@@ -302,7 +308,8 @@ public class SupportedOBFLProperties extends SupportedBrailleCSS {
 		if (forTransformer)
 			return processTextIndent(d, properties, values);
 		return genericOneIdentOrInteger(
-			BrailleCSSProperty.TextIndent.class, BrailleCSSProperty.TextIndent.integer, false, d, properties, values);
+			BrailleCSSProperty.TextIndent.class, BrailleCSSProperty.TextIndent.length, false, d, properties, values)
+			|| genericTermLength(d.get(0), d.getProperty(), BrailleCSSProperty.TextIndent.length, false, properties, values);
 	}
 
 	@SuppressWarnings("unused")
@@ -340,14 +347,14 @@ public class SupportedOBFLProperties extends SupportedBrailleCSS {
 	private boolean processTableColSpacing(Declaration d, Map<String,CSSProperty> properties, Map<String,Term<?>> values) {
 		if (forTransformer)
 			return copyPropertyValue(d, properties, values);
-		return genericOneIdentOrInteger(AbsoluteMargin.class, AbsoluteMargin.integer, true, d, properties, values);
+		return genericOneIdentOrInteger(AbsoluteMargin.class, AbsoluteMargin.length, true, d, properties, values);
 	}
 
 	@SuppressWarnings("unused")
 	private boolean processTableRowSpacing(Declaration d, Map<String,CSSProperty> properties, Map<String,Term<?>> values) {
 		if (forTransformer)
 			return copyPropertyValue(d, properties, values);
-		return genericOneIdentOrInteger(AbsoluteMargin.class, AbsoluteMargin.integer, true, d, properties, values);
+		return genericOneIdentOrInteger(AbsoluteMargin.class, AbsoluteMargin.length, true, d, properties, values);
 	}
 
 	@SuppressWarnings("unused")
@@ -401,10 +408,13 @@ public class SupportedOBFLProperties extends SupportedBrailleCSS {
 				case INITIAL:
 					properties.put(p, TextIndent.INITIAL);
 					return true;
-				case integer:
-					properties.put(p, TextIndent.integer);
-					values.put(p, pv.getValue());
-					return true;
+				case length:
+					Term<?> v = pv.getValue();
+					if (v instanceof TermLength && (((TermLength)v).getUnit() == null || ((TermLength)v).getUnit() == Unit.none)) {
+						properties.put(p, TextIndent.integer);
+						values.put(p, pv.getValue());
+						return true;
+					}
 				default:
 					return false;
 				}
@@ -445,7 +455,7 @@ public class SupportedOBFLProperties extends SupportedBrailleCSS {
 	private boolean processVerticalPosition(Declaration d, Map<String,CSSProperty> properties, Map<String,Term<?>> values) {
 		if (forTransformer)
 			return copyPropertyValue(d, properties, values);
-		return genericOneIdentOrInteger(AbsoluteMargin.class, AbsoluteMargin.integer, true, d, properties, values);
+		return genericOneIdentOrInteger(AbsoluteMargin.class, AbsoluteMargin.length, true, d, properties, values);
 	}
 
 	@SuppressWarnings("unused")
@@ -658,15 +668,15 @@ class SupportedCSSImpl implements SupportedCSS {
 			setProperty("hyphens",               Hyphens.MANUAL);
 			setProperty("letter-spacing",        LetterSpacing.length,    DEFAULT_UA_LETTER_SPACING);
 			setProperty("line-height",           LineHeight.number,       DEFAULT_UA_LINE_HEIGHT);
-			setProperty("margin-bottom",         Margin.integer,          DEFAULT_UA_MARGIN);
-			setProperty("margin-left",           Margin.integer,          DEFAULT_UA_MARGIN);
-			setProperty("margin-right",          Margin.integer,          DEFAULT_UA_MARGIN);
-			setProperty("margin-top",            Margin.integer,          DEFAULT_UA_MARGIN);
+			setProperty("margin-bottom",         Margin.length,          DEFAULT_UA_MARGIN);
+			setProperty("margin-left",           Margin.length,          DEFAULT_UA_MARGIN);
+			setProperty("margin-right",          Margin.length,          DEFAULT_UA_MARGIN);
+			setProperty("margin-top",            Margin.length,          DEFAULT_UA_MARGIN);
 			setProperty("orphans",               Orphans.integer,         DEFAULT_UA_ORPHANS);
-			setProperty("padding-bottom",        Padding.integer,         DEFAULT_UA_PADDING);
-			setProperty("padding-left",          Padding.integer,         DEFAULT_UA_PADDING);
-			setProperty("padding-right",         Padding.integer,         DEFAULT_UA_PADDING);
-			setProperty("padding-top",           Padding.integer,         DEFAULT_UA_PADDING);
+			setProperty("padding-bottom",        Padding.length,         DEFAULT_UA_PADDING);
+			setProperty("padding-left",          Padding.length,         DEFAULT_UA_PADDING);
+			setProperty("padding-right",         Padding.length,         DEFAULT_UA_PADDING);
+			setProperty("padding-top",           Padding.length,         DEFAULT_UA_PADDING);
 			setProperty("page-break-after",      PageBreak.AUTO);
 			setProperty("page-break-before",     PageBreak.AUTO);
 			setProperty("page-break-inside",     PageBreakInside.AUTO);
@@ -687,7 +697,7 @@ class SupportedCSSImpl implements SupportedCSS {
 		setProperty(prefix + "underline",                     BorderPattern.NONE);
 		setProperty(prefix + "keep-with-next-sheets",         KeepWithSheets.integer, DEFAULT_UA_KEEP_WITH_NEXT_SHEETS);
 		setProperty(prefix + "keep-with-previous-sheets",     KeepWithSheets.integer, DEFAULT_UA_KEEP_WITH_PREVIOUS_SHEETS);
-		setProperty(prefix + "preferred-empty-space",         AbsoluteMargin.integer, DEFAULT_UA_PREFERRED_EMPTY_SPACE);
+		setProperty(prefix + "preferred-empty-space",         AbsoluteMargin.length, DEFAULT_UA_PREFERRED_EMPTY_SPACE);
 		setProperty(prefix + "scenario-cost",                 ScenarioCost.NONE);
 		setProperty(prefix + "table-col-spacing",             AbsoluteMargin.AUTO);
 		setProperty(prefix + "table-row-spacing",             AbsoluteMargin.AUTO);

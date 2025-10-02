@@ -183,7 +183,7 @@ public class SpeechCssCascader implements CssCascader {
 		}
 
 		@Override
-		protected String serializeValue(Term<?> value) {
+		protected String serializeValue(Term<?> value, String property) {
 			throw new UnsupportedOperationException();
 		}
 

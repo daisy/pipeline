@@ -370,7 +370,7 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 								if (data != null) {
 									Term<?> value = data.getValue(property, true);
 									if (value != null)
-										return Optional.of(serializeValue(value));
+										return Optional.of(serializeValue(value, property));
 									else {
 										CSSProperty p = data.getProperty(property);
 										if (p != null)
@@ -471,7 +471,7 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 
 	protected abstract Map<QName,String> serializeStyle(NodeData mainStyle, Map<PseudoElement,NodeData> pseudoStyles, Element context);
 
-	protected abstract String serializeValue(Term<?> value);
+	protected abstract String serializeValue(Term<?> value, String property);
 
 	protected StyleSheet getParsedStyleSheet() {
 		if (styleSheet == null)

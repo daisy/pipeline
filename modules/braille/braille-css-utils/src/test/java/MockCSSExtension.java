@@ -155,7 +155,8 @@ public class MockCSSExtension extends BrailleCSSExtension {
 
 	@SuppressWarnings("unused")
 	private boolean processRightTextIndent(Declaration d, Map<String,CSSProperty> properties, Map<String,Term<?>> values) {
-		return genericOneIdentOrInteger(TextIndent.class, TextIndent.integer, false, d, properties, values);
+		return genericOneIdentOrInteger(TextIndent.class, TextIndent.length, false, d, properties, values)
+			|| genericTermLength(d.get(0), d.getProperty(), TextIndent.length, false, properties, values);
 	}
 
 	@SuppressWarnings("unused")
@@ -260,7 +261,7 @@ class SupportedFooProperties implements SupportedCSS {
 		supportedCSSproperties = new HashSet<String>(TOTAL_SUPPORTED_DECLARATIONS, 1.0f);
 		defaultCSSproperties = new HashMap<String,CSSProperty>(TOTAL_SUPPORTED_DECLARATIONS, 1.0f);
 		defaultCSSvalues = new HashMap<String,Term<?>>(TOTAL_SUPPORTED_DECLARATIONS, 1.0f);
-		setProperty(prefix + "right-text-indent", TextIndent.integer, DEFAULT_UA_TEXT_IDENT);
+		setProperty(prefix + "right-text-indent", TextIndent.length, DEFAULT_UA_TEXT_IDENT);
 	}
 
 	private void setOridinals() {

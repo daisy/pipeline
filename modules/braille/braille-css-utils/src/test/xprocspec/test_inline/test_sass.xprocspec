@@ -494,7 +494,7 @@
   
   <x:scenario label="test_15">
     <x:documentation>
-      That that stacking a pseudo class onto a pseudo element using @extend is also not supported by
+      Test that stacking a pseudo class onto a pseudo element using @extend is also not supported by
       SASS. Because in plain CSS a pseudo element can not have a pseudo class, SASS moves the pseudo
       classes to the beginning.
     </x:documentation>
