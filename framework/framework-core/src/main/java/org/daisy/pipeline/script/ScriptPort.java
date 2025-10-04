@@ -46,4 +46,48 @@ public interface ScriptPort {
 	 */
 	public String getMediaType();
 
+	/**
+	 * Get the file name extension for the given media type.
+	 */
+	public static String getFileExtension(String mediaType) {
+		if (mediaType != null) {
+			if ("application/epub+zip".equals(mediaType))
+				return ".epub";
+			if ("application/oebps-package+xml".equals(mediaType))
+				return ".opf";
+			if ("application/pdf".equals(mediaType))
+				return ".pdf";
+			if ("application/vnd.openxmlformats-officedocument.wordprocessingml.document".equals(mediaType))
+				return ".docx";
+			if ("application/vnd.pipeline.report+xml".equals(mediaType))
+				return ".html";
+			if ("application/xhtml+xml".equals(mediaType))
+				return ".xhtml";
+			if ("application/xml".equals(mediaType))
+				return ".xml";
+			if ("application/x-dtbook+xml".equals(mediaType))
+				return ".xml";
+			if ("application/x-obfl+xml".equals(mediaType))
+				return ".xml";
+			if ("application/x-pef+xml".equals(mediaType))
+				return ".pef";
+			if ("application/x-tex".equals(mediaType)
+			    || "text/x-latex".equals(mediaType)
+			    || "text/latex".equals(mediaType)
+			    || "text/x-tex".equals(mediaType)
+			    || "text/tex".equals(mediaType)
+			    || "application/tex".equals(mediaType)
+			    || "application/x-latex".equals(mediaType)
+			    || "application/latex".equals(mediaType))
+				return ".tex";
+			if ("application/z3998-auth+xml".equals(mediaType))
+				return ".xml";
+			if ("text/html".equals(mediaType))
+				return ".html";
+			if ("text/plain".equals(mediaType)
+			    || "text".equals(mediaType))
+				return ".txt";
+		}
+		return ".xml";
+	}
 }

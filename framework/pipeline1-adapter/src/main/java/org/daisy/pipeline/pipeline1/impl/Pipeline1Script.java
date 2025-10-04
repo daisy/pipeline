@@ -239,7 +239,7 @@ public class Pipeline1Script extends Script {
 					switch (param.getDatatype().getType()) {
 					case FILE:
 						resultPath = String.format("%s/%s%s",
-						                           portName, portName, getFileExtension(port.getMediaType()));
+						                           portName, portName, ScriptPort.getFileExtension(port.getMediaType()));
 						// Pipeline1 may expect directory to exist
 						new File(resultDir, resultPath).getParentFile().mkdirs();
 						break;
@@ -781,15 +781,5 @@ public class Pipeline1Script extends Script {
 				}
 			}
 		return result;
-	}
-
-	private static String getFileExtension(String mediaType) {
-		if (mediaType != null) {
-			if ("application/x-tex".equals(mediaType))
-				return ".tex";
-			if ("application/x-pef+xml".equals(mediaType))
-				return ".pef";
-		}
-		return ".xml";
 	}
 }

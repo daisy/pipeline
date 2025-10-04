@@ -12,6 +12,8 @@ import javax.xml.transform.stream.StreamResult;
 import com.google.common.base.Supplier;
 import com.google.common.collect.Lists;
 
+import org.daisy.pipeline.script.ScriptPort;
+
 /**
  * This class is not thread-safe if several threads are generating results at the same time.
  * not that likely use case
@@ -122,11 +124,11 @@ public final class DynamicResultProvider implements Supplier<Result>{
 		String parts[] = null;
 		// on the result/result.xml way
 		if (systemId == null || systemId.isEmpty()) {
-			parts = new String[]{String.format("%s/%s", name, name), getFileExtension(mimetype)};
+			parts = new String[]{String.format("%s/%s", name, name), ScriptPort.getFileExtension(mimetype)};
 			// directory -> dir/name, .xml
 			// the first part is the last char of the sysId
 		} else if (systemId.charAt(systemId.length() - 1) == '/') {
-			parts= new String[]{String.format("%s%s", systemId, name), getFileExtension(mimetype)};
+			parts= new String[]{String.format("%s%s", systemId, name), ScriptPort.getFileExtension(mimetype)};
 			// file name/name, (".???"|"")
 		} else {
 			String ext = "";
@@ -145,17 +147,5 @@ public final class DynamicResultProvider implements Supplier<Result>{
 			parts = new String[]{path, ext};
 		}
 		return parts;
-	}
-
-	private static final String MEDIA_TYPE_REPORT_XML = "application/vnd.pipeline.report+xml";
-
-	/**
-	 * Map mimetype to file extension
-	 */
-	private static String getFileExtension(String mimetype) {
-		if (MEDIA_TYPE_REPORT_XML.equals(mimetype))
-			return ".html";
-		else
-			return ".xml";
 	}
 }
