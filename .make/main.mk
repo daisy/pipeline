@@ -268,7 +268,7 @@ $(addsuffix /.sources.mk,$(addprefix $(TARGET_DIR)/mk/,$(MAVEN_MODULES))) : $(TA
 			if (!isSnapshot) { \
 				if (otherSourceFiles.size() > 0) { \
 					s.print(String.format("%s/.test :", module)); \
-					for (String p : otherSourceFiles) s.print(" \\\n\t" + p); \
+					for (String p : otherSourceFiles) s.print(" \\\n\t" + p.replace("$$", "$$$$")); \
 					s.println(); \
 				} \
 			} else { \
@@ -280,7 +280,7 @@ $(addsuffix /.sources.mk,$(addprefix $(TARGET_DIR)/mk/,$(MAVEN_MODULES))) : $(TA
 						if (isJar) \
 							targets += String.format(" %s/.install-doc", module); \
 						s.print(targets + " :"); \
-						for (String p : mainSourceFiles) s.print(" \\\n\t" + p); \
+						for (String p : mainSourceFiles) s.print(" \\\n\t" + p.replace("$$", "$$$$")); \
 						s.println(); \
 					} \
 					if (otherSourceFiles.size() > 0) { \
@@ -288,7 +288,7 @@ $(addsuffix /.sources.mk,$(addprefix $(TARGET_DIR)/mk/,$(MAVEN_MODULES))) : $(TA
 						if (isJar) \
 							targets += String.format(" %s/.install-doc", module); \
 						s.print(targets + " :"); \
-						for (String p : otherSourceFiles) s.print(" \\\n\t" + p); \
+						for (String p : otherSourceFiles) s.print(" \\\n\t" + p.replace("$$", "$$$$")); \
 						s.println(); \
 					} \
 					if (isJar && (docDir.isDirectory() || indexFile.isFile())) { \
@@ -308,7 +308,7 @@ $(addsuffix /.sources.mk,$(addprefix $(TARGET_DIR)/mk/,$(MAVEN_MODULES))) : $(TA
 							docFiles.add(indexFile.getPath()); \
 						if (docFiles.size() > 0) { \
 							s.print(String.format("%s/.install-doc :", module)); \
-							for (String p : docFiles) s.print(" \\\n\t" + p); \
+							for (String p : docFiles) s.print(" \\\n\t" + p.replace("$$", "$$$$")); \
 							s.println(); \
 						} \
 					} \
@@ -316,7 +316,7 @@ $(addsuffix /.sources.mk,$(addprefix $(TARGET_DIR)/mk/,$(MAVEN_MODULES))) : $(TA
 			} \
 			if (sourceDirs.size() > 0) { \
 				s.print("$@ :"); \
-				for (String p : sourceDirs) s.print(" \\\n\t" + p); \
+				for (String p : sourceDirs) s.print(" \\\n\t" + p.replace("$$", "$$$$")); \
 				s.println(); \
 			} \
 		} \
@@ -373,17 +373,17 @@ $(addsuffix /.sources.mk,$(addprefix $(TARGET_DIR)/mk/,$(GRADLE_MODULES))) : $(G
 				); \
 			if (mainSourceFiles.size() > 0) { \
 				s.print(String.format("%s/.test %s/.install :", module, module)); \
-				for (String p : mainSourceFiles) s.print(" \\\n\t" + p); \
+				for (String p : mainSourceFiles) s.print(" \\\n\t" + p.replace("$$", "$$$$")); \
 				s.println(); \
 			} \
 			if (otherSourceFiles.size() > 0) { \
 				s.print(String.format("%s/.test :", module, module)); \
-				for (String p : otherSourceFiles) s.print(" \\\n\t" + p); \
+				for (String p : otherSourceFiles) s.print(" \\\n\t" + p.replace("$$", "$$$$")); \
 				s.println(); \
 			} \
 			if (sourceDirs.size() > 0) { \
 				s.print("$@ :"); \
-				for (String p : sourceDirs) s.print(" \\\n\t" + p); \
+				for (String p : sourceDirs) s.print(" \\\n\t" + p.replace("$$", "$$$$")); \
 				s.println(); \
 			} \
 		} \
