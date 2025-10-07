@@ -111,6 +111,13 @@
       <artifactId>dtbook-to-epub3</artifactId>
     </dependency>
     <!--
+        word-to-html
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>dtbook-to-html</artifactId>
+    </dependency>
+    <!--
         word-to-daisy202
     -->
     <dependency>
@@ -126,6 +133,7 @@
       org.daisy.pipeline.script.impl.WordToDAISY202Script,
       org.daisy.pipeline.script.impl.WordToDAISY3Script,
       org.daisy.pipeline.script.impl.WordToEPUB3Script,
+      org.daisy.pipeline.script.impl.WordToHTMLScript,
       org.daisy.pipeline.script.impl.WordToMP3Script,
       org.daisy.pipeline.datatypes.impl.Datatype_px_word_to_dtbook_script_pagination,
       org.daisy.pipeline.datatypes.impl.Datatype_px_word_to_dtbook_script_image_size,

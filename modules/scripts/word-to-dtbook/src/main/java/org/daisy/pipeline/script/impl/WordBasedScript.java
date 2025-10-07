@@ -49,6 +49,7 @@ public abstract class WordBasedScript implements ScriptService<Script>, ScriptSe
 			if (!("daisy3".equals(format)
 			      || "daisy202".equals(format)
 			      || "epub3".equals(format)
+			      || "html".equals(format)
 			      || "mp3".equals(format)))
 				throw new IllegalArgumentException();
 		this.formatChain = formatChain;
@@ -159,6 +160,10 @@ public abstract class WordBasedScript implements ScriptService<Script>, ScriptSe
 					+ (formatId.equals("mp3")
 					      ? "a folder structure with MP3 files suitable for playback on MegaVoice Envoy devices"
 					      : (formatName + " format")) + ".")
+				// FIXME: home page has yet to be created
+				.withHomepage(
+					"http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/word-to-"
+					+ formatId + "/")
 				;
 			for (ScriptPort p : wordToDTBook.getInputPorts())
 				builder = builder.withInputPort(p.getName(), p);
@@ -178,12 +183,12 @@ public abstract class WordBasedScript implements ScriptService<Script>, ScriptSe
 			Script lastScript = null;
 			for (Script s : scriptChain) {
 				for (ScriptOption o : s.getOptions()) {
-					String name = o.getName();                     //  daisy3  |  daisy202  |  epub3  |  mp3
-					if (   "include-tts-log".equals(name)          //  x          x            x         x
-					    || "tts-config".equals(name)               //  x          x            x         x
-					    || "language".equals(name)                 //             x            x
-					    || "validation".equals(name)               //             x            x
-					    || "folder-depth".equals(name)             //                                    x
+					String name = o.getName();                     //  daisy3  |  daisy202  |  epub3  |  html  |  mp3
+					if (   "include-tts-log".equals(name)          //  x          x            x                  x
+					    || "tts-config".equals(name)               //  x          x            x                  x
+					    || "language".equals(name)                 //             x            x         x
+					    || "validation".equals(name)               //             x            x         x
+					    || "folder-depth".equals(name)             //                                             x
 					    || (!"mp3".equals(formatId) &&
 					         (   "audio".equals(name)              //  x          x            x
 					          || "with-text".equals(name)          //  x
@@ -317,6 +322,8 @@ public abstract class WordBasedScript implements ScriptService<Script>, ScriptSe
 			return "DAISY 2.02";
 		else if ("epub3".equals(formatId))
 			return "EPUB 3";
+		else if ("html".equals(formatId))
+			return "HTML";
 		else if ("mp3".equals(formatId))
 			return "navigable MP3 file-set";
 		else
