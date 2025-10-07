@@ -48,6 +48,7 @@ public abstract class WordBasedScript implements ScriptService<Script>, ScriptSe
 		for (String format : formatChain)
 			if (!("daisy3".equals(format)
 			      || "daisy202".equals(format)
+			      || "ebraille".equals(format)
 			      || "epub3".equals(format)
 			      || "html".equals(format)
 			      || "mp3".equals(format)))
@@ -183,14 +184,18 @@ public abstract class WordBasedScript implements ScriptService<Script>, ScriptSe
 			Script lastScript = null;
 			for (Script s : scriptChain) {
 				for (ScriptOption o : s.getOptions()) {
-					String name = o.getName();                     //  daisy3  |  daisy202  |  epub3  |  html  |  mp3
-					if (   "include-tts-log".equals(name)          //  x          x            x                  x
-					    || "tts-config".equals(name)               //  x          x            x                  x
-					    || "language".equals(name)                 //             x            x         x
-					    || "validation".equals(name)               //             x            x         x
-					    || "folder-depth".equals(name)             //                                             x
+					String name = o.getName();                     //  daisy3  |  daisy202  |  ebraille  |  epub3  |  html  |  mp3
+					if (   "include-tts-log".equals(name)          //  x          x                         x                  x
+					    || "tts-config".equals(name)               //  x          x                         x                  x
+					    || "language".equals(name)                 //             x                         x         x
+					    || "validation".equals(name)               //             x                         x         x
+					    || "folder-depth".equals(name)             //                                                          x
+					    || "epub-package".equals(name)             //                          x
+					    || "attach-stylesheet".equals(name)        //                          x
+					    || "braille-code".equals(name)             //                          x
+					    || "include-original-text".equals(name)    //                          x
 					    || (!"mp3".equals(formatId) &&
-					         (   "audio".equals(name)              //  x          x            x
+					         (   "audio".equals(name)              //  x          x                         x
 					          || "with-text".equals(name)          //  x
 					          || "word-detection".equals(name)))   //  x
 					)
@@ -320,6 +325,8 @@ public abstract class WordBasedScript implements ScriptService<Script>, ScriptSe
 			return "DAISY 3";
 		else if ("daisy202".equals(formatId))
 			return "DAISY 2.02";
+		else if ("ebraille".equals(formatId))
+			return "eBraille";
 		else if ("epub3".equals(formatId))
 			return "EPUB 3";
 		else if ("html".equals(formatId))

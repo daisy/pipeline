@@ -111,6 +111,13 @@
       <artifactId>dtbook-to-epub3</artifactId>
     </dependency>
     <!--
+        word-to-ebraille
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>dtbook-to-ebraille</artifactId>
+    </dependency>
+    <!--
         word-to-html
     -->
     <dependency>
@@ -132,6 +139,7 @@
       org.daisy.pipeline.script.impl.XProcScript_word_to_dtbook,
       org.daisy.pipeline.script.impl.WordToDAISY202Script,
       org.daisy.pipeline.script.impl.WordToDAISY3Script,
+      org.daisy.pipeline.script.impl.WordToEBrailleScript,
       org.daisy.pipeline.script.impl.WordToEPUB3Script,
       org.daisy.pipeline.script.impl.WordToHTMLScript,
       org.daisy.pipeline.script.impl.WordToMP3Script,
@@ -161,5 +169,65 @@
       </resource>
     </resources>
   </build>
+
+  <profiles>
+    <profile>
+      <id>mac</id>
+      <activation>
+        <os>
+          <family>mac</family>
+        </os>
+      </activation>
+      <dependencies>
+        <!--
+            for word-to-ebraille
+        -->
+        <dependency>
+          <groupId>org.daisy.pipeline.modules.braille</groupId>
+          <artifactId>liblouis-utils</artifactId>
+          <classifier>mac</classifier>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+    <profile>
+      <id>linux</id>
+      <activation>
+        <os>
+          <name>linux</name>
+        </os>
+      </activation>
+      <dependencies>
+        <!--
+            for word-to-ebraille
+        -->
+        <dependency>
+          <groupId>org.daisy.pipeline.modules.braille</groupId>
+          <artifactId>liblouis-utils</artifactId>
+          <classifier>linux</classifier>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+    <profile>
+      <id>win</id>
+      <activation>
+        <os>
+          <family>windows</family>
+        </os>
+      </activation>
+      <dependencies>
+        <!--
+            for word-to-ebraille
+        -->
+        <dependency>
+          <groupId>org.daisy.pipeline.modules.braille</groupId>
+          <artifactId>liblouis-utils</artifactId>
+          <classifier>windows</classifier>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+  </profiles>
 
 </project>
