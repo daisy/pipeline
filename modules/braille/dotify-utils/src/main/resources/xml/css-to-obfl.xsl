@@ -397,7 +397,7 @@
                                         </xsl:variable>
                                         <xsl:variable name="volume-area-page-style" as="xs:string?" select="s:get($volume-area-style,'@page')"/>
                                         <xsl:variable name="default-page-style" as="xs:string" select="($volume-area-page-style,$default-page-style)[1]"/>
-                                        <xsl:variable name="default-page-counter-name" as="xs:string" select="concat($space,'-page')"/>
+                                        <xsl:variable name="default-page-counter-name" as="xs:string" select="concat('--',$space,'-page')"/>
                                         <xsl:variable name="volume-area-content" as="array(element()*)">
                                             <!-- no xsl:array in XSLT 3.0, so using this convoluted xsl:map workaround -->
                                             <xsl:variable name="groups" as="map(xs:integer,map(xs:integer,element()*))">

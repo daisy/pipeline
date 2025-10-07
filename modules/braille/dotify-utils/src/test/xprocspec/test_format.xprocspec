@@ -11314,7 +11314,13 @@
                           content: counter(page) }}
                       @volume {
                         @begin {
-                          content: flow(titlepage, document) }}">
+                          content: flow(titlepage, document);
+                          @page {
+                            counter-increment: pre-page;
+                            size: 15 5;
+                            margin-bottom: 1;
+                              @bottom-right {
+                                content: counter(page) }}}}">
             <front>
               <titlepage style="display: block; flow: titlepage; counter-set: pre-page 11">
                 ⠿⠿⠿
@@ -11350,14 +11356,27 @@
               </footer>
             </default-template>
           </layout-master>
+          <layout-master name="b" duplex="true" page-width="15" page-height="5">
+            <default-template>
+              <header/>
+              <footer>
+                <field>
+                  <string value=""/>
+                </field>
+                <field>
+                  <current-page number-format="default"/>
+                </field>
+              </footer>
+            </default-template>
+          </layout-master>
           <volume-template sheets-in-volume-max="1000">
             <pre-content>
-              <sequence master="a" initial-page-number="11">
+              <sequence master="a" initial-page-number="11" page-number-counter="pre-page">
                 <block translate="pre-translated-text-css"> ⠿⠿⠿ </block>
               </sequence>
             </pre-content>
           </volume-template>
-          <sequence master="a">
+          <sequence master="b">
             <block/>
             <block translate="pre-translated-text-css"> ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ </block>
           </sequence>

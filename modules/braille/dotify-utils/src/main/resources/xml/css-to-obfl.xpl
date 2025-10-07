@@ -524,16 +524,16 @@
                               (for $p in s:get($s,'counter-increment') return tokenize(string($p),'\s+'),'page')[1]
                           ,
                           if (empty($volume-begin-page-styles)) then
-                            'pre-page'
+                            '--pre-page'
                           else
                             for $s in $volume-begin-page-styles return
-                              (for $p in s:get($s,'counter-increment') return tokenize(string($p),'\s+'),'pre-page')[1]
+                              (for $p in s:get($s,'counter-increment') return tokenize(string($p),'\s+'),'--pre-page')[1]
                           ,
                           if (empty($volume-end-page-styles)) then
-                            'post-page'
+                            '--post-page'
                           else
                             for $s in $volume-end-page-styles return
-                              (for $p in s:get($s,'counter-increment') return tokenize(string($p),'\s+'),'post-page')[1]
+                              (for $p in s:get($s,'counter-increment') return tokenize(string($p),'\s+'),'--post-page')[1]
                         ))"/>
     
     <pxi:eval-counter px:progress=".17">
