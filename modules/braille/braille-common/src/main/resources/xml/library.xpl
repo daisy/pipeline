@@ -19,7 +19,7 @@
         <p:output port="result"/>
         <p:option name="query" required="true">
             <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-                <p>The transformer query</p>
+                <p>The transformer query, as a sequence of strings or c:param-set or c:param elements.</p>
             </p:documentation>
         </p:option>
         <!--

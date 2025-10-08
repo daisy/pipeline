@@ -2,6 +2,7 @@ package org.daisy.pipeline.braille.common.calabash.impl;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -14,9 +15,16 @@ import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.model.RuntimeValue;
 import com.xmlcalabash.runtime.XAtomicStep;
 
+import net.sf.saxon.om.Item;
+import net.sf.saxon.om.NodeInfo;
+import net.sf.saxon.om.SequenceIterator;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
+import net.sf.saxon.s9api.XdmNode;
+import net.sf.saxon.value.StringValue;
 
+import org.daisy.common.saxon.SaxonHelper;
+import org.daisy.common.saxon.SaxonInputValue;
 import org.daisy.common.transform.SingleInSingleOutXMLTransformer;
 import org.daisy.common.transform.TransformerException;
 import org.daisy.common.xproc.calabash.XMLCalabashInputValue;
@@ -27,7 +35,9 @@ import org.daisy.common.xproc.calabash.XProcStepProvider;
 import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.pipeline.braille.common.Transform;
 import org.daisy.pipeline.braille.common.TransformProvider;
+import org.daisy.pipeline.braille.common.Query.MutableQuery;
 import org.daisy.pipeline.braille.common.Query;
+import static org.daisy.pipeline.braille.common.Query.util.mutableQuery;
 import static org.daisy.pipeline.braille.common.Query.util.query;
 import static org.daisy.pipeline.braille.common.TransformProvider.util.dispatch;
 import static org.daisy.pipeline.braille.common.TransformProvider.util.logSelect;
@@ -107,7 +117,34 @@ public class PxTransformStep implements XProcStep {
 	@Override
 	public void run() throws SaxonApiException {
 		try {
-			Query query = query(options.get(_query).getString());
+			Query query = null; {
+				RuntimeValue queryOption = options.get(_query);
+				if (queryOption != null) {
+					SequenceIterator iterator = queryOption.getValue().getUnderlyingValue().iterate();
+					Item i;
+					while ((i = iterator.next()) != null) {
+						Query q; {
+							if (i instanceof StringValue)
+								q = query(((StringValue)i).getStringValue());
+							else if (i instanceof NodeInfo)
+								q = query(
+									new SaxonInputValue(
+										(Iterator<XdmNode>)SaxonHelper.iteratorFromSequence(i, XdmNode.class)
+									).asXMLStreamReader());
+							else
+								throw new IllegalArgumentException();
+						}
+						if (query == null)
+							query = q;
+						else if (query instanceof MutableQuery)
+							query = ((MutableQuery)query).addAll(q);
+						else
+							query = mutableQuery().addAll(query).addAll(q);
+					}
+				}
+				if (query instanceof MutableQuery)
+					query = ((MutableQuery)query).asImmutable();
+			}
 			SingleInSingleOutXMLTransformer xmlTransformer = null;
 			try {
 				for (Transform t : logSelect(query, provider, logger))
