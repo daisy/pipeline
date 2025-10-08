@@ -26,6 +26,10 @@
       <artifactId>tts-common</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>braille-common</artifactId>
+    </dependency>
+    <dependency>
       <groupId>onl.mdw</groupId>
       <artifactId>mathcat4j-core</artifactId>
     </dependency>
@@ -54,7 +58,8 @@
   
   <properties>
     <expose-services>
-      org.daisy.pipeline.mathcat.impl.MathCAT
+      org.daisy.pipeline.mathcat.impl.MathCAT,
+      org.daisy.pipeline.mathcat.impl.MathCAT$Provider
     </expose-services>
   </properties>
 

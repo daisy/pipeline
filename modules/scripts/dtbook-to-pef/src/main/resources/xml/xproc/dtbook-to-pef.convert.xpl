@@ -112,7 +112,7 @@
     </p:variable>
     
     <!-- Parse transform query to a c:param-set -->
-    <px:parse-query name="parsed-transform-query">
+    <px:parse-query name="transform-query">
         <p:with-option name="query" select="$transform"/>
     </px:parse-query>
     <p:sink/>
@@ -144,15 +144,16 @@
     
     <p:choose px:progress=".04">
         <p:when test="//math:math" px:message="Transforming MathML">
-            <p:variable name="lang" select="(/*/@xml:lang,'und')[1]">
+            <p:variable name="document-locale" select="concat('(document-locale:',(/*/@xml:lang,'und')[1],')')">
                 <p:pipe step="dtbook" port="result"/>
-            </p:variable>
-            <p:variable name="locale-query" select="concat('(locale:',(//c:param[@name='locale']/@value,$lang)[1],')')">
-                <p:pipe step="parsed-transform-query" port="result"/>
             </p:variable>
             <p:viewport px:progress="1" match="math:math">
                 <px:transform px:progress="1">
-                    <p:with-option name="query" select="concat('(input:mathml)',$locale-query)"/>
+                    <p:with-option name="query" select="('(input:mathml)',
+                                                         //c:param[@name=('locale','math-code','math-translator')],
+                                                         $document-locale)">
+                        <p:pipe step="transform-query" port="result"/>
+                    </p:with-option>
                     <p:input port="parameters">
                         <p:pipe step="dtbook-with-css" port="result.parameters"/>
                     </p:input>
@@ -167,8 +168,7 @@
     </p:choose>
     
     <p:choose name="transform" px:progress=".83">
-        <p:variable name="lang" select="(/*/@xml:lang,'und')[1]"/>
-        <p:variable name="locale-query" select="concat('(document-locale:',$lang,')')"/>
+        <p:variable name="document-locale" select="concat('(document-locale:',(/*/@xml:lang,'und')[1],')')"/>
         <p:when test="$include-obfl='true'">
             <p:output port="result" primary="true" sequence="true"/>
             <p:output port="obfl" sequence="true">
@@ -185,9 +185,12 @@
                             <d:status result="ok"/>
                         </p:inline>
                     </p:output>
-                    <p:variable name="transform-query" select="concat('(input:css)(output:obfl)',$transform,$locale-query)"/>
-                    <px:transform px:progress="1" px:message-severity="DEBUG" px:message="px:transform query={$transform-query}">
-                        <p:with-option name="query" select="$transform-query"/>
+                    <px:transform px:progress="1">
+                        <p:with-option name="query" select="('(input:css)(output:obfl)',
+                                                             //c:param[not(@name=('math-code','math-translator'))],
+                                                             $document-locale)">
+                            <p:pipe step="transform-query" port="result"/>
+                        </p:with-option>
                         <p:with-param port="parameters" name="medium" select="$medium"/>
                         <p:with-param port="parameters" name="temp-dir" select="$temp-dir"/>
                         <p:input port="parameters">
@@ -219,11 +222,9 @@
                     <p:output port="status">
                         <p:pipe step="try-obfl" port="status"/>
                     </p:output>
-                    <p:variable name="transform-query" select="'(input:obfl)(input:text-css)(output:pef)'"/>
                     <p:for-each px:progress="1">
-                        <p:identity px:message="Transforming from OBFL to PEF"/>
-                        <px:transform px:progress="1" px:message-severity="DEBUG" px:message="px:transform query={$transform-query}">
-                            <p:with-option name="query" select="$transform-query"/>
+                        <px:transform query="(input:obfl)(input:text-css)(output:pef)"
+                                      px:message="Transforming from OBFL to PEF" px:progress="1">
                             <p:with-param port="parameters" name="temp-dir" select="$temp-dir"/>
                             <p:input port="parameters">
                                 <p:pipe step="dtbook-with-css" port="result.parameters"/>
@@ -260,9 +261,12 @@
                     <d:status result="ok"/>
                 </p:inline>
             </p:output>
-            <p:variable name="transform-query" select="concat('(input:css)(output:pef)',$transform,$locale-query)"/>
-            <px:transform px:progress="1" px:message-severity="DEBUG" px:message="px:transform query={$transform-query}">
-                <p:with-option name="query" select="$transform-query"/>
+            <px:transform px:progress="1">
+                <p:with-option name="query" select="('(input:css)(output:pef)',
+                                                     //c:param[not(@name=('math-code','math-translator'))],
+                                                     $document-locale)">
+                    <p:pipe step="transform-query" port="result"/>
+                </p:with-option>
                 <p:with-param port="parameters" name="medium" select="$medium"/>
                 <p:with-param port="parameters" name="temp-dir" select="$temp-dir"/>
                 <p:input port="parameters">
