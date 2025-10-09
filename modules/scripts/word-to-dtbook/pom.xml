@@ -19,6 +19,10 @@
   <dependencies>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>common-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>fileset-utils</artifactId>
     </dependency>
     <dependency>

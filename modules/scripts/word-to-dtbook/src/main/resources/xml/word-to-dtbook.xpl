@@ -2,6 +2,7 @@
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                xmlns:c="http://www.w3.org/ns/xproc-step"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 type="px:word-to-dtbook.script" name="main"
@@ -270,6 +271,12 @@ if MathML is present in the document.</p>
 		<!-- directory used for temporary files -->
 	</p:option>
 
+	<p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+		<p:documentation>
+			px:error
+			px:log-error
+		</p:documentation>
+	</p:import>
 	<p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
 		<p:documentation>
 			px:fileset-add-entry
@@ -335,9 +342,39 @@ if MathML is present in the document.</p>
 		<p:store name="store">
 			<p:with-option name="href" select="$path"/>
 		</p:store>
-		<p:load cx:depends-on="store">
-			<p:with-option name="href" select="$path"/>
-		</p:load>
+		<p:try>
+			<p:group>
+				<p:load cx:depends-on="store">
+					<p:with-option name="href" select="$path"/>
+				</p:load>
+			</p:group>
+			<p:catch name="catch">
+				<p:choose>
+					<p:xpath-context>
+						<p:pipe step="catch" port="error"/>
+					</p:xpath-context>
+					<p:when test="/c:errors/c:error/@code='err:XD0011'">
+						<px:log-error severity="DEBUG">
+							<p:input port="source">
+								<p:empty/>
+							</p:input>
+							<p:input port="error">
+								<p:pipe step="catch" port="error"/>
+							</p:input>
+						</px:log-error>
+						<px:error code="BUG" message="An unexpected error happened. Please contact maintainer."/>
+					</p:when>
+					<p:otherwise>
+						<!-- re-throw error -->
+						<px:error>
+							<p:input port="error">
+								<p:pipe step="catch" port="error"/>
+							</p:input>
+						</px:error>
+					</p:otherwise>
+				</p:choose>
+			</p:catch>
+		</p:try>
 	</p:group>
 
 	<!-- ******************************************************************* -->
