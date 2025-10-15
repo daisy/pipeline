@@ -26,6 +26,20 @@
       <groupId>org.daisy.libs</groupId>
       <artifactId>com.xmlcalabash</artifactId>
       <version>1.1.20-p8-98</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.restlet.jee</groupId>
+          <artifactId>org.restlet</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.restlet.jee</groupId>
+          <artifactId>org.restlet.ext.fileupload</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.restlet.jee</groupId>
+          <artifactId>org.restlet.ext.slf4j</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.daisy.libs</groupId>

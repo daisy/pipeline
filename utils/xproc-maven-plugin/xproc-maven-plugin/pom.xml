@@ -20,7 +20,7 @@
     <it.com.xmlcalabash.version>1.1.20-p8-98</it.com.xmlcalabash.version>
     <it.saxon.version>9.8.0.8-1</it.saxon.version>
     <it.jing.version>20151127.0.1</it.jing.version>
-    <it.xproc-engine-calabash.version>1.1.4</it.xproc-engine-calabash.version>
+    <it.xproc-engine-calabash.version>1.2.1-SNAPSHOT</it.xproc-engine-calabash.version>
   </properties>
   
   <dependencies>
@@ -84,6 +84,20 @@
       <artifactId>com.xmlcalabash</artifactId>
       <version>${it.com.xmlcalabash.version}</version>
       <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.restlet.jee</groupId>
+          <artifactId>org.restlet</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.restlet.jee</groupId>
+          <artifactId>org.restlet.ext.fileupload</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.restlet.jee</groupId>
+          <artifactId>org.restlet.ext.slf4j</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.daisy.libs</groupId>
