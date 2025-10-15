@@ -6,6 +6,6 @@
 [subrepo]
 	remote = git@github.com:daisy/xprocspec.git
 	branch = master
-	commit = 7617513997658dc35034fb337e9baf7811d397b6
-	parent = b5ca37745f935f0c965bf097a076164348ff6363
+	commit = c3cc11f15962c59ae090178338299148d580b73d
+	parent = 996e2b5c6e18704fa93bb0e60364bc48dfd24180
 	cmdver = 0.3.1
