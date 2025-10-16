@@ -391,20 +391,6 @@ $(addsuffix /.sources.mk,$(addprefix $(TARGET_DIR)/mk/,$(GRADLE_MODULES))) : $(G
 
 endif
 
-ifneq ($(OS), WINDOWS)
-
-PHONY : $(addprefix eclipse-,$(MODULES))
-$(addprefix eclipse-,$(MODULES)) : eclipse-% : %/.project
-
-# mvn-eclipse.sh requires parent poms to be installed because it uses `mvn --projects ...`
-$(addsuffix /.project,$(MODULES)) : parents
-
-$(addsuffix /.project,$(MODULES)) : .metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.m2e.core.prefs
-.metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.m2e.core.prefs : | $(TARGET_DIR)/effective-settings.xml .group-eval
-	$(EVAL) $(call bash, $(MY_DIR)/eclipse-init.sh)
-
-endif
-
 # FIXME: specifying "--debug" option breaks this code
 # - passing "MAKEFLAGS=" does not fix it for some reason, and also has unwanted side effects
 # - passing "--debug=no" to the sub-make would be a solution but not all versions of make support it
@@ -455,16 +441,12 @@ endif
 .group-eval : | .maven-init .gradle-init
 
 .PHONY : clean
-clean : clean-eclipse
+clean :
 	rm("$(TARGET_DIR)"); \
 	rm("maven.log"); \
 	glob("**/.last-tested").forEach(x -> rm(x));
 
-.PHONY : clean-eclipse
-clean-eclipse :
-	rm(".metadata");
-
-ifneq (,$(filter clean clean-eclipse,$(MAKECMDGOALS)))
+ifneq (,$(filter clean,$(MAKECMDGOALS)))
 include $(shell for (String f : "$(addsuffix /.deps.mk,$(addprefix $(TARGET_DIR)/mk/,$(MODULES) $(MAVEN_AGGREGATORS)))".trim().split("\\s+")) \
                     if (new File(f).exists()) println(f); \
                 for (String f : "$(addsuffix /.sources.mk,$(addprefix $(TARGET_DIR)/mk/,$(MODULES)))".trim().split("\\s+")) \

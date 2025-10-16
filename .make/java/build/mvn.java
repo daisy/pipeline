@@ -83,10 +83,6 @@ public class mvn {
 		U apply(T... args);
 	}
 	
-	public static void eclipse(String dir) throws IOException, InterruptedException {
-		exec("bash", "-c", String.format("%s/mvn-eclipse.sh %s", MY_DIR, dir));
-	}
-
 	static void mvn(File cd, String... args) throws IOException, InterruptedException {
 		File settings = MVN_SETTINGS != null
 			? new File(ROOT_DIR, MVN_SETTINGS)

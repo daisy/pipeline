@@ -33,10 +33,6 @@ public class gradle {
 		exec("bash", "-c", String.format("%s/gradle-release.sh %s", MY_DIR, dir));
 	}
 
-	public static void eclipse(String dir) throws IOException, InterruptedException {
-		exec("bash", "-c", String.format("%s/gradle-eclipse.sh %s", MY_DIR, dir));
-	}
-
 	static void gradlew(File cd, String... args) throws IOException, InterruptedException {
 		String gradlewFileName = "gradlew";
 		if (getOS() == OS.WINDOWS)

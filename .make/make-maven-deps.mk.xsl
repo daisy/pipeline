@@ -269,19 +269,6 @@
 						<xsl:value-of select="concat($dirname,.,'/.last-tested')"/>
 					</xsl:for-each>
 					<xsl:text>&#x0A;</xsl:text>
-					<xsl:if test="not($module='.')">
-						<xsl:text>&#x0A;</xsl:text>
-						<xsl:text>.PHONY : </xsl:text>
-						<xsl:value-of select="concat('eclipse-',$module)"/>
-						<xsl:text>&#x0A;</xsl:text>
-						<xsl:value-of select="concat('eclipse-',$module)"/>
-						<xsl:text> :</xsl:text>
-						<xsl:for-each select="$module-pom/pom:project/pom:modules/pom:module">
-							<xsl:text> \&#x0A;&#x09;</xsl:text>
-							<xsl:value-of select="concat('eclipse-',$dirname,.)"/>
-						</xsl:for-each>
-						<xsl:text>&#x0A;</xsl:text>
-					</xsl:if>
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:value-of select="concat($dirname,'.last-tested : %/.last-tested : %/.test | .group-eval')"/>
@@ -612,70 +599,6 @@
 				</xsl:if>
 			</xsl:if>
 			<xsl:if test="not($is-aggregator)">
-				<xsl:text>&#x0A;</xsl:text>
-				<xsl:value-of select="concat($dirname,'.project',' : ',$dirname,'pom.xml')"/>
-				<!--
-				    All dependencies need to be installed in order to be able to run the
-				    eclipse:eclipse goal and all non-Maven and non-snapshot dependencies need to be
-				    installed in order to make the projects build in Eclipse.
-				    
-				    FIXME: The correct working of the Makefile relies on Make putting this whole
-				    "install" part before the "eclipse" part in the execution order. If this is not
-				    satisfied the Eclipse projects are not linked up correctly.
-				-->
-				<xsl:value-of select="concat(' ',$dirname,'.compile-dependencies ',$dirname,'.test-dependencies')"/>
-				<xsl:text> \&#x0A;&#x09;</xsl:text>
-				<xsl:text>| </xsl:text>
-				<xsl:variable name="dependencies" as="xs:string*">
-					<xsl:for-each select="$artifacts-and-dependencies/self::pom:dependency[not(@fromDependencyManagement)
-					                                                                       or string(pom:scope)='import']">
-						<!-- if it is a Maven dependency -->
-						<xsl:if test="$effective-pom/pom:project[
-						                string(pom:groupId)=string(current()/pom:groupId) and
-						                string(pom:artifactId)=string(current()/pom:artifactId)]">
-							<xsl:sequence select="concat('.eclipse-projects/',pom:groupId,'.',pom:artifactId)"/>
-						</xsl:if>
-					</xsl:for-each>
-				</xsl:variable>
-				<xsl:variable name="dependencies" as="xs:string*" select="distinct-values($dependencies)"/>
-				<xsl:if test="count($dependencies) &gt; 0">
-					<xsl:sequence select="string-join($dependencies, ' \&#x0A;&#x09;  ')"/>
-					<xsl:text> \&#x0A;&#x09;  </xsl:text>
-				</xsl:if>
-				<xsl:text>.group-eval</xsl:text>
-				<xsl:text>&#x0A;</xsl:text>
-				<xsl:text>&#x09;</xsl:text>
-				<xsl:text>+$(EVAL) mvn.eclipse("</xsl:text>
-				<xsl:value-of select="substring($dirname,1,string-length($dirname) - 1)"/>
-				<xsl:text>");</xsl:text>
-				<xsl:text>&#x0A;</xsl:text>
-				<xsl:text>&#x0A;</xsl:text>
-				<xsl:text>.SECONDARY :</xsl:text>
-				<xsl:value-of select="concat('.eclipse-projects/',$groupId,'.',$artifactId)"/>
-				<xsl:text>&#x0A;</xsl:text>
-				<xsl:value-of select="concat('.eclipse-projects/',$groupId,'.',$artifactId)"/>
-				<xsl:text> : </xsl:text>
-				<xsl:value-of select="concat($dirname,'.project')"/>
-				<xsl:text>&#x0A;</xsl:text>
-				<xsl:text>&#x0A;</xsl:text>
-				<xsl:value-of select="concat('clean-eclipse : ',$dirname,'.clean-eclipse')"/>
-				<xsl:text>&#x0A;</xsl:text>
-				<xsl:text>.PHONY : </xsl:text>
-				<xsl:value-of select="concat($dirname,'.clean-eclipse')"/>
-				<xsl:text>&#x0A;</xsl:text>
-				<xsl:value-of select="concat($dirname,'.clean-eclipse :')"/>
-				<xsl:text>&#x0A;</xsl:text>
-				<xsl:text>&#x09;</xsl:text>
-				<xsl:text>rm("</xsl:text>
-				<xsl:value-of select="$dirname"/>
-				<xsl:text>.project"); \&#x0A;&#x09;</xsl:text>
-				<xsl:text>rm("</xsl:text>
-				<xsl:value-of select="$dirname"/>
-				<xsl:text>.settings"); \&#x0A;&#x09;</xsl:text>
-				<xsl:text>rm("</xsl:text>
-				<xsl:value-of select="$dirname"/>
-				<xsl:text>.classpath");</xsl:text>
-				<xsl:text>&#x0A;</xsl:text>
 				<xsl:text>&#x0A;</xsl:text>
 				<xsl:value-of select="concat('clean : ',$dirname,'.clean')"/>
 				<xsl:text>&#x0A;</xsl:text>
