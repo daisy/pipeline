@@ -114,7 +114,7 @@ public class core {
 			} else if (dirOrFile.exists()) {
 				if (dirOrFile.getName().equals("pom.xml"))
 					pomFile = dirOrFile;
-				else if (dirOrFile.getName().equals("build.gralde"))
+				else if (dirOrFile.getName().equals("build.gradle"))
 					gradleBuildFile = dirOrFile;
 				else
 					throw new IllegalArgumentException();
