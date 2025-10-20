@@ -169,14 +169,14 @@ $(TARGET_DIR)/effective-pom.xml : $(TARGET_DIR)/maven-modules poms | $(SAXON) $(
 			File dest = new File("$(TARGET_DIR)/poms/" + String.format("%s/%s/%s/%s-%s.pom", g.replace(".", "/"), a, v, a, v)); \
 			mkdirs(dest.getParentFile()); \
 			cp(pom, dest); \
-			if (v.endsWith("-SNAPSHOT")) \
+			if (!v.endsWith("-SNAPSHOT")) \
 				exitOnError( \
 					captureOutput( \
 						new PrintStream(new FileOutputStream(dest))::println, \
 						"java", "-cp", "$(SAXON)", "net.sf.saxon.Transform", \
 						        "-s:" + pom, \
 						        "-xsl:$(MY_DIR)/mvn-set-version.xsl", \
-						        "VERSION=" + v)); \
+						        "VERSION=" + v + "-SNAPSHOT")); \
 		} \
 		try { \
 			mvn("-Dworkspace=$(TARGET_DIR)/poms", \
