@@ -4,12 +4,12 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.15.5-SNAPSHOT</version>
+    <version>1.15.4</version>
     <relativePath>../parent</relativePath>
   </parent>
 
   <artifactId>common-utils</artifactId>
-  <version>6.4.1-SNAPSHOT</version>
+  <version>6.4.0</version>
 
   <packaging>bundle</packaging>
   <name>DAISY Pipeline 2 :: Common Utilities</name>

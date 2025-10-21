@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.15.5-SNAPSHOT</version>
+    <version>1.15.4</version>
     <relativePath>../parent</relativePath>
   </parent>
 
   <artifactId>logging-appender</artifactId>
-  <version>2.1.7-SNAPSHOT</version>
+  <version>2.1.6</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 :: Logging Appender</name>
