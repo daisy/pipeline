@@ -6,11 +6,11 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.15.3-SNAPSHOT</version>
+    <version>1.15.3</version>
     <relativePath>../../parent</relativePath>
   </parent>
 
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.0.1</version>
   <artifactId>tts-adapter-aws</artifactId>
   <packaging>bundle</packaging>
 

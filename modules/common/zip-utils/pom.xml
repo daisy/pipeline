@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.15.3-SNAPSHOT</version>
+    <version>1.15.3</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <artifactId>zip-utils</artifactId>
-  <version>2.1.10-SNAPSHOT</version>
+  <version>2.1.10</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: ZIP Utilities</name>
