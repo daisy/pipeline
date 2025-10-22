@@ -165,7 +165,10 @@ public class core {
 				"ROOT_DIR=" + System.getenv("ROOT_DIR"),
 				"GRADLE_POM=" + gradlePom.getPath().replace('\\', '/'),
 				"MODULE=.",
-				"RELEASE_DIRS=" + glob("[!.]**/.gitrepo").stream().map(f -> f.getParentFile().toString().replace('\\', '/'))
+				"RELEASE_DIRS=" + glob("[!.]**/.gitrepo").stream()
+				                                         .map(f -> f.getParentFile())
+				                                         .filter(f -> new File(f, "bom/pom.xml").exists())
+				                                         .map(f -> f.toString().replace('\\', '/'))
 				                                         .collect(Collectors.joining(" ")),
 				"OUTPUT_BASEDIR=" + outputBaseDir.getPath().replace('\\', '/'),
 				"OUTPUT_FILENAME=" + outputFileName,
