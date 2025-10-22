@@ -7,5 +7,5 @@
 	remote = git@github.com:daisy/jStyleParser.git
 	branch = org.daisy.libs
 	commit = e5a6deeb36cb6251457de7fc8dc38b804d4aeb02
-	parent = 7a956b8c969aaf2302e91903dc74c03d6fa27a41
+	parent = 7c9ccfc10ab2b46bd03965060ed74c7d07bd3883
 	cmdver = 0.3.1
