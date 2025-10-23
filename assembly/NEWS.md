@@ -9,7 +9,7 @@ Changes in release v1.15.3
 
 ## Modules
 
-- **NEW** Experimental DTBook based scripts
+- **NEW** Experimental Word based scripts
   - Word to EPUB 3
   - Word to HTML
   - Word to DAISY 2.02

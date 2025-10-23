@@ -1,4 +1,4 @@
-              DAISY Pipeline 2 - 1.15.2 - August 13, 2025
+              DAISY Pipeline 2 - 1.15.3 - October 23, 2025
 ==============================================================================
 
 
@@ -72,10 +72,10 @@ The package includes:
 3. Release Notes
 ------------------------------------------------------------------------------
 
-The package includes the 1.15.2 version of the project.
+The package includes the 1.15.3 version of the project.
 
 See the release notes on this page:
-  https://github.com/daisy/pipeline-assembly/blob/master/NEWS.md#changes-in-release-v1152
+  https://github.com/daisy/pipeline-assembly/blob/master/NEWS.md#changes-in-release-v1153
 
 4. Prerequisites
 ------------------------------------------------------------------------------
