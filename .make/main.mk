@@ -10,8 +10,10 @@ M2_HOME           := $(ROOT_DIR)/$(TARGET_DIR)/.gradle-settings
 EVAL              := //
 
 CLASSPATH := $(shell                                                                              \
-    File classPath = new File("$(MY_DIR)/java");                                                  \
-    List<File> javaFiles = glob(classPath.getPath().replace("\\", "/") +  "/{*.java,**/*.java}"); \
+    File javaDir = new File("$(MY_DIR)/java");                                                    \
+    File classPath = new File("$(TARGET_DIR)/classes/" + getJavaVersion());                       \
+    mkdirs(classPath);                                                                            \
+    List<File> javaFiles = glob(javaDir.getPath().replace("\\", "/") +  "/{*.java,**/*.java}");   \
     if (javaFiles.stream().anyMatch(                                                              \
         javaFile -> {                                                                             \
             File classFile = new File(javaFile.getPath().replace(".java", ".class"));             \
@@ -27,6 +29,8 @@ CLASSPATH := $(shell                                                            
         cmd.add(javac);                                                                           \
         cmd.add("-cp");                                                                           \
         cmd.add(classPath.getPath() + File.pathSeparator + "$(MY_DIR)/lib");                      \
+        cmd.add("-d");                                                                            \
+        cmd.add(classPath.getPath());                                                             \
         for (File f : javaFiles) cmd.add(f.getPath());                                            \
         exitOnError(captureOutput(err::println, cmd)); }                                          \
     println(classPath.getPath().replace('\\', '/'));                                              )
