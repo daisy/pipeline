@@ -257,24 +257,24 @@
 					</xsl:for-each>
 					<xsl:text>&#x0A;</xsl:text>
 					<xsl:text>&#x0A;</xsl:text>
-					<xsl:value-of select="concat('check : ',$dirname,'.last-tested')"/>
+					<xsl:value-of select="concat('check : $(TARGET_DIR)/state/',$dirname,'last-tested')"/>
 					<xsl:text>&#x0A;</xsl:text>
 					<xsl:text>.PHONY : </xsl:text>
-					<xsl:value-of select="concat($dirname,'.last-tested')"/>
+					<xsl:value-of select="concat('$(TARGET_DIR)/state/',$dirname,'last-tested')"/>
 					<xsl:text>&#x0A;</xsl:text>
-					<xsl:value-of select="concat($dirname,'.last-tested')"/>
+					<xsl:value-of select="concat('$(TARGET_DIR)/state/',$dirname,'last-tested')"/>
 					<xsl:text> :</xsl:text>
 					<xsl:for-each select="$module-pom/pom:project/pom:modules/pom:module">
 						<xsl:text> \&#x0A;&#x09;</xsl:text>
-						<xsl:value-of select="concat($dirname,.,'/.last-tested')"/>
+						<xsl:value-of select="concat('$(TARGET_DIR)/state/',$dirname,.,'/last-tested')"/>
 					</xsl:for-each>
 					<xsl:text>&#x0A;</xsl:text>
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:value-of select="concat($dirname,'.last-tested : %/.last-tested : %/.test | .group-eval')"/>
+					<xsl:value-of select="concat('$(TARGET_DIR)/state/',$dirname,'last-tested : $(TARGET_DIR)/state/%/last-tested : %/.test | .group-eval')"/>
 					<xsl:text>&#x0A;</xsl:text>
 					<xsl:text>&#x09;</xsl:text>
-					<xsl:text>+$(EVAL) touch("$@");</xsl:text>
+					<xsl:text>+$(EVAL) mkdirs("$(dir $@)"); touch("$@");</xsl:text>
 					<xsl:text>&#x0A;</xsl:text>
 					<xsl:text>&#x0A;</xsl:text>
 					<xsl:text>.SECONDARY : </xsl:text>

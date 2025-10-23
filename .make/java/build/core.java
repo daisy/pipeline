@@ -96,6 +96,28 @@ public class core {
 		};
 	}
 
+	public static void traverseModules(File rootDir, BiConsumer<File,Boolean> collector) throws XPathExpressionException {
+		new Consumer<File>() {
+			public void accept(File module) {
+				try {
+					String[] submodules = xpath(
+						new File(module, "pom.xml"), "string(/*/*[local-name()='modules'])"
+					).trim().split("\\s+");
+					if (submodules.length > 0 && !(submodules.length == 1 && submodules[0].equals(""))) {
+						collector.accept(module, true);
+						for (String m : submodules)
+							accept(".".equals(module.toString()) ? new File(m) : new File(module, m));
+					} else
+						collector.accept(module, false);
+				} catch (RuntimeException e) {
+					throw e;
+				} catch (Throwable e) {
+					throw new RuntimeException(e);
+				}
+			}
+		}.accept(rootDir);
+	}
+
 	public static mvn.Coords getMavenCoords(File dirOrFile) throws IOException, XPathExpressionException {
 		File gradleBuildFile = null;
 		File pomFile = null;
@@ -147,13 +169,17 @@ public class core {
 		}
 	}
 
-	public static void computeMavenDeps(File modulesList, File effectivePom, File gradlePom, File outputBaseDir, String outputFileName)
-			throws IOException, InterruptedException {
+	public static void computeMavenDeps(File effectivePom, File gradlePom, File outputBaseDir, String outputFileName)
+			throws IOException, InterruptedException, XPathExpressionException {
 
 		String SAXON = System.getenv("SAXON");
 		String MY_DIR = System.getenv("MY_DIR");
-		List<String> modules = new BufferedReader(new FileReader(modulesList)).lines()
-		                                                                      .collect(Collectors.toList());
+		List<String> modules = new ArrayList<>(); {
+			traverseModules(
+				new File("."),
+				(module, isAggregator) -> {
+					if (!isAggregator)
+						modules.add(module.toString().replace('\\', '/')); }); }
 		for (String m : modules)
 			rm(new File(new File(outputBaseDir, m), outputFileName));
 		if (
@@ -191,7 +217,7 @@ public class core {
 			try (PrintStream s = new PrintStream(new FileOutputStream(outputFile))) {
 				s.println(m + "/VERSION := " + v);
 				s.println();
-				s.println(m + "/.last-tested : %/.last-tested : %/.test | .group-eval");
+				s.println("$(TARGET_DIR)/state/" + m + "/last-tested : $(TARGET_DIR)/state/%/last-tested : %/.test | .group-eval");
 				s.println("	+$(EVAL) touch(\"$@\");");
 				s.println();
 				s.println(".SECONDARY : " + m + "/.test");
@@ -235,7 +261,7 @@ public class core {
 				if (v.endsWith("-SNAPSHOT")) {
 					s.println();
 					// FIXME: gradle eclipse does not link up projects
-					// FIXME: gradle eclipse does not take into account localRepository from .gradle-settings/conf/settings.xml
+					// FIXME: gradle eclipse does not take into account localRepository from gradle-settings/conf/settings.xml
 					// when creating .classpath (but it does need the dependencies to be installed in .maven-workspace)
 					s.println(m + "/.project : " + m + "/build.gradle " + m + "/gradle.properties " + m + "/.dependencies .group-eval");
 					s.println("	+$(EVAL) gradle.eclipse(\"" + m + "\");");
