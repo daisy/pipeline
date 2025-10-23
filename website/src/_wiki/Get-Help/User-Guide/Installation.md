@@ -134,7 +134,6 @@ below. Simply create a file called "docker-compose.yml" with the
 following content and run `docker-compose up`.
 
 ~~~yaml
-version: "2.1"
 services:
   pipeline:
     image: daisyorg/pipeline
@@ -151,9 +150,6 @@ services:
       - "9000:9000"
     volumes:
       - "webui-data:/opt/daisy-pipeline2-webui/data"
-    depends_on:
-      pipeline:
-        condition: service_healthy
 volumes:
   pipeline-data:
   webui-data:

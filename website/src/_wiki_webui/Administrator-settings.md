@@ -52,10 +52,10 @@ All public users have access to the jobs created by other public users.
 <tr><td>Under "Scripts", you can choose which scripts to make available to the users. This is useful if you want to clean up the list of jobs so that it is easier to create jobs, or if you want to prevent users from using certain resource intensive scripts.</td><td><img src="images/25.png" alt=""/></td></tr>
 </tbody></table>
 
-## Pipeline 2 Web API
+## Pipeline Web API
 
 <table role="presentation"><tbody>
-<tr><td>Under the "Pipeline 2 Web API" tab you can configure the Pipeline 2 Web API endpoint you want to connect to.</td><td><img src="images/26.png" alt=""/></td></tr>
+<tr><td>Under the "Pipeline Web API" tab you can configure the Pipeline Web API endpoint you want to connect to.</td><td><img src="images/26.png" alt=""/></td></tr>
 </tbody></table>
 
 ## Storage directories

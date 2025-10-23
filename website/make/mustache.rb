@@ -62,9 +62,9 @@ end
 def render_description(desc)
   lines = desc.lines
   if lines.count > 1
-    [lines[0],render_markdown(lines[1..-1].join)]
+    [CGI::escapeHTML(lines[0]),render_markdown(lines[1..-1].join)]
   else
-    lines
+    [CGI::escapeHTML(lines[0])]
   end
 end
 
@@ -267,6 +267,9 @@ Dir.glob(ARGV[0]).each do |f|
     options_solutions = graph.query(options_query)
     process_option = lambda { |solution|
         id = solution.id.to_s
+        if id =~ /^[^:]+: *(.*)$/o
+          name = $1
+        end
         sequence = solution.bound?('sequence') ? solution.sequence.true? : false
         if solution.bound?('data_type')
           case solution.data_type
@@ -310,9 +313,6 @@ Dir.glob(ARGV[0]).each do |f|
         end
         if solution.bound?('name')
           name = solution.name.to_s
-          if name =~ /^[^:]+: *(.*)$/o
-            name = $1
-          end
         else
           name = nil
         end
@@ -485,7 +485,7 @@ Dir.glob(ARGV[0]).each do |f|
         if (option['desc']['long'])
           render << "#{option['desc']['long']}"
         else
-          render << "#{CGI::escapeHTML(option['desc']['short'])}"
+          render << "#{option['desc']['short']}"
         end
         render << '</div>'
       end

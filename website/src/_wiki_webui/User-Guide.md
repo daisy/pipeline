@@ -18,7 +18,7 @@
 You can access this page through the "Jobs" menu item in the navigation bar at the top of the page.
 
 <table role="presentation">
-<tr><td><p>A new job will either be "Running" or "Queued". The Pipeline 2 engine will by default allow at most two jobs to run at the same time. If you create more jobs, those jobs will be queued.</p>
+<tr><td><p>A new job will either be "Running" or "Queued". The Pipeline engine will by default allow at most two jobs to run at the same time. If you create more jobs, those jobs will be queued.</p>
 
 <p>If the job succeeds, the status will change to "Success".</p>
 <p>If there is a validation error, the status will change to "Validation failed".</p>
@@ -27,7 +27,7 @@ You can access this page through the "Jobs" menu item in the navigation bar at t
 <tr><td>Just below the "Job Summary" headline, you can click "Show details" to get more technical info about the job, such as its ID, and when it was started.</td><td><img src="images/20.png" alt=""/></td></tr>
 <tr><td><p>Further down the page, there may be a validation report, or another type of report depending on which script the job were running.</p></td><td><img src="images/36.png" alt=""/></td></tr>
 <tr><td><p>You can check the execution log to see what kind of tasks the job has performed. This is especially useful when a job fails so that you can determine why it failed.</p>
-<p>A link is also provided to a more detailed log. The detailed log is a text file with more technical information. If you encounter a problem while executing job and want to ask for help, you should ideally attach the detailed log and if possible also the input fileset and arguments used.</p></td><td><img src="images/19.png" alt=""/></td></tr>
+<p>A link is also provided to a more detailed log. The detailed log is a text file with more technical information. If you encounter a problem while executing job and want to ask for help (for instance on the DAISY Pipeline forum), you should ideally attach the detailed log and if possible also the input fileset and arguments used.</p></td><td><img src="images/19.png" alt=""/></td></tr>
 <tr><td><p>At the end, there are links to download the input files, and a list of what parameters were used to run the job. There are also shortcuts for restarting the job, and for creating a new job with the same inputs and parameters.</p></td><td><img src="images/34.png" alt=""/></td></tr>
 </table>
 
@@ -44,7 +44,7 @@ For more information on templates, see the [Templating documentation](Templating
 ## About Page
 
 <table role="presentation"><body>
-<tr><td>The about page contains a description of what DAISY Pipeline 2 is as well as external links to where you can find more information and get support. At the bottom, the version of the currently running Pipeline 2 engine and the Web UI are displayed.</td><td><img src="images/22.png" alt=""/></td></tr>
+<tr><td>The about page contains a description of what DAISY Pipeline is as well as external links to where you can find more information and get support. At the bottom, the version of the currently running Pipeline engine and the Web UI are displayed.</td><td><img src="images/22.png" alt=""/></td></tr>
 </body></table>
 
 ## Account settings
@@ -55,6 +55,6 @@ For more information on templates, see the [Templating documentation](Templating
 
 ## Admin Settings (for administrators)
 
-Administrators have access to the "Admin settings" page, where they can configure several aspects of the Web UI; Users and Permissions, the Pipeline 2 Web API, Upload directory, E-mail settings, Maintenance, and Appearance.
+Administrators have access to the "Admin settings" page, where they can configure several aspects of the Web UI; Users and Permissions, the Pipeline Web API, Upload directory, E-mail settings, Maintenance, and Appearance.
 
 For more info, see the [Administrator settings](Administrator-settings) documentation.

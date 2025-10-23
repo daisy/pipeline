@@ -4,7 +4,6 @@
 
 - [Checking out the sources](Sources)
 - [Build system](Building)
-- [Setting up Eclipse](Eclipse)
 
 ## Advanced
 

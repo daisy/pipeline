@@ -1,4 +1,4 @@
-name: DAISY Pipeline 2
+name: DAISY Pipeline
 collections:
   wiki:
     output: true

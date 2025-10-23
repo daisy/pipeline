@@ -231,7 +231,7 @@ pipeline-assembly are released separately.
 
 ### Checklist for testing release binaries
 
-For each release of the Pipeline 2, the steps below should be followed to test the release binaries:
+For each release of the Pipeline, the steps below should be followed to test the release binaries:
 
 TBD
 

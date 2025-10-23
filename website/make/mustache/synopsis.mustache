@@ -73,11 +73,11 @@
 <div class="synopsis-output-name">{{name}}</div>
 <div class="synopsis-output-desc">
 {{#desc.long}}
-<div class="shortdesc">{{desc.short}}</div>
+<div class="shortdesc">{{{desc.short}}}</div>
 <div class="longdesc">{{{.}}}</div>
 {{/desc.long}}
 {{^desc.long}}
-{{desc.short}}
+{{{desc.short}}}
 {{/desc.long}}
 </div>
 {{#media-type.length}}
@@ -107,11 +107,11 @@
 <div class="synopsis-option-name">{{name}}</div>
 <div class="synopsis-option-desc">
 {{#desc.long}}
-<div class="shortdesc">{{desc.short}}</div>
+<div class="shortdesc">{{{desc.short}}}</div>
 <div class="longdesc">{{{.}}}</div>
 {{/desc.long}}
 {{^desc.long}}
-{{desc.short}}
+{{{desc.short}}}
 {{/desc.long}}
 </div>
 <div class="synopsis-option-data-type"><b>Possible values</b>: {{{data-type}}}</div>
@@ -173,7 +173,7 @@ Options:</pre>
 {{#all}}
 <tr>
 <td>--{{id}} <span style="text-transform: uppercase">{{id}}</span></td>
-<td>{{desc.short}}</td>
+<td>{{{desc.short}}}</td>
 </tr>
 {{/all}}
 {{/inputs}}
