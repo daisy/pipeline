@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.15.3</version>
+    <version>1.15.4-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <artifactId>dtbook-utils</artifactId>
-  <version>6.0.0</version>
+  <version>6.0.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: DTBook Utils</name>

@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.15.3</version>
+    <version>1.15.4-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>pef-utils</artifactId>
-  <version>8.0.0</version>
+  <version>8.0.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: pef-utils</name>

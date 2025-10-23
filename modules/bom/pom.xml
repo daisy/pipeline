@@ -920,8 +920,4 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-
-  <scm>
-    <tag>v1.15.3</tag>
-  </scm>
 </project>
