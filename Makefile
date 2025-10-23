@@ -196,7 +196,7 @@ check-clientlib/go :
 release : assembly/.release
 
 .PHONY : $(addprefix check-,$(MODULES) $(MAVEN_AGGREGATORS))
-$(addprefix check-,$(MODULES) $(MAVEN_AGGREGATORS)) : check-% : %/.last-tested
+$(addprefix check-,$(MODULES) $(MAVEN_AGGREGATORS)) : check-% : $(TARGET_DIR)/state/%/last-tested
 
 pipeline2-$(assembly/VERSION)_linux.zip \
 	: $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-linux.zip \
@@ -356,7 +356,7 @@ gradle-clean :
 .PHONY : checked
 checked :
 	for (String m : "$(MODULES)".trim().split("\\s+")) \
-		touch(new File(f + "/.last-tested");
+		touch(new File("$(TARGET_DIR)/state/" + m + "/last-tested");
 
 poms : website/target/maven/pom.xml
 website/target/maven/pom.xml : $(addprefix website/src/_data/,modules.yml api.yml versions.yml)
