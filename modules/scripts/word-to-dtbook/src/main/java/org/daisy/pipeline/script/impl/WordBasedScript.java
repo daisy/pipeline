@@ -316,6 +316,28 @@ public abstract class WordBasedScript implements ScriptService<Script>, ScriptSe
 			}
 			return status;
 		}
+
+		private ScriptInput.Builder pickOptions(Script script, ScriptInput.Builder toInput, ScriptInput fromInput) {
+			for (ScriptOption o : script.getOptions()) {
+				String name = o.getName();
+				boolean set = false;
+				for (String s : fromInput.getOption(name)) {
+					toInput = toInput.withOption(name, s);
+					set = true;
+				}
+				if (!set) {
+					// if no value was set, set the option to the default value, because it may happen that
+					// several steps have the option but with different defaults
+					ScriptOption globalOption = getOption(name);
+					if (globalOption != null) {
+						String globalDefault = globalOption.getDefault();
+						if (globalDefault != null)
+							toInput = toInput.withOption(name, globalDefault);
+					}
+				}
+			}
+			return toInput;
+		}
 	}
 
 	private static String getFormatName(String formatId) {
@@ -353,14 +375,5 @@ public abstract class WordBasedScript implements ScriptService<Script>, ScriptSe
 	private static void mkdirs(File dir) throws IOException {
 		if (!dir.exists() && !dir.mkdirs())
 			throw new IOException("Could not create directory:" + dir.getAbsolutePath());
-	}
-
-	private static ScriptInput.Builder pickOptions(Script script, ScriptInput.Builder toInput, ScriptInput fromInput) {
-		for (ScriptOption o : script.getOptions()) {
-			String name = o.getName();
-			for (String s : fromInput.getOption(name))
-				toInput = toInput.withOption(name, s);
-		}
-		return toInput;
 	}
 }
