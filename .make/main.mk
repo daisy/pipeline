@@ -73,15 +73,17 @@ $(TARGET_DIR)/effective-settings.xml : $(MVN_SETTINGS) $(TARGET_DIR)/state/prope
 		mvn(new File("$(TARGET_DIR)"), \
 		    "org.apache.maven.plugins:maven-help-plugin:2.2:effective-settings", "-Doutput=$(ROOT_DIR)/$@");
 
-.SECONDARY : poms aggregators
-poms : pom.xml
-aggregators :
 # if maven.mk does not exist yet or is out of date, make will restart after the file has been created/changed
 # (see https://www.gnu.org/software/make/manual/html_node/Remaking-Makefiles.html)
 include $(TARGET_DIR)/maven.mk
 
+# effective-pom.xml is updated when any of the prerequisites of `poms` (defined in maven.mk) change
+.SECONDARY : poms
+poms :
+
 # this recipe is executed only when prerequisites have changed
-$(TARGET_DIR)/maven.mk : $(TARGET_DIR)/effective-settings.xml aggregators poms
+# note that most prerequisites are defined in maven.mk itself
+$(TARGET_DIR)/maven.mk : $(TARGET_DIR)/effective-settings.xml
 	try (PrintStream s = new PrintStream(new FileOutputStream("$@"))) { \
 		String localRepo = xpath(new File("$<"), "/*/*[local-name()='localRepository']/text()") \
 		                   .replace('\\', '/') \
@@ -90,27 +92,64 @@ $(TARGET_DIR)/maven.mk : $(TARGET_DIR)/effective-settings.xml aggregators poms
 		s.println("export MVN_LOCAL_REPOSITORY"); \
 		traverseModules( \
 			new File("."), \
-			(module, isAggregator) -> { \
-				if (isAggregator) \
-					s.println("MAVEN_AGGREGATORS += " + module.toString().replace('\\', '/')); \
+			(m, isAggregator) -> { \
+				String module = m.toString().replace('\\', '/'); \
+				s.println("MAVEN_" + (isAggregator ? "AGGREGATORS" : "MODULES") + " += " + module); \
+				if ("bom".equals(m.getName())) { \
+					String optimized = "$$(TARGET_DIR)/optimized/" + module + "/pom.xml"; \
+					s.println("poms : " + optimized); \
+					/* assuming there is an aggregator pom one level up */ \
+					try { \
+						traverseModules( \
+							m.getParentFile(), \
+							(mm, aggr) -> { \
+								if (!aggr && !"bom".equals(mm.getName())) { \
+									/* assume that all modules are in the BOM */ \
+									s.println(optimized + " : $$(TARGET_DIR)/state/" + mm.toString().replace('\\', '/') \
+									          + "/modified-since-release"); }}); \
+					} catch (javax.xml.xpath.XPathExpressionException e) { \
+						throw new RuntimeException(e); \
+					} \
+				} else if (isAggregator) \
+					s.println("poms : $$(TARGET_DIR)/optimized/" + module + "/pom.xml"); \
 				else \
-					s.println("MAVEN_MODULES += " + module.toString().replace('\\', '/')); }); \
-		s.println("aggregators : $$(addsuffix /pom.xml,$$(MAVEN_AGGREGATORS))"); \
-		s.println("poms : $$(addsuffix /pom.xml,$$(MAVEN_MODULES))"); \
+					s.println("poms : " + module + "/pom.xml"); \
+				/* maven.mk should not be updated when optimized POMs change, only when the originals change */ \
+				s.println("$$(TARGET_DIR)/maven.mk : " + module + "/pom.xml"); }); \
 	}
+
+$(TARGET_DIR)/optimized/%/pom.xml : %/pom.xml
+	mkdirs("$(dir $@)"); \
+	optimizePom(new File("$<"), new File("$@"));
+
+# updateFileIfChanged() causes a rule to be executed over and over as long as the target is not
+# updated, so do the real work in modified-since-release_ rules
+$(TARGET_DIR)/state/%/modified-since-release : $(TARGET_DIR)/state/%/modified-since-release_
+	try (OutputStream s = updateFileIfChanged("$@")) { \
+		new PrintStream(s).print(slurp(new File("$<"))); }
+
+$(TARGET_DIR)/state/%/modified-since-release_ : %/pom.xml
+	mkdirs("$(dir $@)"); \
+	try (OutputStream s = new FileOutputStream("$@")) { \
+		new PrintStream(s).print(Boolean.toString(isModifiedSinceLastRelease(new File("$<").getParentFile()))); }
 
 # this recipe is executed only when prerequisites have changed
 # the purpose of the isOutOfDate() is for making "make -B" not affect this rule (to speed thing up)
+$(TARGET_DIR)/effective-pom.xml : export JAVA_REPL_PORT =
+# FIXME: main.mk is not supposed to be aware of settings.xml.in
+$(TARGET_DIR)/effective-pom.xml : export MVN_SETTINGS = settings.xml.in
 $(TARGET_DIR)/effective-pom.xml : poms | $(MVN_SETTINGS)
+	File optimizedDir = new File("$(TARGET_DIR)/optimized"); \
 	List<String> modules = new ArrayList<>(); { \
 		traverseModules( \
-			new File("."), \
-			(module, isAggregator) -> { \
+			optimizedDir, \
+			(m, isAggregator) -> { \
 				if (!isAggregator) \
-					modules.add(module.toString().replace('\\', '/')); }); } \
+					modules.add(m.toString().replace('\\', '/').substring(optimizedDir.toString().length() + 1)); }); } \
 	File[] poms = new File[modules.size()]; \
-	for (int i = 0; i < poms.length; i++) \
-		poms[i] = new File(modules.get(i), "pom.xml"); \
+	int i = 0; \
+	for (String module : modules) \
+		poms[i++] = new File(new File(optimizedDir, module), "pom.xml"); \
 	if (isOutOfDate(new File("$@"), poms)) { \
 		File tmpRepo = new File("$(TARGET_DIR)/tmp-repo"); \
 		rm(tmpRepo); \
@@ -132,14 +171,15 @@ $(TARGET_DIR)/effective-pom.xml : poms | $(MVN_SETTINGS)
 							"version", v + "-SNAPSHOT")); \
 			} \
 			try { \
-				mvn("-Dworkspace=" + tmpRepo, \
+				mvn("-Dworkspace=" + tmpRepo.toString(), \
 				    "-Dcache=.maven-cache", \
+				    "-f", optimizedDir.toString(), \
 				    "--projects", String.join(",", modules), \
 				    "-Prun-script-webserver", "-Ddocumentation", \
 				    "org.apache.maven.plugins:maven-help-plugin:2.2:effective-pom", "-Doutput=$(ROOT_DIR)/$@"); \
-			} catch (SystemExit ex) { \
+			} catch (SystemExit e) { \
 				err.println("Failed to compute Maven dependencies."); \
-				throw ex; \
+				throw e; \
 			} \
 		} finally { \
 			rm(tmpRepo); \
@@ -233,6 +273,7 @@ $(addsuffix /sources.mk,$(addprefix $(TARGET_DIR)/mk/,$(MAVEN_MODULES))) : $(TAR
 						String targets = String.format("%s/.test %s/.install", module, module); \
 						if (isJar) \
 							targets += String.format(" %s/.install-doc", module); \
+						targets += String.format(" $$(TARGET_DIR)/state/%s/modified-since-release_", module); \
 						s.print(targets + " :"); \
 						for (String p : mainSourceFiles) s.print(" \\\n\t" + p.replace("$$", "$$$$")); \
 						s.println(); \

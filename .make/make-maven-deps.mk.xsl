@@ -342,14 +342,23 @@
 						<xsl:text> : | .maven-init .group-eval</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:text>&#x09;</xsl:text>
-						<xsl:text>+$(EVAL) mvn.installPom("$(patsubst %/,%,$(dir $@))");</xsl:text>
+						<xsl:text>+$(EVAL) mvn.installPom("</xsl:text>
+						<xsl:if test="tokenize($module,'/')[last()]='bom'">
+							<xsl:text>$(TARGET_DIR)/optimized/</xsl:text>
+						</xsl:if>
+						<xsl:value-of select="$module"/>
+						<xsl:text>");</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:value-of select="concat($dirname,'.install.pom')"/>
 						<xsl:text> : %/.install.pom :</xsl:text>
 						<xsl:choose>
 							<xsl:when test="ends-with($version,'-SNAPSHOT')">
-								<xsl:text> %/pom.xml %/.compile-dependencies | %/.test-dependencies</xsl:text>
+								<xsl:text> </xsl:text>
+								<xsl:if test="tokenize($module,'/')[last()]='bom'">
+									<xsl:text>$(TARGET_DIR)/optimized/</xsl:text>
+								</xsl:if>
+								<xsl:text>%/pom.xml %/.compile-dependencies | %/.test-dependencies</xsl:text>
 							</xsl:when>
 							<xsl:otherwise>
 								<xsl:text> | %/.compile-dependencies %/.test-dependencies</xsl:text>

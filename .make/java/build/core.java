@@ -153,15 +153,15 @@ public class core {
 						throw new IllegalArgumentException();
 				}
 			} else if (dirOrFile.exists()) {
-				if (dirOrFile.getName().equals("pom.xml"))
+				if (dirOrFile.getName().endsWith(".xml"))
 					pomFile = dirOrFile;
 				else if (dirOrFile.getName().equals("build.gradle"))
 					gradleBuildFile = dirOrFile;
 				else
-					throw new IllegalArgumentException();
+					throw new IllegalArgumentException("No pom.xml or build.gradle in directory: " + dirOrFile);
 				dir = dirOrFile.getParentFile();
 			} else
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException("No such file or directory: " + dirOrFile);
 		}
 		if (pomFile != null) {
 			String v = xpath(pomFile, "/*/*[local-name()='version']/text()");
@@ -272,8 +272,247 @@ public class core {
 		}
 	}
 
+	// cache `git diff-index commands' (only meaningful in REPL mode)
+	private static Map<String,List<String>> diffTreeCache = new HashMap<>();
+	private static Map<String,List<String>> parentCommits = new HashMap<>();
+	private static Map<String,String> subrepoCommits = new HashMap<>();
+
+	public static boolean isModifiedSinceLastRelease(File module)
+			throws IOException, InterruptedException, XPathExpressionException, SystemExit {
+
+		String pom = new File(module, "pom.xml").toString();
+		String mainDir = new File(module, "src/main").toString();
+		// check for uncommitted changes
+		if (captureOutput(_x -> {}, "git", "diff-index", "--quiet", "HEAD", "--", mainDir) != 0)
+			return true;
+		// check for committed changes
+		String currentVersion = getMavenCoords(module).v;
+		if (!currentVersion.endsWith("-SNAPSHOT"))
+			return false;
+		else if (currentVersion.endsWith(".0-SNAPSHOT"))
+			// if the module got a minor or major version update, assume that there have been changes
+			return true;
+		String subrepo = null; {
+			File f = module;
+			while (true) {
+				if (new File(f, ".gitrepo").exists()) {
+					subrepo = f.toString().replace('\\', '/');
+					break; }
+				f = f.getParentFile();
+				if (f == null)
+					break; }}
+		LinkedList<String> todo = new LinkedList<>();
+		todo.add("HEAD");
+		Set<String> done = new HashSet<>();
+		Map<String,String> versions = new HashMap<>();
+		File tmpPom = File.createTempFile("pom-", ".xml");
+		try {
+			loop: while (true) {
+				if (todo.isEmpty())
+					break;
+				String commit = todo.poll();
+				if (!done.add(commit))
+					// we already reached this commit through another branch
+					continue;
+				for (String parent : getParentCommits(commit)) {
+					List<String> changedFiles; {
+						if (diffTreeCache.containsKey(parent + " " + commit))
+							changedFiles = diffTreeCache.get(parent + " " + commit);
+						else {
+							changedFiles = new ArrayList<>();
+							diffTreeCache.put(parent + " " + commit, changedFiles);
+							captureOutput(
+								line -> {
+									try { changedFiles.add(line.split("\\t")[1].replace('\\', '/')); }
+									catch (IndexOutOfBoundsException e) {}},
+								"git", "diff-tree", "--exit-code", "-r", parent, commit
+							);
+						}
+					}
+					if (!changedFiles.isEmpty()) {
+						if (changedFiles.contains(pom)) {
+							String version; {
+								version = versions.get(commit);
+								if (version == null) {
+									if (captureOutput(new PrintStream(new FileOutputStream(tmpPom))::println,
+									                  "git", "show", commit + ":" + pom) != 0)
+										exit(1);
+									version = getMavenCoords(tmpPom).v;
+									versions.put(commit, version);
+								}
+							}
+							String versionBefore; {
+								versionBefore = versions.get(parent);
+								if (versionBefore == null) {
+									PrintStream restoreErr = System.err;
+									System.setErr(nullOutputStream);
+									try {
+										if (captureOutput(new PrintStream(new FileOutputStream(tmpPom))::println,
+										                  "git", "show", parent + ":" + pom) == 0) {
+											versionBefore = getMavenCoords(tmpPom).v;
+											versions.put(parent, versionBefore);
+										} else
+											// file did not exist yet before this commit
+											versionBefore = "";
+									} finally {
+										System.setErr(restoreErr);
+									}
+								}
+							}
+							if (!versionBefore.equals(version)) {
+								if (subrepo != null && changedFiles.contains(subrepo + "/.gitrepo")) {
+									// Check if the version update happened before or after any changes to src/main.
+									if (changedFiles.stream().anyMatch(startsWith(mainDir + "/"))) {
+										String subrepoCommit; {
+											if (subrepoCommits.containsKey(commit))
+												subrepoCommit = subrepoCommits.get(commit);
+											else {
+												try (ByteArrayOutputStream commitMessage = new ByteArrayOutputStream()) {
+													if (captureOutput(new PrintStream(commitMessage)::println,
+													                  "git", "log", "--format=%B", "-n", "1", commit) != 0)
+														exit(1);
+													Matcher m = Pattern
+														.compile("(?m)^subrepo:\n +subdir: *\"([^\"]*)\"\n +merged: *\"([0-9a-fA-F]{7,})\"")
+														.matcher(commitMessage.toString());
+													if (m.find() && m.group(1).equals(subrepo)) {
+														subrepoCommit = m.group(2);
+														if (captureOutput(_x -> {}, "git", "rev-parse", "-q", "--verify", subrepoCommit) != 0)
+															subrepoCommit = null;
+													} else
+														subrepoCommit = null;
+													subrepoCommits.put(commit, subrepoCommit);
+												}
+											}
+										}
+										if (subrepoCommit != null) {
+											pom = pom.substring(subrepo.length() + 1);
+											mainDir = mainDir.substring(subrepo.length() + 1);
+											subrepo = null;
+											todo.clear(); // this should already be the case
+											todo.add(subrepoCommit);
+											continue loop;
+										}
+										// If the subrepo commits haven't been fetched, or something else is
+										// wrong, fall back to assuming that the changes happened after the
+										// version update.
+										return true;
+									}
+								}
+								// We either found the non-snapshot, or we know there must be a non-snapshot
+								// following this version (and preceding the current version). In both cases
+								// we need to keep looking for changes, but not in this branch.
+								continue;
+							}
+						}
+						if (changedFiles.stream().anyMatch(startsWith(mainDir + "/")))
+							return true;
+					}
+					// keep looking for changes on this branch
+					todo.add(parent);
+				}
+			}
+		} finally {
+			tmpPom.delete();
+		}
+		return false;
+	}
+
+	private static Predicate<String> startsWith(String prefix) {
+		return x -> x.startsWith(prefix);
+	}
+
+	private static List<String> getParentCommits(String commit) throws IOException, InterruptedException, SystemExit {
+		if (parentCommits.containsKey(commit))
+			return parentCommits.get(commit);
+		else {
+			List<String> list = new ArrayList<>();
+			parentCommits.put(commit, list);
+			if (captureOutput(line -> list.addAll(Arrays.asList(line.trim().split("\\s+"))), "git", "log", "--pretty=%P", "-n", "1", commit) != 0)
+				exit(1);
+			if (list.size() == 1 && "".equals(list.get(0)))
+				list.clear();
+			return list;
+		}
+	}
+
+	/**
+	 * @param source is a POM file that is either a BOM (name of parent directory is "bom"), or an
+	 *               aggregator (contains {@code modules} element).
+	 */
+	public static void optimizePom(File source, File dest) throws IOException, InterruptedException, XPathExpressionException, SystemExit {
+		String MY_DIR = System.getenv("MY_DIR");
+		String TARGET_DIR = System.getenv("TARGET_DIR");
+		List<mvn.Coords> unchangedSinceRelease = new ArrayList<>();
+		List<String> optimizedModules = new ArrayList<>();
+		if (source.getParentFile() != null && "bom".equals(source.getParentFile().getName()))
+			traverseModules(
+				// assuming there is an aggregator pom one level up
+				source.getParentFile().getParentFile(),
+				(module, isAggregator) -> {
+					if (!isAggregator) {
+						// this file is expected to exist
+						File modifiedState = new File(TARGET_DIR + "/state/" + module + "/modified-since-release");
+						try {
+							if (modifiedState.exists() && "false".equalsIgnoreCase(slurp(modifiedState).trim()))
+								unchangedSinceRelease.add(getMavenCoords(module));
+						} catch (IOException|XPathExpressionException e) {}
+					}});
+		else {
+			// assuming all bom and aggregator modules are optimized
+			String[] modules = xpath(
+				source, "string(/*/*[local-name()='modules'])"
+			).trim().split("\\s+");
+			if (modules.length > 0 && !(modules.length == 1 && modules[0].equals("")))
+				for (String m : modules)
+					if (m.equals("bom")
+					    || !xpath(new File(new File(source.getParentFile(), m), "pom.xml"),
+					              "string(/*/*[local-name()='modules'])").trim().equals(""))
+						optimizedModules.add(m); }
+		if (
+			xslt(
+				source,
+				new FileOutputStream(dest),
+				new File(MY_DIR + "/mvn-optimize-pom.xsl"),
+				"unchanged-deps", unchangedSinceRelease.stream()
+				                                       .map(gav -> gav.g + ":" + gav.a)
+				                                       .collect(Collectors.toList()),
+				"optimized-modules", optimizedModules,
+				"relative-path-to-original-dir", relativize(source.getParentFile() != null
+				                                                ? source.getParentFile()
+				                                                : new File("."),
+				                                            dest)
+			) != 0) {
+			rm(dest);
+			exit(1);
+		}
+	}
+
+	private static String relativize(File file, File base) throws IOException {
+		String filePath = file.getCanonicalPath().replace('\\', '/');
+		String basePath = base.getCanonicalPath().replace('\\', '/');
+		if (base.isDirectory()) basePath += "/.";
+		String[] filePathSegments = filePath.split("/", -1);
+		String[] basePathSegments = basePath.split("/", -1);
+		int i = 0, j = 0;
+		while (i < filePathSegments.length && j < basePathSegments.length - 1) {
+			if (basePathSegments[i].equals(filePathSegments[j])) {
+				i++;
+				j++; }
+			else
+				break; }
+		String relativizedPath = "";
+		while (j < basePathSegments.length - 1) {
+			relativizedPath += "../";
+			j++; }
+		while (i < filePathSegments.length) {
+			relativizedPath += filePathSegments[i] + "/";
+			i++; }
+		relativizedPath = relativizedPath.substring(0, relativizedPath.length() - 1);
+		return relativizedPath;
+	}
+
 	public static void computeMavenDeps(File effectivePom, File gradlePom, File outputBaseDir, String outputFileName)
-			throws IOException, InterruptedException, XPathExpressionException {
+			throws IOException, InterruptedException, XPathExpressionException, SystemExit {
 
 		String MY_DIR = System.getenv("MY_DIR");
 		List<String> modules = new ArrayList<>(); {
