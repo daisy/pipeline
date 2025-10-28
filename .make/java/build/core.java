@@ -272,26 +272,57 @@ public class core {
 		}
 	}
 
+	public enum ModificationType {
+		PATCH,
+		MINOR,
+		MAJOR;
+		@Override
+		public String toString() {
+			return name().toLowerCase();
+		}
+		public ModificationType and(ModificationType other) {
+			if (other == null)
+				return this;
+			switch (this) {
+			case PATCH:
+				return other;
+			case MINOR:
+				return other == PATCH
+					? this
+					: other;
+			case MAJOR:
+			default:
+				return this;
+			}
+		}
+	}
+
 	// cache `git diff-index commands' (only meaningful in REPL mode)
 	private static Map<String,List<String>> diffTreeCache = new HashMap<>();
 	private static Map<String,List<String>> parentCommits = new HashMap<>();
 	private static Map<String,String> subrepoCommits = new HashMap<>();
 
-	public static boolean isModifiedSinceLastRelease(File module)
+	/**
+	 * @return a {@code ModificationType}, or {@code null} if there are no modifications
+	 */
+	public static ModificationType isModifiedSinceLastRelease(File module)
 			throws IOException, InterruptedException, XPathExpressionException, SystemExit {
 
 		String pom = new File(module, "pom.xml").toString();
 		String mainDir = new File(module, "src/main").toString();
+		ModificationType modified = null;
 		// check for uncommitted changes
 		if (captureOutput(_x -> {}, "git", "diff-index", "--quiet", "HEAD", "--", mainDir) != 0)
-			return true;
+			modified = ModificationType.PATCH; // might be a minor or major change, but we don't know yet
 		// check for committed changes
 		String currentVersion = getMavenCoords(module).v;
 		if (!currentVersion.endsWith("-SNAPSHOT"))
-			return false;
+			return null;
 		else if (currentVersion.endsWith(".0-SNAPSHOT"))
 			// if the module got a minor or major version update, assume that there have been changes
-			return true;
+			return currentVersion.endsWith(".0.0-SNAPSHOT")
+				? ModificationType.MAJOR
+				: ModificationType.MINOR;
 		String subrepo = null; {
 			File f = module;
 			while (true) {
@@ -330,7 +361,8 @@ public class core {
 						}
 					}
 					if (!changedFiles.isEmpty()) {
-						if (changedFiles.contains(pom)) {
+						boolean pomChanged = changedFiles.contains(pom);
+						if (pomChanged) {
 							String version; {
 								version = versions.get(commit);
 								if (version == null) {
@@ -367,21 +399,16 @@ public class core {
 											if (subrepoCommits.containsKey(commit))
 												subrepoCommit = subrepoCommits.get(commit);
 											else {
-												try (ByteArrayOutputStream commitMessage = new ByteArrayOutputStream()) {
-													if (captureOutput(new PrintStream(commitMessage)::println,
-													                  "git", "log", "--format=%B", "-n", "1", commit) != 0)
-														exit(1);
-													Matcher m = Pattern
-														.compile("(?m)^subrepo:\n +subdir: *\"([^\"]*)\"\n +merged: *\"([0-9a-fA-F]{7,})\"")
-														.matcher(commitMessage.toString());
-													if (m.find() && m.group(1).equals(subrepo)) {
-														subrepoCommit = m.group(2);
-														if (captureOutput(_x -> {}, "git", "rev-parse", "-q", "--verify", subrepoCommit) != 0)
-															subrepoCommit = null;
-													} else
+												Matcher m = Pattern
+													.compile("(?m)^subrepo:\n +subdir: *\"([^\"]*)\"\n +merged: *\"([0-9a-fA-F]{7,})\"")
+													.matcher(getCommitMessage(commit));
+												if (m.find() && m.group(1).equals(subrepo)) {
+													subrepoCommit = m.group(2);
+													if (captureOutput(_x -> {}, "git", "rev-parse", "-q", "--verify", subrepoCommit) != 0)
 														subrepoCommit = null;
-													subrepoCommits.put(commit, subrepoCommit);
-												}
+												} else
+													subrepoCommit = null;
+												subrepoCommits.put(commit, subrepoCommit);
 											}
 										}
 										if (subrepoCommit != null) {
@@ -395,7 +422,7 @@ public class core {
 										// If the subrepo commits haven't been fetched, or something else is
 										// wrong, fall back to assuming that the changes happened after the
 										// version update.
-										return true;
+										modified = ModificationType.PATCH; // note that we will miss out on any minor/major info
 									}
 								}
 								// We either found the non-snapshot, or we know there must be a non-snapshot
@@ -404,8 +431,27 @@ public class core {
 								continue;
 							}
 						}
-						if (changedFiles.stream().anyMatch(startsWith(mainDir + "/")))
-							return true;
+						boolean srcChanged = changedFiles.stream().anyMatch(startsWith(mainDir + "/"));
+						if (pomChanged || srcChanged) {
+							Matcher m = Pattern
+								.compile("(?m)^(Minor|Major)-Change: *([^\\s]+) *$")
+								.matcher(getCommitMessage(commit));
+							if (m.find()) {
+								String prf = module.toString().replace('\\', '/');
+								if (subrepo != null)
+									prf = prf.substring(subrepo.length() + 1);
+								do {
+									String path = m.group(2).replace('\\', '/');
+									if (path.equals(prf) || path.startsWith(prf + "/"))
+										if ("Major".equals(m.group(1)))
+											return ModificationType.MAJOR;
+										else
+											modified = ModificationType.MINOR;
+								} while (m.find());
+							}
+							if (srcChanged) // ignore changes to pom (unless minor/major change indicated in commit message)
+								modified = ModificationType.PATCH.and(modified);
+						}
 					}
 					// keep looking for changes on this branch
 					todo.add(parent);
@@ -414,11 +460,20 @@ public class core {
 		} finally {
 			tmpPom.delete();
 		}
-		return false;
+		return modified;
 	}
 
 	private static Predicate<String> startsWith(String prefix) {
 		return x -> x.startsWith(prefix);
+	}
+
+	private static String getCommitMessage(String commit) throws IOException, InterruptedException, SystemExit {
+		try (ByteArrayOutputStream commitMessage = new ByteArrayOutputStream()) {
+			if (captureOutput(new PrintStream(commitMessage)::println,
+			                  "git", "log", "--format=%B", "-n", "1", commit) != 0)
+				exit(1);
+			return commitMessage.toString();
+		}
 	}
 
 	private static List<String> getParentCommits(String commit) throws IOException, InterruptedException, SystemExit {
@@ -453,7 +508,7 @@ public class core {
 						// this file is expected to exist
 						File modifiedState = new File(TARGET_DIR + "/state/" + module + "/modified-since-release");
 						try {
-							if (modifiedState.exists() && "false".equalsIgnoreCase(slurp(modifiedState).trim()))
+							if (modifiedState.exists() && "null".equalsIgnoreCase(slurp(modifiedState).trim()))
 								unchangedSinceRelease.add(getMavenCoords(module));
 						} catch (IOException|XPathExpressionException e) {}
 					}});
@@ -515,13 +570,18 @@ public class core {
 			throws IOException, InterruptedException, XPathExpressionException, SystemExit {
 
 		String MY_DIR = System.getenv("MY_DIR");
-		List<String> modules = new ArrayList<>(); {
+		Map<String,String> modules = new HashMap<>(); {
 			traverseModules(
 				new File("."),
 				(module, isAggregator) -> {
 					if (!isAggregator)
-						modules.add(module.toString().replace('\\', '/')); }); }
-		for (String m : modules)
+						try {
+							mvn.Coords gav = getMavenCoords(module);
+							modules.put(gav.g + ":" + gav.a,
+							            module.toString().replace('\\', '/')); }
+						catch (IOException|XPathExpressionException e) {
+							throw new RuntimeException(e); }}); }
+		for (String m : modules.values())
 			rm(new File(new File(outputBaseDir, m), outputFileName));
 		if (
 			xslt(
@@ -536,11 +596,12 @@ public class core {
 				                                       .filter(f -> new File(f, "bom/pom.xml").exists())
 				                                       .map(f -> f.toString().replace('\\', '/'))
 				                                       .collect(Collectors.toList()),
+				"source-modules", modules,
 				"output-basedir", outputBaseDir.getPath().replace('\\', '/'),
 				"output-filename", outputFileName,
 				"verbose", System.getenv("VERBOSE") != null
 			) != 0) {
-			for (String m : modules)
+			for (String m : modules.values())
 				rm(new File(new File(outputBaseDir, m), outputFileName));
 		};
 	}

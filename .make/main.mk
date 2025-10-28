@@ -128,10 +128,17 @@ $(TARGET_DIR)/state/%/modified-since-release : $(TARGET_DIR)/state/%/modified-si
 	try (OutputStream s = updateFileIfChanged("$@")) { \
 		new PrintStream(s).print(slurp(new File("$<"))); }
 
+# the rule below is needed for when deps.mk have not been generated yet
+# the rule does not really do anything because it is intended to be overridden
+# by setting the modified state to "patch" (rather than "null") we ensure the
+# deps.mk rules are executed in the right order, and avoid an extra iteration
+# note that because this is an implicit rule, the target files will be deleted
+# (see https://www.gnu.org/software/make/manual/html_node/Chained-Rules.html)
+# the files created by the corresponding rules from deps.mk are not deleted
 $(TARGET_DIR)/state/%/modified-since-release_ : %/pom.xml
 	mkdirs("$(dir $@)"); \
 	try (OutputStream s = new FileOutputStream("$@")) { \
-		new PrintStream(s).print(Boolean.toString(isModifiedSinceLastRelease(new File("$<").getParentFile()))); }
+		new PrintStream(s).print(ModificationType.PATCH.toString()); }
 
 # this recipe is executed only when prerequisites have changed
 # the purpose of the isOutOfDate() is for making "make -B" not affect this rule (to speed thing up)
@@ -212,6 +219,10 @@ $(TARGET_DIR)/gradle-settings/conf/settings.xml : $(MVN_SETTINGS)
 	rm("$@"); \
 	cp("$<", "$@");
 
+# this recipe is executed when any poms (including optimized ones) change (causing effective-pom.xml
+# to be regenerated)
+# note that it may need to be run multiple times to get everything right, because boms are optimized
+# based on compile dependency information
 .SECONDARY : .maven-deps.mk
 .maven-deps.mk : $(TARGET_DIR)/effective-pom.xml $(TARGET_DIR)/gradle-pom.xml
 	computeMavenDeps(new File("$<"), \

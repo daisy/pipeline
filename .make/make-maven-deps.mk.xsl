@@ -16,6 +16,7 @@
 	<xsl:param name="output-basedir"/>
 	<xsl:param name="output-filename"/>
 	<xsl:param name="verbose" as="xs:boolean"/>
+	<xsl:param name="source-modules" as="map(xs:string,xs:string)"/>
 	
 	<xsl:output method="xml" indent="yes"/>
 	
@@ -295,6 +296,43 @@
 					<xsl:text>&#x09;</xsl:text>
 					<xsl:text>+$(EVAL) mkdirs("$(dir $@)"); touch("$@");</xsl:text>
 					<xsl:text>&#x0A;</xsl:text>
+					<xsl:if test="ends-with($version,'-SNAPSHOT')">
+						<xsl:variable name="compile-dependencies" as="element()*">
+							<xsl:apply-templates select="$effective-pom/pom:project[pom:groupId=$groupId and
+							                                                        pom:artifactId=$artifactId and
+							                                                        pom:version=$version]">
+								<xsl:with-param name="include-transitive" select="false()"/>
+								<xsl:with-param name="indent" select="'  '"/>
+							</xsl:apply-templates>
+						</xsl:variable>
+						<xsl:variable name="compile-dependencies" as="xs:string*"
+						              select="for $module in distinct-values(
+						                        for $d in $compile-dependencies return
+						                          $source-modules(concat($d/pom:groupId,':',$d/pom:artifactId))
+						                      ) return
+						                        concat('$(TARGET_DIR)/state/',$module,'/modified-since-release')"/>
+						<xsl:if test="count($compile-dependencies) &gt; 0">
+							<xsl:text>&#x0A;</xsl:text>
+							<xsl:text># this rule overrides the implicit rule in main.mk&#x0A;</xsl:text>
+							<xsl:text># note that because the modified-since-release_ files created by main.mk, are deleted,&#x0A;</xsl:text>
+							<xsl:text># this rule gets executed at least once&#x0A;</xsl:text>
+							<xsl:value-of select="concat('$(TARGET_DIR)/state/',$dirname,'modified-since-release_ : ',$dirname,'pom.xml ')"/>
+							<xsl:if test="count($compile-dependencies) &gt; 1">
+								<xsl:text>\&#x0A;&#x09;</xsl:text>
+							</xsl:if>
+							<xsl:value-of select="string-join($compile-dependencies, ' \&#x0A;&#x09;')"/>
+							<xsl:text>&#x0A;</xsl:text>
+							<xsl:text>&#x09;mkdirs("$(dir $@)"); \&#x0A;</xsl:text>
+							<xsl:text>&#x09;try (OutputStream s = new FileOutputStream("$@")) { \&#x0A;</xsl:text>
+							<xsl:text>&#x09;&#x09;ModificationType modified = isModifiedSinceLastRelease(new File("$&lt;").getParentFile()); \&#x0A;</xsl:text>
+							<xsl:text>&#x09;&#x09;if (modified == null) \&#x0A;</xsl:text>
+							<xsl:text>&#x09;&#x09;&#x09;for (String d : "$(filter %/modified-since-release,$^)".trim().split("\\s+")) \&#x0A;</xsl:text>
+							<xsl:text>&#x09;&#x09;&#x09;&#x09;if ("major".equals(slurp(new File(d)).trim())) { \&#x0A;</xsl:text>
+							<xsl:text>&#x09;&#x09;&#x09;&#x09;&#x09;modified = ModificationType.PATCH; \&#x0A;</xsl:text>
+							<xsl:text>&#x09;&#x09;&#x09;&#x09;&#x09;break; } \&#x0A;</xsl:text>
+							<xsl:text>&#x09;&#x09;new PrintStream(s).print("" + modified); }&#x0A;</xsl:text>
+						</xsl:if>
+					</xsl:if>
 					<xsl:text>&#x0A;</xsl:text>
 					<xsl:text>.SECONDARY : </xsl:text>
 					<xsl:value-of select="concat($dirname,'.test')"/>
@@ -654,6 +692,7 @@
 		-->
 		<xsl:param name="scope" as="xs:string?" select="()"/>
 		<xsl:param name="exclusions" select="()"/>
+		<xsl:param name="include-transitive" select="true()"/>
 		<xsl:param name="indent" as="xs:string" select="''"/>
 		<xsl:if test="not(exists($scope)) or $scope=('compile','provided','runtime','test')">
 			<xsl:variable name="project" select="."/>
@@ -810,7 +849,7 @@
 					    take care of transitive dependencies in test/runtime scope. However this method
 					    would not allow us to overwrite versions.
 					-->
-					<xsl:if test="self::pom:dependency">
+					<xsl:if test="$include-transitive and self::pom:dependency">
 						<xsl:apply-templates select="$managed-internal-runtime-dependencies/pom:project[pom:groupId=$groupId and
 						                                                                                pom:artifactId=$artifactId]">
 							<xsl:with-param name="managed-internal-runtime-dependencies" select="$managed-internal-runtime-dependencies"/>
