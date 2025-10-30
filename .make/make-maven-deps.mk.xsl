@@ -6,29 +6,26 @@
                 exclude-result-prefixes="xs pom"
                 xmlns="http://maven.apache.org/POM/4.0.0">
 	
-	<xsl:param name="ROOT_DIR"/>
-	<xsl:param name="GRADLE_POM"/>
-	<xsl:param name="MODULE"/>
+	<xsl:param name="root-dir"/>
+	<xsl:param name="gradle-pom"/>
+	<xsl:param name="module"/>
 	<!--
 	    directories from which multiple modules are released at once
 	-->
-	<xsl:param name="RELEASE_DIRS"/>
-	<xsl:param name="OUTPUT_BASEDIR"/>
-	<xsl:param name="OUTPUT_FILENAME"/>
-	<xsl:param name="VERBOSE"/>
+	<xsl:param name="release-dirs" as="xs:string*"/>
+	<xsl:param name="output-basedir"/>
+	<xsl:param name="output-filename"/>
+	<xsl:param name="verbose" as="xs:boolean"/>
 	
 	<xsl:output method="xml" indent="yes"/>
 	
 	<xsl:variable name="effective-pom" select="/*"/>
-	<xsl:variable name="gradle-pom" select="document(concat($ROOT_DIR,'/',$GRADLE_POM))/*"/>
-	
-	<xsl:variable name="release-dirs" select="tokenize($RELEASE_DIRS, '\s+')"/>
 	
 	<xsl:template match="/">
 		<xsl:variable name="makefiles" as="map(*)">
 			<xsl:call-template name="main">
-				<xsl:with-param name="module" select="$MODULE"/>
-				<xsl:with-param name="module-pom" select="document(concat($ROOT_DIR,'/',$MODULE,'/pom.xml'))"/>
+				<xsl:with-param name="module" select="$module"/>
+				<xsl:with-param name="module-pom" select="document(concat($root-dir,'/',$module,'/pom.xml'))"/>
 				<xsl:with-param name="release-dir" select="()"/>
 			</xsl:call-template>
 		</xsl:variable>
@@ -36,13 +33,14 @@
 		<xsl:for-each select="$makefiles">
 			<xsl:variable name="module" as="xs:string" select=".('module')"/>
 			<xsl:variable name="makefile" as="text()*" select=".('makefile')"/>
-			<xsl:result-document href="{concat($OUTPUT_BASEDIR,'/',$module,'/',$OUTPUT_FILENAME)}" method="text">
+			<xsl:result-document href="{concat($output-basedir,'/',$module,'/',$output-filename)}" method="text">
 				<xsl:sequence select="$makefile"/>
 			</xsl:result-document>
 		</xsl:for-each>
 	</xsl:template>
 	
 	<xsl:variable name="internal-runtime-dependencies" as="element()">
+		<xsl:variable name="gradle-pom" select="document(concat($root-dir,'/',$gradle-pom))/*"/>
 		<pom:projects>
 			<xsl:for-each select="/*/pom:project">
 				<xsl:copy>
@@ -111,7 +109,7 @@
 						                          'makefiles':$makefiles}"/>
 					</xsl:on-completion>
 					<xsl:variable name="submodule" select="concat($dirname,.)"/>
-					<xsl:variable name="submodule-pom" select="document(concat($ROOT_DIR,'/',$submodule,'/pom.xml'))"/>
+					<xsl:variable name="submodule-pom" select="document(concat($root-dir,'/',$submodule,'/pom.xml'))"/>
 					<xsl:variable name="submodule-result" as="map(*)*">
 						<xsl:call-template name="main">
 							<xsl:with-param name="module" select="$submodule"/>
@@ -242,7 +240,7 @@
 								</xsl:for-each>
 							</pom:projects>
 						</xsl:variable>
-						<xsl:if test="$VERBOSE='true'">
+						<xsl:if test="$verbose">
 							<xsl:message select="concat('Dependency tree of ',$groupId,':',$artifactId,':',$version,':')"/>
 						</xsl:if>
 						<xsl:apply-templates select=".">
@@ -771,7 +769,7 @@
 							</xsl:if>
 						</dependency>
 					</xsl:if>
-					<xsl:if test="$VERBOSE='true'">
+					<xsl:if test="$verbose">
 						<!--
 						    FIXME: "managed from" is sometimes computed with respect to the snapshot
 						    version (version declared in the module) while it appears to be with

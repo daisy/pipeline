@@ -4,7 +4,7 @@
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:pom="http://maven.apache.org/POM/4.0.0">
 	
-	<xsl:param name="VERSION" as="xs:string" required="yes"/>
+	<xsl:param name="version" as="xs:string" required="yes"/>
 	
 	<xsl:template match="@*|node()">
 		<xsl:copy>
@@ -14,7 +14,7 @@
 	
 	<xsl:template match="/pom:project/pom:version">
 		<xsl:copy>
-			<xsl:value-of select="$VERSION"/>
+			<xsl:value-of select="$version"/>
 		</xsl:copy>
 	</xsl:template>
 	

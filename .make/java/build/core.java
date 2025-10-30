@@ -12,6 +12,10 @@ import javax.xml.xpath.XPathExpressionException;
 
 import static lib.util.*;
 
+import net.sf.saxon.ma.map.HashTrieMap;
+import net.sf.saxon.ma.map.KeyValuePair;
+import net.sf.saxon.ma.map.MapItem;
+import net.sf.saxon.om.Item;
 import net.sf.saxon.s9api.ItemType;
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.QName;
@@ -22,6 +26,9 @@ import net.sf.saxon.s9api.Xslt30Transformer;
 import net.sf.saxon.s9api.XsltCompiler;
 import net.sf.saxon.s9api.XsltExecutable;
 import net.sf.saxon.s9api.XsltTransformer;
+import net.sf.saxon.value.EmptySequence;
+import net.sf.saxon.value.SequenceExtent;
+import net.sf.saxon.value.StringValue;
 
 public class core {
 	private core() {}
@@ -183,7 +190,7 @@ public class core {
 
 	private static final PrintStream nullOutputStream = new PrintStream(new OutputStream() { public void write(int b) {}});
 
-	public static int xslt(File source, OutputStream destination, File stylesheet, String... parameters) {
+	public static int xslt(File source, OutputStream destination, File stylesheet, Object... parameters) {
 		if (!source.exists())
 			throw new IllegalArgumentException("Source file " + source + " does not exist");
 		if (!stylesheet.exists())
@@ -194,14 +201,48 @@ public class core {
 			XsltCompiler compiler = processor.newXsltCompiler();
 			Map<QName,XdmValue> paramMap = new HashMap<>(); {
 				String param = null;
-				for (String p : parameters)
+				for (Object p : parameters)
 					if (param == null)
 						if (p == null)
 							throw new IllegalArgumentException("parameter key must not be null");
+						else if (!(p instanceof String))
+							throw new IllegalArgumentException("parameter key must be a string");
 						else
-							param = p;
+							param = (String)p;
 					else {
-						paramMap.put(QName.fromClarkName(param), new XdmAtomicValue(p, ItemType.UNTYPED_ATOMIC));
+						XdmValue value; {
+							if (p == null)
+								value = XdmValue.wrap(EmptySequence.getInstance());
+							else if (p instanceof String)
+								value = new XdmAtomicValue((String)p, ItemType.UNTYPED_ATOMIC);
+							else if (p instanceof Boolean)
+								value = new XdmAtomicValue((Boolean)p);
+							else if (p instanceof Iterable) {
+								List<Item> seq = new ArrayList<>();
+								for (Object o : (Iterable)p)
+									if (o instanceof String)
+										seq.add(new StringValue((String)o));
+									else
+										throw new IllegalArgumentException(
+											"parameter values must be strings, booleans or maps");
+								value = XdmValue.wrap(new SequenceExtent(seq));
+							} else if (p instanceof Map) {
+								MapItem mapItem = new HashTrieMap();
+								for (Map.Entry e : ((Map<?,?>)p).entrySet()) {
+									if (!(e.getKey() instanceof String))
+										throw new IllegalArgumentException("map keys must be strings");
+									if (!(e.getValue() instanceof String))
+										throw new IllegalArgumentException("map values must be strings");
+									mapItem = mapItem.addEntry(
+										new StringValue((String)e.getKey()),
+										new StringValue((String)e.getValue()));
+								}
+								value = XdmValue.wrap(mapItem);
+							} else
+								throw new IllegalArgumentException(
+									"parameter values must be strings, booleans or maps");
+						}
+						paramMap.put(QName.fromClarkName(param), value);
 						param = null; }
 				if (param != null)
 					throw new IllegalArgumentException("no value specified for parameter " + param);
@@ -248,17 +289,17 @@ public class core {
 				effectivePom,
 				null,
 				new File(MY_DIR + "/make-maven-deps.mk.xsl"),
-				"ROOT_DIR", System.getenv("ROOT_DIR"),
-				"GRADLE_POM", gradlePom.getPath().replace('\\', '/'),
-				"MODULE", ".",
-				"RELEASE_DIRS", glob("[!.]**/.gitrepo").stream()
+				"root-dir", System.getenv("ROOT_DIR"),
+				"gradle-pom", gradlePom.getPath().replace('\\', '/'),
+				"module", ".",
+				"release-dirs", glob("[!.]**/.gitrepo").stream()
 				                                       .map(f -> f.getParentFile())
 				                                       .filter(f -> new File(f, "bom/pom.xml").exists())
 				                                       .map(f -> f.toString().replace('\\', '/'))
-				                                       .collect(Collectors.joining(" ")),
-				"OUTPUT_BASEDIR", outputBaseDir.getPath().replace('\\', '/'),
-				"OUTPUT_FILENAME", outputFileName,
-				"VERBOSE", "" + (System.getenv("VERBOSE") != null)
+				                                       .collect(Collectors.toList()),
+				"output-basedir", outputBaseDir.getPath().replace('\\', '/'),
+				"output-filename", outputFileName,
+				"verbose", System.getenv("VERBOSE") != null
 			) != 0) {
 			for (String m : modules)
 				rm(new File(new File(outputBaseDir, m), outputFileName));
