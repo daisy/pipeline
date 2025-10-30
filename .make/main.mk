@@ -36,6 +36,7 @@ CLASSPATH := $(shell                                                            
     println(classPath.getPath().replace('\\', '/'));                                              )
 IMPORTS := build.mvn build.gradle build.mvn.Coords
 STATIC_IMPORTS := build.core.*
+# for use in mvn-release.sh
 SAXON = $(MY_DIR)/Saxon-HE-9.4.jar
 
 export ROOT_DIR MY_DIR TARGET_DIR MVN_SETTINGS MVN_PROPERTIES MVN_LOG MVN_RELEASE_CACHE_REPO M2_HOME MAKE SHELL IMPORTS STATIC_IMPORTS CLASSPATH SAXON
@@ -122,12 +123,11 @@ $(TARGET_DIR)/effective-pom.xml : poms | $(MVN_SETTINGS)
 				cp(pom, dest); \
 				if (!v.endsWith("-SNAPSHOT")) \
 					exitOnError( \
-						captureOutput( \
-							new PrintStream(new FileOutputStream(dest))::println, \
-							"java", "-cp", "$(SAXON)", "net.sf.saxon.Transform", \
-							        "-s:" + pom, \
-							        "-xsl:$(MY_DIR)/mvn-set-version.xsl", \
-							        "VERSION=" + v + "-SNAPSHOT")); \
+						xslt( \
+							pom, \
+							new FileOutputStream(dest), \
+							new File("$(MY_DIR)/mvn-set-version.xsl"), \
+							"VERSION", v + "-SNAPSHOT")); \
 			} \
 			try { \
 				mvn("-Dworkspace=" + tmpRepo, \

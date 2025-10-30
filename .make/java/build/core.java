@@ -169,10 +169,37 @@ public class core {
 		}
 	}
 
+	public static int xslt(File source, OutputStream destination, File stylesheet, String... parameters)
+			throws IOException, InterruptedException {
+
+		String MY_DIR = System.getenv("MY_DIR");
+		List<String> cmd = new ArrayList<>();
+		for (String a : new String[]{"java", "-cp", MY_DIR + "/Saxon-HE-9.4.jar", "net.sf.saxon.Transform",
+		                             "-s:" + source,
+		                             "-xsl:" + stylesheet})
+			cmd.add(a);
+		String key = null;
+		for (String p : parameters)
+			if (key == null)
+				if (p == null)
+					throw new IllegalArgumentException("parameter key must not be null");
+				else
+					key = p;
+			else {
+				cmd.add(key + "=" + p);
+				key = null; }
+		if (key != null)
+			throw new IllegalArgumentException("no value specified for parameter " + key);
+		return captureOutput(
+			destination != null
+				? new PrintStream(destination)::println
+				: _x -> {},
+			cmd);
+	}
+
 	public static void computeMavenDeps(File effectivePom, File gradlePom, File outputBaseDir, String outputFileName)
 			throws IOException, InterruptedException, XPathExpressionException {
 
-		String SAXON = System.getenv("SAXON");
 		String MY_DIR = System.getenv("MY_DIR");
 		List<String> modules = new ArrayList<>(); {
 			traverseModules(
@@ -183,22 +210,21 @@ public class core {
 		for (String m : modules)
 			rm(new File(new File(outputBaseDir, m), outputFileName));
 		if (
-			captureOutput(
-				_x -> {},
-				"java", "-cp", SAXON, "net.sf.saxon.Transform",
-				"-s:" + effectivePom,
-				"-xsl:" + MY_DIR + "/make-maven-deps.mk.xsl",
-				"ROOT_DIR=" + System.getenv("ROOT_DIR"),
-				"GRADLE_POM=" + gradlePom.getPath().replace('\\', '/'),
-				"MODULE=.",
-				"RELEASE_DIRS=" + glob("[!.]**/.gitrepo").stream()
-				                                         .map(f -> f.getParentFile())
-				                                         .filter(f -> new File(f, "bom/pom.xml").exists())
-				                                         .map(f -> f.toString().replace('\\', '/'))
-				                                         .collect(Collectors.joining(" ")),
-				"OUTPUT_BASEDIR=" + outputBaseDir.getPath().replace('\\', '/'),
-				"OUTPUT_FILENAME=" + outputFileName,
-				"VERBOSE=" + (System.getenv("VERBOSE") != null)
+			xslt(
+				effectivePom,
+				null,
+				new File(MY_DIR + "/make-maven-deps.mk.xsl"),
+				"ROOT_DIR", System.getenv("ROOT_DIR"),
+				"GRADLE_POM", gradlePom.getPath().replace('\\', '/'),
+				"MODULE", ".",
+				"RELEASE_DIRS", glob("[!.]**/.gitrepo").stream()
+				                                       .map(f -> f.getParentFile())
+				                                       .filter(f -> new File(f, "bom/pom.xml").exists())
+				                                       .map(f -> f.toString().replace('\\', '/'))
+				                                       .collect(Collectors.joining(" ")),
+				"OUTPUT_BASEDIR", outputBaseDir.getPath().replace('\\', '/'),
+				"OUTPUT_FILENAME", outputFileName,
+				"VERBOSE", "" + (System.getenv("VERBOSE") != null)
 			) != 0) {
 			for (String m : modules)
 				rm(new File(new File(outputBaseDir, m), outputFileName));
