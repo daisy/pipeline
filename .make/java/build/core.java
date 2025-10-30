@@ -7,9 +7,21 @@ import java.util.function.*;
 import java.util.regex.*;
 import java.util.stream.*;
 
+import javax.xml.transform.stream.StreamSource;
 import javax.xml.xpath.XPathExpressionException;
 
 import static lib.util.*;
+
+import net.sf.saxon.s9api.ItemType;
+import net.sf.saxon.s9api.Processor;
+import net.sf.saxon.s9api.QName;
+import net.sf.saxon.s9api.Serializer;
+import net.sf.saxon.s9api.XdmAtomicValue;
+import net.sf.saxon.s9api.XdmValue;
+import net.sf.saxon.s9api.Xslt30Transformer;
+import net.sf.saxon.s9api.XsltCompiler;
+import net.sf.saxon.s9api.XsltExecutable;
+import net.sf.saxon.s9api.XsltTransformer;
 
 public class core {
 	private core() {}
@@ -169,32 +181,54 @@ public class core {
 		}
 	}
 
-	public static int xslt(File source, OutputStream destination, File stylesheet, String... parameters)
-			throws IOException, InterruptedException {
+	private static final PrintStream nullOutputStream = new PrintStream(new OutputStream() { public void write(int b) {}});
 
-		String MY_DIR = System.getenv("MY_DIR");
-		List<String> cmd = new ArrayList<>();
-		for (String a : new String[]{"java", "-cp", MY_DIR + "/Saxon-HE-9.8.0-8.jar", "net.sf.saxon.Transform",
-		                             "-s:" + source,
-		                             "-xsl:" + stylesheet})
-			cmd.add(a);
-		String key = null;
-		for (String p : parameters)
-			if (key == null)
-				if (p == null)
-					throw new IllegalArgumentException("parameter key must not be null");
-				else
-					key = p;
-			else {
-				cmd.add(key + "=" + p);
-				key = null; }
-		if (key != null)
-			throw new IllegalArgumentException("no value specified for parameter " + key);
-		return captureOutput(
-			destination != null
-				? new PrintStream(destination)::println
-				: _x -> {},
-			cmd);
+	public static int xslt(File source, OutputStream destination, File stylesheet, String... parameters) {
+		if (!source.exists())
+			throw new IllegalArgumentException("Source file " + source + " does not exist");
+		if (!stylesheet.exists())
+			throw new IllegalArgumentException("Stylesheet file " + stylesheet + " does not exist");
+		try {
+			Processor processor = new Processor(false);
+			processor.getUnderlyingConfiguration().getDefaultXsltCompilerInfo().setSchemaAware(false);
+			XsltCompiler compiler = processor.newXsltCompiler();
+			Map<QName,XdmValue> paramMap = new HashMap<>(); {
+				String param = null;
+				for (String p : parameters)
+					if (param == null)
+						if (p == null)
+							throw new IllegalArgumentException("parameter key must not be null");
+						else
+							param = p;
+					else {
+						paramMap.put(QName.fromClarkName(param), new XdmAtomicValue(p, ItemType.UNTYPED_ATOMIC));
+						param = null; }
+				if (param != null)
+					throw new IllegalArgumentException("no value specified for parameter " + param);
+			}
+			for (Map.Entry<QName,XdmValue> e : paramMap.entrySet())
+				compiler.setParameter(e.getKey(), e.getValue());
+			XsltExecutable exec = compiler.compile(new StreamSource(stylesheet.toURI().toString()));
+			boolean xslt3 = true;
+			if (xslt3) {
+				Xslt30Transformer transformer = exec.load30();
+				transformer.setStylesheetParameters(paramMap);
+				XdmValue result = transformer.applyTemplates(new StreamSource(source.toURI().toString()));
+				if (destination != null)
+					transformer.newSerializer(new PrintStream(destination)).serializeXdmValue(result);
+			} else {
+				XsltTransformer transformer = exec.load();
+				transformer.setSource(new StreamSource(source.toURI().toString()));
+				Serializer serializer = processor.newSerializer();
+				serializer.setOutputStream(destination != null ? destination : nullOutputStream);
+				transformer.setDestination(serializer);
+				transformer.transform();
+			}
+			return 0;
+		} catch (Throwable e) {
+			e.printStackTrace();
+			return 1;
+		}
 	}
 
 	public static void computeMavenDeps(File effectivePom, File gradlePom, File outputBaseDir, String outputFileName)

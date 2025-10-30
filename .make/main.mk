@@ -28,16 +28,18 @@ CLASSPATH := $(shell                                                            
         List<String> cmd = new ArrayList<>();                                                     \
         cmd.add(javac);                                                                           \
         cmd.add("-cp");                                                                           \
-        cmd.add(classPath.getPath() + File.pathSeparator + "$(MY_DIR)/lib");                      \
+        cmd.add(classPath.getPath() + File.pathSeparator + "$(MY_DIR)/lib"                        \
+                                    + File.pathSeparator + "$(MY_DIR)/lib/Saxon-HE-9.8.0-8.jar"); \
         cmd.add("-d");                                                                            \
         cmd.add(classPath.getPath());                                                             \
         for (File f : javaFiles) cmd.add(f.getPath());                                            \
         exitOnError(captureOutput(err::println, cmd)); }                                          \
     println(classPath.getPath().replace('\\', '/'));                                              )
+CLASSPATH += $(MY_DIR)/lib/Saxon-HE-9.8.0-8.jar
 IMPORTS := build.mvn build.gradle build.mvn.Coords
 STATIC_IMPORTS := build.core.*
 # for use in mvn-release.sh
-SAXON = $(MY_DIR)/Saxon-HE-9.8.0-8.jar
+SAXON = $(MY_DIR)/lib/Saxon-HE-9.8.0-8.jar
 
 export ROOT_DIR MY_DIR TARGET_DIR MVN_SETTINGS MVN_PROPERTIES MVN_LOG MVN_RELEASE_CACHE_REPO M2_HOME MAKE SHELL IMPORTS STATIC_IMPORTS CLASSPATH SAXON
 # MAKECMDGOALS used in gradle-release.sh and mvn-release.sh
