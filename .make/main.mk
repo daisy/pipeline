@@ -36,11 +36,17 @@ CLASSPATH := $(shell                                                            
     println(classPath.getPath().replace('\\', '/'));                                              )
 IMPORTS := build.mvn build.gradle build.mvn.Coords
 STATIC_IMPORTS := build.core.*
+SAXON = $(MY_DIR)/Saxon-HE-9.4.jar
 
-export ROOT_DIR MY_DIR TARGET_DIR MVN_SETTINGS MVN_PROPERTIES MVN_LOG MVN_RELEASE_CACHE_REPO M2_HOME MAKE SHELL IMPORTS STATIC_IMPORTS CLASSPATH
+export ROOT_DIR MY_DIR TARGET_DIR MVN_SETTINGS MVN_PROPERTIES MVN_LOG MVN_RELEASE_CACHE_REPO M2_HOME MAKE SHELL IMPORTS STATIC_IMPORTS CLASSPATH SAXON
 # MAKECMDGOALS used in gradle-release.sh and mvn-release.sh
 export MAKECMDGOALS
 # MAKEFLAGS exported by default
+
+# REPL server can be spawned after the latest environment variable export
+ifneq ($(OS), WINDOWS)
+export JAVA_REPL_PORT := $(shell --spawn-repl-server)
+endif
 
 eval-java = $(ROOT_DIR)/$(SHELL) $(call quote-for-bash,$1)
 
@@ -90,23 +96,9 @@ $(TARGET_DIR)/maven.mk : $(TARGET_DIR)/effective-settings.xml aggregators poms
 		s.println("poms : $$(addsuffix /pom.xml,$$(MAVEN_MODULES))"); \
 	}
 
-# definition of SAXON depends on MVN_LOCAL_REPOSITORY which is defined in maven.mk
-SAXON = $(MVN_LOCAL_REPOSITORY)/net/sf/saxon/Saxon-HE/9.4/Saxon-HE-9.4.jar
-export SAXON
-
-# REPL server can only be spawned after the latest environment variable export
-ifneq ($(OS), WINDOWS)
-export JAVA_REPL_PORT := $(shell --spawn-repl-server)
-endif
-
-$(SAXON) : | .maven-init
-	/* cd into random directory in order to force Maven "stub" project */ \
-	mvn(new File("$(TARGET_DIR)"), \
-	    "org.apache.maven.plugins:maven-dependency-plugin:3.0.0:get", "-Dartifact=net.sf.saxon:Saxon-HE:9.4:jar");
-
 # this recipe is executed only when prerequisites have changed
 # the purpose of the isOutOfDate() is for making "make -B" not affect this rule (to speed thing up)
-$(TARGET_DIR)/effective-pom.xml : poms | $(SAXON) $(MVN_SETTINGS)
+$(TARGET_DIR)/effective-pom.xml : poms | $(MVN_SETTINGS)
 	List<String> modules = new ArrayList<>(); { \
 		traverseModules( \
 			new File("."), \
@@ -179,7 +171,7 @@ $(TARGET_DIR)/gradle-settings/conf/settings.xml : $(MVN_SETTINGS)
 	cp("$<", "$@");
 
 .SECONDARY : .maven-deps.mk
-.maven-deps.mk : $(TARGET_DIR)/effective-pom.xml $(TARGET_DIR)/gradle-pom.xml | $(SAXON)
+.maven-deps.mk : $(TARGET_DIR)/effective-pom.xml $(TARGET_DIR)/gradle-pom.xml
 	computeMavenDeps(new File("$<"), \
 	                 new File("$(word 2,$^)"), \
 	                 new File("$(TARGET_DIR)/mk"), \
