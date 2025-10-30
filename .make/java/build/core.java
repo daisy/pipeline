@@ -176,7 +176,6 @@ public class core {
 			) != 0) {
 			for (String m : modules)
 				rm(new File(new File(outputBaseDir, m), outputFileName));
-			exit(1);
 		};
 	}
 
