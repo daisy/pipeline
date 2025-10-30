@@ -174,7 +174,7 @@ public class core {
 
 		String MY_DIR = System.getenv("MY_DIR");
 		List<String> cmd = new ArrayList<>();
-		for (String a : new String[]{"java", "-cp", MY_DIR + "/Saxon-HE-9.4.jar", "net.sf.saxon.Transform",
+		for (String a : new String[]{"java", "-cp", MY_DIR + "/Saxon-HE-9.8.0-8.jar", "net.sf.saxon.Transform",
 		                             "-s:" + source,
 		                             "-xsl:" + stylesheet})
 			cmd.add(a);

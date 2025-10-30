@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xsl:stylesheet version="2.0"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:map="http://www.w3.org/2005/xpath-functions/map"
                 xmlns:pom="http://maven.apache.org/POM/4.0.0"
                 exclude-result-prefixes="xs pom"
                 xmlns="http://maven.apache.org/POM/4.0.0">
@@ -25,11 +25,21 @@
 	<xsl:variable name="release-dirs" select="tokenize($RELEASE_DIRS, '\s+')"/>
 	
 	<xsl:template match="/">
-		<xsl:call-template name="main">
-			<xsl:with-param name="module" select="$MODULE"/>
-			<xsl:with-param name="module-pom" select="document(concat($ROOT_DIR,'/',$MODULE,'/pom.xml'))"/>
-			<xsl:with-param name="release-dir" select="()"/>
-		</xsl:call-template>
+		<xsl:variable name="makefiles" as="map(*)">
+			<xsl:call-template name="main">
+				<xsl:with-param name="module" select="$MODULE"/>
+				<xsl:with-param name="module-pom" select="document(concat($ROOT_DIR,'/',$MODULE,'/pom.xml'))"/>
+				<xsl:with-param name="release-dir" select="()"/>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:variable name="makefiles" as="map(*)*" select="$makefiles('makefiles')"/>
+		<xsl:for-each select="$makefiles">
+			<xsl:variable name="module" as="xs:string" select=".('module')"/>
+			<xsl:variable name="makefile" as="text()*" select=".('makefile')"/>
+			<xsl:result-document href="{concat($OUTPUT_BASEDIR,'/',$module,'/',$OUTPUT_FILENAME)}" method="text">
+				<xsl:sequence select="$makefile"/>
+			</xsl:result-document>
+		</xsl:for-each>
 	</xsl:template>
 	
 	<xsl:variable name="internal-runtime-dependencies" as="element()">
@@ -60,7 +70,7 @@
 		</pom:projects>
 	</xsl:variable>
 	
-	<xsl:template name="main">
+	<xsl:template name="main" as="map(*)">
 		<xsl:param name="module"/>
 		<xsl:param name="module-pom"/>
 		<xsl:param name="release-dir"/>
@@ -91,17 +101,47 @@
 		</xsl:variable>
 		<xsl:variable name="is-aggregator" as="xs:boolean" select="exists($module-pom/pom:project/pom:modules/pom:module)"/>
 		<xsl:variable name="is-release-dir" as="xs:boolean" select="not($release-dir) and $module=$release-dirs"/>
-		<xsl:variable name="artifacts-and-dependencies" as="element()*"> <!-- (artifactItem | dependency)* -->
-			<xsl:choose>
-				<xsl:when test="$is-aggregator">
-					<xsl:for-each select="$module-pom/pom:project/pom:modules/pom:module">
-						<xsl:variable name="submodule" select="concat($dirname,.)"/>
-						<xsl:variable name="submodule-pom" select="document(concat($ROOT_DIR,'/',$submodule,'/pom.xml'))"/>
+		<xsl:variable name="submodule-results" as="map(*)?">
+			<xsl:if test="$is-aggregator">
+				<xsl:iterate select="$module-pom/pom:project/pom:modules/pom:module">
+					<xsl:param name="artifacts-and-dependencies" as="element()*" select="()"/>
+					<xsl:param name="makefiles" as="map(*)*" select="()"/>
+					<xsl:on-completion>
+						<xsl:sequence select="map{'artifacts-and-dependencies':$artifacts-and-dependencies,
+						                          'makefiles':$makefiles}"/>
+					</xsl:on-completion>
+					<xsl:variable name="submodule" select="concat($dirname,.)"/>
+					<xsl:variable name="submodule-pom" select="document(concat($ROOT_DIR,'/',$submodule,'/pom.xml'))"/>
+					<xsl:variable name="submodule-result" as="map(*)*">
 						<xsl:call-template name="main">
 							<xsl:with-param name="module" select="$submodule"/>
 							<xsl:with-param name="module-pom" select="$submodule-pom"/>
 							<xsl:with-param name="release-dir" select="if ($is-release-dir) then $module else $release-dir"/>
 						</xsl:call-template>
+					</xsl:variable>
+					<xsl:next-iteration>
+						<xsl:with-param name="artifacts-and-dependencies" select="($artifacts-and-dependencies,
+						                                                           $submodule-result('artifacts-and-dependencies'))"/>
+						<xsl:with-param name="makefiles" select="($makefiles,
+						                                          $submodule-result('makefiles'))"/>
+					</xsl:next-iteration>
+				</xsl:iterate>
+			</xsl:if>
+		</xsl:variable>
+		<xsl:variable name="artifacts-and-dependencies" as="element()*"> <!-- (artifactItem | dependency)* -->
+			<xsl:choose>
+				<xsl:when test="$is-aggregator">
+					<xsl:variable name="artifacts-and-dependencies" as="element()*"
+					              select="$submodule-results('artifacts-and-dependencies')"/>
+					<xsl:sequence select="$artifacts-and-dependencies/self::pom:artifactItem"/>
+					<xsl:for-each select="$artifacts-and-dependencies/self::pom:dependency">
+						<xsl:if test="not($artifacts-and-dependencies/self::pom:artifactItem[
+						                      string(pom:groupId)=string(current()/pom:groupId) and
+						                      string(pom:artifactId)=string(current()/pom:artifactId) and
+						                      string(pom:version)=string(current()/pom:version) and
+						                      string(pom:type)=string(current()/pom:type)])">
+							<xsl:sequence select="."/>
+						</xsl:if>
 					</xsl:for-each>
 				</xsl:when>
 				<xsl:otherwise>
@@ -213,26 +253,7 @@
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
-		<xsl:variable name="artifacts-and-dependencies" as="element()*">
-			<xsl:choose>
-				<xsl:when test="$is-aggregator">
-					<xsl:sequence select="$artifacts-and-dependencies/self::pom:artifactItem"/>
-					<xsl:for-each select="$artifacts-and-dependencies/self::pom:dependency">
-						<xsl:if test="not($artifacts-and-dependencies/self::pom:artifactItem[
-						              string(pom:groupId)=string(current()/pom:groupId) and
-						              string(pom:artifactId)=string(current()/pom:artifactId) and
-						              string(pom:version)=string(current()/pom:version) and
-						              string(pom:type)=string(current()/pom:type)])">
-							<xsl:sequence select="."/>
-						</xsl:if>
-					</xsl:for-each>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:sequence select="$artifacts-and-dependencies"/>
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>
-		<xsl:result-document href="{concat($OUTPUT_BASEDIR,'/',$module,'/',$OUTPUT_FILENAME)}" method="text">
+		<xsl:variable name="makefile" as="text()*">
 			<xsl:value-of select="concat($dirname,'VERSION')"/>
 			<xsl:text> := </xsl:text>
 			<xsl:value-of select="$version"/>
@@ -457,7 +478,7 @@
 							<xsl:if test="count($dependencies) &gt; 1">
 								<xsl:text>\&#x0A;&#x09;</xsl:text>
 							</xsl:if>
-							<xsl:sequence select="string-join($dependencies, ' \&#x0A;&#x09;')"/>
+							<xsl:value-of select="string-join($dependencies, ' \&#x0A;&#x09;')"/>
 						</xsl:if>
 					</xsl:if>
 					<xsl:text>&#x0A;</xsl:text>
@@ -482,7 +503,7 @@
 							<xsl:if test="count($dependencies) &gt; 1">
 								<xsl:text>\&#x0A;&#x09;</xsl:text>
 							</xsl:if>
-							<xsl:sequence select="string-join($dependencies, ' \&#x0A;&#x09;')"/>
+							<xsl:value-of select="string-join($dependencies, ' \&#x0A;&#x09;')"/>
 						</xsl:if>
 					</xsl:if>
 					<xsl:text>&#x0A;</xsl:text>
@@ -593,7 +614,7 @@
 							<xsl:if test="count($dependencies) &gt; 1">
 								<xsl:text>\&#x0A;&#x09;</xsl:text>
 							</xsl:if>
-							<xsl:sequence select="string-join($dependencies, ' \&#x0A;&#x09;')"/>
+							<xsl:value-of select="string-join($dependencies, ' \&#x0A;&#x09;')"/>
 						</xsl:if>
 						<xsl:text>&#x0A;</xsl:text>
 				</xsl:if>
@@ -613,8 +634,10 @@
 				<xsl:text>target");</xsl:text>
 				<xsl:text>&#x0A;</xsl:text>
 			</xsl:if>
-		</xsl:result-document>
-		<xsl:sequence select="$artifacts-and-dependencies"/>
+		</xsl:variable>
+		<xsl:variable name="makefile" as="map(*)" select="map{'module':$module,'makefile':$makefile}"/>
+		<xsl:sequence select="map{'artifacts-and-dependencies':$artifacts-and-dependencies,
+		                          'makefiles':(for $r in $submodule-results return $r('makefiles'),$makefile)}"/>
 	</xsl:template>
 	
 	<xsl:template match="pom:project" as="element()*">

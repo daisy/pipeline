@@ -37,7 +37,7 @@ CLASSPATH := $(shell                                                            
 IMPORTS := build.mvn build.gradle build.mvn.Coords
 STATIC_IMPORTS := build.core.*
 # for use in mvn-release.sh
-SAXON = $(MY_DIR)/Saxon-HE-9.4.jar
+SAXON = $(MY_DIR)/Saxon-HE-9.8.0-8.jar
 
 export ROOT_DIR MY_DIR TARGET_DIR MVN_SETTINGS MVN_PROPERTIES MVN_LOG MVN_RELEASE_CACHE_REPO M2_HOME MAKE SHELL IMPORTS STATIC_IMPORTS CLASSPATH SAXON
 # MAKECMDGOALS used in gradle-release.sh and mvn-release.sh
