@@ -129,7 +129,7 @@ $(TARGET_DIR)/effective-pom.xml : poms | $(MVN_SETTINGS)
 							pom, \
 							new FileOutputStream(dest), \
 							new File("$(MY_DIR)/mvn-set-version.xsl"), \
-							"VERSION", v + "-SNAPSHOT")); \
+							"version", v + "-SNAPSHOT")); \
 			} \
 			try { \
 				mvn("-Dworkspace=" + tmpRepo, \
