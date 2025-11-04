@@ -2488,20 +2488,7 @@
 				</xsl:choose>
 			</xsl:when>
 
-			<!--Checking for Bridgehead custom style-->
-			<xsl:when test="(w:pPr/w:pStyle/@w:val='BridgeheadDAISY') and not(parent::w:tc)">
-				<bridgehead>
-					<xsl:call-template name="ParaHandler">
-						<xsl:with-param name="flag" select="'0'"/>
-						<xsl:with-param name="version" select="$version"/>
-						<xsl:with-param name="pagination" select="$pagination"/>
-						<xsl:with-param name="imgOptionPara" select="$imgOptionStyle"/>
-						<xsl:with-param name="dpiPara" select="$dpiStyle"/>
-						<xsl:with-param name="txt" select="$txt"/>
-						<xsl:with-param name="charparahandlerStyle" select="$characterStyle"/>
-					</xsl:call-template>
-				</bridgehead>
-			</xsl:when>
+
 			<xsl:otherwise>
 				<xsl:choose>
 					<!--Cheaking for list heading-->
@@ -3498,6 +3485,23 @@
 					and (count(following-sibling::node()[1]/w:r/w:rPr/w:rStyle[@w:val='DefinitionTermDAISY'])=0)">
 					<xsl:value-of disable-output-escaping="yes" select="'&lt;/dl&gt;'"/>
 				</xsl:if>
+			</xsl:when>
+			<!--Checking for Bridgehead custom style-->
+			<xsl:when test="(w:pPr/w:pStyle/@w:val='BridgeheadDAISY') and not(parent::w:tc)">
+				<xsl:variable name="lang">
+					<xsl:call-template name="GetParagraphLanguage">
+						<xsl:with-param name="paragraphNode" select="." />
+					</xsl:call-template>
+				</xsl:variable>
+				<bridgehead xml:lang="{$lang}">
+					<xsl:call-template name="ParaHandler">
+						<xsl:with-param name="flag" select="'0'"/>
+						<xsl:with-param name="version" select="$version"/>
+						<xsl:with-param name="pagination" select="$pagination"/>
+						<xsl:with-param name="txt" select="$txt"/>
+						<xsl:with-param name="charparahandlerStyle" select="$characterparaStyle"/>
+					</xsl:call-template>
+				</bridgehead>
 			</xsl:when>
 
 			<xsl:when test="$characterparaStyle">
