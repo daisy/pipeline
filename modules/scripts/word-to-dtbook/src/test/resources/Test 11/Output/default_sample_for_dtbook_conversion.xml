@@ -1,29 +1,27 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE dtbook PUBLIC '-//NISO//DTD dtbook 2005-3//EN' 'http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd'[
-	<!ENTITY % MATHML.prefixed "INCLUDE" >
-	<!ENTITY % MATHML.prefix "mml">
-	<!ENTITY % Schema.prefix "sch">
-	<!ENTITY % XLINK.prefix "xlp">
-	<!ENTITY % MATHML.Common.attrib
-		"xlink:href    CDATA       #IMPLIED
-		xlink:type     CDATA       #IMPLIED
-		class          CDATA       #IMPLIED
-		style          CDATA       #IMPLIED
-		id             ID          #IMPLIED
-		xref           IDREF       #IMPLIED
-		other          CDATA       #IMPLIED
-		xmlns:dtbook   CDATA       #FIXED
-			'http://www.daisy.org/z3986/2005/dtbook/'
-		dtbook:smilref CDATA       #IMPLIED">
-	<!ENTITY % mathML2 PUBLIC '-//W3C//DTD MathML 2.0//EN' 'http://www.w3.org/Math/DTD/mathml2/mathml2.dtd'>
-	%mathML2;
-	<!ENTITY % externalFlow "| mml:math">
-	<!ENTITY % externalNamespaces "xmlns:mml CDATA #FIXED
-		'http://www.w3.org/1998/Math/MathML'" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dtbook PUBLIC '-//NISO//DTD dtbook 2005-3//EN' 'http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd' [
+    <!ENTITY % MATHML.prefixed "INCLUDE" >
+    <!ENTITY % MATHML.prefix "mml">
+    <!ENTITY % Schema.prefix "sch">
+    <!ENTITY % XLINK.prefix "xlp">
+    <!ENTITY % MATHML.Common.attrib
+        "xlink:href    CDATA       #IMPLIED
+        xlink:type     CDATA       #IMPLIED
+        class          CDATA       #IMPLIED
+        style          CDATA       #IMPLIED
+        id             ID          #IMPLIED
+        xref           IDREF       #IMPLIED
+        other          CDATA       #IMPLIED
+        xmlns:dtbook   CDATA       #FIXED
+            'http://www.daisy.org/z3986/2005/dtbook/'
+        dtbook:smilref CDATA       #IMPLIED">
+    <!ENTITY % mathML2 PUBLIC '-//W3C//DTD MathML 2.0//EN' 'http://www.w3.org/Math/DTD/mathml2/mathml2.dtd'>
+    %mathML2;
+    <!ENTITY % externalFlow "| mml:math">
+    <!ENTITY % externalNamespaces "xmlns:mml CDATA #FIXED
+              'http://www.w3.org/1998/Math/MathML'" >
 ] >
-<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/"
-        xmlns:mml="http://www.w3.org/1998/Math/MathML"
-        version="2005-3"
-        xml:lang="en-US">
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xmlns:mml="http://www.w3.org/1998/Math/MathML" version="2005-3" xml:lang="en-US">
    <head>
       <meta name="dtb:uid" content="11"/>
       <meta name="dtb:generator" content="DAISY Pipeline 2 word-to-dtbook 1.0.0"/>
@@ -38,7 +36,7 @@
    <book showin="blp">
       <frontmatter>
          <doctitle>Default sample for dtbook conversion</doctitle>
-         <docauthor>Nicolas Pavie</docauthor><level1></level1></frontmatter>
+         <docauthor>Nicolas Pavie</docauthor><level1/></frontmatter>
       <bodymatter id="bodymatter_0001"><level1><p>Sample document</p><covertitle xml:lang="fr-FR">A Cover title of the document.</covertitle><p>This is a sample document for testing the conversion of a word document into a dtbook xml within the pipeline 2.</p><p>This document includes a generated table of content</p></level1><level1 class="print_toc">
             <h1>Table des matières</h1><list type="pl"><li><lic/>
             <lic class="pagenum">  Text processing</lic>
@@ -56,28 +54,21 @@
             <lic class="pagenum">  Equations</lic>
             <lic class="pagenum">  7</lic></li><li><lic/>
             <lic class="pagenum">  Tables</lic>
-            <lic class="pagenum">  7</lic></li></list></level1><level1><h1 xml:lang="fr-FR"></h1></level1><level1><h1>  Text processing</h1><level2><h2>  Text decorations</h2><p>Lorem <em >ipsum dolor sit amet,</em> consectetur adipiscing elit. Suspendisse eros felis, blandit ac vestibulum eget, interdum eu odio. <strong >Curabitur placerat sed urna</strong> eget vestibulum. Etiam consectetur, enim dictum efficitur consequat, lacus elit ultricies orci, quis tincidunt tellus leo id massa. Nulla ac tristique massa. Fusce laoreet facilisis molestie. Quisque rutrum, risus tincidunt aliquet varius<em >, diam <strong >ligula finibus</strong> metus,</em> non gravida augue justo non dui. Donec maximus vel mi auctor eleifend. Quisque sit amet massa vel ipsum consectetur fringilla. Aliquam luctus elementum neque, <strong >sit amet <em >tristique urna</em> tempus id. Mauris vitae</strong> libero ut mi finibus malesuada sit amet <sup >eu tortor</sup>. Vivamus <sub >eleifend fermentum</sub> rhoncus. Fusce <sup >eleifend <strong >orci</strong> tempus</sup> libero fringilla, at gravida <sub >libero <em >vulputate</em>. Sed</sub> ac volutpat nisl. Suspendisse sed ornare sem. </p></level2><level2><h2>  Text alignment</h2><p>Nullam sit amet arcu molestie, aliquet quam vitae, scelerisque mauris. Duis orci tortor, eleifend a dui ut, bibendum ultricies est. Pellentesque lacinia leo lacinia elit eleifend placerat. Etiam justo tellus, rutrum in justo eu, laoreet porttitor urna. Integer fringilla elit quis magna sollicitudin, eu cursus nisi consequat. Suspendisse eget dolor cursus, vulputate nisl id, pharetra orci. Morbi tincidunt convallis nulla sed mattis. Donec ac eleifend nulla. In consectetur augue nisi, eu vestibulum nisl pulvinar et.</p><p>Nam volutpat molestie magna vitae porta. Cras commodo neque ut nulla efficitur, sit amet dapibus massa mattis. Aenean sit amet ante fringilla, auctor arcu ut, interdum velit. Vestibulum porttitor quam a urna tempus bibendum. Fusce orci augue, pharetra sit amet nisl dictum, dignissim finibus mauris. Curabitur vestibulum accumsan leo. Sed eget gravida tortor, at egestas massa. Donec sit amet erat et diam commodo blandit non a velit. Vivamus sit amet elementum ex. Praesent consectetur, magna id luctus gravida, elit metus ullamcorper lorem, ut imperdiet eros ipsum id nulla. Aenean sit amet maximus sapien. Ut neque metus, consectetur eu metus nec, efficitur tincidunt lectus. Donec sollicitudin, justo nec malesuada volutpat, nulla ante bibendum urna, id accumsan felis ante ut diam<noteref idref="#footnote-1" class="Footnote">1</noteref>. </p><p>Sed faucibus metus tortor, non aliquam est malesuada quis. Vivamus lobortis nibh et libero pharetra, eget blandit tellus suscipit. Quisque congue mauris a dui congue placerat. Nunc egestas nisi sit amet mi tempus vehicula eget eget libero. Praesent ullamcorper lacus fringilla libero varius, ac lobortis tortor fringilla. Sed tincidunt nulla ac augue ullamcorper viverra. Vestibulum vestibulum, urna id consequat vehicula, eros ligula sollicitudin leo, non hendrerit nulla purus eget tellus. Etiam id bibendum ante, quis dapibus massa. </p><p>Quisque id ultrices velit, ut lacinia lorem. Phasellus a aliquam ex, vitae sodales odio. Praesent pellentesque sapien quis commodo placerat. Praesent vel lectus facilisis, eleifend eros vel, convallis metus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque pretium tincidunt diam ut aliquam. Quisque cursus tortor laoreet, tristique lorem id, iaculis purus. Fusce blandit turpis turpis, id vestibulum metus mattis in. Maecenas tristique gravida lobortis. </p><note id="footnote-1" class="Footnote"><p xml:lang="fr-FR"> This is a simple footnote with some text</p></note></level2><level2><h2>  Manually inserted breaks</h2><p xml:lang="fr-FR"></p><p>This is a first text<noteref idref="#footnote-2" class="Footnote">2</noteref> followed by a page break :</p><p>This is a second text followed by a continous section break:</p><p>This is a third text<noteref idref="#endnote-1" class="Endnote">1</noteref> followed by a section page break : </p><p>This is a text followed by a section break to pair page : </p><p>This is a text followed by a section break to impair page </p><p xml:lang="fr-FR"></p><note id="footnote-2" class="Footnote"><p xml:lang="fr-FR"> This a seconde sample texte with an <a href="https://daisy.org/?s=SaveAsDAISY&amp;test-of-text" external="true">hyperlink</a> to a page</p></note></level2></level1><level1><h1>  Eléments and objects</h1><level2><h2>  Images</h2><p>This an isolated image :</p><p><imggroup>
-            <img src="default_sample_for_dtbook_conversion-Image%201.jpg"
-                 alt="The daisy consortium logo"
-                 id="rId71"/>
+            <lic class="pagenum">  7</lic></li></list></level1><level1><h1 xml:lang="fr-FR"/></level1><level1><h1>  Text processing</h1><level2><h2>  Text decorations</h2><p xml:lang="fr-FR"><span xml:lang="en-US">Lorem <em>ipsum dolor sit amet,</em> consectetur adipiscing elit. </span>Suspendisse eros felis, blandit ac vestibulum eget, interdum eu odio. <strong>Curabitur placerat sed urna</strong> eget vestibulum. Etiam consectetur, enim dictum efficitur consequat, lacus elit ultricies orci, quis tincidunt tellus leo id massa. Nulla ac tristique massa. Fusce laoreet facilisis molestie. Quisque rutrum, risus tincidunt aliquet varius<em>, diam <strong>ligula finibus</strong> metus,</em> non gravida augue justo non dui. Donec maximus vel mi auctor eleifend. Quisque sit amet massa vel ipsum consectetur fringilla. Aliquam luctus elementum neque, <strong>sit amet <em>tristique urna</em> tempus id. Mauris vitae</strong> libero ut mi finibus malesuada sit amet <sup>eu tortor</sup>. Vivamus <sub>eleifend fermentum</sub> rhoncus. Fusce <sup>eleifend <strong>orci</strong> tempus</sup> libero fringilla, at gravida <sub>libero <em>vulputate</em>. Sed</sub> ac volutpat nisl. Suspendisse sed ornare sem. </p></level2><level2><h2 xml:lang="fr-FR">  Text alignment</h2><p xml:lang="fr-FR">Nullam sit amet arcu molestie, aliquet quam vitae, scelerisque mauris. Duis orci tortor, eleifend a dui ut, bibendum ultricies est. Pellentesque lacinia leo lacinia elit eleifend placerat. Etiam justo tellus, rutrum in justo eu, laoreet porttitor urna. Integer fringilla elit quis magna sollicitudin, eu cursus nisi consequat. Suspendisse eget dolor cursus, vulputate nisl id, pharetra orci. Morbi tincidunt convallis nulla sed mattis. Donec ac eleifend nulla. In consectetur augue nisi, eu vestibulum nisl pulvinar et.</p><p xml:lang="fr-FR">Nam volutpat molestie magna vitae porta. Cras commodo neque ut nulla efficitur, sit amet dapibus massa mattis. Aenean sit amet ante fringilla, auctor arcu ut, interdum velit. Vestibulum porttitor quam a urna tempus bibendum. Fusce orci augue, pharetra sit amet nisl dictum, dignissim finibus mauris. <span xml:lang="en-US">Curabitur vestibulum accumsan leo. Sed eget gravida tortor, at egestas massa. </span>Donec sit amet erat et diam commodo blandit non a velit. Vivamus sit amet elementum ex. Praesent consectetur, magna id luctus gravida, elit metus ullamcorper lorem, ut imperdiet eros ipsum id nulla. Aenean sit amet maximus sapien. Ut neque metus, consectetur eu metus nec, efficitur tincidunt lectus. Donec sollicitudin, justo nec malesuada volutpat, nulla ante bibendum urna, id accumsan felis ante ut diam<noteref idref="#footnote-1" class="Footnote">1</noteref>. </p><p xml:lang="fr-FR">Sed faucibus metus tortor, non aliquam est malesuada quis. Vivamus lobortis nibh et libero pharetra, eget blandit tellus suscipit. Quisque congue mauris a dui congue placerat. Nunc egestas nisi sit amet mi tempus vehicula eget eget libero. Praesent ullamcorper lacus fringilla libero varius, ac lobortis tortor fringilla. Sed tincidunt nulla ac augue ullamcorper viverra. Vestibulum vestibulum, urna id consequat vehicula, eros ligula sollicitudin leo, non hendrerit nulla purus eget tellus. Etiam id bibendum ante, quis dapibus massa. </p><p xml:lang="fr-FR">Quisque id ultrices velit, ut lacinia lorem. Phasellus a aliquam ex, vitae sodales odio. Praesent pellentesque sapien quis commodo placerat. Praesent vel lectus facilisis, eleifend eros vel, convallis metus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque pretium tincidunt diam ut aliquam. Quisque cursus tortor laoreet, tristique lorem id, iaculis purus. Fusce blandit turpis turpis, id vestibulum metus mattis in. Maecenas tristique gravida lobortis. </p><note id="footnote-1" class="Footnote"><p> This is a simple footnote with some text</p></note></level2><level2><h2>  Testing special blocks</h2><p>This is a paragraph</p><sidebar xml:lang="fr-FR" render="optional"><hd>This is a head for</hd><p xml:lang="fr-FR">a sidebar optional</p></sidebar><sidebar xml:lang="fr-FR" render="required"><hd>This is a head for</hd><p xml:lang="fr-FR">a sidebar required</p></sidebar><poem xml:lang="fr-FR"><linegroup xml:lang="fr-FR"><line>This is a simple poem.</line>
+         <line>With 2 lines of texte.</line></linegroup></poem><p>A separation paragrpahe.</p><sidebar xml:lang="fr-FR" render="optional"><p xml:lang="fr-FR">This is a sidebar as last element</p></sidebar></level2><level2><h2>  Manually inserted breaks</h2><p xml:lang="fr-FR"/><p>This is a first text<noteref idref="#footnote-2" class="Footnote">2</noteref> followed by a page break :</p><p>This is a second text followed by a continous section break:</p><p>This is a third text<noteref idref="#endnote-1" class="Endnote">1</noteref> followed by a section page break : </p><p>This is a text followed by a section break to pair page : </p><p>This is a text followed by a section break to impair page </p><p xml:lang="fr-FR"/><note id="footnote-2" class="Footnote"><p> This a seconde sample texte with an <a href="https://daisy.org/?s=SaveAsDAISY&amp;test-of-text" external="true">hyperlink</a> to a page</p></note></level2></level1><level1><h1>  Eléments and objects</h1><level2><h2>  Images</h2><p>This an isolated image :</p><p><imggroup>
+            <img src="default_sample_for_dtbook_conversion-Image%201.jpg" alt="The daisy consortium logo" id="rId71"/>
             <caption imgref="rId71">The daisy consortium logo</caption>
          </imggroup></p><p>This is an inlined <imggroup>
-            <img src="default_sample_for_dtbook_conversion-Image%202.jpg"
-                 alt="The daisy consortium logo"
-                 id="rId82"/>
+            <img src="default_sample_for_dtbook_conversion-Image%202.jpg" alt="The daisy consortium logo" id="rId82"/>
             <caption imgref="rId82" xml:lang="en-US">The daisy consortium logo </caption>
          </imggroup>  images.</p><p>Here is <imggroup>
-            <img src="default_sample_for_dtbook_conversion-Image%203.jpg"
-                 alt="The daisy consortium logo"
-                 id="rId93"/>
+            <img src="default_sample_for_dtbook_conversion-Image%203.jpg" alt="The daisy consortium logo" id="rId93"/>
          </imggroup>and <imggroup>
-            <img src="default_sample_for_dtbook_conversion-Image%204.jpg"
-                 alt="The daisy consortium logo"
-                 id="rId104"/>
-         </imggroup>image.</p><p>This is an integrated shape (with caption):</p><p></p><p></p><p>This is a « SmartArt » insertion with caption</p><p><span>Diagramme 8: This a simple process illustration with 3 text box from left to right separated by arrows pointing to the right :
+            <img src="default_sample_for_dtbook_conversion-Image%204.jpg" alt="The daisy consortium logo" id="rId104"/>
+         </imggroup>image.</p><p>This is an integrated shape (with caption):</p><p/><p/><p>This is a « SmartArt » insertion with caption</p><p><span>Diagramme 8: This a simple process illustration with 3 text box from left to right separated by arrows pointing to the right :
 - sample
 - Analysis
-- text </span></p><p>Smart art example 1</p><p>Trying a chart</p><p><span>Graphique 3: Simple chart for conversion tests</span></p></level2><level2><h2>  Equations</h2><p>This a test<noteref idref="#endnote-2" class="Endnote">2</noteref> with an basic equation</p><p xml:lang="fr-FR"><mml:math>
+- text </span></p><p>Smart art example 1</p><p>Trying a chart</p><p><span>Graphique 3: Simple chart for conversion tests</span></p></level2><level2><h2>  Equations</h2><p>This a test<noteref idref="#endnote-2" class="Endnote">2</noteref> with an basic equation</p><p xml:lang="fr-FR"><mml:math xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/">
             <mml:msup>
                <mml:mrow>
                   <mml:mfenced>
@@ -163,7 +154,7 @@
                   <td><p> zeza</p></td>
                </tr>
             </tbody>
-         </table><p xml:lang="fr-FR"></p><p>The same table with a caption</p><table border="1">
+         </table><p xml:lang="fr-FR"/><p>The same table with a caption</p><table border="1">
             <tbody>
                <tr>
                   <td><p>Header 1</p></td>
@@ -223,11 +214,11 @@
                   <td><p> zeza</p></td>
                </tr>
             </tbody>
-         </table><p xml:lang="fr-FR"></p></level2></level1></bodymatter>
+         </table><p xml:lang="fr-FR"/></level2></level1></bodymatter>
       <rearmatter>
          <level1>
-            <note id="endnote-1" class="Endnote"><p xml:lang="fr-FR"> This is a simple endote</p></note>
-            <note id="endnote-2" class="Endnote"><p xml:lang="fr-FR"> This is an exemple of endnote with an <a href="https://daisy.org/?s=SaveAsDAISY&amp;test-of-text" external="true">hyperlink</a> and<sup >1</sup> <strong >other</strong> <em >things</em>.<sub > 3</sub></p></note>
-         </level1><level1></level1></rearmatter>
+            <note id="endnote-1" class="Endnote"><p> This is a simple endote</p></note>
+            <note id="endnote-2" class="Endnote"><p> This is an exemple of endnote with an <a href="https://daisy.org/?s=SaveAsDAISY&amp;test-of-text" external="true">hyperlink</a> and<sup>1</sup> <strong>other</strong> <em>things</em>.<sub> 3</sub></p></note>
+         </level1><level1/></rearmatter>
    </book>
 </dtbook>
