@@ -295,9 +295,9 @@
 				<xsl:attribute name="xml:lang">
 					<xsl:value-of select="$documentLanguages/*:lang[1]/@*:val"/>
 				</xsl:attribute>
-				<xsl:variable name="documentDate" as="xs:string" select="$docPropsCoreXml//cp:coreProperties/dcterms:modified" />
-				<xsl:variable name="documentSubject" as="xs:string" select="d:DocPropSubject($myObj)" />
-				<xsl:variable name="documentDescription" as="xs:string" select="d:DocPropDescription($myObj)" />
+				<xsl:variable name="documentDate" as="xs:string?" select="$docPropsCoreXml//cp:coreProperties/dcterms:modified" />
+				<xsl:variable name="documentSubject" as="xs:string?" select="d:DocPropSubject($myObj)" />
+				<xsl:variable name="documentDescription" as="xs:string?" select="d:DocPropDescription($myObj)" />
 				<!--Adding head element-->
 				<head>
 					<!--Adding head element-->
