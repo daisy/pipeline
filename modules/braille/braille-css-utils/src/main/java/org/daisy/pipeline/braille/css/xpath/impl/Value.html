@@ -98,9 +98,9 @@
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">if</strong> (parent != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException();
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<strong class="jxr_keyword">if</strong> (value instanceof PropertyValue)
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  			<strong class="jxr_keyword">return</strong> BrailleCssSerializer.serializePropertyValue((PropertyValue)value);
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  			<strong class="jxr_keyword">return</strong> BrailleCssSerializer.getInstance().serializePropertyValue((PropertyValue)value);
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (value != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  			<strong class="jxr_keyword">return</strong> BrailleCssSerializer.serializeTermList(value);
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  			<strong class="jxr_keyword">return</strong> BrailleCssSerializer.getInstance().serializeTermList(value);
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  			<strong class="jxr_keyword">return</strong> <span class="jxr_string">""</span>;
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  	}
@@ -113,11 +113,11 @@
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 	@Override
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> toXml(XMLStreamWriter writer) <strong class="jxr_keyword">throws</strong> XMLStreamException {
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">if</strong> (value instanceof ContentList)
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 			BrailleCssSerializer.toXml((ContentList)value, writer);
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 			BrailleCssSerializer.getInstance().toXml((ContentList)value, writer);
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (value instanceof CounterSetList)
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 			BrailleCssSerializer.toXml((CounterSetList)value, writer);
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 			BrailleCssSerializer.getInstance().toXml((CounterSetList)value, writer);
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (value instanceof StringSetList)
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 			BrailleCssSerializer.toXml((StringSetList)value, writer);
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 			BrailleCssSerializer.getInstance().toXml((StringSetList)value, writer);
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 	}
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> }
 </pre>

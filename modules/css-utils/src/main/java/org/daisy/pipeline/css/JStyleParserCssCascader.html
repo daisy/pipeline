@@ -379,7 +379,7 @@
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> 								<strong class="jxr_keyword">if</strong> (data != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L371" href="#L371">371</a> 									Term&lt;?&gt; value = data.getValue(property, <strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> 									<strong class="jxr_keyword">if</strong> (value != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 										<strong class="jxr_keyword">return</strong> Optional.of(serializeValue(value));
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 										<strong class="jxr_keyword">return</strong> Optional.of(serializeValue(value, property));
 <a class="jxr_linenumber" name="L374" href="#L374">374</a> 									<strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L375" href="#L375">375</a> 										CSSProperty p = data.getProperty(property);
 <a class="jxr_linenumber" name="L376" href="#L376">376</a> 										<strong class="jxr_keyword">if</strong> (p != <strong class="jxr_keyword">null</strong>)
@@ -480,7 +480,7 @@
 <a class="jxr_linenumber" name="L471" href="#L471">471</a> 
 <a class="jxr_linenumber" name="L472" href="#L472">472</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">abstract</strong> Map&lt;QName,String&gt; serializeStyle(NodeData mainStyle, Map&lt;PseudoElement,NodeData&gt; pseudoStyles, Element context);
 <a class="jxr_linenumber" name="L473" href="#L473">473</a> 
-<a class="jxr_linenumber" name="L474" href="#L474">474</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">abstract</strong> String serializeValue(Term&lt;?&gt; value);
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">abstract</strong> String serializeValue(Term&lt;?&gt; value, String property);
 <a class="jxr_linenumber" name="L475" href="#L475">475</a> 
 <a class="jxr_linenumber" name="L476" href="#L476">476</a> 	<strong class="jxr_keyword">protected</strong> StyleSheet getParsedStyleSheet() {
 <a class="jxr_linenumber" name="L477" href="#L477">477</a> 		<strong class="jxr_keyword">if</strong> (styleSheet == <strong class="jxr_keyword">null</strong>)

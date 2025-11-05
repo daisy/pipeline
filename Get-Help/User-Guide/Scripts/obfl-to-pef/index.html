@@ -1040,6 +1040,19 @@ braille is assumed.</li>
   <ul class="synopsis-outputs">
 <li class="synopsis-output details-on">
 <div class="toggle-details"></div>
+<div class="synopsis-output-name">Output file</div>
+<div class="synopsis-output-desc">
+The output braille file.
+</div>
+<div class="synopsis-output-media-type">
+<b>Media-type</b>:
+<ul class="media-types">
+<li>text</li>
+</ul>
+</div>
+</li>
+<li class="synopsis-output details-on">
+<div class="toggle-details"></div>
 <div class="synopsis-output-name">PDF</div>
 <div class="synopsis-output-desc">
 A PDF version of the braille showing ASCII braille.
@@ -1066,19 +1079,6 @@ The intermediary PEF file.
 </li>
 <li class="synopsis-output details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-output-name">Output file</div>
-<div class="synopsis-output-desc">
-The output braille file.
-</div>
-<div class="synopsis-output-media-type">
-<b>Media-type</b>:
-<ul class="media-types">
-<li>text</li>
-</ul>
-</div>
-</li>
-<li class="synopsis-output details-on">
-<div class="toggle-details"></div>
 <div class="synopsis-output-name">Preview</div>
 <div class="synopsis-output-desc">
 An HTML preview of the braille result.
@@ -1097,6 +1097,40 @@ An HTML preview of the braille result.
   <ul class="synopsis-options">
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
+<div class="synopsis-option-name">Include preview</div>
+<div class="synopsis-option-desc">
+Whether or not to include a HTML preview of the braille result.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Trimming of overflowing text</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">Allow trimming of overflowing text.
+</div>
+<div class="longdesc">Allow trimming of overflowing text.
+
+<p>By default, text that overflows its containing box will result in an error. By selecting this
+option, overflowing text will be truncated and generate a warning instead whenever
+possible. Notably, this will happen with text within page margins (top, right, bottom and left) that
+is too long to fit the space.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
 <div class="synopsis-option-name">ASCII braille table for HTML preview</div>
 <div class="synopsis-option-desc">
 <div class="shortdesc">The ASCII braille table used to render the HTML and PDF previews.
@@ -1111,6 +1145,32 @@ An HTML preview of the braille result.
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code></code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Hyphenation at page boundaries</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">Whether hyphenation of words at page boundaries is allowed or not.
+</div>
+<div class="longdesc">Whether hyphenation of words at page boundaries is allowed or not.
+
+<p>This option only determines whether hyphenation is allowed at page boundaries. The “Hyphenation”
+option and the CSS determine how the hyphenation is done, when allowed.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: One of the following:<dl class="choice">
+<dt><code>false</code></dt>
+<dd>Never hyphenate words at page boundaries</dd>
+<dt><code>except-at-volume-breaks</code></dt>
+<dd>Allow hyphenation at page boundaries except when it's a volume boundary</dd>
+<dt><code>true</code></dt>
+<dd>Allow hyphenation at page boundaries</dd>
+</dl>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
 </div>
 </li>
 <li class="synopsis-option details-on">
@@ -1151,69 +1211,9 @@ used in the Netherlands and store to a file with extension “.brl”, set the o
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Hyphenation at page boundaries</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">Whether hyphenation of words at page boundaries is allowed or not.
-</div>
-<div class="longdesc">Whether hyphenation of words at page boundaries is allowed or not.
-
-<p>This option only determines whether hyphenation is allowed at page boundaries. The “Hyphenation”
-option and the CSS determine how the hyphenation is done, when allowed.</p>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: One of the following:<dl class="choice">
-<dt><code>false</code></dt>
-<dd>Never hyphenate words at page boundaries</dd>
-<dt><code>except-at-volume-breaks</code></dt>
-<dd>Allow hyphenation at page boundaries except when it's a volume boundary</dd>
-<dt><code>true</code></dt>
-<dd>Allow hyphenation at page boundaries</dd>
-</dl>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
 <div class="synopsis-option-name">Include PDF</div>
 <div class="synopsis-option-desc">
 Whether or not to include a PDF version of the braille result showing ASCII braille.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Include preview</div>
-<div class="synopsis-option-desc">
-Whether or not to include a HTML preview of the braille result.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Trimming of overflowing text</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">Allow trimming of overflowing text.
-</div>
-<div class="longdesc">Allow trimming of overflowing text.
-
-<p>By default, text that overflows its containing box will result in an error. By selecting this
-option, overflowing text will be truncated and generate a warning instead whenever
-possible. Notably, this will happen with text within page margins (top, right, bottom and left) that
-is too long to fit the space.</p>
-</div>
 </div>
 <div class="synopsis-option-data-type">
 <b>Possible values</b>: <code>true</code> or <code>false</code>
@@ -1272,8 +1272,20 @@ Options:</pre>
 </td>
 </tr>
 <tr>
+<td>--include-preview [<span style="text-transform: uppercase">include-preview</span>]</td>
+<td>Include preview (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+</tr>
+<tr>
+<td>--allow-text-overflow-trimming [<span style="text-transform: uppercase">allow-text-overflow-trimming</span>]</td>
+<td>Trimming of overflowing text (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+</tr>
+<tr>
 <td>--preview-table [<span style="text-transform: uppercase">preview-table</span>]</td>
 <td>ASCII braille table for HTML preview (default: <span class="synopsis-option-default"><code></code></span>)</td>
+</tr>
+<tr>
+<td>--hyphenation-at-page-breaks [<span style="text-transform: uppercase">hyphenation-at-page-breaks</span>]</td>
+<td>Hyphenation at page boundaries (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
 </tr>
 <tr>
 <td>--include-pef [<span style="text-transform: uppercase">include-pef</span>]</td>
@@ -1284,20 +1296,8 @@ Options:</pre>
 <td>Output file format (default: <span class="synopsis-option-default"><code></code></span>)</td>
 </tr>
 <tr>
-<td>--hyphenation-at-page-breaks [<span style="text-transform: uppercase">hyphenation-at-page-breaks</span>]</td>
-<td>Hyphenation at page boundaries (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
-</tr>
-<tr>
 <td>--include-pdf [<span style="text-transform: uppercase">include-pdf</span>]</td>
 <td>Include PDF (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
-</tr>
-<tr>
-<td>--include-preview [<span style="text-transform: uppercase">include-preview</span>]</td>
-<td>Include preview (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
-</tr>
-<tr>
-<td>--allow-text-overflow-trimming [<span style="text-transform: uppercase">allow-text-overflow-trimming</span>]</td>
-<td>Trimming of overflowing text (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>

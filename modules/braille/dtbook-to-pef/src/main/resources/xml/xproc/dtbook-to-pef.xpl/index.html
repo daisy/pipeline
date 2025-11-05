@@ -50,9 +50,9 @@
     
     <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">stylesheet</span>"</span><span class="script-inherited"> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"<span property="data-type">anyURI</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="">''</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">sequence</span>=<span class="code-xml-attribute-value">"<span property="sequence" datatype="xsd:boolean">true</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">separator</span>=<span class="code-xml-attribute-value">" "</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">media-type</span>=<span class="code-xml-attribute-value">"text/css text/x-scss"</span></span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;<span property="name" content="Style sheets">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Style sheets&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
-          <span property="desc" content="A list of CSS/Sass style sheets to take into account.
+          <span property="desc" content="CSS/Sass style sheets to take into account.
 
-Must be a space separated list of URIs, absolute or relative to the input.
+Each style sheet must be specified as a URI, absolute or relative to the input.
 
 Style sheets specified through this option are called &quot;[user style
 sheets](https://www.w3.org/TR/CSS2/cascade.html#cascade)&quot;. Style sheets can also be attached to the
@@ -87,9 +87,9 @@ sheet modules) are available for use in Sass style sheets:
   for styling definition lists
 - [http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/_legacy.scss](http://daisy.github.io/pipeline/modules/braille/dtbook-to-pef/src/main/resources/css/_legacy.scss/):
   collection of styles that used to be included by default
-">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;A list of CSS/Sass style sheets to take into account.
+">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;CSS/Sass style sheets to take into account.
 
-Must be a space separated list of URIs, absolute or relative to the input.
+Each style sheet must be specified as a URI, absolute or relative to the input.
 
 Style sheets specified through this option are called "[user style
 sheets](https://www.w3.org/TR/CSS2/cascade.html#cascade)". Style sheets can also be attached to the
@@ -243,22 +243,68 @@ If left blank, the locale information in the input document will be used to sele
 		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;</span>&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
 
     
-    <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">page-width</span>"</span><span class="script-inherited"> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"<span property="data-type">integer</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="40">'40'</span>"</span></span>&gt;<span class="script-inherited">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
+    <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">xs</span>=<span class="code-xml-attribute-value">"http://www.w3.org/2001/XMLSchema"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">page-width</span>"</span><span class="script-inherited"> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default">()</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">cx:</span><span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:string?"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"media-feature"</span></span>&gt;<span class="script-inherited">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipeinfo</span>&gt;<span rel="data-type"><span typeof="data-type" id="data-type-page-width" resource="../dtbook-to-pef.xpl#data-type-page-width"><link rel="doc" href="#data-type-page-width">
+<span property="id" content="px:dtbook-to-pef.script-page-width"><span property="definition" content="
+                &lt;data xmlns:a=&quot;http://relaxng.org/ns/compatibility/annotations/1.0&quot; type=&quot;string&quot;&gt;
+                    &lt;a:documentation xml:lang=&quot;en&quot; xml:space=&quot;preserve&quot;&gt;A length
+
+The syntax is as follows (described in terms of [CSS grammar](https://www.w3.org/TR/CSS21/grammar.html)):
+
+    length
+     : number unit?
+     ;
+    unit
+     : 'mm' | 'cm' | 'in' | 'px' | 'ch'
+     ;
+&lt;/a:documentation&gt;
+                    &lt;param name=&quot;pattern&quot;&gt;^+?([0-9]*\\\\.)?[0-9]+([eE][+-]?[0-9]+)?(mm|cm|in|px|ch)?$&lt;/param&gt;
+                &lt;/data&gt;
+            ">&lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">type</span>&gt;
+                &lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">a</span>=<span class="code-xml-attribute-value">"http://relaxng.org/ns/compatibility/annotations/1.0"</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">lang</span>=<span class="code-xml-attribute-value">"en"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;A length
+
+The syntax is as follows (described in terms of [CSS grammar](https://www.w3.org/TR/CSS21/grammar.html)):
+
+    length
+     : number unit?
+     ;
+    unit
+     : 'mm' | 'cm' | 'in' | 'px' | 'ch'
+     ;
+&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+                    &lt;<span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pattern"</span>&gt;^+?([0-9]*\\.)?[0-9]+([eE][+-]?[0-9]+)?(mm|cm|in|px|ch)?$&lt;/<span class="code-xml-element-local-name">param</span>&gt;
+                &lt;/<span class="code-xml-element-local-name">data</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">type</span>&gt;</span></span></span></span>&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipeinfo</span>&gt;</span><span class="script-inherited">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
             <span property="name" content="Page width">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Page width&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
-            <span property="desc" content="The number of columns available for printing.
+            <span property="desc" content="The width of the targeted medium.
 
-Sets the default page width (this can be overwritten with `@page` rules) and affects media queries
-that use the 'width' feature. The variable `$page-width` is available in Sass style sheets.
+Sets the default page width, and affects media queries that use the 'width' and 'device-width' media
+features. The 'width' media feature describes the width of the targeted display area, i.e. the
+printable area of the page. The 'device-width' media feature describes the total width of the
+rendering surface, i.e. the page width.&amp;#xA;
+Note that the default page width may be overwritten with `@page` rules, but this does not
+affect media queries.
+
+The width may be specified in an absolute (`mm`, `cm`, `in`, ...) or cell-relative (`ch`)
+length. A dimension without a unit is interpreted as a multiple of the braille cell width.
 
 See the CSS specification for more info:
 
 - the [`@page`](http://braillespecs.github.io/braille-css/#h4_the-page-rule) rule
 - the [`size`](http://braillespecs.github.io/braille-css/#the-size-property) property
 - the [page dimensions media features](https://www.w3.org/TR/mediaqueries-4/#mf-dimensions)
-">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;The number of columns available for printing.
+">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;The width of the targeted medium.
 
-Sets the default page width (this can be overwritten with `@page` rules) and affects media queries
-that use the 'width' feature. The variable `$page-width` is available in Sass style sheets.
+Sets the default page width, and affects media queries that use the 'width' and 'device-width' media
+features. The 'width' media feature describes the width of the targeted display area, i.e. the
+printable area of the page. The 'device-width' media feature describes the total width of the
+rendering surface, i.e. the page width.
+
+Note that the default page width may be overwritten with `@page` rules, but this does not
+affect media queries.
+
+The width may be specified in an absolute (`mm`, `cm`, `in`, ...) or cell-relative (`ch`)
+length. A dimension without a unit is interpreted as a multiple of the braille cell width.
 
 See the CSS specification for more info:
 
@@ -267,22 +313,63 @@ See the CSS specification for more info:
 - the [page dimensions media features](https://www.w3.org/TR/mediaqueries-4/#mf-dimensions)
 &lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;</span>&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
-    <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">page-height</span>"</span><span class="script-inherited"> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"<span property="data-type">integer</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="25">'25'</span>"</span></span>&gt;<span class="script-inherited">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
+    <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">xs</span>=<span class="code-xml-attribute-value">"http://www.w3.org/2001/XMLSchema"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">page-height</span>"</span><span class="script-inherited"> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default">()</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">cx:</span><span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:string?"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"media-feature"</span></span>&gt;<span class="script-inherited">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipeinfo</span>&gt;<span rel="data-type"><span typeof="data-type" id="data-type-page-height" resource="../dtbook-to-pef.xpl#data-type-page-height"><link rel="doc" href="#data-type-page-height">
+<span property="id" content="px:dtbook-to-pef.script-page-height"><span property="definition" content="
+                &lt;data xmlns:a=&quot;http://relaxng.org/ns/compatibility/annotations/1.0&quot; type=&quot;string&quot;&gt;
+                    &lt;a:documentation xml:lang=&quot;en&quot; xml:space=&quot;preserve&quot;&gt;A length
+
+The syntax is as follows (described in terms of [CSS grammar](https://www.w3.org/TR/CSS21/grammar.html)):
+
+    length
+     : number unit?
+     ;
+    unit
+     : 'mm' | 'cm' | 'in' | 'px' | 'em'
+     ;
+&lt;/a:documentation&gt;
+                    &lt;param name=&quot;pattern&quot;&gt;^+?([0-9]*\\\\.)?[0-9]+([eE][+-]?[0-9]+)?(mm|cm|in|px|em)?$&lt;/param&gt;
+                &lt;/data&gt;
+            ">&lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">type</span>&gt;
+                &lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">a</span>=<span class="code-xml-attribute-value">"http://relaxng.org/ns/compatibility/annotations/1.0"</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">lang</span>=<span class="code-xml-attribute-value">"en"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;A length
+
+The syntax is as follows (described in terms of [CSS grammar](https://www.w3.org/TR/CSS21/grammar.html)):
+
+    length
+     : number unit?
+     ;
+    unit
+     : 'mm' | 'cm' | 'in' | 'px' | 'em'
+     ;
+&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+                    &lt;<span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pattern"</span>&gt;^+?([0-9]*\\.)?[0-9]+([eE][+-]?[0-9]+)?(mm|cm|in|px|em)?$&lt;/<span class="code-xml-element-local-name">param</span>&gt;
+                &lt;/<span class="code-xml-element-local-name">data</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">type</span>&gt;</span></span></span></span>&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipeinfo</span>&gt;</span><span class="script-inherited">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
             <span property="name" content="Page height">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Page height&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
-            <span property="desc" content="The number of rows available for printing.
+            <span property="desc" content="The height of the targeted medium.
 
-Sets the default page height (this can be overwritten with `@page` rules) and affects media queries
-that use the 'height' feature. The variable `$page-height` is available in Sass style sheets.
+Sets the default page height, and affects media queries that use the 'height' and 'device-height'
+media features. The 'height' media feature describes the height of the targeted display area,
+i.e. the printable area of the page. The 'device-height' media feature describes the total height of
+the rendering surface, i.e. the page height.
+
+The height may be specified in an absolute (`mm`, `cm`, `in`, ...) or cell-relative (`em`)
+length. A dimension without a unit is interpreted as a multiple of the braille cell height.
 
 See the CSS specification for more info:
 
 - the [`@page`](http://braillespecs.github.io/braille-css/#h4_the-page-rule) rule
 - the [`size`](http://braillespecs.github.io/braille-css/#the-size-property) property
 - the [page dimensions media features](https://www.w3.org/TR/mediaqueries-4/#mf-dimensions)
-">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;The number of rows available for printing.
+">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;The height of the targeted medium.
 
-Sets the default page height (this can be overwritten with `@page` rules) and affects media queries
-that use the 'height' feature. The variable `$page-height` is available in Sass style sheets.
+Sets the default page height, and affects media queries that use the 'height' and 'device-height'
+media features. The 'height' media feature describes the height of the targeted display area,
+i.e. the printable area of the page. The 'device-height' media feature describes the total height of
+the rendering surface, i.e. the page height.
+
+The height may be specified in an absolute (`mm`, `cm`, `in`, ...) or cell-relative (`em`)
+length. A dimension without a unit is interpreted as a multiple of the braille cell height.
 
 See the CSS specification for more info:
 
@@ -291,9 +378,25 @@ See the CSS specification for more info:
 - the [page dimensions media features](https://www.w3.org/TR/mediaqueries-4/#mf-dimensions)
 &lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;</span>&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
-    <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">duplex</span>"</span><span class="script-inherited"> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"<span property="data-type">boolean</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="true">'true'</span>"</span></span>&gt;<span class="script-inherited">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
+    <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">xs</span>=<span class="code-xml-attribute-value">"http://www.w3.org/2001/XMLSchema"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">duplex</span>"</span><span class="script-inherited"> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default">()</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">cx:</span><span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:boolean?"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"media-feature"</span></span>&gt;<span class="script-inherited">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
             <span property="name" content="Duplex">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Duplex&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
-            <span property="desc" content="When enabled, will print on both sides of the paper.">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;When enabled, will print on both sides of the paper.&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
+            <span property="desc" content="Whether to print on both sides of the leaves.
+
+Sets the number of printed sides per leaf, and affects media queries that use the '-daisy-duplex'
+media feature.">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;Whether to print on both sides of the leaves.
+
+Sets the number of printed sides per leaf, and affects media queries that use the '-daisy-duplex'
+media feature.&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;</span>&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
+    <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">xs</span>=<span class="code-xml-attribute-value">"http://www.w3.org/2001/XMLSchema"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">saddle-stitch</span>"</span><span class="script-inherited"> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default">()</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">cx:</span><span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:boolean?"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"media-feature"</span></span>&gt;<span class="script-inherited">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
+            <span property="name" content="Saddle stitch (folio binding)">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Saddle stitch (folio binding)&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
+            <span property="desc" content="Whether the targeted medium is bound in folios.
+
+In this mode, sheets of paper are folded once to produce two leaves (four pages). This option
+affects media queries that use the '-daisy-saddle-stitch' media feature.">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;Whether the targeted medium is bound in folios.
+
+In this mode, sheets of paper are folded once to produce two leaves (four pages). This option
+affects media queries that use the '-daisy-saddle-stitch' media feature.&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;</span>&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
 
     
@@ -417,7 +520,7 @@ is too long to fit the space.
     
     
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">in-scope-names</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"in-scope-names"</span>/&gt;
-    &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">delete-parameters</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"input-options"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".01"</span> <span class="code-xml-attribute-local-name">parameter-names</span>=<span class="code-xml-attribute-value">"stylesheet                                            stylesheet-parameters                                            transform                                            braille-code                                            output-file-format                                            include-pef                                            include-preview                                            include-pdf                                            include-obfl                                            include-css                                            result                                            pef                                            preview                                            obfl                                            css                                            temp-dir"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">delete-parameters</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"input-options"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".01"</span> <span class="code-xml-attribute-local-name">parameter-names</span>=<span class="code-xml-attribute-value">"stylesheet                                            stylesheet-parameters                                            transform                                            braille-code                                            output-file-format                                            include-pef                                            include-preview                                            include-pdf                                            include-obfl                                            include-css                                            result                                            pef                                            preview                                            pdf                                            obfl                                            css                                            temp-dir"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"in-scope-names"</span>/&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
@@ -443,7 +546,7 @@ is too long to fit the space.
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"convert"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"status"</span>/&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span>&gt;
         
-        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"medium"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"pf:pef-assert-embossable(                               pf:css-parse-medium((                                 ($output-file-format,'embossed AND (-daisy-format:pef)')[not(.='')][1],                                 map:merge((                                   map:entry('width',$page-width),                                   map:entry('height',$page-height),                                   map:entry('-daisy-duplex',$duplex),                                   map:entry('-daisy-document-locale',(/*/@xml:lang,'und')[1]))))))"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"medium"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"pf:pef-assert-embossable(                               pf:css-parse-medium((                                 ($output-file-format,'embossed AND (-daisy-format:pef)')[not(.='')][1],                                 map:merge((                                   for $page-width in $page-width return map:entry('device-width',$page-width),                                   for $page-height in $page-height return map:entry('device-height',$page-height),                                   for $duplex in $duplex return map:entry('duplex',$duplex),                                   for $saddle-stitch in $saddle-stitch return map:entry('saddle-stitch',$saddle-stitch),                                   map:entry('-daisy-document-locale',(/*/@xml:lang,'und')[1]))))))"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"main"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>/&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">variable</span>&gt;
         

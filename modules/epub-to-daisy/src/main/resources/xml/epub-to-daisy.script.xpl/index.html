@@ -102,9 +102,9 @@ This will remove any existing media overlays in the EPUB.&lt;/<span class="code-
 
 	<span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">_</span>=<span class="code-xml-attribute-value">"tts"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">_:stylesheet</span>"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="">''</span>"</span><span class="script-inherited"> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"<span property="data-type">anyURI</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">sequence</span>=<span class="code-xml-attribute-value">"<span property="sequence" datatype="xsd:boolean">true</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">separator</span>=<span class="code-xml-attribute-value">" "</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">media-type</span>=<span class="code-xml-attribute-value">"text/css text/x-scss"</span></span>&gt;<span class="script-inherited">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
 			<span property="name" content="Style sheets">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Style sheets&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
-			<span property="desc" content="A list of CSS style sheets to take into account.
+			<span property="desc" content="CSS style sheets to take into account.
 
-Must be a space separated list of URIs, absolute or relative to the input.
+Each style sheet must be specified as a URI, absolute or relative to the input.
 
 Style sheets specified through this option are called &quot;[user style
 sheets](https://www.w3.org/TR/CSS2/cascade.html#cascade)&quot;. Style sheets can also be attached to the
@@ -119,9 +119,9 @@ attributes](https://www.w3.org/TR/css-style-attr/)). Only author styles that app
 All style sheets are applied at once, but the order in which they are specified has an influence on
 the [cascading order](https://www.w3.org/TR/CSS2/cascade.html#cascading-order). Author styles take
 precedence over user styles.
-			">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;A list of CSS style sheets to take into account.
+			">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;CSS style sheets to take into account.
 
-Must be a space separated list of URIs, absolute or relative to the input.
+Each style sheet must be specified as a URI, absolute or relative to the input.
 
 Style sheets specified through this option are called "[user style
 sheets](https://www.w3.org/TR/CSS2/cascade.html#cascade)". Style sheets can also be attached to the
@@ -180,9 +180,9 @@ you can control that variable with the following parameters list: `(foo:true)`.&
 
 	<span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">lexicon</span>"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default">p:system-property('d:org.daisy.pipeline.tts.default-lexicon')</span>"</span><span class="script-inherited"> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"<span property="data-type">anyURI</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">sequence</span>=<span class="code-xml-attribute-value">"<span property="sequence" datatype="xsd:boolean">true</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">separator</span>=<span class="code-xml-attribute-value">" "</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">media-type</span>=<span class="code-xml-attribute-value">"application/pls+xml"</span></span>&gt;<span class="script-inherited">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
 			<span property="name" content="Lexicons">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Lexicons&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
-			<span property="desc" content="A list of PLS lexicons to take into account.
+			<span property="desc" content="PLS lexicons to take into account.
 
-Must be a space separated list of URIs, absolute or relative to the input.
+Each lexicon must be specified as a URI, absolute or relative to the input.
 
 Lexicons can also be attached to the source document, using a ['link'
 element](http://kb.daisy.org/publishing/docs/text-to-speech/pls.html#ex-07).
@@ -196,14 +196,13 @@ default rendering.
 The syntax of a PLS lexicon is defined in [Pronunciation Lexicon
 Specification (PLS) Version
 1.0](https://www.w3.org/TR/pronunciation-lexicon), extended with
-regular expression matching. To enable regular expression matching,"></span></span></span>
-</div></body>
-<html><p>xA;add the "regex" attribute, as follows:
+regular expression matching. To enable regular expression matching,
+add the &quot;regex&quot; attribute, as follows:
 
 ~~~xml
-&lt;lexicon xmlns="http://www.w3.org/2005/01/pronunciation-lexicon" version="1.0"
-         alphabet="ipa" xml:lang="en"&gt;
-  &lt;lexeme regex="true"&gt;
+&lt;lexicon xmlns=&quot;http://www.w3.org/2005/01/pronunciation-lexicon&quot; version=&quot;1.0&quot;
+         alphabet=&quot;ipa&quot; xml:lang=&quot;en&quot;&gt;
+  &lt;lexeme regex=&quot;true&quot;&gt;
     &lt;grapheme&gt;([0-9]+)-([0-9]+)&lt;/grapheme&gt;
     &lt;alias&gt;between $1 and $2&lt;/alias&gt;
   &lt;/lexeme&gt;
@@ -214,44 +213,44 @@ The regex feature works only with alias-based substitutions. The regex
 syntax used is that from [XQuery 1.0 and XPath
 2.0](https://www.w3.org/TR/xpath-functions/#regex-syntax).
 
-Whether or not the regex attribute is set to "true", the grapheme
+Whether or not the regex attribute is set to &quot;true&quot;, the grapheme
 matching can be made more accurate by specifying the
-"positive-lookahead" and "negative-lookahead" attributes:
+&quot;positive-lookahead&quot; and &quot;negative-lookahead&quot; attributes:
 
 ~~~xml
-&lt;lexicon version="1.0" xmlns="http://www.w3.org/2005/01/pronunciation-lexicon"
-         alphabet="ipa" xml:lang="en"&gt;
+&lt;lexicon version=&quot;1.0&quot; xmlns=&quot;http://www.w3.org/2005/01/pronunciation-lexicon&quot;
+         alphabet=&quot;ipa&quot; xml:lang=&quot;en&quot;&gt;
   &lt;lexeme&gt;
-    &lt;grapheme positive-lookahead="[ ]+is"&gt;SB&lt;/grapheme&gt;
+    &lt;grapheme positive-lookahead=&quot;[ ]+is&quot;&gt;SB&lt;/grapheme&gt;
     &lt;alias&gt;somebody&lt;/alias&gt;
   &lt;/lexeme&gt;
   &lt;lexeme&gt;
     &lt;grapheme&gt;SB&lt;/grapheme&gt;
     &lt;alias&gt;should be&lt;/alias&gt;
   &lt;/lexeme&gt;
-  &lt;lexeme xml:lang="fr"&gt;
-    &lt;grapheme positive-lookahead="[ ]+[cC]ity"&gt;boston&lt;/grapheme&gt;
+  &lt;lexeme xml:lang=&quot;fr&quot;&gt;
+    &lt;grapheme positive-lookahead=&quot;[ ]+[cC]ity&quot;&gt;boston&lt;/grapheme&gt;
     &lt;phoneme&gt;bɔstøn&lt;/phoneme&gt;
   &lt;/lexeme&gt;
 &lt;/lexicon&gt;
 ~~~
 
-Graphemes with "positive-lookahead" will match if the beginning of
-what follows matches the "position-lookahead" pattern. Graphemes with
-"negative-lookahead" will match if the beginning of what follows does
-not match the "negative-lookahead" pattern. The lookaheads are
+Graphemes with &quot;positive-lookahead&quot; will match if the beginning of
+what follows matches the &quot;position-lookahead&quot; pattern. Graphemes with
+&quot;negative-lookahead&quot; will match if the beginning of what follows does
+not match the &quot;negative-lookahead&quot; pattern. The lookaheads are
 case-sensitive while the grapheme contents are not.
 
 The lexemes are matched in this order:
 
-1. Graphemes with regex="false" come first, no matter if there is a lookahead or not;
-2. then come graphemes with regex="true" and no lookahead;
-3. then graphemes with regex="true" and one or two lookaheads.
+1. Graphemes with regex=&quot;false&quot; come first, no matter if there is a lookahead or not;
+2. then come graphemes with regex=&quot;true&quot; and no lookahead;
+3. then graphemes with regex=&quot;true&quot; and one or two lookaheads.
 
 Within these categories, lexemes are matched in the same order as they
-appear in the lexicons."&gt;&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;A list of PLS lexicons to take into account.
+appear in the lexicons.">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;PLS lexicons to take into account.
 
-Must be a space separated list of URIs, absolute or relative to the input.
+Each lexicon must be specified as a URI, absolute or relative to the input.
 
 Lexicons can also be attached to the source document, using a ['link'
 element](http://kb.daisy.org/publishing/docs/text-to-speech/pls.html#ex-07).
@@ -317,10 +316,10 @@ The lexemes are matched in this order:
 3. then graphemes with regex="true" and one or two lookaheads.
 
 Within these categories, lexemes are matched in the same order as they
-appear in the lexicons.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
-		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+appear in the lexicons.&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;</span>
 		
-	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
 
 	
 
@@ -546,5 +545,5 @@ property.
 		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
 	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">choose</span>&gt;
 
-&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span>&gt;</p></html>
+&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span>&gt;</div></body>
 </html>

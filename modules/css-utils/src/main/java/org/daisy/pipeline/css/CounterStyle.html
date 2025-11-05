@@ -514,13 +514,13 @@
 <a class="jxr_linenumber" name="L505" href="#L505">505</a> 
 <a class="jxr_linenumber" name="L506" href="#L506">506</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> TermIdent readSingleIdent(String property, List&lt;Term&lt;?&gt;&gt; terms) <strong class="jxr_keyword">throws</strong> IllegalArgumentException {
 <a class="jxr_linenumber" name="L507" href="#L507">507</a> 		<strong class="jxr_keyword">if</strong> (terms.size() != 1 || !(terms.get(0) instanceof TermIdent))
-<a class="jxr_linenumber" name="L508" href="#L508">508</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Invalid "</span> + property + <span class="jxr_string">": "</span> + CssSerializer.serializeTermList(terms));
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Invalid "</span> + property + <span class="jxr_string">": "</span> + CssSerializer.getInstance().serializeTermList(terms));
 <a class="jxr_linenumber" name="L509" href="#L509">509</a> 		<strong class="jxr_keyword">return</strong> (TermIdent)terms.get(0);
 <a class="jxr_linenumber" name="L510" href="#L510">510</a> 	}
 <a class="jxr_linenumber" name="L511" href="#L511">511</a> 
 <a class="jxr_linenumber" name="L512" href="#L512">512</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> TermString readSingleString(String property, List&lt;Term&lt;?&gt;&gt; terms) <strong class="jxr_keyword">throws</strong> IllegalArgumentException {
 <a class="jxr_linenumber" name="L513" href="#L513">513</a> 		<strong class="jxr_keyword">if</strong> (terms.size() != 1 || !(terms.get(0) instanceof TermString))
-<a class="jxr_linenumber" name="L514" href="#L514">514</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Invalid "</span> + property + <span class="jxr_string">": "</span> + CssSerializer.serializeTermList(terms));
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Invalid "</span> + property + <span class="jxr_string">": "</span> + CssSerializer.getInstance().serializeTermList(terms));
 <a class="jxr_linenumber" name="L515" href="#L515">515</a> 		<strong class="jxr_keyword">return</strong> (TermString)terms.get(0);
 <a class="jxr_linenumber" name="L516" href="#L516">516</a> 	}
 <a class="jxr_linenumber" name="L517" href="#L517">517</a> 

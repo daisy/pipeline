@@ -971,13 +971,7 @@ page.</p>
   <li>
 <a href="#dtbook-cleaner" id="markdown-toc-dtbook-cleaner">DTBook Cleaner</a>    <ul>
       <li><a href="#table-of-contents" id="markdown-toc-table-of-contents">Table of contents</a></li>
-      <li>
-<a href="#synopsis" id="markdown-toc-synopsis">Synopsis</a>        <ul>
-          <li><a href="#inputs" id="markdown-toc-inputs">Inputs</a></li>
-          <li><a href="#outputs" id="markdown-toc-outputs">Outputs</a></li>
-          <li><a href="#options" id="markdown-toc-options">Options</a></li>
-        </ul>
-      </li>
+      <li><a href="#synopsis" id="markdown-toc-synopsis">Synopsis</a></li>
     </ul>
   </li>
 </ul>
@@ -985,179 +979,6 @@ page.</p>
 <h2 id="synopsis">Synopsis</h2>
 
 <div class="gui-synopsis">
-
-  <h3 id="inputs">Inputs</h3>
-
-  <ul class="synopsis-inputs">
-<li class="synopsis-input details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-input-name">DTBook file(s)</div>
-<div class="synopsis-input-desc">
-One or more DTBook files to be cleaned
-</div>
-<div class="synopsis-input-media-type">
-<b>Media-type</b>:
-<ul class="media-types">
-<li><a href="http://www.niso.org/workrooms/daisy/Z39-86-2005.html" class="media-type external-link" target="_blank">application/x-dtbook+xml</a></li>
-</ul>
-</div>
-<div class="synopsis-input-sequence">
-<b>Sequence</b>: yes</div>
-</li>
-</ul>
-
-  <h3 id="outputs">Outputs</h3>
-
-  <ul class="synopsis-outputs">
-<li class="synopsis-output details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-output-name">DTBook file(s)</div>
-<div class="synopsis-output-desc">
-Cleaned DTBooks
-</div>
-</li>
-</ul>
-
-  <h3 id="options">Options</h3>
-
-  <ul class="synopsis-options">
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Narrator - Publisher</div>
-<div class="synopsis-option-desc">
-Publisher metadata (dc:Publisher) to be added if none is defined in the DTBook
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;string&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code></code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Repair the DTBook</div>
-<div class="synopsis-option-desc">
-Apply repair routines on the DTBook.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Tidy - Externalize whitespaces</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">Externalize leading and trailing whitespace
-</div>
-<div class="longdesc">Externalize leading and trailing whitespace
-
-<p>from em, strong, sub, sup, pagenum, noteref.</p>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Cleanup the document for audio synthesis</div>
-<div class="synopsis-option-desc">
-Apply cleaning routines on the document to prepare it for text-to-speech processes.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Include doctype in resulting DTBook(s)</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">Include doctype in resulting DTBook(s)
-</div>
-<div class="longdesc">Include doctype in resulting DTBook(s)
-
-<p>The resulting DTBook will have a standard DTBook 2005-3 doctype, optionally with MathML declaration
-if MathML is present in the document.</p>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>true</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Tidy up the DTBook</div>
-<div class="synopsis-option-desc">
-Apply tidying routines on the DTBook.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Tidy - Simplify headings layout</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">Simplify the level structure
-</div>
-<div class="longdesc">Simplify the level structure
-
-<p>Redundant level structure is sometimes used to mimic the original layout, but can pose a problem in
-some circumstances. By selecting this option the script simplifies the level structure by removing
-redundant levels (subordinate levels will be moved upwards). Note that the headings of the affected
-levels will also change, which will alter the appearance of the layout.</p>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Apply sentences detection</div>
-<div class="synopsis-option-desc">
-Encapsulate sentences within the document
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Tidy - Document language</div>
-<div class="synopsis-option-desc">
-Set a document language
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;string&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code></code>
-</div>
-</li>
-</ul>
 
   <script type="text/javascript">
 var allElements = [];
@@ -1196,51 +1017,10 @@ if (window.addEventListener) {
 
 <div class="cli-synopsis hidden">
 
-  <pre>Usage: dp2 [GLOBAL_OPTIONS] dtbook-cleaner [OPTIONS]
+  <pre>Usage: dp2 [GLOBAL_OPTIONS]  [OPTIONS]
 
 Options:</pre>
   <table>
-<tr>
-<td>--source <span style="text-transform: uppercase">source</span>
-</td>
-<td>One or more DTBook files to be cleaned</td>
-</tr>
-<tr>
-<td>--publisher [<span style="text-transform: uppercase">publisher</span>]</td>
-<td>Narrator - Publisher (default: <span class="synopsis-option-default"><code></code></span>)</td>
-</tr>
-<tr>
-<td>--repair [<span style="text-transform: uppercase">repair</span>]</td>
-<td>Repair the DTBook (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
-</tr>
-<tr>
-<td>--externalizeWhitespace [<span style="text-transform: uppercase">externalizeWhitespace</span>]</td>
-<td>Tidy - Externalize whitespaces (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
-</tr>
-<tr>
-<td>--narrator [<span style="text-transform: uppercase">narrator</span>]</td>
-<td>Cleanup the document for audio synthesis (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
-</tr>
-<tr>
-<td>--WithDoctype [<span style="text-transform: uppercase">WithDoctype</span>]</td>
-<td>Include doctype in resulting DTBook(s) (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
-</tr>
-<tr>
-<td>--tidy [<span style="text-transform: uppercase">tidy</span>]</td>
-<td>Tidy up the DTBook (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
-</tr>
-<tr>
-<td>--simplifyHeadingLayout [<span style="text-transform: uppercase">simplifyHeadingLayout</span>]</td>
-<td>Tidy - Simplify headings layout (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
-</tr>
-<tr>
-<td>--ApplySentenceDetection [<span style="text-transform: uppercase">ApplySentenceDetection</span>]</td>
-<td>Apply sentences detection (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
-</tr>
-<tr>
-<td>--documentLanguage [<span style="text-transform: uppercase">documentLanguage</span>]</td>
-<td>Tidy - Document language (default: <span class="synopsis-option-default"><code></code></span>)</td>
-</tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>
 <td>Path where to store the results. This option is mandatory when the job is not executed in the background</td>

@@ -107,7 +107,7 @@
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  				MediaQuery q = MediaQueryParser.parse(features);
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  				query = query != <strong class="jxr_keyword">null</strong> ? query.and(q) : q;
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 			}
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		logger.debug(<span class="jxr_string">"Finding medium for query: "</span> + query);
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		logger.info(<span class="jxr_string">"Selecting medium for query: "</span> + query);
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 			<strong class="jxr_keyword">return</strong> mediumProvider.get(query).iterator().next();
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 		} <strong class="jxr_keyword">finally</strong> {

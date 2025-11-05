@@ -357,7 +357,7 @@
 <a class="jxr_linenumber" name="L348" href="#L348">348</a> 													builder.add(ruleblock); }}
 <a class="jxr_linenumber" name="L349" href="#L349">349</a> 										<strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L350" href="#L350">350</a> 											<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"Unexpected style "</span> + block); }
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 									newStyle = BrailleCssSerializer.serializeRuleBlockList(builder); }
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 									newStyle = BrailleCssSerializer.getInstance().serializeRuleBlockList(builder); }
 <a class="jxr_linenumber" name="L352" href="#L352">352</a> 								<strong class="jxr_keyword">if</strong> (!newStyle.isEmpty())
 <a class="jxr_linenumber" name="L353" href="#L353">353</a> 									writeActions.add(w -&gt; writeAttribute(w, attrName, newStyle)); }
 <a class="jxr_linenumber" name="L354" href="#L354">354</a> 							<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (isCell &amp;&amp; _STYLE.equals(attrName))
@@ -1005,7 +1005,7 @@
 <a class="jxr_linenumber" name="L996" href="#L996">996</a> 
 <a class="jxr_linenumber" name="L997" href="#L997">997</a> 		@Override
 <a class="jxr_linenumber" name="L998" href="#L998">998</a> 		<strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L999" href="#L999">999</a> 			<strong class="jxr_keyword">return</strong> BrailleCssSerializer.serializeRuleBlockList(ruleBlocks.values());
+<a class="jxr_linenumber" name="L999" href="#L999">999</a> 			<strong class="jxr_keyword">return</strong> BrailleCssSerializer.getInstance().serializeRuleBlockList(ruleBlocks.values());
 <a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> 		}
 <a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> 	}
 <a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> 
@@ -1289,7 +1289,7 @@
 <a class="jxr_linenumber" name="L1280" href="#L1280">1280</a> 			<strong class="jxr_keyword">if</strong> (lang != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L1281" href="#L1281">1281</a> 				writeAttribute(writer, XML_LANG, lang);
 <a class="jxr_linenumber" name="L1282" href="#L1282">1282</a> 			<strong class="jxr_keyword">if</strong> (style != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L1283" href="#L1283">1283</a> 				String styleAttr = BrailleCssSerializer.toString(style);
+<a class="jxr_linenumber" name="L1283" href="#L1283">1283</a> 				String styleAttr = BrailleCssSerializer.getInstance().toString(style);
 <a class="jxr_linenumber" name="L1284" href="#L1284">1284</a> 				<strong class="jxr_keyword">if</strong> (styleAttr != <strong class="jxr_keyword">null</strong> &amp;&amp; !<span class="jxr_string">""</span>.equals(styleAttr))
 <a class="jxr_linenumber" name="L1285" href="#L1285">1285</a> 					writeAttribute(writer, _STYLE, styleAttr); }
 <a class="jxr_linenumber" name="L1286" href="#L1286">1286</a> 			<strong class="jxr_keyword">for</strong> (WriterEvent action : content)

@@ -1043,6 +1043,81 @@ The resulting EPUB 3 publication.
   <ul class="synopsis-options">
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
+<div class="synopsis-option-name">Enable text-to-speech</div>
+<div class="synopsis-option-desc">
+Whether to use a speech synthesizer to produce audio files.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Style sheet parameters</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">A list of parameters passed to the style sheets.
+</div>
+<div class="longdesc">A list of parameters passed to the style sheets.
+
+<p>Style sheets, whether they’re user style sheets (specified with the “Style sheets” option) or author
+style sheets (associated with the source), may have parameters (Sass variables). This option, which
+takes a comma-separated list of key-value pairs enclosed in parenthesis, can be used to set these
+variables.</p>
+
+<p>For example, if a style sheet uses the Sass variable “foo”:</p>
+
+<pre><code class="language-sass">@if $foo {
+   /* some style that should only be enabled when "foo" is truthy */
+}
+</code></pre>
+
+<p>you can control that variable with the following parameters list: <code>(foo:true)</code>.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <var>&lt;stylesheet-parameters&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>()</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">NIMAS input</div>
+<div class="synopsis-option-desc">
+Whether the input DTBook is a NIMAS 1.1-conformant XML content file.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Chunk size</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">The maximum size of HTML files in kB. Specify "-1" for no maximum.
+</div>
+<div class="longdesc">The maximum size of HTML files in kB. Specify "-1" for no maximum.
+
+<p>Top-level sections in the DTBook become separate HTML files in the resulting EPUB, and are further
+split up if they exceed the given maximum size.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>-1</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
 <div class="synopsis-option-name">Validation</div>
 <div class="synopsis-option-desc">
 Whether to abort on validation issues.
@@ -1065,11 +1140,11 @@ Whether to abort on validation issues.
 <div class="toggle-details"></div>
 <div class="synopsis-option-name">Lexicons</div>
 <div class="synopsis-option-desc">
-<div class="shortdesc">A list of PLS lexicons to take into account.
+<div class="shortdesc">PLS lexicons to take into account.
 </div>
-<div class="longdesc">A list of PLS lexicons to take into account.
+<div class="longdesc">PLS lexicons to take into account.
 
-<p>Must be a space separated list of URIs, absolute or relative to the input.</p>
+<p>Each lexicon must be specified as a URI, absolute or relative to the input.</p>
 
 <p>Lexicons can also be attached to the source document, using a <a href="http://kb.daisy.org/publishing/docs/text-to-speech/pls.html#ex-07" class="external-link" target="_blank">‘link’
 element</a>.</p>
@@ -1147,58 +1222,26 @@ appear in the lexicons.</p>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">NIMAS input</div>
+<div class="synopsis-option-name">Language code</div>
 <div class="synopsis-option-desc">
-Whether the input DTBook is a NIMAS 1.1-conformant XML content file.
+Language code of the input document.
 </div>
 <div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
 </div>
 <div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Enable text-to-speech</div>
-<div class="synopsis-option-desc">
-Whether to use a speech synthesizer to produce audio files.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Chunk size</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">The maximum size of HTML files in kB. Specify "-1" for no maximum.
-</div>
-<div class="longdesc">The maximum size of HTML files in kB. Specify "-1" for no maximum.
-
-<p>Top-level sections in the DTBook become separate HTML files in the resulting EPUB, and are further
-split up if they exceed the given maximum size.</p>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>-1</code>
+<b>Default value</b>: <code></code>
 </div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
 <div class="synopsis-option-name">Style sheets</div>
 <div class="synopsis-option-desc">
-<div class="shortdesc">A list of CSS style sheets to take into account.
+<div class="shortdesc">CSS style sheets to take into account.
 </div>
-<div class="longdesc">A list of CSS style sheets to take into account.
+<div class="longdesc">CSS style sheets to take into account.
 
-<p>Must be a space separated list of URIs, absolute or relative to the input.</p>
+<p>Each style sheet must be specified as a URI, absolute or relative to the input.</p>
 
 <p>Style sheets specified through this option are called “<a href="https://www.w3.org/TR/CSS2/cascade.html#cascade" class="external-link" target="_blank">user style
 sheets</a>”. Style sheets can also be attached to the
@@ -1217,49 +1260,6 @@ precedence over user styles.</p>
 </div>
 <div class="synopsis-option-data-type">
 <b>Possible values</b>: <var>&lt;anyURI&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code></code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Style sheet parameters</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">A list of parameters passed to the style sheets.
-</div>
-<div class="longdesc">A list of parameters passed to the style sheets.
-
-<p>Style sheets, whether they’re user style sheets (specified with the “Style sheets” option) or author
-style sheets (associated with the source), may have parameters (Sass variables). This option, which
-takes a comma-separated list of key-value pairs enclosed in parenthesis, can be used to set these
-variables.</p>
-
-<p>For example, if a style sheet uses the Sass variable “foo”:</p>
-
-<pre><code class="language-sass">@if $foo {
-   /* some style that should only be enabled when "foo" is truthy */
-}
-</code></pre>
-
-<p>you can control that variable with the following parameters list: <code>(foo:true)</code>.</p>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <var>&lt;stylesheet-parameters&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>()</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Language code</div>
-<div class="synopsis-option-desc">
-Language code of the input document.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;string&gt;</var>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code></code>
@@ -1320,6 +1320,22 @@ Options:</pre>
 </td>
 </tr>
 <tr>
+<td>--audio [<span style="text-transform: uppercase">audio</span>]</td>
+<td>Enable text-to-speech (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+</tr>
+<tr>
+<td>--stylesheet-parameters [<span style="text-transform: uppercase">stylesheet-parameters</span>]</td>
+<td>Style sheet parameters (default: <span class="synopsis-option-default"><code>()</code></span>)</td>
+</tr>
+<tr>
+<td>--nimas [<span style="text-transform: uppercase">nimas</span>]</td>
+<td>NIMAS input (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+</tr>
+<tr>
+<td>--_:chunk-size [<span style="text-transform: uppercase">_:chunk-size</span>]</td>
+<td>Chunk size (default: <span class="synopsis-option-default"><code>-1</code></span>)</td>
+</tr>
+<tr>
 <td>--validation [<span style="text-transform: uppercase">validation</span>]</td>
 <td>Validation (default: <span class="synopsis-option-default"><code>abort</code></span>)</td>
 </tr>
@@ -1328,28 +1344,12 @@ Options:</pre>
 <td>Lexicons (default: <span class="synopsis-option-default"><code>p:system-property('d:org.daisy.pipeline.tts.default-lexicon')</code></span>)</td>
 </tr>
 <tr>
-<td>--nimas [<span style="text-transform: uppercase">nimas</span>]</td>
-<td>NIMAS input (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
-</tr>
-<tr>
-<td>--audio [<span style="text-transform: uppercase">audio</span>]</td>
-<td>Enable text-to-speech (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
-</tr>
-<tr>
-<td>--_:chunk-size [<span style="text-transform: uppercase">_:chunk-size</span>]</td>
-<td>Chunk size (default: <span class="synopsis-option-default"><code>-1</code></span>)</td>
+<td>--language [<span style="text-transform: uppercase">language</span>]</td>
+<td>Language code (default: <span class="synopsis-option-default"><code></code></span>)</td>
 </tr>
 <tr>
 <td>--_:stylesheet [<span style="text-transform: uppercase">_:stylesheet</span>]</td>
 <td>Style sheets (default: <span class="synopsis-option-default"><code></code></span>)</td>
-</tr>
-<tr>
-<td>--stylesheet-parameters [<span style="text-transform: uppercase">stylesheet-parameters</span>]</td>
-<td>Style sheet parameters (default: <span class="synopsis-option-default"><code>()</code></span>)</td>
-</tr>
-<tr>
-<td>--language [<span style="text-transform: uppercase">language</span>]</td>
-<td>Language code (default: <span class="synopsis-option-default"><code></code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>

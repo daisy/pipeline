@@ -29,6 +29,19 @@
 
     &lt;<span class="code-xml-element-local-name">doc</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.oxygenxml.com/ns/doc/xsl"</span>&gt;
         &lt;<span class="code-xml-element-local-name">desc</span>&gt;
+            &lt;<span class="code-xml-element-local-name">p</span>&gt;Apply an XML transformer to a node sequence.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">desc</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">doc</span>&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">function</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pf:transform"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"item()*"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"query"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:string"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"source"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"node()*"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">Transform</span>=<span class="code-xml-attribute-value">"org.daisy.pipeline.braille.common.saxon.impl.TransformDefinition$Transform"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"Transform:transform($query,$source)"</span>&gt;
+            
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">function</span>&gt;
+
+    &lt;<span class="code-xml-element-local-name">doc</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.oxygenxml.com/ns/doc/xsl"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">desc</span>&gt;
             &lt;<span class="code-xml-element-local-name">p</span>&gt;Get braille code from language tag.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
         &lt;/<span class="code-xml-element-local-name">desc</span>&gt;
     &lt;/<span class="code-xml-element-local-name">doc</span>&gt;

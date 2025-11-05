@@ -173,13 +173,13 @@
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (relativeTo == <strong class="jxr_keyword">null</strong> &amp;&amp; parent != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 			<em class="jxr_comment">// we may want to remove unneeded declarations</em>
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 			relativeTo = BrailleCssStyle.EMPTY;
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<strong class="jxr_keyword">return</strong> BrailleCssSerializer.toString(style, relativeTo);
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<strong class="jxr_keyword">return</strong> BrailleCssSerializer.getInstance().toString(style, relativeTo);
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 	}
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 	@Override
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 	<strong class="jxr_keyword">protected</strong> String toPrettyString(String indentation) {
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 		<strong class="jxr_keyword">if</strong> (style != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 			<strong class="jxr_keyword">return</strong> BrailleCssSerializer.toString(style, indentation);
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 			<strong class="jxr_keyword">return</strong> BrailleCssSerializer.getInstance().toString(style, indentation);
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 		<strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">""</span>;
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 	}
@@ -203,14 +203,14 @@
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (relativeTo == <strong class="jxr_keyword">null</strong> &amp;&amp; parent != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 			<em class="jxr_comment">// we may want to remove unneeded declarations</em>
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 			relativeTo = BrailleCssStyle.EMPTY;
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		BrailleCssSerializer.toAttributes(style, relativeTo, writer);
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		BrailleCssSerializer.getInstance().toAttributes(style, relativeTo, writer);
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 	}
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 	@Override
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> toXml(XMLStreamWriter writer) <strong class="jxr_keyword">throws</strong> XMLStreamException {
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 		<strong class="jxr_keyword">if</strong> (style != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 			<em class="jxr_comment">// &lt;css:rule&gt;</em>
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 			BrailleCssSerializer.toXml(style, writer);
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 			BrailleCssSerializer.getInstance().toXml(style, writer);
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 	}
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> }
 </pre>

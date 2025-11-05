@@ -37,7 +37,7 @@
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>      <strong class="jxr_keyword">public</strong> <a href="/pipeline/modules/daisy202-to-mp3/src/main/java/org/daisy/pipeline/modules/impl/Module_daisy202_to_mp3.html">Module_daisy202_to_mp3</a>() {
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>          <strong class="jxr_keyword">super</strong>(<span class="jxr_string">"daisy202-to-mp3"</span>,
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>                <span class="jxr_string">"1.1.7"</span>,
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>                <span class="jxr_string">"1.1.8"</span>,
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>                <span class="jxr_string">"DAISY Pipeline 2 module :: DAISY 2.02 to MP3"</span>);
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>      }
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  
@@ -82,20 +82,20 @@
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>              <strong class="jxr_keyword">if</strong> (resource1 == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>                  resource1 = <strong class="jxr_keyword">super</strong>.getResource(<span class="jxr_string">"../xml/daisy202-to-mp3.script.xpl"</span>);
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>              <strong class="jxr_keyword">if</strong> (url.equals(resource1)) {
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>                  tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/file-utils/library.xsl"</span>,
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>                                      <span class="jxr_string">"[4.3.2,5.0.0)"</span>);
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>                  tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/common-utils/library.xsl"</span>,
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>                                      <span class="jxr_string">"[3.2.0,4.0.0)"</span>);
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>                  tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/audio-common/library.xpl"</span>,
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>                                      <span class="jxr_string">"[5.1.6,6.0.0)"</span>);
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>                  tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/smil-utils/clock-functions.xsl"</span>,
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>                                      <span class="jxr_string">"[4.0.3,5.0.0)"</span>);
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>                  tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/common-utils/library.xsl"</span>,
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>                                      <span class="jxr_string">"[3.3.1,4.0.0)"</span>);
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>                  tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/file-utils/library.xsl"</span>,
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>                                      <span class="jxr_string">"[4.3.3,5.0.0)"</span>);
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>                  tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/smil-utils/clock-functions.xsl"</span>,
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>                                      <span class="jxr_string">"[4.0.3,5.0.0)"</span>);
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>                  tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/daisy202-utils/library.xpl"</span>,
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>                                      <span class="jxr_string">"[1.6.5,2.0.0)"</span>);
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>                  tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/common-utils/library.xpl"</span>,
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>                                      <span class="jxr_string">"[3.2.0,4.0.0)"</span>);
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>                  tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/daisy202-utils/library.xpl"</span>,
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>                                      <span class="jxr_string">"[1.6.5,2.0.0)"</span>);
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>                  tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"</span>,
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>                                      <span class="jxr_string">"[7.0.0,8.0.0)"</span>);
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>                                      <span class="jxr_string">"[3.3.1,4.0.0)"</span>);
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>                  tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"</span>,
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>                                      <span class="jxr_string">"[7.0.1,8.0.0)"</span>);
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>                  tryResolveComponent(<span class="jxr_string">"http://www.daisy.org/pipeline/modules/audio-common/library.xpl"</span>,
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>                                      <span class="jxr_string">"[5.1.7,6.0.0)"</span>);
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>                  <strong class="jxr_keyword">return</strong> url;
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>              }
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>          } <strong class="jxr_keyword">catch</strong> (ResolutionException re) {

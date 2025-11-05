@@ -69,7 +69,7 @@
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  	<strong class="jxr_keyword">protected</strong> String toString(<a href="/pipeline/modules/braille/braille-css-utils/src/main/java/org/daisy/pipeline/braille/css/xpath/Style.html">Style</a> parent) {
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  		<strong class="jxr_keyword">if</strong> (parent != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException();
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">return</strong> BrailleCssSerializer.toString(declaration);
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">return</strong> BrailleCssSerializer.getInstance().toString(declaration);
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  	}
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  	@Override
@@ -80,7 +80,7 @@
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  	@Override
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> toXml(XMLStreamWriter writer) <strong class="jxr_keyword">throws</strong> XMLStreamException {
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<em class="jxr_comment">// &lt;css:property&gt;</em>
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		BrailleCssSerializer.toXml(declaration, writer);
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		BrailleCssSerializer.getInstance().toXml(declaration, writer);
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  	}
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  }
 </pre>

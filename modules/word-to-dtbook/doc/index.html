@@ -998,107 +998,9 @@ Output folder of the conversion to DTBook XML
   <ul class="synopsis-options">
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Image resizing</div>
+<div class="synopsis-option-name">Subject(s)</div>
 <div class="synopsis-option-desc">
-
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: One of the following:<dl class="choice">
-<dt><code>original</code></dt>
-<dd>Keep image size</dd>
-<dt><code>resize</code></dt>
-<dd>Resize images</dd>
-<dt><code>resample</code></dt>
-<dd>Resample images</dd>
-</dl>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>original</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Document identifier</div>
-<div class="synopsis-option-desc">
-Identifier to be added as dtb:uid metadata
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;string&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code></code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Footnotes starting value</div>
-<div class="synopsis-option-desc">
-If footnotes numbering is required, start the notes numbering process from this value
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;string&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>1</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Document author</div>
-<div class="synopsis-option-desc">
-
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;string&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code></code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Footnotes number suffix</div>
-<div class="synopsis-option-desc">
-Add a text between the note's number and the note's content.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;string&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code></code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Footnotes insertion level</div>
-<div class="synopsis-option-desc">
-Lowest level into which notes are inserted in content. 0 means the footnotes will be inserted as close as possible of its first call.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;string&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>0</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Accept revisions</div>
-<div class="synopsis-option-desc">
-If the document has revisions that are not accepted, consider them as accepted for the conversion.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;string&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>false()</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Document title</div>
-<div class="synopsis-option-desc">
-
+Subject(s) to be added as dc:Subject metadata
 </div>
 <div class="synopsis-option-data-type">
 <b>Possible values</b>: Any <var>&lt;string&gt;</var>
@@ -1122,35 +1024,73 @@ Add a prefix before the note's number if numbering is requested.
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Subject(s)</div>
+<div class="synopsis-option-name">Pagination mode</div>
 <div class="synopsis-option-desc">
-Subject(s) to be added as dc:Subject metadata
+Define how page numbers are computed and inserted in the result
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: One of the following:<dl class="choice">
+<dt><code>custom</code></dt>
+<dd>Use numbers tagged with the style 'PageNumberDAISY' in the document</dd>
+<dt><code>automatic</code></dt>
+<dd>Use Word page breaks to compute and insert page numbers in content</dd>
+</dl>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>custom</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Footnotes insertion level</div>
+<div class="synopsis-option-desc">
+Lowest level into which notes are inserted in content. 0 means the footnotes will be inserted as close as possible of its first call.
 </div>
 <div class="synopsis-option-data-type">
 <b>Possible values</b>: Any <var>&lt;string&gt;</var>
 </div>
 <div class="synopsis-option-default">
-<b>Default value</b>: <code></code>
+<b>Default value</b>: <code>0</code>
 </div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Document publisher</div>
+<div class="synopsis-option-name">Footnotes position</div>
 <div class="synopsis-option-desc">
-
+Footnotes position in content
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: One of the following:<dl class="choice">
+<dt><code>inline</code></dt>
+<dd>Inline note in content (after the paragraph containing its first reference)</dd>
+<dt><code>end</code></dt>
+<dd>Put notes at the end of a level defined in footnotes insertion level</dd>
+<dt><code>page</code></dt>
+<dd>Put the notes near the page break</dd>
+</dl>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>end</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Image resampling value</div>
+<div class="synopsis-option-desc">
+Image resampling targeted resolution in dpi (dot-per-inch)
 </div>
 <div class="synopsis-option-data-type">
 <b>Possible values</b>: Any <var>&lt;string&gt;</var>
 </div>
 <div class="synopsis-option-default">
-<b>Default value</b>: <code></code>
+<b>Default value</b>: <code>96</code>
 </div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Translate character styles</div>
+<div class="synopsis-option-name">Cleanup the document for audio synthesis</div>
 <div class="synopsis-option-desc">
-
+Apply cleaning routines on the document to prepare it for text-to-speech processes.
 </div>
 <div class="synopsis-option-data-type">
 <b>Possible values</b>: Any <var>&lt;string&gt;</var>
@@ -1174,20 +1114,113 @@ Try to export inline shapes like diagrams or charts during conversion using Micr
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Pagination mode</div>
+<div class="synopsis-option-name">Repair the DTBook</div>
 <div class="synopsis-option-desc">
-Define how page numbers are computed and inserted in the result
+Apply repair routines on the DTBook.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false()</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Document identifier</div>
+<div class="synopsis-option-desc">
+Identifier to be added as dtb:uid metadata
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code></code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Tidy up the DTBook</div>
+<div class="synopsis-option-desc">
+Apply tidying routines on the DTBook.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false()</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Footnotes number suffix</div>
+<div class="synopsis-option-desc">
+Add a text between the note's number and the note's content.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code></code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Footnotes starting value</div>
+<div class="synopsis-option-desc">
+If footnotes numbering is required, start the notes numbering process from this value
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>1</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Apply sentences detection</div>
+<div class="synopsis-option-desc">
+Encapsulate sentences within the document
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false()</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Image resizing</div>
+<div class="synopsis-option-desc">
+
 </div>
 <div class="synopsis-option-data-type">
 <b>Possible values</b>: One of the following:<dl class="choice">
-<dt><code>custom</code></dt>
-<dd>Use numbers tagged with the style 'PageNumberDAISY' in the document</dd>
-<dt><code>automatic</code></dt>
-<dd>Use Word page breaks to compute and insert page numbers in content</dd>
+<dt><code>original</code></dt>
+<dd>Keep image size</dd>
+<dt><code>resize</code></dt>
+<dd>Resize images</dd>
+<dt><code>resample</code></dt>
+<dd>Resample images</dd>
 </dl>
 </div>
 <div class="synopsis-option-default">
-<b>Default value</b>: <code>custom</code>
+<b>Default value</b>: <code>original</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Document title</div>
+<div class="synopsis-option-desc">
+
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code></code>
 </div>
 </li>
 <li class="synopsis-option details-on">
@@ -1212,35 +1245,54 @@ Customize footnotes numbering
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Image resampling value</div>
+<div class="synopsis-option-name">Document publisher</div>
 <div class="synopsis-option-desc">
-Image resampling targeted resolution in dpi (dot-per-inch)
+Publisher metadata (dc:Publisher) to be added
 </div>
 <div class="synopsis-option-data-type">
 <b>Possible values</b>: Any <var>&lt;string&gt;</var>
 </div>
 <div class="synopsis-option-default">
-<b>Default value</b>: <code>96</code>
+<b>Default value</b>: <code></code>
 </div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Footnotes position</div>
+<div class="synopsis-option-name">Translate character styles</div>
 <div class="synopsis-option-desc">
-Footnotes position in content
+
 </div>
 <div class="synopsis-option-data-type">
-<b>Possible values</b>: One of the following:<dl class="choice">
-<dt><code>inline</code></dt>
-<dd>Inline note in content (after the paragraph containing its first reference)</dd>
-<dt><code>end</code></dt>
-<dd>Put notes at the end of a level defined in footnotes insertion level</dd>
-<dt><code>page</code></dt>
-<dd>Put the notes near the page break</dd>
-</dl>
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
 </div>
 <div class="synopsis-option-default">
-<b>Default value</b>: <code>end</code>
+<b>Default value</b>: <code>false()</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Accept revisions</div>
+<div class="synopsis-option-desc">
+If the document has revisions that are not accepted, consider them as accepted for the conversion.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false()</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Document author</div>
+<div class="synopsis-option-desc">
+
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code></code>
 </div>
 </li>
 </ul>
@@ -1292,44 +1344,72 @@ Options:</pre>
 <td>The document you want to convert.</td>
 </tr>
 <tr>
-<td>--image-size [<span style="text-transform: uppercase">image-size</span>]</td>
-<td>Image resizing (default: <span class="synopsis-option-default"><code>original</code></span>)</td>
-</tr>
-<tr>
-<td>--uid [<span style="text-transform: uppercase">uid</span>]</td>
-<td>Document identifier (default: <span class="synopsis-option-default"><code></code></span>)</td>
-</tr>
-<tr>
-<td>--footnotes-start-value [<span style="text-transform: uppercase">footnotes-start-value</span>]</td>
-<td>Footnotes starting value (default: <span class="synopsis-option-default"><code>1</code></span>)</td>
-</tr>
-<tr>
-<td>--creator [<span style="text-transform: uppercase">creator</span>]</td>
-<td>Document author (default: <span class="synopsis-option-default"><code></code></span>)</td>
-</tr>
-<tr>
-<td>--footnotes-numbering-suffix [<span style="text-transform: uppercase">footnotes-numbering-suffix</span>]</td>
-<td>Footnotes number suffix (default: <span class="synopsis-option-default"><code></code></span>)</td>
-</tr>
-<tr>
-<td>--footnotes-level [<span style="text-transform: uppercase">footnotes-level</span>]</td>
-<td>Footnotes insertion level (default: <span class="synopsis-option-default"><code>0</code></span>)</td>
-</tr>
-<tr>
-<td>--accept-revisions [<span style="text-transform: uppercase">accept-revisions</span>]</td>
-<td>Accept revisions (default: <span class="synopsis-option-default"><code>false()</code></span>)</td>
-</tr>
-<tr>
-<td>--title [<span style="text-transform: uppercase">title</span>]</td>
-<td>Document title (default: <span class="synopsis-option-default"><code></code></span>)</td>
+<td>--subject [<span style="text-transform: uppercase">subject</span>]</td>
+<td>Subject(s) (default: <span class="synopsis-option-default"><code></code></span>)</td>
 </tr>
 <tr>
 <td>--footnotes-numbering-prefix [<span style="text-transform: uppercase">footnotes-numbering-prefix</span>]</td>
 <td>Footnotes number prefix (default: <span class="synopsis-option-default"><code></code></span>)</td>
 </tr>
 <tr>
-<td>--subject [<span style="text-transform: uppercase">subject</span>]</td>
-<td>Subject(s) (default: <span class="synopsis-option-default"><code></code></span>)</td>
+<td>--pagination [<span style="text-transform: uppercase">pagination</span>]</td>
+<td>Pagination mode (default: <span class="synopsis-option-default"><code>custom</code></span>)</td>
+</tr>
+<tr>
+<td>--footnotes-level [<span style="text-transform: uppercase">footnotes-level</span>]</td>
+<td>Footnotes insertion level (default: <span class="synopsis-option-default"><code>0</code></span>)</td>
+</tr>
+<tr>
+<td>--footnotes-position [<span style="text-transform: uppercase">footnotes-position</span>]</td>
+<td>Footnotes position (default: <span class="synopsis-option-default"><code>end</code></span>)</td>
+</tr>
+<tr>
+<td>--dpi [<span style="text-transform: uppercase">dpi</span>]</td>
+<td>Image resampling value (default: <span class="synopsis-option-default"><code>96</code></span>)</td>
+</tr>
+<tr>
+<td>--narrator [<span style="text-transform: uppercase">narrator</span>]</td>
+<td>Cleanup the document for audio synthesis (default: <span class="synopsis-option-default"><code>false()</code></span>)</td>
+</tr>
+<tr>
+<td>--extract-shapes [<span style="text-transform: uppercase">extract-shapes</span>]</td>
+<td>Extract vector shapes (Experimental) (default: <span class="synopsis-option-default"><code>false()</code></span>)</td>
+</tr>
+<tr>
+<td>--repair [<span style="text-transform: uppercase">repair</span>]</td>
+<td>Repair the DTBook (default: <span class="synopsis-option-default"><code>false()</code></span>)</td>
+</tr>
+<tr>
+<td>--uid [<span style="text-transform: uppercase">uid</span>]</td>
+<td>Document identifier (default: <span class="synopsis-option-default"><code></code></span>)</td>
+</tr>
+<tr>
+<td>--tidy [<span style="text-transform: uppercase">tidy</span>]</td>
+<td>Tidy up the DTBook (default: <span class="synopsis-option-default"><code>false()</code></span>)</td>
+</tr>
+<tr>
+<td>--footnotes-numbering-suffix [<span style="text-transform: uppercase">footnotes-numbering-suffix</span>]</td>
+<td>Footnotes number suffix (default: <span class="synopsis-option-default"><code></code></span>)</td>
+</tr>
+<tr>
+<td>--footnotes-start-value [<span style="text-transform: uppercase">footnotes-start-value</span>]</td>
+<td>Footnotes starting value (default: <span class="synopsis-option-default"><code>1</code></span>)</td>
+</tr>
+<tr>
+<td>--ApplySentenceDetection [<span style="text-transform: uppercase">ApplySentenceDetection</span>]</td>
+<td>Apply sentences detection (default: <span class="synopsis-option-default"><code>false()</code></span>)</td>
+</tr>
+<tr>
+<td>--image-size [<span style="text-transform: uppercase">image-size</span>]</td>
+<td>Image resizing (default: <span class="synopsis-option-default"><code>original</code></span>)</td>
+</tr>
+<tr>
+<td>--title [<span style="text-transform: uppercase">title</span>]</td>
+<td>Document title (default: <span class="synopsis-option-default"><code></code></span>)</td>
+</tr>
+<tr>
+<td>--footnotes-numbering [<span style="text-transform: uppercase">footnotes-numbering</span>]</td>
+<td>Footnotes numbering (default: <span class="synopsis-option-default"><code>none</code></span>)</td>
 </tr>
 <tr>
 <td>--publisher [<span style="text-transform: uppercase">publisher</span>]</td>
@@ -1340,24 +1420,12 @@ Options:</pre>
 <td>Translate character styles (default: <span class="synopsis-option-default"><code>false()</code></span>)</td>
 </tr>
 <tr>
-<td>--extract-shapes [<span style="text-transform: uppercase">extract-shapes</span>]</td>
-<td>Extract vector shapes (Experimental) (default: <span class="synopsis-option-default"><code>false()</code></span>)</td>
+<td>--accept-revisions [<span style="text-transform: uppercase">accept-revisions</span>]</td>
+<td>Accept revisions (default: <span class="synopsis-option-default"><code>false()</code></span>)</td>
 </tr>
 <tr>
-<td>--pagination [<span style="text-transform: uppercase">pagination</span>]</td>
-<td>Pagination mode (default: <span class="synopsis-option-default"><code>custom</code></span>)</td>
-</tr>
-<tr>
-<td>--footnotes-numbering [<span style="text-transform: uppercase">footnotes-numbering</span>]</td>
-<td>Footnotes numbering (default: <span class="synopsis-option-default"><code>none</code></span>)</td>
-</tr>
-<tr>
-<td>--dpi [<span style="text-transform: uppercase">dpi</span>]</td>
-<td>Image resampling value (default: <span class="synopsis-option-default"><code>96</code></span>)</td>
-</tr>
-<tr>
-<td>--footnotes-position [<span style="text-transform: uppercase">footnotes-position</span>]</td>
-<td>Footnotes position (default: <span class="synopsis-option-default"><code>end</code></span>)</td>
+<td>--creator [<span style="text-transform: uppercase">creator</span>]</td>
+<td>Document author (default: <span class="synopsis-option-default"><code></code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>
