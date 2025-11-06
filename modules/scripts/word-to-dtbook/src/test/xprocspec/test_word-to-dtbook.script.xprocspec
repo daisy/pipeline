@@ -5,7 +5,6 @@
 
   <x:scenario label="FromSingleDocx">
     <x:call step="px:word-to-dtbook.script"/>
-
    <x:scenario label="Test 1">
       <x:call>
         <x:option
@@ -302,15 +301,14 @@
             href="../resources/Test%2010/Output/F10.xml"/>
       </x:expect>
     </x:scenario>
-
-    <x:scenario label="Test 11">
+    <x:scenario label="Test 11 - document with metadata">
       <x:call>
         <x:option
-                name="source"
-                select="resolve-uri('../resources/Test%2011/Input/default_sample_for_dtbook_conversion.docx')"/>
-        <x:option name="title" select="'Default sample for dtbook conversion'"/>
+            name="source"
+            select="resolve-uri('../resources/Test%2011/Input/default_sample_for_dtbook_conversion.docx')"/>
+        <!--<x:option name="title" select="'Default sample for dtbook conversion'"/>
         <x:option name="creator" select="'Nicolas Pavie'"/>
-        <x:option name="publisher" select="'Association Valentin Haüy'"/>
+        <x:option name="publisher" select="'Association Valentin Haüy'"/>-->
         <x:option name="uid" select="'11'"/>
         <x:option name="result" select="concat($temp-dir,'FromSingleDocx/11/Output/')"/>
         <x:option name="temp-dir" select="concat($temp-dir,'FromSingleDocx/11/Temp/')"/>
@@ -329,8 +327,39 @@
       </x:context>
       <x:expect label="result" type="compare">
         <x:document
-                type="file"
-                href="../resources/Test%2011/Output/default_sample_for_dtbook_conversion.xml"/>
+            type="file"
+            href="../resources/Test%2011/Output/default_sample_for_dtbook_conversion.xml"/>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Test 12 - document without modification date">
+      <x:call>
+        <x:option
+            name="source"
+            select="resolve-uri('../resources/Test%2012/Input/Untitled.docx')"/>
+        <x:option name="title" select="'Date issue'"/>
+        <x:option name="creator" select="'Nicolas Pavie'"/>
+        <x:option name="publisher" select="'Association Valentin Haüy'"/>
+        <x:option name="uid" select="'12'"/>
+        <x:option name="result" select="concat($temp-dir,'FromSingleDocx/12/Output/')"/>
+        <x:option name="temp-dir" select="concat($temp-dir,'FromSingleDocx/12/Temp/')"/>
+        <x:option name="accept-revisions" select="true()"/>
+        <x:option name="disableDateGeneration" select="true()"/>
+        <x:option name="extract-shapes" select="false()" />
+      </x:call>
+      <x:context label="directory">
+        <x:document type="directory" base-uri="temp-dir" href="FromSingleDocx/12/Output/"/>
+      </x:context>
+      <x:expect label="directory" type="compare">
+        <x:document type="directory" href="../resources/Test%2012/Output/"/>
+      </x:expect>
+      <x:context label="result">
+        <x:document type="file" base-uri="temp-dir" href="FromSingleDocx/12/Output/Untitled.xml"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+        <x:document
+            type="file"
+            href="../resources/Test%2012/Output/Untitled.xml"/>
       </x:expect>
     </x:scenario>
   </x:scenario>
