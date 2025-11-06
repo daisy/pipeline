@@ -3811,7 +3811,6 @@
 	</xsl:template>
 
 	<xsl:template name="CloseEndedBlocks">
-		<xsl:message terminate="no"><xsl:value-of select="name()"/> </xsl:message>
 		<!-- Closing previously manually opened block before treating -->
 		<!-- Optional sidebar -->
 		<xsl:if test="not(w:pPr/w:pStyle[starts-with(@w:val,'Sidebar') and ends-with(@w:val,'OptionalDAISY')])
