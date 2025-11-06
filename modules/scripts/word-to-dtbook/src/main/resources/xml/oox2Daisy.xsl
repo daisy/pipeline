@@ -17,7 +17,9 @@
 	xmlns="http://www.daisy.org/z3986/2005/dtbook/"
 	xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math"
 	xmlns:mml="http://www.w3.org/1998/Math/MathML"
-	exclude-result-prefixes="w pic wp dcterms xsi cp dc a r vt dcmitype xs d m mml">
+	xmlns:ccp="http://schemas.openxmlformats.org/officeDocument/2006/custom-properties"
+	xmlns:vtp="http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes"
+	exclude-result-prefixes="w pic wp dcterms xsi cp dc a r vt dcmitype xs d m mml ccp vtp">
 	
 	<xsl:output method="xml" encoding="UTF-8"/>
 
@@ -77,6 +79,9 @@
 	<xsl:variable name="endnotesXml"
 		as="document-node(element(w:endnotes))?"
 		select="document(concat('jar:',$InputFile,'!/word/endnotes.xml'))" />
+	<xsl:variable name="customPropsXml"
+								as="document-node(element(ccp:Properties))?"
+								select="document(concat('jar:',$InputFile,'!/docProps/custom.xml'))" />
 	
 	<xsl:variable name="documentLanguages">
 		<!-- Compute runners languages -->
@@ -371,10 +376,18 @@
 							</xsl:if>
 						</xsl:otherwise>
 					</xsl:choose>
-					<!--Taking the value of dc:description from core.xml file-->
-					<xsl:if test="string-length($documentDescription)!=0">
-						<meta name="dc:Description" content="{$documentDescription}"/>
-					</xsl:if>
+
+					<xsl:choose>
+						<!--Prioritize the value of dc:description from docprops/custom.xml file-->
+						<xsl:when test="$customPropsXml//ccp:property[@name='Description']/vtp:lpwstr[string-length(text()) &gt; 0]">
+							<meta name="dc:Description" content="{$customPropsXml//ccp:property[@name='Description']/vtp:lpwstr/text()}"/>
+						</xsl:when>
+						<!--Taking the value of dc:description from core.xml file-->
+						<xsl:when test="string-length($documentDescription)!=0">
+							<meta name="dc:Description" content="{$documentDescription}"/>
+						</xsl:when>
+					</xsl:choose>
+
 					<!--Choose block for checking whether user has entered the UID value or not for implementing dc:identifier meta tag-->
 					<xsl:choose>
 						<xsl:when test="string-length($uid) = 0">
@@ -388,6 +401,23 @@
 						<xsl:sequence select="d:sink(d:AddLanguage($myObj,@val))" /> <!-- empty -->
 						<meta name="dc:Language" content="{@val}"/>
 					</xsl:for-each>
+
+					<!-- New accessibility metadata retrieved from docProps/custom.xml properties -->
+					<xsl:if test="$customPropsXml//ccp:property[@name='Contributor']/vtp:lpwstr[string-length(text()) &gt; 0]">
+						<meta name="dc:Contributor" content="{$customPropsXml//ccp:property[@name='Contributor']/vtp:lpwstr/text()}"/>
+					</xsl:if>
+					<xsl:if test="$customPropsXml//ccp:property[@name='SourceDate']/vtp:lpwstr[string-length(text()) &gt; 0]">
+						<meta name="dc:SourceDate" content="{$customPropsXml//ccp:property[@name='SourceDate']/vtp:lpwstr/text()}"/>
+					</xsl:if>
+					<xsl:if test="$customPropsXml//ccp:property[@name='Rights']/vtp:lpwstr[string-length(text()) &gt; 0]">
+						<meta name="dc:Rights" content="{$customPropsXml//ccp:property[@name='Rights']/vtp:lpwstr/text()}"/>
+					</xsl:if>
+					<xsl:if test="$customPropsXml//ccp:property[@name='Source']/vtp:lpwstr[string-length(text()) &gt; 0]">
+						<meta name="dc:Source" content="{$customPropsXml//ccp:property[@name='Source']/vtp:lpwstr/text()}"/>
+					</xsl:if>
+					<xsl:if test="$customPropsXml//ccp:property[@name='AccessibilitySummary']/vtp:lpwstr[string-length(text()) &gt; 0]">
+						<meta name="schema:accessibilitySummary" content="{$customPropsXml//ccp:property[@name='AccessibilitySummary']/vtp:lpwstr/text()}"/>
+					</xsl:if>
 					
 					<!--End of Head element-->
 				</head>
