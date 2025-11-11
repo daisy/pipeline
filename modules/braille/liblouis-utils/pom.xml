@@ -169,6 +169,10 @@
         <targetPath>native/linux/x86_64/</targetPath>
       </resource>
       <resource>
+        <directory>${project.build.directory}/generated-resources/native/liblouis/aarch64-Linux-gpp/</directory>
+        <targetPath>native/linux/aarch64/</targetPath>
+      </resource>
+      <resource>
         <directory>${project.build.directory}/generated-resources/native/liblouisutdml/i386-Linux-gpp/</directory>
         <targetPath>native/linux/x86/liblouisutdml/</targetPath>
       </resource>
@@ -232,6 +236,12 @@
                   <groupId>org.liblouis</groupId>
                   <artifactId>louis</artifactId>
                   <classifier>amd64-Linux-gpp-shared</classifier>
+                  <type>nar</type>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.liblouis</groupId>
+                  <artifactId>louis</artifactId>
+                  <classifier>aarch64-Linux-gpp-shared</classifier>
                   <type>nar</type>
                 </artifactItem>
                 <artifactItem>
@@ -501,6 +511,7 @@
                    ='org.daisy.pipeline.braille.liblouis.impl.linux.LiblouisNativePathForLinux_SPI',
                   native/linux/x86=target/generated-resources/native/liblouis/i386-Linux-gpp,
                   native/linux/x86_64=target/generated-resources/native/liblouis/amd64-Linux-gpp,
+                  native/linux/aarch64=target/generated-resources/native/liblouis/aarch64-Linux-gpp,
                   native/linux/x86/liblouisutdml=target/generated-resources/native/liblouisutdml/i386-Linux-gpp,
                   native/linux/x86_64/liblouisutdml=target/generated-resources/native/liblouisutdml/amd64-Linux-gpp
                 </Include-Resource>
