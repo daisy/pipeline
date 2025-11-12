@@ -99,6 +99,10 @@
         <targetPath>native/linux/x86_64/</targetPath>
       </resource>
       <resource>
+        <directory>${project.build.directory}/dependency/libhyphen/lib/aarch64-Linux-gpp/shared/</directory>
+        <targetPath>native/linux/aarch64/</targetPath>
+      </resource>
+      <resource>
         <directory>${project.build.directory}/dependency/libhyphen/lib/x86_64-MacOSX-gpp/shared/</directory>
         <targetPath>native/macosx/x86_64/</targetPath>
       </resource>
@@ -138,6 +142,12 @@
                   <groupId>org.daisy.libs</groupId>
                   <artifactId>hyphen</artifactId>
                   <classifier>amd64-Linux-gpp-shared</classifier>
+                  <type>nar</type>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.libs</groupId>
+                  <artifactId>hyphen</artifactId>
+                  <classifier>aarch64-Linux-gpp-shared</classifier>
                   <type>nar</type>
                 </artifactItem>
                 <artifactItem>
@@ -269,7 +279,8 @@
                   META-INF/services/org.daisy.pipeline.braille.common.NativePath;literal
                    ='org.daisy.pipeline.braille.libhyphen.impl.linux.LibhyphenNativePathForLinux_SPI',
                   native/linux/x86=target/dependency/libhyphen/lib/i386-Linux-gpp/shared,
-                  native/linux/x86_64=target/dependency/libhyphen/lib/amd64-Linux-gpp/shared
+                  native/linux/x86_64=target/dependency/libhyphen/lib/amd64-Linux-gpp/shared,
+                  native/linux/aarch64=target/dependency/libhyphen/lib/aarch64-Linux-gpp/shared
                 </Include-Resource>
               </instructions>
             </configuration>
