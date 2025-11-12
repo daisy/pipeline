@@ -161,7 +161,7 @@ run-webui : webui/.compile-dependencies
 .PHONY : run-docker
 run-docker : dist-docker-image
 	exec("docker", "run", "-e", "PIPELINE2_WS_HOST=0.0.0.0", \
-	                      "-e", "PIPELINE2_WS_AUTHENTICATION=false" \
+	                      "-e", "PIPELINE2_WS_AUTHENTICATION=false", \
 	                      "-p", "8181:8181", \
 	                      "daisyorg/pipeline:latest-snapshot");
 
@@ -169,7 +169,7 @@ run-docker : dist-docker-image
 run-docker-detached : dist-docker-image
 	exec("docker", "run", "--name", "pipeline", "--detach", \
 	                      "-e", "PIPELINE2_WS_HOST=0.0.0.0", \
-	                      "-e", "PIPELINE2_WS_AUTHENTICATION=false" \
+	                      "-e", "PIPELINE2_WS_AUTHENTICATION=false", \
 	                      "-p", "8181:8181", \
 	                      "daisyorg/pipeline:latest-snapshot");
 
