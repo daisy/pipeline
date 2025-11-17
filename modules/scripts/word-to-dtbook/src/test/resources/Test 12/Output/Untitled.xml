@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dtbook PUBLIC '-//NISO//DTD dtbook 2005-3//EN' 'http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd' [] >
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en-US">
+   <head>
+      <meta name="dtb:uid" content="12"/>
+      <meta name="dtb:generator" content="DAISY Pipeline 2 word-to-dtbook 1.0.0"/>
+      <meta name="dc:Title" content="Date issue"/>
+      <meta name="dc:Creator" content="Nicolas Pavie"/>
+      <meta name="dc:Publisher" content="Association Valentin Haüy"/>
+      <meta name="dc:Identifier" content="12"/>
+      <meta name="dc:Language" content="en-US"/>
+   </head>
+   <book showin="blp">
+      <frontmatter>
+         <doctitle>Date issue</doctitle>
+         <docauthor>Nicolas Pavie</docauthor>
+      </frontmatter>
+      <bodymatter id="bodymatter_0001"><level1><h1><bdo dir="rtl" xml:lang="en-US">  Heading</bdo></h1><p/><p><bdo dir="rtl" xml:lang="en-US">Test text one two three</bdo></p></level1></bodymatter>
+   </book>
+</dtbook>
