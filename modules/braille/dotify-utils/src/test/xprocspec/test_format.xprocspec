@@ -870,13 +870,11 @@
     </x:expect>
   </x:scenario>
   
-  <!--
-      TODO: move orphans and widows to their own test?
-  -->
   <x:scenario label="test_07">
     <x:documentation>
-      Tests page-break-inside:avoid and page-break-after:avoid, both on text-only blocks and on
-      blocks with nested blocks. Also tests orphans and widows.
+      Tests page-break-inside:avoid, page-break-after:avoid, orphans and widows, both on text-only
+      blocks and on blocks with nested blocks. Note that widows and orphans do not have a meaning
+      on blocks with nested blocks.
     </x:documentation>
     <x:call step="dotify:format">
       <x:input port="source">
@@ -966,6 +964,18 @@
                 </section>
               </section>
               <section style="display: block; page-break-before: right">
+                <p style="display: block">⠤⠤⠤</p>
+                <p style="display: block">⠤⠤⠤</p>
+                <p style="display: block">⠤⠤⠤</p>
+                <p style="display: block">⠤⠤⠤</p>
+                <section style="display: block; orphans: 3">
+                  <p style="display: block">⠤⠤⠤</p>
+                  <p style="display: block">⠤⠤⠤</p>
+                  <p style="display: block">⠤⠤⠤</p>
+                  <p style="display: block">⠤⠤⠤</p>
+                </section>
+              </section>
+              <section style="display: block; page-break-before: right">
                 ⠤⠤⠤⠤⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤⠤⠤⠤⠤
@@ -975,6 +985,18 @@
                   ⠤⠤⠤⠤⠤⠤⠤⠤⠤
                   ⠤⠤⠤⠤⠤⠤⠤⠤⠤
                   ⠤⠤⠤⠤⠤⠤⠤⠤⠤
+                </section>
+              </section>
+              <section style="display: block; page-break-before: right">
+                <p style="display: block">⠤⠤⠤</p>
+                <p style="display: block">⠤⠤⠤</p>
+                <p style="display: block">⠤⠤⠤</p>
+                <p style="display: block">⠤⠤⠤</p>
+                <section style="display: block; widows: 3">
+                  <p style="display: block">⠤⠤⠤</p>
+                  <p style="display: block">⠤⠤⠤</p>
+                  <p style="display: block">⠤⠤⠤</p>
+                  <p style="display: block">⠤⠤⠤</p>
                 </section>
               </section>
             </body>
@@ -1089,6 +1111,18 @@
               </block>
             </block>
             <block break-before="sheet">
+              <block>⠤⠤⠤</block>
+              <block>⠤⠤⠤</block>
+              <block>⠤⠤⠤</block>
+              <block>⠤⠤⠤</block>
+              <block orphans="3">
+	            <block>⠤⠤⠤</block>
+                <block>⠤⠤⠤</block>
+                <block>⠤⠤⠤</block>
+                <block>⠤⠤⠤</block>
+              </block>
+            </block>
+            <block break-before="sheet">
               <block>
                 ⠤⠤⠤⠤⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤⠤⠤⠤⠤
@@ -1100,6 +1134,18 @@
                 ⠤⠤⠤⠤⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤⠤⠤⠤⠤
+              </block>
+            </block>
+            <block break-before="sheet">
+              <block>⠤⠤⠤</block>
+              <block>⠤⠤⠤</block>
+              <block>⠤⠤⠤</block>
+              <block>⠤⠤⠤</block>
+              <block widows="3">
+                <block>⠤⠤⠤</block>
+                <block>⠤⠤⠤</block>
+                <block>⠤⠤⠤</block>
+                <block>⠤⠤⠤</block>
               </block>
             </block>
           </sequence>
@@ -1203,6 +1249,18 @@
                   <row>⠤⠤⠤⠤⠤⠤⠤⠤⠤</row>
                 </page>
                 <page>
+                  <row>⠤⠤⠤</row>
+                  <row>⠤⠤⠤</row>
+                  <row>⠤⠤⠤</row>
+                  <row>⠤⠤⠤</row>
+                  <row>⠤⠤⠤</row>
+                  <row>⠤⠤⠤</row>
+                </page>
+                <page>
+                  <row>⠤⠤⠤</row>
+                  <row>⠤⠤⠤</row>
+                </page>
+                <page>
                   <row>⠤⠤⠤⠤⠤⠤⠤⠤⠤</row>
                   <row>⠤⠤⠤⠤⠤⠤⠤⠤⠤</row>
                   <row>⠤⠤⠤⠤⠤⠤⠤⠤⠤</row>
@@ -1213,6 +1271,18 @@
                   <row>⠤⠤⠤⠤⠤⠤⠤⠤⠤</row>
                   <row>⠤⠤⠤⠤⠤⠤⠤⠤⠤</row>
                   <row>⠤⠤⠤⠤⠤⠤⠤⠤⠤</row>
+                </page>
+                <page>
+                  <row>⠤⠤⠤</row>
+                  <row>⠤⠤⠤</row>
+                  <row>⠤⠤⠤</row>
+                  <row>⠤⠤⠤</row>
+                  <row>⠤⠤⠤</row>
+                  <row>⠤⠤⠤</row>
+                </page>
+                <page>
+                  <row>⠤⠤⠤</row>
+                  <row>⠤⠤⠤</row>
                 </page>
               </section>
             </volume>
