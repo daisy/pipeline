@@ -168,7 +168,7 @@ task sourcesJar(type: Jar) {
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 
 signing {
-	useGpgCmd()
+	// useGpgCmd()
 	required { isReleaseVersion }
 	sign publishing.publications
 }
