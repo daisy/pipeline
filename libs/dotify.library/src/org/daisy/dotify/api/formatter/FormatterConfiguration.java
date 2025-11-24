@@ -18,6 +18,7 @@ public class FormatterConfiguration {
     private final boolean hyphenating;
     private final boolean marksCapitalLetters;
     private final Set<String> ignoredStyles;
+    private final int pagesPerSheet;
 
     /**
      * Provides a builder for formatter configuration.
@@ -33,6 +34,7 @@ public class FormatterConfiguration {
         private boolean hyphenating = true;
         private boolean marksCapitalLetters = true;
         private Set<String> ignoredStyles = new HashSet<String>();
+        private int pagesPerSheet = 2;
 
         /**
          * Creates a new builder with the specified properties.
@@ -117,6 +119,33 @@ public class FormatterConfiguration {
         }
 
         /**
+         * Sets the the number of pages that a sheet of paper can hold.
+         *
+         * This is a property of the output medium. The value can be either two or four. A page is
+         * one side of a "leaf", which can be either a sheet or a half-sheet. A sheet that is not
+         * folded has one leaf, or two pages. A sheet folded in half has two leaves, or four pages.
+         *
+         * Note that this meaning of sheet differs from what a sheet means in OBFL. A sheet in
+         * OBFL is a leaf. Also note that a leaf is always composed of two pages, whether or not
+         * both sides are printed (see the <a
+         * href="https://mtmse.github.io/obfl/obfl-specification.html#L5024">duplex</a> attribute in
+         * OBFL).
+         *
+         * @param value the number of pages per sheet
+         * @return returns this builder
+         */
+        public Builder pagesPerSheet(int value) {
+            switch (value) {
+            case 2:
+            case 4:
+                pagesPerSheet = value;
+                return this;
+            default:
+                throw new IllegalArgumentException("Value of pagesPerSheet must be 2 or 4");
+            }
+        }
+
+        /**
          * Creates new configuration.
          *
          * @return returns a new configuration instance
@@ -147,6 +176,7 @@ public class FormatterConfiguration {
         hyphenating = builder.hyphenating;
         marksCapitalLetters = builder.marksCapitalLetters;
         ignoredStyles = Collections.unmodifiableSet(new HashSet<>(builder.ignoredStyles));
+        pagesPerSheet = builder.pagesPerSheet;
     }
 
     /**
@@ -223,4 +253,12 @@ public class FormatterConfiguration {
         return ignoredStyles;
     }
 
+    /**
+     * Returns the number of pages that a sheet can hold.
+     *
+     * @return the number of pages per sheet
+     */
+    public int getPagesPerSheet() {
+        return pagesPerSheet;
+    }
 }

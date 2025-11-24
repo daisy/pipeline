@@ -1,10 +1,17 @@
 package org.daisy.dotify.formatter.test;
 
+import org.daisy.dotify.api.engine.FormatterEngine;
+import org.daisy.dotify.api.engine.FormatterEngineMaker;
 import org.daisy.dotify.api.engine.LayoutEngineException;
+import org.daisy.dotify.api.formatter.FormatterConfiguration;
+import org.daisy.dotify.api.translator.TranslatorType;
+import org.daisy.dotify.api.writer.MediaTypes;
 import org.daisy.dotify.api.writer.PagedMediaWriterConfigurationException;
+import org.daisy.dotify.api.writer.PagedMediaWriterFactoryMaker;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
 
 
@@ -191,6 +198,27 @@ public class VolumeBreaksTest extends AbstractFormatterEngineTest {
             "resource-files/volume-break/display-when-starts-at-top-of-page-inside-volume-transition-input.obfl",
             "resource-files/volume-break/display-when-starts-at-top-of-page-inside-volume-transition-expected.pef",
             false
+        );
+    }
+
+    @Test
+    public void testPadWithEmptySheets() throws
+            LayoutEngineException,
+            IOException,
+            PagedMediaWriterConfigurationException {
+        boolean keep = false;
+        FormatterEngine engine = FormatterEngineMaker.newInstance().getFactory().newFormatterEngine(
+            FormatterConfiguration
+                .with("sv-SE", TranslatorType.UNCONTRACTED.toString())
+                .pagesPerSheet(4)
+                .build(),
+            PagedMediaWriterFactoryMaker.newInstance().newPagedMediaWriter(MediaTypes.PEF_MEDIA_TYPE));
+        File res = keep ? File.createTempFile("TestResult", ".tmp") : null;
+        testPEF(
+            engine,
+            "resource-files/volume-break/pad-with-empty-sheets-input.obfl",
+            "resource-files/volume-break/pad-with-empty-sheets-expected.pef",
+            res
         );
     }
 }

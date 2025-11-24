@@ -172,21 +172,36 @@ public class CrossReferenceHandler {
         transitionProperties.commit();
     }
 
-    public void setRowCount(BlockAddress blockId, int value) {
+    // Set the number of lines of text a block contains. This does not include borders and
+    // margins, but it does include text nodes that are descendants of the block within
+    // the original (OBFL) document.
+    public void keepRowCount(BlockAddress blockId, int value) {
         if (readOnly) {
             return;
         }
-        // The row count is used by the page break algorithm in the next iteration to
-        // determine/estimate how many widow lines a block will have. The actual row count can
-        // differ however, for instance due to changes in hyphenation (hyphenation may be suppressed
-        // on the last line of the page). This could lead to an endless alternation between two
-        // renderings. This is why we're storing the *minimum* value. Note that it could result in
-        // page breaks that happen one row too early because the row count was underestimated.
-        Integer prevValue = rowCount.get(blockId, null, true);
-        if (prevValue != null) {
-            value = Math.min(prevValue, value);
+        rowCount.keep(blockId, value);
+    }
+
+    // We keep track of the row count while rows are being added, but want to commit only
+    // once, because we need the minimum value across iterations, but without taking into
+    // account any intermediary values.
+    public void commitRowCount() {
+        while (!rowCount.uncommitted.isEmpty()) {
+            BlockAddress blockId = rowCount.uncommitted.keySet().iterator().next();
+            int value = rowCount.uncommitted.remove(blockId);
+
+            // The row count is used by the page break algorithm in the next iteration to
+            // determine/estimate how many widow lines a block will have. The actual row count can
+            // differ however, for instance due to changes in hyphenation (hyphenation may be suppressed
+            // on the last line of the page). This could lead to an endless alternation between two
+            // renderings. This is why we're storing the *minimum* value. Note that it could result in
+            // page breaks that happen one row too early because the row count was underestimated.
+            Integer prevValue = rowCount.get(blockId, null, true);
+            if (prevValue != null) {
+                value = Math.min(prevValue, value);
+            }
+            rowCount.put(blockId, value);
         }
-        rowCount.put(blockId, value);
     }
 
     public void trimPageDetails() {

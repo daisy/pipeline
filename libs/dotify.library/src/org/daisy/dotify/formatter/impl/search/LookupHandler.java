@@ -58,7 +58,7 @@ import java.util.Set;
  */
 class LookupHandler<K, V> {
     private final Map<K, V> keyValueMap;
-    private final Map<K, V> uncommitted;
+    final Map<K, V> uncommitted;
     private final Set<K> requestedKeys;
     private boolean dirty;
 

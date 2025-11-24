@@ -17,4 +17,15 @@
 		<block margin-top="4">⠤⠤</block>
 		<block orphans="2">⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤</block>
 	</sequence>
+	<sequence master="body">
+		<block margin-top="4">⠤⠤</block>
+		<block orphans="2">
+			<block>⠤⠤ ⠤⠤ ⠤⠤</block>
+			<block>⠤⠤ ⠤⠤ ⠤⠤</block>
+			<block>⠤⠤ ⠤⠤ ⠤⠤</block>
+			<block>⠤⠤ ⠤⠤ ⠤⠤</block>
+			<block>⠤⠤ ⠤⠤ ⠤⠤</block>
+			<block>⠤⠤ ⠤⠤ ⠤⠤</block>
+		</block>
+	</sequence>
 </obfl>

@@ -11,6 +11,7 @@ import org.daisy.dotify.formatter.impl.search.BlockAddress;
 import org.daisy.dotify.formatter.impl.search.DefaultContext;
 
 import java.util.Optional;
+import java.util.Stack;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -21,12 +22,19 @@ import java.util.function.Consumer;
  */
 final class BlockProcessor {
     protected RowGroupProvider rowGroupProvider;
+    private final Stack<OrphanWidowControl> owcStack = new Stack<>();
 
     BlockProcessor() {
     }
 
     BlockProcessor(BlockProcessor template) {
-        this.rowGroupProvider = copyUnlessNull(template.rowGroupProvider);
+        OrphanWidowControl lastOwc = null;
+        for (OrphanWidowControl owc : template.owcStack) {
+            owcStack.add((lastOwc = new OrphanWidowControl(owc, lastOwc)));
+        }
+        this.rowGroupProvider = template.rowGroupProvider != null
+            ? new RowGroupProvider(template.rowGroupProvider, lastOwc)
+            : null;
     }
 
     protected void loadBlock(
@@ -66,7 +74,29 @@ final class BlockProcessor {
         } else if (rowGroupProvider != null) {
             keepWithNext = rowGroupProvider.getKeepWithNext();
         }
-        rowGroupProvider = new RowGroupProvider(master, g, bcm, bc, keepWithNext);
+        if (rowGroupProvider != null) {
+            // might have ancestors in common with previous block
+            Block prev = rowGroupProvider.g;
+            int common = g.getCommonAncestors(prev);
+            while (owcStack.size() > common) {
+                owcStack.pop();
+            }
+        } else {
+            owcStack.clear();
+        }
+        OrphanWidowControl owc = !owcStack.empty() ? owcStack.peek() : null;
+        int depth = g.getAncestors();
+        while (owcStack.size() < depth - 1) {
+            owcStack.push((owc = new OrphanWidowControl(0, 0, 0, g.getBlockAddress(), owc)));
+        }
+        owc = new OrphanWidowControl(
+            g.getRowDataProperties().getOrphans(),
+            g.getRowDataProperties().getWidows(),
+            bc.getRefs().getRowCount(g.getBlockAddress()),
+            g.getBlockAddress(),
+            owc);
+        rowGroupProvider = new RowGroupProvider(master, g, bcm, bc, keepWithNext, owc);
+        owcStack.push(owc);
     }
 
     protected Optional<RowGroup> getNextRowGroup(DefaultContext context, LineProperties lineProps) {
@@ -86,10 +116,6 @@ final class BlockProcessor {
             }
         }
         return false;
-    }
-
-    private RowGroupProvider copyUnlessNull(RowGroupProvider template) {
-        return template == null ? null : new RowGroupProvider(template);
     }
 
     BlockAddress getBlockAddress() {

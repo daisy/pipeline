@@ -36,6 +36,9 @@
 <row>⠤⠤⠀⠤⠤⠀⠤⠤</row>
 <row>⠤⠤⠀⠤⠤⠀⠤⠤</row>
 </page>
+<page>
+<row>⠼⠙</row>
+</page>
 </section>
 </volume>
 <volume cols="10" rows="7" rowgap="0" duplex="true">
@@ -66,6 +69,9 @@
 <row>⠤⠤⠀⠤⠤⠀⠤⠤</row>
 <row>⠤⠤⠀⠤⠤⠀⠤⠤</row>
 <row>⠤⠤⠀⠤⠤⠀⠤⠤</row>
+</page>
+<page>
+<row>⠼⠓</row>
 </page>
 </section>
 </volume>

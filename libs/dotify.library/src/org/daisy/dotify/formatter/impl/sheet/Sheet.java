@@ -76,6 +76,17 @@ public class Sheet implements SplitPointUnit {
             return this;
         }
 
+        /**
+         * The number of pages currently contained in the sheet.
+         */
+        int size() {
+            return pages.size();
+        }
+
+        SectionProperties getSectionProperties() {
+            return sectionProperties;
+        }
+
         Sheet build() {
             return new Sheet(this);
         }

@@ -39,41 +39,46 @@ import java.util.stream.Collectors;
  */
 class RowGroupProvider {
     private final LayoutMaster master;
-    private final Block g;
+    final Block g;
     private final AbstractBlockContentManager bcm;
     private final BlockContext bc;
 
     private final OrphanWidowControl owc;
     private final boolean otherData;
     private DefaultContext context;
-    private int rowIndex;
+    private boolean firstRow;
     private int phase;
     private int keepWithNext;
     private final boolean invisible;
 
-    RowGroupProvider(RowGroupProvider template) {
+    RowGroupProvider(RowGroupProvider template, OrphanWidowControl owc) {
         this.master = template.master;
         this.g = template.g;
         this.bcm = template.bcm == null ? null : template.bcm.copy();
         this.bc = template.bc;
-        this.owc = template.owc;
+        this.owc = owc;
         this.otherData = template.otherData;
-        this.rowIndex = template.rowIndex;
+        this.firstRow = template.firstRow;
         this.phase = template.phase;
         this.keepWithNext = template.keepWithNext;
         this.invisible = template.invisible;
     }
 
-    RowGroupProvider(LayoutMaster master, Block g, AbstractBlockContentManager bcm, BlockContext bc, int keepWithNext) {
+    RowGroupProvider(
+        LayoutMaster master,
+        Block g,
+        AbstractBlockContentManager bcm,
+        BlockContext bc,
+        int keepWithNext,
+        OrphanWidowControl owc
+    ) {
         this.master = master;
         this.g = g;
         this.bcm = bcm;
         this.bc = bc;
         this.phase = 0;
-        this.rowIndex = 0;
-        this.owc = new OrphanWidowControl(g.getRowDataProperties().getOrphans(),
-            g.getRowDataProperties().getWidows(),
-            bc.getRefs().getRowCount(g.getBlockAddress()));
+        this.firstRow = true;
+        this.owc = owc;
         this.otherData = !bc.getRefs().getGroupAnchors(g.getBlockAddress()).isEmpty() ||
             !bc.getRefs().getGroupMarkers(g.getBlockAddress()).isEmpty() ||
             !bc.getRefs().getGroupIdentifiers(g.getBlockAddress()).isEmpty() ||
@@ -185,14 +190,13 @@ class RowGroupProvider {
             Optional<RowImpl> rt;
             if ((rt = bcm.getNext(lineProps)).isPresent()) {
                 RowImpl r = rt.get();
-                rowIndex++;
                 boolean hasNext = bcm.hasNext();
+                r = count(makeInvisible(r), owc);
                 if (!hasNext) {
                     //we're at the last line, this should be kept with the next block's first line
                     keepWithNext = g.getKeepWithNext();
-                    bc.getRefs().setRowCount(g.getBlockAddress(), bcm.getRowCount());
+                    owc.storeRowCount(bc.getRefs());
                 }
-                r = makeInvisible(r);
                 RowGroup.Builder rgb = new RowGroup.Builder(master.getRowSpacing()).add(r)
                         .mergeable(bcm.supportsVariableWidth())
                         .lineProperties(lineProps)
@@ -200,14 +204,15 @@ class RowGroupProvider {
                         .skippable(false)
                         .breakable(
                             r.allowsBreakAfter() &&
-                            owc.allowsBreakAfter(rowIndex - 1) &&
+                            owc.allowsBreakAfter() &&
                             keepWithNext <= 0 &&
                             (Keep.AUTO == g.getKeepType() || !hasNext) &&
                             (hasNext || !bcm.hasPostContentRows())
                         );
-                if (rowIndex == 1) { //First item
+                if (firstRow) {
                     setPropertiesForFirstContentRowGroup(rgb, bc.getRefs(), g);
                 }
+                firstRow = false;
                 keepWithNext = keepWithNext - 1;
                 return setPropertiesThatDependOnHasNext(rgb, hasNext(), g).build();
             } else {
@@ -290,6 +295,25 @@ class RowGroupProvider {
     private List<RowImpl> makeInvisible(List<RowImpl> rows) {
         if (invisible && rows.size() > 0) {
             rows = rows.stream().map(this::makeInvisible).collect(Collectors.toList());
+        }
+        return rows;
+    }
+
+    /**
+     * Count visible rows using the provided {@link OrphanWidowControl}.
+     */
+    private static RowImpl count(RowImpl row, OrphanWidowControl owc) {
+        if (!row.isInvisible()) {
+            owc.increaseRowCount();
+        }
+        return row;
+    }
+
+    private static List<RowImpl> count(List<RowImpl> rows, OrphanWidowControl owc) {
+        for (RowImpl r : rows) {
+            if (!r.isInvisible()) {
+                owc.increaseRowCount();
+            }
         }
         return rows;
     }

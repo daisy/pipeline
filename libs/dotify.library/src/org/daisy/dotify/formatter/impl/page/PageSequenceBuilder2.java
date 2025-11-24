@@ -274,6 +274,22 @@ public class PageSequenceBuilder2 {
      *                           between the first and the current page. This does not necessarily match the actual page
      *                           number of the produced page, because for instance when a volume break happens inside a
      *                           sequence, there can be a jump in the page numbering.
+     * @return a new blank {@link PageImpl} object
+     */
+    public PageImpl getEmptyPage(int pageNumberOffset) {
+        nextEmpty = false;
+        PageImpl ret = newPage(pageNumberOffset);
+        getContext().getRefs().keepPageDetails(ret.getDetails());
+        toIndex++;
+        return ret;
+    }
+
+    /**
+     * @param pageNumberOffset   Page number corresponding to the first page of this
+     *                           <code>PageSequenceBuilder2</code> minus 1, if the page numbering would be continuous
+     *                           between the first and the current page. This does not necessarily match the actual page
+     *                           number of the produced page, because for instance when a volume break happens inside a
+     *                           sequence, there can be a jump in the page numbering.
      * @param hyphenateLastLine  Whether to allow the last line on the page to end on a hyphenation
      *                           point (may be the case on the last page of the volume).
      * @param transitionContent  Content to be inserted at the top (any-resumed and/or

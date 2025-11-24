@@ -17,4 +17,15 @@
 		<block>⠤⠤</block>
 		<block widows="2">⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤</block>
 	</sequence>
+	<sequence master="body">
+		<block>⠤⠤</block>
+		<block widows="2">
+			<block>⠤⠤ ⠤⠤ ⠤⠤</block>
+			<block>⠤⠤ ⠤⠤ ⠤⠤</block>
+			<block>⠤⠤ ⠤⠤ ⠤⠤</block>
+			<block>⠤⠤ ⠤⠤ ⠤⠤</block>
+			<block>⠤⠤ ⠤⠤ ⠤⠤</block>
+			<block>⠤⠤ ⠤⠤ ⠤⠤</block>
+		</block>
+	</sequence>
 </obfl>

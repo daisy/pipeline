@@ -75,6 +75,8 @@ public class FormatterCoreImpl extends Stack<Block> implements FormatterCore, Bl
     private Table table;
     protected final FormatterCoreContext fc;
 
+    private int blocksClosedSinceLastNewBlock = 0;
+
     // TODO: fix recursive keep problem
     // TODO: Implement floating elements
     public FormatterCoreImpl(FormatterCoreContext fc) {
@@ -148,7 +150,6 @@ public class FormatterCoreImpl extends Stack<Block> implements FormatterCore, Bl
         // because it could have been inherited from an ancestor
         AncestorContext ac = new AncestorContext(p, inheritVolumeKeepPriority(p.getVolumeKeepPriority()));
         setPrecedingVolumeKeepAfterPriority(ac.getVolumeKeepPriority());
-        Block c = newBlock(blockId, rdp.build());
         if (
             propsContext.size() > 0 &&
             propsContext.peek().getBlockProperties().getListType() != FormattingTypes.ListStyle.NONE
@@ -186,6 +187,8 @@ public class FormatterCoreImpl extends Stack<Block> implements FormatterCore, Bl
             }
             listItem = new ListItem(listLabel, propsContext.peek().getBlockProperties().getListType());
         }
+        propsContext.push(ac);
+        Block c = newBlock(blockId, rdp.build());
         c.setBreakBeforeType(p.getBreakBeforeType());
         c.setKeepType(p.getKeepType());
         c.setKeepWithNext(p.getKeepWithNext());
@@ -196,7 +199,6 @@ public class FormatterCoreImpl extends Stack<Block> implements FormatterCore, Bl
         c.setVerticalPosition(p.getVerticalPosition());
         c.setAvoidVolumeBreakInsidePriority(ac.getVolumeKeepPriority());
         c.setAvoidVolumeBreakAfterPriority(-1); // value will be overwritten later
-        propsContext.push(ac);
         Block bi = getCurrentBlock();
         RowDataProperties.Builder builder = new RowDataProperties.Builder(bi.getRowDataProperties());
         if (p.getTextBorderStyle() != null) {
@@ -242,6 +244,7 @@ public class FormatterCoreImpl extends Stack<Block> implements FormatterCore, Bl
 
     @Override
     public void endBlock() {
+        blocksClosedSinceLastNewBlock++;
         if (table != null) {
             throw new IllegalStateException("A table is open.");
         }
@@ -311,6 +314,8 @@ public class FormatterCoreImpl extends Stack<Block> implements FormatterCore, Bl
         RegularBlock block = new RegularBlock(blockId, rdp, scenario);
         currentBlockAddress = new BlockAddress(groupNumber, currentBlockAddress.getBlockNumber() + 1);
         block.setBlockAddress(currentBlockAddress);
+        block.setTreeInfo(blocksClosedSinceLastNewBlock, propsContext.size());
+        blocksClosedSinceLastNewBlock = 0;
         return this.push(block);
     }
 
@@ -443,7 +448,10 @@ public class FormatterCoreImpl extends Stack<Block> implements FormatterCore, Bl
         if (table != null) {
             throw new IllegalStateException("A table is open.");
         }
+        // for simplicity pretend the content before the scenario, each of the scenarios,
+        // and the content after the scenarios do not have any ancestors in common
         for (RenderingScenario rs : renderer.getScenarios()) {
+            blocksClosedSinceLastNewBlock = propsContext.size();
             try {
                 scenario = rs;
                 //this is a downcast, which is generally unsafe, but it will work
@@ -458,6 +466,7 @@ public class FormatterCoreImpl extends Stack<Block> implements FormatterCore, Bl
                     pop();
                 }
             }
+            blocksClosedSinceLastNewBlock = propsContext.size();
         }
         scenario = null;
         //TODO: The following is a quick workaround for a scenario grouping problem that should be solved

@@ -38,6 +38,7 @@ public abstract class Block {
     private final RenderingScenario rs;
     private boolean isVolatile;
     private BlockAddress blockAddress;
+    private TreeInfo treeInfo;
 
     Block(String blockId, RowDataProperties rdp, RenderingScenario rs) {
         this.context = null;
@@ -126,6 +127,62 @@ public abstract class Block {
 
     public void setBlockAddress(BlockAddress blockAddress) {
         this.blockAddress = blockAddress;
+    }
+
+    /**
+     * Set info about the original tree structure, in terms of how
+     * many ancestor nodes this block's origin node shares with the
+     * origin node of the block that preceeds this one in the
+     * sequence. This is relevant for determining which blocks form a
+     * unit in the context of orphan and widow control for instance.
+     *
+     * The tree info from all the blocks in a sequence combined can be
+     * used to reconstruct the original tree hierarchy.
+     *
+     * @param closedAncestors number of ancestor nodes of the
+     *                        preceding block's origin node that are
+     *                        not ancestors of the current block's
+     *                        origin node
+     * @param currentAncestors total number of ancestor nodes (depth)
+     *                         of the current block's origin node
+     */
+    public void setTreeInfo(int closedAncestors, int currentAncestors) {
+        this.treeInfo = new TreeInfo(closedAncestors, currentAncestors);
+    }
+
+    private static class TreeInfo {
+        final int closedAncestors, currentAncestors;
+        TreeInfo(int closedAncestors, int currentAncestors) {
+            if (closedAncestors < 0 || currentAncestors < 0) {
+                throw new IllegalArgumentException();
+            }
+            this.closedAncestors = closedAncestors;
+            this.currentAncestors = currentAncestors;
+        }
+    }
+
+    /**
+     * Get the number of ancestors of this block's origin node.
+     *
+     * @return the number of ancestors
+     */
+    public int getAncestors() {
+        return treeInfo != null ? treeInfo.currentAncestors : 0;
+    }
+
+    /**
+     * Get the number of common ancestors that this block's origin
+     * node has with the preceding block's origin node.
+     *
+     * @param previousBlock the block that preceeds this block in the sequence
+     * @return the number of common ancestors
+     */
+    public int getCommonAncestors(Block previousBlock) {
+        if (treeInfo == null || previousBlock == null || previousBlock.treeInfo == null) {
+            return 0;
+        } else {
+            return previousBlock.treeInfo.currentAncestors - treeInfo.closedAncestors;
+        }
     }
 
     /**
