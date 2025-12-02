@@ -7,8 +7,10 @@ import java.util.Map;
 
 import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.Declaration;
+import cz.vutbr.web.css.MediaQueryList;
 import cz.vutbr.web.css.Rule;
 import cz.vutbr.web.css.SourceLocator;
+import cz.vutbr.web.css.StyleSheet.Origin;
 import cz.vutbr.web.css.Term;
 import cz.vutbr.web.css.TermIdent;
 import cz.vutbr.web.csskit.TermIdentImpl;
@@ -161,9 +163,21 @@ public class PropertyValue extends AbstractList<Term<?>> implements Cloneable, D
 		return sourceDeclaration != null ? sourceDeclaration.getSource() : null;
 	}
 	
+	@Override
+	public Origin getOrigin() {
+		return sourceDeclaration != null ? sourceDeclaration.getOrigin() : null;
+	}
+	
+	@Override
+	public MediaQueryList getMediaQueries() {
+		return sourceDeclaration != null ? sourceDeclaration.getMediaQueries() : null;
+	}
+
 	@Override public void setProperty(String p) { throw new UnsupportedOperationException("immutable"); }
 	@Override public void setImportant(boolean i) { throw new UnsupportedOperationException("immutable"); }
 	@Override public void setSource(SourceLocator sl) { throw new UnsupportedOperationException("immutable"); }
+	@Override public void setOrigin(Origin o) { throw new UnsupportedOperationException("immutable"); }
+	@Override public void setMediaQueries(MediaQueryList m) { throw new UnsupportedOperationException("immutable"); }
 	
 	// List<Term<?>>
 	

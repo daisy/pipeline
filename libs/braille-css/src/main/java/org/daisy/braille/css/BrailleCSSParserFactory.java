@@ -11,6 +11,7 @@ import cz.vutbr.web.css.CSSFactory;
 import cz.vutbr.web.css.Declaration;
 import cz.vutbr.web.css.MediaQuery;
 import cz.vutbr.web.css.MediaQueryList;
+import cz.vutbr.web.css.Rule;
 import cz.vutbr.web.css.RuleFactory;
 import cz.vutbr.web.css.RuleList;
 import cz.vutbr.web.css.RuleMedia;
@@ -48,19 +49,19 @@ public class BrailleCSSParserFactory extends CSSParserFactory {
 	}
 	
 	@Override
-	public StyleSheet parse(CSSSource source, CSSSourceReader cssReader, boolean inlinePriority)
+	public StyleSheet parse(CSSSource source, CSSSourceReader cssReader, boolean inlinePriority, MediaQueryList mediaQuery)
 			throws IOException, CSSException {
 		StyleSheet sheet = (StyleSheet)ruleFactory.createStyleSheet().unlock();
 		Preparator preparator = new Preparator(source.inlineElement, inlinePriority, null);
-		StyleSheet ret = parseAndImport(source, cssReader, sheet, preparator, null);
+		StyleSheet ret = parseAndImport(source, cssReader, sheet, preparator, mediaQuery);
 		return ret;
 	}
 	
 	@Override
-	public StyleSheet append(CSSSource source, CSSSourceReader cssReader, boolean inlinePriority, StyleSheet sheet)
+	public StyleSheet append(CSSSource source, CSSSourceReader cssReader, boolean inlinePriority, MediaQueryList mediaQuery, StyleSheet sheet)
 			throws IOException, CSSException {
 		Preparator preparator = new Preparator(source.inlineElement, inlinePriority, null);
-		StyleSheet ret = parseAndImport(source, cssReader, sheet, preparator, null);
+		StyleSheet ret = parseAndImport(source, cssReader, sheet, preparator, mediaQuery);
 		return ret;
 	}
 	
@@ -83,11 +84,13 @@ public class BrailleCSSParserFactory extends CSSParserFactory {
 			else
 				log.trace("Skipping import {} (media not matching)", path); }
 		RuleList rules = parser.getRules();
-		if (media != null) {
+		if (media != null && !media.isEmpty()) {
 			RuleMedia rm = CSSFactory.getRuleFactory().createMedia();
 			rm.setMediaQueries(media);
 			log.debug("Wrapping rules {} into RuleMedia: {}", rules, rm);
 			rm.unlock();
+			for (Rule<?> r : rules)
+				r.setMediaQueries(media);
 			rm.replaceAll(rules);
 			sheet.add(rm);
 			return sheet;

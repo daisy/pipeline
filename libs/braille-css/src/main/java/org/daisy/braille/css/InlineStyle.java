@@ -10,6 +10,7 @@ import com.google.common.collect.ForwardingList;
 
 import cz.vutbr.web.css.CombinedSelector;
 import cz.vutbr.web.css.Declaration;
+import cz.vutbr.web.css.MediaQueryList;
 import cz.vutbr.web.css.Rule;
 import cz.vutbr.web.css.RuleBlock;
 import cz.vutbr.web.css.RulePage;
@@ -17,7 +18,7 @@ import cz.vutbr.web.css.RuleSet;
 import cz.vutbr.web.css.Selector;
 import cz.vutbr.web.css.Selector.SelectorPart;
 import cz.vutbr.web.css.SourceLocator;
-import cz.vutbr.web.css.StyleSheet;
+import cz.vutbr.web.css.StyleSheet.Origin;
 import cz.vutbr.web.csskit.AbstractRuleBlock;
 
 /*
@@ -201,12 +202,20 @@ public class InlineStyle implements Cloneable, Iterable<RuleBlock<?>> {
 			return delegate;
 		}
 		
-		public StyleSheet getStyleSheet() {
-			return delegate.getStyleSheet();
+		public Origin getOrigin() {
+			return delegate.getOrigin();
 		}
 		
-		public void setStyleSheet(StyleSheet sheet) {
-			delegate.setStyleSheet(sheet);
+		public void setOrigin(Origin origin) {
+			delegate.setOrigin(origin);
+		}
+		
+		public MediaQueryList getMediaQueries() {
+			return delegate.getMediaQueries();
+		}
+		
+		public void setMediaQueries(MediaQueryList media) {
+			delegate.setMediaQueries(media);
 		}
 		
 		public List<E> asList() {

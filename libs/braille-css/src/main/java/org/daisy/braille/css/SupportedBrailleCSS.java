@@ -26,6 +26,8 @@ import cz.vutbr.web.css.CSSProperty.PageBreak;
 import cz.vutbr.web.css.CSSProperty.PageBreakInside;
 import cz.vutbr.web.css.CSSProperty.TextAlign;
 import cz.vutbr.web.css.Declaration;
+import cz.vutbr.web.css.MediaQuery;
+import cz.vutbr.web.css.MediaQueryList;
 import cz.vutbr.web.css.SupportedCSS;
 import cz.vutbr.web.css.Term;
 import cz.vutbr.web.css.TermFactory;
@@ -40,6 +42,7 @@ import cz.vutbr.web.css.TermPercent;
 import cz.vutbr.web.css.TermString;
 import cz.vutbr.web.domassign.DeclarationTransformer;
 import cz.vutbr.web.domassign.Repeater;
+import cz.vutbr.web.domassign.SupportedCSS3;
 import cz.vutbr.web.domassign.Variator;
 
 import org.daisy.braille.css.BrailleCSSProperty.AbsoluteMargin;
@@ -99,6 +102,18 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 	                           boolean allowShorthandProperties,
 	                           Collection<BrailleCSSExtension> extensions,
 	                           boolean allowUnknownVendorExtensions) {
+		this(allowComponentProperties, allowShorthandProperties, extensions, allowUnknownVendorExtensions, true);
+	}
+
+	/**
+	 * @param warningsForUnsupportedButKnownProperties Set to {@code false} to skip warnings if
+	 *                                                it is a known property in standard CSS.
+	 */
+	public SupportedBrailleCSS(boolean allowComponentProperties,
+	                           boolean allowShorthandProperties,
+	                           Collection<BrailleCSSExtension> extensions,
+	                           boolean allowUnknownVendorExtensions,
+	                           boolean warningsForUnsupportedButKnownProperties) {
 		// SupportedCSSImpl is defined at the bottom of this file
 		// it is a separate class because we need an argument to pass to the constructor of DeclarationTransformer
 		super(new SupportedCSSImpl(allowComponentProperties, allowShorthandProperties, prefix, extensions));
@@ -111,6 +126,7 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 			else
 				this.extensions.add(x);
 		this.allowUnknownVendorExtensions = allowUnknownVendorExtensions;
+		this.warningsForUnsupportedButKnownProperties = warningsForUnsupportedButKnownProperties;
 	}
 
 	protected SupportedBrailleCSS(SupportedCSS css) {
@@ -118,6 +134,7 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 		this.allowShorthandProperties = false;
 		this.extensions = null;
 		this.allowUnknownVendorExtensions = false;
+		this.warningsForUnsupportedButKnownProperties = true;
 	}
 
 	private static final String prefix = "-daisy-"; // optional prefix for properties that are
@@ -125,6 +142,8 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 	private final boolean allowShorthandProperties;
 	protected final Collection<BrailleCSSExtension> extensions;
 	protected final boolean allowUnknownVendorExtensions;
+	private final boolean warningsForUnsupportedButKnownProperties;
+	private static final SupportedCSS standardCSS = SupportedCSS3.getInstance();
 
 	///////////////////////////////////////////////////////////////
 	// DeclarationTransformer
@@ -307,6 +326,21 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 					                       new NormalizingMap<CSSProperty>(x, properties),
 					                       new NormalizingMap<Term<?>>(x, values)))
 						return true;
+		}
+		if (!warningsForUnsupportedButKnownProperties) {
+			// check whether the media query associated with the declaration explicitly mentions "embossed"
+			// or "braille"
+			boolean brailleMedia = false; {
+				MediaQueryList mq = d.getMediaQueries();
+				if (mq != null)
+					for (MediaQuery q : mq)
+						if ("embossed".equals(q.getType()) || "braille".equals(q.getType())) {
+							brailleMedia = true;
+							break; }}
+			if (!brailleMedia && standardCSS.isSupportedCSSProperty(property)) {
+				log.debug("Ignoring unsupported declaration: " + declarationToString(d));
+				return false;
+			}
 		}
 		log.warn("Ignoring unsupported declaration: " + declarationToString(d));
 		return false;
