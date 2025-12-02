@@ -15,9 +15,9 @@ public class RuleMarginImpl extends AbstractRuleBlock<Declaration> implements Ru
 		BOTTOMLEFT("bottom-left"),
 		BOTTOMCENTER("bottom-center"),
 		BOTTOMRIGHT("bottom-right"),
-		LEFT("left"),
-		RIGHT("right"),
-		FOOTNOTES("footnotes");
+		LEFT("-daisy-left"),
+		RIGHT("-daisy-right"),
+		FOOTNOTES("-daisy-footnotes");
 		
 		public final String value;
 		
@@ -30,14 +30,14 @@ public class RuleMarginImpl extends AbstractRuleBlock<Declaration> implements Ru
 	
 	protected RuleMarginImpl(String area) {
 		for (MarginArea a : MarginArea.values()) {
-			if (a.value.equals(area)) {
+			if (a.value.equals(area) || a.value.replaceAll("^-daisy-", "").equals(area)) {
 				marginArea = a;
 				return; }}
 		throw new IllegalArgumentException("Illegal value for margin area: " + area);
 	}
 	
 	public String getMarginArea() {
-		return marginArea.value;
+		return marginArea.value.replaceAll("^-daisy-", "");
 	}
 	
 	@Override
