@@ -230,16 +230,11 @@ public class FileFormatCatalog implements MediumProvider {
 											}
 											Boolean saddleStitch = FileFormatBuilder.this.saddleStitch;
 											if (saddleStitch != null)
-												if ((format instanceof EmbosserAsFileFormat
-												     && ((EmbosserAsFileFormat)format).embosser.supportsPrintMode(PrintMode.MAGAZINE))
-												    || saddleStitch == true)
-													try {
-														format.setFeature(EmbosserFeatures.SADDLE_STITCH, saddleStitch);
-													} catch (IllegalArgumentException e) {
-														return null;
-													}
-												else
+												try {
+													format.setFeature(EmbosserFeatures.SADDLE_STITCH, saddleStitch);
+												} catch (IllegalArgumentException e) {
 													return null;
+												}
 											else if (format instanceof EmbosserAsFileFormat)
 												try {
 													saddleStitch = (Boolean)format.getFeature(EmbosserFeatures.SADDLE_STITCH);
