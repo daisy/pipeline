@@ -384,7 +384,8 @@
                                 </xsl:if>
                                 <xsl:if test="$volume-area-content">
                                     <xsl:element name="{$space}-content">
-                                        <xsl:variable name="volume-area-counter-set" as="item()?" select="s:get($volume-area-style,'counter-set')"/>
+                                        <xsl:variable name="volume-area-counter-set" as="item()?"
+                                                      select="s:get($volume-area-style,'counter-set')[not(string(.)='none')]"/>
                                         <xsl:variable name="volume-area-counter-set" as="item()*"
                                                       select="for $s in $volume-area-counter-set return s:iterate($s)"/>
                                         <xsl:variable name="volume-area-counter-set" as="map(xs:string,xs:integer)">
