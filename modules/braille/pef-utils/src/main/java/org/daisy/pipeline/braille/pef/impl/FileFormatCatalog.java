@@ -186,6 +186,7 @@ public class FileFormatCatalog implements MediumProvider {
 					locale = null;
 				} else if (docLocale != null)
 					table = Iterables.concat(tableRegistry.get(mutableQuery().add("locale", docLocale.toLanguageTag())),
+					                         tableRegistry.get(mutableQuery().add("id", ConfigurableFileFormat.DEFAULT_TABLE)),
 					                         Collections.singleton(null)); // for PEF
 				else if (formatID == null && embosserID == null)
 					table = Iterables.concat(tableRegistry.get(mutableQuery().add("id", ConfigurableFileFormat.DEFAULT_TABLE)),
@@ -203,10 +204,6 @@ public class FileFormatCatalog implements MediumProvider {
 									table,
 									new Function<Table,EmbossedMedium>() {
 										public EmbossedMedium apply(Table table) {
-
-											// FIXME: try newEmbosserWriter() on the object before returning?
-											// => but will not work for PEFFileFormat
-
 											FileFormat format = fs.get();
 											Boolean duplex = FileFormatBuilder.this.duplex;
 											if (duplex != null) {
@@ -263,6 +260,8 @@ public class FileFormatCatalog implements MediumProvider {
 												else
 													return null;
 											else
+												// this is meant for PEFFileFormat or other formats/embossers that have a table set by default
+												// in case of a format that needs the setting, newEmbosserWriter() below will fail
 												try {
 													table = (Table)format.getFeature(EmbosserFeatures.TABLE);
 												} catch (IllegalArgumentException e) {
@@ -369,6 +368,14 @@ public class FileFormatCatalog implements MediumProvider {
 														pageFormat = getPageFormat(embosser);
 													}
 												}
+												// verify that newEmbosserWriter() works (will be used in PEF2TextStep)
+												try {
+													if (!(format instanceof PEFFileFormat))
+														format.newEmbosserWriter(new OutputStream() { public void write(int b) {}});
+												} catch (Throwable e) {
+													logger.debug("file format misconfigured", e);
+													return null;
+												}
 												return new BrailleFileFormat(
 													format, embosser.getPrintableArea(pageFormat),
 													pageWidth, pageHeight, cellWidth, cellHeight,
@@ -396,6 +403,14 @@ public class FileFormatCatalog implements MediumProvider {
 													pageHeight = height;
 												else
 													; // can not happen, see assertion above
+												// verify that newEmbosserWriter() works (will be used in PEF2TextStep)
+												try {
+													if (!(format instanceof PEFFileFormat))
+														format.newEmbosserWriter(new OutputStream() { public void write(int b) {}});
+												} catch (Throwable e) {
+													logger.debug("file format misconfigured", e);
+													return null;
+												}
 												return new BrailleFileFormat(
 													format,
 													new Area(
