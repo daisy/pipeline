@@ -62,9 +62,9 @@ end
 def render_description(desc)
   lines = desc.lines
   if lines.count > 1
-    [lines[0],render_markdown(lines[1..-1].join)]
+    [CGI::escapeHTML(lines[0]),render_markdown(lines[1..-1].join)]
   else
-    lines
+    [CGI::escapeHTML(lines[0])]
   end
 end
 
@@ -485,7 +485,7 @@ Dir.glob(ARGV[0]).each do |f|
         if (option['desc']['long'])
           render << "#{option['desc']['long']}"
         else
-          render << "#{CGI::escapeHTML(option['desc']['short'])}"
+          render << "#{option['desc']['short']}"
         end
         render << '</div>'
       end
