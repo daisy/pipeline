@@ -9,7 +9,8 @@ MVN_CACHE               := .maven-cache
 # -----------------------------------
 MVN_SETTINGS            := settings.xml
 MVN_PROPERTIES          := -Dorg.ops4j.pax.url.mvn.localRepository="$(CURDIR)/$(MVN_WORKSPACE)" \
-                           -Dorg.ops4j.pax.url.mvn.settings="$(CURDIR)/settings.xml"
+                           -Dorg.ops4j.pax.url.mvn.settings="$(CURDIR)/settings.xml" \
+                           -Djava.awt.headless=true
 MVN_RELEASE_CACHE_REPO  := $(MVN_CACHE)
 
 ifneq ($(MAKECMDGOALS),)
