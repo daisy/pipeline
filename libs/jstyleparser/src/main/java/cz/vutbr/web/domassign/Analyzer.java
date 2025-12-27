@@ -294,10 +294,7 @@ public class Analyzer {
 		for (OrderedRule orule : clist) {
 		    
 			final RuleSet rule = orule.getRule();
-			StyleSheet sheet = rule.getStyleSheet();
-			if (sheet == null)
-			    log.warn("No source style sheet set for rule: {}", rule.toString());
-			StyleSheet.Origin origin = (sheet == null) ? StyleSheet.Origin.AGENT : sheet.getOrigin();
+			StyleSheet.Origin origin = rule.getOrigin();
 			
 			// for all selectors inside
 			for (CombinedSelector s : rule.getSelectors()) {

@@ -2,6 +2,8 @@ package cz.vutbr.web.css;
 
 import java.util.List;
 
+import cz.vutbr.web.css.StyleSheet.Origin;
+
 /**
  * Base class for elements of CSS definition.
  * All rules can be created as immutable objects, but
@@ -35,5 +37,31 @@ public interface Rule<T> extends List<T> {
 	 * @return Underlying collection
 	 */
 	List<T> asList();
-    
+	
+	/**
+	 * Sets the origin of the owner style sheet (user agent, user, or author) that contains this rule.
+	 * @param origin The origin to be set
+	 */
+	public void setOrigin(Origin origin);
+	
+	/**
+	 * Gets the origin of the owner style sheet (user agent, user, or author) that contains this rule.
+	 * @return the origin of the stylesheet.
+	 */
+	public Origin getOrigin();
+
+	/**
+	 * Sets the media query list associated with this rule.
+	 *
+	 * An empty list or {@code null} means that this rule applies to all media (equivalent to "all").
+	 */
+	public void setMediaQueries(MediaQueryList media);
+
+	/**
+	 * Gets the media query list associated with this rule.
+	 *
+	 * An empty list or {@code null} means that this rule applies to all media (equivalent to "all").
+	 */
+	public MediaQueryList getMediaQueries();
+
 }

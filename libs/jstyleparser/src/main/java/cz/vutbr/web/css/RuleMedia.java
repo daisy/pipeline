@@ -11,19 +11,4 @@ package cz.vutbr.web.css;
  * 
  */
 public interface RuleMedia extends RuleBlock<RuleBlock<?>>, PrettyOutput {
-
-	/**
-	 * Returns list of all media associated with this rule
-	 * @return List of media
-	 */
-	public MediaQueryList getMediaQueries();
-	
-	/**
-	 * Sets media associated with rules
-	 * @param media Media associated
-	 * @return Modified instance
-	 */
-	public RuleMedia setMediaQueries(MediaQueryList media);
-
-	
 }

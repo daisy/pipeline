@@ -16,43 +16,15 @@ import cz.vutbr.web.css.StyleSheet;
  */
 public class StyleSheetImpl extends AbstractRule<RuleBlock<?>> implements StyleSheet {
 	
-    private Origin origin;
-
 	protected StyleSheetImpl() {
-    	this.origin = StyleSheet.Origin.AUTHOR;
-    }    
-    
-	@Override
-	public void setOrigin(Origin o)
-	{
-		this.origin = o;
-	}
-
-	@Override
-	public Origin getOrigin()
-	{
-		return origin;
-	}
-
-	@Override
-	public void add(int index, RuleBlock<?> element)
-	{
-		element.setStyleSheet(this);
-		super.add(index, element);
-	}
-
-	@Override
-	public boolean add(RuleBlock<?> o)
-	{
-		o.setStyleSheet(this);
-		return super.add(o);
 	}
 
 	@Override
 	public StyleSheet filter(MediaSpec medium) {
 		StyleSheet filtered = new StyleSheetImpl();
 		filtered.unlock();
-		filtered.setOrigin(origin);
+		filtered.setOrigin(getOrigin());
+		filtered.setMediaQueries(getMediaQueries());
 		filter(this, medium, filtered);
 		return filtered;
 	}

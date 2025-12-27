@@ -148,8 +148,7 @@ public class DirectAnalyzer extends Analyzer
         for (OrderedRule orule : clist) {
             
             final RuleSet rule = orule.getRule();
-            StyleSheet sheet = rule.getStyleSheet();
-            StyleSheet.Origin origin = (sheet == null) ? StyleSheet.Origin.AGENT : sheet.getOrigin();
+            StyleSheet.Origin origin = rule.getOrigin();
             
             // for all selectors inside
             for (CombinedSelector s : rule.getSelectors()) {

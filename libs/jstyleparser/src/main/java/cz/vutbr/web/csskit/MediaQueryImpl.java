@@ -69,6 +69,8 @@ public class MediaQueryImpl extends AbstractRule<MediaExpression> implements Med
 
     @Override
     public MediaQuery and(MediaQuery query) {
+        if (query == this)
+            return this;
         MediaQueryImpl combined;
         if (type == null) {
             combined = new MediaQueryImpl(query.getType(), negative);
@@ -97,6 +99,7 @@ public class MediaQueryImpl extends AbstractRule<MediaExpression> implements Med
             else
                 combined = new MediaQueryImpl(type, negative);
         }
+        combined.unlock();
         combined.addAll(this);
         if (negative == query.isNegative())
             combined.addAll(query);

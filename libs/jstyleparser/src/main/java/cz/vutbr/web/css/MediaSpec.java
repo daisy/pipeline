@@ -506,7 +506,7 @@ public class MediaSpec
      */
     public boolean matchesEmpty()
     {
-        return true;
+        return matchEmpty;
     }
     
     /**

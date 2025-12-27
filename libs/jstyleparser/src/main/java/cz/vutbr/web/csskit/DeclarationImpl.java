@@ -32,6 +32,8 @@ public class DeclarationImpl extends AbstractRule<Term<?>> implements Declaratio
 		this.property = clone.getProperty();
 		this.important = clone.isImportant();
 		this.source = clone.getSource();
+		this.origin = clone.getOrigin();
+		this.media = clone.getMediaQueries();
 		this.replaceAll(clone.asList());
 	}
 

@@ -21,6 +21,7 @@ import cz.vutbr.web.css.CSSFactory;
 import cz.vutbr.web.css.MediaQuery;
 import cz.vutbr.web.css.MediaQueryList;
 import cz.vutbr.web.css.RuleBlock;
+import cz.vutbr.web.css.Rule;
 import cz.vutbr.web.css.RuleList;
 import cz.vutbr.web.css.RuleMedia;
 import cz.vutbr.web.css.StyleSheet;
@@ -191,12 +192,16 @@ public class CSSParserFactory {
 	 */
 	public StyleSheet parse(CSSSource source, CSSSourceReader cssReader, boolean inlinePriority)
 			throws IOException, CSSException {
+		return parse(source, cssReader, inlinePriority, null);
+	}
 
+	public StyleSheet parse(CSSSource source, CSSSourceReader cssReader, boolean inlinePriority, MediaQueryList mediaQuery)
+			throws IOException, CSSException {
 		StyleSheet sheet = (StyleSheet) CSSFactory.getRuleFactory()
 				.createStyleSheet().unlock();
 
 		Preparator preparator = new SimplePreparator(source.inlineElement, inlinePriority);
-        StyleSheet ret = parseAndImport(source, cssReader, sheet, preparator, null);
+		StyleSheet ret = parseAndImport(source, cssReader, sheet, preparator, mediaQuery);
 		return ret;
 	}
 
@@ -236,9 +241,14 @@ public class CSSParserFactory {
 	 */
 	public StyleSheet append(CSSSource source, CSSSourceReader cssReader,
 			boolean inlinePriority, StyleSheet sheet) throws IOException, CSSException {
+		return append(source, cssReader, inlinePriority, null, sheet);
+	}
 
+	public StyleSheet append(CSSSource source, CSSSourceReader cssReader,
+			boolean inlinePriority, MediaQueryList mediaQuery, StyleSheet sheet)
+			throws IOException, CSSException {
 		Preparator preparator = new SimplePreparator(source.inlineElement, inlinePriority);
-		StyleSheet ret = parseAndImport(source, cssReader, sheet, preparator, null);
+		StyleSheet ret = parseAndImport(source, cssReader, sheet, preparator, mediaQuery);
 		return ret;
 	}
 
@@ -300,11 +310,13 @@ public class CSSParserFactory {
         }
 
         RuleList rules = parser.getRules();
-        if (media != null) {
+        if (media != null && !media.isEmpty()) {
             RuleMedia rm = CSSFactory.getRuleFactory().createMedia();
             rm.setMediaQueries(media);
             log.debug("Wrapping rules {} into RuleMedia: {}", rules, rm);
             rm.unlock();
+            for (Rule<?> r : rules)
+                r.setMediaQueries(media);
             rm.replaceAll(rules);
             sheet.add(rm);
             return sheet;

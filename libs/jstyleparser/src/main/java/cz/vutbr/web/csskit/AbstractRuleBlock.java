@@ -5,21 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.vutbr.web.css.RuleBlock;
-import cz.vutbr.web.css.StyleSheet;
 
 public class AbstractRuleBlock<T> extends AbstractRule<T> implements RuleBlock<T> {
-	
-	protected StyleSheet stylesheet;
-	
-	public StyleSheet getStyleSheet()
-	{
-		return stylesheet;
-	}
-
-	public void setStyleSheet(StyleSheet stylesheet)
-	{
-		this.stylesheet = stylesheet;
-	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()

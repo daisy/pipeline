@@ -23,6 +23,7 @@ import org.w3c.dom.traversal.NodeFilter;
 
 import cz.vutbr.web.csskit.ElementUtil;
 import cz.vutbr.web.csskit.MatchConditionImpl;
+import cz.vutbr.web.csskit.MediaQueryListImpl;
 import cz.vutbr.web.csskit.antlr.CSSParserFactory;
 import cz.vutbr.web.csskit.antlr.CSSSource;
 import cz.vutbr.web.csskit.antlr.CSSSourceReader;
@@ -762,8 +763,10 @@ public final class CSSFactory {
 			Element elem = (Element) current;
 
 			try {
+				MediaQueryList mq = null;
+
 				// embedded style-sheet
-				if (isEmbeddedStyleSheet(elem, media)) {
+				if (isEmbeddedStyleSheet(elem) && media.matches(mq = getMediaQuery(elem))) {
 					Node firstChild = elem.getFirstChild();
 					if (firstChild != null) {
 						SourceLocator loc = nodeLocator.apply(firstChild);
@@ -772,45 +775,53 @@ public final class CSSFactory {
 							result = pf.append(
 								new CSSSource(extractElementText(elem), mediaType, base, loc.getLineNumber(), loc.getColumnNumber()),
 								cssReader,
+								false,
+								mq,
 								result);
 							log.debug("Matched embedded CSS style");
 						}
 					}
 				}
+
 				// linked style-sheet
-				else if (isLinkedStyleSheet(elem, media)) {
-				    URL uri = DataURLHandler.createURL(base, ElementUtil.getAttribute(elem, "href"));
+				else if (isLinkedStyleSheet(elem) && media.matches(mq = getMediaQuery(elem))) {
+					URL uri = DataURLHandler.createURL(base, ElementUtil.getAttribute(elem, "href"));
 					String mediaType = getMediaType(elem);
 					if (cssReader.supportsMediaType(mediaType, uri)) {
 						result = pf.append(
 							new CSSSource(uri, null, getMediaType(elem)),
 							cssReader,
+							false,
+							mq,
 							result);
 						log.debug("Matched linked CSS style");
 					}
 				}
+
 				// in-line style and default style
 				else {
 					if (cssReader.supportsMediaType(null, null)) {
-    				    if (elem.getAttribute("style") != null && elem.getAttribute("style").length() > 0) {
-        					SourceLocator loc = nodeLocator.apply(elem.getAttributeNode("style"));
-        					result = pf.append(
-        						new CSSSource(elem.getAttribute("style"), elem, base, loc.getLineNumber(), loc.getColumnNumber()),
-        						cssReader,
-        						true,
-        						result);
-        					log.debug("Matched inline CSS style");
-    				    }
+						if (elem.getAttribute("style") != null && elem.getAttribute("style").length() > 0) {
+							SourceLocator loc = nodeLocator.apply(elem.getAttributeNode("style"));
+							result = pf.append(
+								new CSSSource(elem.getAttribute("style"), elem, base, loc.getLineNumber(), loc.getColumnNumber()),
+								cssReader,
+								true,
+								null,
+								result);
+							log.debug("Matched inline CSS style");
+						}
 					}
-                        if (elem.getAttribute("XDefaultStyle") != null && elem.getAttribute("XDefaultStyle").length() > 0) {
-                            SourceLocator loc = nodeLocator.apply(elem.getAttributeNode("XDefaultStyle"));
-                            result = pf.append(
-                            		new CSSSource(elem.getAttribute("XDefaultStyle"), elem, base, loc.getLineNumber(), loc.getColumnNumber()),
-                                 cssReader,
-                                 false,
-                                 result);
-                            log.debug("Matched default CSS style");
-                        }
+					if (elem.getAttribute("XDefaultStyle") != null && elem.getAttribute("XDefaultStyle").length() > 0) {
+						SourceLocator loc = nodeLocator.apply(elem.getAttributeNode("XDefaultStyle"));
+						result = pf.append(
+							new CSSSource(elem.getAttribute("XDefaultStyle"), elem, base, loc.getLineNumber(), loc.getColumnNumber()),
+							cssReader,
+							false,
+							null,
+							result);
+						log.debug("Matched default CSS style");
+					}
 				}
 			} catch (CSSException ce) {
 				log.error(ce.getMessage(), ce);
@@ -820,15 +831,13 @@ public final class CSSFactory {
 
 		}
 
-		private boolean isEmbeddedStyleSheet(Element e, MediaSpec media) {
-			return "style".equalsIgnoreCase(e.getNodeName())
-					&& isAllowedMedia(e, media);
+		private boolean isEmbeddedStyleSheet(Element e) {
+			return "style".equalsIgnoreCase(e.getNodeName());
 		}
 
-		private boolean isLinkedStyleSheet(Element e, MediaSpec media) {
+		private boolean isLinkedStyleSheet(Element e) {
 			return e.getNodeName().equalsIgnoreCase("link")
-			        && (ElementUtil.getAttribute(e, "rel").toLowerCase().contains("stylesheet"))
-					&& isAllowedMedia(e, media);
+			        && (ElementUtil.getAttribute(e, "rel").toLowerCase().contains("stylesheet"));
 		}
 
 		/*
@@ -868,33 +877,22 @@ public final class CSSFactory {
 		}
 
 		/**
-		 * Checks allowed media by searching for {@code media} attribute on
-		 * element and its content
-		 * 
-		 * @param e
-		 *            (STYLE) Element
-		 * @param media
-		 *            Current media specification used for parsing
-		 * @return {@code true} if allowed, {@code false} otherwise
+		 * Checks allowed media by searching for {@code media} attribute on element
 		 */
-		private boolean isAllowedMedia(Element e, MediaSpec media) {
-		    String attr = ElementUtil.getAttribute(e, "media");
-		    if (attr != null && attr.length() > 0)
-		    {
-		        attr = attr.trim();
-		        if (attr.length() > 0)
-		        {
-		            List<MediaQuery> ql = pf.parseMediaQuery(attr);
-		            if (ql != null)
-		                return media.matches(ql);
-		            else
-		                return false; //no usable media queries (malformed string?)
-		        }
-		        else
-		            return media.matchesEmpty(); //empty query string
-		    }
-		    else
-		        return media.matchesEmpty(); //no media queries
+		private MediaQueryList getMediaQuery(Element e) {
+			String attr = ElementUtil.getAttribute(e, "media");
+			if (attr != null && attr.length() > 0) {
+				attr = attr.trim();
+				if (attr.length() > 0) {
+					MediaQueryList ql = pf.parseMediaQuery(attr);
+					if (ql != null)
+						return ql;
+					else
+						return MediaQueryListImpl.NOT_ALL; //no usable media queries (malformed string?)
+				} else
+					return MediaQueryListImpl.EMPTY; //empty query string
+			} else
+				return MediaQueryListImpl.EMPTY; //no media queries
 		}
 	}
 
