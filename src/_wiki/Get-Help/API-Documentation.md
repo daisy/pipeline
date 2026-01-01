@@ -2,7 +2,7 @@
 
 ## Web Service API
 
-If you want to use DAISY Pipeline 2 as a web server and implement your
+If you want to use DAISY Pipeline as a web server and implement your
 own client, you need to know about the [web service API](WebServiceAPI).
 
 ## Java Client Library
@@ -38,7 +38,7 @@ go get github.com/daisy/pipeline-clientlib-go
 
 ## Java API
 
-DAISY Pipeline 2 may also be used directly as a Java library instead
+DAISY Pipeline may also be used directly as a Java library instead
 of via client-server communication.
 
 These are the most important classes in the Java API:

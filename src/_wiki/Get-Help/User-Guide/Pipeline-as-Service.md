@@ -1,6 +1,6 @@
 # Pipeline as a Service
 
-Most people will use DAISY Pipeline 2 as a standalone desktop
+Most people will use DAISY Pipeline as a standalone desktop
 application. It is easy to install and ready to go. But the Pipeline
 can also be used as a service to which client programs can connect,
 through a [web API](WebServiceAPI).
@@ -21,7 +21,7 @@ Choose a package from the
 includes the server, then follow the installation instructions for
 that package.
 
-## Starting and stopping the service
+## Starting and stopping the web service
 
 ### Windows
 
@@ -29,7 +29,7 @@ that package.
 
 ### Debian/Ubuntu
 
-If the Pipeline was installed via the Debian package, the service is
+If the Pipeline was installed via the Debian package, the web service is
 launched automatically on system startup. To start or stop the service
 manually, use `service daisy-pipeline2 start|stop|restart|status`.
 
@@ -43,7 +43,7 @@ installation. To shut down the service press `Ctrl-C`.
 
 ### Configuration files
 
-When using DAISY Pipeline 2 as a service, especially when integrating
+When using DAISY Pipeline as a service, especially when integrating
 it in a custom setup, you probably want to configure a thing or
 two. Two files are intended to be edited by you for this purpose:
 `pipeline.properties` and `config-logback.xml`. See

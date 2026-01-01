@@ -1,9 +1,9 @@
-The Pipeline 2 Web UI is a standalone application, intended to be run on a server.
-By default it is assumed that it is running on the same server as the Pipeline 2 engine,
+The Pipeline Web UI is a standalone application, intended to be run on a server.
+By default it is assumed that it is running on the same server as the Pipeline engine,
 which is the recommended setup.
 
-If you install the Pipeline 2 engine on your personal computer, it is recommended that you
-use the Pipeline 2 Desktop GUI instead.
+If you install the Pipeline engine on your personal computer, it is recommended that you
+use the Pipeline Desktop GUI instead.
 
 ## Installation
 
@@ -34,13 +34,13 @@ The first time that you use the Web UI, you will be asked to create an administr
 
 <img src="images/13.png" alt=""/>
 
-There might be a warning message at the top of the Web UI, right under the navigation bar, saying "Unable to communicate with the Pipeline 2 Engine". If this is the case, it means that either the Pipeline 2 Engine is not running, or it is running in a non-standard location.
+There might be a warning message at the top of the Web UI, right under the navigation bar, saying "Unable to communicate with the Pipeline Engine". If this is the case, it means that either the Pipeline Engine is not running, or it is running in a non-standard location.
 
-When starting the Pipeline 2 engine, you must start it from the command line instead of the GUI. Go to the folder where the Pipeline 2 engine is installed, usually `C:\Program Files (x86)\DAISY Pipeline 2\daisy-pipeline` on Windows, or `/opt/daisy-pipeline` on Linux, and run `bin/pipeline2`.
+When starting the Pipeline engine, you must start it from the command line instead of the GUI. Go to the folder where the Pipeline engine is installed, usually `C:\Program Files (x86)\DAISY Pipeline 2\daisy-pipeline` on Windows, or `/opt/daisy-pipeline` on Linux, and run `bin/pipeline2`.
 
 <img src="images/16.png" alt=""/>
 
-If the engine is already running, but on a non-standard port or on another server, then you need to configure it in the Web UI. Go to "Admin settings" and "Pipeline 2 Web API". Set the endpoint address to the Web API endpoint as necessary. If the Pipeline 2 Engine at the given Web API endpoint requires authentication, you will be required to provide the authentication ID and the secret text as well.
+If the engine is already running, but on a non-standard port or on another server, then you need to configure it in the Web UI. Go to "Admin settings" and "Pipeline 2 Web API". Set the endpoint address to the Web API endpoint as necessary. If the Pipeline Engine at the given Web API endpoint requires authentication, you will be required to provide the authentication ID and the secret text as well.
 
 <img src="images/15.png" alt=""/>
 

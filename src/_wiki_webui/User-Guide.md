@@ -18,7 +18,7 @@
 You can access this page through the "Jobs" menu item in the navigation bar at the top of the page.
 
 <table role="presentation">
-<tr><td><p>A new job will either be "Running" or "Queued". The Pipeline 2 engine will by default allow at most two jobs to run at the same time. If you create more jobs, those jobs will be queued.</p>
+<tr><td><p>A new job will either be "Running" or "Queued". The Pipeline engine will by default allow at most two jobs to run at the same time. If you create more jobs, those jobs will be queued.</p>
 
 <p>If the job succeeds, the status will change to "Success".</p>
 <p>If there is a validation error, the status will change to "Validation failed".</p>
@@ -44,7 +44,7 @@ For more information on templates, see the [Templating documentation](Templating
 ## About Page
 
 <table role="presentation"><body>
-<tr><td>The about page contains a description of what DAISY Pipeline 2 is as well as external links to where you can find more information and get support. At the bottom, the version of the currently running Pipeline 2 engine and the Web UI are displayed.</td><td><img src="images/22.png" alt=""/></td></tr>
+<tr><td>The about page contains a description of what DAISY Pipeline is as well as external links to where you can find more information and get support. At the bottom, the version of the currently running Pipeline engine and the Web UI are displayed.</td><td><img src="images/22.png" alt=""/></td></tr>
 </body></table>
 
 ## Account settings
@@ -55,6 +55,6 @@ For more information on templates, see the [Templating documentation](Templating
 
 ## Admin Settings (for administrators)
 
-Administrators have access to the "Admin settings" page, where they can configure several aspects of the Web UI; Users and Permissions, the Pipeline 2 Web API, Upload directory, E-mail settings, Maintenance, and Appearance.
+Administrators have access to the "Admin settings" page, where they can configure several aspects of the Web UI; Users and Permissions, the Pipeline Web API, Upload directory, E-mail settings, Maintenance, and Appearance.
 
 For more info, see the [Administrator settings](Administrator-settings) documentation.

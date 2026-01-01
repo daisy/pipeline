@@ -1,6 +1,6 @@
 # Contribute
 
-The DAISY Pipeline 2 project is under active development and welcomes
+The DAISY Pipeline project is under active development and welcomes
 any kind of contributions.
 
 <!--
@@ -8,7 +8,7 @@ Depending on your skills or intents there
 are several ways to participate.
 -->
 
-DAISY Pipeline 2 is open source software. It is licensed under the
+DAISY Pipeline is open source software. It is licensed under the
 [GNU Lesser General Public License (LGPL)](https://www.gnu.org/licenses/lgpl.html). All
 the source code is hosted on
 [Github](https://github.com/daisy/pipeline).

@@ -8,7 +8,7 @@ under the free software licence
 ## Main repositories
 
 A first group of repositories are the principal repositories that make
-up the DAISY Pipeline 2 software suite.
+up the DAISY Pipeline software suite.
 
 - [pipeline-assembly][]: The build script that assembles all
   components into various packages (for different platforms).
@@ -207,7 +207,7 @@ provided services can be found
 ## Contributing
 
 We accept contributions of any kind to any part of the DAISY
-Pipeline 2. It can be code changes, tests, documentation, or anything
+Pipeline. It can be code changes, tests, documentation, or anything
 else. Contributions should preferably happen through git/GitHub. The
 general workflow is the following:
 

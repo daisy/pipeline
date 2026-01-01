@@ -1,7 +1,7 @@
 # Scripts
 
 "Scripts" is the term we use for the conversion tasks you can perform
-with DAISY Pipeline 2. The complete list of available scripts is:
+with DAISY Pipeline. The complete list of available scripts is:
 
 * [DAISY 2.02 Unscrambler](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/daisy202-unscrambler/)
 * [DAISY 2.02 Validator](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/daisy202-validator/)

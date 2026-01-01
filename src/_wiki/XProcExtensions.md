@@ -1,6 +1,6 @@
 # XProc Extensions
 
-DAISY Pipeline 2 supports a number of extensions to XProc, in the form of [extension attributes](https://www.w3.org/TR/xproc/#extension-attributes). They have the namespace `http://www.daisy.org/ns/pipeline/xproc`. Some are applicable only to scripts and are meant to provide metadata about the script, such as data types for option. Some other, like `px:message`, are applicable everywhere.
+DAISY Pipeline supports a number of extensions to XProc, in the form of [extension attributes](https://www.w3.org/TR/xproc/#extension-attributes). They have the namespace `http://www.daisy.org/ns/pipeline/xproc`. Some are applicable only to scripts and are meant to provide metadata about the script, such as data types for option. Some other, like `px:message`, are applicable everywhere.
 
 We also list some standard XProc elements and attributes that are treated specially by DAISY Pipeline.
 

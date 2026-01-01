@@ -12,9 +12,9 @@ The `pipeline-clientlib-java` Java library is used for parsing and serializing t
 
 There are two repositories you can use:
 - [The Web UI repository](https://github.com/daisy/pipeline-webui)
-- [The Pipeline 2 super project](https://github.com/daisy/pipeline)
+- [The Pipeline super project](https://github.com/daisy/pipeline)
 
-The Pipeline 2 super project is easier to use if you want to start a development version of the engine for testing the Web UI, and/or change `pipeline-clientlib-java` or other relevant libraries at the same time as you make changes to the Web UI.
+The Pipeline super project is easier to use if you want to start a development version of the engine for testing the Web UI, and/or change `pipeline-clientlib-java` or other relevant libraries at the same time as you make changes to the Web UI.
 
 Note that if you use the super project, you will need to have `Make` installed.
 
@@ -32,7 +32,7 @@ Note that if you use the super project, you will need to have `Make` installed.
 
 - Build and run the application by bringing up a shell with `./activator` (or alternatively a graphical interface with `./activator ui`) and invoking `playRun`. Changes to the code are automatically picked up.
 
-#### From the Pipeline 2 super project
+#### From the Pipeline super project
 
 To start the Web UI, simply run:
 

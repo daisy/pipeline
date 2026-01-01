@@ -4,7 +4,7 @@ layout: default
 # Issue Tracker
 
 [This Github project](https://github.com/daisy/pipeline/issues) is the
-main issue tracker for DAISY Pipeline 2. However, it is not the only
+main issue tracker for DAISY Pipeline. However, it is not the only
 place where you can find issues, as the Pipeline source code is
 distributed over several smaller sub-projects that each have their own
 issue tracker. If possible, use the individual trackers of the
@@ -59,7 +59,7 @@ problem.
 ### Finding your Log Files
 
 If an error message was displayed when you tried to start DAISY
-Pipeline 2, the log files should have been automatically opened with
+Pipeline, the log files should have been automatically opened with
 File Explorer in a minimized window. If they were, continue to the
 next section **Uploading your Log Files**.
 
