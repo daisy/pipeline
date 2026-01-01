@@ -14,10 +14,8 @@ the source code is hosted on
 [Github](https://github.com/daisy/pipeline).
 
 The best way to get in touch with the developers is through our
-[mailing
-list](https://groups.google.com/forum/#!forum/daisy-pipeline-dev)
-(hosted on Google Groups) or [direct
-email](mailto:daisy-pipeline@mail.daisy.org).
+[discussion forum](https://github.com/daisy/pipeline/discussions)
+(hosted on Github) or through [email](mailto:daisy-pipeline@mail.daisy.org).
 
 Guidance on how to get started can be found in the
 [developer guide](Developer-Guide).

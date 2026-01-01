@@ -34,14 +34,13 @@ appropriate sub-project and open the **Issues** tab.
   daisy/pipeline-ui
   daisy/pipeline-updater
   daisy/pipeline-webui
-  daisy/braille-css
+  daisy/braille-css-java
   daisy/jStyleParser
   daisy/osgi-libs
   daisy/xmlcalabash1
   daisy/xprocspec
   daisy/xproc-maven-plugin
   daisy/xspec-maven-plugin
-  snaekobbi/pipeline-mod-braille
 {% endcapture %}
 {% assign repos = repos | normalize_whitespace | split:' ' %}
 
@@ -56,6 +55,7 @@ For all new issues, we ask that users provide their error logs via
 simple file-sharing service for GitHub, for us to diagnose and fix the
 problem.
 
+<!--
 ### Finding your Log Files
 
 If an error message was displayed when you tried to start DAISY
@@ -66,6 +66,7 @@ next section **Uploading your Log Files**.
 If the log files weren't opened: open File Explorer, copy/paste
 **%AppData%/DAISY Pipeline 2/log** in the navigation bar, and press
 **Enter**.
+-->
 
 ### Uploading your Log Files
 
@@ -75,4 +76,5 @@ If the log files weren't opened: open File Explorer, copy/paste
    the appropriate section of your GitHub issue.
 
 __NOTE__: Do __NOT__ paste the contents of your logs into the issue,
-as the issue will be much too long.
+as the issue will be much too long, and the logs may contain sensitive
+data.

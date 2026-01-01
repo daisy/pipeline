@@ -50,8 +50,6 @@
   * [[API Documentation|API-Documentation]]
     * [[Web Service API|WebServiceAPI]]
   * [[Issue Tracker|http://daisy.github.io/pipeline/Get-Help/Issue-Tracker.html]]
-  * [[Troubleshooting|Troubleshooting]]
-    * [[Troubleshooting Desktop Application|https://github.com/daisy/pipeline-ui/wiki/Troubleshooting]]
   * [[Forum|https://github.com/daisy/pipeline/discussions]]
   * [[Contact|mailto:daisy-pipeline@mail.daisy.org]]
 * [[Contribute|Contribute]]

@@ -28,14 +28,13 @@ FIXME: duplication with Issue-Tracker.md
   daisy/pipeline-ui
   daisy/pipeline-updater
   daisy/pipeline-webui
-  daisy/braille-css
+  daisy/braille-css-java
   daisy/jStyleParser
   daisy/osgi-libs
   daisy/xmlcalabash1
   daisy/xprocspec
   daisy/xproc-maven-plugin
   daisy/xspec-maven-plugin
-  snaekobbi/pipeline-mod-braille
 {% endcapture %}
 {% assign repos = repos | normalize_whitespace | split:' ' %}
 
