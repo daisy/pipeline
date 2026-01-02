@@ -22,485 +22,565 @@
 <a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">import</strong> java.net.URL;
 <a class="jxr_linenumber" name="L14" href="#L14">14</a>  <strong class="jxr_keyword">import</strong> java.nio.charset.StandardCharsets;
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> java.util.Base64;
-<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">import</strong> java.util.LinkedList;
-<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">import</strong> java.util.Map;
-<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> java.util.NoSuchElementException;
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> javax.xml.namespace.QName;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> javax.xml.stream.XMLStreamConstants.START_ELEMENT;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> javax.xml.stream.XMLStreamConstants.END_ELEMENT;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> javax.xml.stream.XMLStreamReader;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> javax.xml.transform.stream.StreamSource;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> com.google.common.collect.ImmutableMap;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> com.google.common.io.ByteStreams;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> com.google.common.io.CharStreams;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> com.openhtmltopdf.outputdevice.helper.BaseRendererBuilder.PageSizeUnits;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.core.XProcException;
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.core.XProcRuntime;
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.io.ReadablePipe;
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.io.WritablePipe;
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.library.DefaultStep;
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.runtime.XAtomicStep;
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">import</strong> net.sf.saxon.s9api.SaxonApiException;
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <strong class="jxr_keyword">import</strong> org.daisy.dotify.api.table.BrailleConverter;
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <strong class="jxr_keyword">import</strong> org.daisy.dotify.api.table.Table;
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <strong class="jxr_keyword">import</strong> org.daisy.pipeline.braille.pef.TableRegistry;
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.file.URLs;
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.shell.CommandRunner;
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.transform.InputValue;
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.transform.OutputValue;
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.transform.TransformerException;
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.transform.XMLInputValue;
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.transform.XMLTransformer;
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.xproc.calabash.XMLCalabashInputValue;
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.xproc.calabash.XProcStep;
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.xproc.calabash.XProcStepProvider;
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.xproc.XProcMonitor;
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <strong class="jxr_keyword">import</strong> org.daisy.pipeline.braille.common.Query.MutableQuery;
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.daisy.pipeline.braille.common.Query.util.mutableQuery;
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.daisy.pipeline.braille.common.Query.util.query;
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.daisy.pipeline.file.FileUtils.cResultDocument;
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <strong class="jxr_keyword">import</strong> org.osgi.service.component.annotations.Component;
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <strong class="jxr_keyword">import</strong> org.osgi.service.component.annotations.Reference;
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <strong class="jxr_keyword">import</strong> org.osgi.service.component.annotations.ReferenceCardinality;
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <strong class="jxr_keyword">import</strong> org.osgi.service.component.annotations.ReferencePolicy;
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <strong class="jxr_keyword">import</strong> org.slf4j.Logger;
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <strong class="jxr_keyword">import</strong> org.slf4j.LoggerFactory;
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/calabash/impl/pdf/PEF2PDFStep.html">PEF2PDFStep</a> <strong class="jxr_keyword">extends</strong> DefaultStep <strong class="jxr_keyword">implements</strong> XProcStep {
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Logger logger = LoggerFactory.getLogger(PEF2PDFStep.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName _SOURCE = <strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"source"</span>);
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> net.sf.saxon.s9api.QName _HREF = <strong class="jxr_keyword">new</strong> net.sf.saxon.s9api.QName(<span class="jxr_string">"href"</span>);
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> net.sf.saxon.s9api.QName _TABLE = <strong class="jxr_keyword">new</strong> net.sf.saxon.s9api.QName(<span class="jxr_string">"table"</span>);
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DEFAULT_TABLE = <span class="jxr_string">"org.daisy.braille.impl.table.DefaultTableProvider.TableType.EN_US"</span>;
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> URL font = URLs.getResourceFromJAR(<span class="jxr_string">"odt2braille8.ttf"</span>, PEF2PDFStep.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  	<em class="jxr_comment">/*</em>
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_comment">	 * pdfbox does not support OpenType fonts, nor does it support the font-face properties</em>
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_comment">	 * ascent-override, descent-override and size-adjust. NotCourierSans-Bold.ttf was created from</em>
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_comment">	 * NotCourierSans-Bold.otf using the Font Squirrel Webfont Generator tool</em>
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_comment">	 * (https://www.fontsquirrel.com/tools/webfont-generator). I used these settings:</em>
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_comment">	 *</em>
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_comment">	 * - Upload Fonts: NotCourierSans-Bold.otf</em>
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_comment">	 * - Font Formats: TrueType</em>
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_comment">	 * - Vertical Metrics: Custom Adjustment:</em>
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_comment">	 *   - Ascent: 70%</em>
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_comment">	 *   - Descent: 30%</em>
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_comment">	 * - X-height Matching: 83%</em>
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_comment">	 */</em>
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> URL fallbackFont = URLs.getResourceFromJAR(<span class="jxr_string">"NotCourierSans-Bold.ttf"</span>, PEF2PDFStep.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/TableRegistry.html">TableRegistry</a> tableRegistry;
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	<strong class="jxr_keyword">private</strong> ReadablePipe source = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	<strong class="jxr_keyword">private</strong> WritablePipe result = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	<strong class="jxr_keyword">private</strong> <a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/calabash/impl/pdf/PEF2PDFStep.html">PEF2PDFStep</a>(XProcRuntime runtime,
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	                    XAtomicStep step,
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	                    TableRegistry tableRegistry) {
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		<strong class="jxr_keyword">super</strong>(runtime, step);
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		<strong class="jxr_keyword">this</strong>.tableRegistry = tableRegistry;
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	}
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 	@Override
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setInput(String port, ReadablePipe pipe) {
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		source = pipe;
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 	}
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 	@Override
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setOutput(String port, WritablePipe pipe) {
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		result = pipe;
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	}
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	@Override
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> reset() {
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		source.resetReader();
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		result.resetWriter();
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	}
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	@Override
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> run() <strong class="jxr_keyword">throws</strong> SaxonApiException {
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		<strong class="jxr_keyword">super</strong>.run();
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 			URI href = <strong class="jxr_keyword">null</strong>; {
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 				<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 					href = URI.create(getOption(_HREF).getString());
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 				} <strong class="jxr_keyword">catch</strong> (IllegalArgumentException e) {
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Not a valid URI: "</span> + href);
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 				}
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 			}
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 			File pdfFile = <strong class="jxr_keyword">null</strong>; {
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 				<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 					pdfFile = <strong class="jxr_keyword">new</strong> File(href);
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 				} <strong class="jxr_keyword">catch</strong> (IllegalArgumentException e) {
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Not a valid file URI: "</span> + href);
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 				}
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 			}
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 			<strong class="jxr_keyword">if</strong> (pdfFile.exists())
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"File exists: "</span> + pdfFile);
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 			Table table = <strong class="jxr_keyword">null</strong>; {
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 				MutableQuery q = mutableQuery(query(getOption(_TABLE, <span class="jxr_string">""</span>)));
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 				logger.debug(<span class="jxr_string">"Finding table for query: "</span> + q);
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 				<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 					table = tableRegistry.get(q).iterator().next();
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 				} <strong class="jxr_keyword">catch</strong> (NoSuchElementException e) {
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 					<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 						table = tableRegistry.get(mutableQuery().add(<span class="jxr_string">"id"</span>, DEFAULT_TABLE)).iterator().next();
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 						logger.warn(<span class="jxr_string">"Can not find a table for query: "</span> + q);
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 						logger.warn(<span class="jxr_string">"Falling back to default"</span>);
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 					} <strong class="jxr_keyword">catch</strong> (NoSuchElementException ee) {
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Could not find a table for query: "</span> + q);
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 					}
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 				}
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 			}
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 			logger.debug(<span class="jxr_string">"Storing PEF to PDF using table: "</span> + table);
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 			<strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/calabash/impl/pdf/PEF2PDFStep.html">PEF2PDF</a>(pdfFile, table).transform(
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 				ImmutableMap.of(_SOURCE, XMLCalabashInputValue.of(source)),
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 				ImmutableMap.of()
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 			).run();
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 			result.write(runtime.getProcessor().newDocumentBuilder().build(<strong class="jxr_keyword">new</strong> StreamSource(cResultDocument(pdfFile.toURI().toString()))));
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		} <strong class="jxr_keyword">catch</strong> (Throwable e) {
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 			<strong class="jxr_keyword">throw</strong> XProcStep.raiseError(e, step);
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		}
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	}
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 	@Component(
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		name = <span class="jxr_string">"pxi:pef2pdf"</span>,
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		service = { XProcStepProvider.<strong class="jxr_keyword">class</strong> },
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		property = { <span class="jxr_string">"type:String={http://www.daisy.org/ns/pipeline/xproc/internal}pef2pdf"</span> }
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 	)
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/calabash/impl/pdf/PEF2PDFStep.html">Provider</a> <strong class="jxr_keyword">implements</strong> XProcStepProvider {
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		@Override
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		<strong class="jxr_keyword">public</strong> XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map&lt;String,String&gt; properties) {
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/calabash/impl/pdf/PEF2PDFStep.html">PEF2PDFStep</a>(runtime, step, tableRegistry);
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		}
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		@Reference(
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 			name = <span class="jxr_string">"TableRegistry"</span>,
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 			unbind = <span class="jxr_string">"-"</span>,
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 			service = TableRegistry.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 			cardinality = ReferenceCardinality.MANDATORY,
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 			policy = ReferencePolicy.STATIC
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		)
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> bindTableRegistry(<a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/TableRegistry.html">TableRegistry</a> registry) {
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 			tableRegistry = registry;
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		}
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<strong class="jxr_keyword">private</strong> <a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/TableRegistry.html">TableRegistry</a> tableRegistry;
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 	}
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String PEF_NS = <span class="jxr_string">"http://www.daisy.org/ns/2008/pef"</span>;
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DP2_NS = <span class="jxr_string">"http://www.daisy.org/ns/pipeline/"</span>;
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName PEF_PEF = <strong class="jxr_keyword">new</strong> QName(PEF_NS, <span class="jxr_string">"pef"</span>);
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName PEF_HEAD = <strong class="jxr_keyword">new</strong> QName(PEF_NS, <span class="jxr_string">"head"</span>);
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName PEF_META = <strong class="jxr_keyword">new</strong> QName(PEF_NS, <span class="jxr_string">"meta"</span>);
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName PEF_BODY = <strong class="jxr_keyword">new</strong> QName(PEF_NS, <span class="jxr_string">"body"</span>);
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName PEF_VOLUME = <strong class="jxr_keyword">new</strong> QName(PEF_NS, <span class="jxr_string">"volume"</span>);
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName PEF_SECTION = <strong class="jxr_keyword">new</strong> QName(PEF_NS, <span class="jxr_string">"section"</span>);
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName PEF_PAGE = <strong class="jxr_keyword">new</strong> QName(PEF_NS, <span class="jxr_string">"page"</span>);
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName PEF_ROW = <strong class="jxr_keyword">new</strong> QName(PEF_NS, <span class="jxr_string">"row"</span>);
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName _DUPLEX = <strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"duplex"</span>);
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName _COLS = <strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"cols"</span>);
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName _ROWS = <strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"rows"</span>);
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName _ROWGAP = <strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"rowgap"</span>);
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName DP2_ASCII = <strong class="jxr_keyword">new</strong> QName(DP2_NS, <span class="jxr_string">"ascii"</span>);
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName DP2_ASCII_BRAILLE_CHARSET = <strong class="jxr_keyword">new</strong> QName(DP2_NS, <span class="jxr_string">"ascii-braille-charset"</span>);
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/calabash/impl/pdf/PEF2PDFStep.html">PEF2PDF</a> <strong class="jxr_keyword">implements</strong> XMLTransformer {
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> File pdf;
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Table table;
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		<strong class="jxr_keyword">public</strong> <a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/calabash/impl/pdf/PEF2PDFStep.html">PEF2PDF</a>(File pdf, Table table) {
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 			<strong class="jxr_keyword">this</strong>.pdf = pdf;
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 			<strong class="jxr_keyword">this</strong>.table = table;
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		}
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		@Override
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		<strong class="jxr_keyword">public</strong> Runnable transform(Map&lt;QName,InputValue&lt;?&gt;&gt; input, Map&lt;QName,OutputValue&lt;?&gt;&gt; output) {
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 			input = XMLTransformer.validateInput(input, ImmutableMap.of(_SOURCE, InputType.MANDATORY_NODE_SEQUENCE));
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 			output = XMLTransformer.validateOutput(output, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 			XMLInputValue&lt;?&gt; source = (XMLInputValue&lt;?&gt;)input.get(_SOURCE);
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 			<strong class="jxr_keyword">return</strong> () -&gt; {
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 				<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 					org.daisy.common.stax.BaseURIAwareXMLStreamReader pef = source.asXMLStreamReader();
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 					ByteArrayOutputStream htmlBytes = <strong class="jxr_keyword">new</strong> ByteArrayOutputStream();
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 					Writer html = <strong class="jxr_keyword">new</strong> OutputStreamWriter(htmlBytes, StandardCharsets.UTF_8);
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 					BrailleConverter bc = table.newBrailleConverter();
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 					<strong class="jxr_keyword">boolean</strong> tableMatchesBrailleCharset = false;
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 					<strong class="jxr_keyword">int</strong> maxColumns = 0; <em class="jxr_comment">// in cells per line</em>
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 					<strong class="jxr_keyword">int</strong> maxRows = 0; <em class="jxr_comment">// in lines</em>
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 					<strong class="jxr_keyword">int</strong> marginLeft = 10; <em class="jxr_comment">// in mm</em>
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 					<strong class="jxr_keyword">int</strong> marginTop = 10; <em class="jxr_comment">// in mm</em>
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 					LinkedList&lt;QName&gt; elementStack = <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;();
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 					LinkedList&lt;Boolean&gt; duplexStack = <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;();
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 					LinkedList&lt;Integer&gt; colsStack = <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;();
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 					LinkedList&lt;Integer&gt; rowsStack = <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;();
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 					LinkedList&lt;Integer&gt; rowgapStack = <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;();
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 					<strong class="jxr_keyword">int</strong> volumeCount = 0;
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 					<strong class="jxr_keyword">int</strong> pagesInSection = 0;
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 					events: <strong class="jxr_keyword">while</strong> (<strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 						<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 							<strong class="jxr_keyword">int</strong> event = pef.next();
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 							<strong class="jxr_keyword">switch</strong> (event) {
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 							<strong class="jxr_keyword">case</strong> START_ELEMENT: {
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 								QName elemName = pef.getName();
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 								<strong class="jxr_keyword">switch</strong> (elementStack.size()) {
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 								<strong class="jxr_keyword">case</strong> 0:
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 									<strong class="jxr_keyword">if</strong> (PEF_PEF.equals(elemName)) {
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 										html.write(
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 											<span class="jxr_string">"&lt;!DOCTYPE html&gt;\n"</span> +
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 											<span class="jxr_string">"&lt;html xmlns=\"http://www.w3.org/1999/xhtml\"&gt;\n"</span> +
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 											<span class="jxr_string">"	&lt;head&gt;\n"</span> +
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 											<span class="jxr_string">"		&lt;meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /&gt;\n"</span> +
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 											<span class="jxr_string">"		&lt;style type=\"text/css\"&gt;\n"</span> +
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 											<span class="jxr_string">"		/*&lt;![CDATA[*/\n"</span> +
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 											<span class="jxr_string">"@font-face {\n"</span> +
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 											<span class="jxr_string">"	font-family: odt2braille;\n"</span> +
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 											<span class="jxr_string">"	src: url(data:font/truetype;charset=utf8;base64,"</span>
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 											         <em class="jxr_comment">// since Java 9 there is also InputStream.readAllBytes()</em>
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 											         + Base64.getEncoder().encodeToString(ByteStreams.toByteArray(font.openStream())) + <span class="jxr_string">")\n"</span> +
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 											<span class="jxr_string">"	     format(\"truetype\");\n"</span> +
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 											<span class="jxr_string">"}\n"</span> +
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 											<span class="jxr_string">"@font-face {\n"</span> +
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 											<span class="jxr_string">"	font-family: NotCourierSans;\n"</span> +
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 											<span class="jxr_string">"	src: url(data:font/truetype;charset=utf8;base64,"</span>
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 											         + Base64.getEncoder().encodeToString(ByteStreams.toByteArray(fallbackFont.openStream())) + <span class="jxr_string">")\n"</span> +
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 											<span class="jxr_string">"	     format(\"truetype\");\n"</span> +
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 											<span class="jxr_string">"}\n"</span> +
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 											<span class="jxr_string">"@page {\n"</span> +
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 											String.format(<span class="jxr_string">"	margin-left: %dmm;\n"</span>, marginLeft) +
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 											String.format(<span class="jxr_string">"	margin-top: %dmm;\n"</span>, marginTop) +
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 											<span class="jxr_string">"	margin-right: 0mm;\n"</span> +
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 											<span class="jxr_string">"	margin-bottom: 0mm;\n"</span> +
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 											<span class="jxr_string">"}\n"</span> +
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 											<span class="jxr_string">"body {\n"</span> +
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 											<span class="jxr_string">"	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;\n"</span> +
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 											<span class="jxr_string">"	margin: 0;\n"</span> +
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 											<span class="jxr_string">"	font-size: 25px;\n"</span> +
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 											<span class="jxr_string">"}\n"</span> +
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 											<span class="jxr_string">"h1.bookmark {\n"</span> +
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 											<span class="jxr_string">"	position: absolute;\n"</span> +
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 											<span class="jxr_string">"	left: -1000mm;\n"</span> +
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 											<span class="jxr_string">"	font-size: 1px;\n"</span> +
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 											<span class="jxr_string">"}\n"</span> +
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 											<span class="jxr_string">".page {\n"</span> +
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 											<span class="jxr_string">"	page-break-before: always;\n"</span> +
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 											<span class="jxr_string">"}\n"</span> +
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 											<span class="jxr_string">".row {\n"</span> +
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 											<span class="jxr_string">"    font-family: odt2braille, NotCourierSans;\n"</span> +
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 											<span class="jxr_string">"    letter-spacing: 0px;\n"</span> +
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 											<span class="jxr_string">"    white-space: pre;\n"</span> +
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 											<span class="jxr_string">"    letter-spacing: 0px;\n"</span> +
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 											<span class="jxr_string">"    font-size: 125%;\n"</span> +
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 											<span class="jxr_string">"    height: 1em;\n"</span> +
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 											<span class="jxr_string">"}\n"</span> +
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 											<span class="jxr_string">".row[rowgap=\"1\"] {\n"</span> +
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 											<span class="jxr_string">"    height: 1.25em;\n"</span> +
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 											<span class="jxr_string">"}\n"</span> +
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 											<span class="jxr_string">".row[rowgap=\"2\"] {\n"</span> +
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 											<span class="jxr_string">"    height: 1.5em;\n"</span> +
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 											<span class="jxr_string">"}\n"</span> +
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 											<span class="jxr_string">".row[rowgap=\"3\"] {\n"</span> +
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 											<span class="jxr_string">"    height: 1.75em;\n"</span> +
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 											<span class="jxr_string">"}\n"</span> +
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 											<span class="jxr_string">".row[rowgap=\"4\"] {\n"</span> +
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 											<span class="jxr_string">"    height: 2em;\n"</span> +
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 											<span class="jxr_string">"}\n"</span> +
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 											<span class="jxr_string">"		/*]]&gt;*/\n"</span> +
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 											<span class="jxr_string">"		&lt;/style&gt;\n"</span> +
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 											<span class="jxr_string">"	&lt;/head&gt;\n"</span> +
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 											<span class="jxr_string">"	&lt;body&gt;\n"</span>);
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 										elementStack.push(elemName);
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 										<strong class="jxr_keyword">continue</strong> events;
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 									}
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 									<strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 								<strong class="jxr_keyword">case</strong> 1:
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 									<strong class="jxr_keyword">if</strong> (PEF_HEAD.equals(elemName) || PEF_BODY.equals(elemName)) {
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> 										elementStack.push(elemName);
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 										<strong class="jxr_keyword">continue</strong> events;
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 									}
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 									<strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 								<strong class="jxr_keyword">case</strong> 2:
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 									<strong class="jxr_keyword">if</strong> (elementStack.get(0).equals(PEF_HEAD)) {
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 										<strong class="jxr_keyword">if</strong> (PEF_META.equals(elemName)) {
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 											elementStack.push(elemName);
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 											<strong class="jxr_keyword">continue</strong> events;
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 										}
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 									} <strong class="jxr_keyword">else</strong> { <em class="jxr_comment">// BODY</em>
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 										<strong class="jxr_keyword">if</strong> (PEF_VOLUME.equals(elemName)) {
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 											duplexStack.push(getDuplex(pef, duplexStack));
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 											colsStack.push(getCols(pef, colsStack));
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 											rowsStack.push(getRows(pef, rowsStack));
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> 											rowgapStack.push(getRowgap(pef, rowgapStack));
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> 											elementStack.push(elemName);
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 											volumeCount++;
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 											<em class="jxr_comment">// FIXME: bookmarks supported by wkhtmltopdf but not by openhtmltopdf</em>
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 											html.write(<span class="jxr_string">"		&lt;div class=\"volume\"&gt;\n"</span> +
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 											           <span class="jxr_string">"			&lt;h1 class=\"bookmark\"&gt;Volume "</span> + volumeCount + <span class="jxr_string">"&lt;/h1&gt;\n"</span>);
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 											<strong class="jxr_keyword">continue</strong> events;
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 										}
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 									}
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 									<strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 								<strong class="jxr_keyword">case</strong> 3:
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 									<strong class="jxr_keyword">if</strong> (elementStack.get(0).equals(PEF_META)) {
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 										<strong class="jxr_keyword">if</strong> (DP2_ASCII_BRAILLE_CHARSET.equals(elemName)) {
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 											String charset = pef.getElementText(); <em class="jxr_comment">// consumes whole element</em>
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 											<strong class="jxr_keyword">if</strong> (charset.equals(table.getIdentifier()))
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 												tableMatchesBrailleCharset = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 											<strong class="jxr_keyword">continue</strong> events;
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 										}
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 									} <strong class="jxr_keyword">else</strong> {<em class="jxr_comment">// VOLUME</em>
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 										<strong class="jxr_keyword">if</strong> (PEF_SECTION.equals(elemName)) {
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 											pagesInSection = 0;
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 											<strong class="jxr_keyword">int</strong> cols = getCols(pef, colsStack);
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 											<strong class="jxr_keyword">if</strong> (cols &gt; maxColumns)
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 												maxColumns = cols;
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 											<strong class="jxr_keyword">int</strong> rows = getRows(pef, rowsStack);
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 											<strong class="jxr_keyword">if</strong> (rows &gt; maxRows)
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 												maxRows = rows;
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 											duplexStack.push(getDuplex(pef, duplexStack));
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 											rowgapStack.push(getRowgap(pef, rowgapStack));
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 											elementStack.push(elemName);
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 											<strong class="jxr_keyword">continue</strong> events;
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 										}
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 									}
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 									<strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 								<strong class="jxr_keyword">case</strong> 4:
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 									<strong class="jxr_keyword">if</strong> (elementStack.get(0).equals(PEF_SECTION)) {
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 										<strong class="jxr_keyword">if</strong> (PEF_PAGE.equals(elemName)) {
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 											pagesInSection++;
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 											rowgapStack.push(getRowgap(pef, rowgapStack));
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 											elementStack.push(elemName);
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 											html.write(<span class="jxr_string">"			&lt;div class=\"page\"&gt;\n"</span>);
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 											<strong class="jxr_keyword">continue</strong> events;
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 										}
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 									}
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 									<strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 								<strong class="jxr_keyword">case</strong> 5:
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 									<strong class="jxr_keyword">if</strong> (elementStack.get(0).equals(PEF_PAGE)) {
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 										<strong class="jxr_keyword">if</strong> (PEF_ROW.equals(elemName)) {
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 											<strong class="jxr_keyword">int</strong> rowgap = getRowgap(pef, rowgapStack);
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 											String row = pef.getElementText(); <em class="jxr_comment">// consumes whole element</em>
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 											<strong class="jxr_keyword">if</strong> (tableMatchesBrailleCharset) {
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 												String attr = pef.getAttributeValue(DP2_ASCII.getNamespaceURI(), DP2_ASCII.getLocalPart());
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 												<strong class="jxr_keyword">if</strong> (attr != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 													row = attr;
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 												<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 													row = bc.toText(row);
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 											} <strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 												row = bc.toText(row);
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 											html.write(<span class="jxr_string">"				&lt;div class=\"row\" rowgap=\""</span> + rowgap + <span class="jxr_string">"\"&gt;"</span>);
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 											html.write(row.replace(<span class="jxr_string">"&amp;"</span>, <span class="jxr_string">"&amp;amp;"</span>)
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 											              .replace(<span class="jxr_string">"&lt;"</span>, <span class="jxr_string">"&amp;lt;"</span>)
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 											              .replace(<span class="jxr_string">"&gt;"</span>, <span class="jxr_string">"&amp;gt;"</span>) + <span class="jxr_string">"&lt;/div&gt;\n"</span>);
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 											<strong class="jxr_keyword">continue</strong> events;
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 										}
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 									}
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 									<strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 								<strong class="jxr_keyword">default</strong>:
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 								}
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 								pef.getElementText(); <em class="jxr_comment">// consume whole element</em>
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 								<strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 							}
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 							<strong class="jxr_keyword">case</strong> END_ELEMENT: {
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> 								QName elemName = elementStack.pop();
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 								<strong class="jxr_keyword">if</strong> (PEF_PAGE.equals(elemName)) {
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 									rowgapStack.pop();
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 									html.write(<span class="jxr_string">"			&lt;/div&gt;\n"</span>);
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 								} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (PEF_SECTION.equals(elemName)) {
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 									<strong class="jxr_keyword">if</strong> (duplexStack.pop()) {
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 										<strong class="jxr_keyword">if</strong> (pagesInSection % 2 != 0) {
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 											<em class="jxr_comment">// insert empty page</em>
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 											html.write(<span class="jxr_string">"			&lt;div class=\"page\"&gt;\n"</span>);
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> 											html.write(<span class="jxr_string">"			&lt;/div&gt;\n"</span>);
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 										}
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 									}
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 									rowgapStack.pop();
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 								} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (PEF_VOLUME.equals(elemName)) {
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 									duplexStack.pop();
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 									colsStack.pop();
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 									rowsStack.pop();
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 									rowgapStack.pop();
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 									html.write(<span class="jxr_string">"		&lt;/div&gt;\n"</span>);
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> 								} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (PEF_PEF.equals(elemName)) {
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> 									html.write(<span class="jxr_string">"	&lt;/body&gt;\n"</span> +
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> 									           <span class="jxr_string">"&lt;/html&gt;\n"</span>);
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> 								}
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> 								<strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> 							}
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 							<strong class="jxr_keyword">default</strong>:
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 							}
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 						} <strong class="jxr_keyword">catch</strong> (NoSuchElementException e) {
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> 							<strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> 						}
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 					html.flush();
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> 					pdf.getParentFile().mkdirs();
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> 					<strong class="jxr_keyword">int</strong> pageWidth = (<strong class="jxr_keyword">int</strong>)Math.ceil(4.2 * maxColumns) + 2 * marginLeft;
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> 					<strong class="jxr_keyword">int</strong> pageHeight = (<strong class="jxr_keyword">int</strong>)Math.ceil(8.44 * maxRows) + 2 * marginTop;
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> 					<strong class="jxr_keyword">try</strong> (OutputStream os = <strong class="jxr_keyword">new</strong> FileOutputStream(pdf)) {
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> 						<strong class="jxr_keyword">new</strong> PdfRendererBuilder()
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> 							.withHtmlContent(<strong class="jxr_keyword">new</strong> String(htmlBytes.toByteArray(), StandardCharsets.UTF_8),
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> 							                 pef.getBaseURI().toString())
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> 							.useDefaultPageSize(pageWidth, pageHeight, PageSizeUnits.MM)
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> 							.toStream(os)
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> 							.run();
-<a class="jxr_linenumber" name="L451" href="#L451">451</a> 					}
-<a class="jxr_linenumber" name="L452" href="#L452">452</a> 				} <strong class="jxr_keyword">catch</strong> (Throwable e) {
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> TransformerException(e);
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> 				}
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> 			};
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> 		}
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> 
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> getDuplex(XMLStreamReader pef, LinkedList&lt;Boolean&gt; stack) {
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> 			<em class="jxr_comment">// not using XMLStreamReader#getAttributeValue(String, String) because it is buggy</em>
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> 			<em class="jxr_comment">// String attr = pef.getAttributeValue(_DUPLEX.getNamespaceURI(), _DUPLEX.getLocalPart());</em>
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; pef.getAttributeCount(); i++)
-<a class="jxr_linenumber" name="L462" href="#L462">462</a> 				<strong class="jxr_keyword">if</strong> (_DUPLEX.equals(pef.getAttributeName(i)))
-<a class="jxr_linenumber" name="L463" href="#L463">463</a> 					<strong class="jxr_keyword">return</strong> Boolean.parseBoolean(pef.getAttributeValue(i)); <em class="jxr_comment">// assume "true" or "false"</em>
-<a class="jxr_linenumber" name="L464" href="#L464">464</a> 			<strong class="jxr_keyword">return</strong> stack.getFirst(); <em class="jxr_comment">// throws NoSuchElementException if stack is empty, which can not</em>
-<a class="jxr_linenumber" name="L465" href="#L465">465</a> 			                         <em class="jxr_comment">// happen if PEF is valid</em>
-<a class="jxr_linenumber" name="L466" href="#L466">466</a> 		}
-<a class="jxr_linenumber" name="L467" href="#L467">467</a> 
-<a class="jxr_linenumber" name="L468" href="#L468">468</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getCols(XMLStreamReader pef, LinkedList&lt;Integer&gt; stack) {
-<a class="jxr_linenumber" name="L469" href="#L469">469</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; pef.getAttributeCount(); i++)
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> 				<strong class="jxr_keyword">if</strong> (_COLS.equals(pef.getAttributeName(i)))
-<a class="jxr_linenumber" name="L471" href="#L471">471</a> 					<strong class="jxr_keyword">return</strong> Integer.parseInt(pef.getAttributeValue(i)); <em class="jxr_comment">// assume positive integer</em>
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> 			<strong class="jxr_keyword">return</strong> stack.getFirst(); <em class="jxr_comment">// throws NoSuchElementException if stack is empty, which can not</em>
-<a class="jxr_linenumber" name="L473" href="#L473">473</a> 			                         <em class="jxr_comment">// happen if PEF is valid</em>
-<a class="jxr_linenumber" name="L474" href="#L474">474</a> 		}
-<a class="jxr_linenumber" name="L475" href="#L475">475</a> 
-<a class="jxr_linenumber" name="L476" href="#L476">476</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getRows(XMLStreamReader pef, LinkedList&lt;Integer&gt; stack) {
-<a class="jxr_linenumber" name="L477" href="#L477">477</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; pef.getAttributeCount(); i++)
-<a class="jxr_linenumber" name="L478" href="#L478">478</a> 				<strong class="jxr_keyword">if</strong> (_ROWS.equals(pef.getAttributeName(i)))
-<a class="jxr_linenumber" name="L479" href="#L479">479</a> 					<strong class="jxr_keyword">return</strong> Integer.parseInt(pef.getAttributeValue(i)); <em class="jxr_comment">// assume positive integer</em>
-<a class="jxr_linenumber" name="L480" href="#L480">480</a> 			<strong class="jxr_keyword">return</strong> stack.getFirst(); <em class="jxr_comment">// throws NoSuchElementException if stack is empty, which can not</em>
-<a class="jxr_linenumber" name="L481" href="#L481">481</a> 			                         <em class="jxr_comment">// happen if PEF is valid</em>
-<a class="jxr_linenumber" name="L482" href="#L482">482</a> 		}
-<a class="jxr_linenumber" name="L483" href="#L483">483</a> 
-<a class="jxr_linenumber" name="L484" href="#L484">484</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getRowgap(XMLStreamReader pef, LinkedList&lt;Integer&gt; stack) {
-<a class="jxr_linenumber" name="L485" href="#L485">485</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; pef.getAttributeCount(); i++)
-<a class="jxr_linenumber" name="L486" href="#L486">486</a> 				<strong class="jxr_keyword">if</strong> (_ROWGAP.equals(pef.getAttributeName(i)))
-<a class="jxr_linenumber" name="L487" href="#L487">487</a> 					<strong class="jxr_keyword">return</strong> Integer.parseInt(pef.getAttributeValue(i)); <em class="jxr_comment">// assume non-negative integer</em>
-<a class="jxr_linenumber" name="L488" href="#L488">488</a> 			<strong class="jxr_keyword">return</strong> stack.getFirst(); <em class="jxr_comment">// throws NoSuchElementException if stack is empty, which can not</em>
-<a class="jxr_linenumber" name="L489" href="#L489">489</a> 			                         <em class="jxr_comment">// happen if PEF is valid</em>
-<a class="jxr_linenumber" name="L490" href="#L490">490</a> 		}
-<a class="jxr_linenumber" name="L491" href="#L491">491</a> 	}
-<a class="jxr_linenumber" name="L492" href="#L492">492</a> }
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">import</strong> java.util.Collections;
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">import</strong> java.util.Iterator;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> java.util.LinkedList;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> java.util.Map;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> java.util.NoSuchElementException;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> javax.xml.namespace.NamespaceContext;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> javax.xml.namespace.QName;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> javax.xml.stream.XMLStreamConstants.START_ELEMENT;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> javax.xml.stream.XMLStreamConstants.END_ELEMENT;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> javax.xml.stream.XMLStreamReader;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> javax.xml.transform.stream.StreamSource;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> javax.xml.xpath.XPath;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> javax.xml.xpath.XPathConstants;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> javax.xml.xpath.XPathFactory;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> com.google.common.collect.ImmutableMap;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> com.google.common.io.ByteStreams;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> com.google.common.io.CharStreams;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> com.openhtmltopdf.outputdevice.helper.BaseRendererBuilder.PageSizeUnits;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.core.XProcException;
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.core.XProcRuntime;
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.io.ReadablePipe;
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.io.WritablePipe;
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.library.DefaultStep;
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.runtime.XAtomicStep;
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <strong class="jxr_keyword">import</strong> net.sf.saxon.dom.NodeOverNodeInfo;
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <strong class="jxr_keyword">import</strong> net.sf.saxon.s9api.SaxonApiException;
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <strong class="jxr_keyword">import</strong> net.sf.saxon.xpath.XPathFactoryImpl;
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <strong class="jxr_keyword">import</strong> org.daisy.dotify.api.table.BrailleConverter;
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <strong class="jxr_keyword">import</strong> org.daisy.dotify.api.table.Table;
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <strong class="jxr_keyword">import</strong> org.daisy.pipeline.braille.pef.TableRegistry;
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.file.URLs;
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.saxon.SaxonHelper;
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.shell.CommandRunner;
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.stax.BaseURIAwareXMLStreamReader;
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.transform.InputValue;
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.transform.Mult;
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.transform.OutputValue;
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.transform.TransformerException;
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.transform.XMLInputValue;
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.transform.XMLTransformer;
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.xproc.calabash.XMLCalabashInputValue;
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.xproc.calabash.XProcStep;
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.xproc.calabash.XProcStepProvider;
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.xproc.XProcMonitor;
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <strong class="jxr_keyword">import</strong> org.daisy.pipeline.braille.common.Query.MutableQuery;
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.daisy.pipeline.braille.common.Query.util.mutableQuery;
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.daisy.pipeline.braille.common.Query.util.query;
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <strong class="jxr_keyword">import</strong> org.daisy.pipeline.braille.css.EmbossedMedium;
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <strong class="jxr_keyword">import</strong> org.daisy.pipeline.css.Dimension;
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <strong class="jxr_keyword">import</strong> org.daisy.pipeline.css.Dimension.Unit;
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <strong class="jxr_keyword">import</strong> org.daisy.pipeline.css.Medium;
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.daisy.pipeline.file.FileUtils.cResultDocument;
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <strong class="jxr_keyword">import</strong> org.osgi.service.component.annotations.Component;
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <strong class="jxr_keyword">import</strong> org.osgi.service.component.annotations.Reference;
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  <strong class="jxr_keyword">import</strong> org.osgi.service.component.annotations.ReferenceCardinality;
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <strong class="jxr_keyword">import</strong> org.osgi.service.component.annotations.ReferencePolicy;
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <strong class="jxr_keyword">import</strong> org.slf4j.Logger;
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  <strong class="jxr_keyword">import</strong> org.slf4j.LoggerFactory;
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  <strong class="jxr_keyword">import</strong> org.w3c.dom.Node;
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/calabash/impl/pdf/PEF2PDFStep.html">PEF2PDFStep</a> <strong class="jxr_keyword">extends</strong> DefaultStep <strong class="jxr_keyword">implements</strong> XProcStep {
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Logger logger = LoggerFactory.getLogger(PEF2PDFStep.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName _SOURCE = <strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"source"</span>);
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> net.sf.saxon.s9api.QName _HREF = <strong class="jxr_keyword">new</strong> net.sf.saxon.s9api.QName(<span class="jxr_string">"href"</span>);
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> net.sf.saxon.s9api.QName _TABLE = <strong class="jxr_keyword">new</strong> net.sf.saxon.s9api.QName(<span class="jxr_string">"table"</span>);
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> net.sf.saxon.s9api.QName _OFFSET_X = <strong class="jxr_keyword">new</strong> net.sf.saxon.s9api.QName(<span class="jxr_string">"offset-x"</span>);
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> net.sf.saxon.s9api.QName _OFFSET_Y = <strong class="jxr_keyword">new</strong> net.sf.saxon.s9api.QName(<span class="jxr_string">"offset-y"</span>);
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> net.sf.saxon.s9api.QName _SCALE_FONT = <strong class="jxr_keyword">new</strong> net.sf.saxon.s9api.QName(<span class="jxr_string">"scale-font"</span>);
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> net.sf.saxon.s9api.QName _FONT_COLOR = <strong class="jxr_keyword">new</strong> net.sf.saxon.s9api.QName(<span class="jxr_string">"font-color"</span>);
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> net.sf.saxon.s9api.QName _MEDIUM = <strong class="jxr_keyword">new</strong> net.sf.saxon.s9api.QName(<span class="jxr_string">"medium"</span>);
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DEFAULT_TABLE = <span class="jxr_string">"org.daisy.braille.impl.table.DefaultTableProvider.TableType.EN_US"</span>;
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> URL font = URLs.getResourceFromJAR(<span class="jxr_string">"odt2braille8.ttf"</span>, PEF2PDFStep.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	<em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> <em class="jxr_comment">	 * pdfbox does not support OpenType fonts, nor does it support the font-face properties</em>
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_comment">	 * ascent-override, descent-override and size-adjust. NotCourierSans-Bold.ttf was created from</em>
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_comment">	 * NotCourierSans-Bold.otf using the Font Squirrel Webfont Generator tool</em>
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_comment">	 * (https://www.fontsquirrel.com/tools/webfont-generator). I used these settings:</em>
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> <em class="jxr_comment">	 *</em>
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> <em class="jxr_comment">	 * - Upload Fonts: NotCourierSans-Bold.otf</em>
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> <em class="jxr_comment">	 * - Font Formats: TrueType</em>
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> <em class="jxr_comment">	 * - Vertical Metrics: Custom Adjustment:</em>
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> <em class="jxr_comment">	 *   - Ascent: 70%</em>
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> <em class="jxr_comment">	 *   - Descent: 30%</em>
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> <em class="jxr_comment">	 * - X-height Matching: 83%</em>
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> <em class="jxr_comment">	 */</em>
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> URL fallbackFont = URLs.getResourceFromJAR(<span class="jxr_string">"NotCourierSans-Bold.ttf"</span>, PEF2PDFStep.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/TableRegistry.html">TableRegistry</a> tableRegistry;
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	<strong class="jxr_keyword">private</strong> ReadablePipe source = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	<strong class="jxr_keyword">private</strong> WritablePipe result = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 	<strong class="jxr_keyword">private</strong> <a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/calabash/impl/pdf/PEF2PDFStep.html">PEF2PDFStep</a>(XProcRuntime runtime,
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	                    XAtomicStep step,
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 	                    TableRegistry tableRegistry) {
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		<strong class="jxr_keyword">super</strong>(runtime, step);
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		<strong class="jxr_keyword">this</strong>.tableRegistry = tableRegistry;
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	}
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 	@Override
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setInput(String port, ReadablePipe pipe) {
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		source = pipe;
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	}
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 	@Override
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setOutput(String port, WritablePipe pipe) {
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		result = pipe;
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 	}
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	@Override
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> reset() {
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		source.resetReader();
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		result.resetWriter();
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 	}
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 	@Override
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> run() <strong class="jxr_keyword">throws</strong> SaxonApiException {
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		<strong class="jxr_keyword">super</strong>.run();
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 			URI href = <strong class="jxr_keyword">null</strong>; {
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 				<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 					href = URI.create(getOption(_HREF).getString());
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 				} <strong class="jxr_keyword">catch</strong> (IllegalArgumentException e) {
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Not a valid URI: "</span> + href);
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 				}
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 			}
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 			File pdfFile = <strong class="jxr_keyword">null</strong>; {
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 				<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 					pdfFile = <strong class="jxr_keyword">new</strong> File(href);
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 				} <strong class="jxr_keyword">catch</strong> (IllegalArgumentException e) {
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Not a valid file URI: "</span> + href);
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 				}
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 			}
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 			<strong class="jxr_keyword">if</strong> (pdfFile.exists())
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"File exists: "</span> + pdfFile);
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 			Table table = <strong class="jxr_keyword">null</strong>; {
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 				MutableQuery q = mutableQuery(query(getOption(_TABLE, <span class="jxr_string">""</span>)));
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 				logger.debug(<span class="jxr_string">"Finding table for query: "</span> + q);
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 				<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 					table = tableRegistry.get(q).iterator().next();
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 				} <strong class="jxr_keyword">catch</strong> (NoSuchElementException e) {
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 					<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 						table = tableRegistry.get(mutableQuery().add(<span class="jxr_string">"id"</span>, DEFAULT_TABLE)).iterator().next();
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 						logger.warn(<span class="jxr_string">"Can not find a table for query: "</span> + q);
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 						logger.warn(<span class="jxr_string">"Falling back to default"</span>);
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 					} <strong class="jxr_keyword">catch</strong> (NoSuchElementException ee) {
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Could not find a table for query: "</span> + q);
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 					}
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 				}
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 			}
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 			Medium medium = SaxonHelper.objectFromItem(
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 				SaxonHelper.getSingleItem(getOption(_MEDIUM).getValue().getUnderlyingValue()),
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 				Medium.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 			<strong class="jxr_keyword">double</strong> offsetX = Dimension.parse(getOption(_OFFSET_X).getString()).toUnit(Unit.MM).getValue().doubleValue();
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 			<strong class="jxr_keyword">double</strong> offsetY = Dimension.parse(getOption(_OFFSET_Y).getString()).toUnit(Unit.MM).getValue().doubleValue();
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 			<strong class="jxr_keyword">double</strong> scaleFont = parseNumberOrPercentage(getOption(_SCALE_FONT).getString());
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 			<strong class="jxr_keyword">if</strong> (scaleFont &lt;= 0)
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Font scaling factor must be a positive number, but got: "</span> + scaleFont);
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 			String fontColor = getOption(_FONT_COLOR).getString();
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 			<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 				fontColor = String.format(<span class="jxr_string">"#%06x"</span>, ColorFactory.valueOf(fontColor).getRGB() &amp; 0xffffff);
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 			} <strong class="jxr_keyword">catch</strong> (IllegalArgumentException e) {
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Can not parse font color: "</span> + fontColor, e);
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 			}
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 			logger.debug(<span class="jxr_string">"Storing PEF to PDF using table: "</span> + table);
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 			<strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/calabash/impl/pdf/PEF2PDFStep.html">PEF2PDF</a>(pdfFile, table, medium, offsetX, offsetY, scaleFont, fontColor).transform(
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 				ImmutableMap.of(_SOURCE, XMLCalabashInputValue.of(source)),
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 				ImmutableMap.of()
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 			).run();
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 			result.write(runtime.getProcessor().newDocumentBuilder().build(<strong class="jxr_keyword">new</strong> StreamSource(cResultDocument(pdfFile.toURI().toString()))));
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		} <strong class="jxr_keyword">catch</strong> (Throwable e) {
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 			<strong class="jxr_keyword">throw</strong> XProcStep.raiseError(e, step);
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		}
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 	}
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 	@Component(
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		name = <span class="jxr_string">"pxi:pef2pdf"</span>,
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		service = { XProcStepProvider.<strong class="jxr_keyword">class</strong> },
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		property = { <span class="jxr_string">"type:String={http://www.daisy.org/ns/pipeline/xproc/internal}pef2pdf"</span> }
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 	)
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/calabash/impl/pdf/PEF2PDFStep.html">Provider</a> <strong class="jxr_keyword">implements</strong> XProcStepProvider {
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 		@Override
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		<strong class="jxr_keyword">public</strong> XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map&lt;String,String&gt; properties) {
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/calabash/impl/pdf/PEF2PDFStep.html">PEF2PDFStep</a>(runtime, step, tableRegistry);
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		}
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		@Reference(
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 			name = <span class="jxr_string">"TableRegistry"</span>,
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 			unbind = <span class="jxr_string">"-"</span>,
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 			service = TableRegistry.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 			cardinality = ReferenceCardinality.MANDATORY,
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 			policy = ReferencePolicy.STATIC
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		)
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> bindTableRegistry(<a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/TableRegistry.html">TableRegistry</a> registry) {
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 			tableRegistry = registry;
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		}
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		<strong class="jxr_keyword">private</strong> <a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/TableRegistry.html">TableRegistry</a> tableRegistry;
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 	}
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String PEF_NS = <span class="jxr_string">"http://www.daisy.org/ns/2008/pef"</span>;
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DP2_NS = <span class="jxr_string">"http://www.daisy.org/ns/pipeline/"</span>;
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName PEF_PEF = <strong class="jxr_keyword">new</strong> QName(PEF_NS, <span class="jxr_string">"pef"</span>);
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName PEF_HEAD = <strong class="jxr_keyword">new</strong> QName(PEF_NS, <span class="jxr_string">"head"</span>);
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName PEF_META = <strong class="jxr_keyword">new</strong> QName(PEF_NS, <span class="jxr_string">"meta"</span>);
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName PEF_BODY = <strong class="jxr_keyword">new</strong> QName(PEF_NS, <span class="jxr_string">"body"</span>);
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName PEF_VOLUME = <strong class="jxr_keyword">new</strong> QName(PEF_NS, <span class="jxr_string">"volume"</span>);
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName PEF_SECTION = <strong class="jxr_keyword">new</strong> QName(PEF_NS, <span class="jxr_string">"section"</span>);
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName PEF_PAGE = <strong class="jxr_keyword">new</strong> QName(PEF_NS, <span class="jxr_string">"page"</span>);
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName PEF_ROW = <strong class="jxr_keyword">new</strong> QName(PEF_NS, <span class="jxr_string">"row"</span>);
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName _DUPLEX = <strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"duplex"</span>);
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName _ROWGAP = <strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"rowgap"</span>);
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName DP2_ASCII = <strong class="jxr_keyword">new</strong> QName(DP2_NS, <span class="jxr_string">"ascii"</span>);
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName DP2_ASCII_BRAILLE_CHARSET = <strong class="jxr_keyword">new</strong> QName(DP2_NS, <span class="jxr_string">"ascii-braille-charset"</span>);
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/calabash/impl/pdf/PEF2PDFStep.html">PEF2PDF</a> <strong class="jxr_keyword">implements</strong> XMLTransformer {
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> File pdf;
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Table table;
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Medium medium;
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> offsetX;
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> offsetY;
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> scaleFont;
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String fontColor;
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		<strong class="jxr_keyword">public</strong> <a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/calabash/impl/pdf/PEF2PDFStep.html">PEF2PDF</a>(File pdf, Table table, Medium medium, <strong class="jxr_keyword">double</strong> offsetX, <strong class="jxr_keyword">double</strong> offsetY, <strong class="jxr_keyword">double</strong> scaleFont, String fontColor) {
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 			<strong class="jxr_keyword">this</strong>.pdf = pdf;
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 			<strong class="jxr_keyword">this</strong>.table = table;
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 			<strong class="jxr_keyword">this</strong>.medium = medium;
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 			<strong class="jxr_keyword">this</strong>.offsetX = offsetX;
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 			<strong class="jxr_keyword">this</strong>.offsetY = offsetY;
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 			<strong class="jxr_keyword">this</strong>.scaleFont = scaleFont;
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 			<strong class="jxr_keyword">this</strong>.fontColor = fontColor;
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		}
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		@Override
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 		<strong class="jxr_keyword">public</strong> Runnable transform(Map&lt;QName,InputValue&lt;?&gt;&gt; input, Map&lt;QName,OutputValue&lt;?&gt;&gt; output) {
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 			input = XMLTransformer.validateInput(input, ImmutableMap.of(_SOURCE, InputType.MANDATORY_NODE_SINGLE));
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 			output = XMLTransformer.validateOutput(output, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 			Mult&lt;? <strong class="jxr_keyword">extends</strong> XMLInputValue&lt;?&gt;&gt; source = ((XMLInputValue&lt;?&gt;)input.get(_SOURCE)).mult(2);
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 			<strong class="jxr_keyword">return</strong> () -&gt; {
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 				<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 					<strong class="jxr_keyword">int</strong> maxColumns = 0; <em class="jxr_comment">// cells per line</em>
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 					<strong class="jxr_keyword">int</strong> maxRows = 0; <em class="jxr_comment">// lines</em>
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 					<strong class="jxr_keyword">int</strong> totalVolumes = 0; {
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 						Node node = source.get().asNodeIterator().next();
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 						<em class="jxr_comment">// we know it's a Saxon object because this is called from the XProcStep</em>
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 						XPath xpath = <strong class="jxr_keyword">new</strong> XPathFactoryImpl(
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 							((NodeOverNodeInfo)node).getUnderlyingNodeInfo().getConfiguration()
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 						).newXPath();
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 						xpath.setNamespaceContext(
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 							<strong class="jxr_keyword">new</strong> NamespaceContext() {
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 								<strong class="jxr_keyword">public</strong> String getNamespaceURI(String prefix) {
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 									<strong class="jxr_keyword">return</strong> <span class="jxr_string">"pef"</span>.equals(prefix) ? PEF_NS : <strong class="jxr_keyword">null</strong>; }
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 								<strong class="jxr_keyword">public</strong> String getPrefix(String namespaceURI) {
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 									<strong class="jxr_keyword">return</strong> PEF_NS.equals(namespaceURI) ? <span class="jxr_string">"pef"</span> : <strong class="jxr_keyword">null</strong>; }
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 								<strong class="jxr_keyword">public</strong> Iterator&lt;String&gt; getPrefixes(String namespaceURI) {
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 									<strong class="jxr_keyword">return</strong> PEF_NS.equals(namespaceURI)
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 										? Collections.singleton(<span class="jxr_string">"pef"</span>).iterator()
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 										: <strong class="jxr_keyword">null</strong>; }});
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 						maxColumns = ((Double)xpath.evaluate(<span class="jxr_string">"max(//pef:*/@cols/number(.))"</span>, node, XPathConstants.NUMBER))
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 							.intValue();
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 						maxRows = ((Double)xpath.evaluate(<span class="jxr_string">"max(//pef:*/@rows/number(.))"</span>, node, XPathConstants.NUMBER))
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 							.intValue();
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 						totalVolumes = ((Double)xpath.evaluate(<span class="jxr_string">"count(//pef:volume)"</span>, node, XPathConstants.NUMBER))
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 							.intValue();
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 					}
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 					BaseURIAwareXMLStreamReader pef = source.get().asXMLStreamReader();
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 					ByteArrayOutputStream htmlBytes = <strong class="jxr_keyword">new</strong> ByteArrayOutputStream();
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 					Writer html = <strong class="jxr_keyword">new</strong> OutputStreamWriter(htmlBytes, StandardCharsets.UTF_8);
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 					BrailleConverter bc = table.newBrailleConverter();
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 					<strong class="jxr_keyword">boolean</strong> tableMatchesBrailleCharset = false;
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 					<strong class="jxr_keyword">double</strong> cellHeight = 10;
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 					<strong class="jxr_keyword">double</strong> cellWidth = 6;
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 					<strong class="jxr_keyword">if</strong> (medium.getType() == Medium.Type.EMBOSSED &amp;&amp; medium instanceof EmbossedMedium) {
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 						EmbossedMedium embossedMedium = (EmbossedMedium)medium;
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 						cellHeight = embossedMedium.getEm();
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 						cellWidth = embossedMedium.getCh();
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 					}
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 					<strong class="jxr_keyword">double</strong> fontSize = cellHeight;
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 					<strong class="jxr_keyword">double</strong> letterSpacing = 0;
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 					<strong class="jxr_keyword">if</strong> (cellHeight &lt; 2 * cellWidth)
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 						letterSpacing = cellWidth - cellHeight / 2;
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 					<strong class="jxr_keyword">double</strong> lineHeight = 1; <em class="jxr_comment">// em</em>
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 					<strong class="jxr_keyword">if</strong> (cellHeight &gt; 2 * cellWidth) {
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 						fontSize = 2 * cellWidth;
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 						lineHeight = cellHeight / (2 * cellWidth);
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 					}
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 					letterSpacing += (1 - scaleFont) * fontSize / 2;
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 					fontSize *= scaleFont;
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 					lineHeight /= scaleFont;
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 					<strong class="jxr_keyword">double</strong> pageHeight = maxRows * cellHeight; <em class="jxr_comment">// mm</em>
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 					<strong class="jxr_keyword">double</strong> pageWidth = maxColumns * cellWidth; <em class="jxr_comment">// mm</em>
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 					LinkedList&lt;QName&gt; elementStack = <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;();
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 					LinkedList&lt;Boolean&gt; duplexStack = <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;();
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 					LinkedList&lt;Integer&gt; rowgapStack = <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;();
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 					<strong class="jxr_keyword">int</strong> volumeCount = 0;
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 					<strong class="jxr_keyword">int</strong> pagesInSection = 0;
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 					events: <strong class="jxr_keyword">while</strong> (<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 						<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 							<strong class="jxr_keyword">int</strong> event = pef.next();
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 							<strong class="jxr_keyword">switch</strong> (event) {
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 							<strong class="jxr_keyword">case</strong> START_ELEMENT: {
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 								QName elemName = pef.getName();
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 								<strong class="jxr_keyword">switch</strong> (elementStack.size()) {
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 								<strong class="jxr_keyword">case</strong> 0:
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 									<strong class="jxr_keyword">if</strong> (PEF_PEF.equals(elemName)) {
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 										html.write(
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 											<span class="jxr_string">"&lt;!DOCTYPE html&gt;\n"</span> +
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 											<span class="jxr_string">"&lt;html xmlns=\"http://www.w3.org/1999/xhtml\"&gt;\n"</span> +
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 											<span class="jxr_string">"	&lt;head&gt;\n"</span> +
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 											<span class="jxr_string">"		&lt;meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /&gt;\n"</span> +
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 											<span class="jxr_string">"		&lt;style type=\"text/css\"&gt;\n"</span> +
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 											<span class="jxr_string">"		/*&lt;![CDATA[*/\n"</span> +
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 											<span class="jxr_string">"@font-face {\n"</span> +
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 											<span class="jxr_string">"	font-family: odt2braille;\n"</span> +
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 											<span class="jxr_string">"	src: url(data:font/truetype;charset=utf8;base64,"</span>
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 											         <em class="jxr_comment">// since Java 9 there is also InputStream.readAllBytes()</em>
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 											         + Base64.getEncoder().encodeToString(ByteStreams.toByteArray(font.openStream())) + <span class="jxr_string">")\n"</span> +
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 											<span class="jxr_string">"	     format(\"truetype\");\n"</span> +
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 											<span class="jxr_string">"}\n"</span> +
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 											<span class="jxr_string">"@font-face {\n"</span> +
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 											<span class="jxr_string">"	font-family: NotCourierSans;\n"</span> +
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 											<span class="jxr_string">"	src: url(data:font/truetype;charset=utf8;base64,"</span>
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 											         + Base64.getEncoder().encodeToString(ByteStreams.toByteArray(fallbackFont.openStream())) + <span class="jxr_string">")\n"</span> +
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 											<span class="jxr_string">"	     format(\"truetype\");\n"</span> +
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 											<span class="jxr_string">"}\n"</span> +
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 											<span class="jxr_string">"@page {\n"</span> +
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 											<span class="jxr_string">"	margin: 0;\n"</span> +
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 											<span class="jxr_string">"}\n"</span> +
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 											<span class="jxr_string">"body {\n"</span> +
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 											<span class="jxr_string">"	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;\n"</span> +
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 											<span class="jxr_string">"	color: "</span> + fontColor + <span class="jxr_string">";\n"</span> +
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 											<span class="jxr_string">"	margin: 0;\n"</span> +
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 											<span class="jxr_string">"	font-size: "</span> + fontSize + <span class="jxr_string">"mm;\n"</span> +
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 											<span class="jxr_string">"}\n"</span> +
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 											<span class="jxr_string">".volume, .page {\n"</span> +
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 											<span class="jxr_string">"	page-break-before: always;\n"</span> +
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 											<span class="jxr_string">"}\n"</span> +
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 											<span class="jxr_string">".page {\n"</span> +
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 											<em class="jxr_comment">// Margins are expected to be specified in @page rules, and therefore included in</em>
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 											<em class="jxr_comment">// the PEF, so don't add any if we want the braille and print versions to match.</em>
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 											<em class="jxr_comment">// We do however support tweaking the position of the content by providing X/Y offset</em>
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 											<em class="jxr_comment">// options.</em>
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 											<span class="jxr_string">"	margin-left: "</span> + offsetX + <span class="jxr_string">"mm;\n"</span> +
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 											<span class="jxr_string">"	margin-top: "</span> + offsetY + <span class="jxr_string">"mm;\n"</span> +
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 											<span class="jxr_string">"	height: "</span> + (pageHeight - offsetY) + <span class="jxr_string">"mm;\n"</span> +
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 											<span class="jxr_string">"	width: "</span> + (pageWidth - offsetX) + <span class="jxr_string">"mm;\n"</span> +
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 											<span class="jxr_string">"	overflow: hidden;\n"</span> +
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 											<span class="jxr_string">"}\n"</span> +
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 											<span class="jxr_string">".row {\n"</span> +
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 											<span class="jxr_string">"    font-family: odt2braille, NotCourierSans;\n"</span> +
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 											<span class="jxr_string">"    white-space: pre;\n"</span> +
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 											<span class="jxr_string">"    letter-spacing: "</span> + letterSpacing + <span class="jxr_string">"mm;\n"</span> +
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 											<span class="jxr_string">"    height: "</span> + lineHeight + <span class="jxr_string">"em;\n"</span> +
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 											<span class="jxr_string">"}\n"</span> +
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 											<span class="jxr_string">".row[rowgap=\"1\"] {\n"</span> +
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 											<span class="jxr_string">"    height: "</span> + (1.25 * lineHeight) + <span class="jxr_string">"em;\n"</span> +
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 											<span class="jxr_string">"}\n"</span> +
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 											<span class="jxr_string">".row[rowgap=\"2\"] {\n"</span> +
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 											<span class="jxr_string">"    height: "</span> + (1.5 * lineHeight) + <span class="jxr_string">"em;\n"</span> +
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 											<span class="jxr_string">"}\n"</span> +
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 											<span class="jxr_string">".row[rowgap=\"3\"] {\n"</span> +
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 											<span class="jxr_string">"    height: "</span> + (1.75 * lineHeight) + <span class="jxr_string">"em;\n"</span> +
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 											<span class="jxr_string">"}\n"</span> +
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 											<span class="jxr_string">".row[rowgap=\"4\"] {\n"</span> +
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 											<span class="jxr_string">"    height: "</span> + (2 * lineHeight) + <span class="jxr_string">"em;\n"</span> +
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 											<span class="jxr_string">"}\n"</span> +
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 											<span class="jxr_string">"		/*]]&gt;*/\n"</span> +
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 											<span class="jxr_string">"		&lt;/style&gt;\n"</span> +
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 											<span class="jxr_string">"		&lt;bookmarks&gt;\n"</span>);
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 										<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> v = 1; v &lt;= totalVolumes; v++)
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 											html.write(
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 												<span class="jxr_string">"			&lt;bookmark name=\"Volume "</span> + v + <span class="jxr_string">"\" href=\"#volume-"</span> + v + <span class="jxr_string">"\"/&gt;\n"</span>);
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 										html.write(
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 											<span class="jxr_string">"		&lt;/bookmarks&gt;\n"</span> +
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 											<span class="jxr_string">"	&lt;/head&gt;\n"</span> +
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 											<span class="jxr_string">"	&lt;body&gt;\n"</span>);
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 										elementStack.push(elemName);
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 										<strong class="jxr_keyword">continue</strong> events;
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 									}
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 									<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 								<strong class="jxr_keyword">case</strong> 1:
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 									<strong class="jxr_keyword">if</strong> (PEF_HEAD.equals(elemName) || PEF_BODY.equals(elemName)) {
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 										elementStack.push(elemName);
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 										<strong class="jxr_keyword">continue</strong> events;
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 									}
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 									<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 								<strong class="jxr_keyword">case</strong> 2:
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 									<strong class="jxr_keyword">if</strong> (elementStack.get(0).equals(PEF_HEAD)) {
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 										<strong class="jxr_keyword">if</strong> (PEF_META.equals(elemName)) {
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 											elementStack.push(elemName);
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 											<strong class="jxr_keyword">continue</strong> events;
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 										}
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 									} <strong class="jxr_keyword">else</strong> { <em class="jxr_comment">// BODY</em>
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 										<strong class="jxr_keyword">if</strong> (PEF_VOLUME.equals(elemName)) {
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 											duplexStack.push(getDuplex(pef, duplexStack));
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 											rowgapStack.push(getRowgap(pef, rowgapStack));
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 											elementStack.push(elemName);
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 											volumeCount++;
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 											html.write(<span class="jxr_string">"		&lt;div class=\"volume\" id=\"volume-"</span> + volumeCount + <span class="jxr_string">"\"&gt;\n"</span>);
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 											<strong class="jxr_keyword">continue</strong> events;
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 										}
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 									}
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 									<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 								<strong class="jxr_keyword">case</strong> 3:
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 									<strong class="jxr_keyword">if</strong> (elementStack.get(0).equals(PEF_META)) {
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 										<strong class="jxr_keyword">if</strong> (DP2_ASCII_BRAILLE_CHARSET.equals(elemName)) {
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 											String charset = pef.getElementText(); <em class="jxr_comment">// consumes whole element</em>
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 											<strong class="jxr_keyword">if</strong> (charset.equals(table.getIdentifier()))
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 												tableMatchesBrailleCharset = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 											<strong class="jxr_keyword">continue</strong> events;
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 										}
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 									} <strong class="jxr_keyword">else</strong> {<em class="jxr_comment">// VOLUME</em>
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 										<strong class="jxr_keyword">if</strong> (PEF_SECTION.equals(elemName)) {
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 											pagesInSection = 0;
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 											duplexStack.push(getDuplex(pef, duplexStack));
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 											rowgapStack.push(getRowgap(pef, rowgapStack));
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 											elementStack.push(elemName);
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 											<strong class="jxr_keyword">continue</strong> events;
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 										}
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 									}
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 									<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 								<strong class="jxr_keyword">case</strong> 4:
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 									<strong class="jxr_keyword">if</strong> (elementStack.get(0).equals(PEF_SECTION)) {
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 										<strong class="jxr_keyword">if</strong> (PEF_PAGE.equals(elemName)) {
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 											pagesInSection++;
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 											rowgapStack.push(getRowgap(pef, rowgapStack));
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 											elementStack.push(elemName);
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 											html.write(<span class="jxr_string">"			&lt;div class=\"page\"&gt;\n"</span>);
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 											<strong class="jxr_keyword">continue</strong> events;
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 										}
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 									}
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 									<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 								<strong class="jxr_keyword">case</strong> 5:
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 									<strong class="jxr_keyword">if</strong> (elementStack.get(0).equals(PEF_PAGE)) {
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 										<strong class="jxr_keyword">if</strong> (PEF_ROW.equals(elemName)) {
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 											<strong class="jxr_keyword">int</strong> rowgap = getRowgap(pef, rowgapStack);
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 											String row = pef.getElementText(); <em class="jxr_comment">// consumes whole element</em>
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 											<strong class="jxr_keyword">if</strong> (tableMatchesBrailleCharset) {
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 												String attr = pef.getAttributeValue(DP2_ASCII.getNamespaceURI(), DP2_ASCII.getLocalPart());
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 												<strong class="jxr_keyword">if</strong> (attr != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 													row = attr;
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 												<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 													row = bc.toText(row);
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 											} <strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 												row = bc.toText(row);
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 											html.write(<span class="jxr_string">"				&lt;div class=\"row\" rowgap=\""</span> + rowgap + <span class="jxr_string">"\"&gt;"</span>);
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 											html.write(row.replace(<span class="jxr_string">"&amp;"</span>, <span class="jxr_string">"&amp;amp;"</span>)
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> 											              .replace(<span class="jxr_string">"&lt;"</span>, <span class="jxr_string">"&amp;lt;"</span>)
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 											              .replace(<span class="jxr_string">"&gt;"</span>, <span class="jxr_string">"&amp;gt;"</span>) + <span class="jxr_string">"&lt;/div&gt;\n"</span>);
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 											<strong class="jxr_keyword">continue</strong> events;
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 										}
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 									}
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> 									<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 								<strong class="jxr_keyword">default</strong>:
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> 								}
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> 								pef.getElementText(); <em class="jxr_comment">// consume whole element</em>
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> 								<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 							}
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 							<strong class="jxr_keyword">case</strong> END_ELEMENT: {
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> 								QName elemName = elementStack.pop();
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> 								<strong class="jxr_keyword">if</strong> (PEF_PAGE.equals(elemName)) {
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> 									rowgapStack.pop();
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> 									html.write(<span class="jxr_string">"			&lt;/div&gt;\n"</span>);
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> 								} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (PEF_SECTION.equals(elemName)) {
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> 									<strong class="jxr_keyword">if</strong> (duplexStack.pop()) {
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 										<strong class="jxr_keyword">if</strong> (pagesInSection % 2 != 0) {
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> 											<em class="jxr_comment">// insert empty page</em>
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> 											html.write(<span class="jxr_string">"			&lt;div class=\"page\"&gt;\n"</span>);
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 											html.write(<span class="jxr_string">"			&lt;/div&gt;\n"</span>);
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> 										}
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> 									}
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> 									rowgapStack.pop();
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 								} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (PEF_VOLUME.equals(elemName)) {
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> 									duplexStack.pop();
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 									rowgapStack.pop();
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> 									html.write(<span class="jxr_string">"		&lt;/div&gt;\n"</span>);
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> 								} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (PEF_PEF.equals(elemName)) {
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> 									html.write(<span class="jxr_string">"	&lt;/body&gt;\n"</span> +
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 									           <span class="jxr_string">"&lt;/html&gt;\n"</span>);
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> 								}
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> 								<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 							}
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> 							<strong class="jxr_keyword">default</strong>:
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> 							}
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> 						} <strong class="jxr_keyword">catch</strong> (NoSuchElementException e) {
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> 							<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 						}
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 					html.flush();
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> 					pdf.getParentFile().mkdirs();
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> 					<strong class="jxr_keyword">try</strong> (OutputStream os = <strong class="jxr_keyword">new</strong> FileOutputStream(pdf)) {
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> 						<strong class="jxr_keyword">new</strong> PdfRendererBuilder()
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> 							.withHtmlContent(<strong class="jxr_keyword">new</strong> String(htmlBytes.toByteArray(), StandardCharsets.UTF_8),
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> 							                 pef.getBaseURI().toString())
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> 							.useDefaultPageSize((<strong class="jxr_keyword">int</strong>)Math.ceil(pageWidth),
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> 							                    <em class="jxr_comment">// for some reason a small extra of 0,5% is</em>
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> 							                    <em class="jxr_comment">// needed to fit all the rows on the page</em>
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> 							                    (<strong class="jxr_keyword">int</strong>)Math.ceil(pageHeight * 1.005),
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> 							                    PageSizeUnits.MM)
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> 							.toStream(os)
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> 							.run();
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> 					}
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> 				} <strong class="jxr_keyword">catch</strong> (Throwable e) {
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> TransformerException(e);
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 				}
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 			};
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> 		}
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> 
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> getDuplex(XMLStreamReader pef, LinkedList&lt;Boolean&gt; stack) {
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> 			<em class="jxr_comment">// not using XMLStreamReader#getAttributeValue(String, String) because it is buggy</em>
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> 			<em class="jxr_comment">// String attr = pef.getAttributeValue(_DUPLEX.getNamespaceURI(), _DUPLEX.getLocalPart());</em>
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; pef.getAttributeCount(); i++)
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> 				<strong class="jxr_keyword">if</strong> (_DUPLEX.equals(pef.getAttributeName(i)))
+<a class="jxr_linenumber" name="L545" href="#L545">545</a> 					<strong class="jxr_keyword">return</strong> Boolean.parseBoolean(pef.getAttributeValue(i)); <em class="jxr_comment">// assume "true" or "false"</em>
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> 			<strong class="jxr_keyword">return</strong> stack.getFirst(); <em class="jxr_comment">// throws NoSuchElementException if stack is empty, which can not</em>
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> 			                         <em class="jxr_comment">// happen if PEF is valid</em>
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> 		}
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> 
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getRowgap(XMLStreamReader pef, LinkedList&lt;Integer&gt; stack) {
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; pef.getAttributeCount(); i++)
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> 				<strong class="jxr_keyword">if</strong> (_ROWGAP.equals(pef.getAttributeName(i)))
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> 					<strong class="jxr_keyword">return</strong> Integer.parseInt(pef.getAttributeValue(i)); <em class="jxr_comment">// assume non-negative integer</em>
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> 			<strong class="jxr_keyword">return</strong> stack.getFirst(); <em class="jxr_comment">// throws NoSuchElementException if stack is empty, which can not</em>
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> 			                         <em class="jxr_comment">// happen if PEF is valid</em>
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> 		}
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> 	}
+<a class="jxr_linenumber" name="L558" href="#L558">558</a> 
+<a class="jxr_linenumber" name="L559" href="#L559">559</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">double</strong> parseNumberOrPercentage(String value) <strong class="jxr_keyword">throws</strong> IllegalArgumentException {
+<a class="jxr_linenumber" name="L560" href="#L560">560</a> 		<strong class="jxr_keyword">boolean</strong> isPercentage = false;
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> 		<strong class="jxr_keyword">if</strong> (value.endsWith(<span class="jxr_string">"%"</span>)) {
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> 			value = value.substring(0, value.length() - 1);
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> 			isPercentage = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> 		}
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> 			<strong class="jxr_keyword">double</strong> number = Double.valueOf(value);
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> 			<strong class="jxr_keyword">return</strong> isPercentage ? number / 100 : number;
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> 		} <strong class="jxr_keyword">catch</strong> (NumberFormatException e) {
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Can not parse percentage: "</span> + value, e);
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> 		}
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> 	}
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> }
 </pre>
 <hr>
-<div id="footer">Copyright © 2010–2025 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<div id="footer">Copyright © 2010–2026 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

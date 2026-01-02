@@ -668,35 +668,8 @@
       
         <li class="spine-item">
       
-      <a href="/pipeline/Get-Help/Troubleshooting" tabindex="56">
-      Troubleshooting
-      </a>
       
-      <ul class="spine">
-  
-    
-      
-        <li class="spine-item">
-      
-      
-        <a href="/pipeline/Get-Help/User-Guide/Desktop-Application/Troubleshooting" tabindex="57">
-      
-      Troubleshooting Desktop Application
-      </a>
-    
-    </li>
-  
-</ul>
-
-    
-    </li>
-  
-    
-      
-        <li class="spine-item">
-      
-      
-        <a href="https://github.com/daisy/pipeline/discussions" class="external-link" target="_blank" tabindex="58">
+        <a href="https://github.com/daisy/pipeline/discussions" class="external-link" target="_blank" tabindex="56">
       
       Forum
       </a>
@@ -708,7 +681,7 @@
         <li class="spine-item">
       
       
-        <a href="mailto:daisy-pipeline@mail.daisy.org" tabindex="59">
+        <a href="mailto:daisy-pipeline@mail.daisy.org" tabindex="57">
       
       Contact
       </a>
@@ -735,7 +708,7 @@
         <li class="spine-item">
       
       
-        <a href="https://github.com/daisy/pipeline" class="external-link" target="_blank" tabindex="60">
+        <a href="https://github.com/daisy/pipeline" class="external-link" target="_blank" tabindex="58">
       
       Source Code
       </a>
@@ -746,7 +719,7 @@
       
         <li class="spine-item">
       
-      <a href="/pipeline/Contribute/Developer-Guide" tabindex="61">
+      <a href="/pipeline/Contribute/Developer-Guide" tabindex="59">
       Developer Guide
       </a>
       
@@ -757,7 +730,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Sources" tabindex="62">
+        <a href="/pipeline/Contribute/Developer-Guide/Sources" tabindex="60">
       
       Source Code
       </a>
@@ -769,7 +742,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Building" tabindex="63">
+        <a href="/pipeline/Contribute/Developer-Guide/Building" tabindex="61">
       
       Build System
       </a>
@@ -781,7 +754,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Modules" tabindex="64">
+        <a href="/pipeline/Modules" tabindex="62">
       
       Writing Modules
       </a>
@@ -792,7 +765,7 @@
       
         <li class="spine-item">
       
-      <a href="/pipeline/Contribute/Developer-Guide/XProc" tabindex="65">
+      <a href="/pipeline/Contribute/Developer-Guide/XProc" tabindex="63">
       XProc
       </a>
       
@@ -803,7 +776,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/XProcExtensions" tabindex="66">
+        <a href="/pipeline/XProcExtensions" tabindex="64">
       
       XProc Extensions
       </a>
@@ -820,7 +793,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Testing" tabindex="67">
+        <a href="/pipeline/Contribute/Developer-Guide/Testing" tabindex="65">
       
       Testing
       </a>
@@ -832,7 +805,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Debugging" tabindex="68">
+        <a href="/pipeline/Contribute/Developer-Guide/Debugging" tabindex="66">
       
       Debugging
       </a>
@@ -844,7 +817,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Releasing" tabindex="69">
+        <a href="/pipeline/Contribute/Developer-Guide/Releasing" tabindex="67">
       
       Release Management
       </a>
@@ -861,7 +834,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Easy-Hacks.html" tabindex="70">
+        <a href="/pipeline/Contribute/Easy-Hacks.html" tabindex="68">
       
       Easy Hacks
       </a>
@@ -1025,19 +998,6 @@ The ZedAI you want to convert to braille.
   <ul class="synopsis-outputs">
 <li class="synopsis-output details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-output-name">Output file</div>
-<div class="synopsis-output-desc">
-The output braille file.
-</div>
-<div class="synopsis-output-media-type">
-<b>Media-type</b>:
-<ul class="media-types">
-<li>text</li>
-</ul>
-</div>
-</li>
-<li class="synopsis-output details-on">
-<div class="toggle-details"></div>
 <div class="synopsis-output-name">Preview</div>
 <div class="synopsis-output-desc">
 An HTML preview of the braille result.
@@ -1046,6 +1006,19 @@ An HTML preview of the braille result.
 <b>Media-type</b>:
 <ul class="media-types">
 <li>text/html</li>
+</ul>
+</div>
+</li>
+<li class="synopsis-output details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-output-name">Output file</div>
+<div class="synopsis-output-desc">
+The output braille file.
+</div>
+<div class="synopsis-output-media-type">
+<b>Media-type</b>:
+<ul class="media-types">
+<li>text</li>
 </ul>
 </div>
 </li>
@@ -1069,33 +1042,35 @@ The intermediary PEF file.
   <ul class="synopsis-options">
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Include PEF</div>
+<div class="synopsis-option-name">Transformer features</div>
 <div class="synopsis-option-desc">
-Whether or not to keep the intermediary PEF file (for debugging).
+<div class="shortdesc">Features of the braille transformer.
 </div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">ASCII braille table for HTML preview</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">The ASCII braille table used to render the HTML and PDF previews.
-</div>
-<div class="longdesc">The ASCII braille table used to render the HTML and PDF previews.
+<div class="longdesc">Features of the braille transformer.
 
-<p>If left blank, the locale information in the input document will be used to select a suitable table.</p>
+<p>Features of the <a href="/pipeline/Get-Help/User-Guide/Braille">braille transformer</a>
+to be used for creating the paginated braille document from the CSS styled input document. Together
+with the “Braille code” option this determines the transformer that is selected.</p>
 </div>
 </div>
 <div class="synopsis-option-data-type">
-<b>Possible values</b>: <var>&lt;preview-table&gt;</var>
+<b>Possible values</b>: A query
+
+<p>The syntax is as follows (described in terms of <a href="https://www.w3.org/TR/CSS21/grammar.html" class="external-link" target="_blank">CSS grammar</a>):</p>
+
+<pre><code>query
+ : feature*
+ ;
+feature
+ : '(' S* IDENT S* [ ':' S* value ]? ')' S*
+ ;
+value
+ : string | integer | IDENT
+ ;
+</code></pre>
 </div>
 <div class="synopsis-option-default">
-<b>Default value</b>: <code></code>
+<b>Default value</b>: <code>(translator:liblouis)(formatter:dotify)</code>
 </div>
 </li>
 <li class="synopsis-option details-on">
@@ -1138,6 +1113,50 @@ manual</a>.</p>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
+<div class="synopsis-option-name">Include PEF</div>
+<div class="synopsis-option-desc">
+Whether or not to keep the intermediary PEF file (for debugging).
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Include preview</div>
+<div class="synopsis-option-desc">
+Whether or not to include a HTML preview of the braille result.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">ASCII braille table for HTML preview</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">The ASCII braille table used to render the HTML and PDF previews.
+</div>
+<div class="longdesc">The ASCII braille table used to render the HTML and PDF previews.
+
+<p>If left blank, the locale information in the input document will be used to select a suitable table.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <var>&lt;preview-table&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code></code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
 <div class="synopsis-option-name">Output file format</div>
 <div class="synopsis-option-desc">
 <div class="shortdesc">The file format in which to store the braille result.
@@ -1157,52 +1176,6 @@ used in the Netherlands and store to a file with extension “.brl”, set the o
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code></code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Include preview</div>
-<div class="synopsis-option-desc">
-Whether or not to include a HTML preview of the braille result.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Transformer features</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">Features of the braille transformer.
-</div>
-<div class="longdesc">Features of the braille transformer.
-
-<p>Features of the <a href="/pipeline/Get-Help/User-Guide/Braille">braille transformer</a>
-to be used for creating the paginated braille document from the CSS styled input document. Together
-with the “Braille code” option this determines the transformer that is selected.</p>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: A query
-
-<p>The syntax is as follows (described in terms of <a href="https://www.w3.org/TR/CSS21/grammar.html" class="external-link" target="_blank">CSS grammar</a>):</p>
-
-<pre><code>query
- : feature*
- ;
-feature
- : '(' S* IDENT S* [ ':' S* value ]? ')' S*
- ;
-value
- : string | integer | IDENT
- ;
-</code></pre>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>(translator:liblouis)(formatter:dotify)</code>
 </div>
 </li>
 </ul>
@@ -1254,28 +1227,28 @@ Options:</pre>
 <td>The ZedAI you want to convert to braille.</td>
 </tr>
 <tr>
-<td>--include-pef [<span style="text-transform: uppercase">include-pef</span>]</td>
-<td>Include PEF (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
-</tr>
-<tr>
-<td>--preview-table [<span style="text-transform: uppercase">preview-table</span>]</td>
-<td>ASCII braille table for HTML preview (default: <span class="synopsis-option-default"><code></code></span>)</td>
+<td>--transform [<span style="text-transform: uppercase">transform</span>]</td>
+<td>Transformer features (default: <span class="synopsis-option-default"><code>(translator:liblouis)(formatter:dotify)</code></span>)</td>
 </tr>
 <tr>
 <td>--stylesheet [<span style="text-transform: uppercase">stylesheet</span>]</td>
 <td>Style sheets (default: <span class="synopsis-option-default"><code></code></span>)</td>
 </tr>
 <tr>
-<td>--output-file-format [<span style="text-transform: uppercase">output-file-format</span>]</td>
-<td>Output file format (default: <span class="synopsis-option-default"><code></code></span>)</td>
+<td>--include-pef [<span style="text-transform: uppercase">include-pef</span>]</td>
+<td>Include PEF (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
 </tr>
 <tr>
 <td>--include-preview [<span style="text-transform: uppercase">include-preview</span>]</td>
 <td>Include preview (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
 </tr>
 <tr>
-<td>--transform [<span style="text-transform: uppercase">transform</span>]</td>
-<td>Transformer features (default: <span class="synopsis-option-default"><code>(translator:liblouis)(formatter:dotify)</code></span>)</td>
+<td>--preview-table [<span style="text-transform: uppercase">preview-table</span>]</td>
+<td>ASCII braille table for HTML preview (default: <span class="synopsis-option-default"><code></code></span>)</td>
+</tr>
+<tr>
+<td>--output-file-format [<span style="text-transform: uppercase">output-file-format</span>]</td>
+<td>Output file format (default: <span class="synopsis-option-default"><code></code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>
@@ -1421,7 +1394,7 @@ alice.brf
 </div>
 </div>
 
-<p>If you are running DAISY Pipeline 2 in local mode, and you have your own liblouis tables installed somewhere, you can use them by specifying the full path:</p>
+<p>If you are running DAISY Pipeline in local mode, and you have your own liblouis tables installed somewhere, you can use them by specifying the full path:</p>
 
 <div class="language-plaintext highlighter-coderay">
 <div class="CodeRay">
@@ -1430,7 +1403,7 @@ alice.brf
 </div>
 </div>
 
-<p>Liblouis is the main translation engine used in DAISY Pipeline 2, but other libraries are available. The following translator is backed by <a href="https://code.google.com/p/dotify/" class="external-link" target="_blank">Dotify</a>, the braille translation library developed at MTM:</p>
+<p>Liblouis is the main translation engine used in DAISY Pipeline, but other libraries are available. The following translator is backed by <a href="https://code.google.com/p/dotify/" class="external-link" target="_blank">Dotify</a>, the braille translation library developed at MTM:</p>
 
 <div class="language-plaintext highlighter-coderay">
 <div class="CodeRay">

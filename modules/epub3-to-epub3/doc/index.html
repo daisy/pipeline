@@ -668,35 +668,8 @@
       
         <li class="spine-item">
       
-      <a href="/pipeline/Get-Help/Troubleshooting" tabindex="56">
-      Troubleshooting
-      </a>
       
-      <ul class="spine">
-  
-    
-      
-        <li class="spine-item">
-      
-      
-        <a href="/pipeline/Get-Help/User-Guide/Desktop-Application/Troubleshooting" tabindex="57">
-      
-      Troubleshooting Desktop Application
-      </a>
-    
-    </li>
-  
-</ul>
-
-    
-    </li>
-  
-    
-      
-        <li class="spine-item">
-      
-      
-        <a href="https://github.com/daisy/pipeline/discussions" class="external-link" target="_blank" tabindex="58">
+        <a href="https://github.com/daisy/pipeline/discussions" class="external-link" target="_blank" tabindex="56">
       
       Forum
       </a>
@@ -708,7 +681,7 @@
         <li class="spine-item">
       
       
-        <a href="mailto:daisy-pipeline@mail.daisy.org" tabindex="59">
+        <a href="mailto:daisy-pipeline@mail.daisy.org" tabindex="57">
       
       Contact
       </a>
@@ -735,7 +708,7 @@
         <li class="spine-item">
       
       
-        <a href="https://github.com/daisy/pipeline" class="external-link" target="_blank" tabindex="60">
+        <a href="https://github.com/daisy/pipeline" class="external-link" target="_blank" tabindex="58">
       
       Source Code
       </a>
@@ -746,7 +719,7 @@
       
         <li class="spine-item">
       
-      <a href="/pipeline/Contribute/Developer-Guide" tabindex="61">
+      <a href="/pipeline/Contribute/Developer-Guide" tabindex="59">
       Developer Guide
       </a>
       
@@ -757,7 +730,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Sources" tabindex="62">
+        <a href="/pipeline/Contribute/Developer-Guide/Sources" tabindex="60">
       
       Source Code
       </a>
@@ -769,7 +742,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Building" tabindex="63">
+        <a href="/pipeline/Contribute/Developer-Guide/Building" tabindex="61">
       
       Build System
       </a>
@@ -781,7 +754,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Modules" tabindex="64">
+        <a href="/pipeline/Modules" tabindex="62">
       
       Writing Modules
       </a>
@@ -792,7 +765,7 @@
       
         <li class="spine-item">
       
-      <a href="/pipeline/Contribute/Developer-Guide/XProc" tabindex="65">
+      <a href="/pipeline/Contribute/Developer-Guide/XProc" tabindex="63">
       XProc
       </a>
       
@@ -803,7 +776,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/XProcExtensions" tabindex="66">
+        <a href="/pipeline/XProcExtensions" tabindex="64">
       
       XProc Extensions
       </a>
@@ -820,7 +793,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Testing" tabindex="67">
+        <a href="/pipeline/Contribute/Developer-Guide/Testing" tabindex="65">
       
       Testing
       </a>
@@ -832,7 +805,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Debugging" tabindex="68">
+        <a href="/pipeline/Contribute/Developer-Guide/Debugging" tabindex="66">
       
       Debugging
       </a>
@@ -844,7 +817,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Releasing" tabindex="69">
+        <a href="/pipeline/Contribute/Developer-Guide/Releasing" tabindex="67">
       
       Release Management
       </a>
@@ -861,7 +834,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Easy-Hacks.html" tabindex="70">
+        <a href="/pipeline/Contribute/Easy-Hacks.html" tabindex="68">
       
       Easy Hacks
       </a>
@@ -966,69 +939,23 @@ if (window.addEventListener) {
   <ul class="synopsis-inputs">
 <li class="synopsis-input details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-input-name">Metadata</div>
+<div class="synopsis-input-name">Text-to-speech configuration file</div>
 <div class="synopsis-input-desc">
-<div class="shortdesc">Metadata to be included in the EPUB.
+<div class="shortdesc">Configuration file for text-to-speech.
 </div>
-<div class="longdesc">Metadata to be included in the EPUB.
+<div class="longdesc">Configuration file for text-to-speech.
 
-<p>If specified, the document must be a single
-<a href="https://www.w3.org/publishing/epub3/epub-packages.html#sec-metadata-elem" class="external-link" target="_blank"><code>metadata</code></a> or
-<a href="https://www.w3.org/publishing/epub3/epub-packages.html#sec-package-elem" class="external-link" target="_blank"><code>package</code></a> element. A
-<a href="https://www.w3.org/publishing/epub3/epub-packages.html#sec-prefix-attr" class="external-link" target="_blank"><code>prefix</code></a> attribute is
-allowed on the root element. The metadata will be injected in the EPUB’s package document, possibly
-overwriting existing metadata. This works as follows:</p>
-
-<ul>
-  <li>All (valid) fields in the provided metadata document end up in the output EPUB. More than one
-field with the same property is allowed. <code>meta</code> elements with a <code>refines</code> attribute must refine
-elements within the metadata document itself. Elements that refine elements in the EPUB’s package
-document will be dropped.</li>
-  <li>Any metadata fields in the input EPUB that have matching fields (same property in case of <code>meta</code>
-fields, same element name in case of <code>dc:*</code> fields) in the provided metadata document are omitted,
-together with any <code>meta</code> elements that refine them.</li>
-  <li>Metadata fields in the input that do not have any matching fields in the provided metadata
-document are preserved in the output.</li>
-</ul>
-
-<p>There are a number of fields that result in addional changes in the EPUB (apart from an updated
-<code>metadata</code> section in the package document):</p>
-
-<ul>
-  <li>If the provided metadata document contains one or more
-<a href="https://www.w3.org/publishing/epub3/epub-packages.html#sec-opf-dcidentifier" class="external-link" target="_blank"><code>dc:identifier</code></a>
-fields, the first one without a <code>refines</code> attribute will be used to update the
-<a href="https://www.w3.org/publishing/epub3/epub-packages.html#attrdef-package-unique-identifier" class="external-link" target="_blank"><code>unique-identifier</code></a>
-attribute on the package document. The <code>dc:identifier</code> metadata in the content documents can also be
-aligned with it. This behavior can be enabled or disabled with the “Update <meta name="dc:identifier"> elements based on EPUB metadata” option.</li>
-  <li>If the provided metadata document contains one or more
-<a href="https://www.w3.org/publishing/epub3/epub-packages.html#sec-opf-dctitle" class="external-link" target="_blank"><code>dc:title</code></a> fields, the
-first one can also be used as the <code>title</code> element in the content documents. This behavior can be
-enabled or disabled with the “Update <title> elements based on EPUB metadata" option.</title>
-</li>
-  <li>If the provided metadata document contains exactly one
-<a href="https://www.w3.org/publishing/epub3/epub-packages.html#sec-opf-dclanguage" class="external-link" target="_blank"><code>dc:language</code></a> field,
-it can be used to update the <code>xml:lang</code> and <code>lang</code> attributes of the content documents. This
-behavior can be enabled or disabled with the “Update ‘lang’ attributes based on metadata” option.</li>
-</ul>
-
-<p>Some fields are ignored:</p>
-
-<ul>
-  <li>The <a href="https://www.w3.org/publishing/epub3/epub-packages.html#last-modified-date" class="external-link" target="_blank"><code>dcterms:modified</code></a>
-field gets updated whenever Pipeline produces an EPUB. As a consequence, any <code>dcterms:modified</code>
-fields in the provided metadata document are ignored.</li>
-</ul>
+<p><a href="/pipeline/Get-Help/User-Guide/Text-To-Speech">More details on the configuration file format</a>.</p>
 </div>
 </div>
 <div class="synopsis-input-media-type">
 <b>Media-type</b>:
 <ul class="media-types">
-<li>application/xml</li>
+<li>application/vnd.pipeline.tts-config+xml</li>
 </ul>
 </div>
 <div class="synopsis-input-sequence">
-<b>Sequence</b>: yes</div>
+<b>Sequence</b>: no</div>
 </li>
 <li class="synopsis-input details-on">
 <div class="toggle-details"></div>
@@ -1053,23 +980,69 @@ fields in the provided metadata document are ignored.</li>
 </li>
 <li class="synopsis-input details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-input-name">Text-to-speech configuration file</div>
+<div class="synopsis-input-name">Metadata</div>
 <div class="synopsis-input-desc">
-<div class="shortdesc">Configuration file for text-to-speech.
+<div class="shortdesc">Metadata to be included in the EPUB.
 </div>
-<div class="longdesc">Configuration file for text-to-speech.
+<div class="longdesc">Metadata to be included in the EPUB.
 
-<p><a href="/pipeline/Get-Help/User-Guide/Text-To-Speech">More details on the configuration file format</a>.</p>
+<p>If specified, the document must be a single
+<a href="https://www.w3.org/TR/epub-33/#sec-metadata-elem" class="external-link" target="_blank"><code>metadata</code></a> or
+<a href="https://www.w3.org/TR/epub-33/#sec-package-elem" class="external-link" target="_blank"><code>package</code></a> element. A
+<a href="https://www.w3.org/TR/epub-33/#sec-prefix-attr" class="external-link" target="_blank"><code>prefix</code></a> attribute is
+allowed on the root element. The metadata will be injected in the EPUB’s package document, possibly
+overwriting existing metadata. This works as follows:</p>
+
+<ul>
+  <li>All (valid) fields in the provided metadata document end up in the output EPUB. More than one
+field with the same property is allowed. <code>meta</code> elements with a <code>refines</code> attribute must refine
+elements within the metadata document itself. Elements that refine elements in the EPUB’s package
+document will be dropped.</li>
+  <li>Any metadata fields in the input EPUB that have matching fields (same property in case of <code>meta</code>
+fields, same element name in case of <code>dc:*</code> fields) in the provided metadata document are omitted,
+together with any <code>meta</code> elements that refine them.</li>
+  <li>Metadata fields in the input that do not have any matching fields in the provided metadata
+document are preserved in the output.</li>
+</ul>
+
+<p>There are a number of fields that result in addional changes in the EPUB (apart from an updated
+<code>metadata</code> section in the package document):</p>
+
+<ul>
+  <li>If the provided metadata document contains one or more
+<a href="https://www.w3.org/TR/epub-33/#dfn-dc-identifier" class="external-link" target="_blank"><code>dc:identifier</code></a>
+fields, the first one without a <code>refines</code> attribute will be used to update the
+<a href="https://www.w3.org/TR/epub-33/#attrdef-package-unique-identifier" class="external-link" target="_blank"><code>unique-identifier</code></a>
+attribute on the package document. The <code>dc:identifier</code> metadata in the content documents can also be
+aligned with it. This behavior can be enabled or disabled with the “Update <meta name="dc:identifier"> elements based on EPUB metadata” option.</li>
+  <li>If the provided metadata document contains one or more
+<a href="https://www.w3.org/TR/epub-33/#dfn-dc-title" class="external-link" target="_blank"><code>dc:title</code></a> fields, the
+first one can also be used as the <code>title</code> element in the content documents. This behavior can be
+enabled or disabled with the “Update <title> elements based on EPUB metadata" option.</title>
+</li>
+  <li>If the provided metadata document contains exactly one
+<a href="https://www.w3.org/TR/epub-33/#dfn-dc-language" class="external-link" target="_blank"><code>dc:language</code></a> field,
+it can be used to update the <code>xml:lang</code> and <code>lang</code> attributes of the content documents. This
+behavior can be enabled or disabled with the “Update ‘lang’ attributes based on metadata” option.</li>
+</ul>
+
+<p>Some fields are ignored:</p>
+
+<ul>
+  <li>The <a href="https://www.w3.org/TR/epub-33/#dfn-dcterms-modified" class="external-link" target="_blank"><code>dcterms:modified</code></a>
+field gets updated whenever Pipeline produces an EPUB. As a consequence, any <code>dcterms:modified</code>
+fields in the provided metadata document are ignored.</li>
+</ul>
 </div>
 </div>
 <div class="synopsis-input-media-type">
 <b>Media-type</b>:
 <ul class="media-types">
-<li>application/vnd.pipeline.tts-config+xml</li>
+<li>application/xml</li>
 </ul>
 </div>
 <div class="synopsis-input-sequence">
-<b>Sequence</b>: no</div>
+<b>Sequence</b>: yes</div>
 </li>
 </ul>
 
@@ -1103,77 +1076,6 @@ Log file with information about text-to-speech process.
   <ul class="synopsis-options">
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Sentence class</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">Class attribute to mark sentences with.
-</div>
-<div class="longdesc">Class attribute to mark sentences with.
-
-<p>When sentence detection is enabled, this option may be used to add a class attribute to the <code>span</code>
-elements that represent the sentences.</p>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;string&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code></code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Apply author CSS style sheets</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">If this option is enabled, any CSS style sheets attached to the EPUB's content documents for media "embossed" or "speech" will be taken into account.
-</div>
-<div class="longdesc">If this option is enabled, any CSS style sheets attached to the EPUB's content documents for media "embossed" or "speech" will be taken into account.
-
-<p>The EPUB’s content documents may contain CSS (<a href="https://www.w3.org/TR/CSS2/cascade.html#cascade" class="external-link" target="_blank">author style
-sheets</a>) that apply to “embossed” or
-“<a href="https://www.w3.org/TR/CSS2/aural.html" class="external-link" target="_blank">speech</a>” media. Style sheets can be associated with an HTML
-file in several ways: linked (using an ‘xml-stylesheet’ processing instruction or a ‘link’ element),
-embedded (using a ‘style’ element) and/or inlined (using ‘style’ attributes).</p>
-
-<p>Author style sheets take precedence over user style sheets (any CSS provided through the “Style
-sheets” option). For instance, if the EPUB already contains the rule <code>p { padding-left: 2; }</code>, and
-using this script the rule <code>p#docauthor { padding-left: 4; }</code> is provided, then the <code>padding-left</code>
-property will get the value <code>2</code> because that’s what was defined in the EPUB, even though the
-provided CSS is more specific.</p>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Update 'lang' attributes based on metadata</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">Whether to update 'lang' and 'xml:lang' attributes of content documents based on metadata in the package document.
-</div>
-<div class="longdesc">Whether to update 'lang' and 'xml:lang' attributes of content documents based on metadata in the package document.
-
-<p>If there is exactly one
-<a href="https://www.w3.org/publishing/epub3/epub-packages.html#sec-opf-dclanguage" class="external-link" target="_blank"><code>dc:language</code></a> element,
-use its value to create <code>xml:lang</code> and <code>lang</code> attributes on the root elements of all content
-documents (overwriting any existing attributes)</p>
-
-<p>If the “Metadata” option is used to inject new metadata into the EPUB, the resulting metadata is
-used to generate the attributes.</p>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
 <div class="synopsis-option-name">Ensure headings for all sections</div>
 <div class="synopsis-option-desc">
 <div class="shortdesc">Whether to generate a heading element for sections that don't have one.
@@ -1188,193 +1090,6 @@ attribute. If the <code>aria-label</code> attribute is not present, no heading e
 new heading. The rank of the generated heading matches the depth of the corresponding TOC item in
 the navigation document.</p>
 </div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Enable TTS log</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">Whether or not to make the TTS log available.
-</div>
-<div class="longdesc">Whether or not to make the TTS log available.
-
-<p>The TTS log contains a great deal of additional information that is not present in the main job log
-and that is helpful for troubleshooting. Most of the log entries concern particular chunks of text
-of the input document.</p>
-
-<p>The default can be changed using the
-<a href="/pipeline/Get-Help/User-Guide/Text-To-Speech#common-settings"><code>org.daisy.pipeline.tts.log</code></a>
-property.</p>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>p:system-property('d:org.daisy.pipeline.tts.log')</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">identifier'&gt; elements based on EPUB metadata</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">Whether to update &lt;meta name='dc:identifier'&gt; elements of content documents based on metadata in the package document.
-</div>
-<div class="longdesc">Whether to update <meta name="dc:identifier"> elements of content documents based on metadata in the package document.
-
-<p>Use the primary identifier (provided by the
-<a href="https://www.w3.org/publishing/epub3/epub-packages.html#sec-opf-dcidentifier" class="external-link" target="_blank"><code>dc:identifier</code></a>
-element identified by the
-<a href="https://www.w3.org/publishing/epub3/epub-packages.html#attrdef-package-unique-identifier" class="external-link" target="_blank"><code>unique-identifier</code></a>
-attribute) to create a <code>&lt;meta name='dc:identifier'&gt;</code> element in all content documents
-(overwriting any existing elements with the same name).</p>
-
-<p>If the “Metadata” option is used to inject new metadata into the EPUB, the resulting metadata is
-used to generate the attributes.</p>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Braille translator query</div>
-<div class="synopsis-option-desc">
-
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: A query
-
-<p>The syntax is as follows (described in terms of <a href="https://www.w3.org/TR/CSS21/grammar.html" class="external-link" target="_blank">CSS grammar</a>):</p>
-
-<pre><code>query
- : feature*
- ;
-feature
- : '(' S* IDENT S* [ ':' S* value ]? ')' S*
- ;
-value
- : string | integer | IDENT
- ;
-</code></pre>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>(translator:liblouis)</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Style sheet parameters</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">A list of parameters passed to the style sheets.
-</div>
-<div class="longdesc">A list of parameters passed to the style sheets.
-
-<p>Style sheets, whether they’re user style sheets (specified with the “Style sheets” option) or author
-style sheets (associated with the source), may have parameters (Sass variables). This option, which
-takes a comma-separated list of key-value pairs enclosed in parenthesis, can be used to set these
-variables.</p>
-
-<p>For example, if a style sheet uses the Sass variable “foo”:</p>
-
-<pre><code class="language-sass">@if $foo {
-   /* some style that should only be enabled when "foo" is truthy */
-}
-</code></pre>
-
-<p>you can control that variable with the following parameters list: <code>(foo:true)</code>.</p>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <var>&lt;stylesheet-parameters&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>()</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Perform text-to-speech</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">Whether to use a speech synthesizer to produce media overlays.
-</div>
-<div class="longdesc">Whether to use a speech synthesizer to produce media overlays.
-
-<p>This will remove any existing media overlays in the EPUB.</p>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: One of the following:<dl class="choice">
-<dt><code>true</code></dt>
-<dd>Yes</dd>
-<dt><code>false</code></dt>
-<dd>No</dd>
-<dt><code>default</code></dt>
-<dd>If publication has no media overlays yet</dd>
-</dl>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>default</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Update &lt;title&gt; elements based on EPUB metadata</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">Whether to update &lt;title&gt; elements of content documents based on metadata in the package document.
-</div>
-<div class="longdesc">Whether to update <title> elements of content documents based on metadata in the package document.
-
-<p>If there is one or more
-<a href="https://www.w3.org/publishing/epub3/epub-packages.html#sec-opf-dctitle" class="external-link" target="_blank"><code>dc:title</code></a> element, use
-the value of the first one to create a <code>&lt;title&gt;</code> element in all content documents (overwriting
-any existing elements with the same name).</p>
-
-<p>If the “Metadata” option is used to inject new metadata into the EPUB, the resulting metadata is
-used to generate the attributes.</p>
-&lt;/div&gt;
-&lt;/div&gt;
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
-</div>
-&lt;/li&gt;
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Perform sentence detection</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">Whether to add markup (span elements) for sentences.
-</div>
-<div class="longdesc">Whether to add markup (span elements) for sentences.
-
-<p>This setting has no effect when text-to-speech is also enabled. In that case sentences are always
-marked up.</p>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Set default rendition to braille.</div>
-<div class="synopsis-option-desc">
-Make the generated braille rendition the default rendition.
 </div>
 <div class="synopsis-option-data-type">
 <b>Possible values</b>: <code>true</code> or <code>false</code>
@@ -1469,6 +1184,230 @@ appear in the lexicons.</p>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
+<div class="synopsis-option-name">Set default rendition to braille.</div>
+<div class="synopsis-option-desc">
+Make the generated braille rendition the default rendition.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Update 'lang' attributes based on metadata</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">Whether to update 'lang' and 'xml:lang' attributes of content documents based on metadata in the package document.
+</div>
+<div class="longdesc">Whether to update 'lang' and 'xml:lang' attributes of content documents based on metadata in the package document.
+
+<p>If there is exactly one
+<a href="https://www.w3.org/TR/epub-33/#dfn-dc-language" class="external-link" target="_blank"><code>dc:language</code></a> element,
+use its value to create <code>xml:lang</code> and <code>lang</code> attributes on the root elements of all content
+documents (overwriting any existing attributes)</p>
+
+<p>If the “Metadata” option is used to inject new metadata into the EPUB, the resulting metadata is
+used to generate the attributes.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Braille translator query</div>
+<div class="synopsis-option-desc">
+
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: A query
+
+<p>The syntax is as follows (described in terms of <a href="https://www.w3.org/TR/CSS21/grammar.html" class="external-link" target="_blank">CSS grammar</a>):</p>
+
+<pre><code>query
+ : feature*
+ ;
+feature
+ : '(' S* IDENT S* [ ':' S* value ]? ')' S*
+ ;
+value
+ : string | integer | IDENT
+ ;
+</code></pre>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>(translator:liblouis)</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Update &lt;title&gt; elements based on EPUB metadata</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">Whether to update &lt;title&gt; elements of content documents based on metadata in the package document.
+</div>
+<div class="longdesc">Whether to update &lt;title&gt; elements of content documents based on metadata in the package document.
+
+<p>If there is one or more
+<a href="https://www.w3.org/TR/epub-33/#dfn-dc-title" class="external-link" target="_blank"><code>dc:title</code></a> element, use
+the value of the first one to create a <code>&lt;title&gt;</code> element in all content documents (overwriting
+any existing elements with the same name).</p>
+
+<p>If the “Metadata” option is used to inject new metadata into the EPUB, the resulting metadata is
+used to generate the attributes.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Enable TTS log</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">Whether or not to make the TTS log available.
+</div>
+<div class="longdesc">Whether or not to make the TTS log available.
+
+<p>The TTS log contains a great deal of additional information that is not present in the main job log
+and that is helpful for troubleshooting. Most of the log entries concern particular chunks of text
+of the input document.</p>
+
+<p>The default can be changed using the
+<a href="/pipeline/Get-Help/User-Guide/Text-To-Speech#common-settings"><code>org.daisy.pipeline.tts.log</code></a>
+property.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>p:system-property('d:org.daisy.pipeline.tts.log')</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Style sheets</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">A list of CSS/Sass style sheets to take into account.
+</div>
+<div class="longdesc">A list of CSS/Sass style sheets to take into account.
+
+<p>A list of CSS/Sass style sheets to take into account, both for braille transcription (if a braille
+rendition is requested), and for text-to-speech (if text-to-speech is enabled).</p>
+
+<p>Must be a space separated list of URIs, absolute or relative to the input.</p>
+
+<p>All style sheets are applied at once, but the order in which they are specified has an influence on
+the <a href="https://www.w3.org/TR/CSS2/cascade.html#cascading-order" class="external-link" target="_blank">cascading order</a>.</p>
+
+<p>If the “Apply author style sheets” option is enabled, <a href="https://www.w3.org/TR/CSS2/cascade.html#cascade" class="external-link" target="_blank">author style
+sheets</a> will be taken into account and will take
+precedence over any style sheets specified through this option (<a href="https://www.w3.org/TR/CSS2/cascade.html#cascade" class="external-link" target="_blank">user style
+sheets</a>).</p>
+
+<p>When generating the braille rendition, style sheets are interpreted according to <a href="http://braillespecs.github.io/braille-css" class="external-link" target="_blank">braille
+CSS</a> rules. When performing text-to-speech, they are
+interpreted as <a href="https://www.w3.org/TR/CSS2/aural.html" class="external-link" target="_blank">aural CSS</a>.</p>
+
+<p>For info on how to use Sass (Syntactically Awesome StyleSheets) see the <a href="http://sass-lang.com/documentation/file.SASS_REFERENCE.html" class="external-link" target="_blank">Sass
+manual</a>.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <var>&lt;anyURI&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code></code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Apply author CSS style sheets</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">If this option is enabled, any CSS style sheets attached to the EPUB's content documents for media "embossed" or "speech" will be taken into account.
+</div>
+<div class="longdesc">If this option is enabled, any CSS style sheets attached to the EPUB's content documents for media "embossed" or "speech" will be taken into account.
+
+<p>The EPUB’s content documents may contain CSS (<a href="https://www.w3.org/TR/CSS2/cascade.html#cascade" class="external-link" target="_blank">author style
+sheets</a>) that apply to “embossed” or
+“<a href="https://www.w3.org/TR/CSS2/aural.html" class="external-link" target="_blank">speech</a>” media. Style sheets can be associated with an HTML
+file in several ways: linked (using an ‘xml-stylesheet’ processing instruction or a ‘link’ element),
+embedded (using a ‘style’ element) and/or inlined (using ‘style’ attributes).</p>
+
+<p>Author style sheets take precedence over user style sheets (any CSS provided through the “Style
+sheets” option). For instance, if the EPUB already contains the rule <code>p { padding-left: 2; }</code>, and
+using this script the rule <code>p#docauthor { padding-left: 4; }</code> is provided, then the <code>padding-left</code>
+property will get the value <code>2</code> because that’s what was defined in the EPUB, even though the
+provided CSS is more specific.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Style sheet parameters</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">A list of parameters passed to the style sheets.
+</div>
+<div class="longdesc">A list of parameters passed to the style sheets.
+
+<p>Style sheets, whether they’re user style sheets (specified with the “Style sheets” option) or author
+style sheets (associated with the source), may have parameters (Sass variables). This option, which
+takes a comma-separated list of key-value pairs enclosed in parenthesis, can be used to set these
+variables.</p>
+
+<p>For example, if a style sheet uses the Sass variable “foo”:</p>
+
+<pre><code class="language-sass">@if $foo {
+   /* some style that should only be enabled when "foo" is truthy */
+}
+</code></pre>
+
+<p>you can control that variable with the following parameters list: <code>(foo:true)</code>.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <var>&lt;stylesheet-parameters&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>()</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Sentence class</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">Class attribute to mark sentences with.
+</div>
+<div class="longdesc">Class attribute to mark sentences with.
+
+<p>When sentence detection is enabled, this option may be used to add a class attribute to the <code>span</code>
+elements that represent the sentences.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code></code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
 <div class="synopsis-option-name">Ensure text content for page numbers</div>
 <div class="synopsis-option-desc">
 <div class="shortdesc">Whether to fix empty page number elements.
@@ -1517,44 +1456,77 @@ Whether to produce a braille rendition.
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Style sheets</div>
+<div class="synopsis-option-name">Perform text-to-speech</div>
 <div class="synopsis-option-desc">
-<div class="shortdesc">A list of CSS/Sass style sheets to take into account.
+<div class="shortdesc">Whether to use a speech synthesizer to produce media overlays.
 </div>
-<div class="longdesc">A list of CSS/Sass style sheets to take into account.
+<div class="longdesc">Whether to use a speech synthesizer to produce media overlays.
 
-<p>A list of CSS/Sass style sheets to take into account, both for braille transcription (if a braille
-rendition is requested), and for text-to-speech (if text-to-speech is enabled).</p>
-
-<p>Must be a space separated list of URIs, absolute or relative to the input.</p>
-
-<p>All style sheets are applied at once, but the order in which they are specified has an influence on
-the <a href="https://www.w3.org/TR/CSS2/cascade.html#cascading-order" class="external-link" target="_blank">cascading order</a>.</p>
-
-<p>If the “Apply author style sheets” option is enabled, <a href="https://www.w3.org/TR/CSS2/cascade.html#cascade" class="external-link" target="_blank">author style
-sheets</a> will be taken into account and will take
-precedence over any style sheets specified through this option (<a href="https://www.w3.org/TR/CSS2/cascade.html#cascade" class="external-link" target="_blank">user style
-sheets</a>).</p>
-
-<p>When generating the braille rendition, style sheets are interpreted according to <a href="http://braillespecs.github.io/braille-css" class="external-link" target="_blank">braille
-CSS</a> rules. When performing text-to-speech, they are
-interpreted as <a href="https://www.w3.org/TR/CSS2/aural.html" class="external-link" target="_blank">aural CSS</a>.</p>
-
-<p>For info on how to use Sass (Syntactically Awesome StyleSheets) see the <a href="http://sass-lang.com/documentation/file.SASS_REFERENCE.html" class="external-link" target="_blank">Sass
-manual</a>.</p>
+<p>This will remove any existing media overlays in the EPUB.</p>
 </div>
 </div>
 <div class="synopsis-option-data-type">
-<b>Possible values</b>: <var>&lt;anyURI&gt;</var>
+<b>Possible values</b>: One of the following:<dl class="choice">
+<dt><code>true</code></dt>
+<dd>Yes</dd>
+<dt><code>false</code></dt>
+<dd>No</dd>
+<dt><code>default</code></dt>
+<dd>If publication has no media overlays yet</dd>
+</dl>
 </div>
 <div class="synopsis-option-default">
-<b>Default value</b>: <code></code>
+<b>Default value</b>: <code>default</code>
 </div>
 </li>
-&lt;/ul&gt;
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Update &lt;meta name='dc:identifier'&gt; elements based on EPUB metadata</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">Whether to update &lt;meta name='dc:identifier'&gt; elements of content documents based on metadata in the package document.
+</div>
+<div class="longdesc">Whether to update &lt;meta name='dc:identifier'&gt; elements of content documents based on metadata in the package document.
 
+<p>Use the primary identifier (provided by the
+<a href="https://www.w3.org/TR/epub-33/#dfn-dc-identifier" class="external-link" target="_blank"><code>dc:identifier</code></a>
+element identified by the
+<a href="https://www.w3.org/TR/epub-33/#attrdef-package-unique-identifier" class="external-link" target="_blank"><code>unique-identifier</code></a>
+attribute) to create a <code>&lt;meta name='dc:identifier'&gt;</code> element in all content documents
+(overwriting any existing elements with the same name).</p>
 
-<script type="text/javascript">
+<p>If the “Metadata” option is used to inject new metadata into the EPUB, the resulting metadata is
+used to generate the attributes.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Perform sentence detection</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">Whether to add markup (span elements) for sentences.
+</div>
+<div class="longdesc">Whether to add markup (span elements) for sentences.
+
+<p>This setting has no effect when text-to-speech is also enabled. In that case sentences are always
+marked up.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
+</ul>
+
+  <script type="text/javascript">
 var allElements = [];
 function showDetailsAndHideAllOther() {
   var windowTopBefore = window.pageYOffset;
@@ -1586,20 +1558,19 @@ if (window.addEventListener) {
   window.attachEvent('onload', onload);
 }
 </script>
-&lt;/div&gt;
 
-
+</div>
 
 <div class="cli-synopsis hidden">
 
-<pre>Usage: dp2 [GLOBAL_OPTIONS] epub3-to-epub3 [OPTIONS]
+  <pre>Usage: dp2 [GLOBAL_OPTIONS] epub3-to-epub3 [OPTIONS]
 
 Options:</pre>
-<table>
+  <table>
 <tr>
-<td>--metadata <span style="text-transform: uppercase">metadata</span>
+<td>--tts-config <span style="text-transform: uppercase">tts-config</span>
 </td>
-<td>Metadata to be included in the EPUB.
+<td>Configuration file for text-to-speech.
 </td>
 </tr>
 <tr>
@@ -1609,62 +1580,54 @@ Options:</pre>
 </td>
 </tr>
 <tr>
-<td>--tts-config <span style="text-transform: uppercase">tts-config</span>
+<td>--metadata <span style="text-transform: uppercase">metadata</span>
 </td>
-<td>Configuration file for text-to-speech.
+<td>Metadata to be included in the EPUB.
 </td>
-</tr>
-<tr>
-<td>--sentence-class [<span style="text-transform: uppercase">sentence-class</span>]</td>
-<td>Sentence class (default: <span class="synopsis-option-default"><code></code></span>)</td>
-</tr>
-<tr>
-<td>--apply-document-specific-stylesheets [<span style="text-transform: uppercase">apply-document-specific-stylesheets</span>]</td>
-<td>Apply author CSS style sheets (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
-</tr>
-<tr>
-<td>--update-lang-attributes [<span style="text-transform: uppercase">update-lang-attributes</span>]</td>
-<td>Update 'lang' attributes based on metadata (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
 </tr>
 <tr>
 <td>--ensure-section-headings [<span style="text-transform: uppercase">ensure-section-headings</span>]</td>
 <td>Ensure headings for all sections (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
 </tr>
 <tr>
-<td>--include-tts-log [<span style="text-transform: uppercase">include-tts-log</span>]</td>
-<td>Enable TTS log (default: <span class="synopsis-option-default"><code>p:system-property('d:org.daisy.pipeline.tts.log')</code></span>)</td>
-</tr>
-<tr>
-<td>--update-identifier-in-content-docs [<span style="text-transform: uppercase">update-identifier-in-content-docs</span>]</td>
-<td>identifier'&gt; elements based on EPUB metadata (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
-</tr>
-<tr>
-<td>--braille-translator [<span style="text-transform: uppercase">braille-translator</span>]</td>
-<td>Braille translator query (default: <span class="synopsis-option-default"><code>(translator:liblouis)</code></span>)</td>
-</tr>
-<tr>
-<td>--stylesheet-parameters [<span style="text-transform: uppercase">stylesheet-parameters</span>]</td>
-<td>Style sheet parameters (default: <span class="synopsis-option-default"><code>()</code></span>)</td>
-</tr>
-<tr>
-<td>--audio [<span style="text-transform: uppercase">audio</span>]</td>
-<td>Perform text-to-speech (default: <span class="synopsis-option-default"><code>default</code></span>)</td>
-</tr>
-<tr>
-<td>--update-title-in-content-docs [<span style="text-transform: uppercase">update-title-in-content-docs</span>]</td>
-<td>Update &lt;title&gt; elements based on EPUB metadata (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
-</tr>
-<tr>
-<td>--sentence-detection [<span style="text-transform: uppercase">sentence-detection</span>]</td>
-<td>Perform sentence detection (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+<td>--lexicon [<span style="text-transform: uppercase">lexicon</span>]</td>
+<td>Lexicons (default: <span class="synopsis-option-default"><code>p:system-property('d:org.daisy.pipeline.tts.default-lexicon')</code></span>)</td>
 </tr>
 <tr>
 <td>--set-default-rendition-to-braille [<span style="text-transform: uppercase">set-default-rendition-to-braille</span>]</td>
 <td>Set default rendition to braille. (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
 </tr>
 <tr>
-<td>--lexicon [<span style="text-transform: uppercase">lexicon</span>]</td>
-<td>Lexicons (default: <span class="synopsis-option-default"><code>p:system-property('d:org.daisy.pipeline.tts.default-lexicon')</code></span>)</td>
+<td>--update-lang-attributes [<span style="text-transform: uppercase">update-lang-attributes</span>]</td>
+<td>Update 'lang' attributes based on metadata (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+</tr>
+<tr>
+<td>--braille-translator [<span style="text-transform: uppercase">braille-translator</span>]</td>
+<td>Braille translator query (default: <span class="synopsis-option-default"><code>(translator:liblouis)</code></span>)</td>
+</tr>
+<tr>
+<td>--update-title-in-content-docs [<span style="text-transform: uppercase">update-title-in-content-docs</span>]</td>
+<td>Update &lt;title&gt; elements based on EPUB metadata (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+</tr>
+<tr>
+<td>--include-tts-log [<span style="text-transform: uppercase">include-tts-log</span>]</td>
+<td>Enable TTS log (default: <span class="synopsis-option-default"><code>p:system-property('d:org.daisy.pipeline.tts.log')</code></span>)</td>
+</tr>
+<tr>
+<td>--stylesheet [<span style="text-transform: uppercase">stylesheet</span>]</td>
+<td>Style sheets (default: <span class="synopsis-option-default"><code></code></span>)</td>
+</tr>
+<tr>
+<td>--apply-document-specific-stylesheets [<span style="text-transform: uppercase">apply-document-specific-stylesheets</span>]</td>
+<td>Apply author CSS style sheets (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+</tr>
+<tr>
+<td>--stylesheet-parameters [<span style="text-transform: uppercase">stylesheet-parameters</span>]</td>
+<td>Style sheet parameters (default: <span class="synopsis-option-default"><code>()</code></span>)</td>
+</tr>
+<tr>
+<td>--sentence-class [<span style="text-transform: uppercase">sentence-class</span>]</td>
+<td>Sentence class (default: <span class="synopsis-option-default"><code></code></span>)</td>
 </tr>
 <tr>
 <td>--ensure-pagenum-text [<span style="text-transform: uppercase">ensure-pagenum-text</span>]</td>
@@ -1675,8 +1638,16 @@ Options:</pre>
 <td>Translate to braille (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
 </tr>
 <tr>
-<td>--stylesheet [<span style="text-transform: uppercase">stylesheet</span>]</td>
-<td>Style sheets (default: <span class="synopsis-option-default"><code></code></span>)</td>
+<td>--audio [<span style="text-transform: uppercase">audio</span>]</td>
+<td>Perform text-to-speech (default: <span class="synopsis-option-default"><code>default</code></span>)</td>
+</tr>
+<tr>
+<td>--update-identifier-in-content-docs [<span style="text-transform: uppercase">update-identifier-in-content-docs</span>]</td>
+<td>Update &lt;meta name='dc:identifier'&gt; elements based on EPUB metadata (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+</tr>
+<tr>
+<td>--sentence-detection [<span style="text-transform: uppercase">sentence-detection</span>]</td>
+<td>Perform sentence detection (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>
@@ -1757,12 +1728,6 @@ if (window.addEventListener) {
 }
 </script>
 
-</title>
-</div>
-</div>
-</li>
-</ul>
-</div>
 
     </div>
   </body>

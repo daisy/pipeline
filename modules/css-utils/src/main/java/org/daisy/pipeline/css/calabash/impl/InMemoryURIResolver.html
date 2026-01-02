@@ -87,10 +87,10 @@
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<em class="jxr_comment">// A URI that contains "!/" is a ZIP URI</em>
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">if</strong> (s.startsWith(<span class="jxr_string">"file:"</span>) &amp;&amp; s.contains(<span class="jxr_string">"!/"</span>))
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  			s = <span class="jxr_string">"zip:"</span> + s;
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  			s = <span class="jxr_string">"jar:"</span> + s;
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<em class="jxr_comment">// The part of a ZIP URI after the "!" must start with "/"</em>
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">if</strong> (s.startsWith(<span class="jxr_string">"zip:file:"</span>) &amp;&amp; !s.contains(<span class="jxr_string">"!/"</span>))
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">if</strong> (s.startsWith(<span class="jxr_string">"jar:file:"</span>) &amp;&amp; !s.contains(<span class="jxr_string">"!/"</span>))
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  			s = s.replaceFirst(<span class="jxr_string">"!"</span>, <span class="jxr_string">"!/"</span>);
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> URI(s); }
@@ -100,6 +100,6 @@
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  }
 </pre>
 <hr>
-<div id="footer">Copyright © 2010–2025 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<div id="footer">Copyright © 2010–2026 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

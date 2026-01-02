@@ -668,35 +668,8 @@
       
         <li class="spine-item">
       
-      <a href="/pipeline/Get-Help/Troubleshooting" tabindex="56">
-      Troubleshooting
-      </a>
       
-      <ul class="spine">
-  
-    
-      
-        <li class="spine-item">
-      
-      
-        <a href="/pipeline/Get-Help/User-Guide/Desktop-Application/Troubleshooting" tabindex="57">
-      
-      Troubleshooting Desktop Application
-      </a>
-    
-    </li>
-  
-</ul>
-
-    
-    </li>
-  
-    
-      
-        <li class="spine-item">
-      
-      
-        <a href="https://github.com/daisy/pipeline/discussions" class="external-link" target="_blank" tabindex="58">
+        <a href="https://github.com/daisy/pipeline/discussions" class="external-link" target="_blank" tabindex="56">
       
       Forum
       </a>
@@ -708,7 +681,7 @@
         <li class="spine-item">
       
       
-        <a href="mailto:daisy-pipeline@mail.daisy.org" tabindex="59">
+        <a href="mailto:daisy-pipeline@mail.daisy.org" tabindex="57">
       
       Contact
       </a>
@@ -735,7 +708,7 @@
         <li class="spine-item">
       
       
-        <a href="https://github.com/daisy/pipeline" class="external-link" target="_blank" tabindex="60">
+        <a href="https://github.com/daisy/pipeline" class="external-link" target="_blank" tabindex="58">
       
       Source Code
       </a>
@@ -746,7 +719,7 @@
       
         <li class="spine-item">
       
-      <a href="/pipeline/Contribute/Developer-Guide" tabindex="61">
+      <a href="/pipeline/Contribute/Developer-Guide" tabindex="59">
       Developer Guide
       </a>
       
@@ -757,7 +730,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Sources" tabindex="62">
+        <a href="/pipeline/Contribute/Developer-Guide/Sources" tabindex="60">
       
       Source Code
       </a>
@@ -769,7 +742,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Building" tabindex="63">
+        <a href="/pipeline/Contribute/Developer-Guide/Building" tabindex="61">
       
       Build System
       </a>
@@ -781,7 +754,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Modules" tabindex="64">
+        <a href="/pipeline/Modules" tabindex="62">
       
       Writing Modules
       </a>
@@ -792,7 +765,7 @@
       
         <li class="spine-item">
       
-      <a href="/pipeline/Contribute/Developer-Guide/XProc" tabindex="65">
+      <a href="/pipeline/Contribute/Developer-Guide/XProc" tabindex="63">
       XProc
       </a>
       
@@ -803,7 +776,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/XProcExtensions" tabindex="66">
+        <a href="/pipeline/XProcExtensions" tabindex="64">
       
       XProc Extensions
       </a>
@@ -820,7 +793,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Testing" tabindex="67">
+        <a href="/pipeline/Contribute/Developer-Guide/Testing" tabindex="65">
       
       Testing
       </a>
@@ -832,7 +805,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Debugging" tabindex="68">
+        <a href="/pipeline/Contribute/Developer-Guide/Debugging" tabindex="66">
       
       Debugging
       </a>
@@ -844,7 +817,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Releasing" tabindex="69">
+        <a href="/pipeline/Contribute/Developer-Guide/Releasing" tabindex="67">
       
       Release Management
       </a>
@@ -861,7 +834,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Easy-Hacks.html" tabindex="70">
+        <a href="/pipeline/Contribute/Easy-Hacks.html" tabindex="68">
       
       Easy Hacks
       </a>
@@ -962,16 +935,19 @@ if (window.addEventListener) {
 #-copyright: 2004-2006, JJB Software, Inc. www.jjb-software.com
 #-copyright: 2009-2010, 2012-2013, 2017, 2019, 2021-2022, 2025, Lars Bjørndal &lt;lars@lamasti.net&gt;
 #-copyright: 2015-2018, NLB Norwegian library of talking books and braille, http://www.nlb.no/
+#-copyright: 2019, 2021-2023, 2025, Lars Bjørndal &lt;lars@lamasti.net&gt;
 #
 # Created June 9, 2005 by Leon Ungier &lt;Leon.Ungier@ViewPlus.com&gt; with
 # help and guidance from Lars Bjørndal &lt;lars@lamasti.net&gt;
 # Updated June 2009 by Lars Bjørndal &lt;lars@lamasti.net&gt;
 # Updated April 2015 by Jostein Austvik Jacobsen &lt;jostein@nlb.com&gt; and Ammar Usama &lt;ammar.usama@nlb.no&gt;
+# Updated July 2025 by Lars Bjørndal &lt;lars@lamasti.net&gt;
 #
 #-author: Leon Ungier &lt;Leon.Ungier@ViewPlus.com&gt;
 #-author: Lars Bjørndal &lt;lars@lamasti.net&gt;
 #-author: Jostein Austvik Jacobsen &lt;jostein@nlb.no&gt;
 #-author: Ammar Usama &lt;ammar.usama@nlb.no&gt;
+#-author: Lars Bjørndal &lt;lars@lamasti.net&gt;
 #
 #  This file is part of liblouis.
 #
@@ -1014,14 +990,14 @@ punctuation { 6-12356        # left curly bracket x007B
 punctuation } 6-23456        # right curly bracket x007D
 punctuation « 256            # left-pointing double angle quotation mark x00AB
 punctuation » 256            # right-pointing double angle quotation mark x00BB
-punctuation \x2010 36        # 8208 hyphen
-punctuation \x2011 36        # 8209 non-breaking hyphen
-punctuation \x2012 36        # figure dash
+noback punctuation \x2010 36        # 8208 hyphen
+noback punctuation \x2011 36        # 8209 non-breaking hyphen
+noback punctuation \x2012 36        # figure dash
 punctuation \x2013 36-36     # en dash
 punctuation \x2014 36-36     # em dash
 punctuation \x002D 36        # hyphen-minus x002D
-punctuation \x2018 256         # 8216 smart single left quotation mark
-punctuation \x2019 256         # 8217 smart single right quotation mark
+punctuation \x2018 5         # 8216 smart single left quotation mark
+punctuation \x2019 5         # 8217 smart single right quotation mark
 punctuation \x201C 256       # 8220 smart opening double quote
 punctuation \x201D 256       # 8221 smart closing double quote
 punctuation \x201E 256       # 8222 smart double low quotation mark
@@ -1047,7 +1023,7 @@ lowercase \x00E9 123456      # e with acute é 00E9
 sign | 123456                # vertical line x007C
 sign ~ 1456                  # tilde x007E
 sign \x0080 15-136-1235-135  # Euro sign x0080
-sign ¢ 4-14                  # cent sign x00A2
+noback sign ¢ 4-14                  # cent sign x00A2
 sign £ 45-123                # pound sign x00A3
 sign ¤ 236-134-356           # currency sign x00A4
 sign ¥ 45-13456              # yen sign x00A5
@@ -1128,7 +1104,7 @@ lowercase ß 2346               # Latin Small Letter Sharp S
 lowercase \x00EA 126           # e with circumflex 00EA
 lowercase \x010D 146           # c with caron 00EE
 noback lowercase \x00EF 34            # i with diaeresis 00EF
-lowercase \x00F4 4-135        # o with circumflex ô 00F4
+noback lowercase \x00F4 4-135        # o with circumflex ô 00F4
 lowercase \x00ED 126           # i with acute 00ED
 lowercase \x00E6 345           # æ 00E6
 lowercase å 16                 # A with ring above 00E5
@@ -1137,10 +1113,10 @@ lowercase ø 246                # o with stroke
 lowercase \x00FA 12456         # u with acute 00FA
 lowercase \x00FD 12346         # y with acute x00FD
 lowercase \x00E0 12356         # a with grave 00E0
-lowercase \x00E2 4-1          # a with circumflex 00E2
+noback lowercase \x00E2 4-1          # a with circumflex 00E2
 lowercase ä 345                # A with diaeresis 00E4
 lowercase \x00E7 12346         # c with cedilla ç 00E7
-lowercase \x00F5 4-135         # o with tilde 00F5
+noback lowercase \x00F5 4-135         # o with tilde 00F5
 lowercase ö 246                # O with diaeresis 00F6
 lowercase \x00F2 346           # O with grave ò
 lowercase \x017E 2346          # z with caron
@@ -1191,9 +1167,11 @@ base uppercase Œ œ  # Latin Ligature Oe
 
 math + 235                   # plus x002B
 math / 34 solidus            # x002F
-math &lt; 246-3                 # less-than sign x003C
+#noback math &lt; 246-3                 # less-than sign x003C
+noback math &lt; 126                 # less-than sign x003C
 math = 2356                  # equal sign x003D
-math &gt; 135-2                 # greater-than sign x003E
+#noback math &gt; 135-2                 # greater-than sign x003E
+noback math &gt; 345                 # greater-than sign x003E
 math × 3                     # multiplication sign x00D7
 math ÷ 25                    # division sign x00F7
 math √ 146                   # root sign
@@ -1218,21 +1196,27 @@ math ⅝ 3456-15-34-3456-125    # vulgar fraction 5/8 (x215d)
 math ⅞ 3456-1245-34-3456-125  # vulgar fraction 7/8 (x215e)
 math ⅑ 3456-1-34-3456-24      # vulgar fraction 1/9 (x2151)
 math ↉ 3456-245-34-3456-14    # vulgar fraction 0/3 (x2189)
+math − 36                      # x2212 MINUS SIGN
+math ∕ 34                      # x2215 DIVISION SLASH
+math ∙ 3                      # x2219 BULLET OPERATOR
+math ⋅ 3                      # x22c5 DOT OPERATOR
+math ∶ 25                      # x2236 RATIO (dele)
 math ≈ 26-26                      # x2248 ALMOST EQUAL TO
 math ± 235-36                      # xb1 PLUS-MINUS sign
-math ∞ 3456-123456              # 221e INFINITY
+math ∞ 3456-123456              # x221e INFINITY
+math ′ 5                      # x2032 PRIME
 math ″ 5-5                      # x2033 DOUBLE PRIME
 
 
 lowercase \x00F3 1456         # DEC 243 ó
-lowercase \x00F4 4-135        # DEC 244 ô
+noback lowercase \x00F4 4-135        # DEC 244 ô
 
 undefined 0                   # sign used for undefined characters
 
 # no space within mixed numbers like 1 1/2
 # the swapcd rule is for compensating that the litdigit rule is not matched anymore
 swapcd aslitdigit 1234567890 1,12,14,145,15,124,1245,125,24,245 # as defined in litdigits6Dots.uti
-noback context [%aslitdigit$s.]$d."/"$d %aslitdigit
+noback context [%aslitdigit$s.]$d."/"$d %aslitdigit@3456
 
 # arrows
 sign → 25-5 # rightwards arrow x2192

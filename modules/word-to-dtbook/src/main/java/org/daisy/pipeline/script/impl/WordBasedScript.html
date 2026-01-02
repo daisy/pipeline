@@ -169,212 +169,220 @@
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 					<span class="jxr_string">"Transforms a Microsoft Office Word (.docx) document into "</span>
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 					+ (formatId.equals(<span class="jxr_string">"mp3"</span>)
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 					      ? <span class="jxr_string">"a folder structure with MP3 files suitable for playback on MegaVoice Envoy devices"</span>
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 					      : (formatName + <span class="jxr_string">" format"</span>)) + <span class="jxr_string">"."</span>)
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 				<em class="jxr_comment">// FIXME: home page has yet to be created</em>
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 				.withHomepage(
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 					<span class="jxr_string">"http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/word-to-"</span>
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 					+ formatId + <span class="jxr_string">"/"</span>)
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 				;
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 			<strong class="jxr_keyword">for</strong> (ScriptPort p : wordToDTBook.getInputPorts())
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 				builder = builder.withInputPort(p.getName(), p);
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 			<strong class="jxr_keyword">for</strong> (ScriptOption o : wordToDTBook.getOptions()) {
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 				String name = o.getName();
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 				<strong class="jxr_keyword">if</strong> (   <span class="jxr_string">"title"</span>.equals(name)
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 				    || <span class="jxr_string">"creator"</span>.equals(name)
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 				    || <span class="jxr_string">"publisher"</span>.equals(name)
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 				    || <span class="jxr_string">"uid"</span>.equals(name)
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 				    || <span class="jxr_string">"subject"</span>.equals(name)
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 				    || <span class="jxr_string">"accept-revisions"</span>.equals(name)
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 				    || <span class="jxr_string">"repair"</span>.equals(name)
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 				    || <span class="jxr_string">"tidy"</span>.equals(name)
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 				)
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 					builder = builder.withOption(name, o);
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 			}
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 			Script lastScript = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 			<strong class="jxr_keyword">for</strong> (Script s : scriptChain) {
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 				<strong class="jxr_keyword">for</strong> (ScriptOption o : s.getOptions()) {
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 					String name = o.getName();                     <em class="jxr_comment">//  daisy3  |  daisy202  |  ebraille  |  epub3  |  html  |  mp3</em>
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 					<strong class="jxr_keyword">if</strong> (   <span class="jxr_string">"include-tts-log"</span>.equals(name)          <em class="jxr_comment">//  x          x                         x                  x</em>
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 					    || <span class="jxr_string">"tts-config"</span>.equals(name)               <em class="jxr_comment">//  x          x                         x                  x</em>
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 					    || <span class="jxr_string">"language"</span>.equals(name)                 <em class="jxr_comment">//             x                         x         x</em>
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 					    || <span class="jxr_string">"validation"</span>.equals(name)               <em class="jxr_comment">//             x                         x         x</em>
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 					    || <span class="jxr_string">"folder-depth"</span>.equals(name)             <em class="jxr_comment">//                                                          x</em>
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 					    || <span class="jxr_string">"epub-package"</span>.equals(name)             <em class="jxr_comment">//                          x</em>
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 					    || <span class="jxr_string">"attach-stylesheet"</span>.equals(name)        <em class="jxr_comment">//                          x</em>
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 					    || <span class="jxr_string">"braille-code"</span>.equals(name)             <em class="jxr_comment">//                          x</em>
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 					    || <span class="jxr_string">"include-original-text"</span>.equals(name)    <em class="jxr_comment">//                          x</em>
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 					    || (!<span class="jxr_string">"mp3"</span>.equals(formatId) &amp;&amp;
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 					         (   <span class="jxr_string">"audio"</span>.equals(name)              <em class="jxr_comment">//  x          x                         x</em>
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 					          || <span class="jxr_string">"with-text"</span>.equals(name)          <em class="jxr_comment">//  x</em>
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 					          || <span class="jxr_string">"word-detection"</span>.equals(name)))   <em class="jxr_comment">//  x</em>
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 					)
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 						<em class="jxr_comment">// note that this will override any previously defined options with the same name</em>
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 						builder = builder.withOption(name, o);
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 				}
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 				lastScript = s;
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 			}
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 			<em class="jxr_comment">// take outputs of last script</em>
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 			<strong class="jxr_keyword">for</strong> (ScriptPort p : lastScript.getOutputPorts())
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 				builder = builder.withOutputPort(p.getName(), p);
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 			script = builder.build();
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		}
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 		<strong class="jxr_keyword">return</strong> script;
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 	}
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/word-to-dtbook/src/main/java/org/daisy/pipeline/script/impl/WordBasedScript.html">Builder</a> <strong class="jxr_keyword">extends</strong> Script.Builder {
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		Builder() {
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 			<strong class="jxr_keyword">super</strong>(WordBasedScript.<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		}
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		@Override
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		<strong class="jxr_keyword">public</strong> <a href="/pipeline/modules/word-to-dtbook/src/main/java/org/daisy/pipeline/script/impl/WordBasedScript.html">ScriptImpl</a> build() {
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/word-to-dtbook/src/main/java/org/daisy/pipeline/script/impl/WordBasedScript.html">ScriptImpl</a>(shortName, description, homepage, inputPorts, outputPorts,
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 			                      options, inputFilesets, outputFilesets);
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		}
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 	}
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 					      : (formatName + <span class="jxr_string">" format"</span>)) + <span class="jxr_string">"."</span>);
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 			<strong class="jxr_keyword">for</strong> (ScriptPort p : wordToDTBook.getInputPorts())
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 				builder = builder.withInputPort(p.getName(), p);
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 			<strong class="jxr_keyword">for</strong> (ScriptOption o : wordToDTBook.getOptions()) {
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 				String name = o.getName();
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 				<strong class="jxr_keyword">if</strong> (   <span class="jxr_string">"title"</span>.equals(name)
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 				    || <span class="jxr_string">"creator"</span>.equals(name)
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 				    || <span class="jxr_string">"publisher"</span>.equals(name)
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 				    || <span class="jxr_string">"uid"</span>.equals(name)
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 				    || <span class="jxr_string">"subject"</span>.equals(name)
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 				    || <span class="jxr_string">"accept-revisions"</span>.equals(name)
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 				    || <span class="jxr_string">"repair"</span>.equals(name)
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 				    || <span class="jxr_string">"tidy"</span>.equals(name)
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 				)
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 					builder = builder.withOption(name, o);
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 			}
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			Script lastScript = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 			<strong class="jxr_keyword">for</strong> (Script s : scriptChain) {
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 				<strong class="jxr_keyword">for</strong> (ScriptOption o : s.getOptions()) {
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 					String name = o.getName();                     <em class="jxr_comment">//  daisy3  |  daisy202  |  ebraille  |  epub3  |  html  |  mp3</em>
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 					<strong class="jxr_keyword">if</strong> (   <span class="jxr_string">"include-tts-log"</span>.equals(name)          <em class="jxr_comment">//  x          x                         x                  x</em>
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 					    || <span class="jxr_string">"tts-config"</span>.equals(name)               <em class="jxr_comment">//  x          x                         x                  x</em>
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 					    || <span class="jxr_string">"language"</span>.equals(name)                 <em class="jxr_comment">//             x                         x         x</em>
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 					    || <span class="jxr_string">"validation"</span>.equals(name)               <em class="jxr_comment">//             x                         x         x</em>
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 					    || <span class="jxr_string">"folder-depth"</span>.equals(name)             <em class="jxr_comment">//                                                          x</em>
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 					    || <span class="jxr_string">"epub-package"</span>.equals(name)             <em class="jxr_comment">//                          x</em>
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 					    || <span class="jxr_string">"attach-stylesheet"</span>.equals(name)        <em class="jxr_comment">//                          x</em>
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 					    || <span class="jxr_string">"braille-code"</span>.equals(name)             <em class="jxr_comment">//                          x</em>
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 					    || <span class="jxr_string">"include-original-text"</span>.equals(name)    <em class="jxr_comment">//                          x</em>
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 					    || (!<span class="jxr_string">"mp3"</span>.equals(formatId) &amp;&amp;
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 					         (   <span class="jxr_string">"audio"</span>.equals(name)              <em class="jxr_comment">//  x          x                         x</em>
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 					          || <span class="jxr_string">"with-text"</span>.equals(name)          <em class="jxr_comment">//  x</em>
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 					          || <span class="jxr_string">"word-detection"</span>.equals(name)))   <em class="jxr_comment">//  x</em>
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 					)
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 						<em class="jxr_comment">// note that this will override any previously defined options with the same name</em>
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 						builder = builder.withOption(name, o);
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 				}
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 				lastScript = s;
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 			}
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 			<em class="jxr_comment">// take outputs of last script</em>
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 			<strong class="jxr_keyword">for</strong> (ScriptPort p : lastScript.getOutputPorts())
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 				builder = builder.withOutputPort(p.getName(), p);
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 			script = builder.build();
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		}
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		<strong class="jxr_keyword">return</strong> script;
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 	}
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/word-to-dtbook/src/main/java/org/daisy/pipeline/script/impl/WordBasedScript.html">Builder</a> <strong class="jxr_keyword">extends</strong> Script.Builder {
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 		Builder() {
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 			<strong class="jxr_keyword">super</strong>(WordBasedScript.<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		}
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		@Override
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		<strong class="jxr_keyword">public</strong> <a href="/pipeline/modules/word-to-dtbook/src/main/java/org/daisy/pipeline/script/impl/WordBasedScript.html">ScriptImpl</a> build() {
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/word-to-dtbook/src/main/java/org/daisy/pipeline/script/impl/WordBasedScript.html">ScriptImpl</a>(shortName, description, homepage, inputPorts, outputPorts,
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 			                      options, inputFilesets, outputFilesets);
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		}
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 	}
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/word-to-dtbook/src/main/java/org/daisy/pipeline/script/impl/WordBasedScript.html">ScriptImpl</a> <strong class="jxr_keyword">extends</strong> Script {
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Script wordToDTBook;
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Script[] scriptChain;
 <a class="jxr_linenumber" name="L227" href="#L227">227</a> 
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/word-to-dtbook/src/main/java/org/daisy/pipeline/script/impl/WordBasedScript.html">ScriptImpl</a> <strong class="jxr_keyword">extends</strong> Script {
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Script wordToDTBook;
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Script[] scriptChain;
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 		<strong class="jxr_keyword">private</strong> <a href="/pipeline/modules/word-to-dtbook/src/main/java/org/daisy/pipeline/script/impl/WordBasedScript.html">ScriptImpl</a>(String name, String description, String homepage,
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 		                   Map&lt;String,ScriptPort&gt; inputPorts, Map&lt;String,ScriptPort&gt; outputPorts,
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		                   Map&lt;String,ScriptOption&gt; options, List&lt;String&gt; inputFilesets,
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		                   List&lt;String&gt; outputFilesets) {
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 			<strong class="jxr_keyword">super</strong>(id, version, name, description, homepage, inputPorts, outputPorts, options,
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 			      inputFilesets, outputFilesets);
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 			<strong class="jxr_keyword">this</strong>.wordToDTBook = WordBasedScript.<strong class="jxr_keyword">this</strong>.wordToDTBook;
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 			<strong class="jxr_keyword">this</strong>.scriptChain = WordBasedScript.<strong class="jxr_keyword">this</strong>.scriptChain.clone();
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		}
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		@Override
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		<strong class="jxr_keyword">public</strong> Status run(ScriptInput input, Map&lt;String,String&gt; properties,
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		                  MessageAppender messages, JobResultSet.Builder resultBuilder,
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		                  File resultDir) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 			ScriptInput.Builder stepInput = <strong class="jxr_keyword">new</strong> ScriptInput.Builder(input.getResources());
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 			<strong class="jxr_keyword">for</strong> (Source s : input.getInput(<span class="jxr_string">"source"</span>))
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 				stepInput = stepInput.withInput(<span class="jxr_string">"source"</span>, s);
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 			stepInput = pickOptions(wordToDTBook, stepInput, input);
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 			JobResultSet.Builder stepResultBuilder = <strong class="jxr_keyword">new</strong> JobResultSet.Builder(wordToDTBook);
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 			File stepResultDir = <strong class="jxr_keyword">new</strong> File(resultDir, <span class="jxr_string">"word-to-dtbook"</span>);
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 			mkdirs(stepResultDir);
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 			Status status = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 			BigDecimal portion = BigDecimal.ONE.divide(
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 				<strong class="jxr_keyword">new</strong> BigDecimal(1 + scriptChain.length), MathContext.DECIMAL128);
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 			<strong class="jxr_keyword">try</strong> (MessageAppender stepMessages = messages != <strong class="jxr_keyword">null</strong>
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 			         ? messages.append(<strong class="jxr_keyword">new</strong> MessageBuilder().withProgress(portion))
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 			         : <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 				status = wordToDTBook.run(stepInput.build(),
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 			                              properties,
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 			                              stepMessages,
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 			                              stepResultBuilder,
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 			                              stepResultDir);
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 			}
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 			Script prevStep = wordToDTBook;
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 			String prevStepResultFormat = <span class="jxr_string">"dtbook"</span>;
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 			<strong class="jxr_keyword">int</strong> i = 0;
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 			<strong class="jxr_keyword">for</strong> (Script step : scriptChain) {
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 				<strong class="jxr_keyword">switch</strong> (status) {
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 				<strong class="jxr_keyword">case</strong> ERROR:
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 				<strong class="jxr_keyword">case</strong> FAIL:
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 					<strong class="jxr_keyword">return</strong> status;
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 				<strong class="jxr_keyword">case</strong> SUCCESS:
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 				<strong class="jxr_keyword">default</strong>:
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 				}
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 				JobResultSet stepResult = stepResultBuilder.build();
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 				stepInput = <strong class="jxr_keyword">new</strong> ScriptInput.Builder();
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 				<strong class="jxr_keyword">for</strong> (JobResult r : stepResult.getResults(<span class="jxr_string">"result"</span>))
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 					<strong class="jxr_keyword">if</strong> (isPrimaryFile(r.getPath().getName(), prevStepResultFormat))
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 						stepInput = stepInput.withInput(<span class="jxr_string">"source"</span>, r.getPath());
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 				stepInput = pickOptions(step, stepInput, input);
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 				<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"mp3"</span>.equals(formatId))
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 					<em class="jxr_comment">// certain options must have a fixed value for mp3 output</em>
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 					<strong class="jxr_keyword">for</strong> (ScriptOption o : step.getOptions()) {
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 						String name = o.getName();
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 						<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"audio"</span>.equals(name))
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 							stepInput = stepInput.withOption(name, <span class="jxr_string">"true"</span>);
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 						<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"with-text"</span>.equals(name))
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 							stepInput = stepInput.withOption(name, <span class="jxr_string">"false"</span>);
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 						<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"word-detection"</span>.equals(name))
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 							stepInput = stepInput.withOption(name, <span class="jxr_string">"false"</span>);
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 					}
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 				String stepResultFormat = formatChain[i];
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 				stepResultBuilder = formatId.equals(stepResultFormat)
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 					? resultBuilder <em class="jxr_comment">// this is the last step</em>
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 					: <strong class="jxr_keyword">new</strong> JobResultSet.Builder(step);
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 				stepResultDir = <strong class="jxr_keyword">new</strong> File(resultDir, step.getId());
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 				mkdirs(stepResultDir);
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 				<strong class="jxr_keyword">try</strong> (MessageAppender stepMessages = messages != <strong class="jxr_keyword">null</strong>
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 				         ? messages.append(
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 				             <strong class="jxr_keyword">new</strong> MessageBuilder().withProgress(portion)
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 				                                 .withText(<span class="jxr_string">"Converting "</span> + getFormatName(prevStepResultFormat)
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 				                                           + <span class="jxr_string">" to "</span> + getFormatName(stepResultFormat))
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 				                                 .withLevel(Message.Level.INFO))
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 				         : <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 					status = step.run(stepInput.build(),
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 					                  properties,
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 					                  stepMessages,
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 					                  stepResultBuilder,
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 					                  stepResultDir);
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 				}
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 				prevStep = step;
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 				prevStepResultFormat = stepResultFormat;
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 				i++;
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 			}
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 			<strong class="jxr_keyword">return</strong> status;
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		}
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 	}
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String getFormatName(String formatId) {
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"dtbook"</span>.equals(formatId))
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"DTBook"</span>;
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"daisy3"</span>.equals(formatId))
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"DAISY 3"</span>;
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"daisy202"</span>.equals(formatId))
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"DAISY 2.02"</span>;
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"ebraille"</span>.equals(formatId))
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"eBraille"</span>;
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"epub3"</span>.equals(formatId))
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"EPUB 3"</span>;
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"html"</span>.equals(formatId))
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"HTML"</span>;
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"mp3"</span>.equals(formatId))
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"navigable MP3 file-set"</span>;
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"unknown format "</span> + formatId);
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> 	}
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> 
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isPrimaryFile(String fileName, String formatId) {
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 		<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"dtbook"</span>.equals(formatId))
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 			<strong class="jxr_keyword">return</strong> fileName.endsWith(<span class="jxr_string">".xml"</span>);
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"daisy3"</span>.equals(formatId))
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 			<strong class="jxr_keyword">return</strong> fileName.endsWith(<span class="jxr_string">".opf"</span>);
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"daisy202"</span>.equals(formatId))
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 			<strong class="jxr_keyword">return</strong> fileName.equals(<span class="jxr_string">"ncc.html"</span>); <em class="jxr_comment">// assume output of epub3-to-daisy202</em>
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		<strong class="jxr_keyword">private</strong> <a href="/pipeline/modules/word-to-dtbook/src/main/java/org/daisy/pipeline/script/impl/WordBasedScript.html">ScriptImpl</a>(String name, String description, String homepage,
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 		                   Map&lt;String,ScriptPort&gt; inputPorts, Map&lt;String,ScriptPort&gt; outputPorts,
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		                   Map&lt;String,ScriptOption&gt; options, List&lt;String&gt; inputFilesets,
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 		                   List&lt;String&gt; outputFilesets) {
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 			<strong class="jxr_keyword">super</strong>(id, version, name, description, homepage, inputPorts, outputPorts, options,
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 			      inputFilesets, outputFilesets);
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 			<strong class="jxr_keyword">this</strong>.wordToDTBook = WordBasedScript.<strong class="jxr_keyword">this</strong>.wordToDTBook;
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 			<strong class="jxr_keyword">this</strong>.scriptChain = WordBasedScript.<strong class="jxr_keyword">this</strong>.scriptChain.clone();
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		}
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		@Override
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		<strong class="jxr_keyword">public</strong> Status run(ScriptInput input, Map&lt;String,String&gt; properties,
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		                  MessageAppender messages, JobResultSet.Builder resultBuilder,
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		                  File resultDir) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 			ScriptInput.Builder stepInput = <strong class="jxr_keyword">new</strong> ScriptInput.Builder(input.getResources());
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 			<strong class="jxr_keyword">for</strong> (Source s : input.getInput(<span class="jxr_string">"source"</span>))
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 				stepInput = stepInput.withInput(<span class="jxr_string">"source"</span>, s);
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 			stepInput = pickOptions(wordToDTBook, stepInput, input);
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 			JobResultSet.Builder stepResultBuilder = <strong class="jxr_keyword">new</strong> JobResultSet.Builder(wordToDTBook);
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 			File stepResultDir = <strong class="jxr_keyword">new</strong> File(resultDir, <span class="jxr_string">"word-to-dtbook"</span>);
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 			mkdirs(stepResultDir);
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 			Status status = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 			BigDecimal portion = BigDecimal.ONE.divide(
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 				<strong class="jxr_keyword">new</strong> BigDecimal(1 + scriptChain.length), MathContext.DECIMAL128);
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 			<strong class="jxr_keyword">try</strong> (MessageAppender stepMessages = messages != <strong class="jxr_keyword">null</strong>
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 			         ? messages.append(<strong class="jxr_keyword">new</strong> MessageBuilder().withProgress(portion))
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 			         : <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 				status = wordToDTBook.run(stepInput.build(),
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 			                              properties,
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 			                              stepMessages,
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 			                              stepResultBuilder,
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 			                              stepResultDir);
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 			}
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 			Script prevStep = wordToDTBook;
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 			String prevStepResultFormat = <span class="jxr_string">"dtbook"</span>;
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 			<strong class="jxr_keyword">int</strong> i = 0;
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 			<strong class="jxr_keyword">for</strong> (Script step : scriptChain) {
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 				<strong class="jxr_keyword">switch</strong> (status) {
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 				<strong class="jxr_keyword">case</strong> ERROR:
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 				<strong class="jxr_keyword">case</strong> FAIL:
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 					<strong class="jxr_keyword">return</strong> status;
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 				<strong class="jxr_keyword">case</strong> SUCCESS:
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 				<strong class="jxr_keyword">default</strong>:
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 				}
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 				JobResultSet stepResult = stepResultBuilder.build();
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 				stepInput = <strong class="jxr_keyword">new</strong> ScriptInput.Builder();
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 				<strong class="jxr_keyword">for</strong> (JobResult r : stepResult.getResults(<span class="jxr_string">"result"</span>))
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 					<strong class="jxr_keyword">if</strong> (isPrimaryFile(r.getPath().getName(), prevStepResultFormat))
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 						stepInput = stepInput.withInput(<span class="jxr_string">"source"</span>, r.getPath());
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 				stepInput = pickOptions(step, stepInput, input);
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 				<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"mp3"</span>.equals(formatId))
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 					<em class="jxr_comment">// certain options must have a fixed value for mp3 output</em>
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 					<strong class="jxr_keyword">for</strong> (ScriptOption o : step.getOptions()) {
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 						String name = o.getName();
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 						<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"audio"</span>.equals(name))
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 							stepInput = stepInput.withOption(name, <span class="jxr_string">"true"</span>);
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 						<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"with-text"</span>.equals(name))
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 							stepInput = stepInput.withOption(name, <span class="jxr_string">"false"</span>);
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 						<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"word-detection"</span>.equals(name))
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 							stepInput = stepInput.withOption(name, <span class="jxr_string">"false"</span>);
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 					}
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 				String stepResultFormat = formatChain[i];
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 				stepResultBuilder = formatId.equals(stepResultFormat)
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 					? resultBuilder <em class="jxr_comment">// this is the last step</em>
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 					: <strong class="jxr_keyword">new</strong> JobResultSet.Builder(step);
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 				stepResultDir = <strong class="jxr_keyword">new</strong> File(resultDir, step.getId());
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 				mkdirs(stepResultDir);
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 				<strong class="jxr_keyword">try</strong> (MessageAppender stepMessages = messages != <strong class="jxr_keyword">null</strong>
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 				         ? messages.append(
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 				             <strong class="jxr_keyword">new</strong> MessageBuilder().withProgress(portion)
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 				                                 .withText(<span class="jxr_string">"Converting "</span> + getFormatName(prevStepResultFormat)
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 				                                           + <span class="jxr_string">" to "</span> + getFormatName(stepResultFormat))
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 				                                 .withLevel(Message.Level.INFO))
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 				         : <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 					status = step.run(stepInput.build(),
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 					                  properties,
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 					                  stepMessages,
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 					                  stepResultBuilder,
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 					                  stepResultDir);
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 				}
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 				prevStep = step;
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 				prevStepResultFormat = stepResultFormat;
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 				i++;
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 			}
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 			<strong class="jxr_keyword">return</strong> status;
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 		}
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 		<strong class="jxr_keyword">private</strong> ScriptInput.Builder pickOptions(Script script, ScriptInput.Builder toInput, ScriptInput fromInput) {
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 			<strong class="jxr_keyword">for</strong> (ScriptOption o : script.getOptions()) {
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 				String name = o.getName();
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 				<strong class="jxr_keyword">boolean</strong> set = false;
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 				<strong class="jxr_keyword">for</strong> (String s : fromInput.getOption(name)) {
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 					toInput = toInput.withOption(name, s);
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 					set = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 				}
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 				<strong class="jxr_keyword">if</strong> (!set) {
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 					<em class="jxr_comment">// if no value was set, set the option to the default value, because it may happen that</em>
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 					<em class="jxr_comment">// several steps have the option but with different defaults</em>
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 					ScriptOption globalOption = getOption(name);
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 					<strong class="jxr_keyword">if</strong> (globalOption != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 						String globalDefault = globalOption.getDefault();
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 						<strong class="jxr_keyword">if</strong> (globalDefault != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 							toInput = toInput.withOption(name, globalDefault);
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 					}
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 				}
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 			}
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 			<strong class="jxr_keyword">return</strong> toInput;
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		}
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 	}
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String getFormatName(String formatId) {
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 		<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"dtbook"</span>.equals(formatId))
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"DTBook"</span>;
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"daisy3"</span>.equals(formatId))
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"DAISY 3"</span>;
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"daisy202"</span>.equals(formatId))
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"DAISY 2.02"</span>;
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"ebraille"</span>.equals(formatId))
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"eBraille"</span>;
 <a class="jxr_linenumber" name="L347" href="#L347">347</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"epub3"</span>.equals(formatId))
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 			<strong class="jxr_keyword">return</strong> fileName.endsWith(<span class="jxr_string">".epub"</span>);
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 	}
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> mkdirs(File dir) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		<strong class="jxr_keyword">if</strong> (!dir.exists() &amp;&amp; !dir.mkdirs())
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"Could not create directory:"</span> + dir.getAbsolutePath());
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 	}
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> ScriptInput.Builder pickOptions(Script script, ScriptInput.Builder toInput, ScriptInput fromInput) {
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		<strong class="jxr_keyword">for</strong> (ScriptOption o : script.getOptions()) {
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 			String name = o.getName();
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 			<strong class="jxr_keyword">for</strong> (String s : fromInput.getOption(name))
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 				toInput = toInput.withOption(name, s);
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 		}
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		<strong class="jxr_keyword">return</strong> toInput;
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 	}
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> }
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"EPUB 3"</span>;
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"html"</span>.equals(formatId))
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"HTML"</span>;
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"mp3"</span>.equals(formatId))
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"navigable MP3 file-set"</span>;
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 		<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"unknown format "</span> + formatId);
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 	}
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isPrimaryFile(String fileName, String formatId) {
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"dtbook"</span>.equals(formatId))
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 			<strong class="jxr_keyword">return</strong> fileName.endsWith(<span class="jxr_string">".xml"</span>);
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 		<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"daisy3"</span>.equals(formatId))
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 			<strong class="jxr_keyword">return</strong> fileName.endsWith(<span class="jxr_string">".opf"</span>);
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"daisy202"</span>.equals(formatId))
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 			<strong class="jxr_keyword">return</strong> fileName.equals(<span class="jxr_string">"ncc.html"</span>); <em class="jxr_comment">// assume output of epub3-to-daisy202</em>
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"epub3"</span>.equals(formatId))
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 			<strong class="jxr_keyword">return</strong> fileName.endsWith(<span class="jxr_string">".epub"</span>);
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 	}
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> mkdirs(File dir) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		<strong class="jxr_keyword">if</strong> (!dir.exists() &amp;&amp; !dir.mkdirs())
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"Could not create directory:"</span> + dir.getAbsolutePath());
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 	}
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> }
 </pre>
 <hr>
-<div id="footer">Copyright © 2010–2025 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<div id="footer">Copyright © 2010–2026 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

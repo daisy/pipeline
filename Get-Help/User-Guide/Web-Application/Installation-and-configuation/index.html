@@ -668,35 +668,8 @@
       
         <li class="spine-item">
       
-      <a href="/pipeline/Get-Help/Troubleshooting" tabindex="56">
-      Troubleshooting
-      </a>
       
-      <ul class="spine">
-  
-    
-      
-        <li class="spine-item">
-      
-      
-        <a href="/pipeline/Get-Help/User-Guide/Desktop-Application/Troubleshooting" tabindex="57">
-      
-      Troubleshooting Desktop Application
-      </a>
-    
-    </li>
-  
-</ul>
-
-    
-    </li>
-  
-    
-      
-        <li class="spine-item">
-      
-      
-        <a href="https://github.com/daisy/pipeline/discussions" class="external-link" target="_blank" tabindex="58">
+        <a href="https://github.com/daisy/pipeline/discussions" class="external-link" target="_blank" tabindex="56">
       
       Forum
       </a>
@@ -708,7 +681,7 @@
         <li class="spine-item">
       
       
-        <a href="mailto:daisy-pipeline@mail.daisy.org" tabindex="59">
+        <a href="mailto:daisy-pipeline@mail.daisy.org" tabindex="57">
       
       Contact
       </a>
@@ -735,7 +708,7 @@
         <li class="spine-item">
       
       
-        <a href="https://github.com/daisy/pipeline" class="external-link" target="_blank" tabindex="60">
+        <a href="https://github.com/daisy/pipeline" class="external-link" target="_blank" tabindex="58">
       
       Source Code
       </a>
@@ -746,7 +719,7 @@
       
         <li class="spine-item">
       
-      <a href="/pipeline/Contribute/Developer-Guide" tabindex="61">
+      <a href="/pipeline/Contribute/Developer-Guide" tabindex="59">
       Developer Guide
       </a>
       
@@ -757,7 +730,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Sources" tabindex="62">
+        <a href="/pipeline/Contribute/Developer-Guide/Sources" tabindex="60">
       
       Source Code
       </a>
@@ -769,7 +742,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Building" tabindex="63">
+        <a href="/pipeline/Contribute/Developer-Guide/Building" tabindex="61">
       
       Build System
       </a>
@@ -781,7 +754,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Modules" tabindex="64">
+        <a href="/pipeline/Modules" tabindex="62">
       
       Writing Modules
       </a>
@@ -792,7 +765,7 @@
       
         <li class="spine-item">
       
-      <a href="/pipeline/Contribute/Developer-Guide/XProc" tabindex="65">
+      <a href="/pipeline/Contribute/Developer-Guide/XProc" tabindex="63">
       XProc
       </a>
       
@@ -803,7 +776,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/XProcExtensions" tabindex="66">
+        <a href="/pipeline/XProcExtensions" tabindex="64">
       
       XProc Extensions
       </a>
@@ -820,7 +793,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Testing" tabindex="67">
+        <a href="/pipeline/Contribute/Developer-Guide/Testing" tabindex="65">
       
       Testing
       </a>
@@ -832,7 +805,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Debugging" tabindex="68">
+        <a href="/pipeline/Contribute/Developer-Guide/Debugging" tabindex="66">
       
       Debugging
       </a>
@@ -844,7 +817,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Releasing" tabindex="69">
+        <a href="/pipeline/Contribute/Developer-Guide/Releasing" tabindex="67">
       
       Release Management
       </a>
@@ -861,7 +834,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Easy-Hacks.html" tabindex="70">
+        <a href="/pipeline/Contribute/Easy-Hacks.html" tabindex="68">
       
       Easy Hacks
       </a>
@@ -953,12 +926,12 @@ if (window.addEventListener) {
   </a>
 </div>
 
-      <p>The Pipeline 2 Web UI is a standalone application, intended to be run on a server.
-By default it is assumed that it is running on the same server as the Pipeline 2 engine,
+      <p>The Pipeline Web UI is a standalone application, intended to be run on a server.
+By default it is assumed that it is running on the same server as the Pipeline engine,
 which is the recommended setup.</p>
 
-<p>If you install the Pipeline 2 engine on your personal computer, it is recommended that you
-use the Pipeline 2 Desktop GUI instead.</p>
+<p>If you install the Pipeline engine on your personal computer, it is recommended that you
+use the Pipeline Desktop GUI instead.</p>
 
 <h2 id="installation">Installation</h2>
 
@@ -1025,13 +998,13 @@ use the Pipeline 2 Desktop GUI instead.</p>
 
 <p><img src="/pipeline/Get-Help/User-Guide/Web-Application/images/13.png" alt=""></p>
 
-<p>There might be a warning message at the top of the Web UI, right under the navigation bar, saying “Unable to communicate with the Pipeline 2 Engine”. If this is the case, it means that either the Pipeline 2 Engine is not running, or it is running in a non-standard location.</p>
+<p>There might be a warning message at the top of the Web UI, right under the navigation bar, saying “Unable to communicate with the Pipeline Engine”. If this is the case, it means that either the Pipeline Engine is not running, or it is running in a non-standard location.</p>
 
-<p>When starting the Pipeline 2 engine, you must start it from the command line instead of the GUI. Go to the folder where the Pipeline 2 engine is installed, usually <code>C:\Program Files (x86)\DAISY Pipeline 2\daisy-pipeline</code> on Windows, or <code>/opt/daisy-pipeline</code> on Linux, and run <code>bin/pipeline2</code>.</p>
+<p>When starting the Pipeline engine, you must start it from the command line instead of the GUI. Go to the folder where the Pipeline engine is installed, usually <code>C:\Program Files (x86)\DAISY Pipeline 2\daisy-pipeline</code> on Windows, or <code>/opt/daisy-pipeline</code> on Linux, and run <code>bin/pipeline2</code>.</p>
 
 <p><img src="/pipeline/Get-Help/User-Guide/Web-Application/images/16.png" alt=""></p>
 
-<p>If the engine is already running, but on a non-standard port or on another server, then you need to configure it in the Web UI. Go to “Admin settings” and “Pipeline 2 Web API”. Set the endpoint address to the Web API endpoint as necessary. If the Pipeline 2 Engine at the given Web API endpoint requires authentication, you will be required to provide the authentication ID and the secret text as well.</p>
+<p>If the engine is already running, but on a non-standard port or on another server, then you need to configure it in the Web UI. Go to “Admin settings” and “Pipeline 2 Web API”. Set the endpoint address to the Web API endpoint as necessary. If the Pipeline Engine at the given Web API endpoint requires authentication, you will be required to provide the authentication ID and the secret text as well.</p>
 
 <p><img src="/pipeline/Get-Help/User-Guide/Web-Application/images/15.png" alt=""></p>
 

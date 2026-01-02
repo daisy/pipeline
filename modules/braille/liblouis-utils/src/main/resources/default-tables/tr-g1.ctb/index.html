@@ -668,35 +668,8 @@
       
         <li class="spine-item">
       
-      <a href="/pipeline/Get-Help/Troubleshooting" tabindex="56">
-      Troubleshooting
-      </a>
       
-      <ul class="spine">
-  
-    
-      
-        <li class="spine-item">
-      
-      
-        <a href="/pipeline/Get-Help/User-Guide/Desktop-Application/Troubleshooting" tabindex="57">
-      
-      Troubleshooting Desktop Application
-      </a>
-    
-    </li>
-  
-</ul>
-
-    
-    </li>
-  
-    
-      
-        <li class="spine-item">
-      
-      
-        <a href="https://github.com/daisy/pipeline/discussions" class="external-link" target="_blank" tabindex="58">
+        <a href="https://github.com/daisy/pipeline/discussions" class="external-link" target="_blank" tabindex="56">
       
       Forum
       </a>
@@ -708,7 +681,7 @@
         <li class="spine-item">
       
       
-        <a href="mailto:daisy-pipeline@mail.daisy.org" tabindex="59">
+        <a href="mailto:daisy-pipeline@mail.daisy.org" tabindex="57">
       
       Contact
       </a>
@@ -735,7 +708,7 @@
         <li class="spine-item">
       
       
-        <a href="https://github.com/daisy/pipeline" class="external-link" target="_blank" tabindex="60">
+        <a href="https://github.com/daisy/pipeline" class="external-link" target="_blank" tabindex="58">
       
       Source Code
       </a>
@@ -746,7 +719,7 @@
       
         <li class="spine-item">
       
-      <a href="/pipeline/Contribute/Developer-Guide" tabindex="61">
+      <a href="/pipeline/Contribute/Developer-Guide" tabindex="59">
       Developer Guide
       </a>
       
@@ -757,7 +730,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Sources" tabindex="62">
+        <a href="/pipeline/Contribute/Developer-Guide/Sources" tabindex="60">
       
       Source Code
       </a>
@@ -769,7 +742,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Building" tabindex="63">
+        <a href="/pipeline/Contribute/Developer-Guide/Building" tabindex="61">
       
       Build System
       </a>
@@ -781,7 +754,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Modules" tabindex="64">
+        <a href="/pipeline/Modules" tabindex="62">
       
       Writing Modules
       </a>
@@ -792,7 +765,7 @@
       
         <li class="spine-item">
       
-      <a href="/pipeline/Contribute/Developer-Guide/XProc" tabindex="65">
+      <a href="/pipeline/Contribute/Developer-Guide/XProc" tabindex="63">
       XProc
       </a>
       
@@ -803,7 +776,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/XProcExtensions" tabindex="66">
+        <a href="/pipeline/XProcExtensions" tabindex="64">
       
       XProc Extensions
       </a>
@@ -820,7 +793,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Testing" tabindex="67">
+        <a href="/pipeline/Contribute/Developer-Guide/Testing" tabindex="65">
       
       Testing
       </a>
@@ -832,7 +805,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Debugging" tabindex="68">
+        <a href="/pipeline/Contribute/Developer-Guide/Debugging" tabindex="66">
       
       Debugging
       </a>
@@ -844,7 +817,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Releasing" tabindex="69">
+        <a href="/pipeline/Contribute/Developer-Guide/Releasing" tabindex="67">
       
       Release Management
       </a>
@@ -861,7 +834,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Easy-Hacks.html" tabindex="70">
+        <a href="/pipeline/Contribute/Easy-Hacks.html" tabindex="68">
       
       Easy Hacks
       </a>
@@ -957,8 +930,9 @@ if (window.addEventListener) {
 #
 #  Copyright (C) 2014, Greg Kearney, gkearney@gmail.com
 #  Copyright (C) 2014-2016 Arend Arends &lt;arendarends@ziggo.nl&gt;
-#  Copyright (C) 2023-2024 Oğuz Uğur &lt;oguzugur2834@gmail.com&gt;
+#  Copyright (C) 2023-2025 Oğuz Uğur &lt;oguzugur2834@gmail.com&gt;
 #  Copyright (C) 2024 Attila Hammer from IT Foundation for the Visually Impaired - Hungary &lt;www.infoalap.hu&gt;
+#  Copyright (C) 2025 Ozancan Karataş &lt;ozancankaratas96@outlook.com&gt;
 #
 #  This file is part of liblouis.
 #
@@ -992,11 +966,6 @@ if (window.addEventListener) {
 
 # Based on English UEB Grade 1 (included below)
 
-# Latin characters defined differently than in UEB table
-
-lowercase q 4-12345
-lowercase w 4-2456
-lowercase x 4-1346
 
 # Turkish characters
 
@@ -1179,22 +1148,32 @@ lowercase \x0131 35                LATIN SMALL LETTER DOTLESS I
 base uppercase I \x0131                LATIN CAPITAL LETTER I/SMALL LETTER DOTLESS I
 base uppercase \x0130 i                LATIN CAPITAL LETTER I WITH DOT/SMALL LETTER i
 
+# Specific signs
+
+sign @ 4-23456
+
 # Punctuation symbols
 
-punctuation " 56
-punctuation “ 236                LEFT DOUBLE QUOTATION MARK
-punctuation ” 356                RIGHT DOUBLE QUOTATION MARK
-punctuation ‘ 3                LEFT SINGLE QUOTATION MARK
-punctuation ’ 3                RIGHT SINGLE QUOTATİON MARK
-noback always \x25cc 6
+punctuation \x201c 236 “
+prepunc \x201c 236 “
+punctuation \x201d 356 ”
+postpunc \x201d 356 ”
 punctuation ' 3
+punctuation \x2018 3 ‘
+punctuation \x2019 3 ’
+noback always \x25cc 6
+punctuation ? 236
+postpunc ? 236
+punctuation " 236
+prepunc " 236
+punctuation " 356
+postpunc " 356
 punctuation ; 23
 punctuation : 25
-prepunc ( 2356
 punctuation ( 2356
-postpunc ) 2356
+prepunc ( 2356
 punctuation ) 2356
-punctuation − 36
+postpunc ) 2356
 
 # Used to display symbols, Unicode chars and other symbols used
 # throughout UEB code.
