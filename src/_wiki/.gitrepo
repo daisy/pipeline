@@ -5,7 +5,7 @@
 ;
 [subrepo]
 	remote = git@github.com:daisy/pipeline.wiki.git
-	branch = wiki
-	commit = 62c679fcc53b3639d40bf05fc1204244a3fa6e78
-	parent = 22a8c95b3a3a3188121a4b348be23cd1c1565871
+	branch = master
+	commit = c6fc34eb536decdc61ac02beccd677275940cff2
+	parent = fb711afff7b355df5a510f33fae3c47f3dcf3592
 	cmdver = 0.3.1
