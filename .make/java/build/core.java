@@ -310,6 +310,7 @@ public class core {
 
 		String pom = new File(module, "pom.xml").toString();
 		String mainDir = new File(module, "src/main").toString();
+		String docDir = new File(module, "doc").toString();
 		ModificationType modified = null;
 		// check for uncommitted changes
 		if (captureOutput(_x -> {}, "git", "diff-index", "--quiet", "HEAD", "--", mainDir) != 0)
@@ -393,8 +394,8 @@ public class core {
 							}
 							if (!versionBefore.equals(version)) {
 								if (subrepo != null && changedFiles.contains(subrepo + "/.gitrepo")) {
-									// Check if the version update happened before or after any changes to src/main.
-									if (changedFiles.stream().anyMatch(startsWith(mainDir + "/"))) {
+									// Check if the version update happened before or after any changes to src/main or doc.
+									if (changedFiles.stream().anyMatch(startsWith(mainDir + "/").or(startsWith(docDir + "/")))) {
 										String subrepoCommit; {
 											if (subrepoCommits.containsKey(commit))
 												subrepoCommit = subrepoCommits.get(commit);
@@ -414,6 +415,7 @@ public class core {
 										if (subrepoCommit != null) {
 											pom = pom.substring(subrepo.length() + 1);
 											mainDir = mainDir.substring(subrepo.length() + 1);
+											docDir = docDir.substring(subrepo.length() + 1);
 											subrepo = null;
 											todo.clear(); // this should already be the case
 											todo.add(subrepoCommit);
@@ -431,7 +433,7 @@ public class core {
 								continue;
 							}
 						}
-						boolean srcChanged = changedFiles.stream().anyMatch(startsWith(mainDir + "/"));
+						boolean srcChanged = changedFiles.stream().anyMatch(startsWith(mainDir + "/").or(startsWith(docDir + "/")));
 						if (pomChanged || srcChanged) {
 							Matcher m = Pattern
 								.compile("(?m)^(Minor|Major)-Change: *([^\\s]+) *$")
