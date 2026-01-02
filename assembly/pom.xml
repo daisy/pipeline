@@ -9,7 +9,7 @@
   </parent>
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>assembly</artifactId>
-  <version>1.15.4-SNAPSHOT</version>
+  <version>1.15.5-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>DAISY Pipeline 2 :: Assembly</name>
   <description>Builds the main distribution of the DAISY Pipeline 2.</description>
@@ -64,14 +64,14 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.15.4</version>
+        <version>1.15.6</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>modules-bom</artifactId>
-        <version>1.15.3</version>
+        <version>1.15.4</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -863,6 +863,16 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>pandoc-adapter</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>smil-utils</artifactId>
       <exclusions>
         <exclusion>
@@ -934,6 +944,16 @@
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>odf-utils</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>ocr-utils</artifactId>
       <exclusions>
         <exclusion>
           <groupId>*</groupId>
@@ -2665,6 +2685,14 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
+                  <artifactId>ocr-utils</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline.modules</groupId>
+                  <artifactId>pandoc-adapter</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>tts-adapter-acapela</artifactId>
                 </artifactItem>
                 <artifactItem>
@@ -3144,6 +3172,23 @@
             </executions>
           </plugin>
           <plugin>
+            <groupId>pl.project13.maven</groupId>
+            <artifactId>git-commit-id-plugin</artifactId>
+            <version>2.2.4</version>
+            <executions>
+              <execution>
+                <phase>validate</phase>
+                <goals>
+                  <goal>revision</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <dateFormat>yyyyMMdd</dateFormat>
+              <generateGitPropertiesFile>false</generateGitPropertiesFile>
+            </configuration>
+          </plugin>
+          <plugin>
             <artifactId>maven-antrun-plugin</artifactId>
             <executions>
               <execution>
@@ -3158,6 +3203,7 @@
                       <arg value="${project.basedir}/target/effective-pom.xml" />
                       <arg value="${project.basedir}/src/main/xslt/pom-to-release.xslt" />
                       <arg value="time=${maven.build.timestamp}" />
+                      <arg value="commit-id=${git.commit.time}-${git.commit.id.abbrev}" />
                       <arg line="-o:${project.basedir}/target/release-descriptor/releaseDescriptor.xml" />
                     </java>
                   </target>

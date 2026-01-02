@@ -1,3 +1,30 @@
+Changes in release v1.15.4
+==========================
+
+## Framework
+
+- **NEW** Indicate in web API which input and option values are suitable for reuse in future jobs (`reusable` attribute)
+- **NEW** Allow getting a job from a partial job ID
+- **FIX** Web sockets of type "messages" or "progress" now also pass status updates
+- **FIX** Improve exception handling of closed jobs in web service
+- **FIX** Improved job and script API in Java
+- **FIX** Minor improvements to `CommandRunner` API
+- Various other bugfixes and improvements
+
+## Modules
+
+<!-- **NEW** PDF to Word script powered by Mistral OCR -->
+- **FIX** Take into account `lang` attributes (not only `xml:lang`) for math to speech conversion
+- **FIX** Make math to speech work for EPUB input
+- **FIX** DAISY 2.02 validator should not crash on valid master.smil
+- **FIX** DAISY 3 converted from DAISY 2.02 had wrong doctype on SMIL documents
+- **FIX** Word to DTBook: don't create invalid DTBook with empty title metadata
+- **FIX** Support for accessibility metadata (managed by WordToEpub and SaveAsDAISY) in Word to DTBook
+- **FIX** Output math as MathML Core in Word to DTBook
+- **FIX** Improve descriptions of script options
+- Changes to braille production scripts, see release notes of braille modules [v1.15.4](https://github.com/daisy/pipeline-modules/blob/master/braille/NEWS.md#v1154)
+- Various other bugfixes and improvements
+
 Changes in release v1.15.3
 ==========================
 
@@ -92,7 +119,7 @@ Changes in release v1.14.21
 - **FIX** Support master SMIL in DAISY 2.02 validator script
 - **FIX** Timeout errors in speech synthesis
 - Major refactoring and other changes to braille production scripts, see release notes of braille modules [v1.14.30](https://github.com/daisy/pipeline-modules/blob/master/braille/NEWS.md#v11430)
-- Added "espeak-" prefix to eSpeak voice names
+- **FIX** Added "espeak-" prefix to eSpeak voice names
 - Other bugfixes and improvements
 
 Backwards incompatibility note: renamed "tts" option to "audio" in EPUB 3 enhancer script

@@ -7,6 +7,7 @@
         exclude-result-prefixes="#all"
         >
         <xsl:param name="time"/>
+        <xsl:param name="commit-id"/>
         <xsl:param name="relativeHrefs" select="false()"/>
         
         <!-- don't include unmatched text nodes in the result -->
@@ -94,7 +95,11 @@
                 
                 <xsl:text>
 </xsl:text>
-                <releaseDescriptor href="http://daisy.github.io/pipeline-assembly/releases/{$version}" version="{$version}" time="{$time}">
+                <releaseDescriptor href="http://daisy.github.io/pipeline-assembly/releases/{$version}"
+                                   version="{if (ends-with($version,'-SNAPSHOT'))
+                                             then concat($version,'-',$commit-id)
+                                             else $version}"
+                                   time="{$time}">
                         <xsl:for-each select="$artifacts">
                                 <xsl:sort select="xs:boolean(@extract)"/>
                                 <xsl:sort select="@id"/>
