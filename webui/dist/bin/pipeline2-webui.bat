@@ -1,6 +1,6 @@
 @echo off
 @setlocal enabledelayedexpansion
-title DAISY Pipeline 2 Web UI
+title DAISY Pipeline Web UI
 
 if "%WEBUI_HOME%"=="" set "WEBUI_HOME=%~dp0.."
 
@@ -60,7 +60,7 @@ if "%JAVAOK%"=="false" (
   echo Please go to
   echo   http://www.oracle.com/technetwork/java/javase/downloads/index.html
   echo and download a valid Java Runtime Environment and install before
-  echo running the DAISY Pipeline 2 Web UI.
+  echo running the DAISY Pipeline Web UI.
   echo.
   echo If you think this message is in error, please check
   echo your environment variables to see if "java.exe" are
@@ -86,7 +86,7 @@ if 8 gtr %JAVAVER% (
   echo Please go to
   echo   http://www.oracle.com/technetwork/java/javase/downloads/index.html
   echo and download a newer version of Java before
-  echo running the DAISY Pipeline 2 Web UI.
+  echo running the DAISY Pipeline Web UI.
   echo.
   echo If you think this message is in error, please check
   echo your environment variables to see if the correct "java.exe" are
@@ -108,7 +108,7 @@ set DP2WEBUILOGFILE="%DP2DATA%\log.txt"
       del "%DP2DATA%\RUNNING_PID"
     )
   ) || (
-    echo DAISY Pipeline 2 Web UI is already running
+    echo DAISY Pipeline Web UI is already running
     echo (because the log file is locked by another process^)
     if defined DOUBLECLICKED pause
     exit /B 1

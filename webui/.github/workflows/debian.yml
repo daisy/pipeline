@@ -1,0 +1,31 @@
+name: debian
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    name: Build Debian package
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-java@v2
+      with:
+        distribution: 'adopt'
+        java-version: '8'
+    - name: Cache downloaded dependencies
+      uses: actions/cache@v2
+      with:
+        path: ~/.ivy2/cache
+        key: ${{ runner.os }}-ivy-${{ hashFiles('**/*.sbt') }}
+        restore-keys: |
+          ${{ runner.os }}-ivy-
+    - name: Build
+      run: |
+        ./activator clean debian:packageBin
+    - name: Store the deb file
+      if: ${{ always() }}
+      uses: actions/upload-artifact@v2
+      with:
+        path: target/*.deb

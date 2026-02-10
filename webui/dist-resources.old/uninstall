@@ -8,12 +8,12 @@ else
 fi
 
 if [ -d "$DP2DATA" ]; then
-    echo "Deleting DAISY Pipeline 2 data..."
+    echo "Deleting DAISY Pipeline data..."
     rm -r "$DP2DATA"
-    echo "DAISY Pipeline 2 data is now removed."
+    echo "DAISY Pipeline data is now removed."
     read -p "Press any key to continue..."
 else
-    echo "There is no DAISY Pipeline 2 data to remove."
+    echo "There is no DAISY Pipeline data to remove."
     read -p "Press any key to continue..."
 fi
 

@@ -1,7 +1,7 @@
 @ECHO OFF
 SETLOCAL ENABLEDELAYEDEXPANSION
 
-title Pipeline 2 Web UI
+title Pipeline Web UI
 cd /d "%~dp0"
 
 set DP2DATA=%APPDATA%\DAISY Pipeline 2

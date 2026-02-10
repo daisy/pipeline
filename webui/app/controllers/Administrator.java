@@ -284,7 +284,7 @@ public class Administrator extends Controller {
 			Setting.set("mail.smtp.host", filledForm.field("smtp").valueOr(""));
 			Setting.set("mail.smtp.port", filledForm.field("port").valueOr(""));
 			Setting.set("mail.smtp.ssl", filledForm.field("ssl").valueOr(""));
-			Setting.set("mail.from.name", "Pipeline 2");
+			Setting.set("mail.from.name", "Pipeline");
 			Setting.set("mail.from.email", session("email"));
 		}
 
@@ -851,7 +851,7 @@ public class Administrator extends Controller {
 
 			} else {
 				Administrator.SetWSForm.save(filledForm);
-				flash("success", "Pipeline 2 Web API endpoint changed successfully!");
+				flash("success", "Pipeline Web API endpoint changed successfully!");
 				return redirect(routes.Administrator.getSettings());
 			}
 		}

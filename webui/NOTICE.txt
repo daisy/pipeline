@@ -1,4 +1,4 @@
-DAISY Pipeline 2 Web UI
+DAISY Pipeline Web UI
 ________________
 
 Copyright © 2010-2011, The DAISY Consortium
@@ -17,10 +17,10 @@ You should have received a copy of the GNU Lesser General Public License along
 with this library; if not, see <http://www.gnu.org/licenses/lgpl.html>
 
 
-DAISY Pipeline 2
+DAISY Pipeline
 ____________________
 
-The DAISY Pipeline 2 Web UI depends on the DAISY Pipeline 2 core framework.
+The DAISY Pipeline Web UI depends on the DAISY Pipeline core framework.
 The core framework is bundled with the standalone version of this Web UI,
 in which case you should also read the NOTICE.txt included inside the
 "daisy-pipeline" directory.
@@ -92,7 +92,7 @@ This product includes the following third-party software:
 Respective licenses are available in the LICENSES directory.
 
 
-Pipeline 2 Web UI Dependencies:
+Pipeline Web UI Dependencies:
  - Play! 2.0 Framework - http://www.playframework.org/ - Apache License v2.0
  - Twitter Bootstrap - http://twitter.github.com/bootstrap/ - Apache License v2.0
  - Glyphicons Free - http://glyphicons.com/ - CC BY 3.0

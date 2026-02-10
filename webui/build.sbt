@@ -12,7 +12,7 @@ organizationName := "The DAISY Consortium"
 organizationHomepage := Some(url("http://daisy.org"))
 homepage := Some(url("https://github.com/daisy/pipeline-webui"))
 startYear := Some(2012)
-description := "A web-based user interface for the DAISY Pipeline 2."
+description := "A web-based user interface for the DAISY Pipeline."
 maintainer := "Jostein Austvik Jacobsen <josteinaj@gmail.com>"
 licenses += "LGPLv3" -> url("https://www.gnu.org/licenses/lgpl-3.0.html")
 
@@ -34,8 +34,8 @@ resourceGenerators in Compile <+= Def.task {
 mappings in Universal += file((resourceManaged in Compile).value + "/conf/version.properties") -> "conf/version.properties"
 
 // For packaging
-packageSummary := "DAISY Pipeline 2 Web User Interface"
-packageDescription := "A web-based user interface for the DAISY Pipeline 2."
+packageSummary := "DAISY Pipeline Web User Interface"
+packageDescription := "A web-based user interface for the DAISY Pipeline."
 
 // Documentation for Linux packaging with sbt-native-packager available at:
 // <http://www.scala-sbt.org/sbt-native-packager/formats/linux.html>
@@ -97,7 +97,7 @@ com.typesafe.sbt.packager.SettingsHelper.makeDeploymentSettings(Rpm, packageBin 
 com.typesafe.sbt.packager.SettingsHelper.makeDeploymentSettings(Universal, packageBin in Universal, "zip")
 
 // For packaging on Windows
-name in Windows := "DAISY Pipeline 2 Web UI"
+name in Windows := "DAISY Pipeline Web UI"
 wixProductLicense := Some(file("License.rtf"))
 wixProductId := ""+java.util.UUID.nameUUIDFromBytes(("pipeline2-webui-"+version.value.split("\\.")(0)).getBytes())
 wixProductUpgradeId := ""+java.util.UUID.nameUUIDFromBytes(("pipeline2-webui-"+version.value).getBytes())
@@ -112,7 +112,7 @@ wixConfig := {
                   if (element.label == "Shortcut") {
                       if (element.attribute("Name").getOrElse("").toString() == "application_conf") {
                           // create start menu entry to start the Web UI
-                          element % xml.Attribute(None, "Name", xml.Text("DAISY Pipeline 2 Web UI"), xml.Null) % xml.Attribute(None, "Description", xml.Text("Run the DAISY Pipeline 2 Web User Interface"), xml.Null) % xml.Attribute(None, "Target", xml.Text("[INSTALLDIR]\\bin\\pipeline2-webui.bat"), xml.Null)
+                          element % xml.Attribute(None, "Name", xml.Text("DAISY Pipeline Web UI"), xml.Null) % xml.Attribute(None, "Description", xml.Text("Run the DAISY Pipeline Web User Interface"), xml.Null) % xml.Attribute(None, "Target", xml.Text("[INSTALLDIR]\\bin\\pipeline2-webui.bat"), xml.Null)
                       } else {
                           Nil // application.conf is the only config file that resembles a "public" config file, so let's only keep the shortcut to that one
                       }

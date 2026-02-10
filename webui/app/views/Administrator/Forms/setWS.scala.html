@@ -43,10 +43,8 @@
 						<img id="setWS-authidHelpLoading" src="@routes.Assets.versioned("images/loading-inline.gif")" alt="" style="display:none;"/>
 						<span id="setWS-authidHelp"></span>
 					</p>
-					<p class="help-block" style="color:black;">This Pipeline 2 Engine requires authentication. The authentication ID is not to be confused with the user accounts in the Web UI.</p>
-					<p class="help-block" style="color:black;">The authentication ID and secret token were configured during the installation of the Pipeline engine.
-	  		   			To learn more about Pipeline 2's Web API authentication, please refer to the
-	  		   			<a href="http://code.google.com/p/daisy-pipeline/wiki/UserGuideIntro" target="_blank">Pipeline 2 User Guide</a>.</p>
+					<p class="help-block" style="color:black;">This Pipeline Engine requires authentication. The authentication ID is not to be confused with the user accounts in the Web UI.</p>
+					<p class="help-block" style="color:black;">The authentication ID and secret token need to be configured in the Pipeline engine.</p>
 				</div>
 			</div>
 			<div class="dp2-form-br"></div>
@@ -108,7 +106,7 @@
 					
 					// endpoint success message
 					if (typeof engine !== "undefined" && typeof form.errors["endpoint"] === "undefined") {
-						var text = "A Pipeline 2 Engine version "+engine.version+" is running at the given URL. It "+(engine.authentication?"requires":"does not require")+" authentication.";
+						var text = "A Pipeline Engine version "+engine.version+" is running at the given URL. It "+(engine.authentication?"requires":"does not require")+" authentication.";
 						$("#setWS-endpoint").data("messages",[text]);
 					}
 					
@@ -145,7 +143,7 @@
 												if (typeof p === "undefined") {
 													p = $(
 														'<p>'+
-														'	A Pipeline 2 Engine is running at <code>'+url+'</code>.'+
+														'	A Pipeline Engine is running at <code>'+url+'</code>.'+
 														'	&nbsp; <a class="btn btn-primary" onclick="$(\'#setWS-endpoint\')[0].value=\''+url+'\';$(\'#setWS-endpoint\').change();$(this).hide(400);return false;">Use it</a>'+
 														'</p>'
 													);

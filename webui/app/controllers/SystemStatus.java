@@ -104,12 +104,12 @@ public class SystemStatus extends Controller {
 					}
 	
 				} catch (Pipeline2Exception e) {
-					attempt.aliveError = "Something unexpected occured while communicating with the Pipeline 2 framework";
+					attempt.aliveError = "Something unexpected occured while communicating with the Pipeline engine";
 				}
 			}
 			
 			if (attempt.aliveResponse == null && attempt.aliveError == null)
-				attempt.aliveError = "Something unexpected occured while communicating with the Pipeline 2 framework";
+				attempt.aliveError = "Something unexpected occured while communicating with the Pipeline engine";
 		}
 		if (attempt.aliveError != null)
 			attempt.alive = null;
@@ -134,7 +134,7 @@ public class SystemStatus extends Controller {
 					}
 
 				} catch (Pipeline2Exception e) {
-					attempt.authError = "An error occured while authenticating; could not reach the Pipeline 2 Engine.";
+					attempt.authError = "An error occured while authenticating; could not reach the Pipeline engine.";
 				}
 			}
 		}

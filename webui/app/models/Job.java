@@ -317,7 +317,7 @@ public class Job extends Model implements Comparable<Job> {
 				Logger.debug("deleting "+this.id+" (sending DELETE request)");
 				boolean success = Application.ws.deleteJob(this.engineId);
 				if (!success) {
-					Pipeline2Logger.logger().error("An error occured when trying to delete job "+this.id+" ("+this.engineId+") from the Pipeline 2 Engine");
+					Pipeline2Logger.logger().error("An error occured when trying to delete job "+this.id+" ("+this.engineId+") from the Pipeline Engine");
 					return false; // don't delete Web UI job when an error occured attempting to delete the engine job
 				}
 			}

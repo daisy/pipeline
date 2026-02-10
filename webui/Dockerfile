@@ -1,5 +1,5 @@
 # Build the webui
-FROM java as builder
+FROM eclipse-temurin:8-jdk AS builder
 
 # Uncomment the following during development to reduce build time
 #RUN apt install git && \
@@ -17,7 +17,7 @@ RUN mkdir data && mv db-empty data/db
 
 
 # then use the build artifacts to create an image where the pipeline is installed
-FROM openjdk:8-jre
+FROM eclipse-temurin:8-jre
 LABEL maintainer="DAISY Consortium (http://www.daisy.org/)"
 COPY --from=builder /usr/src/webui/target/docker/stage/opt/docker /opt/daisy-pipeline2-webui/.
 RUN mkdir /run/daisy-pipeline2-webui

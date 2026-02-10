@@ -1,8 +1,8 @@
 <!-- [![Build Status](https://travis-ci.org/daisy/pipeline-webui.png?branch=master)](https://travis-ci.org/daisy/pipeline-webui) -->
 
-# Pipeline 2 Web UI
+# Pipeline Web UI
 
-This project provides a Web User Interface for the DAISY Pipeline 2, developed with the Play! framework.
+This project provides a Web User Interface for the DAISY Pipeline, developed with the Play! framework.
 
 ## Publishing builds
 
@@ -71,7 +71,7 @@ Then:
   - Upload the `target/rpm/RPMS/noarch/*.rpm.asc` file, then click "Add Artifact"
   - Upload the `target/windows/*.msi` file, then click "Add Artifact"
   - Upload the `target/windows/*.msi.asc` file, then click "Add Artifact"
-- In the "Description" field, enter "A web-based user interface for the DAISY Pipeline 2."
+- In the "Description" field, enter "A web-based user interface for the DAISY Pipeline."
 - Click "Upload Artifact(s)"
 - Click "Staging Repositories"
 - Scroll to the bottom and click the "orgdaisy" repository that was created

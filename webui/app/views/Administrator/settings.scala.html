@@ -26,7 +26,7 @@
 <ul class="nav nav-pills">
     <li class="@("active".when(Controller.flash("settings.formName")==null||Controller.flash("settings.formName")=="updateGlobalPermissions"||Controller.flash("settings.formName")=="updateGuest"||Controller.flash("settings.formName")=="updateUser"||Controller.flash("settings.formName")=="deleteUser"||Controller.flash("settings.formName")=="createUser"))"><a href="#usersAndPermissions" data-toggle="tab">Users and Permissions</a></li>
     <li class="@("active".when(Controller.flash("settings.formName")=="configureScripts"))"><a href="#configureScripts" data-toggle="tab">Scripts</a></li>
-    <li class="@("active".when(Controller.flash("settings.formName")=="setWS"))"><a href="#pipeline2WebServiceEndpoint" data-toggle="tab">Pipeline 2 Web API</a></li>
+    <li class="@("active".when(Controller.flash("settings.formName")=="setWS"))"><a href="#pipeline2WebServiceEndpoint" data-toggle="tab">Pipeline Web API</a></li>
     <li class="@("active".when(Controller.flash("settings.formName")=="setStorageDirs"))"><a href="#storageDirectories" data-toggle="tab">Storage directories</a></li>
     <li class="@("active".when(Controller.flash("settings.formName")=="configureEmail"))"><a href="#eMailSettings" data-toggle="tab">E-mail settings</a></li>
     <li class="@("active".when(Controller.flash("settings.formName")=="setMaintenance"))"><a href="#maintenance" data-toggle="tab">Maintenance</a></li>
@@ -82,7 +82,7 @@
 	</section>
 	
 	<section id="pipeline2WebServiceEndpoint" class="tab-pane @("active".when(Controller.flash("settings.formName")=="setWS"))">
-		<h2>Pipeline 2 Web API endpoint</h2>
+		<h2>Pipeline Web API endpoint</h2>
 		<br/>
 		<script type="text/javascript">
 	  		$(function(){ DP2Forms.startValidation("setWS", "@routes.Administrator.postSettings()?validate", ["endpoint","authid","secret"]); });

@@ -39,7 +39,7 @@ public class Global extends GlobalSettings {
 					public void run() {
 						
 						if (Setting.get("appearance.title") == null)
-							Setting.set("appearance.title", "DAISY Pipeline 2");
+							Setting.set("appearance.title", "DAISY Pipeline");
 						
 						if (Setting.get("appearance.titleLink") == null)
 							Setting.set("appearance.titleLink", "scripts");

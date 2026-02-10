@@ -218,7 +218,7 @@ public class Account extends Controller {
 			email.setHostName(host);
 			email.setDebug(Application.debug);
 			email.setFrom(from, fromName);
-			email.setSubject("[DAISY Pipeline 2] "+subject);
+			email.setSubject("[DAISY Pipeline] "+subject);
 			email.setHtmlMsg(html);
 			email.setTextMsg(text);
 			email.addTo(recipientEmail.toLowerCase(), recipientName);

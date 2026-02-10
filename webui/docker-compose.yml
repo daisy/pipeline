@@ -1,7 +1,6 @@
-version: "2.1"
 services:
   pipeline:
-    image: daisyorg/pipeline-assembly
+    image: daisyorg/pipeline
     environment:
       PIPELINE2_WS_HOST: "0.0.0.0"
       PIPELINE2_WS_AUTHENTICATION: "false"
@@ -15,9 +14,6 @@ services:
       - "9000:9000"
     volumes:
       - "webui-data:/opt/daisy-pipeline2-webui/data"
-    depends_on:
-      pipeline:
-        condition: service_healthy
 volumes:
   pipeline-data:
   webui-data:

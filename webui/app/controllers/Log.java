@@ -37,7 +37,7 @@ public class Log extends Controller {
 		if (user == null || !user.isAdmin())
 			return redirect(routes.Login.login());
 		
-		Result result = ok(logText("Pipeline 2 Web UI Log", null));
+		Result result = ok(logText("Pipeline Web UI Log", null));
 				
 		return result;
 	}
@@ -70,7 +70,7 @@ public class Log extends Controller {
 				}
 			}
 			Map<String,List<String>> log = new HashMap<String,List<String>>();
-			log.put("Pipeline 2 Web UI - Settings", settings);
+			log.put("Pipeline Web UI - Settings", settings);
 			logs.add(log);
 		}
 		
@@ -97,7 +97,7 @@ public class Log extends Controller {
 	            webuiLog.add(sw.toString()); // stack trace as a string
 			}
 			Map<String,List<String>> log = new HashMap<String,List<String>>();
-			log.put("Pipeline 2 Web UI - webui.log", webuiLog);
+			log.put("Pipeline Web UI - webui.log", webuiLog);
 			logs.add(log);
 		}
 		
@@ -124,7 +124,7 @@ public class Log extends Controller {
 				daisyPipelineLog.add(sw.toString()); // stack trace as a string
 			}
 			Map<String,List<String>> log = new HashMap<String,List<String>>();
-			log.put("Pipeline 2 Engine - daisy-pipeline.log", daisyPipelineLog);
+			log.put("Pipeline Engine - daisy-pipeline.log", daisyPipelineLog);
 			logs.add(log);
 		}
 			
@@ -155,7 +155,7 @@ public class Log extends Controller {
 				derbyLog.add("There is no Derby log file at: "+derbyLogFile.getAbsolutePath());
 			}
 			Map<String,List<String>> log = new HashMap<String,List<String>>();
-			log.put("Pipeline 2 Engine - derby.log", derbyLog);
+			log.put("Pipeline Engine - derby.log", derbyLog);
 			logs.add(log);
 		}
 		
@@ -183,7 +183,7 @@ public class Log extends Controller {
 		            derbyLog.add(sw.toString()); // stack trace as a string
 				}
 				Map<String,List<String>> log = new HashMap<String,List<String>>();
-				log.put("Pipeline 2 Web UI - webui-database.log", derbyLog);
+				log.put("Pipeline Web UI - webui-database.log", derbyLog);
 				logs.add(log);
 			}
 		}
@@ -217,8 +217,8 @@ public class Log extends Controller {
 	/** Helper function to create main headline in the plaintext logs */
 	private static String h1(String title) {
 		String time = "Time: "+df.format(new Date());
-		String engineVersion = "";//"Pipeline 2 Engine Version: "+(Application.getAlive() == null ? "unknown" : Application.getAlive().version);
-		String webuiVersion = "Pipeline 2 Web UI Version: "+Application.version;
+		String engineVersion = "";//"Pipeline Engine Version: "+(Application.getAlive() == null ? "unknown" : Application.getAlive().version);
+		String webuiVersion = "Pipeline Web UI Version: "+Application.version;
 		int width = Math.max(title.length(), Math.max(time.length(), Math.max(engineVersion.length(), webuiVersion.length())));
 		while (title.length() < width) title += " ";
 		while (time.length() < width) time += " ";
