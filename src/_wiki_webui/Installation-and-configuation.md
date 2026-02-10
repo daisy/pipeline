@@ -40,7 +40,7 @@ When starting the Pipeline engine, you must start it from the command line inste
 
 <img src="images/16.png" alt=""/>
 
-If the engine is already running, but on a non-standard port or on another server, then you need to configure it in the Web UI. Go to "Admin settings" and "Pipeline 2 Web API". Set the endpoint address to the Web API endpoint as necessary. If the Pipeline Engine at the given Web API endpoint requires authentication, you will be required to provide the authentication ID and the secret text as well.
+If the engine is already running, but on a non-standard port or on another server, then you need to configure it in the Web UI. Go to "Admin settings" and "Pipeline Web API". Set the endpoint address to the Web API endpoint as necessary. If the Pipeline Engine at the given Web API endpoint requires authentication, you will be required to provide the authentication ID and the secret text as well.
 
 <img src="images/15.png" alt=""/>
 

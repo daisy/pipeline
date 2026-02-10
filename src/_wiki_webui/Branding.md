@@ -4,7 +4,7 @@ Branding is the process of applying the name of your organizations, logo, colors
 
 ### Title
 
-The default title of the Web UI is "DAISY Pipeline 2". It appears on the left side of the top navigation bar, in the web browsers window or tab title, as well as other places. It can be customized through the "Admin settings" under "Appearance".
+The default title of the Web UI is "DAISY Pipeline". It appears on the left side of the top navigation bar, in the web browsers window or tab title, as well as other places. It can be customized through the "Admin settings" under "Appearance".
 
 ### Visual themes
 
