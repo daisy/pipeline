@@ -179,7 +179,8 @@ endif # eq ($(OS), WINDOWS)
 SCRIPTS := $(filter modules/scripts/%,$(MAVEN_MODULES)) \
            modules/scripts-utils/daisy202-utils \
            modules/scripts-utils/daisy3-utils \
-           modules/scripts-utils/dtbook-utils
+           modules/scripts-utils/dtbook-utils \
+           modules/scripts-utils/ocr-utils
 
 .PHONY : $(addprefix run-,$(SCRIPTS))
 $(addprefix run-,$(SCRIPTS)) : run-% : %/.compile-dependencies %/.test-dependencies
