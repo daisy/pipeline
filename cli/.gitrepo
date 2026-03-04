@@ -6,6 +6,6 @@
 [subrepo]
 	remote = git@github.com:daisy/pipeline-cli-go.git
 	branch = master
-	commit = c14de9c866a27042a34a9d8927f118a7112b006f
-	parent = 3e2338e395f3dfa81e02c4b94f61616817915e8d
+	commit = eff37b23b26b429fe743b9759090a8df692ee1da
+	parent = 524a590ff7aba820049f72d88028ce5d9ee5dfdb
 	cmdver = 0.3.1
