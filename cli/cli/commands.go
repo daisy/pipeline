@@ -60,7 +60,7 @@ func AddJobStatusCommand(cli *Cli, link PipelineLink) {
 		}
 		return printable, nil
 	}
-	cmd := newCommandBuilder("status", "Returns the status of the job with id JOB_ID").
+	cmd := newCommandBuilder("status", "Returns the status of a job").
 		withCall(fn).withTemplate(JobStatusTemplate).
 		buildWithId(cli)
 
@@ -79,7 +79,7 @@ func AddDeleteCommand(cli *Cli, link PipelineLink) {
 		}
 		return "", err
 	}
-	newCommandBuilder("delete", "Removes a job from the pipeline").
+	newCommandBuilder("delete", "Removes a job").
 		withCall(fn).buildWithId(cli)
 }
 
@@ -144,7 +144,7 @@ func AddLogCommand(cli *Cli, link PipelineLink) {
 		_, err = outWriter.Write(data)
 		return ret, err
 	}
-	cmd := newCommandBuilder("log", "Stores the results from a job").
+	cmd := newCommandBuilder("log", "Stores the logs from a job").
 		withCall(fn).buildWithId(cli)
 
 	cmd.AddOption("output", "o", "Write the log lines into the file provided instead of printing it", "", "", func(name, file string) error {

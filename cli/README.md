@@ -30,24 +30,24 @@ Usage dp2 [GLOBAL_OPTIONS] command [COMMAND_OPTIONS] [PARAMS]
 Script commands:
 
         zedai-to-epub3             Transforms a ZedAI (DAISY 4 XML) document into an EPUB 3 publication.
-        dtbook-to-zedai             Transforms DTBook XML into ZedAI XML.
+        dtbook-to-zedai            Transforms DTBook XML into ZedAI XML.
         dtbook-to-html             Transforms DTBook XML into HTML.
-        nimas-fileset-validator             Validate a NIMAS Fileset. Supports inclusion of MathML.
-        zedai-to-html             Transforms ZedAI XML (ANSI/NISO Z39.98-2012 Authoring and Interchange) into HTML.
-        daisy3-to-epub3             Transforms a DAISY 3 publication into an EPUB 3 publication.
-        html-to-epub3             Transforms an (X)HTML document into an EPUB 3 publication.
-        dtbook-to-epub3             Converts multiple dtbooks to epub3 format
-        daisy202-to-epub3             Transforms a DAISY 2.02 publication into an EPUB3 publication.
-        dtbook-validator             Validates DTBook documents. Supports inclusion of MathML.
+        nimas-fileset-validator    Validate a NIMAS Fileset. Supports inclusion of MathML.
+        zedai-to-html              Transforms ZedAI XML (ANSI/NISO Z39.98-2012 Authoring and Interchange) into HTML.
+        daisy3-to-epub3            Transforms a DAISY 3 publication into an EPUB 3 publication.
+        html-to-epub3              Transforms an (X)HTML document into an EPUB 3 publication.
+        dtbook-to-epub3            Converts multiple dtbooks to epub3 format
+        daisy202-to-epub3          Transforms a DAISY 2.02 publication into an EPUB3 publication.
+        dtbook-validator           Validates DTBook documents. Supports inclusion of MathML.
         
 
 General commands:
 
-        status             Returns the status of the job with id JOB_ID
-        delete             Removes a job from the pipeline
-        results             Stores the results from a job
+        status           Returns the status of a job
+        delete           Removes a job
+        results          Stores the results from a job
         jobs             Returns the list of jobs present in the server
-        log             Stores the results from a job
+        log              Stores the logs from a job
         halt             Stops the webservice
 
 List of global options:                 dp2 help -g

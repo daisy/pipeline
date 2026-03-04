@@ -69,11 +69,11 @@ func checkId(lastId bool, command string, args ...string) (id string, err error)
 
 //Adds the last id switch to the command
 func addLastId(cmd *subcommand.Command, lastId *bool) {
-	cmd.AddSwitch("lastid", "l", "Get id from the last executed job instead of JOB_ID", func(string, string) error {
+	cmd.AddSwitch("lastid", "l", "Get id from the last executed job instead of JOB", func(string, string) error {
 		*lastId = true
 		return nil
 	})
-	cmd.SetArity(-1, "[JOB_ID]")
+	cmd.SetArity(-1, "[JOB]")
 }
 
 //Calculates the absolute path in base of cwd and creates the directory
