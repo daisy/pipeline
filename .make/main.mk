@@ -189,7 +189,11 @@ $(TARGET_DIR)/effective-pom.xml : poms | $(MVN_SETTINGS)
 				throw e; \
 			} \
 		} finally { \
-			rm(tmpRepo); \
+			try { \
+				rm(tmpRepo); \
+			} catch (Throwable e) { \
+				// for some reason this may fail on Windows: simply ignore \
+			} \
 		} \
 	} else { \
 		touch("$@"); \
