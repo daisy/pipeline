@@ -308,6 +308,14 @@ public class core {
 	public static ModificationType isModifiedSinceLastRelease(File module)
 			throws IOException, InterruptedException, XPathExpressionException, SystemExit {
 
+		/*
+		 * By settings the "FULL_BUILD" environment variable, all modules are marked as
+		 * "modified" so that all snapshot dependencies are build.
+		 * Note that even though this bypasses the optimization, it can contradictorily
+		 * speed up the build (notably on a Windows VM).
+		 */
+		if (System.getenv("FULL_BUILD") != null)
+			return ModificationType.MINOR;
 		String pom = new File(module, "pom.xml").toString();
 		String mainDir = new File(module, "src/main").toString();
 		String docDir = new File(module, "doc").toString();
