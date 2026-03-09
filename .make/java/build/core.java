@@ -10,6 +10,8 @@ import java.util.stream.*;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.xpath.XPathExpressionException;
 
+import com.neva.commons.gitignore.GitIgnore;
+
 import static lib.util.*;
 
 import net.sf.saxon.ma.map.HashTrieMap;
@@ -708,6 +710,17 @@ public class core {
 			}
 			throw e;
 		}
+	}
+
+	public static GitIgnore findGitIgnore(File current) {
+		File dir = current.isDirectory() ? current : current.getParentFile();
+		while (dir != null) {
+			File gitignore = new File(dir, ".gitignore");
+			if (gitignore.isFile())
+				return new GitIgnore(dir);
+			dir = dir.getParentFile();
+		}
+		return null;
 	}
 
 	public static void groupEval() throws Exception {

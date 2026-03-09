@@ -382,7 +382,7 @@
 						<xsl:text>&#x09;</xsl:text>
 						<xsl:text>+$(EVAL) mvn.installPom("</xsl:text>
 						<xsl:if test="tokenize($module,'/')[last()]='bom'">
-							<xsl:text>$(TARGET_DIR)/optimized/</xsl:text>
+							<xsl:text>$(MY_DIR)/pom/</xsl:text>
 						</xsl:if>
 						<xsl:value-of select="$module"/>
 						<xsl:text>");</xsl:text>
@@ -394,7 +394,7 @@
 							<xsl:when test="ends-with($version,'-SNAPSHOT')">
 								<xsl:text> </xsl:text>
 								<xsl:if test="tokenize($module,'/')[last()]='bom'">
-									<xsl:text>$(TARGET_DIR)/optimized/</xsl:text>
+									<xsl:text>$(MY_DIR)/pom/</xsl:text>
 								</xsl:if>
 								<xsl:text>%/pom.xml %/.compile-dependencies | %/.test-dependencies</xsl:text>
 							</xsl:when>
@@ -409,7 +409,7 @@
 							<xsl:value-of select="concat($dirname,'.install.jar')"/>
 							<xsl:text>&#x0A;</xsl:text>
 							<xsl:value-of select="concat($dirname,'.install.jar')"/>
-							<xsl:text> : %/.install.jar : %/.install </xsl:text>
+							<xsl:text> : %/.install.jar : %/.install</xsl:text>
 							<xsl:text>&#x0A;</xsl:text>
 							<xsl:text>&#x0A;</xsl:text>
 							<xsl:text>.SECONDARY : </xsl:text>
@@ -477,7 +477,7 @@
 								<xsl:value-of select="concat($dirname,'.install-javadoc.jar')"/>
 								<xsl:text>&#x0A;</xsl:text>
 								<xsl:value-of select="concat($dirname,'.install-javadoc.jar')"/>
-								<xsl:text> : %/.install-javadoc.jar : %/.install-doc </xsl:text>
+								<xsl:text> : %/.install-javadoc.jar : %/.install-doc</xsl:text>
 								<xsl:text>&#x0A;</xsl:text>
 							</xsl:if>
 						</xsl:if>
