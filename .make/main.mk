@@ -53,12 +53,6 @@ endif
 
 eval-java = $(ROOT_DIR)/$(SHELL) $(call quote-for-bash,$1)
 
-rwildcard = $(shell if (new File("$1").isDirectory()) glob("$1**/$2").forEach(x -> println(x.getPath().replace('\\', '/').replace(" ", "\\ ")));)
-# this alternative does not support spaces in file names
-#rwildcard = $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(subst *,%,$2),$d))
-
-update-target-if-changed = $@.tmp && ((! [ -e $@ ] || ! diff -q $@ $@.tmp >/dev/null) && mv $@.tmp $@ || rm $@.tmp ) || (rm $@.tmp && false)
-
 # always execute this recipe (but only update the file it actually changes)
 .PHONY : $(TARGET_DIR)/state/properties
 $(TARGET_DIR)/state/properties :
