@@ -60,6 +60,16 @@ eval-java = $(ROOT_DIR)/$(SHELL) $(call quote-for-bash,$1)
 # (see https://www.gnu.org/software/make/manual/html_node/Remaking-Makefiles.html)
 include $(MY_DIR)/mk/maven.mk
 
+ifneq (,$(filter clean,$(MAKECMDGOALS)))
+include $(shell for (String f : "$(addsuffix /sources.mk,$(addprefix $(MY_DIR)/mk/,$(MODULES)))".trim().split("\\s+")) \
+                    if (new File(f).exists()) println(f); \
+                for (String f : "$(addsuffix /deps.mk,$(addprefix $(MY_DIR)/mk/,$(MODULES) $(MAVEN_AGGREGATORS)))".trim().split("\\s+")) \
+                    if (new File(f).exists()) println(f);)
+else
+-include $(addsuffix /sources.mk,$(addprefix $(MY_DIR)/mk/,$(MODULES)))
+-include $(addsuffix /deps.mk,$(addprefix $(MY_DIR)/mk/,$(MODULES) $(MAVEN_AGGREGATORS)))
+endif
+
 ifndef FIXED_BUILD
 
 # always execute this recipe (but only update the file it actually changes)
@@ -138,6 +148,164 @@ $(MY_DIR)/mk/maven.mk : $(TARGET_DIR)/effective-settings.xml
 		for (String m : boms) \
 			s.println("$$(MY_DIR)/mk/maven.mk : " + m + "/pom.xml"); \
 		s.println("endif"); \
+	}
+
+ifneq ($(MAKECMDGOALS), clean)
+
+$(addsuffix /sources.mk,$(addprefix $(MY_DIR)/mk/,$(MAVEN_MODULES))) : $(MY_DIR)/mk/%/sources.mk : %/pom.xml
+	rm("$@"); \
+	mkdirs("$(dir $@)"); \
+	touch("$@"); \
+	try (PrintStream s = new PrintStream(new FileOutputStream("$@"))) { \
+		File pomFile = new File("$<"); \
+		File module = pomFile.getParentFile(); \
+		File srcDir = new File(module, "src"); \
+		File docDir = new File(module, "doc"); \
+		File indexFile = new File(module, "index.md"); \
+		if (srcDir.isDirectory() || docDir.isDirectory() || indexFile.isFile()) { \
+			boolean isSnapshot = getMavenCoords(pomFile).v.endsWith("-SNAPSHOT"); \
+			List<String> sourceDirs = new ArrayList<>(); \
+			List<String> mainSourceFiles = new ArrayList<>(); \
+			List<String> otherSourceFiles = new ArrayList<>(); \
+			if (srcDir.isDirectory()) { \
+				String mainDir = new File(srcDir, "main").getPath() + "/"; \
+				GitIgnore gitignore = findGitIgnore(srcDir.getAbsoluteFile()); \
+				Files.walk(srcDir.toPath()).forEach( \
+					f -> { \
+						if (gitignore == null || !gitignore.isExcluded(f.toFile().getAbsoluteFile())) { \
+							String path = f.toString().replace(" ", "\\ "); \
+							if (Files.isDirectory(f)) \
+								sourceDirs.add(path); \
+							else if (isSnapshot && path.startsWith(mainDir)) \
+								mainSourceFiles.add(path); \
+							else \
+								otherSourceFiles.add(path); \
+						} \
+					} \
+				); \
+			} \
+			if (!isSnapshot) { \
+				if (otherSourceFiles.size() > 0) { \
+					s.print(String.format("%s/.test :", module)); \
+					for (String p : otherSourceFiles) s.print(" \\\n\t" + p.replace("$$", "$$$$")); \
+					s.println(); \
+				} \
+			} else { \
+				if (mainSourceFiles.size() > 0 || otherSourceFiles.size() > 0 || docDir.isDirectory() || indexFile.isFile()) { \
+					String packaging = xpath(pomFile, "string(/*/*[local-name()='packaging'])"); \
+					boolean isJar = "".equals(packaging) || "bundle".equals(packaging) || "maven-plugin".equals(packaging); \
+					if (mainSourceFiles.size() > 0) { \
+						String targets = String.format("%s/.test %s/.install", module, module); \
+						if (isJar) \
+							targets += String.format(" %s/.install-doc", module); \
+						targets += String.format(" $$(TARGET_DIR)/state/%s/modified-since-release_", module); \
+						s.print(targets + " :"); \
+						for (String p : mainSourceFiles) s.print(" \\\n\t" + p.replace("$$", "$$$$")); \
+						s.println(); \
+					} \
+					if (otherSourceFiles.size() > 0) { \
+						String targets = String.format("%s/.test", module); \
+						if (isJar) \
+							targets += String.format(" %s/.install-doc", module); \
+						s.print(targets + " :"); \
+						for (String p : otherSourceFiles) s.print(" \\\n\t" + p.replace("$$", "$$$$")); \
+						s.println(); \
+					} \
+					if (isJar && (docDir.isDirectory() || indexFile.isFile())) { \
+						List<String> docFiles = new ArrayList<>(); \
+						if (docDir.isDirectory()) { \
+							Files.walk(docDir.toPath()).forEach( \
+								f -> { \
+									String path = f.toString().replace(" ", "\\ "); \
+									if (Files.isDirectory(f)) \
+										sourceDirs.add(path); \
+									else \
+										docFiles.add(path); \
+								} \
+							); \
+						} \
+						if (indexFile.isFile()) \
+							docFiles.add(indexFile.getPath()); \
+						if (docFiles.size() > 0) { \
+							s.print(String.format("%s/.install-doc :", module)); \
+							for (String p : docFiles) s.print(" \\\n\t" + p.replace("$$", "$$$$")); \
+							s.println(); \
+						} \
+					} \
+				} \
+			} \
+			if (sourceDirs.size() > 0) { \
+				s.print("$@ :"); \
+				for (String p : sourceDirs) s.print(" \\\n\t" + p.replace("$$", "$$$$")); \
+				s.println(); \
+			} \
+		} \
+	}
+
+$(addsuffix /sources.mk,$(addprefix $(MY_DIR)/mk/,$(GRADLE_MODULES))) : $(GRADLE_FILES)
+	rm("$@"); \
+	mkdirs("$(dir $@)"); \
+	touch("$@"); \
+	try (PrintStream s = new PrintStream(new FileOutputStream("$@"))) { \
+		File module = new File("$(patsubst $(MY_DIR)/mk/%/sources.mk,%,$@)"); \
+		File srcDir = new File(module, "src"); \
+		File testDir = new File(module, "test"); \
+		File itDir = new File(module, "integrationtest"); \
+		if (srcDir.isDirectory() || testDir.isDirectory() || itDir.isDirectory()) { \
+			boolean isSnapshot = getMavenCoords(module).v.endsWith("-SNAPSHOT"); \
+			List<String> sourceDirs = new ArrayList<>(); \
+			List<String> mainSourceFiles = new ArrayList<>(); \
+			List<String> otherSourceFiles = new ArrayList<>(); \
+			if (isSnapshot && srcDir.isDirectory()) { \
+				GitIgnore gitignore = findGitIgnore(srcDir.getAbsoluteFile()); \
+				Files.walk(srcDir.toPath()).forEach( \
+					f -> { \
+						if (gitignore == null || !gitignore.isExcluded(f.toFile().getAbsoluteFile())) { \
+							String path = f.toString().replace(" ", "\\ "); \
+							if (Files.isDirectory(f)) \
+								sourceDirs.add(path); \
+							else \
+								mainSourceFiles.add(path); \
+						} \
+					} \
+				); \
+			} \
+			if (testDir.isDirectory()) \
+				Files.walk(testDir.toPath()).forEach( \
+					f -> { \
+						String path = f.toString().replace(" ", "\\ "); \
+						if (Files.isDirectory(f)) \
+							sourceDirs.add(path); \
+						else \
+							otherSourceFiles.add(path); \
+					} \
+				); \
+			if (itDir.isDirectory()) \
+				Files.walk(itDir.toPath()).forEach( \
+					f -> { \
+						String path = f.toString().replace(" ", "\\ "); \
+						if (Files.isDirectory(f)) \
+							sourceDirs.add(path); \
+						else \
+							otherSourceFiles.add(path); \
+					} \
+				); \
+			if (mainSourceFiles.size() > 0) { \
+				s.print(String.format("%s/.test %s/.install :", module, module)); \
+				for (String p : mainSourceFiles) s.print(" \\\n\t" + p.replace("$$", "$$$$")); \
+				s.println(); \
+			} \
+			if (otherSourceFiles.size() > 0) { \
+				s.print(String.format("%s/.test :", module, module)); \
+				for (String p : otherSourceFiles) s.print(" \\\n\t" + p.replace("$$", "$$$$")); \
+				s.println(); \
+			} \
+			if (sourceDirs.size() > 0) { \
+				s.print("$@ :"); \
+				for (String p : sourceDirs) s.print(" \\\n\t" + p.replace("$$", "$$$$")); \
+				s.println(); \
+			} \
+		} \
 	}
 
 $(MY_DIR)/pom/% : $(TARGET_DIR)/optimized/%
@@ -249,8 +417,6 @@ $(TARGET_DIR)/gradle-pom.xml : $(GRADLE_FILES)
 	                 new File("$(MY_DIR)/mk"), \
 	                 "deps.mk");
 
-ifneq ($(MAKECMDGOALS), clean)
-
 $(addsuffix /deps.mk,$(addprefix $(MY_DIR)/mk/,$(MAVEN_MODULES) $(MAVEN_AGGREGATORS))) : .maven-deps.mk
 	if (!new File("$@").exists()) { \
 		mkdirs("$(dir $@)"); \
@@ -260,166 +426,10 @@ $(addsuffix /deps.mk,$(addprefix $(MY_DIR)/mk/,$(MAVEN_MODULES) $(MAVEN_AGGREGAT
 	} \
 	touch("$@");
 
-$(addsuffix /sources.mk,$(addprefix $(MY_DIR)/mk/,$(MAVEN_MODULES))) : $(MY_DIR)/mk/%/sources.mk : %/pom.xml
-	rm("$@"); \
-	mkdirs("$(dir $@)"); \
-	touch("$@"); \
-	try (PrintStream s = new PrintStream(new FileOutputStream("$@"))) { \
-		File pomFile = new File("$<"); \
-		File module = pomFile.getParentFile(); \
-		File srcDir = new File(module, "src"); \
-		File docDir = new File(module, "doc"); \
-		File indexFile = new File(module, "index.md"); \
-		if (srcDir.isDirectory() || docDir.isDirectory() || indexFile.isFile()) { \
-			boolean isSnapshot = getMavenCoords(pomFile).v.endsWith("-SNAPSHOT"); \
-			List<String> sourceDirs = new ArrayList<>(); \
-			List<String> mainSourceFiles = new ArrayList<>(); \
-			List<String> otherSourceFiles = new ArrayList<>(); \
-			if (srcDir.isDirectory()) { \
-				String mainDir = new File(srcDir, "main").getPath() + "/"; \
-				GitIgnore gitignore = findGitIgnore(srcDir.getAbsoluteFile()); \
-				Files.walk(srcDir.toPath()).forEach( \
-					f -> { \
-						if (gitignore == null || !gitignore.isExcluded(f.toFile().getAbsoluteFile())) { \
-							String path = f.toString().replace(" ", "\\ "); \
-							if (Files.isDirectory(f)) \
-								sourceDirs.add(path); \
-							else if (isSnapshot && path.startsWith(mainDir)) \
-								mainSourceFiles.add(path); \
-							else \
-								otherSourceFiles.add(path); \
-						} \
-					} \
-				); \
-			} \
-			if (!isSnapshot) { \
-				if (otherSourceFiles.size() > 0) { \
-					s.print(String.format("%s/.test :", module)); \
-					for (String p : otherSourceFiles) s.print(" \\\n\t" + p.replace("$$", "$$$$")); \
-					s.println(); \
-				} \
-			} else { \
-				if (mainSourceFiles.size() > 0 || otherSourceFiles.size() > 0 || docDir.isDirectory() || indexFile.isFile()) { \
-					String packaging = xpath(pomFile, "string(/*/*[local-name()='packaging'])"); \
-					boolean isJar = "".equals(packaging) || "bundle".equals(packaging) || "maven-plugin".equals(packaging); \
-					if (mainSourceFiles.size() > 0) { \
-						String targets = String.format("%s/.test %s/.install", module, module); \
-						if (isJar) \
-							targets += String.format(" %s/.install-doc", module); \
-						targets += String.format(" $$(TARGET_DIR)/state/%s/modified-since-release_", module); \
-						s.print(targets + " :"); \
-						for (String p : mainSourceFiles) s.print(" \\\n\t" + p.replace("$$", "$$$$")); \
-						s.println(); \
-					} \
-					if (otherSourceFiles.size() > 0) { \
-						String targets = String.format("%s/.test", module); \
-						if (isJar) \
-							targets += String.format(" %s/.install-doc", module); \
-						s.print(targets + " :"); \
-						for (String p : otherSourceFiles) s.print(" \\\n\t" + p.replace("$$", "$$$$")); \
-						s.println(); \
-					} \
-					if (isJar && (docDir.isDirectory() || indexFile.isFile())) { \
-						List<String> docFiles = new ArrayList<>(); \
-						if (docDir.isDirectory()) { \
-							Files.walk(docDir.toPath()).forEach( \
-								f -> { \
-									String path = f.toString().replace(" ", "\\ "); \
-									if (Files.isDirectory(f)) \
-										sourceDirs.add(path); \
-									else \
-										docFiles.add(path); \
-								} \
-							); \
-						} \
-						if (indexFile.isFile()) \
-							docFiles.add(indexFile.getPath()); \
-						if (docFiles.size() > 0) { \
-							s.print(String.format("%s/.install-doc :", module)); \
-							for (String p : docFiles) s.print(" \\\n\t" + p.replace("$$", "$$$$")); \
-							s.println(); \
-						} \
-					} \
-				} \
-			} \
-			if (sourceDirs.size() > 0) { \
-				s.print("$@ :"); \
-				for (String p : sourceDirs) s.print(" \\\n\t" + p.replace("$$", "$$$$")); \
-				s.println(); \
-			} \
-		} \
-	}
-
 $(addsuffix /deps.mk,$(addprefix $(MY_DIR)/mk/,$(GRADLE_MODULES))) : $(GRADLE_FILES)
 	computeGradleDeps("$(patsubst $(MY_DIR)/mk/%/deps.mk,%,$@)", \
 	                  new File("$(MY_DIR)/mk"), \
 	                  "deps.mk");
-
-$(addsuffix /sources.mk,$(addprefix $(MY_DIR)/mk/,$(GRADLE_MODULES))) : $(GRADLE_FILES)
-	rm("$@"); \
-	mkdirs("$(dir $@)"); \
-	touch("$@"); \
-	try (PrintStream s = new PrintStream(new FileOutputStream("$@"))) { \
-		File module = new File("$(patsubst $(MY_DIR)/mk/%/sources.mk,%,$@)"); \
-		File srcDir = new File(module, "src"); \
-		File testDir = new File(module, "test"); \
-		File itDir = new File(module, "integrationtest"); \
-		if (srcDir.isDirectory() || testDir.isDirectory() || itDir.isDirectory()) { \
-			boolean isSnapshot = getMavenCoords(module).v.endsWith("-SNAPSHOT"); \
-			List<String> sourceDirs = new ArrayList<>(); \
-			List<String> mainSourceFiles = new ArrayList<>(); \
-			List<String> otherSourceFiles = new ArrayList<>(); \
-			if (isSnapshot && srcDir.isDirectory()) { \
-				GitIgnore gitignore = findGitIgnore(srcDir.getAbsoluteFile()); \
-				Files.walk(srcDir.toPath()).forEach( \
-					f -> { \
-						if (gitignore == null || !gitignore.isExcluded(f.toFile().getAbsoluteFile())) { \
-							String path = f.toString().replace(" ", "\\ "); \
-							if (Files.isDirectory(f)) \
-								sourceDirs.add(path); \
-							else \
-								mainSourceFiles.add(path); \
-						} \
-					} \
-				); \
-			} \
-			if (testDir.isDirectory()) \
-				Files.walk(testDir.toPath()).forEach( \
-					f -> { \
-						String path = f.toString().replace(" ", "\\ "); \
-						if (Files.isDirectory(f)) \
-							sourceDirs.add(path); \
-						else \
-							otherSourceFiles.add(path); \
-					} \
-				); \
-			if (itDir.isDirectory()) \
-				Files.walk(itDir.toPath()).forEach( \
-					f -> { \
-						String path = f.toString().replace(" ", "\\ "); \
-						if (Files.isDirectory(f)) \
-							sourceDirs.add(path); \
-						else \
-							otherSourceFiles.add(path); \
-					} \
-				); \
-			if (mainSourceFiles.size() > 0) { \
-				s.print(String.format("%s/.test %s/.install :", module, module)); \
-				for (String p : mainSourceFiles) s.print(" \\\n\t" + p.replace("$$", "$$$$")); \
-				s.println(); \
-			} \
-			if (otherSourceFiles.size() > 0) { \
-				s.print(String.format("%s/.test :", module, module)); \
-				for (String p : otherSourceFiles) s.print(" \\\n\t" + p.replace("$$", "$$$$")); \
-				s.println(); \
-			} \
-			if (sourceDirs.size() > 0) { \
-				s.print("$@ :"); \
-				for (String p : sourceDirs) s.print(" \\\n\t" + p.replace("$$", "$$$$")); \
-				s.println(); \
-			} \
-		} \
-	}
 
 endif
 
@@ -488,16 +498,6 @@ endif
 clean :
 	rm("$(TARGET_DIR)"); \
 	rm("maven.log");
-
-ifneq (,$(filter clean,$(MAKECMDGOALS)))
-include $(shell for (String f : "$(addsuffix /deps.mk,$(addprefix $(MY_DIR)/mk/,$(MODULES) $(MAVEN_AGGREGATORS)))".trim().split("\\s+")) \
-                    if (new File(f).exists()) println(f); \
-                for (String f : "$(addsuffix /sources.mk,$(addprefix $(MY_DIR)/mk/,$(MODULES)))".trim().split("\\s+")) \
-                    if (new File(f).exists()) println(f);)
-else
--include $(addsuffix /deps.mk,$(addprefix $(MY_DIR)/mk/,$(MODULES) $(MAVEN_AGGREGATORS)))
--include $(addsuffix /sources.mk,$(addprefix $(MY_DIR)/mk/,$(MODULES)))
-endif
 
 ifdef SKIP_GROUP_EVAL_TARGET
 .SILENT:
