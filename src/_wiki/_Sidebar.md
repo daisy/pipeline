@@ -43,6 +43,7 @@
       * [[HTML to DTBook|http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/html-to-dtbook/]]
       * [[HTML to EPUB3|http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/html-to-epub3/]]
       * [[NIMAS Fileset Validator|http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/nimas-fileset-validator/]]
+      * [[OBFL to braille|http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/obfl-to-pef/]]
       * [[Word to DTBook|http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/word-to-dtbook/]]
       * [[ZedAI to braille|http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/zedai-to-pef/]]
       * [[ZedAI to EPUB 3|http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/zedai-to-epub3/]]
