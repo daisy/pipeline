@@ -13,29 +13,29 @@ with DAISY Pipeline. The complete list of available scripts is:
 * [DAISY 3 to EPUB 3](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/daisy3-to-epub3/)
 * [DAISY 3 to navigable MP3 file-set](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/daisy3-to-mp3/)
 * [DTBook Validator](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-validator/)
-* [DTBook to DAISY 3](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-daisy3/)
+* [DTBook to braille](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-pef/)
 * [DTBook to eBraille](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-ebraille/)
+* [DTBook to DAISY 3](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-daisy3/)
 * [DTBook to EPUB3](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-epub3/)
 * [DTBook to HTML](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-html/)
 * [DTBook to ODT](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-odt/)
-* [DTBook to PEF](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-pef/)
 * [DTBook to RTF](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-rtf/)
 * [DTBook to ZedAI](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-zedai/)
 * [EPUB Upgrader](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/epub2-to-epub3/)
 * [EPUB 3 Enhancer](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/epub3-to-epub3/)
 * [EPUB 3 Validator](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/epub3-validator/)
+* [EPUB 3 to braille](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/epub3-to-pef/)
 * [EPUB 3 to DAISY 2.02](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/epub3-to-daisy202/)
 * [EPUB 3 to DAISY 3](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/epub3-to-daisy3/)
-* [EPUB 3 to PEF](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/epub3-to-pef/)
 * [EPUB to DAISY](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/epub-to-daisy/)
+* [HTML to braille](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/html-to-pef/)
 * [HTML to DTBook](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/html-to-dtbook/)
 * [HTML to EPUB3](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/html-to-epub3/)
-* [HTML to PEF](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/html-to-pef/)
 * [NIMAS Fileset Validator](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/nimas-fileset-validator/)
 * [Word to DTBook](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/word-to-dtbook/)
+* [ZedAI to braille](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/zedai-to-pef/)
 * [ZedAI to EPUB 3](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/zedai-to-epub3/)
 * [ZedAI to HTML](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/zedai-to-html/)
-* [ZedAI to PEF](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/zedai-to-pef/)
 
 
 ## Matrix
@@ -96,7 +96,7 @@ with DAISY Pipeline. The complete list of available scripts is:
     <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-epub3">DTBook to EPUB 3</a></td>
     <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-html">DTBook to HTML</a></td>
     <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-zedai">DTBook to ZedAI</a></td>
-    <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-pef">DTBook to PEF</a></td>
+    <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-pef">DTBook to braille</a></td>
     <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-rtf">DTBook to RTF</a></td>
     <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-odt">DTBook to ODT</a></td>
   </tr>
@@ -137,7 +137,7 @@ with DAISY Pipeline. The complete list of available scripts is:
     <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/epub3-to-epub3">EPUB 3 Enhancer</a></td>
     <td></td>
     <td></td>
-    <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/epub3-to-pef">EPUB 3 to PEF</a></td>
+    <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/epub3-to-pef">EPUB 3 to braille</a></td>
     <td></td>
     <td></td>
   </tr>
@@ -150,7 +150,7 @@ with DAISY Pipeline. The complete list of available scripts is:
     <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/html-to-epub3">HTML to EPUB 3</a></td>
     <td></td>
     <td></td>
-    <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/html-to-pef">HTML to PEF</a></td>
+    <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/html-to-pef">HTML to braille</a></td>
     <td></td>
     <td></td>
   </tr>
@@ -163,7 +163,7 @@ with DAISY Pipeline. The complete list of available scripts is:
     <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/zedai-to-epub3">ZedAI to EPUB 3</a></td>
     <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/zedai-to-html">ZedAI to HTML</a></td>
     <td></td>
-    <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/zedai-to-pef">ZedAI to PEF</a></td>
+    <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/zedai-to-pef">ZedAI to braille</a></td>
     <td></td>
     <td></td>
   </tr>
