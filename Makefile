@@ -323,7 +323,9 @@ modules/braille/libhyphen-utils/.install-windows.jar: \
 $(MVN_WORKSPACE) :
 	if (!new File("$@").exists()) { \
 		mkdirs("$(MVN_CACHE)"); \
-		cp("$(MVN_CACHE)", "$@"); \
+		/* FIXME: cp() only works on files, not directories */ \
+		/*cp("$(MVN_CACHE)", "$@");*/ \
+		mkdirs("$@"); \
 	}
 
 .PHONY : cache
