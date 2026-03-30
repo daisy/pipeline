@@ -26,4 +26,29 @@ public interface DocumentBuilder {
 	 */
 	public Document parse(InputSource input) throws SAXException, IOException;
 
+	/**
+	 * Parse an input using one of the provided parsers.
+	 *
+	 * @throws SAXException if the input could not be parsed
+	 * @throws IOException if the input could not be read
+	 */
+	public static Document parse(InputSource input, String contentType, Iterable<DocumentBuilder> parsers)
+			throws SAXException, IOException{
+		boolean isXml = "".equals(contentType) || contentType.matches("[^ ]*(/|\\+)xml");
+		DocumentBuilder xmlParser = null;
+		for (DocumentBuilder p : parsers) {
+			if (xmlParser == null && p.supportsContentType("text/xml")) {
+				xmlParser = p;
+				if (isXml)
+					break;
+			}
+			if (!isXml && p.supportsContentType(contentType))
+				return p.parse(input);
+		}
+		if (xmlParser != null)
+			// content-type is either XML, not specified, or not recognized
+			// in all cases we use (fallback to) the XML parser
+			return xmlParser.parse(input);
+		throw new SAXException("No parser found that supports the content type");
+	}
 }

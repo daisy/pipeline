@@ -515,6 +515,10 @@ public final class SaxonHelper {
 		};
 	}
 
+	/**
+	 * Compile an XSLT match pattern expression, which when evaluated returns a boolean result: true if the context
+	 * node matches the pattern, false if it does not.See {@link XpathEvaluator#createPattern}.
+	 */
 	public static XPathExpression compileExpression(String expression, Hashtable<String,String> namespaceBindings, Configuration configuration)
 			throws XPathException {
 		XPathEvaluator xpathEvaluator = new XPathEvaluator(configuration);
