@@ -69,6 +69,16 @@
 					</snapshots>
 				</repository>
 				<repository>
+					<id>eclipselink</id> <!-- defined in modules-parent and assembly -->
+					<url>https://download.eclipse.org/rt/eclipselink/maven.repo</url>
+					<releases>
+						<enabled>true</enabled>
+					</releases>
+					<snapshots>
+						<enabled>false</enabled>
+					</snapshots>
+				</repository>
+				<repository>
 					<id>eclipse-gemini-repo</id> <!-- defined in framework-parent -->
 					<url>https://download.eclipse.org/gemini/mvn/</url>
 					<releases>
