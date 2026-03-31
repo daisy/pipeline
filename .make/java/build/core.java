@@ -301,6 +301,7 @@ public class core {
 	private static Map<String,List<String>> diffTreeCache = new HashMap<>();
 	private static Map<String,List<String>> parentCommits = new HashMap<>();
 	private static Map<String,String> subrepoCommits = new HashMap<>();
+	private static Map<String,String> commitMessages = new HashMap<>();
 
 	/**
 	 * @return a {@code ModificationType}, or {@code null} if there are no modifications
@@ -342,18 +343,53 @@ public class core {
 				if (f == null)
 					break; }}
 		LinkedList<String> todo = new LinkedList<>();
+		LinkedList<String> todoSubrepo = new LinkedList<>();
 		todo.add("HEAD");
 		Set<String> done = new HashSet<>();
 		Map<String,String> versions = new HashMap<>();
 		File tmpPom = File.createTempFile("pom-", ".xml");
 		try {
 			loop: while (true) {
-				if (todo.isEmpty())
-					break;
+				if (todo.isEmpty()) {
+					if (subrepo == null || todoSubrepo.isEmpty())
+						break;
+					todo.addAll(todoSubrepo);
+					todoSubrepo.clear();
+					module = new File(module.toString().substring(subrepo.length() + 1));
+					pom = pom.substring(subrepo.length() + 1);
+					mainDir = mainDir.substring(subrepo.length() + 1);
+					docDir = docDir.substring(subrepo.length() + 1);
+					subrepo = null;
+				}
 				String commit = todo.poll();
 				if (!done.add(commit))
 					// we already reached this commit through another branch
-					continue;
+					continue; // loop
+				String commitMessage; {
+					if (commitMessages.containsKey(commit))
+						commitMessage = commitMessages.get(commit);
+					else {
+						commitMessage = getCommitMessage(commit);
+						commitMessages.put(commit, commitMessage);
+					}
+				}
+				// check for "Minor-Change" or "Major-Change" in commit message
+				{
+					Matcher m = Pattern
+						.compile("(?m)^(Minor|Major)-Change: *([^\\s]+) *$")
+						.matcher(commitMessage);
+					if (m.find()) {
+						String prf = module.toString().replace('\\', '/');
+						do {
+							String path = m.group(2).replace('\\', '/');
+							if (path.equals(prf) || path.startsWith(prf + "/"))
+								if ("Major".equals(m.group(1)))
+									return ModificationType.MAJOR;
+								else
+									modified = ModificationType.MINOR;
+						} while (m.find());
+					}
+				}
 				for (String parent : getParentCommits(commit)) {
 					List<String> changedFiles; {
 						if (diffTreeCache.containsKey(parent + " " + commit))
@@ -370,8 +406,34 @@ public class core {
 						}
 					}
 					if (!changedFiles.isEmpty()) {
-						boolean pomChanged = changedFiles.contains(pom);
-						if (pomChanged) {
+						if (subrepo != null && changedFiles.contains(subrepo + "/.gitrepo")) {
+							// continue looking for changes on subrepo branch after other branches have been checked
+							String subrepoCommit; {
+								if (subrepoCommits.containsKey(commit))
+									subrepoCommit = subrepoCommits.get(commit);
+								else {
+									Matcher m = Pattern
+										.compile("(?m)^subrepo:\n +subdir: *\"([^\"]*)\"\n +merged: *\"([0-9a-fA-F]{7,})\"")
+										.matcher(commitMessage);
+									if (m.find() && m.group(1).equals(subrepo)) {
+										subrepoCommit = m.group(2);
+										if (captureOutput(_x -> {}, "git", "rev-parse", "-q", "--verify", subrepoCommit) != 0)
+											subrepoCommit = null;
+									} else
+										subrepoCommit = null;
+									subrepoCommits.put(commit, subrepoCommit);
+								}
+							}
+							if (subrepoCommit != null)
+								todoSubrepo.add(subrepoCommit);
+							else
+								// If the subrepo commits haven't been fetched, or something else is
+								// wrong, fall back to assuming that the changes happened after the
+								// version update.
+								modified = ModificationType.PATCH; // note that we will miss out on any minor/major info
+						}
+						// check if the version number changed
+						if (changedFiles.contains(pom)) {
 							String version; {
 								version = versions.get(commit);
 								if (version == null) {
@@ -401,67 +463,17 @@ public class core {
 								}
 							}
 							if (!versionBefore.equals(version)) {
-								if (subrepo != null && changedFiles.contains(subrepo + "/.gitrepo")) {
-									// Check if the version update happened before or after any changes to src/main or doc.
-									if (changedFiles.stream().anyMatch(startsWith(mainDir + "/").or(startsWith(docDir + "/")))) {
-										String subrepoCommit; {
-											if (subrepoCommits.containsKey(commit))
-												subrepoCommit = subrepoCommits.get(commit);
-											else {
-												Matcher m = Pattern
-													.compile("(?m)^subrepo:\n +subdir: *\"([^\"]*)\"\n +merged: *\"([0-9a-fA-F]{7,})\"")
-													.matcher(getCommitMessage(commit));
-												if (m.find() && m.group(1).equals(subrepo)) {
-													subrepoCommit = m.group(2);
-													if (captureOutput(_x -> {}, "git", "rev-parse", "-q", "--verify", subrepoCommit) != 0)
-														subrepoCommit = null;
-												} else
-													subrepoCommit = null;
-												subrepoCommits.put(commit, subrepoCommit);
-											}
-										}
-										if (subrepoCommit != null) {
-											pom = pom.substring(subrepo.length() + 1);
-											mainDir = mainDir.substring(subrepo.length() + 1);
-											docDir = docDir.substring(subrepo.length() + 1);
-											subrepo = null;
-											todo.clear(); // this should already be the case
-											todo.add(subrepoCommit);
-											continue loop;
-										}
-										// If the subrepo commits haven't been fetched, or something else is
-										// wrong, fall back to assuming that the changes happened after the
-										// version update.
-										modified = ModificationType.PATCH; // note that we will miss out on any minor/major info
-									}
-								}
 								// We either found the non-snapshot, or we know there must be a non-snapshot
 								// following this version (and preceding the current version). In both cases
 								// we need to keep looking for changes, but not in this branch.
-								continue;
+								continue; // loop
 							}
+							// ignore other changes to pom
 						}
-						boolean srcChanged = changedFiles.stream().anyMatch(startsWith(mainDir + "/").or(startsWith(docDir + "/")));
-						if (pomChanged || srcChanged) {
-							Matcher m = Pattern
-								.compile("(?m)^(Minor|Major)-Change: *([^\\s]+) *$")
-								.matcher(getCommitMessage(commit));
-							if (m.find()) {
-								String prf = module.toString().replace('\\', '/');
-								if (subrepo != null)
-									prf = prf.substring(subrepo.length() + 1);
-								do {
-									String path = m.group(2).replace('\\', '/');
-									if (path.equals(prf) || path.startsWith(prf + "/"))
-										if ("Major".equals(m.group(1)))
-											return ModificationType.MAJOR;
-										else
-											modified = ModificationType.MINOR;
-								} while (m.find());
-							}
-							if (srcChanged) // ignore changes to pom (unless minor/major change indicated in commit message)
-								modified = ModificationType.PATCH.and(modified);
-						}
+						// check changes to src/main and doc directories
+						if (changedFiles.stream().anyMatch(startsWith(mainDir + "/")
+						                               .or(startsWith(docDir + "/"))))
+							modified = ModificationType.PATCH.and(modified);
 					}
 					// keep looking for changes on this branch
 					todo.add(parent);
