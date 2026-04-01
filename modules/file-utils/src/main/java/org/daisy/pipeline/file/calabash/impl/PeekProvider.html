@@ -29,10 +29,10 @@
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> net.sf.saxon.s9api.QName;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> net.sf.saxon.s9api.SaxonApiException;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.xproc.calabash.XProcStep;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.xproc.calabash.XProcStepProvider;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.xproc.XProcMonitor;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.daisy.pipeline.file.FileUtils;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.file.URLs;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.xproc.calabash.XProcStep;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.xproc.calabash.XProcStepProvider;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.xproc.XProcMonitor;
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.osgi.service.component.annotations.Component;
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  
@@ -80,7 +80,7 @@
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  			URI sourceUri = href.getBaseURI().resolve(href.getString());
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  			Path file; {
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  				<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  					file = FileUtils.asPath(sourceUri);
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  					file = URLs.asPath(sourceUri);
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  				} <strong class="jxr_keyword">catch</strong> (IllegalArgumentException|URISyntaxException e) {
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  					<strong class="jxr_keyword">throw</strong> XProcStep.raiseError(<strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Illegal value for href option: "</span> + href.getString(), e), step);
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  				}
@@ -170,6 +170,6 @@
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> }
 </pre>
 <hr>
-<div id="footer">Copyright © 2010–2025 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<div id="footer">Copyright © 2010–2026 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

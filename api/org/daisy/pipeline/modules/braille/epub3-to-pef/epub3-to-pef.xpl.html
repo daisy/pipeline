@@ -23,8 +23,8 @@
 <h2>
             Step <span class="name">epub3-to-pef.script</span> <span class="uri">{http://www.daisy.org/ns/pipeline/xproc}</span>
 </h2>
-<h1 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">EPUB 3 to braille</h1>
-<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">Transforms a EPUB 3 publication into an embosser ready braille document.</p>
+<h1 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">EPUB to braille</h1>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">Transforms a EPUB publication into an embosser ready braille document.</p>
 <a xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="homepage" href="/pipeline/Get-Help/User-Guide/Scripts/epub3-to-pef">
             Online documentation
         </a><div>Defined in:
@@ -59,7 +59,7 @@
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code"></td>
 <td>
-<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Input EPUB 3</h2>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Input EPUB</h2>
 <p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">The EPUB you want to convert to braille.
 
 You may alternatively use the EPUB package document (the OPF-file) if your input is a unzipped/"exploded" version of an EPUB.</p>
@@ -78,9 +78,25 @@ You may alternatively use the EPUB package document (the OPF-file) if your input
 </tr>
 <tr>
 <td width="150px;" class="nowrap name">
-<span class="">stylesheet</span><span class="details"></span>
+<span class="">braille-code</span><span class="details"></span>
 </td>
 <td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code"></td>
+<td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">formatting-standard</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code"></td>
+<td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">stylesheet</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri">embossed</td>
 <td width="10px" class="nowrap code"></td>
 <td><p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve" px:inherit="prepend">
 
@@ -120,14 +136,6 @@ even though the provided CSS is more specific.
 <tr>
 <td width="150px;" class="nowrap name">
 <span class="">stylesheet-parameters</span><span class="details"></span>
-</td>
-<td width="10px" class="nowrap uri"></td>
-<td width="10px" class="nowrap code"></td>
-<td></td>
-</tr>
-<tr>
-<td width="150px;" class="nowrap name">
-<span class="">braille-code</span><span class="details"></span>
 </td>
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code"></td>
@@ -211,6 +219,14 @@ even though the provided CSS is more specific.
 <tr>
 <td width="150px;" class="nowrap name">
 <span class="">duplex</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code"></td>
+<td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">saddle-stitch</span><span class="details"></span>
 </td>
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code"></td>

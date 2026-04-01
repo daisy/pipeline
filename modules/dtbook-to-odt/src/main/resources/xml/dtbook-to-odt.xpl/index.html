@@ -12,7 +12,7 @@
     
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
         <span property="name" content="DTBook to ODT">&lt;<span class="code-xml-element-local-name">h1</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;DTBook to ODT&lt;/<span class="code-xml-element-local-name">h1</span>&gt;</span>
-        <span property="desc" content="Transforms a DTBook (DAISY 3 XML) document into an ODT (Open Document Text).">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span>&gt;Transforms a DTBook (DAISY 3 XML) document into an ODT (Open Document Text).&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
+        <span property="desc" content="Transforms a DTBook (DAISY 3 XML) document into an ODT (OpenDocument Text).">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span>&gt;Transforms a DTBook (DAISY 3 XML) document into an ODT (OpenDocument Text).&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
         &lt;<span class="code-xml-element-local-name">a</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"homepage"</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-odt/"</span>&gt;
             Online documentation
         &lt;/<span class="code-xml-element-local-name">a</span>&gt;
@@ -45,7 +45,7 @@
     
     
     
-    <span rel="input">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">template</span>"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"false"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"anyFileURI"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"''"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">media-type</span>=<span class="code-xml-attribute-value">"<span property="media-type">application/vnd.oasis.opendocument.text-template</span>"</span>&gt;
+    <span rel="input">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">template</span>"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"false"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"anyFileURI"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"''"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">media-type</span>=<span class="code-xml-attribute-value">"<span property="media-type">application/vnd.oasis.opendocument.text-template</span>"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">reusable</span>=<span class="code-xml-attribute-value">"true"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
             <span property="name" content="Template">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Template&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
             <span property="desc" content="OpenOffice template file (.ott) that contains the style definitions.
@@ -63,36 +63,60 @@ See [Templating](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtb
     <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">asciimath</span>"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="ASCIIMATH">'ASCIIMATH'</span>"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipeinfo</span>&gt;
             <span rel="data-type"><span typeof="data-type" id="data-type-asciimath" resource="../dtbook-to-odt.xpl#data-type-asciimath"><link rel="doc" href="#data-type-asciimath">
-<span property="id" content="px:dtbook-to-odt.script-asciimath"><span property="definition" content="
-                &lt;choice&gt;
+<span property="id" content="px:dtbook-to-odt.script-asciimath"><span property="definition" content='
+                &lt;choice xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"&gt;
                     &lt;value&gt;ASCIIMATH&lt;/value&gt;
+                    &lt;a:documentation xml:lang="en"&gt;Keep (as plain text)&lt;/a:documentation&gt;
                     &lt;value&gt;MATHML&lt;/value&gt;
+                    &lt;a:documentation xml:lang="en" xml:space="preserve"&gt;Convert to MathML
+
+Convert ASCIIMath elements to MathML elements. The ASCIIMath encoding is used as the name of the
+frame that contains the formula object.&lt;/a:documentation&gt;
                 &lt;/choice&gt;
-            ">&lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">type</span>&gt;
-                &lt;<span class="code-xml-element-local-name">choice</span>&gt;
+            '>&lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">type</span>&gt;
+                &lt;<span class="code-xml-element-local-name">choice</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">a</span>=<span class="code-xml-attribute-value">"http://relaxng.org/ns/compatibility/annotations/1.0"</span>&gt;
                     &lt;<span class="code-xml-element-local-name">value</span>&gt;ASCIIMATH&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">lang</span>=<span class="code-xml-attribute-value">"en"</span>&gt;Keep (as plain text)&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
                     &lt;<span class="code-xml-element-local-name">value</span>&gt;MATHML&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">lang</span>=<span class="code-xml-attribute-value">"en"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;Convert to MathML
+
+Convert ASCIIMath elements to MathML elements. The ASCIIMath encoding is used as the name of the
+frame that contains the formula object.&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
                 &lt;/<span class="code-xml-element-local-name">choice</span>&gt;
             &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">type</span>&gt;</span></span></span></span>
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipeinfo</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
             <span property="name" content="ASCIIMath handling">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;ASCIIMath handling&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
-            <span property="desc" content="How to render ASCIIMath-encoded formulas.">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span>&gt;How to render ASCIIMath-encoded formulas.&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
+            <span property="desc" content='How to render ASCIIMath-encoded formulas.
+
+Mathematical content in the DTBook may be encoded as [MathML](https://en.wikipedia.org/wiki/MathML)
+elements, or as plain [ASCIIMath](https://asciimath.org/) text enclosed in `span` elements with a
+"asciimath" class. MathML elements are converted to formula objects. ASCIIMath can either be treated
+the same as MathML, or included as-is.'>&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;How to render ASCIIMath-encoded formulas.
+
+Mathematical content in the DTBook may be encoded as [MathML](https://en.wikipedia.org/wiki/MathML)
+elements, or as plain [ASCIIMath](https://asciimath.org/) text enclosed in `span` elements with a
+"asciimath" class. MathML elements are converted to formula objects. ASCIIMath can either be treated
+the same as MathML, or included as-is.&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
     
     <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">images</span>"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="EMBED">'EMBED'</span>"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipeinfo</span>&gt;
             <span rel="data-type"><span typeof="data-type" id="data-type-images" resource="../dtbook-to-odt.xpl#data-type-images"><link rel="doc" href="#data-type-images">
-<span property="id" content="px:dtbook-to-odt.script-images"><span property="definition" content="
-                &lt;choice&gt;
+<span property="id" content="px:dtbook-to-odt.script-images"><span property="definition" content='
+                &lt;choice xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"&gt;
                     &lt;value&gt;EMBED&lt;/value&gt;
+                    &lt;a:documentation xml:lang="en"&gt;Embed images in the OpenDocument package&lt;/a:documentation&gt;
                     &lt;value&gt;LINK&lt;/value&gt;
+                    &lt;a:documentation xml:lang="en"&gt;Link to external image files&lt;/a:documentation&gt;
                 &lt;/choice&gt;
-            ">&lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">type</span>&gt;
-                &lt;<span class="code-xml-element-local-name">choice</span>&gt;
+            '>&lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">type</span>&gt;
+                &lt;<span class="code-xml-element-local-name">choice</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">a</span>=<span class="code-xml-attribute-value">"http://relaxng.org/ns/compatibility/annotations/1.0"</span>&gt;
                     &lt;<span class="code-xml-element-local-name">value</span>&gt;EMBED&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">lang</span>=<span class="code-xml-attribute-value">"en"</span>&gt;Embed images in the OpenDocument package&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
                     &lt;<span class="code-xml-element-local-name">value</span>&gt;LINK&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">lang</span>=<span class="code-xml-attribute-value">"en"</span>&gt;Link to external image files&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
                 &lt;/<span class="code-xml-element-local-name">choice</span>&gt;
             &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">type</span>&gt;</span></span></span></span>
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipeinfo</span>&gt;

@@ -32,11 +32,12 @@
             <span property="name" content="Input OBFL">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Input OBFL&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
             <span property="desc" content='The OBFL document to convert.
 
-The OBFL document describes how the text is to be formatted and
-transcribed to braille. The text may also have been transcribed to
-braille already.
+An [OBFL (Open Braille Formatting
+Language)](https://mtmse.github.io/obfl/obfl-specification.html)
+document describes how text is to be formatted and transcribed to
+braille. The text may also have been transcribed to braille already.
 
-A typical use case is when the "OBFL" output of one of the braille
+The typical use case is when the "OBFL" output of one of the braille
 production scripts has been edited, and needs to be transformed to a
 formatted braille document.
 
@@ -75,11 +76,12 @@ supported:
   to encode braille present in the OBFL. If not specified, Unicode
   braille is assumed.'>&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;The OBFL document to convert.
 
-The OBFL document describes how the text is to be formatted and
-transcribed to braille. The text may also have been transcribed to
-braille already.
+An [OBFL (Open Braille Formatting
+Language)](https://mtmse.github.io/obfl/obfl-specification.html)
+document describes how text is to be formatted and transcribed to
+braille. The text may also have been transcribed to braille already.
 
-A typical use case is when the "OBFL" output of one of the braille
+The typical use case is when the "OBFL" output of one of the braille
 production scripts has been edited, and needs to be transformed to a
 formatted braille document.
 
@@ -131,7 +133,15 @@ supported:
 		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;</span>&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
     <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">include-pef</span>"</span><span class="script-inherited"> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"<span property="data-type">boolean</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="false">'false'</span>"</span></span>&gt;<span class="script-inherited">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
 			<span property="name" content="Include PEF">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Include PEF&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
-			<span property="desc" content="Whether or not to keep the intermediary PEF file (for debugging).">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;Whether or not to keep the intermediary PEF file (for debugging).&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
+			<span property="desc" content="Whether or not to keep the intermediary PEF file (for debugging).
+
+[PEF (Portable Embosser Format)](https://braillespecs.github.io/pef/pef-specification.html) is an
+internal data format used by DAISY Pipeline to represent the final formatted braille document,
+before it is converted to another embosser-ready format.">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;Whether or not to keep the intermediary PEF file (for debugging).
+
+[PEF (Portable Embosser Format)](https://braillespecs.github.io/pef/pef-specification.html) is an
+internal data format used by DAISY Pipeline to represent the final formatted braille document,
+before it is converted to another embosser-ready format.&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
 		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;</span>&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
     <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">output-file-format</span>"</span><span class="script-inherited"> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"<span property="data-type">medium</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="">''</span>"</span></span>&gt;<span class="script-inherited">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
 			<span property="name" content="Output file format">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Output file format&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
@@ -142,14 +152,16 @@ suited for the U.S., set the option to `(-daisy-locale: en-US)`. To use the brai
 used in the Netherlands and store to a file with extension ".brl", set the option to
 `(-daisy-locale: nl) AND (-daisy-file-extension: \.brl)`.
 
-If left blank, the braille will be stored in PEF format.'>&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;The file format in which to store the braille result.
+If left blank, the braille will be stored in
+[PEF](https://braillespecs.github.io/pef/pef-specification.html) (Portable Embosser Format).'>&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;The file format in which to store the braille result.
 
 The file format must be expressed in the media query syntax. For example, to select a file format
 suited for the U.S., set the option to `(-daisy-locale: en-US)`. To use the braille character set
 used in the Netherlands and store to a file with extension ".brl", set the option to
 `(-daisy-locale: nl) AND (-daisy-file-extension: \.brl)`.
 
-If left blank, the braille will be stored in PEF format.&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
+If left blank, the braille will be stored in
+[PEF](https://braillespecs.github.io/pef/pef-specification.html) (Portable Embosser Format).&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
 		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;</span>&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
     <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">preview-table</span>"</span><span class="script-inherited"> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"<span property="data-type">preview-table</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="">''</span>"</span></span>&gt;<span class="script-inherited">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
 			<span property="name" content="ASCII braille table for HTML preview">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;ASCII braille table for HTML preview&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>

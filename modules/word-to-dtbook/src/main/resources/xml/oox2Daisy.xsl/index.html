@@ -212,7 +212,7 @@
 					&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
 						
 						&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"string-length($title) = 0"</span>&gt;
-							&lt;<span class="code-xml-element-local-name">meta</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dc:Title"</span> <span class="code-xml-attribute-local-name">content</span>=<span class="code-xml-attribute-value">"{$docPropsCoreXml//cp:coreProperties/dc:title/text()}"</span>/&gt;
+							&lt;<span class="code-xml-element-local-name">meta</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dc:Title"</span> <span class="code-xml-attribute-local-name">content</span>=<span class="code-xml-attribute-value">"{($docPropsCoreXml//cp:coreProperties/dc:title/text()[not(.='')],'Unknown')[1]}"</span>/&gt;
 						&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
 						
 						&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;

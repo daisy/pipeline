@@ -234,7 +234,10 @@ the navigation document.</p>
 <td width="10px" class="nowrap code">'false'</td>
 <td>
 <h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Translate to braille</h2>
-<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Whether to produce a braille rendition.</p>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">Whether to produce a braille rendition.
+
+When this option is selected, a secondary rendition, containing the braille transcription of the text,
+will be added to the EPUB 3 publication.</p>
 </td>
 </tr>
 <tr>
@@ -261,11 +264,23 @@ marked up.</p>
 </tr>
 <tr>
 <td width="150px;" class="nowrap name">
+<span class="">braille-code</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">''</td>
+<td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
 <span class="">braille-translator</span><span class="details"></span>
 </td>
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code">'(translator:liblouis)'</td>
-<td><h2 xmlns="" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Braille translator query</h2></td>
+<td><p xmlns="" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">Features of the braille transformer.
+
+Features of the [braille transcription](http://daisy.github.io/pipeline/Get-Help/User-Guide/Braille/)
+for creating the braille rendition. Together with the "Braille code" option this determines the
+translator that is selected.</p></td>
 </tr>
 <tr>
 <td width="150px;" class="nowrap name">

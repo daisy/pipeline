@@ -24,7 +24,7 @@
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> net.sf.saxon.value.SequenceType;
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">import</strong> net.sf.saxon.value.StringValue;
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  
-<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.daisy.pipeline.file.FileUtils.normalizeURI;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.file.URLs;
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.osgi.service.component.annotations.Component;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  
@@ -84,7 +84,7 @@
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  						}
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  					}
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  					<strong class="jxr_keyword">boolean</strong> fragment = arguments.length &gt; 1 ? ((BooleanValue)arguments[1]).getBooleanValue() : <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> StringValue(normalizeURI(uri, !fragment).toASCIIString(), BuiltInAtomicType.STRING);
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> StringValue(URLs.normalize(uri, !fragment).toASCIIString(), BuiltInAtomicType.STRING);
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  				} <strong class="jxr_keyword">catch</strong> (XPathException e) {
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  					<strong class="jxr_keyword">throw</strong> e;
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  				} <strong class="jxr_keyword">catch</strong> (Throwable e) {
@@ -96,6 +96,6 @@
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  }
 </pre>
 <hr>
-<div id="footer">Copyright © 2010–2025 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<div id="footer">Copyright © 2010–2026 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>
