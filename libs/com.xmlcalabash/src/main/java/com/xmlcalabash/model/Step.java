@@ -610,8 +610,9 @@ public class Step extends SourceArtifact {
                         if (input.getParameterInput()) {
                             if (port != null) {
                                 error(
-                                    new XProcException(
-                                        XProcException.err_E0001, "Port not specified and multiple parameter input ports"));
+                                    new XProcException(XProcException.err_E0001,
+                                                       this,
+                                                       "Port not specified and multiple parameter input ports"));
                             }
                             port = input.getPort();
                         }
@@ -621,12 +622,16 @@ public class Step extends SourceArtifact {
 
             if (port == null) {
                 valid = false;
-                error(new XProcException(XProcException.err_E0001, "Port not specified and no primary parameter input port"));
+                error(new XProcException(XProcException.err_E0001,
+                                         this,
+                                         "Port not specified and no primary parameter input port"));
             } else {
                 Input input = getInput(port);
                 if (input == null || !input.getParameterInput()) {
                     valid = false;
-                    error(new XProcException(XProcException.err_E0001, "Port is not a parameter input port: " + port));
+                    error(new XProcException(XProcException.err_E0001,
+                                             this,
+                                             "Port is not a parameter input port: " + port));
                 }
             }
         }

@@ -259,6 +259,10 @@ public class XProcException extends RuntimeException {
         this(code, location, message, null);
     }
 
+    public XProcException(QName code, Step location, String message) {
+        this(code, location, message, null);
+    }
+
     public XProcException(QName code, TransformerException location, XdmNode message) {
         this(code, location, message, null);
     }
