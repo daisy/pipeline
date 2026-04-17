@@ -206,7 +206,11 @@ public class ScriptInput {
 		 * form a sequence.
 		 */
 		public Builder withInput(String port, InputStream source) {
-			Resource res = Resource.load(source, URI.create(generateFileName(port)), Resource.MEDIA_TYPE_UNKNOWN);
+			return withInput(port, source, Resource.MEDIA_TYPE_UNKNOWN);
+		}
+
+		public Builder withInput(String port, InputStream source, String mediaType) {
+			Resource res = Resource.load(source, URI.create(generateFileName(null, port, mediaType)), mediaType);
 			getSequence(port).add(addExtraResource(res));
 			return this;
 		}
@@ -245,6 +249,10 @@ public class ScriptInput {
 		}
 
 		private String generateFileName(String uri, String port) {
+			return generateFileName(null, port, null);
+		}
+
+		private String generateFileName(String uri, String port, String mediaType) {
 			String fileName = "";
 			if (uri != null)
 				try {
@@ -253,7 +261,7 @@ public class ScriptInput {
 				} catch (Throwable e) {
 				}
 			if ("".equals(fileName))
-				fileName = port + '-' + getSequence(port).size() + ".xml";
+				fileName = port + '-' + getSequence(port).size() + ScriptPort.getFileExtension(mediaType);
 			return fileName;
 		}
 

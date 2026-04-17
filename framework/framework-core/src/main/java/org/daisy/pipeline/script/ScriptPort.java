@@ -95,6 +95,10 @@ public interface ScriptPort {
 			if ("text/plain".equals(mediaType)
 			    || "text".equals(mediaType))
 				return ".txt";
+			if ("text/css".equals(mediaType))
+				return ".css";
+			if ("text/x-scss".equals(mediaType))
+				return ".scss";
 		}
 		return ".xml";
 	}
