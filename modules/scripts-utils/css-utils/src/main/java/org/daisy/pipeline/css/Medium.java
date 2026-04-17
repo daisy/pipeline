@@ -454,6 +454,7 @@ public class Medium implements Dimension.RelativeDimensionBase {
 				// escape characters)
 				if (!(value instanceof String
 				      || value instanceof Integer
+				      || value instanceof Long
 				      || value instanceof Boolean
 				      || value instanceof Dimension))
 					throw new IllegalArgumentException();
@@ -479,6 +480,8 @@ public class Medium implements Dimension.RelativeDimensionBase {
 		protected Integer parseInteger(Object value) throws IllegalArgumentException {
 			if (value instanceof Integer)
 				return (Integer)value;
+			else if (value instanceof Long)
+				return ((Long)value).intValue();
 			else if (value instanceof TermInteger)
 				return ((TermInteger)value).getIntValue();
 			else if (value instanceof String)
@@ -549,12 +552,12 @@ public class Medium implements Dimension.RelativeDimensionBase {
 						throw e;
 					}
 				}
-			else if (value instanceof Integer)
+			else if (value instanceof Integer || value instanceof Long)
 				// Grid based media may support integer lengths.
 				// Interpreting these lengths (e.g. as multiple of em or ch) is left up to
 				// subclasses.  Here we assume we are parsing a media query (see MediaQueryParser),
 				// so the exact interpretation does not matter.
-				return new Dimension((Integer)value, null);
+				return new Dimension(parseInteger(value), null);
 			else if (value instanceof TermInteger)
 				return parseLength(((TermInteger)value).getIntValue(), feature);
 			else

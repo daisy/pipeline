@@ -231,7 +231,8 @@ even though the provided CSS is more specific.
                                                         for $duplex in $duplex return map:entry('duplex',$duplex),
                                                         for $saddle-stitch in $saddle-stitch return map:entry('saddle-stitch',$saddle-stitch),
                                                         map:entry('hyphenation-at-page-breaks',$hyphenation-at-page-breaks),
-                                                        map:entry('allow-text-overflow-trimming',$allow-text-overflow-trimming))))"/>
+                                                        map:entry('allow-text-overflow-trimming',$allow-text-overflow-trimming),
+                                                        map:entry('preview-table',$preview-table))))"/>
             <p:with-option name="apply-document-specific-stylesheets" select="$apply-document-specific-stylesheets"/>
             <p:with-option name="transform"
                            select="concat($braille-code,($transform,'(translator:liblouis)(formatter:dotify)')[not(.='')][1])"/>

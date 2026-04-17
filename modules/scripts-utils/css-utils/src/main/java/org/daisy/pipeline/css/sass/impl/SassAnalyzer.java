@@ -119,35 +119,8 @@ public class SassAnalyzer {
 				@Override
 				public CSSInputStream read(CSSSource source) throws IOException {
 					if (source.type == CSSSource.SourceType.URL) {
-						URL url = (URL)source.source;
-						if (url != null && !url.toString().endsWith(".css") && !url.toString().endsWith(".scss"))
-							// check whether the resource exists when ".scss" is added
-							try {
-								return read(new CSSSource(new URL(url.toString() + ".scss"), source.encoding, source.mediaType));
-							} catch (IOException e) {
-								// ... or ".css" is added
-								try {
-									return read(new CSSSource(new URL(url.toString() + ".css"), source.encoding, source.mediaType));
-								} catch (IOException ee) {
-								}
-								// ... or "_" and ".scss" are added
-								try {
-									String fileName = url.toString();
-									fileName = fileName.substring(fileName.lastIndexOf('/') + 1, fileName.length());
-									return read(new CSSSource(URLs.asURL(URLs.asURI(url).resolve("_" + fileName + ".scss")),
-									                          source.encoding,
-									                          source.mediaType));
-								} catch (IOException ee) {
-								}
-								// ... or "_index.scss" is added
-								try {
-									return read(new CSSSource(new URL(url.toString() + "/_index.scss"), source.encoding, source.mediaType));
-								} catch (IOException ee) {
-								}
-								// otherwise fail
-								throw e;
-							}
 						if (uriResolver != null) {
+							URL url = (URL)source.source;
 							try {
 								// NetworkProcessor.fetch() also does resolve() but we need an additional resolve() to give
 								// CSSInputStream the correct base URL
@@ -155,6 +128,33 @@ public class SassAnalyzer {
 								if (resolved != null)
 									source = new CSSSource(new URL(resolved.getSystemId()), source.encoding, source.mediaType);
 							} catch (TransformerException e) {
+								// check whether the resource exists when ".scss" is added
+								if (url != null && !url.toString().endsWith(".css") && !url.toString().endsWith(".scss")) {
+									try {
+										return read(new CSSSource(new URL(url.toString() + ".scss"), source.encoding, source.mediaType));
+									} catch (IOException ee) {
+									}
+									// ... or ".css" is added
+									try {
+										return read(new CSSSource(new URL(url.toString() + ".css"), source.encoding, source.mediaType));
+									} catch (IOException ee) {
+									}
+									// ... or "_" and ".scss" are added
+									try {
+										String fileName = url.toString();
+										fileName = fileName.substring(fileName.lastIndexOf('/') + 1, fileName.length());
+										return read(new CSSSource(URLs.asURL(URLs.asURI(url).resolve("_" + fileName + ".scss")),
+										                          source.encoding,
+										                          source.mediaType));
+									} catch (IOException ee) {
+									}
+									// ... or "_index.scss" is added
+									try {
+										return read(new CSSSource(new URL(url.toString() + "/_index.scss"), source.encoding, source.mediaType));
+									} catch (IOException ee) {
+									}
+								}
+								// otherwise fail
 								throw new IOException(e);
 							}
 						}

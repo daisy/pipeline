@@ -111,7 +111,7 @@ public class StylesheetParametersResource extends AuthenticatedResource {
 			return null;
 		}
 		Document doc = null;
-		ZippedJobResources data; {
+		JobResources data; {
 			if (representation == null)
 				// everything will be in the query string
 				data = null;
@@ -191,7 +191,8 @@ public class StylesheetParametersResource extends AuthenticatedResource {
 					else if ("http".equals(href.getScheme()) || "https".equals(href.getScheme()))
 						builder.withInput("stylesheet",
 						                  new ByteArrayInputStream(
-							                  ("@import url(\"" + href + "\");").getBytes(StandardCharsets.UTF_8)));
+						                      ("@import url(\"" + href + "\");").getBytes(StandardCharsets.UTF_8)),
+						                  "text/css");
 					else
 						builder.withInput("stylesheet", href);
 				} catch (IllegalArgumentException|FileNotFoundException e) {
@@ -219,7 +220,7 @@ public class StylesheetParametersResource extends AuthenticatedResource {
 		}
 		URI contextBase = URI.create("context:/");
 		uriResolver = fallback(uriResolver, simpleURIResolver);
-		URIResolver resolver = data == null
+		URIResolver resolver = inputs.getResources() == null
 			? uriResolver
 			: new URIResolver() {
 					@Override
@@ -242,7 +243,7 @@ public class StylesheetParametersResource extends AuthenticatedResource {
 					}
 				};
 		URLStreamHandlerFactory resetURLStreamHandlerFactory = null;
-		if (data != null)
+		if (inputs.getResources() != null)
 			resetURLStreamHandlerFactory = setURLStreamHandlerFactory(
 				new URLStreamHandlerFactory() {
 					@Override
@@ -257,7 +258,7 @@ public class StylesheetParametersResource extends AuthenticatedResource {
 										}
 										@Override
 										public InputStream getInputStream() throws IOException {
-											Resource r = data.getResource(URLs.relativize(contextBase, URLs.asURI(u)));
+											Resource r = inputs.getResources().getResource(URLs.relativize(contextBase, URLs.asURI(u)));
 											if (r == null)
 												throw new FileNotFoundException();
 											return r.read();
@@ -273,7 +274,12 @@ public class StylesheetParametersResource extends AuthenticatedResource {
 		try {
 			Function<URI,Source> handleZippedInput = s -> {
 				try {
-					return resolveResource(s, inputs).readAsSource();
+					Resource r = resolveResource(s, inputs);
+					URI u = r.getPath();
+					if (!u.isAbsolute())
+						// we know that u is a relative URI and that data contains the file
+						r = r.copy(URLs.resolve(contextBase, u));
+					return r.readAsSource();
 				} catch (IOException e) {
 					throw new UncheckedIOException(e);
 				}
@@ -327,7 +333,7 @@ public class StylesheetParametersResource extends AuthenticatedResource {
 				return dom;
 			}
 		} finally {
-			if (data != null)
+			if (inputs.getResources() != null)
 				setURLStreamHandlerFactory(resetURLStreamHandlerFactory);
 		}
 	}

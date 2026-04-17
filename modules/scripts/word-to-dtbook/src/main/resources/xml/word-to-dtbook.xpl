@@ -304,7 +304,7 @@ if MathML is present in the document.</p>
 		</p:documentation>
 	</p:import>
 
-	<p:xslt template-name="main" cx:serialize="true" px:message="Converting DOCX to DTBook" px:progess="1/2">
+	<p:xslt template-name="main" cx:serialize="true" px:message="Converting DOCX to DTBook" px:progress="1/2">
 		<p:input port="source">
 			<p:empty/>
 		</p:input>
@@ -381,7 +381,7 @@ if MathML is present in the document.</p>
 	<!-- DTBOOK CLEANUP: apply cleanup routines and optionally tag sentences -->
 	<!-- ******************************************************************* -->
 
-	<p:for-each px:message="Cleaning DTBook(s)" px:progess="1/2">
+	<p:for-each px:message="Cleaning DTBook(s)" px:progress="1/2">
 		<p:variable name="output-name" select="concat(replace(replace(base-uri(.),'^.*/([^/]+)$','$1'),'\.[^\.]*$',''),'.xml')"/>
 		<p:group name="cleaned" px:message="Cleaning '{$output-name}' ...">
 			<p:output port="result"/>
