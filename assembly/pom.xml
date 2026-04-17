@@ -64,14 +64,14 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.15.6</version>
+        <version>1.15.7-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>modules-bom</artifactId>
-        <version>1.15.4</version>
+        <version>1.15.5-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
