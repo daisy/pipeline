@@ -8,4 +8,4 @@ if (new URLSearchParams(window.location.search).get("post-download") == "true") 
 </script>
 
 If you find DAISY Pipeline useful, please help us by donating to support its
-ongoing maintenance. [Support out work](https://daisy.org/pipelineAppSponsor).
+ongoing maintenance. [Support our work](https://daisy.org/pipelineAppSponsor).
