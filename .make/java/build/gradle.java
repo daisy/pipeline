@@ -54,6 +54,7 @@ public class gradle {
 		cmd.add(gradlew.getPath());
 		if (properties != null)
 			cmd.addAll(properties);
+		cmd.add("--no-daemon");
 		for (String a : args)
 			cmd.add(a);
 		try {
