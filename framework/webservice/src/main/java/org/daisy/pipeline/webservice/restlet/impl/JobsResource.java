@@ -134,7 +134,7 @@ public class JobsResource extends AuthenticatedResource {
                         // is cURL, but the ZIP file is not identical to the uploaded file
                         logger.debug("Reading zip file");
                         try {
-                                File tmp = File.createTempFile("p2ws", ".zip", new File(getConfiguration().getTmpDir()));
+                                File tmp = File.createTempFile("pipeline-ws-", ".zip", new File(getConfiguration().getTmpDir()));
                                 try (FileOutputStream fos = new FileOutputStream(tmp)) {
                                         representation.write(fos);
                                 }

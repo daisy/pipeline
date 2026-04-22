@@ -34,6 +34,7 @@ import org.daisy.pipeline.core.transformer.AbstractTransformerLoader;
 import org.daisy.pipeline.core.transformer.TransformerHandler;
 
 // Pipeline 2
+import static org.daisy.common.file.Files.deleteDir;
 import org.daisy.common.file.URLs;
 import org.daisy.common.properties.Properties;
 import org.daisy.common.spi.annotations.LoadWith;
@@ -94,14 +95,16 @@ public class Pipeline1ScriptProvider implements ScriptServiceProvider {
 			                                          URLs.getCurrentJAR(Pipeline1ScriptProvider.class).toPath());
 			// In order to support TDF files with a ${transformer_dir} parameter, the JAR must be exploded.
 			try (FileSystem fs = FileSystems.newFileSystem(transformersDir, (ClassLoader)null)) {
-				transformersDir = copyFolder(fs.getPath("/"), Files.createTempDirectory(null));
+				transformersDir = copyFolder(fs.getPath("/"),
+				                             Files.createTempDirectory("pipeline-pipeline1-transformers-"),
+				                             true);
 			}
 			// (Note that without this requirement, we would still have to extract the JAR, because URL
 			// and ClassLoader do not support nested JARs, however we wouldn't have to explode it.)
-			//transformersDir = copyFile(transformersDir, Files.createTempFile(null, ".jar"));
-			//transformersDir.toFile().deleteOnExit();
+			//transformersDir = copyFile(transformersDir, Files.createTempFile(null, ".jar"), true);
 			//transformersDir = FileSystems.newFileSystem(transformersDir, (ClassLoader)null).getPath("/");
-			tempDir = Files.createTempDirectory(null).toFile();
+			tempDir = Files.createTempDirectory("pipeline-pipeline1-").toFile();
+			tempDir.deleteOnExit(); // delete if empty (deleting recursively is handled in close())
 			scripts = new ArrayList<>();
 			try (ThreadLocalEnvironment _env = new ThreadLocalEnvironment(getClass().getClassLoader(),
 			                                                              System.getProperties())) {
@@ -274,10 +277,8 @@ public class Pipeline1ScriptProvider implements ScriptServiceProvider {
 						for (String jar : jars) {
 							Path jarFile = tdfFile.getParent().resolve(jar);
 							// copy to temporary file if needed, because URL and ClassLoader do not support nested JARs
-							if (jarFile.toUri().toString().matches("^jar:.+\\.jar$")) {
-								jarFile = copyFile(jarFile, Files.createTempFile(null, ".jar"));
-								jarFile.toFile().deleteOnExit();
-							}
+							if (jarFile.toUri().toString().matches("^jar:.+\\.jar$"))
+								jarFile = copyFile(jarFile, Files.createTempFile("pipeline-pipeline1-", ".jar"), true);
 							addURL(jarFile.toUri().toURL());
 						}
 					} catch (MalformedURLException e) {
@@ -294,36 +295,32 @@ public class Pipeline1ScriptProvider implements ScriptServiceProvider {
 		}
 	}
 
-	private static Path copyFile(Path source, Path target) throws IOException {
+	private static Path copyFile(Path source, Path target, boolean deleteOnExit) throws IOException {
 		Files.copy(source, Files.newOutputStream(target));
+		if (deleteOnExit)
+			target.toFile().deleteOnExit();
 		return target;
 	}
 
-	private static Path copyFolder(Path source, Path target) throws IOException {
+	private static Path copyFolder(Path source, Path target, boolean deleteOnExit) throws IOException {
 		Files.walkFileTree(source, new SimpleFileVisitor<Path>() {
 				@Override
 				public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-					Files.createDirectories(target.resolve(source.relativize(dir).toString()));
+					Path newDir = target.resolve(source.relativize(dir).toString());
+					Files.createDirectories(newDir);
+					if (deleteOnExit)
+						newDir.toFile().deleteOnExit();
 					return FileVisitResult.CONTINUE;
 				}
 				@Override
 				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-					Files.copy(file, target.resolve(source.relativize(file).toString()));
+					Path newFile = target.resolve(source.relativize(file).toString());
+					Files.copy(file, newFile);
+					if (deleteOnExit)
+						newFile.toFile().deleteOnExit();
 					return FileVisitResult.CONTINUE;
 				}
 			});
 		return target;
-	}
-
-	private static boolean deleteDir(File dir) {
-		File[] files = dir.listFiles();
-		if (files != null)
-			for (File f : files) {
-				if (f.isDirectory()) {
-					deleteDir(f);
-				}
-				f.delete();
-			}
-		return dir.delete();
 	}
 }

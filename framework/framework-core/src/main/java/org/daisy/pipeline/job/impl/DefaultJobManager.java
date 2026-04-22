@@ -91,7 +91,10 @@ public class DefaultJobManager implements JobManager {
                                         return Optional.absent();
                                 else
                                         singleJob = j;
-                return Optional.fromNullable(singleJob);
+                // FIXME: because of a bug in PersistentJobStorage.iterator(), we can
+                // not simply return singleJob, but we need to call get() to get an
+                // up to date PersistentJob object
+                return getJob(singleJob.getId());
         }
 
         @SuppressWarnings("unchecked") // safe cast to Iterable<Job>

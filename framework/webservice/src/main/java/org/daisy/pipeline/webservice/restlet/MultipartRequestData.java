@@ -83,7 +83,7 @@ public class MultipartRequestData {
 			FileItem fi = it.next();
 			if (fi.getFieldName().equals(dataFieldName)) {
 				logger.debug("Reading zip file");
-				File file = File.createTempFile("p2ws", ".zip", tmpdir);
+				File file = File.createTempFile("pipeline-ws-", ".zip", tmpdir);
 				fi.write(file);
 				// re-opening the file after writing to it
 				File file2 = new File(file.getAbsolutePath());

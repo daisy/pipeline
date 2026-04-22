@@ -75,7 +75,7 @@ public abstract class JarIsolatedClassLoader extends URLClassLoader {
 			Path realJar = jar;
 			if (jar.toUri().toString().matches("^jar:.+\\.jar$")) {
 				try {
-					realJar = Files.createTempFile(null, ".jar");
+					realJar = Files.createTempFile("pipeline-classpath-", ".jar");
 					Files.copy(jar, Files.newOutputStream(realJar));
 				} catch (IOException e) {
 					throw new RuntimeException(e);
