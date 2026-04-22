@@ -92,11 +92,10 @@ public class MathCAT extends SingleInSingleOutXMLTransformer implements TTSInput
 				// extract all files within the rules directory
 				File dir;
 				try {
-					dir = Files.createTempDirectory("pipeline-").toFile().getCanonicalFile();
+					dir = Files.createTempDirectory("pipeline-mathcat-").toFile().getCanonicalFile();
 				} catch (Exception e) {
 					throw new RuntimeException("Could not create temporary directory", e);
 				}
-				dir.deleteOnExit();
 				copyFromJarRecursively("rules/", dir, true);
 				logger.debug("Using MathCAT version " + version);
 				rulesDir = dir;
@@ -260,7 +259,7 @@ public class MathCAT extends SingleInSingleOutXMLTransformer implements TTSInput
 	}
 
 	private static boolean mkdirs(File file, boolean deleteOnExit) {
-		if (deleteOnExit)
+		if (!deleteOnExit)
 			return file.mkdirs();
 		if (file.exists())
 			return false;

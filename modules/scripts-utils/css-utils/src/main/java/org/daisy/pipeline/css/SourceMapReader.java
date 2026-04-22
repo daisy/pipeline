@@ -40,7 +40,7 @@ public final class SourceMapReader {
 						if (!s.isString())
 							throw new RuntimeException("Expected string");
 						// the source can be either
-						if (s.asString().matches("^\\w+:.*"))
+						if (s.asString().matches("^(file|jar|https?):.*")) // can not match on /\w+:/ because Windows file paths can start with D:/
 							// an absolute URL (with encoded path)
 							sources.add(URLs.asURL(URLs.resolve(base, URLs.asURI(s.asString()))));
 						else

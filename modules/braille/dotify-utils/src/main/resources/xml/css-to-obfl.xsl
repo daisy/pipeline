@@ -432,7 +432,7 @@
                                             <xsl:param name="volume-area-counter-set" as="map(xs:string,xs:integer)" select="$volume-area-counter-set"/>
                                             <xsl:on-completion>
                                                 <xsl:for-each select="map:keys($volume-area-counter-set)">
-                                                    <xsl:call-template name="pf:warn">
+                                                    <xsl:call-template name="pf:debug">
                                                         <xsl:with-param name="msg">
                                                             counter-set: {} {}: ignored: no content in this {} volume area with this page counter.
                                                         </xsl:with-param>

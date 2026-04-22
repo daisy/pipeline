@@ -34,6 +34,7 @@ public class BundledResourcePath extends AbstractResourcePath {
 	private File unpackDir = null;
 	private boolean unpacking = false;
 	private boolean executables = false;
+	private Class<?> context = null;
 	
 	/* The included resources as relative paths */
 	private Collection<URI> resources = null;
@@ -83,6 +84,7 @@ public class BundledResourcePath extends AbstractResourcePath {
 			unpacking = true;
 		if (properties.get(EXECUTABLES) != null && (Boolean)properties.get(EXECUTABLES))
 			executables = true;
+		this.context = context;
 	}
 	
 	public URI getIdentifier() {
@@ -112,7 +114,7 @@ public class BundledResourcePath extends AbstractResourcePath {
 		if (unpackDir == null) {
 			File tmpDirectory; {
 				try {
-					tmpDirectory = createTempDirectory("pipeline-").toFile(); }
+					tmpDirectory = createTempDirectory("pipeline-" + context.getSimpleName() + "-").toFile(); }
 				catch (Exception e) {
 					throw new RuntimeException("Could not create temporary directory", e); }
 				tmpDirectory.deleteOnExit();

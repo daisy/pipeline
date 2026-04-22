@@ -199,7 +199,7 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 	protected void activate() {
 		logger.debug("Loading liblouis service");
 		try {
-			tempDir = normalize(createTempDirectory("pipeline-").toFile());
+			tempDir = normalize(createTempDirectory("pipeline-liblouis-").toFile());
 			tempDir.deleteOnExit();
 		} catch (Exception e) {
 			throw new RuntimeException("Could not create temporary directory", e);
@@ -306,6 +306,7 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 						public LiblouisTableJnaImpl _apply() {
 							MutableQuery q = mutableQuery(query);
 							String table = null;
+							boolean suppressWarnings = false;
 							String charset = null;
 							TableInfo tableInfo = null;
 							boolean whiteSpace = false;
@@ -327,10 +328,14 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 								charset = q.containsKey("charset")
 									? q.removeOnly("charset").getValue().get()
 									: q.removeOnly("braille-charset").getValue().get();
-							if (q.containsKey("table") || q.containsKey("liblouis-table")) {
+							if (q.containsKey("table") || q.containsKey("liblouis-table") || q.containsKey("table-no-warnings")) {
+								suppressWarnings = q.containsKey("table-no-warnings");
 								table = q.containsKey("table")
 									? q.removeOnly("table").getValue().get()
-									: q.removeOnly("liblouis-table").getValue().get();
+									: suppressWarnings
+										? q.removeOnly("table-no-warnings").getValue().get()
+										: q.removeOnly("liblouis-table").getValue().get();
+
 								tableInfo = new TableInfo(table);
 								if (q.containsKey("locale")) {
 									// locale is shorthand for language + region
@@ -449,7 +454,8 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 								catch (CompilationException e) {
 									__apply(
 										warn("Could not compile table " + table));
-									logger.warn("Could not compile table", e); }}
+									if (!suppressWarnings)
+										logger.warn("Could not compile table", e); }}
 							throw new NoSuchElementException();
 						}
 					}

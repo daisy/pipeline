@@ -220,15 +220,15 @@ public class OBFLToPEFStep extends DefaultStep implements XProcStep {
 							: brailleTranslatorRegistry.getWithHyphenator(mainQuery)
 						).iterator().next();
 					} catch (NoSuchElementException e) {
-						if (!"".equals(textTransformAndHyphenationResourceDefinitions))
-							throw new XProcException(
-								"No translator available for style type '" + styleType + "', mode '" + mode
-								+ "', locale '" + locale + "' and CSS rules:\n" + textTransformAndHyphenationResourceDefinitions);
-						else
-							throw new XProcException(
-								step.getNode(),
-								"No translator available for style type '" + styleType + "', mode '" + mode
-								+ "' and locale '" + locale + "'");
+						String errorMessage = "No translator available for ";
+						//errorMessage += ("style type '" + styleType + "', "); // skip because will in practice always be text/css
+						errorMessage += ("mode '" + mode + "', ");
+						if (!"".equals(textTransformAndHyphenationResourceDefinitions)) {
+							errorMessage += ("locale '" + locale + "' ");
+							errorMessage += ("and CSS rules:\n" + textTransformAndHyphenationResourceDefinitions);
+						} else
+							errorMessage += ("and locale '" + locale + "'");
+						throw new XProcException(step.getNode(), errorMessage);
 					}
 				}
 				String counterStyleDefinitions = getOption(_css_counter_style_definitions, "");

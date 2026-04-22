@@ -79,8 +79,9 @@ public class LiblouisDisplayTableProvider extends AbstractTableProvider {
 			String id = q.removeOnly("id").getValue().get();
 			if (!q.isEmpty())
 				return empty;
-			q.add("liblouis-table", id); }
-		if (!q.containsKey("liblouis-table"))
+			// we don't know whether the ID is actually a table that can be compiled, so suppress warnings
+			q.add("table-no-warnings", id); }
+		if (!(q.containsKey("liblouis-table") || q.containsKey("table") || q.containsKey("table-no-warnings")))
 			q.add("type", "display");
 		return filter(
 			transform(

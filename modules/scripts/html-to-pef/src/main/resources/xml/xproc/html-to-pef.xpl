@@ -59,8 +59,8 @@
                     <a:documentation xml:lang="en" xml:space="preserve">United States and Canada (BANA)
 
 The document is formatted according to the rules of the [Braille Authority of North America
-(BANA)](https://www.brailleauthority.org/). [UEB](https://iceb.org/) is used as the braille code for
-all text.
+(BANA)](https://www.brailleauthority.org/). Note that this does not select
+[UEB](https://iceb.org/) as the braille code automatically.
 
 Equivalent to specifying the value
 `https://raw.githubusercontent.com/daisy/braille-stylesheets/refs/heads/main/bana/bana.scss` for the

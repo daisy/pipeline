@@ -50,7 +50,7 @@ public class OSXSpeechService implements TTSService {
 			try {
 				File tmpDirectory; {
 					try {
-						tmpDirectory = Files.createTempDirectory("pipeline-").toFile();
+						tmpDirectory = Files.createTempDirectory("pipeline-rococoa-").toFile();
 					} catch (Exception e) {
 						throw new RuntimeException("Could not create temporary directory", e);
 					}
@@ -58,6 +58,7 @@ public class OSXSpeechService implements TTSService {
 				}
 				dylibFile = new File(tmpDirectory, "librococoa.dylib");
 				dylibFile.createNewFile();
+				dylibFile.deleteOnExit();
 				URL dylibURL = URLs.getResourceFromJAR("/native/librococoa-0.10.0.dylib", OSXSpeechService.class);
 				dylibURL.openConnection();
 				try (FileOutputStream writer = new FileOutputStream(dylibFile);
