@@ -93,7 +93,10 @@ public class DefaultCSSSourceReader implements CSSSourceReader {
 		case URL:
 			URL url = (URL)source.source;
 			if (!supportsMediaType(source.mediaType, url))
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException(
+					String.format("Media type of source not supported: {url: %s, media-type: %s}",
+					              url,
+					              source.mediaType));
 			if (source.encoding != null)
 				return new CSSInputStream(
 					network.fetch(url, source.encoding, true, false),
