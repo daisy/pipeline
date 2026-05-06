@@ -17,6 +17,12 @@ public interface StyleSheet extends Rule<RuleBlock<?>>{
     public StyleSheet filter(MediaSpec medium);
 
     /**
+     * Filters out rules in this style sheet that do not match the given {@link FeatureSpec}. Guaranteed
+     * to not contain any instances of {@link RuleSupports}.
+     */
+    public StyleSheet filter(FeatureSpec userAgent);
+
+    /**
      * The origin of the style sheet (user agent, user, or author). 
      * @author radek
      */

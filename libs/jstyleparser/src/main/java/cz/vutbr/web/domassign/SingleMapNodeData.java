@@ -11,6 +11,7 @@ import java.util.Map;
 import cz.vutbr.web.css.CSSFactory;
 import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.Declaration;
+import cz.vutbr.web.css.MediaSpec;
 import cz.vutbr.web.css.NodeData;
 import cz.vutbr.web.css.SupportedCSS;
 import cz.vutbr.web.css.Term;
@@ -29,6 +30,7 @@ public class SingleMapNodeData implements NodeData, Cloneable {
 	
 	private final DeclarationTransformer transformer;
 	private final SupportedCSS css;
+	private final MediaSpec media;
 	
 	protected Map<String, Quadruple> map;
 	
@@ -37,8 +39,13 @@ public class SingleMapNodeData implements NodeData, Cloneable {
 	}
 
 	public SingleMapNodeData(DeclarationTransformer transformer, SupportedCSS css) {
+		this(transformer, css, null);
+	}
+
+	public SingleMapNodeData(DeclarationTransformer transformer, SupportedCSS css, MediaSpec media) {
 		this.transformer = transformer;
 		this.css = css;
+		this.media = media;
 		this.map = new HashMap<String, Quadruple>(css != null ? css.getTotalProperties() : 16, 1.0f);
 	}
 	
@@ -88,7 +95,7 @@ public class SingleMapNodeData implements NodeData, Cloneable {
 		Map<String,Term<?>> terms = 
 			new HashMap<String, Term<?>>(COMMON_DECLARATION_SIZE);
 		
-		boolean result = transformer.parseDeclaration(d, properties, terms);
+		boolean result = transformer.parseDeclaration(d, properties, terms, media);
 		
 		// in case of false do not insert anything
 		if(!result) return this;

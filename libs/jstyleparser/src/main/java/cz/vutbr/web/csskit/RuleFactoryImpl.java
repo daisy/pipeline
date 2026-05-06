@@ -7,6 +7,8 @@ import org.w3c.dom.Element;
 
 import cz.vutbr.web.css.CombinedSelector;
 import cz.vutbr.web.css.Declaration;
+import cz.vutbr.web.css.FeatureCondition;
+import cz.vutbr.web.css.FeatureQuery;
 import cz.vutbr.web.css.MediaExpression;
 import cz.vutbr.web.css.MediaQuery;
 import cz.vutbr.web.css.MediaQueryList;
@@ -17,6 +19,7 @@ import cz.vutbr.web.css.RuleMargin;
 import cz.vutbr.web.css.RuleMedia;
 import cz.vutbr.web.css.RulePage;
 import cz.vutbr.web.css.RuleSet;
+import cz.vutbr.web.css.RuleSupports;
 import cz.vutbr.web.css.RuleViewport;
 import cz.vutbr.web.css.Selector;
 import cz.vutbr.web.css.StyleSheet;
@@ -86,10 +89,18 @@ public class RuleFactoryImpl implements RuleFactory {
 	    return new MediaQueryImpl();
 	}
 	
-    public MediaExpression createMediaExpression() {
-        return new MediaExpressionImpl();
-    }
-    
+	public MediaExpression createMediaExpression() {
+		return new MediaExpressionImpl();
+	}
+
+	public RuleSupports createSupports(FeatureCondition condition) {
+		return new RuleSupportsImpl(condition);
+	}
+
+	public FeatureQuery createFeatureQuery() {
+		return new FeatureQueryImpl();
+	}
+
 	/* (non-Javadoc)
 	 * @see cz.vutbr.web.css.RuleFactory#createPage()
 	 */

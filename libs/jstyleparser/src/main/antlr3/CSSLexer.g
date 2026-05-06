@@ -46,6 +46,7 @@ tokens {
 	VALUE;
 	MEDIA_QUERY;
 	MEDIA_QUERY_NO_VALUE;
+	FEATURE_QUERY;
 	
 	INVALID_STRING;
 	INVALID_SELECTOR;
@@ -146,6 +147,18 @@ IMPORTANT
     : 'important'
     ;
 
+NOT
+    : 'not'
+    ;
+
+AND
+    : 'and'
+    ;
+
+OR
+    : 'or'
+    ;
+
 /** Identifier */
 IDENT	
 	: IDENT_MACR
@@ -198,6 +211,10 @@ NAMESPACE
 
 MEDIA
 	: '@media'
+	;
+
+SUPPORTS
+	: '@supports'
 	;
 
 PAGE

@@ -375,6 +375,26 @@ atstatement returns [cz.vutbr.web.css.RuleBlock<?> stmnt]
 		   $stmnt = preparator.prepareRuleMedia(rules, mediaList);
 		   this.preventImports = true;
 	   }
+    | ^(SUPPORTS ^(FEATURE_QUERY c=supports_condition)
+            ( rs=ruleset {
+                if (rules == null) rules = new ArrayList<cz.vutbr.web.css.RuleBlock<?>>();
+                if (rs != null) {
+                    rules.add(rs);
+                    debug("Inserted ruleset ({}) into @supports", rules.size());
+                }
+              }
+            | at=atstatement {
+                if (rules == null) rules = new ArrayList<cz.vutbr.web.css.RuleBlock<?>>();
+                if (at != null) {
+                    rules.add(at);
+                    debug("Inserted at-rule ({}) into @supports", rules.size());
+                }
+              }
+            )*
+        )
+        {
+            $stmnt = preparator.prepareRuleSupports(rules, c);
+        }
 	| unknown=unknown_atrule { $stmnt = unknown; }
 	;
 
@@ -451,7 +471,7 @@ scope {
   ;
 
 mediaterm
-  : (i=IDENT {
+  : (i=(NOT|AND|IDENT) {
             String m = extractText(i);
             MediaQueryState state = $mediaquery::state;
             if (m.equalsIgnoreCase("ONLY") && state == MediaQueryState.START)
@@ -521,6 +541,87 @@ mediaexpression returns [cz.vutbr.web.css.MediaExpression expr]
               $expr.setFeature(d.getProperty());
               $expr.replaceAll(d);
           }
+      }
+    ;
+
+supports_condition returns [cz.vutbr.web.css.FeatureCondition condition]
+@init {
+    boolean andCombination = false;
+    boolean orCombination = false;
+    boolean invalid = false;
+}
+@after {
+    if (invalid) {
+        trace("Invalid feature query: the syntax does not allow and, or, and not operators to be mixed without a layer of parentheses");
+        $condition = null;
+    } else if (orCombination)
+        $condition = ((cz.vutbr.web.css.FeatureQuery)$condition).negate();
+}
+    : NOT c=supports_in_parens {
+          cz.vutbr.web.css.FeatureQuery query = rf.createFeatureQuery();
+          query.unlock();
+          query.add(c);
+          query = query.negate();
+          $condition = query;
+      }
+    | ( c=supports_in_parens {
+          $condition = c;
+      })
+      ( op=(AND|OR) c=supports_in_parens {
+            if (!invalid) {
+                if ("and".equalsIgnoreCase(extractText(op))) {
+                    if (orCombination)
+                        invalid = true;
+                    else {
+                        if (!andCombination) {
+                            andCombination = true;
+                            cz.vutbr.web.css.FeatureQuery query = rf.createFeatureQuery();
+                            query.unlock();
+                            query.add($condition);
+                            $condition = query;
+                        }
+                        ((cz.vutbr.web.css.FeatureQuery)$condition).add(c);
+                    }
+                } else {
+                    if (andCombination)
+                        invalid = true;
+                    else {
+                        if (!orCombination) {
+                            orCombination = true;
+                            cz.vutbr.web.css.FeatureQuery query = rf.createFeatureQuery();
+                            query.unlock();
+                            if ($condition instanceof cz.vutbr.web.css.FeatureQuery)
+                                query.add(((cz.vutbr.web.css.FeatureQuery)$condition).negate());
+                            else {
+                                cz.vutbr.web.css.FeatureQuery q = rf.createFeatureQuery();
+                                q.unlock();
+                                q.add($condition);
+                                query.add(q.negate());
+                            }
+                            $condition = query;
+                        }
+                        if (c instanceof cz.vutbr.web.css.FeatureQuery)
+                            ((cz.vutbr.web.css.FeatureQuery)$condition).add(((cz.vutbr.web.css.FeatureQuery)c).negate());
+                        else {
+                            cz.vutbr.web.css.FeatureQuery q = rf.createFeatureQuery();
+                            q.unlock();
+                            q.add(c);
+                            ((cz.vutbr.web.css.FeatureQuery)$condition).add(q.negate());
+                        }
+                        
+                    }
+                }
+            }
+        }
+      )*
+    ;
+
+supports_in_parens returns [cz.vutbr.web.css.FeatureCondition condition]
+    : ^(FEATURE_QUERY c=supports_condition) {
+          $condition = c;
+      }
+    | d=declaration {
+          $condition = d;
       }
     ;
 
