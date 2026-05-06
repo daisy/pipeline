@@ -22,6 +22,7 @@ import cz.vutbr.web.css.CSSProperty.BorderRadius;
 import cz.vutbr.web.css.CSSProperty.GenericCSSPropertyProxy;
 import cz.vutbr.web.css.CSSProperty.Opacity;
 import cz.vutbr.web.css.Declaration;
+import cz.vutbr.web.css.MediaSpec;
 import cz.vutbr.web.css.SupportedCSS;
 import cz.vutbr.web.css.Term;
 import cz.vutbr.web.css.TermColor;
@@ -189,8 +190,17 @@ public class DeclarationTransformer {
 	 * @return <code>true</code> in case of success, <code>false</code>
 	 *         otherwise
 	 */
+	public final boolean parseDeclaration(Declaration d, Map<String,CSSProperty> properties, Map<String, Term<?>> values) {
+		return parseDeclaration(d, properties, values, null);
+	}
+
+	/**
+	 * @param media Ignored in the default implementation
+	 */
 	public boolean parseDeclaration(Declaration d,
-			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+	                                Map<String, CSSProperty> properties,
+	                                Map<String, Term<?>> values,
+	                                MediaSpec media) {
 
 		String propertyName = d.getProperty().toLowerCase();
 
@@ -1786,7 +1796,8 @@ public class DeclarationTransformer {
 
 		@Override
 		protected boolean variant(int v, IntegerRef iteration,
-				Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+				Map<String, CSSProperty> properties, Map<String, Term<?>> values,
+				MediaSpec media) {
 
 			// we won't use multivalue functionallity
 			int i = iteration.get();
@@ -1842,7 +1853,8 @@ public class DeclarationTransformer {
 
 		@Override
 		protected boolean variant(int v, IntegerRef iteration,
-				Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+				Map<String, CSSProperty> properties, Map<String, Term<?>> values,
+				MediaSpec media) {
 
 			// we won't use multivalue functionallity
 			int i = iteration.get();
@@ -1901,7 +1913,8 @@ public class DeclarationTransformer {
 
 		@Override
 		protected boolean variant(int v, IntegerRef iteration,
-				Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+				Map<String, CSSProperty> properties, Map<String, Term<?>> values,
+				MediaSpec media) {
 
 			// we won't use multivalue functionallity
 			int i = iteration.get();
@@ -1974,7 +1987,8 @@ public class DeclarationTransformer {
 
 		@Override
 		protected boolean variant(int v, IntegerRef iteration,
-				Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+				Map<String, CSSProperty> properties, Map<String, Term<?>> values,
+				MediaSpec media) {
 
 			// we will use multi value functionality in
 			// FAMILY branch
@@ -2243,7 +2257,8 @@ public class DeclarationTransformer {
 
 		@Override
 		protected boolean variant(int v, IntegerRef iteration,
-				Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+				Map<String, CSSProperty> properties, Map<String, Term<?>> values,
+				MediaSpec media) {
 
 			// we will use multi value functionality in
 			// POSITION branch
@@ -2463,7 +2478,8 @@ public class DeclarationTransformer {
 
 		@Override
 		protected boolean variant(int variant, IntegerRef iteration,
-				Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+				Map<String, CSSProperty> properties, Map<String, Term<?>> values,
+				MediaSpec media) {
 
 			// iteration is not modified in this function
 			int i = iteration.get();
@@ -2546,7 +2562,7 @@ public class DeclarationTransformer {
 
 		@Override
 		protected boolean operation(int i, Map<String, CSSProperty> properties,
-				Map<String, Term<?>> values) {
+				Map<String, Term<?>> values, MediaSpec media) {
 
 			return genericTermIdent(BorderStyle.class, terms.get(i), ALLOW_INH,	names.get(i), properties);
 		}
@@ -2571,7 +2587,7 @@ public class DeclarationTransformer {
 
 		@Override
 		protected boolean operation(int i, Map<String, CSSProperty> properties,
-				Map<String, Term<?>> values) {
+				Map<String, Term<?>> values, MediaSpec media) {
 
 			return genericTermIdent(type, terms.get(i), ALLOW_INH, names.get(i), properties)
 					|| genericTerm(TermColor.class, terms.get(i), names.get(i),	BorderColor.color, false, properties, values);
@@ -2597,7 +2613,7 @@ public class DeclarationTransformer {
 
 		@Override
 		protected boolean operation(int i, Map<String, CSSProperty> properties,
-				Map<String, Term<?>> values) {
+				Map<String, Term<?>> values, MediaSpec media) {
 
 			return genericTermIdent(type, terms.get(i), ALLOW_INH, names.get(i), properties)
 					|| genericTermLength(terms.get(i), names.get(i), BorderWidth.length, true, properties, values);
@@ -2623,7 +2639,7 @@ public class DeclarationTransformer {
 
         @Override
         protected boolean operation(int i, Map<String, CSSProperty> properties,
-                Map<String, Term<?>> values) {
+                Map<String, Term<?>> values, MediaSpec media) {
 
             Term<?> term = terms.get(i);
             String name = names.get(i);
@@ -2772,7 +2788,7 @@ public class DeclarationTransformer {
 
 		@Override
 		protected boolean operation(int i, Map<String, CSSProperty> properties,
-				Map<String, Term<?>> values) {
+				Map<String, Term<?>> values, MediaSpec media) {
 
 			return genericTermIdent(type, terms.get(i), AVOID_INH,
 					names.get(i), properties)
@@ -2804,7 +2820,7 @@ public class DeclarationTransformer {
 
 		@Override
 		protected boolean operation(int i, Map<String, CSSProperty> properties,
-				Map<String, Term<?>> values) {
+				Map<String, Term<?>> values, MediaSpec media) {
 
 			return genericTermIdent(type, terms.get(i), AVOID_INH,
 					names.get(i), properties)
