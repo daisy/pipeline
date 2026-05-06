@@ -130,7 +130,9 @@ atstatement
 	  LCURLY S* declarations
 	  RCURLY -> ^(FONTFACE declarations)
 	| MEDIA S* media? 
-		LCURLY S* (media_rule S*)* RCURLY -> ^(MEDIA media? media_rule*)	
+		LCURLY S* (statement S*)* RCURLY -> ^(MEDIA media? statement*)
+	| SUPPORTS S* supports_condition
+		LCURLY S* (statement S*)* RCURLY -> ^(SUPPORTS ^(FEATURE_QUERY supports_condition) statement*)
 	| unknown_atrule
 	;
 	catch [RecognitionException re] {
@@ -205,7 +207,7 @@ media_query
  ;
 
 media_term
- : (IDENT | media_expression)
+ : (NOT | AND | IDENT | media_expression)
  | nomediaquery -> INVALID_STATEMENT
  ;
  catch [RecognitionException re] {
@@ -240,11 +242,16 @@ media_expression_value
         throw re;
     }
 
-media_rule
- : ruleset
- | atstatement
- ;
-	
+supports_condition
+    : NOT S!* LPAREN! S!* supports_in_parens RPAREN!
+    | LPAREN! S!* supports_in_parens RPAREN! S!* ( (AND | OR) S!* LPAREN! S!* supports_in_parens RPAREN! S!* )*
+    ;
+
+supports_in_parens // but parens are part of support_condition
+    : supports_condition -> ^(FEATURE_QUERY supports_condition)
+    | property COLON S* terms -> ^(DECLARATION property terms)
+    ;
+
 unknown_atrule
  : ATKEYWORD S* any* LCURLY S* any* RCURLY -> INVALID_ATSTATEMENT
  ;

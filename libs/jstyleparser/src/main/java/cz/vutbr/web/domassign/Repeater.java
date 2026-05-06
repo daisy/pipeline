@@ -8,6 +8,7 @@ import java.util.Map;
 import cz.vutbr.web.css.CSSFactory;
 import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.Declaration;
+import cz.vutbr.web.css.MediaSpec;
 import cz.vutbr.web.css.SupportedCSS;
 import cz.vutbr.web.css.Term;
 import cz.vutbr.web.css.TermIdent;
@@ -73,7 +74,7 @@ public abstract class Repeater {
 	 *         elsewhere
 	 */
 	protected abstract boolean operation(int iteration,
-			Map<String, CSSProperty> properties, Map<String, Term<?>> values);
+			Map<String, CSSProperty> properties, Map<String, Term<?>> values, MediaSpec media);
 
 	/**
 	 * Repeats operations on terms
@@ -87,8 +88,13 @@ public abstract class Repeater {
 	 */
 	public boolean repeat(Map<String, CSSProperty> properties,
 			Map<String, Term<?>> values) {
+		return repeat(properties, values, null);
+	}
+
+	public boolean repeat(Map<String, CSSProperty> properties,
+			Map<String, Term<?>> values, MediaSpec media) {
 		for (int i = 0; i < times; i++) {
-			if (!operation(i, properties, values))
+			if (!operation(i, properties, values, media))
 				return false;
 		}
 		return true;
@@ -120,6 +126,12 @@ public abstract class Repeater {
 	public boolean repeatOverFourTermDeclaration(Declaration d,
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values)
 			throws IllegalArgumentException {
+		return repeatOverFourTermDeclaration(d, properties, values, null);
+	}
+
+	public boolean repeatOverFourTermDeclaration(Declaration d,
+			Map<String, CSSProperty> properties, Map<String, Term<?>> values, MediaSpec media)
+			throws IllegalArgumentException {
 
 		switch (d.size()) {
 		case 1:
@@ -136,20 +148,20 @@ public abstract class Repeater {
 			}
 			
 			assignTerms(term, term, term, term);
-			return repeat(properties, values);
+			return repeat(properties, values, media);
 		case 2:
 			// one term for bottom-top and left-right
 			Term<?> term1 = d.get(0);
 			Term<?> term2 = d.get(1);
 			assignTerms(term1, term2, term1, term2);
-			return repeat(properties, values);
+			return repeat(properties, values, media);
 		case 3:
 			// terms for bottom, top, left-right
 			Term<?> term31 = d.get(0);
 			Term<?> term32 = d.get(1);
 			Term<?> term33 = d.get(2);
 			assignTerms(term31, term32, term33, term32);
-			return repeat(properties, values);
+			return repeat(properties, values, media);
 		case 4:
 			// four individual terms (or more - omitted)
 		    //if (d.size() > 4)
@@ -159,7 +171,7 @@ public abstract class Repeater {
 			Term<?> term43 = d.get(2);
 			Term<?> term44 = d.get(3);
 			assignTerms(term41, term42, term43, term44);
-			return repeat(properties, values);
+			return repeat(properties, values, media);
 		default:
 			throw new IllegalArgumentException(
 					"Invalid length of terms in Repeater.");

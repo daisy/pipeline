@@ -17,8 +17,10 @@ import org.w3c.dom.traversal.NodeFilter;
 import org.w3c.dom.traversal.TreeWalker;
 
 import cz.vutbr.web.css.CSSFactory;
+import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.CombinedSelector;
 import cz.vutbr.web.css.Declaration;
+import cz.vutbr.web.css.FeatureSpec;
 import cz.vutbr.web.css.MatchCondition;
 import cz.vutbr.web.css.MediaSpec;
 import cz.vutbr.web.css.NodeData;
@@ -28,6 +30,7 @@ import cz.vutbr.web.css.Selector;
 import cz.vutbr.web.css.Selector.PseudoElement;
 import cz.vutbr.web.css.StyleSheet;
 import cz.vutbr.web.css.SupportedCSS;
+import cz.vutbr.web.css.Term;
 import cz.vutbr.web.csskit.ElementUtil;
 
 /**
@@ -135,7 +138,7 @@ public class Analyzer {
 			@Override
 			protected void processNode(StyleMap result, Node current, Object source) {
 
-			    NodeData main = CSSFactory.createNodeData(transformer, css);
+				NodeData main = CSSFactory.createNodeData(transformer, css, media);
 			    
 				// for all declarations available in the main list (pseudo=null)
 				List<Declaration> declarations = ((DeclarationMap) source).get((Element) current, null);
@@ -153,7 +156,7 @@ public class Analyzer {
 				//repeat for the pseudo classes (if any)
 				for (PseudoElement pseudo : ((DeclarationMap) source).pseudoSet((Element) current))
 				{
-				    NodeData pdata = CSSFactory.createNodeData(transformer, css);
+					NodeData pdata = CSSFactory.createNodeData(transformer, css, media);
 	                declarations = ((DeclarationMap) source).get((Element) current, pseudo);
 	                if (declarations != null) 
 	                {
@@ -420,7 +423,18 @@ public class Analyzer {
 			rules = new Holder();
 		}
 
-		for (Rule<?> rule : sheet.filter(mediaspec)) {
+		sheet = sheet.filter(mediaspec);
+		sheet = sheet.filter(
+			new FeatureSpec() {
+				private final Map<String,CSSProperty> properties = new HashMap<>();
+				private final Map<String,Term<?>> values = new HashMap<>();
+				@Override
+				public boolean supportsDeclaration(Declaration d) {
+					return transformer.parseDeclaration(d, properties, values, mediaspec);
+				}
+			}
+		);
+		for (Rule<?> rule : sheet) {
 			if (rule instanceof RuleSet) {
 				RuleSet ruleset = (RuleSet) rule;
 				for (CombinedSelector s : ruleset.getSelectors()) {

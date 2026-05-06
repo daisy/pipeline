@@ -71,7 +71,17 @@ public interface RuleFactory {
 	 * @return The new expression
 	 */
 	MediaExpression createMediaExpression();
-	
+
+	/**
+	 * Creates @supports rule
+	 */
+	RuleSupports createSupports(FeatureCondition condition);
+
+	/**
+	 * Creates a CSS feature query
+	 */
+	FeatureQuery createFeatureQuery();
+
 	/**
 	 * Creates CSS named page
 	 * @param priority Priority mark

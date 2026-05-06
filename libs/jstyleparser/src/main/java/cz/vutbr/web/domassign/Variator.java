@@ -8,6 +8,7 @@ import java.util.Map;
 import cz.vutbr.web.css.CSSFactory;
 import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.Declaration;
+import cz.vutbr.web.css.MediaSpec;
 import cz.vutbr.web.css.SupportedCSS;
 import cz.vutbr.web.css.Term;
 import cz.vutbr.web.css.TermIdent;
@@ -90,7 +91,8 @@ public abstract class Variator {
 	 *         otherwise
 	 */
 	protected abstract boolean variant(int variant, IntegerRef iteration,
-			Map<String, CSSProperty> properties, Map<String, Term<?>> values);
+			Map<String, CSSProperty> properties, Map<String, Term<?>> values,
+			MediaSpec media);
 
 	/**
 	 * Solves variant which leads to <code>inherit</code> CSS Property value.
@@ -213,6 +215,11 @@ public abstract class Variator {
 	 */
 	public boolean vary(Map<String, CSSProperty> properties,
 			Map<String, Term<?>> values) {
+		return vary(properties, values, null);
+	}
+
+	public boolean vary(Map<String, CSSProperty> properties,
+			Map<String, Term<?>> values, MediaSpec media) {
 
 		// try inherit variant
 		if (terms.size() == 1
@@ -238,7 +245,7 @@ public abstract class Variator {
 				if (variantPassed[v])
 				    continue;
 				//check if this term corresponds to this variant
-				passed = variant(v, i, properties, values);
+				passed = variant(v, i, properties, values, media);
 				if (passed) {
 					// mark occurrence of variant
 					variantPassed[v] = true;
@@ -270,6 +277,12 @@ public abstract class Variator {
 	 */
 	public boolean tryOneTermVariant(int variant, Declaration d,
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+		return tryOneTermVariant(variant, d, properties, values, null);
+	}
+
+	public boolean tryOneTermVariant(int variant, Declaration d,
+			Map<String, CSSProperty> properties, Map<String, Term<?>> values,
+			MediaSpec media) {
 
 		// only one term is allowed
 		if (d.size() != 1)
@@ -282,7 +295,7 @@ public abstract class Variator {
 		this.terms = new ArrayList<Term<?>>();
 		this.terms.add(d.get(0));
 
-		return variant(variant, new IntegerRef(0), properties, values);
+		return variant(variant, new IntegerRef(0), properties, values, media);
 	}
 
 	/**
@@ -305,6 +318,12 @@ public abstract class Variator {
 	public boolean tryMultiTermVariant(int variant,
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values,
 			Term<?>... terms) {
+		return tryMultiTermVariant(variant, properties, values, null, terms);
+	}
+
+	public boolean tryMultiTermVariant(int variant,
+			Map<String, CSSProperty> properties, Map<String, Term<?>> values,
+			MediaSpec media, Term<?>... terms) {
 
 		this.terms = Arrays.asList(terms);
 
@@ -313,7 +332,7 @@ public abstract class Variator {
 				&& checkInherit(variant, this.terms.get(0), properties))
 			return true;
 
-		return variant(variant, new IntegerRef(0), properties, values);
+		return variant(variant, new IntegerRef(0), properties, values, media);
 	}
 
 	/**
