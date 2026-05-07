@@ -3,14 +3,51 @@
 #include <unistd.h>
 #include <string.h>
 #include <errno.h>
-#ifdef _WIN32
-#include <process.h>
-#else
 #include <inttypes.h>
+
+#ifndef _WIN32
+
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+
+typedef int socket_t;
+
+static int socket_init(void) {
+	return 0;
+}
+
+static void socket_cleanup(void) {
+}
+
+static void socket_close(socket_t s) {
+	close(s);
+}
+
+#else
+
+#include <process.h>
+#include <winsock2.h>
+#include <ws2tcpip.h>
+
+#pragma comment(lib, "ws2_32.lib")
+
+typedef SOCKET socket_t;
+
+static int socket_init(void) {
+	WSADATA wsa;
+	return WSAStartup(MAKEWORD(2,2), &wsa);
+}
+
+static void socket_cleanup(void) {
+	WSACleanup();
+}
+
+static void socket_close(socket_t s) {
+	closesocket(s);
+}
+
 #endif
 
 char *quote(char *string) {
@@ -37,6 +74,52 @@ char *quote(char *string) {
 	quoted[j++] = '"';
 	quoted[j++] = '\0';
 	return quoted;
+}
+
+typedef struct {
+	socket_t sock;
+	char buf[4096];
+	size_t start;
+	size_t end;
+} line_reader_t;
+
+/**
+ * @brief Read a single line from a socket stream.
+ *
+ * Reads bytes using recv() until a '\n' is encountered or the
+ * connection closes. The returned string is always NUL-terminated and
+ * includes the trailing newline when present.
+ *
+ * @param reader Line reader state and socket.
+ * @param out    Destination buffer.
+ * @param outlen Size of destination buffer in bytes.
+ *
+ * @return 1 if a line was read, 0 on EOF or socket error.
+ */
+static int recv_line(line_reader_t *reader, char *out, size_t outlen) {
+	size_t pos = 0;
+	for (;;) {
+		while (reader->start < reader->end) {
+			char c = reader->buf[reader->start++];
+			if (pos + 1 < outlen)
+				out[pos++] = c;
+			if (c == '\n') {
+				out[pos] = '\0';
+				return 1;
+			}
+		}
+		reader->start = 0;
+		reader->end = 0;
+		int n = recv(reader->sock, reader->buf, sizeof(reader->buf), 0);
+		if (n <= 0) {
+			if (pos > 0) {
+				out[pos] = '\0';
+				return 1;
+			}
+			return 0;
+		}
+		reader->end = n;
+	}
 }
 
 #ifdef _WIN32
@@ -119,36 +202,43 @@ void exec_java(char *this_executable, char *java_executable, char *java_code, in
 #endif
 }
 
-#ifndef _WIN32
 void exec_java_repl_client(char *this_executable, char *java_code, int port) {
-	int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+	if (socket_init() != 0)
+		return;
+	socket_t sockfd = socket(AF_INET, SOCK_STREAM, 0);
+#ifdef _WIN32
+	if (sockfd == INVALID_SOCKET)
+#else
 	if (sockfd == -1)
+#endif
 		// Failed to create socket. This should not happen, but fall back to evaluating Java
 		// directly.
 		return;
 	struct sockaddr_in servaddr;
-	bzero(&servaddr, sizeof(servaddr));
+	memset(&servaddr, 0, sizeof(servaddr));
 	servaddr.sin_family = AF_INET;
-	servaddr.sin_addr.s_addr = inet_addr("127.0.0.1");
 	servaddr.sin_port = htons(port);
-	if (connect(sockfd, (struct sockaddr*)&servaddr, sizeof(servaddr)) != 0)
+	inet_pton(AF_INET, "127.0.0.1", &servaddr.sin_addr);
+	if (connect(sockfd, (struct sockaddr*)&servaddr, sizeof(servaddr)) != 0) {
 		// Failed to connect to REPL on address 127.0.0.1 and specified port. Perhaps the server was
 		// started but was stopped in the meantime. Fall back to evaluating Java directly.
+		socket_close(sockfd);
 		return;
-	write(sockfd, java_code, strlen(java_code));
+	}
+	send(sockfd, java_code, (int)strlen(java_code), 0);
 	static char NEWLINE = '\n';
-	write(sockfd, &NEWLINE, 1);
-	FILE *in_stream= fdopen(sockfd, "r");
+	send(sockfd, &NEWLINE, 1, 0);
 	unsigned int buflen = 1000;
 	char buf[buflen];
 	int new_line = 1;
+	line_reader_t in_stream;
+	in_stream.sock = sockfd;
+	in_stream.start = 0;
+	in_stream.end = 0;
 	FILE *out_stream = stdout;
 	int exit_value = 0;
 	int done = 0;
-	for (;;) {
-		bzero(buf, buflen);
-		if (fgets(buf, buflen, in_stream) == NULL)
-			break;
+	while (recv_line(&in_stream, buf, sizeof(buf))) {
 		if (done)
 			goto unexpected;
 		if (new_line) {
@@ -162,6 +252,7 @@ void exec_java_repl_client(char *this_executable, char *java_code, int port) {
 			case 'x':
 				if (buf[1] != ':')
 					goto unexpected;
+				errno = 0;
 				intmax_t v = strtoimax(&buf[2], NULL, 10);
 				if (errno) {
 					fprintf(stderr, "%s: could not parse exit value: %s\n", this_executable, &buf[2]);
@@ -180,15 +271,16 @@ void exec_java_repl_client(char *this_executable, char *java_code, int port) {
 			fprintf(out_stream, "%s", &buf[2]);
 		} else
 			fprintf(out_stream, "%s", buf);
-		new_line = (buf[strlen(buf) - 1] == '\n');
+		size_t len = strlen(buf);
+		new_line = (len > 0 && buf[len - 1] == '\n');
 	}
 	if (!done) {
 		fprintf(stderr, "%s: server hung up without providing exit value. System.exit() might have been called.\n", this_executable);
 		exit_value = 1;
 	}
   cleanup:
-	fclose(in_stream);
-	close(sockfd);
+	socket_close(sockfd);
+	socket_cleanup();
 	fflush(stdout);
 	fflush(stderr);
 	exit(exit_value);
@@ -197,7 +289,6 @@ void exec_java_repl_client(char *this_executable, char *java_code, int port) {
 	exit_value = 1;
 	goto cleanup;
 }
-#endif
 
 int main(int argc, char **argv) {
 	char *this_executable_path = argv[0];
@@ -219,7 +310,6 @@ int main(int argc, char **argv) {
 		extra_argc = argc - 3;
 		extra_argv = &argv[3];
 	}
-#ifndef _WIN32
 	if (extra_argc == 0) {
 		char *JAVA_REPL_PORT = getenv("JAVA_REPL_PORT");
 		if (JAVA_REPL_PORT && *JAVA_REPL_PORT) {
@@ -236,7 +326,6 @@ int main(int argc, char **argv) {
 			exec_java_repl_client(this_executable_path, java_code, port);
 		}
 	}
-#endif
 	char *JAVA_HOME = getenv("JAVA_HOME");
 	if (JAVA_HOME) {
 		char *java = malloc(strlen(JAVA_HOME) + 14);
