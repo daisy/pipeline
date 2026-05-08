@@ -14,7 +14,6 @@ $(TARGET_DIR)/state/assembly/modified-since-release_ : assembly/pom.xml \
 	$(TARGET_DIR)/state/framework/modules-registry/modified-since-release \
 	$(TARGET_DIR)/state/framework/pipeline1-adapter/modified-since-release \
 	$(TARGET_DIR)/state/framework/saxon-adapter/modified-since-release \
-	$(TARGET_DIR)/state/framework/xproc-api/modified-since-release \
 	$(TARGET_DIR)/state/modules/scripts-utils/asciimath-utils/modified-since-release \
 	$(TARGET_DIR)/state/modules/audio/audio-common/modified-since-release \
 	$(TARGET_DIR)/state/modules/audio/audio-encoder-lame/modified-since-release \
@@ -23,7 +22,6 @@ $(TARGET_DIR)/state/assembly/modified-since-release_ : assembly/pom.xml \
 	$(TARGET_DIR)/state/modules/scripts/daisy202-to-epub3/modified-since-release \
 	$(TARGET_DIR)/state/modules/scripts/daisy202-to-mp3/modified-since-release \
 	$(TARGET_DIR)/state/modules/scripts-utils/daisy202-utils/modified-since-release \
-	$(TARGET_DIR)/state/modules/scripts/daisy202-validator/modified-since-release \
 	$(TARGET_DIR)/state/modules/scripts/daisy202-to-daisy3/modified-since-release \
 	$(TARGET_DIR)/state/modules/scripts/daisy3-to-daisy202/modified-since-release \
 	$(TARGET_DIR)/state/modules/scripts/daisy3-to-epub3/modified-since-release \
@@ -37,12 +35,10 @@ $(TARGET_DIR)/state/assembly/modified-since-release_ : assembly/pom.xml \
 	$(TARGET_DIR)/state/modules/scripts/dtbook-to-rtf/modified-since-release \
 	$(TARGET_DIR)/state/modules/scripts/dtbook-to-zedai/modified-since-release \
 	$(TARGET_DIR)/state/modules/scripts-utils/dtbook-utils/modified-since-release \
-	$(TARGET_DIR)/state/modules/scripts/dtbook-validator/modified-since-release \
 	$(TARGET_DIR)/state/modules/scripts-utils/epub-utils/modified-since-release \
 	$(TARGET_DIR)/state/modules/scripts/epub-to-daisy/modified-since-release \
 	$(TARGET_DIR)/state/modules/scripts/epub2-to-epub3/modified-since-release \
 	$(TARGET_DIR)/state/modules/scripts/epub3-to-epub3/modified-since-release \
-	$(TARGET_DIR)/state/modules/scripts/epub3-validator/modified-since-release \
 	$(TARGET_DIR)/state/modules/scripts-utils/ace-adapter/modified-since-release \
 	$(TARGET_DIR)/state/modules/scripts-utils/epubcheck-adapter/modified-since-release \
 	$(TARGET_DIR)/state/modules/scripts/epub3-to-daisy202/modified-since-release \
@@ -59,7 +55,7 @@ $(TARGET_DIR)/state/assembly/modified-since-release_ : assembly/pom.xml \
 	$(TARGET_DIR)/state/modules/scripts-utils/pandoc-adapter/modified-since-release \
 	$(TARGET_DIR)/state/modules/scripts-utils/smil-utils/modified-since-release \
 	$(TARGET_DIR)/state/modules/scripts-utils/metadata-utils/modified-since-release \
-	$(TARGET_DIR)/state/modules/scripts/nimas-fileset-validator/modified-since-release \
+	$(TARGET_DIR)/state/modules/nlp/nlp-common/modified-since-release \
 	$(TARGET_DIR)/state/modules/scripts-utils/odf-utils/modified-since-release \
 	$(TARGET_DIR)/state/modules/scripts-utils/ocr-utils/modified-since-release \
 	$(TARGET_DIR)/state/modules/tts/tts-adapter-acapela/modified-since-release \
@@ -82,7 +78,6 @@ $(TARGET_DIR)/state/assembly/modified-since-release_ : assembly/pom.xml \
 	$(TARGET_DIR)/state/modules/braille/libhyphen-utils/modified-since-release \
 	$(TARGET_DIR)/state/modules/braille/liblouis-utils/modified-since-release \
 	$(TARGET_DIR)/state/modules/braille/pef-utils/modified-since-release \
-	$(TARGET_DIR)/state/modules/braille/texhyph-utils/modified-since-release \
 	$(TARGET_DIR)/state/modules/scripts/zedai-to-pef/modified-since-release \
 	$(TARGET_DIR)/state/modules/tts/tts-adapter-osx/modified-since-release \
 	$(TARGET_DIR)/state/framework/webservice/modified-since-release
@@ -138,7 +133,6 @@ assembly/.compile-dependencies : \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/libs/com.xmlcalabash/1.1.20-p20-98-SNAPSHOT/com.xmlcalabash-1.1.20-p20-98-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/saxon-adapter/5.8.2-SNAPSHOT/saxon-adapter-5.8.2-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules-registry/5.0.2-SNAPSHOT/modules-registry-5.0.2-SNAPSHOT.jar \
-	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/xproc-api/8.1.1-SNAPSHOT/xproc-api-8.1.1-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/framework-core/12.0.1-SNAPSHOT/framework-core-12.0.1-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/logging-appender/2.1.8-SNAPSHOT/logging-appender-2.1.8-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/pipeline1-adapter/1.1.3-SNAPSHOT/pipeline1-adapter-1.1.3-SNAPSHOT.jar \
@@ -155,6 +149,7 @@ assembly/.compile-dependencies : \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/daisy202-to-epub3/2.1.6-SNAPSHOT/daisy202-to-epub3-2.1.6-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/daisy202-utils/1.6.7-SNAPSHOT/daisy202-utils-1.6.7-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/html-utils/6.6.1-SNAPSHOT/html-utils-6.6.1-SNAPSHOT.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/nlp-common/3.0.6-SNAPSHOT/nlp-common-3.0.6-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/smil-utils/4.0.5-SNAPSHOT/smil-utils-4.0.5-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/epub-utils/2.4.2-SNAPSHOT/epub-utils-2.4.2-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/odf-utils/1.0.8-SNAPSHOT/odf-utils-1.0.8-SNAPSHOT.jar \
@@ -165,7 +160,6 @@ assembly/.compile-dependencies : \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/epubcheck-adapter/1.1.15-SNAPSHOT/epubcheck-adapter-1.1.15-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/ace-adapter/1.0.13-SNAPSHOT/ace-adapter-1.0.13-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/daisy202-to-mp3/1.1.10-SNAPSHOT/daisy202-to-mp3-1.1.10-SNAPSHOT.jar \
-	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/daisy202-validator/2.1.4-SNAPSHOT/daisy202-validator-2.1.4-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/daisy202-to-daisy3/1.0.12-SNAPSHOT/daisy202-to-daisy3-1.0.12-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/html-to-dtbook/2.0.11-SNAPSHOT/html-to-dtbook-2.0.11-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/daisy3-to-daisy202/2.1.9-SNAPSHOT/daisy3-to-daisy202-2.1.9-SNAPSHOT.jar \
@@ -184,17 +178,14 @@ assembly/.compile-dependencies : \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/dtbook-to-odt/2.1.17-SNAPSHOT/dtbook-to-odt-2.1.17-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/image-utils/1.0.9-SNAPSHOT/image-utils-1.0.9-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/dtbook-to-rtf/2.0.15-SNAPSHOT/dtbook-to-rtf-2.0.15-SNAPSHOT.jar \
-	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/dtbook-validator/3.1.1-SNAPSHOT/dtbook-validator-3.1.1-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/epub-to-daisy/1.5.1-SNAPSHOT/epub-to-daisy-1.5.1-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/epub2-to-epub3/1.1.6-SNAPSHOT/epub2-to-epub3-1.1.6-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/epub3-to-epub3/5.1.1-SNAPSHOT/epub3-to-epub3-5.1.1-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/epub3-to-daisy202/2.2.12-SNAPSHOT/epub3-to-daisy202-2.2.12-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/epub3-to-daisy3/1.0.14-SNAPSHOT/epub3-to-daisy3-1.0.14-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/epub3-to-html/1.0.2-SNAPSHOT/epub3-to-html-1.0.2-SNAPSHOT.jar \
-	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/epub3-validator/2.0.11-SNAPSHOT/epub3-validator-2.0.11-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/mathcat-adapter/1.0.2-SNAPSHOT/mathcat-adapter-1.0.2-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/pandoc-adapter/1.0.1-SNAPSHOT/pandoc-adapter-1.0.1-SNAPSHOT.jar \
-	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/nimas-fileset-validator/2.2.1-SNAPSHOT/nimas-fileset-validator-2.2.1-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/ocr-utils/1.0.1-SNAPSHOT/ocr-utils-1.0.1-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/tts-adapter-acapela/3.1.9-SNAPSHOT/tts-adapter-acapela-3.1.9-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/tts-adapter-azure/1.1.5-SNAPSHOT/tts-adapter-azure-1.1.5-SNAPSHOT.jar \
@@ -210,7 +201,6 @@ assembly/.compile-dependencies : \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/braille/html-to-pef/10.0.1-SNAPSHOT/html-to-pef-10.0.1-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/braille/libhyphen-utils/3.5.1-SNAPSHOT/libhyphen-utils-3.5.1-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/braille/liblouis-utils/6.4.1-SNAPSHOT/liblouis-utils-6.4.1-SNAPSHOT.jar \
-	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/braille/texhyph-utils/3.0.7-SNAPSHOT/texhyph-utils-3.0.7-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/braille/zedai-to-pef/7.1.1-SNAPSHOT/zedai-to-pef-7.1.1-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/braille/libhyphen-utils/3.5.1-SNAPSHOT/libhyphen-utils-3.5.1-SNAPSHOT-linux.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/braille/liblouis-utils/6.4.1-SNAPSHOT/liblouis-utils-6.4.1-SNAPSHOT-linux.jar \
@@ -229,13 +219,13 @@ assembly/.test-dependencies : \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/libs/com.xmlcalabash/1.1.20-p20-98-SNAPSHOT/com.xmlcalabash-1.1.20-p20-98-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/file-utils/5.0.1-SNAPSHOT/file-utils-5.0.1-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/calabash-adapter/7.1.1-SNAPSHOT/calabash-adapter-7.1.1-SNAPSHOT.jar \
-	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/xproc-api/8.1.1-SNAPSHOT/xproc-api-8.1.1-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/common-utils/3.4.1-SNAPSHOT/common-utils-3.4.1-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/fileset-utils/8.0.1-SNAPSHOT/fileset-utils-8.0.1-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/zip-utils/2.1.11-SNAPSHOT/zip-utils-2.1.11-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/css-utils/8.0.1-SNAPSHOT/css-utils-8.0.1-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/framework-core/12.0.1-SNAPSHOT/framework-core-12.0.1-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/webservice/4.0.1-SNAPSHOT/webservice-4.0.1-SNAPSHOT.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/nlp-common/3.0.6-SNAPSHOT/nlp-common-3.0.6-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/braille/liblouis-utils/6.4.1-SNAPSHOT/liblouis-utils-6.4.1-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/braille/braille-common/7.0.1-SNAPSHOT/braille-common-7.0.1-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/braille/braille-css-utils/5.0.2-SNAPSHOT/braille-css-utils-5.0.2-SNAPSHOT.jar \
@@ -274,7 +264,6 @@ assembly/.release : \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/libs/com.xmlcalabash/1.1.20-p20-98/com.xmlcalabash-1.1.20-p20-98.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/saxon-adapter/5.8.2/saxon-adapter-5.8.2.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules-registry/5.0.2/modules-registry-5.0.2.jar \
-	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/xproc-api/8.1.1/xproc-api-8.1.1.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/framework-core/12.0.1/framework-core-12.0.1.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/logging-appender/2.1.8/logging-appender-2.1.8.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/pipeline1-adapter/1.1.3/pipeline1-adapter-1.1.3.jar \
@@ -291,6 +280,7 @@ assembly/.release : \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/daisy202-to-epub3/2.1.6/daisy202-to-epub3-2.1.6.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/daisy202-utils/1.6.7/daisy202-utils-1.6.7.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/html-utils/6.6.1/html-utils-6.6.1.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/nlp-common/3.0.6/nlp-common-3.0.6.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/smil-utils/4.0.5/smil-utils-4.0.5.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/epub-utils/2.4.2/epub-utils-2.4.2.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/odf-utils/1.0.8/odf-utils-1.0.8.jar \
@@ -301,7 +291,6 @@ assembly/.release : \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/epubcheck-adapter/1.1.15/epubcheck-adapter-1.1.15.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/ace-adapter/1.0.13/ace-adapter-1.0.13.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/daisy202-to-mp3/1.1.10/daisy202-to-mp3-1.1.10.jar \
-	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/daisy202-validator/2.1.4/daisy202-validator-2.1.4.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/daisy202-to-daisy3/1.0.12/daisy202-to-daisy3-1.0.12.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/html-to-dtbook/2.0.11/html-to-dtbook-2.0.11.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/daisy3-to-daisy202/2.1.9/daisy3-to-daisy202-2.1.9.jar \
@@ -323,17 +312,14 @@ assembly/.release : \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/dtbook-to-odt/2.1.17/dtbook-to-odt-2.1.17.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/image-utils/1.0.9/image-utils-1.0.9.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/dtbook-to-rtf/2.0.15/dtbook-to-rtf-2.0.15.jar \
-	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/dtbook-validator/3.1.1/dtbook-validator-3.1.1.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/epub-to-daisy/1.5.1/epub-to-daisy-1.5.1.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/epub2-to-epub3/1.1.6/epub2-to-epub3-1.1.6.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/epub3-to-epub3/5.1.1/epub3-to-epub3-5.1.1.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/epub3-to-daisy202/2.2.12/epub3-to-daisy202-2.2.12.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/epub3-to-daisy3/1.0.14/epub3-to-daisy3-1.0.14.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/epub3-to-html/1.0.2/epub3-to-html-1.0.2.jar \
-	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/epub3-validator/2.0.11/epub3-validator-2.0.11.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/mathcat-adapter/1.0.2/mathcat-adapter-1.0.2.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/pandoc-adapter/1.0.1/pandoc-adapter-1.0.1.jar \
-	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/nimas-fileset-validator/2.2.1/nimas-fileset-validator-2.2.1.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/ocr-utils/1.0.1/ocr-utils-1.0.1.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/tts-adapter-acapela/3.1.9/tts-adapter-acapela-3.1.9.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/tts-adapter-azure/1.1.5/tts-adapter-azure-1.1.5.jar \
@@ -346,7 +332,6 @@ assembly/.release : \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/braille/epub3-to-pef/10.0.1/epub3-to-pef-10.0.1.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/braille/html-to-pef/10.0.1/html-to-pef-10.0.1.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/braille/libhyphen-utils/3.5.1/libhyphen-utils-3.5.1.jar \
-	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/braille/texhyph-utils/3.0.7/texhyph-utils-3.0.7.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/braille/zedai-to-pef/7.1.1/zedai-to-pef-7.1.1.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/braille/libhyphen-utils/3.5.1/libhyphen-utils-3.5.1-linux.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/braille/liblouis-utils/6.4.1/liblouis-utils-6.4.1-linux.jar \

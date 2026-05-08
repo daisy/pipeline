@@ -37,8 +37,14 @@ modules/nlp/nlp-common/.test modules/nlp/nlp-common/.install modules/nlp/nlp-com
 	modules/nlp/nlp-common/src/main/java/org/daisy/pipeline/nlp/LanguageUtils.java \
 	modules/nlp/nlp-common/src/main/java/org/daisy/pipeline/nlp/RuleBasedTextCategorizer.java \
 	modules/nlp/nlp-common/src/main/java/org/daisy/pipeline/nlp/lexing/LexResultPrettyPrinter.java \
+	modules/nlp/nlp-common/src/main/java/org/daisy/pipeline/nlp/lexing/ruled/impl/EuroSentenceDetector.java \
+	modules/nlp/nlp-common/src/main/java/org/daisy/pipeline/nlp/lexing/ruled/impl/ISentenceDetector.java \
+	modules/nlp/nlp-common/src/main/java/org/daisy/pipeline/nlp/lexing/ruled/impl/RuleBasedLexer.java \
+	modules/nlp/nlp-common/src/main/java/org/daisy/pipeline/nlp/lexing/ruled/impl/BasicSentenceDetector.java \
 	modules/nlp/nlp-common/src/main/java/org/daisy/pipeline/nlp/lexing/LexServiceRegistry.java \
-	modules/nlp/nlp-common/src/main/java/org/daisy/pipeline/nlp/lexing/LexService.java
+	modules/nlp/nlp-common/src/main/java/org/daisy/pipeline/nlp/lexing/LexService.java \
+	modules/nlp/nlp-common/src/main/java/org/daisy/pipeline/nlp/lexing/light/impl/LightLexer.java \
+	modules/nlp/nlp-common/src/main/java/org/daisy/pipeline/nlp/lexing/omni/impl/OmnilangLexer.java
 modules/nlp/nlp-common/.test modules/nlp/nlp-common/.install-doc : \
 	modules/nlp/nlp-common/src/test/resources/epub3_test.html \
 	modules/nlp/nlp-common/src/test/resources/zedai_test.xml \
@@ -51,6 +57,10 @@ modules/nlp/nlp-common/.test modules/nlp/nlp-common/.install-doc : \
 	modules/nlp/nlp-common/src/test/java/org/daisy/pipeline/nlp/calabash/impl/BreakDetectTest.java \
 	modules/nlp/nlp-common/src/test/java/org/daisy/pipeline/nlp/calabash/impl/StringComposerTest.java \
 	modules/nlp/nlp-common/src/test/java/org/daisy/pipeline/nlp/PrefixMatchTest.java \
+	modules/nlp/nlp-common/src/test/java/org/daisy/pipeline/nlp/lexing/ruled/impl/LexingTest.java \
+	modules/nlp/nlp-common/src/test/java/org/daisy/pipeline/nlp/lexing/ruled/impl/FrenchLexingTest.java \
+	modules/nlp/nlp-common/src/test/java/org/daisy/pipeline/nlp/lexing/light/impl/LightLexingTest.java \
+	modules/nlp/nlp-common/src/test/java/org/daisy/pipeline/nlp/lexing/omni/impl/OmnilangTest.java \
 	modules/nlp/nlp-common/src/test/xprocspec/reshape.xprocspec
 .make/mk/modules/nlp/nlp-common/sources.mk : \
 	modules/nlp/nlp-common/src \
@@ -63,6 +73,13 @@ modules/nlp/nlp-common/.test modules/nlp/nlp-common/.install-doc : \
 	modules/nlp/nlp-common/src/test/java/org/daisy/pipeline/nlp \
 	modules/nlp/nlp-common/src/test/java/org/daisy/pipeline/nlp/calabash \
 	modules/nlp/nlp-common/src/test/java/org/daisy/pipeline/nlp/calabash/impl \
+	modules/nlp/nlp-common/src/test/java/org/daisy/pipeline/nlp/lexing \
+	modules/nlp/nlp-common/src/test/java/org/daisy/pipeline/nlp/lexing/ruled \
+	modules/nlp/nlp-common/src/test/java/org/daisy/pipeline/nlp/lexing/ruled/impl \
+	modules/nlp/nlp-common/src/test/java/org/daisy/pipeline/nlp/lexing/light \
+	modules/nlp/nlp-common/src/test/java/org/daisy/pipeline/nlp/lexing/light/impl \
+	modules/nlp/nlp-common/src/test/java/org/daisy/pipeline/nlp/lexing/omni \
+	modules/nlp/nlp-common/src/test/java/org/daisy/pipeline/nlp/lexing/omni/impl \
 	modules/nlp/nlp-common/src/test/xprocspec \
 	modules/nlp/nlp-common/src/main \
 	modules/nlp/nlp-common/src/main/resources \
@@ -79,4 +96,10 @@ modules/nlp/nlp-common/.test modules/nlp/nlp-common/.install-doc : \
 	modules/nlp/nlp-common/src/main/java/org/daisy/pipeline/nlp/ruledcategorizers \
 	modules/nlp/nlp-common/src/main/java/org/daisy/pipeline/nlp/calabash \
 	modules/nlp/nlp-common/src/main/java/org/daisy/pipeline/nlp/calabash/impl \
-	modules/nlp/nlp-common/src/main/java/org/daisy/pipeline/nlp/lexing
+	modules/nlp/nlp-common/src/main/java/org/daisy/pipeline/nlp/lexing \
+	modules/nlp/nlp-common/src/main/java/org/daisy/pipeline/nlp/lexing/ruled \
+	modules/nlp/nlp-common/src/main/java/org/daisy/pipeline/nlp/lexing/ruled/impl \
+	modules/nlp/nlp-common/src/main/java/org/daisy/pipeline/nlp/lexing/light \
+	modules/nlp/nlp-common/src/main/java/org/daisy/pipeline/nlp/lexing/light/impl \
+	modules/nlp/nlp-common/src/main/java/org/daisy/pipeline/nlp/lexing/omni \
+	modules/nlp/nlp-common/src/main/java/org/daisy/pipeline/nlp/lexing/omni/impl

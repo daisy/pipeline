@@ -63,7 +63,6 @@ modules/braille/braille-common/.test modules/braille/braille-common/.install-doc
 	modules/braille/braille-common/src/test/resources/uppercase-block-translator.xsl \
 	modules/braille/braille-common/src/test/resources/uppercase.xpl \
 	modules/braille/braille-common/src/test/resources/META-INF/catalog.xml \
-	modules/braille/braille-common/src/test/resources/OSGI-INF/uppercase-transform-provider.xml \
 	modules/braille/braille-common/src/test/resources/foobar.cti \
 	modules/braille/braille-common/src/test/java/ignore \
 	modules/braille/braille-common/src/test/java/org/daisy/pipeline/braille/common/LocalesTest.java \
@@ -84,7 +83,6 @@ modules/braille/braille-common/.install-doc : \
 	modules/braille/braille-common/src/test/xspec \
 	modules/braille/braille-common/src/test/resources \
 	modules/braille/braille-common/src/test/resources/META-INF \
-	modules/braille/braille-common/src/test/resources/OSGI-INF \
 	modules/braille/braille-common/src/test/java \
 	modules/braille/braille-common/src/test/java/org \
 	modules/braille/braille-common/src/test/java/org/daisy \

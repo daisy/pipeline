@@ -59,9 +59,6 @@ modules/braille/braille-css-utils/.test modules/braille/braille-css-utils/.insta
 	modules/braille/braille-css-utils/src/test/resources/css/css_3_with_bom.css \
 	modules/braille/braille-css-utils/src/test/resources/css/css_1.css \
 	modules/braille/braille-css-utils/src/test/resources/META-INF/catalog.xml \
-	modules/braille/braille-css-utils/src/test/resources/OSGI-INF/generic-embossed-medium-provider.xml \
-	modules/braille/braille-css-utils/src/test/resources/OSGI-INF/module.xml \
-	modules/braille/braille-css-utils/src/test/resources/OSGI-INF/mock-css-extension.xml \
 	modules/braille/braille-css-utils/src/test/resources/phony.xsl \
 	modules/braille/braille-css-utils/src/test/resources/sass/sass_5_imports_module_sass_2.scss \
 	modules/braille/braille-css-utils/src/test/resources/sass/sass_4_imports_sass_1.scss \
@@ -122,7 +119,6 @@ modules/braille/braille-css-utils/.test modules/braille/braille-css-utils/.insta
 	modules/braille/braille-css-utils/src/test/resources/dir\ with\ spaces \
 	modules/braille/braille-css-utils/src/test/resources/css \
 	modules/braille/braille-css-utils/src/test/resources/META-INF \
-	modules/braille/braille-css-utils/src/test/resources/OSGI-INF \
 	modules/braille/braille-css-utils/src/test/resources/sass \
 	modules/braille/braille-css-utils/src/test/resources/css-module \
 	modules/braille/braille-css-utils/src/test/resources/css-module/css \

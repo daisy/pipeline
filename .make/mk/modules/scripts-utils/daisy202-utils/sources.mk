@@ -1,5 +1,12 @@
 modules/scripts-utils/daisy202-utils/.test modules/scripts-utils/daisy202-utils/.install modules/scripts-utils/daisy202-utils/.install-doc $(TARGET_DIR)/state/modules/scripts-utils/daisy202-utils/modified-since-release_ : \
 	modules/scripts-utils/daisy202-utils/src/main/resources/META-INF/catalog.xml \
+	modules/scripts-utils/daisy202-utils/src/main/resources/xml/xproc/validate/daisy202-validator.script.xpl \
+	modules/scripts-utils/daisy202-utils/src/main/resources/xml/xproc/validate/steps/validate.xpl \
+	modules/scripts-utils/daisy202-utils/src/main/resources/xml/xproc/validate/steps/validate.check-heading-hierarchy.xsl \
+	modules/scripts-utils/daisy202-utils/src/main/resources/xml/xproc/validate/steps/validate.check-references.xsl \
+	modules/scripts-utils/daisy202-utils/src/main/resources/xml/xproc/validate/steps/validate.smil-times-2.xsl \
+	modules/scripts-utils/daisy202-utils/src/main/resources/xml/xproc/validate/steps/validate.smil-times-1.xsl \
+	modules/scripts-utils/daisy202-utils/src/main/resources/xml/xproc/validate/i18n.xml \
 	modules/scripts-utils/daisy202-utils/src/main/resources/xml/xproc/fix-audio-file-order.script.xpl \
 	modules/scripts-utils/daisy202-utils/src/main/resources/xml/xproc/rename-files.xpl \
 	modules/scripts-utils/daisy202-utils/src/main/resources/xml/xproc/fix-audio-file-order.xpl \
@@ -45,10 +52,15 @@ modules/scripts-utils/daisy202-utils/.test modules/scripts-utils/daisy202-utils/
 	modules/scripts-utils/daisy202-utils/src/test/resources/audio.wav \
 	modules/scripts-utils/daisy202-utils/src/test/java/XProcSpecTest.java \
 	modules/scripts-utils/daisy202-utils/src/test/xprocspec/test_fix-audio-file-order.xprocspec \
+	modules/scripts-utils/daisy202-utils/src/test/xprocspec/test_daisy202-validator.script.xprocspec \
 	modules/scripts-utils/daisy202-utils/src/test/xprocspec/test_audio-transcode.xprocspec \
-	modules/scripts-utils/daisy202-utils/src/test/xprocspec/test_load.xprocspec
+	modules/scripts-utils/daisy202-utils/src/test/xprocspec/test_validate-ncc.xprocspec \
+	modules/scripts-utils/daisy202-utils/src/test/xprocspec/test_load.xprocspec \
+	modules/scripts-utils/daisy202-utils/src/test/xprocspec/test_daisy202-validator.xprocspec
 modules/scripts-utils/daisy202-utils/.install-doc : \
-	modules/scripts-utils/daisy202-utils/doc/index.md
+	modules/scripts-utils/daisy202-utils/doc/daisy202-validator.md \
+	modules/scripts-utils/daisy202-utils/doc/index.md \
+	modules/scripts-utils/daisy202-utils/doc/daisy202-unscrambler.md
 .make/mk/modules/scripts-utils/daisy202-utils/sources.mk : \
 	modules/scripts-utils/daisy202-utils/src \
 	modules/scripts-utils/daisy202-utils/src/test \
@@ -61,6 +73,8 @@ modules/scripts-utils/daisy202-utils/.install-doc : \
 	modules/scripts-utils/daisy202-utils/src/main/resources/META-INF \
 	modules/scripts-utils/daisy202-utils/src/main/resources/xml \
 	modules/scripts-utils/daisy202-utils/src/main/resources/xml/xproc \
+	modules/scripts-utils/daisy202-utils/src/main/resources/xml/xproc/validate \
+	modules/scripts-utils/daisy202-utils/src/main/resources/xml/xproc/validate/steps \
 	modules/scripts-utils/daisy202-utils/src/main/resources/xml/xproc/load \
 	modules/scripts-utils/daisy202-utils/src/main/resources/xml/schemas \
 	modules/scripts-utils/daisy202-utils/src/main/resources/xml/schemas/d202 \

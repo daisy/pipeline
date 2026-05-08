@@ -69,8 +69,6 @@ modules/tts/tts-common/.test modules/tts/tts-common/.install-doc : \
 	modules/tts/tts-common/src/test/resources/lexicon-test-en.pls \
 	modules/tts/tts-common/src/test/resources/lexicon-test-fr.pls \
 	modules/tts/tts-common/src/test/resources/tts-default-config.xml \
-	modules/tts/tts-common/src/test/resources/OSGI-INF/mock-tts.xml \
-	modules/tts/tts-common/src/test/resources/OSGI-INF/mock-encoder.xml \
 	modules/tts/tts-common/src/test/resources/mock-tts/mock_short.wav \
 	modules/tts/tts-common/src/test/resources/mock-tts/transform-ssml.xsl \
 	modules/tts/tts-common/src/test/resources/mock-tts/mock_long.wav \
@@ -106,7 +104,6 @@ modules/tts/tts-common/.install-doc : \
 	modules/tts/tts-common/src \
 	modules/tts/tts-common/src/test \
 	modules/tts/tts-common/src/test/resources \
-	modules/tts/tts-common/src/test/resources/OSGI-INF \
 	modules/tts/tts-common/src/test/resources/mock-tts \
 	modules/tts/tts-common/src/test/resources/mock-encoder \
 	modules/tts/tts-common/src/test/java \

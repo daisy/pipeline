@@ -1,6 +1,7 @@
 modules/scripts-utils/epub-utils/.test modules/scripts-utils/epub-utils/.install modules/scripts-utils/epub-utils/.install-doc $(TARGET_DIR)/state/modules/scripts-utils/epub-utils/modified-since-release_ : \
 	modules/scripts-utils/epub-utils/src/main/resources/META-INF/catalog.xml \
 	modules/scripts-utils/epub-utils/src/main/resources/xml/validate/epub-validate.xpl \
+	modules/scripts-utils/epub-utils/src/main/resources/xml/validate/epub3-validator.script.xpl \
 	modules/scripts-utils/epub-utils/src/main/resources/xml/validate/epubcheck-report-to-pipeline-report.xsl \
 	modules/scripts-utils/epub-utils/src/main/resources/xml/validate/epubcheck-pipeline-report-to-html-report.xsl \
 	modules/scripts-utils/epub-utils/src/main/resources/xml/epub-rename-files.xpl \
@@ -269,6 +270,7 @@ modules/scripts-utils/epub-utils/.test modules/scripts-utils/epub-utils/.install
 	modules/scripts-utils/epub-utils/src/test/xprocspec/test_validate.xprocspec \
 	modules/scripts-utils/epub-utils/src/test/xprocspec/ocf/test_ocf-finalize.xprocspec \
 	modules/scripts-utils/epub-utils/src/test/xprocspec/ocf/test_load.xprocspec \
+	modules/scripts-utils/epub-utils/src/test/xprocspec/test_epub3-validator.script.xprocspec \
 	modules/scripts-utils/epub-utils/src/test/xprocspec/pub/test_epub3-pub-merge-prefix.xprocspec \
 	modules/scripts-utils/epub-utils/src/test/xprocspec/pub/test_epub3-pub-create-package-doc.xprocspec \
 	modules/scripts-utils/epub-utils/src/test/xprocspec/pub/test_opf-spine-to-fileset.xprocspec \
@@ -277,6 +279,8 @@ modules/scripts-utils/epub-utils/.test modules/scripts-utils/epub-utils/.install
 	modules/scripts-utils/epub-utils/src/test/xprocspec/nav/test_epub3-nav-create-page-list.xprocspec \
 	modules/scripts-utils/epub-utils/src/test/xprocspec/nav/test_epub3-nav-create-toc.xprocspec \
 	modules/scripts-utils/epub-utils/src/test/xprocspec/epub3-safe-uris.xprocspec
+modules/scripts-utils/epub-utils/.install-doc : \
+	modules/scripts-utils/epub-utils/doc/index.md
 .make/mk/modules/scripts-utils/epub-utils/sources.mk : \
 	modules/scripts-utils/epub-utils/src \
 	modules/scripts-utils/epub-utils/src/test \
@@ -313,4 +317,5 @@ modules/scripts-utils/epub-utils/.test modules/scripts-utils/epub-utils/.install
 	modules/scripts-utils/epub-utils/src/main/resources/xml/mo/tts \
 	modules/scripts-utils/epub-utils/src/main/resources/xml/ocf \
 	modules/scripts-utils/epub-utils/src/main/resources/xml/pub \
-	modules/scripts-utils/epub-utils/src/main/resources/xml/nav
+	modules/scripts-utils/epub-utils/src/main/resources/xml/nav \
+	modules/scripts-utils/epub-utils/doc
