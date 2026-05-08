@@ -50,7 +50,6 @@ modules/common/fileset-utils/.test modules/common/fileset-utils/.install-doc : \
 	modules/common/fileset-utils/src/test/mock/xslt/uri-functions.xsl \
 	modules/common/fileset-utils/src/test/resources/logback.xml \
 	modules/common/fileset-utils/src/test/resources/META-INF/catalog.xml \
-	modules/common/fileset-utils/src/test/resources/OSGI-INF/module.xml \
 	modules/common/fileset-utils/src/test/resources/dtd/svg11-flat.dtd \
 	modules/common/fileset-utils/src/test/resources/dtd/svg11-basic-flat.dtd \
 	modules/common/fileset-utils/src/test/resources/dtd/svg-pattern.mod \
@@ -219,7 +218,6 @@ modules/common/fileset-utils/.install-doc : \
 	modules/common/fileset-utils/src/test/mock/xslt \
 	modules/common/fileset-utils/src/test/resources \
 	modules/common/fileset-utils/src/test/resources/META-INF \
-	modules/common/fileset-utils/src/test/resources/OSGI-INF \
 	modules/common/fileset-utils/src/test/resources/dtd \
 	modules/common/fileset-utils/src/test/resources/dtd/templates \
 	modules/common/fileset-utils/src/test/java \

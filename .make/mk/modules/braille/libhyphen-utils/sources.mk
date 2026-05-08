@@ -50,7 +50,6 @@ modules/braille/libhyphen-utils/.test modules/braille/libhyphen-utils/.install-d
 	modules/braille/libhyphen-utils/src/test/resources/logback.xml \
 	modules/braille/libhyphen-utils/src/test/resources/tables/standard.dic \
 	modules/braille/libhyphen-utils/src/test/resources/tables/non-standard.dic \
-	modules/braille/libhyphen-utils/src/test/resources/OSGI-INF/table-path.xml \
 	modules/braille/libhyphen-utils/src/test/resources/phony.xsl \
 	modules/braille/libhyphen-utils/src/test/resources/foobar.dic \
 	modules/braille/libhyphen-utils/src/test/java/TablePath.java \
@@ -65,7 +64,6 @@ modules/braille/libhyphen-utils/.install-doc : \
 	modules/braille/libhyphen-utils/src/test/xspec \
 	modules/braille/libhyphen-utils/src/test/resources \
 	modules/braille/libhyphen-utils/src/test/resources/tables \
-	modules/braille/libhyphen-utils/src/test/resources/OSGI-INF \
 	modules/braille/libhyphen-utils/src/test/java \
 	modules/braille/libhyphen-utils/src/main \
 	modules/braille/libhyphen-utils/src/main/resources \

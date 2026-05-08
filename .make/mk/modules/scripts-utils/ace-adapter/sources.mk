@@ -1,7 +1,10 @@
 modules/scripts-utils/ace-adapter/.test modules/scripts-utils/ace-adapter/.install modules/scripts-utils/ace-adapter/.install-doc $(TARGET_DIR)/state/modules/scripts-utils/ace-adapter/modified-since-release_ : \
 	modules/scripts-utils/ace-adapter/src/main/resources/META-INF/catalog.xml \
 	modules/scripts-utils/ace-adapter/src/main/resources/xml/xproc/library.xpl \
-	modules/scripts-utils/ace-adapter/src/main/java/org/daisy/pipeline/epub/ace/impl/AceProvider.java
+	modules/scripts-utils/ace-adapter/src/main/java/org/daisy/pipeline/epub/ace/Ace.java \
+	modules/scripts-utils/ace-adapter/src/main/java/org/daisy/pipeline/epub/ace/impl/AceProvider.java \
+	modules/scripts-utils/ace-adapter/src/main/java/org/daisy/pipeline/epub/ace/EpubAccessibilityCheckOption.java \
+	modules/scripts-utils/ace-adapter/src/main/java/org/daisy/pipeline/epub/ace/AceFinder.java
 modules/scripts-utils/ace-adapter/.test modules/scripts-utils/ace-adapter/.install-doc : \
 	modules/scripts-utils/ace-adapter/src/test/resources/logback.xml \
 	modules/scripts-utils/ace-adapter/src/test/resources/moby-dick-mo-20120214.OK.epub \

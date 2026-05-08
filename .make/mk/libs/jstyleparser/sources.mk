@@ -1,67 +1,4 @@
-libs/jstyleparser/.test : \
-	libs/jstyleparser/src/test/resources/advanced/domassign.html \
-	libs/jstyleparser/src/test/resources/advanced/style.html \
-	libs/jstyleparser/src/test/resources/advanced/inherit.html \
-	libs/jstyleparser/src/test/resources/advanced/style.css \
-	libs/jstyleparser/src/test/resources/advanced/background.html \
-	libs/jstyleparser/src/test/resources/w3c/style.css \
-	libs/jstyleparser/src/test/resources/w3c/w3c_input_files/w3c_main.png \
-	libs/jstyleparser/src/test/resources/w3c/w3c_input_files/right000.png \
-	libs/jstyleparser/src/test/resources/w3c/w3c_input_files/58400000.png \
-	libs/jstyleparser/src/test/resources/w3c/w3c_input_files/Logo_25w.gif \
-	libs/jstyleparser/src/test/resources/w3c/w3c_input_files/workshop.jpg \
-	libs/jstyleparser/src/test/resources/w3c/w3c_input_files/MWI-Pict.png \
-	libs/jstyleparser/src/test/resources/w3c/w3c_input_files/valid-xh.png \
-	libs/jstyleparser/src/test/resources/w3c/w3c_input_files/wcag1AA0.png \
-	libs/jstyleparser/src/test/resources/w3c/w3c_input_files/valid-cs.png \
-	libs/jstyleparser/src/test/resources/w3c/w3c_input.html \
-	libs/jstyleparser/src/test/resources/abclinuxu/styles.css \
-	libs/jstyleparser/src/test/resources/abclinuxu/temp.css \
-	libs/jstyleparser/src/test/resources/abclinuxu/layout.css \
-	libs/jstyleparser/src/test/resources/abclinuxu/opensuse-11.1-beta-1.html \
-	libs/jstyleparser/src/test/resources/invalid/recovery2.css \
-	libs/jstyleparser/src/test/resources/invalid/style.html \
-	libs/jstyleparser/src/test/resources/invalid/style.css \
-	libs/jstyleparser/src/test/resources/invalid/recovery2.html \
-	libs/jstyleparser/src/test/resources/simple/impmedia.css \
-	libs/jstyleparser/src/test/resources/simple/selectors3.css \
-	libs/jstyleparser/src/test/resources/simple/selectors2.css \
-	libs/jstyleparser/src/test/resources/simple/selectors.css \
-	libs/jstyleparser/src/test/resources/simple/line-height.html \
-	libs/jstyleparser/src/test/resources/simple/imp.css \
-	libs/jstyleparser/src/test/resources/simple/data.html \
-	libs/jstyleparser/src/test/resources/simple/selectors3.html \
-	libs/jstyleparser/src/test/resources/simple/pseudo.html \
-	libs/jstyleparser/src/test/resources/simple/h1.html \
-	libs/jstyleparser/src/test/resources/simple/selectors.html \
-	libs/jstyleparser/src/test/resources/simple/selectors2.html \
-	libs/jstyleparser/src/test/resources/simple/data.css \
-	libs/jstyleparser/src/test/resources/media/media1.html \
-	libs/jstyleparser/src/test/java/test/NodeDataVariantTest.java \
-	libs/jstyleparser/src/test/java/test/ElementMap.java \
-	libs/jstyleparser/src/test/java/test/ImportTest1.java \
-	libs/jstyleparser/src/test/java/test/DOMAssignMediaTest.java \
-	libs/jstyleparser/src/test/java/test/DeclarationsUtil.java \
-	libs/jstyleparser/src/test/java/test/GrammarRecovery1Test.java \
-	libs/jstyleparser/src/test/java/test/MediaTest.java \
-	libs/jstyleparser/src/test/java/test/FunctionsTest.java \
-	libs/jstyleparser/src/test/java/test/AntlrDebug.java \
-	libs/jstyleparser/src/test/java/test/SelectorTest.java \
-	libs/jstyleparser/src/test/java/test/CollectionSpeedTest.java \
-	libs/jstyleparser/src/test/java/test/ErrorTest.java \
-	libs/jstyleparser/src/test/java/test/SimpleTest.java \
-	libs/jstyleparser/src/test/java/test/DOMAssignDirectTest.java \
-	libs/jstyleparser/src/test/java/test/SelectorsUtil.java \
-	libs/jstyleparser/src/test/java/test/ParserDemo.java \
-	libs/jstyleparser/src/test/java/test/AnalyzerTest.java \
-	libs/jstyleparser/src/test/java/test/DecoderTest.java \
-	libs/jstyleparser/src/test/java/test/AdvancedCSSTest.java \
-	libs/jstyleparser/src/test/java/test/GrammarRecovery2Test.java \
-	libs/jstyleparser/src/test/java/test/PseudoClassTest.java \
-	libs/jstyleparser/src/test/java/test/DOMSource.java \
-	libs/jstyleparser/src/test/java/test/UAConformancyTest.java \
-	libs/jstyleparser/src/test/java/test/ProfilerEntryPoint.java \
-	libs/jstyleparser/src/test/java/test/DOMAssignTest.java \
+libs/jstyleparser/.test libs/jstyleparser/.install libs/jstyleparser/.install-doc $(TARGET_DIR)/state/libs/jstyleparser/modified-since-release_ : \
 	libs/jstyleparser/src/main/assembly/dist.xml \
 	libs/jstyleparser/src/main/resources/placeholder \
 	libs/jstyleparser/src/main/java/org/fit/net/DataURLConnection.java \
@@ -196,6 +133,78 @@ libs/jstyleparser/.test : \
 	libs/jstyleparser/src/main/antlr3/.gitignore \
 	libs/jstyleparser/src/main/antlr3/CSSParser.g \
 	libs/jstyleparser/src/main/antlr3/CSSTreeParser.g
+libs/jstyleparser/.test libs/jstyleparser/.install-doc : \
+	libs/jstyleparser/src/test/resources/advanced/domassign.html \
+	libs/jstyleparser/src/test/resources/advanced/style.html \
+	libs/jstyleparser/src/test/resources/advanced/inherit.html \
+	libs/jstyleparser/src/test/resources/advanced/style.css \
+	libs/jstyleparser/src/test/resources/advanced/background.html \
+	libs/jstyleparser/src/test/resources/w3c/style.css \
+	libs/jstyleparser/src/test/resources/w3c/w3c_input_files/w3c_main.png \
+	libs/jstyleparser/src/test/resources/w3c/w3c_input_files/right000.png \
+	libs/jstyleparser/src/test/resources/w3c/w3c_input_files/58400000.png \
+	libs/jstyleparser/src/test/resources/w3c/w3c_input_files/Logo_25w.gif \
+	libs/jstyleparser/src/test/resources/w3c/w3c_input_files/workshop.jpg \
+	libs/jstyleparser/src/test/resources/w3c/w3c_input_files/MWI-Pict.png \
+	libs/jstyleparser/src/test/resources/w3c/w3c_input_files/valid-xh.png \
+	libs/jstyleparser/src/test/resources/w3c/w3c_input_files/wcag1AA0.png \
+	libs/jstyleparser/src/test/resources/w3c/w3c_input_files/valid-cs.png \
+	libs/jstyleparser/src/test/resources/w3c/w3c_input.html \
+	libs/jstyleparser/src/test/resources/abclinuxu/styles.css \
+	libs/jstyleparser/src/test/resources/abclinuxu/temp.css \
+	libs/jstyleparser/src/test/resources/abclinuxu/layout.css \
+	libs/jstyleparser/src/test/resources/abclinuxu/opensuse-11.1-beta-1.html \
+	libs/jstyleparser/src/test/resources/invalid/recovery2.css \
+	libs/jstyleparser/src/test/resources/invalid/style.html \
+	libs/jstyleparser/src/test/resources/invalid/style.css \
+	libs/jstyleparser/src/test/resources/invalid/recovery2.html \
+	libs/jstyleparser/src/test/resources/simple/impmedia.css \
+	libs/jstyleparser/src/test/resources/simple/selectors3.css \
+	libs/jstyleparser/src/test/resources/simple/selectors2.css \
+	libs/jstyleparser/src/test/resources/simple/selectors.css \
+	libs/jstyleparser/src/test/resources/simple/line-height.html \
+	libs/jstyleparser/src/test/resources/simple/imp.css \
+	libs/jstyleparser/src/test/resources/simple/data.html \
+	libs/jstyleparser/src/test/resources/simple/selectors3.html \
+	libs/jstyleparser/src/test/resources/simple/pseudo.html \
+	libs/jstyleparser/src/test/resources/simple/h1.html \
+	libs/jstyleparser/src/test/resources/simple/selectors.html \
+	libs/jstyleparser/src/test/resources/simple/selectors2.html \
+	libs/jstyleparser/src/test/resources/simple/data.css \
+	libs/jstyleparser/src/test/resources/media/media1.html \
+	libs/jstyleparser/src/test/java/test/NodeDataVariantTest.java \
+	libs/jstyleparser/src/test/java/test/ElementMap.java \
+	libs/jstyleparser/src/test/java/test/ImportTest1.java \
+	libs/jstyleparser/src/test/java/test/DOMAssignMediaTest.java \
+	libs/jstyleparser/src/test/java/test/DeclarationsUtil.java \
+	libs/jstyleparser/src/test/java/test/GrammarRecovery1Test.java \
+	libs/jstyleparser/src/test/java/test/MediaTest.java \
+	libs/jstyleparser/src/test/java/test/FunctionsTest.java \
+	libs/jstyleparser/src/test/java/test/AntlrDebug.java \
+	libs/jstyleparser/src/test/java/test/SelectorTest.java \
+	libs/jstyleparser/src/test/java/test/CollectionSpeedTest.java \
+	libs/jstyleparser/src/test/java/test/ErrorTest.java \
+	libs/jstyleparser/src/test/java/test/SimpleTest.java \
+	libs/jstyleparser/src/test/java/test/DOMAssignDirectTest.java \
+	libs/jstyleparser/src/test/java/test/SelectorsUtil.java \
+	libs/jstyleparser/src/test/java/test/ParserDemo.java \
+	libs/jstyleparser/src/test/java/test/AnalyzerTest.java \
+	libs/jstyleparser/src/test/java/test/DecoderTest.java \
+	libs/jstyleparser/src/test/java/test/AdvancedCSSTest.java \
+	libs/jstyleparser/src/test/java/test/GrammarRecovery2Test.java \
+	libs/jstyleparser/src/test/java/test/PseudoClassTest.java \
+	libs/jstyleparser/src/test/java/test/DOMSource.java \
+	libs/jstyleparser/src/test/java/test/UAConformancyTest.java \
+	libs/jstyleparser/src/test/java/test/ProfilerEntryPoint.java \
+	libs/jstyleparser/src/test/java/test/DOMAssignTest.java
+libs/jstyleparser/.install-doc : \
+	libs/jstyleparser/doc/manual/doc_php.xsl \
+	libs/jstyleparser/doc/manual/gen \
+	libs/jstyleparser/doc/manual/doc.xsl \
+	libs/jstyleparser/doc/manual/manual.php \
+	libs/jstyleparser/doc/manual/manual.xml \
+	libs/jstyleparser/doc/manual/manual.html \
+	libs/jstyleparser/doc/manual/manual.css
 .make/mk/libs/jstyleparser/sources.mk : \
 	libs/jstyleparser/src \
 	libs/jstyleparser/src/test \
@@ -223,4 +232,6 @@ libs/jstyleparser/.test : \
 	libs/jstyleparser/src/main/java/cz/vutbr/web/css \
 	libs/jstyleparser/src/main/java/cz/vutbr/web/csskit \
 	libs/jstyleparser/src/main/java/cz/vutbr/web/csskit/antlr \
-	libs/jstyleparser/src/main/antlr3
+	libs/jstyleparser/src/main/antlr3 \
+	libs/jstyleparser/doc \
+	libs/jstyleparser/doc/manual

@@ -201,8 +201,6 @@ modules/braille/liblouis-utils/.test modules/braille/liblouis-utils/.install-doc
 	modules/braille/liblouis-utils/src/test/resources/mathml/test_022.xml \
 	modules/braille/liblouis-utils/src/test/resources/mathml/test_036.xml \
 	modules/braille/liblouis-utils/src/test/resources/META-INF/catalog.xml \
-	modules/braille/liblouis-utils/src/test/resources/OSGI-INF/mock-hyphenator-provider.xml \
-	modules/braille/liblouis-utils/src/test/resources/OSGI-INF/table-path.xml \
 	modules/braille/liblouis-utils/src/test/resources/phony.xsl \
 	modules/braille/liblouis-utils/src/test/java/TablePath.java \
 	modules/braille/liblouis-utils/src/test/java/ignore \
@@ -223,7 +221,6 @@ modules/braille/liblouis-utils/.install-doc : \
 	modules/braille/liblouis-utils/src/test/resources/tables \
 	modules/braille/liblouis-utils/src/test/resources/mathml \
 	modules/braille/liblouis-utils/src/test/resources/META-INF \
-	modules/braille/liblouis-utils/src/test/resources/OSGI-INF \
 	modules/braille/liblouis-utils/src/test/java \
 	modules/braille/liblouis-utils/src/test/java/org \
 	modules/braille/liblouis-utils/src/test/java/org/daisy \

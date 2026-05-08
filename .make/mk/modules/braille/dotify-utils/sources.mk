@@ -94,7 +94,6 @@ modules/braille/dotify-utils/.test modules/braille/dotify-utils/.install-doc : \
 	modules/braille/dotify-utils/src/test/resources/logback.xml \
 	modules/braille/dotify-utils/src/test/resources/capsphrase.utb \
 	modules/braille/dotify-utils/src/test/resources/file-to-obfl.xpl \
-	modules/braille/dotify-utils/src/test/resources/OSGI-INF/number-braille-translator-provider.xml \
 	modules/braille/dotify-utils/src/test/resources/non-standard-hyph.dic \
 	modules/braille/dotify-utils/src/test/resources/foo.dic \
 	modules/braille/dotify-utils/src/test/resources/test_file-to-obfl/test_01.xml \
@@ -129,7 +128,6 @@ modules/braille/dotify-utils/.install-doc : \
 	modules/braille/dotify-utils/src/test \
 	modules/braille/dotify-utils/src/test/xspec \
 	modules/braille/dotify-utils/src/test/resources \
-	modules/braille/dotify-utils/src/test/resources/OSGI-INF \
 	modules/braille/dotify-utils/src/test/resources/test_file-to-obfl \
 	modules/braille/dotify-utils/src/test/java \
 	modules/braille/dotify-utils/src/test/xprocspec \
