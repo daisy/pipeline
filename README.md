@@ -20,7 +20,6 @@ The tree below shows the structure of the project:
   - [java](https://github.com/daisy/pipeline-clientlib-java)
   - [go](https://github.com/daisy/pipeline-clientlib-go)
 - [framework](https://github.com/daisy/pipeline-framework)
-- [gui](https://github.com/daisy/pipeline-gui)
 - libs
   - [braille-css](https://github.com/daisy/braille-css)
   - [dotify.library](https://github.com/mtmse/dotify.library)
