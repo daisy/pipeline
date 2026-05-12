@@ -35,7 +35,6 @@ The tree below shows the structure of the project:
   - [xprocspec](https://github.com/daisy/xprocspec)
   - [xproc-maven-plugin](https://github.com/daisy/xproc-maven-plugin)
   - [xspec-maven-plugin](https://github.com/daisy/xspec-maven-plugin)
-- [webui](https://github.com/daisy/pipeline-webui)
 
 See http://daisy.github.io/pipeline/Contribute/Developer-Guide/Sources/ for more information about the source code.
 
