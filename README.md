@@ -29,7 +29,6 @@ The tree below shows the structure of the project:
   - [liblouis-java](https://github.com/liblouis/liblouis-java)
   - [osgi-libs](https://github.com/daisy/osgi-libs)
 - [modules](https://github.com/daisy/pipeline-modules)
-- [ui](https://github.com/daisy/pipeline-ui)
 - utils
   - [build-utils](https://github.com/daisy/pipeline-build-utils)
   - [xprocspec](https://github.com/daisy/xprocspec)
