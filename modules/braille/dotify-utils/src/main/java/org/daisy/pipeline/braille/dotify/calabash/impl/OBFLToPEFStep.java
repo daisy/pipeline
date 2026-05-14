@@ -275,13 +275,13 @@ public class OBFLToPEFStep extends DefaultStep implements XProcStep {
 			boolean allowEndingPageOnHyphen;
 			boolean allowEndingVolumeOnHyphen; {
 				String p = params.get("hyphenation-at-page-breaks");
-				if ("false".equalsIgnoreCase(p)) {
+				if (p == null || "false".equalsIgnoreCase(p)) {
 					allowEndingPageOnHyphen = false;
 					allowEndingVolumeOnHyphen = false;
 				} else if ("except-at-volume-breaks".equalsIgnoreCase(p)) {
 					allowEndingPageOnHyphen = true;
 					allowEndingVolumeOnHyphen = false;
-				} else { // true (default)
+				} else { // true
 					allowEndingPageOnHyphen = true;
 					// Follow the OBFL standard which says that "when volume-transition is
 					// present, the last page or sheet in each volume may be modified so that
