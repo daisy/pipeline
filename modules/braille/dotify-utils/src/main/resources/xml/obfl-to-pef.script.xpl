@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:pef="http://www.daisy.org/ns/2008/pef"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:map="http://www.w3.org/2005/xpath-functions/map"
                 xmlns:dc="http://purl.org/dc/elements/1.1/"
                 px:input-filesets="obfl"
                 px:output-filesets="pef"
@@ -101,6 +104,11 @@ supported:
             px:obfl-to-pef
         </p:documentation>
     </p:import>
+    <cx:import href="http://www.daisy.org/pipeline/modules/css-utils/library.xsl" type="application/xslt+xml">
+        <p:documentation>
+            pf:css-parse-medium
+        </p:documentation>
+    </cx:import>
 
     <p:variable name="name" select="replace(p:base-uri(/),'^.*/([^/]*)\.[^/\.]*$','$1')"/>
 
@@ -122,8 +130,10 @@ supported:
         <p:with-option name="output-dir" select="$result"/>
         <p:with-option name="name-pattern" select="concat($name,'_vol-{}')"/>
         <p:with-option name="single-volume-name" select="$name"/>
-        <p:with-option name="file-format" select="concat(($output-file-format,'(format:pef)')[not(.='')][1],
-                                                         '(document-locale:',(//pef:meta/dc:language,'und')[1],')')"/>
+        <p:with-option name="medium"
+                       select="pf:css-parse-medium((
+                                 ($output-file-format,'embossed AND (-daisy-format:pef)')[not(.='')][1],
+                                 map:entry('-daisy-document-locale',(//pef:meta/dc:language,'und')[1])))"/>
         <p:with-option name="preview-table" select="if ($preview-table!='') then $preview-table
                                                     else concat('(document-locale:',(//pef:meta/dc:language,'und')[1],')')"/>
     </px:pef-store>
