@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               script="../../main/resources/xml/sass-compile.xpl">
+
+	<x:scenario label="test">
+		<x:call step="px:sass-compile">
+			<x:input port="source.fileset">
+				<x:document type="inline">
+					<d:fileset>
+						<d:file href="../resources/charset.scss" media-type="text/x-scss"/>
+						<d:file href="../resources/default-dtbook-speech.scss" media-type="text/x-scss"/>
+						<d:file href="../resources/import.scss" media-type="text/x-scss"/>
+						<d:file href="../resources/misc.scss" media-type="text/x-scss"/>
+						<d:file href="../resources/nested_properties.scss" media-type="text/x-scss"/>
+						<d:file href="../resources/imports/_5.scss" media-type="text/x-scss"/>
+					</d:fileset>
+				</x:document>
+			</x:input>
+			<x:input port="source.in-memory"/>
+		</x:call>
+		<x:context label="the result.fileset port">
+			<x:document type="port" port="result.fileset"/>
+		</x:context>
+		<x:expect label="the result"
+		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"
+		          step="x:fileset-compare">
+			<x:document type="inline">
+				<d:fileset>
+					<d:file href="../resources/charset.css" media-type="text/css"/>
+					<d:file href="../resources/default-dtbook-speech.css" media-type="text/css"/>
+					<d:file href="../resources/import.css" media-type="text/css"/>
+					<d:file href="../resources/misc.css" media-type="text/css"/>
+					<d:file href="../resources/nested_properties.css" media-type="text/css"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+		<x:context label="the 'charset.css' document on the result.in-memory port">
+			<x:document type="port" port="result.in-memory" select="/*[ends-with(base-uri(.), '/charset.css')]"/>
+		</x:context>
+		<x:expect label="the 'charset.css' document" type="compare">
+			<x:document type="inline">
+				<c:data content-type="text/css">@charset "UTF-8";
+x::after {
+  content: 'Çüéâäů';
+}
+</c:data>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
+</x:description>

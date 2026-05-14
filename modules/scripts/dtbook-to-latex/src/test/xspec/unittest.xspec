@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+               stylesheet="../../main/resources/xml/dtbook-to-latex.xsl">
+
+  <x:scenario label="minimal DTBook">
+    <x:context>
+      <dtb:dtbook version="2005-3" xml:lang="en">
+        <dtb:book>
+          <dtb:bodymatter>
+            <dtb:level1>
+              <dtb:h1>Chapter One</dtb:h1>
+              <dtb:p>Hello world.</dtb:p>
+            </dtb:level1>
+          </dtb:bodymatter>
+        </dtb:book>
+      </dtb:dtbook>
+    </x:context>
+    <x:expect label="has documentclass declaration"
+              test="contains(string(.), '\documentclass')"/>
+    <x:expect label="has begin document"
+              test="contains(string(.), '\begin{document}')"/>
+    <x:expect label="has end document"
+              test="contains(string(.), '\end{document}')"/>
+  </x:scenario>
+
+  <x:scenario label="headings">
+    <x:context>
+      <dtb:dtbook version="2005-3" xml:lang="en">
+        <dtb:book>
+          <dtb:bodymatter>
+            <dtb:level1>
+              <dtb:h1>Chapter One</dtb:h1>
+              <dtb:level2>
+                <dtb:h2>Section Two</dtb:h2>
+                <dtb:level3>
+                  <dtb:h3>Subsection Three</dtb:h3>
+                </dtb:level3>
+              </dtb:level2>
+            </dtb:level1>
+          </dtb:bodymatter>
+        </dtb:book>
+      </dtb:dtbook>
+    </x:context>
+    <x:expect label="h1 becomes chapter"
+              test="contains(string(.), '\chapter')"/>
+    <x:expect label="h2 becomes section"
+              test="contains(string(.), '\section')"/>
+    <x:expect label="h3 becomes subsection"
+              test="contains(string(.), '\subsection')"/>
+  </x:scenario>
+
+  <x:scenario label="emphasis">
+    <x:context>
+      <dtb:dtbook version="2005-3" xml:lang="en">
+        <dtb:book>
+          <dtb:bodymatter>
+            <dtb:level1>
+              <dtb:h1>Test</dtb:h1>
+              <dtb:p>Some <dtb:em>emphasized</dtb:em> text.</dtb:p>
+            </dtb:level1>
+          </dtb:bodymatter>
+        </dtb:book>
+      </dtb:dtbook>
+    </x:context>
+    <x:expect label="em becomes \emph{}"
+              test="contains(string(.), '\emph{emphasized}')"/>
+  </x:scenario>
+
+  <x:scenario label="strong">
+    <x:context>
+      <dtb:dtbook version="2005-3" xml:lang="en">
+        <dtb:book>
+          <dtb:bodymatter>
+            <dtb:level1>
+              <dtb:h1>Test</dtb:h1>
+              <dtb:p>Some <dtb:strong>bold</dtb:strong> text.</dtb:p>
+            </dtb:level1>
+          </dtb:bodymatter>
+        </dtb:book>
+      </dtb:dtbook>
+    </x:context>
+    <x:expect label="strong becomes \textbf{}"
+              test="contains(string(.), '\textbf{bold}')"/>
+  </x:scenario>
+
+  <x:scenario label="unordered list">
+    <x:context>
+      <dtb:dtbook version="2005-3" xml:lang="en">
+        <dtb:book>
+          <dtb:bodymatter>
+            <dtb:level1>
+              <dtb:h1>Test</dtb:h1>
+              <dtb:list type="ul">
+                <dtb:li>First item</dtb:li>
+                <dtb:li>Second item</dtb:li>
+              </dtb:list>
+            </dtb:level1>
+          </dtb:bodymatter>
+        </dtb:book>
+      </dtb:dtbook>
+    </x:context>
+    <x:expect label="ul becomes itemize environment"
+              test="contains(string(.), '\begin{itemize}')"/>
+    <x:expect label="itemize environment is closed"
+              test="contains(string(.), '\end{itemize}')"/>
+  </x:scenario>
+
+  <x:scenario label="ordered list">
+    <x:context>
+      <dtb:dtbook version="2005-3" xml:lang="en">
+        <dtb:book>
+          <dtb:bodymatter>
+            <dtb:level1>
+              <dtb:h1>Test</dtb:h1>
+              <dtb:list type="ol">
+                <dtb:li>First item</dtb:li>
+                <dtb:li>Second item</dtb:li>
+              </dtb:list>
+            </dtb:level1>
+          </dtb:bodymatter>
+        </dtb:book>
+      </dtb:dtbook>
+    </x:context>
+    <x:expect label="ol becomes enumerate environment"
+              test="contains(string(.), '\begin{enumerate}')"/>
+    <x:expect label="enumerate environment is closed"
+              test="contains(string(.), '\end{enumerate}')"/>
+  </x:scenario>
+
+</x:description>

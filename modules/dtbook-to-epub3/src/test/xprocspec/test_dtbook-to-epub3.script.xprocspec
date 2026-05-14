@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+			   xmlns:c="http://www.w3.org/ns/xproc-step"
+               xmlns:html="http://www.w3.org/1999/xhtml"
+               xmlns:epub="http://www.idpf.org/2007/ops"
+               xmlns:opf="http://www.idpf.org/2007/opf"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               script="../../main/resources/xml/dtbook-to-epub3.xpl">
+
+    <x:scenario label="minimal">
+        <x:call step="px:dtbook-to-epub3.script">
+			<x:input port="source">
+				<x:document type="file" href="../resources/minimal.xml"/>
+			</x:input>
+            <x:option name="validation" select="'off'"/>
+            <x:option name="result" select="resolve-uri('minimal/output-dir/',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('minimal/temp-dir/',$temp-dir)"/>
+        </x:call>
+        <x:context label="the status">
+            <x:document type="port" port="status"/>
+        </x:context>
+        <x:expect label="the conversion should succeed" type="compare">
+            <x:document type="inline">
+                <d:validation-status result="ok"/>
+            </x:document>
+        </x:expect>
+		<x:context label="the output directory">
+            <x:document type="directory" base-uri="temp-dir" href="minimal/output-dir/" recursive="true"/>
+		</x:context>
+        <x:expect label="the output directory should contain the EPUB 3" type="compare" >
+            <x:document type="inline">
+				<c:directory name="output-dir">
+					<c:file name="minimal.epub"/>
+				</c:directory>
+            </x:document>
+        </x:expect>
+        <x:context label="the result epub">
+            <x:document type="zip" base-uri="temp-dir" href="minimal/output-dir/minimal.epub" ordered="true"/>
+        </x:context>
+        <x:expect label="the result epub" type="compare">
+            <x:document type="inline">
+                <c:zipfile name="minimal.epub">
+                    <c:file name="EPUB/minimal-1.xhtml"/>
+                    <c:file name="EPUB/minimal-2.xhtml"/>
+                    <c:file name="EPUB/package.opf"/>
+                    <c:file name="EPUB/toc.xhtml"/>
+                    <c:file name="EPUB/zedai-mods.xml"/>
+                    <c:file name="META-INF/container.xml"/>
+                    <c:file name="mimetype"/>
+                </c:zipfile>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="validation">
+        <x:call step="px:dtbook-to-epub3.script">
+            <x:input port="source">
+                <x:document type="inline">
+                    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en" version="2005-3">
+                        <head>
+                            <meta name="dtb:uid" content="CECIREADER-TEST-CD46505C-6FD0-11E4-B2F6-BBE73AE121C6"/>
+                            <meta name="dc:Title" content="Minimal DTBook"/>
+                            <meta name="dc:Creator" content="Bert"/>
+                        </head>
+                        <book>
+                            <frontmatter>
+                                <doctitle>Minimal DTBook</doctitle>
+                                <docauthor>Bert</docauthor>
+                            </frontmatter>
+                            <bodymatter>
+                                <level2>
+                                    <h1>Chapter</h1>
+                                    <p>Paragraph</p>
+                                </level2>
+                            </bodymatter>
+                        </book>
+                    </dtbook>
+                </x:document>
+            </x:input>
+        </x:call>
+        <x:scenario label="abort (default)">
+            <x:call>
+                <x:option name="validation" select="'abort'"/>
+                <x:option name="result" select="resolve-uri('validation-abort/output-dir/',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('validation-abort/temp-dir/',$temp-dir)"/>
+            </x:call>
+            <x:context label="the status">
+                <x:document type="port" port="status"/>
+            </x:context>
+            <x:expect label="the conversion should succeed" type="compare">
+                <x:document type="inline">
+                    <d:validation-status result="error"/>
+                </x:document>
+            </x:expect>
+            <x:context label="the report">
+                <x:document type="port" port="validation-report"/>
+            </x:context>
+            <x:expect label="there should be an error about the 'level2' element" type="xpath"
+                      test="exists(//html:li[@class='message-error'][contains(string(.),'element &quot;level2&quot; not allowed here')])"/>
+        </x:scenario>
+        <x:scenario label="report">
+            <x:call>
+                <x:option name="validation" select="'report'"/>
+                <x:option name="result" select="resolve-uri('validation-report/output-dir/',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('validation-report/temp-dir/',$temp-dir)"/>
+            </x:call>
+            <x:context label="the status">
+                <x:document type="port" port="status"/>
+            </x:context>
+            <x:expect label="the conversion should succeed" type="compare">
+                <x:document type="inline">
+                    <d:validation-status result="ok"/>
+                </x:document>
+            </x:expect>
+            <x:context label="the output directory">
+                <x:document type="directory" base-uri="temp-dir" href="validation-report/output-dir/" recursive="true"/>
+            </x:context>
+            <x:expect label="the script should succeed" type="compare" >
+                <x:document type="inline">
+                    <c:directory name="output-dir">
+                        <c:file name="test_dtbook-to-epub3.script.epub"/>
+                    </c:directory>
+                </x:document>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+    
+    <x:scenario label="preserve significant white space (issue #94)">
+        <x:call step="px:dtbook-to-epub3.script">
+            <x:input port="source">
+                <x:document type="inline">
+                    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en" version="2005-3">
+                        <head>
+                            <meta name="dc:Title" content="Selections from &quot;Great Pictures, As Seen and Described by Famous Writers&quot;"/>
+                            <meta name="dc:Creator" content="Esther Singleton"/>
+                            <meta name="dc:Language" content="en-US"/>
+                        </head>
+                        <book>
+                            <bodymatter>
+                                <level1>
+                                    <h1 id="chapter_1">
+                                        <em>CHAPTER 1</em> <strong>THE LAST JUDGEMENT (MICHAEL ANGELO)</strong>
+                                    </h1>
+                                </level1>
+                            </bodymatter>
+                        </book>
+                    </dtbook>
+                </x:document>
+            </x:input>
+            <x:option name="validation" select="'report'"/>
+            <x:option name="result" select="resolve-uri('issue-94/output-dir/',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('issue-94/temp-dir/',$temp-dir)"/>
+        </x:call>
+        <x:context label="the status">
+            <x:document type="port" port="status"/>
+        </x:context>
+        <x:expect label="the conversion should succeed" type="compare">
+            <x:document type="inline">
+                <d:validation-status result="ok"/>
+            </x:document>
+        </x:expect>
+        <x:context label="the content file">
+            <x:document type="file" base-uri="temp-dir" href="issue-94/output-dir/test_dtbook-to-epub3.script.epub!/EPUB/test_dtbook-to-epub3.script-2.xhtml" select="//(html:h1|html:h2|html:h3|html:h4|html:h5|html:h6)[1]"/>
+        </x:context>
+        <x:expect label="the white space in between the 'em' elements should be preserved" type="compare" normalize-space="false">
+            <x:document type="inline">
+                <h3 xmlns="http://www.w3.org/1999/xhtml" id="chapter_1">
+                                        <em>CHAPTER 1</em> <strong>THE LAST JUDGEMENT (MICHAEL ANGELO)</strong>
+                                    </h3>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="dtbook 1.1.0">
+        <x:call step="px:dtbook-to-epub3.script">
+            <x:input port="source">
+                <x:document type="file" href="../resources/dtbook110.xml"/>
+            </x:input>
+            <x:option name="validation" select="'abort'"/>
+            <x:option name="result" select="resolve-uri('dtbook110/output-dir/',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('dtbook110/temp-dir/',$temp-dir)"/>
+        </x:call>
+        <x:context label="the status">
+            <x:document type="port" port="status"/>
+        </x:context>
+        <x:expect label="the conversion should succeed" type="compare">
+            <x:document type="inline">
+                <d:validation-status result="ok"/>
+            </x:document>
+        </x:expect>
+        <x:context label="the result HTML file">
+            <x:document type="file" base-uri="temp-dir" href="dtbook110/output-dir/dtbook110.epub!/EPUB/dtbook110-1.xhtml"/>
+        </x:context>
+        <x:expect label="the result HTML file" type="compare">
+            <x:document type="inline">
+                <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+                    <head>
+                        <meta charset="UTF-8"/>
+                        <title>Title</title>
+                    </head>
+                    <body id="id_3" epub:type="frontmatter">
+                        <section id="id_4">
+                            <h3 id="id_5" epub:type="title">Title</h3>
+                        </section>
+                    </body>
+                </html>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="dir-attribute">
+        <x:call step="px:dtbook-to-epub3.script">
+            <x:input port="source">
+                <x:document type="inline">
+                    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en" dir="rtl">
+                        <head>
+                            <meta name="dtb:uid" content="CECIREADER-TEST-CD46505C-6FD0-11E4-B2F6-BBE73AE121C6"/>
+                            <meta name="dc:Title" content="Minimal DTBook"/>
+                            <meta name="dc:Creator" content="Bert"/>
+                        </head>
+                        <book>
+                            <frontmatter>
+                                <doctitle>Minimal DTBook</doctitle>
+                                <docauthor>Bert</docauthor>
+                            </frontmatter>
+                            <bodymatter>
+                                <level1>
+                                    <h1>Chapter</h1>
+                                    <p>Paragraph</p>
+                                </level1>
+                            </bodymatter>
+                        </book>
+                    </dtbook>
+                </x:document>
+            </x:input>
+            <x:option name="validation" select="'off'"/>
+            <x:option name="result" select="resolve-uri('dir-attribute/output-dir/',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('dir-attribute/temp-dir/',$temp-dir)"/>
+        </x:call>
+        <x:context label="the status">
+            <x:document type="port" port="status"/>
+        </x:context>
+        <x:expect label="the conversion should succeed" type="compare">
+            <x:document type="inline">
+                <d:validation-status result="ok"/>
+            </x:document>
+        </x:expect>
+        <x:context label="the output directory">
+            <x:document type="directory" base-uri="temp-dir" href="dir-attribute/output-dir/" recursive="true"/>
+        </x:context>
+        <x:expect label="the script should succeed" type="compare">
+            <x:document type="inline">
+                <c:directory name="output-dir">
+                    <c:file name="test_dtbook-to-epub3.script.epub"/>
+                </c:directory>
+            </x:document>
+        </x:expect>
+        <x:context label="the html document">
+            <x:document type="file" base-uri="temp-dir"
+                        href="dir-attribute/output-dir/test_dtbook-to-epub3.script.epub!/EPUB/test_dtbook-to-epub3.script-1.xhtml"/>
+        </x:context>
+        <x:expect label="the result html document should have a 'dir' attribute" type="xpath" test="/*/@dir" equals="'rtl'"/>
+    </x:scenario>
+    
+    <x:scenario label="tts">
+        <x:call step="px:dtbook-to-epub3.script">
+            <x:input port="source">
+                <x:document type="file" href="../resources/minimal.xml"/>
+            </x:input>
+            <x:input port="tts-config">
+                <x:document type="inline">
+                    <config>
+                        <voice engine="mock-tts" name="alex" lang="en" gender="male-adult"/>
+                    </config>
+                </x:document>
+            </x:input>
+            <x:option name="validation" select="'off'"/>
+            <x:option name="audio" select="true()"/>
+            <x:option name="audio-file-type" select="'audio/x-wav'"/>
+            <x:option name="result" select="resolve-uri('tts/output-dir/',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('tts/temp-dir/',$temp-dir)"/>
+        </x:call>
+        <x:context label="the status">
+            <x:document type="port" port="status"/>
+        </x:context>
+        <x:expect label="the conversion should succeed" type="compare">
+            <x:document type="inline">
+                <d:validation-status result="ok"/>
+            </x:document>
+        </x:expect>
+        <x:context label="the result EPUB">
+            <x:document type="zip" base-uri="temp-dir" href="tts/output-dir/minimal.epub" ordered="true"/>
+        </x:context>
+        <x:expect label="the result EPUB should contain audio files" type="compare">
+            <x:document type="inline">
+                <c:zipfile name="minimal.epub">
+                    <c:file name="EPUB/audio/part0000_00_000.wav"/>
+                    <c:file name="EPUB/audio/part0001_00_000.wav"/>
+                    <c:file name="EPUB/audio/part0002_00_000.wav"/>
+                    <c:file name="EPUB/minimal-1.xhtml"/>
+                    <c:file name="EPUB/minimal-2.xhtml"/>
+                    <c:file name="EPUB/mo/minimal-1.smil"/>
+                    <c:file name="EPUB/mo/minimal-2.smil"/>
+                    <c:file name="EPUB/mo/toc.smil"/>
+                    <c:file name="EPUB/package.opf"/>
+                    <c:file name="EPUB/toc.xhtml"/>
+                    <c:file name="EPUB/zedai-mods.xml"/>
+                    <c:file name="META-INF/container.xml"/>
+                    <c:file name="mimetype"/>
+                </c:zipfile>
+            </x:document>
+        </x:expect>
+        <x:context label="the OPF">
+            <x:document type="file" base-uri="temp-dir" href="tts/output-dir/minimal.epub!/EPUB/package.opf"/>
+        </x:context>
+        <x:expect label="the EPUB should define media overlays" type="xpath"
+                  test="every $item in /opf:package/opf:manifest/opf:item[@media-type='application/xhtml+xml']
+                        satisfies $item/@media-overlay"/>
+    </x:scenario>
+    
+</x:description>

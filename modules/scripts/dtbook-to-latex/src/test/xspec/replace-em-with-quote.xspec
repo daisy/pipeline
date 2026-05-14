@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+               stylesheet="../../main/resources/xml/dtbook-to-latex.xsl">
+
+  <x:param name="replace_em_with_quote" select="'true'"/>
+
+  <x:scenario label="emphasis replaced with quotes">
+    <x:context>
+      <dtb:dtbook version="2005-3" xml:lang="en">
+        <dtb:book>
+          <dtb:bodymatter>
+            <dtb:level1>
+              <dtb:h1>Test</dtb:h1>
+              <dtb:p>Some <dtb:em>emphasized</dtb:em> text.</dtb:p>
+            </dtb:level1>
+          </dtb:bodymatter>
+        </dtb:book>
+      </dtb:dtbook>
+    </x:context>
+    <x:expect label="em becomes single-quoted text"
+              test="contains(string(.), &quot;'emphasized'&quot;)"/>
+    <x:expect label="em does not produce \emph{}"
+              test="not(contains(string(.), '\emph{'))"/>
+  </x:scenario>
+
+</x:description>

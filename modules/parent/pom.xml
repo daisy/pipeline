@@ -7,12 +7,12 @@
     <groupId>org.daisy</groupId>
     <artifactId>daisy</artifactId>
     <version>5</version>
-    <relativePath/>
+    <relativePath />
   </parent>
 
   <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>modules-parent</artifactId>
-  <version>1.15.5-SNAPSHOT</version>
+  <version>1.15.5</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Modules Parent POM</name>
@@ -248,11 +248,6 @@
           <version>3.5.2</version>
         </plugin>
         <plugin>
-          <groupId>org.ops4j.pax.exam</groupId>
-          <artifactId>maven-paxexam-plugin</artifactId>
-          <version>1.2.4</version>
-        </plugin>
-        <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>exec-maven-plugin</artifactId>
           <version>3.0.0</version>
@@ -275,7 +270,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <execute/>
+                    <execute />
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -288,7 +283,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <execute/>
+                    <execute />
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -301,7 +296,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore/>
+                    <ignore />
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -314,7 +309,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <execute/>
+                    <execute />
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -327,7 +322,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore/>
+                    <ignore />
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -340,7 +335,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore/>
+                    <ignore />
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -360,19 +355,6 @@
                 </pluginExecution>
                 <pluginExecution>
                   <pluginExecutionFilter>
-                    <groupId>org.ops4j.pax.exam</groupId>
-                    <artifactId>maven-paxexam-plugin</artifactId>
-                    <versionRange>[1.2.4,)</versionRange>
-                    <goals>
-                      <goal>generate-depends-file</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore/>
-                  </action>
-                </pluginExecution>
-                <pluginExecution>
-                  <pluginExecutionFilter>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>xml-maven-plugin</artifactId>
                     <versionRange>[1.0,)</versionRange>
@@ -381,7 +363,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <execute/>
+                    <execute />
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -396,7 +378,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore/>
+                    <ignore />
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -409,7 +391,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <execute/>
+                    <execute />
                   </action>
                 </pluginExecution>
               </pluginExecutions>
@@ -425,14 +407,14 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>modules-bom</artifactId>
-        <version>1.15.5-SNAPSHOT</version>
+        <version>1.15.5</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.15.7-SNAPSHOT</version>
+        <version>1.15.7</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -462,7 +444,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.build</groupId>
         <artifactId>modules-test-helper</artifactId>
-        <version>2.2.6</version>
+        <version>3.0.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.maven</groupId>
@@ -580,7 +562,11 @@
             <configuration>
               <instructions>
                 <_dsannotations>${expose-services}</_dsannotations>
-                <Import-Package>!org.daisy.common.spi,*</Import-Package>
+                <Import-Package>
+                  !org.daisy.common.spi,
+                  !org.daisy.common.spi.annotations,
+                  *
+                </Import-Package>
               </instructions>
             </configuration>
           </plugin>
@@ -648,18 +634,6 @@
       <build>
         <plugins>
           <plugin>
-            <groupId>org.ops4j.pax.exam</groupId>
-            <artifactId>maven-paxexam-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>generate-depends-file</id>
-                <goals>
-                  <goal>generate-depends-file</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
             <groupId>org.apache.felix</groupId>
             <artifactId>maven-bundle-plugin</artifactId>
             <executions>
@@ -676,13 +650,6 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
             <configuration>
-              <systemPropertyVariables>
-                <pax.exam.logging>none</pax.exam.logging>
-                <!--
-                    set this to "PaxExam" to test with OSGi, or to "PaxExam,OSGiLessRunner" to test both
-                -->
-                <org.daisy.pipeline.junit.runners>OSGiLessRunner</org.daisy.pipeline.junit.runners>
-              </systemPropertyVariables>
               <trimStackTrace>false</trimStackTrace>
             </configuration>
           </plugin>
@@ -982,23 +949,6 @@
         </plugins>
       </build>
     </profile>
-
-    <profile>
-      <id>test-with-paxexam</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <configuration>
-              <systemPropertyVariables>
-                <org.daisy.pipeline.junit.runners>PaxExam</org.daisy.pipeline.junit.runners>
-              </systemPropertyVariables>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
   </profiles>
 
   <repositories>
@@ -1032,11 +982,15 @@
       <url>https://s3.eu-west-1.amazonaws.com/repo.maven.cyberduck.io/releases</url>
       <layout>default</layout>
       <releases>
-          <enabled>true</enabled>
+        <enabled>true</enabled>
       </releases>
       <snapshots>
-          <enabled>false</enabled>
+        <enabled>false</enabled>
       </snapshots>
     </repository>
   </repositories>
+
+  <scm>
+    <tag>v1.15.5</tag>
+  </scm>
 </project>

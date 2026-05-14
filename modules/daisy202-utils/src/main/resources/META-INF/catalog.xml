@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
+
+    <uri uri="../xml/xproc/validate/daisy202-validator.script.xpl" px:content-type="script" px:id="daisy202-validator"/>
+    <uri uri="../xml/xproc/fix-audio-file-order.script.xpl" px:content-type="script" px:id="daisy202-unscrambler"/>
+
+    <uri name="http://www.daisy.org/pipeline/modules/daisy202-utils/library.xpl"
+         uri="../xml/xproc/daisy202-library.xpl"/>
+
+    <uri name="http://www.daisy.org/pipeline/modules/daisy202-utils/library.xsl"
+         uri="../xml/xslt/library.xsl"/>
+
+    <!-- <public publicId="-//DAISY//DTD content v2.02//EN" uri="../xml/schemas/d202/xhtml1-transitional-bodyref.dtd" /> -->
+    <public publicId="-//DAISY//DTD ncc v2.02//EN" uri="../xml/schemas/d202/d202ncc.dtd" />
+    <public publicId="-//DAISY//RNG ncc v2.02//EN" uri="../xml/schemas/d202/d202ncc.rng" />
+    <public publicId="-//DAISY//DTD nccmulti v2.02//EN" uri="../xml/schemas/d202/d202nccmulti.dtd" />
+    <public publicId="-//DAISY//DTD smil v2.02//EN" uri="../xml/schemas/d202/d202smil.dtd" />
+    <public publicId="-//DAISY//RNG smil v2.02//EN" uri="../xml/schemas/d202/d202smil.rng" />
+    <public publicId="-//DAISY//DTD msmil v2.02//EN" uri="../xml/schemas/d202/d202msmil.dtd" />
+    <public publicId="-//DAISY//RNG msmil v2.02//EN" uri="../xml/schemas/d202/d202msmil.rng" />
+    <public publicId="-//DAISY//DTD discinfo v2.02//EN" uri="../xml/schemas/d202/d202discinfo.dtd" />
+
+    <uri name="http://www.daisy.org/pipeline/modules/daisy202-utils/d202msmil.rng"
+         uri="../xml/schemas/d202/d202msmil.rng"/>
+    <uri name="http://www.daisy.org/pipeline/modules/daisy202-utils/d202smil.rng"
+         uri="../xml/schemas/d202/d202smil.rng"/>
+    <uri name="http://www.daisy.org/pipeline/modules/daisy202-utils/d202ncc.rng"
+         uri="../xml/schemas/d202/d202ncc.rng"/>
+
+</catalog>

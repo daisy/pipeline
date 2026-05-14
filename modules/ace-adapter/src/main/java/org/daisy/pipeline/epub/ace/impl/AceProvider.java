@@ -1,0 +1,143 @@
+package org.daisy.pipeline.epub.ace.impl;
+
+import java.io.File;
+import java.net.URI;
+import java.nio.file.Files;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
+import javax.xml.transform.stream.StreamSource;
+
+import com.xmlcalabash.core.XProcRuntime;
+import com.xmlcalabash.io.WritablePipe;
+import com.xmlcalabash.library.DefaultStep;
+import com.xmlcalabash.runtime.XAtomicStep;
+
+import net.sf.saxon.s9api.QName;
+import net.sf.saxon.s9api.SaxonApiException;
+
+import org.daisy.common.shell.CommandRunner;
+import org.daisy.common.xproc.calabash.XProcStep;
+import org.daisy.common.xproc.calabash.XProcStepProvider;
+import org.daisy.common.xproc.XProcMonitor;
+import org.daisy.pipeline.epub.ace.Ace;
+import org.daisy.pipeline.epub.ace.AceFinder;
+import static org.daisy.pipeline.file.FileUtils.cResultDocument;
+
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+
+/**
+ * <p>Accessibility Checker for EPUB (Ace) step provider</p>
+ *
+ * <p>This class provides a step that validates an EPUB using a system-wide install of the Ace tool
+ * if it is installed.</p>
+ */
+@Component(
+	name = "pxi:ace",
+	service = { XProcStepProvider.class },
+	property = { "type:String={http://www.daisy.org/ns/pipeline/xproc/internal}ace" }
+)
+public class AceProvider implements XProcStepProvider {
+
+	public XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties) {
+		return new AceStep(runtime, step, aceProgram);
+	}
+
+	private Ace aceProgram = null;
+
+	/**
+	 * Retrieve the Ace executable path
+	 *
+	 * @throws RuntimeException if Ace is not found on the system
+	 */
+	@Activate
+	public void init() {
+		try {
+			aceProgram = AceFinder.get();
+		} catch (NoSuchElementException e) {
+			throw new RuntimeException("Ace was not found on your system");
+		}
+	}
+
+	public static class AceStep extends DefaultStep implements XProcStep {
+
+		private static final QName _epubFile = new QName("epub");
+		private static final QName _tempDir = new QName("temp-dir");
+		private static final QName _lang = new QName("lang");
+
+		private final Ace aceProgram;
+		private WritablePipe htmlReport = null;
+		private WritablePipe jsonReport = null;
+
+		private AceStep(XProcRuntime runtime, XAtomicStep step, Ace aceProgram) {
+			super(runtime, step);
+			this.aceProgram = aceProgram;
+		}
+
+		@Override
+		public void setOutput(String port, WritablePipe pipe) {
+			if ("html-report-uri".equals(port)) {
+				htmlReport = pipe;
+			} else { // json-report-uri
+				jsonReport = pipe;
+			}
+		}
+
+		@Override
+		public void reset() {
+			htmlReport.resetWriter();
+			jsonReport.resetWriter();
+		}
+
+		@Override
+		public void run() throws SaxonApiException {
+			super.run();
+			try {
+				URI epubURI = new URI(getOption(_epubFile).getString());
+				File epubFile = new File(epubURI);
+
+				// Output where the Ace reports (report.html and report.json) and unzipped epub will be stored
+				File tempDir;
+				if (getOption(_tempDir).getString().equals("")) {
+					tempDir = Files.createTempDirectory("ace-").toFile();
+					tempDir.deleteOnExit();
+				} else
+					tempDir = new File(new URI(getOption(_tempDir).getString()));
+
+				String language = getOption(_lang).getString();
+
+				aceProgram.newCommand()
+				          .withArgument("-o")
+				          .withArgument(tempDir.getAbsolutePath())
+				          .withArgument("-t")
+				          .withArgument(tempDir.getAbsolutePath())
+				          .withArgument("-l")
+				          .withArgument(language.equals("") ? "en" : language)
+				          .withArgument(epubFile.getCanonicalPath())
+				          .runner()
+				          .run();
+
+				File htmlReportFile = new File(tempDir.getAbsolutePath() + File.separator + "report.html");
+				File jsonReportFile = new File(tempDir.getAbsolutePath() + File.separator + "report.json");
+
+				if (getOption(_tempDir).getString().equals("")) {
+					htmlReportFile.deleteOnExit();
+					jsonReportFile.deleteOnExit();
+				}
+
+				// write the result uris in c:result documents
+				writeCResult(htmlReport, htmlReportFile.toURI());
+				writeCResult(jsonReport, jsonReportFile.toURI());
+
+			} catch (Throwable e) {
+				throw XProcStep.raiseError(e, step);
+			}
+		}
+
+		private void writeCResult(WritablePipe port, URI uri) throws SaxonApiException {
+			port.write(runtime.getProcessor().newDocumentBuilder().build(new StreamSource(cResultDocument(uri.toString()))));
+		}
+	}
+}
