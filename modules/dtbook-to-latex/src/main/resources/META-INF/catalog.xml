@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
+
+  <!--
+      script definition
+  -->
+  <uri name="http://www.daisy.org/pipeline/modules/dtbook-to-latex/dtbook-to-latex.script.xpl"
+       uri="../xml/dtbook-to-latex.script.xpl" px:content-type="script" px:id="dtbook-to-latex"/>
+
+</catalog>

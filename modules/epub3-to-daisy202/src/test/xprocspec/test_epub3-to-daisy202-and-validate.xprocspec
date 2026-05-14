@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:html="http://www.w3.org/1999/xhtml">
+    
+    <x:script>
+        <p:declare-step version="1.0" type="pxi:epub3-to-daisy202-and-validate" name="main">
+            <p:input port="epub3.fileset" primary="false" sequence="true"> <!-- sequence="false" if !p:value-available('epub')-->
+                <p:empty/>
+            </p:input>
+            <p:option name="epub"/>
+            <p:option name="temp-dir" required="true"/>
+            <p:output port="daisy202.fileset" primary="true"/>
+            <p:output port="daisy202.in-memory" sequence="true">
+                <p:pipe step="convert" port="result.in-memory"/>
+            </p:output>
+            <p:output port="validation-status">
+                <p:pipe step="validate" port="validation-status"/>
+            </p:output>
+            <p:import href="../../main/resources/xml/xproc/library.xpl"/>
+            <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
+            <p:import href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl"/>
+            <p:import href="http://www.daisy.org/pipeline/modules/daisy202-utils/library.xpl"/>
+            <p:choose name="source">
+                <p:when test="p:value-available('epub')">
+                    <p:output port="result.fileset" primary="true"/>
+                    <p:output port="result.in-memory" sequence="true">
+                        <p:pipe step="load" port="result.in-memory"/>
+                    </p:output>
+                    <px:epub-load name="load" version="3.0" validation="off" store-to-disk="true">
+                        <p:with-option name="href" select="$epub"/>
+                        <p:with-option name="temp-dir" select="concat($temp-dir,'load/')"/>
+                    </px:epub-load>
+                </p:when>
+                <p:otherwise>
+                    <p:output port="result.fileset" primary="true"/>
+                    <p:output port="result.in-memory" sequence="true">
+                        <p:empty/>
+                    </p:output>
+                    <p:identity>
+                        <p:input port="source">
+                            <p:pipe step="main" port="epub3.fileset"/>
+                        </p:input>
+                    </p:identity>
+                </p:otherwise>
+            </p:choose>
+            <px:epub3-to-daisy202 name="convert" px:message="Convert">
+                <p:input port="source.in-memory">
+                    <p:pipe step="source" port="result.in-memory"/>
+                </p:input>
+                <p:with-option name="output-dir" select="concat($temp-dir,'store/')"/>
+            </px:epub3-to-daisy202>
+            <px:daisy202-validate name="validate" ncc="file:/foo" px:message="Validate">
+                <p:input port="in-memory.in">
+                    <p:pipe step="convert" port="result.in-memory"/>
+                </p:input>
+            </px:daisy202-validate>
+            <p:sink/>
+            <p:store name="store-validation-report">
+                <p:input port="source">
+                    <p:pipe step="validate" port="html-report"/>
+                </p:input>
+                <p:with-option name="href" select="concat($temp-dir,'validation-report/daisy202-validation.html')"/>
+            </p:store>
+            <px:fileset-store name="store" px:message="Store">
+                <p:input port="fileset.in">
+                    <p:pipe step="convert" port="result.fileset"/>
+                </p:input>
+                <p:input port="in-memory.in">
+                    <p:pipe step="convert" port="result.in-memory"/>
+                </p:input>
+            </px:fileset-store>
+            <p:identity>
+                <p:input port="source">
+                    <p:pipe step="store" port="fileset.out"/>
+                </p:input>
+            </p:identity>
+            <p:delete match="@original-href"/>
+        </p:declare-step>
+    </x:script>
+    
+    <x:scenario label="hefty-water">
+        <x:call step="pxi:epub3-to-daisy202-and-validate">
+            <x:input port="epub3.fileset">
+                <x:document type="inline" xml:base="hefty-water/">
+                    <d:fileset>
+                        <d:file href="mimetype" media-type="text/plain"/>
+                        <d:file href="META-INF/container.xml" media-type="application/xml"/>
+                        <d:file href="EPUB/package.opf" media-type="application/oebps-package+xml"/>
+                        <d:file href="EPUB/nav.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="EPUB/heftywater.xhtml" media-type="application/xhtml+xml"/>
+                    </d:fileset>
+                </x:document>
+            </x:input>
+            <x:option name="temp-dir" select="$temp-dir"/>
+        </x:call>
+        <x:context label="The status">
+            <x:document type="port" port="validation-status"/>
+        </x:context>
+        <x:expect label="The status" type="compare">
+            <x:document type="inline">
+                <d:validation-status result="error"/>
+            </x:document>
+        </x:expect>
+        <x:context label="The DAISY 2.02 fileset">
+            <x:document type="port" port="daisy202.fileset"/>
+        </x:context>
+        <x:expect label="The DAISY 2.02 fileset"
+                  type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+            <x:document type="inline" base-uri="temp-dir">
+                <d:fileset>
+                    <d:file href="store/code_google_com_epub_samples_hefty_water/heftywater.html" media-type="application/xhtml+xml"
+                            doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
+                            doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="store/code_google_com_epub_samples_hefty_water/heftywater.smil" media-type="application/smil+xml"
+                            doctype-public="-//W3C//DTD SMIL 1.0//EN"
+                            doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="store/code_google_com_epub_samples_hefty_water/ncc.html"  media-type="application/xhtml+xml"
+                            doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
+                            doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                </d:fileset>
+            </x:document>
+        </x:expect>
+        <x:context label="The NCC">
+            <x:document type="port" port="daisy202.in-memory" select="/*[ends-with(base-uri(),'ncc.html')]/html:body"/>
+        </x:context>
+        <x:expect label="The NCC" type="compare">
+            <x:document type="inline" select="/*/html:body">
+                <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    <body>
+                        <h1 id="h_1" class="title">
+                            <a href="heftywater.smil#par_1">Hefty Water</a>
+                        </h1>
+                        <h2 id="h_2">
+                            <a href="heftywater.smil#par_2">The Switch</a>
+                        </h2>
+                        <h2 id="h_3">
+                            <a href="heftywater.smil#par_3">The Source</a>
+                        </h2>
+                        <h2 id="h_4">
+                            <a href="heftywater.smil#par_4">Hefty Ruby Water</a>
+                        </h2>
+                    </body>
+                </html>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+</x:description>
