@@ -177,15 +177,19 @@ public abstract class WordBasedScript implements ScriptService<Script>, ScriptSe
 			}
 			Script lastScript = null;
 			for (Script s : scriptChain) {
+				for (ScriptPort p : s.getInputPorts()) {
+					String name = p.getName();                     //  daisy3  |  daisy202  |  ebraille  |  epub3  |  html  |  mp3
+					if ("attach-stylesheet".equals(name))          //                          x
+						builder = builder.withInputPort(name, p);
+				}
 				for (ScriptOption o : s.getOptions()) {
-					String name = o.getName();                     //  daisy3  |  daisy202  |  ebraille  |  epub3  |  html  |  mp3
+					String name = o.getName();
 					if (   "include-tts-log".equals(name)          //  x          x                         x                  x
 					    || "tts-config".equals(name)               //  x          x                         x                  x
 					    || "language".equals(name)                 //             x                         x         x
 					    || "validation".equals(name)               //             x                         x         x
 					    || "folder-depth".equals(name)             //                                                          x
 					    || "epub-package".equals(name)             //                          x
-					    || "attach-stylesheet".equals(name)        //                          x
 					    || "braille-code".equals(name)             //                          x
 					    || "include-original-text".equals(name)    //                          x
 					    || (!"mp3".equals(formatId) &&
