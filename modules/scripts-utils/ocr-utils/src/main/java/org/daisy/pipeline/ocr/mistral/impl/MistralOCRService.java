@@ -287,7 +287,7 @@ public class MistralOCRService implements OCRService {
 								                                   "The full literal text content of the image, as well-structured HTML."
 								                                   + " Must include only the exact text present within the image."
 								                                   + " Prefer lists over headings to convey structure."
-								                                   + " If the image contains to text, return an empty string.")
+								                                   + " If the image contains no text, return an empty string.")
 								                              .put("type", "string"))
 								         .put("functional_index",
 								              new JSONObject().put("title", "Functional_Index")
