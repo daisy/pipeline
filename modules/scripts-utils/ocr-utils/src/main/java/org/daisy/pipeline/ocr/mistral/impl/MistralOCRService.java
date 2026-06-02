@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -62,9 +63,11 @@ import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.pipeline.common.rest.Request;
 import org.daisy.pipeline.common.rest.Response;
+import org.daisy.pipeline.datatypes.DatatypeService;
 import org.daisy.pipeline.fileset.Fileset;
 import org.daisy.pipeline.ocr.OCRProcessor;
 import org.daisy.pipeline.ocr.OCRService;
+import org.daisy.pipeline.script.ScriptOption;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -125,6 +128,26 @@ public class MistralOCRService implements OCRService {
 	@Override
 	public String getDescription() {
 		return "AI-based online service";
+	}
+
+	private static final ScriptOption INCLUDE_PAGE_NUMBERS = new ScriptOption() {
+			@Override public String getName() { return "include-page-numbers"; }
+			@Override public String getNiceName() { return "Include page numbers"; }
+			@Override public String getDescription() { return "Whether or not to include print page break indicators"; }
+			@Override public boolean isRequired() { return false; }
+			@Override public String getDefault() { return "true"; }
+			@Override public DatatypeService getType() { return DatatypeService.XS_BOOLEAN; }
+			@Override public String getMediaType() { return null; }
+			@Override public boolean isSequence() { return false; }
+			@Override public boolean isOrdered() { return false; }
+			@Override public Role getRole() { return null; }
+			@Override public boolean isPrimary() { return false; }};
+
+	@Override
+	public Iterable<ScriptOption> getOptions() {
+		List<ScriptOption> options = new ArrayList<>();
+		options.add(INCLUDE_PAGE_NUMBERS);
+		return options;
 	}
 
 	private String cacheKey = null;
@@ -231,6 +254,10 @@ public class MistralOCRService implements OCRService {
 			                                       : input.getPath().toString().endsWith(".pdf")))
 				throw new UnsupportedOperationException("Only supports PDF");
 
+			// options
+			boolean includePageNumbers = getBooleanOption(options, INCLUDE_PAGE_NUMBERS);
+
+			// other variables
 			boolean includeImageBase64 = true; // for some reason, extracting the images from the PDF based on the
 			                                   // bounding boxes is not reliable enough
 
@@ -447,7 +474,9 @@ public class MistralOCRService implements OCRService {
 						}
 
 						// <hr> and not <br> because <br> is wrapped in <p>
-						String markdownContent = String.join("\n\n<hr role='doc-pagebreak'/>\n\n", markdownPages);
+						String markdownContent = String.join(
+							includePageNumbers ? "\n\n<hr role='doc-pagebreak'/>\n\n" : "\n\n",
+							markdownPages);
 						markdownContent = "_This document was converted from PDF using AI._\n\n" + markdownContent;
 						markdown = Resource.load(markdownContent.getBytes(StandardCharsets.UTF_8),
 						                         URI.create("index.md"),
@@ -588,6 +617,26 @@ public class MistralOCRService implements OCRService {
 				throw new RuntimeException("failed to upload file", e);
 			}
 		}
+	}
+
+	private static Boolean getBooleanOption(Map<String,Iterable<String>> options, ScriptOption option) {
+		String v = getStringOption(options, option);
+		return "true".equals(v.toLowerCase()) || "1".equals(v);
+	}
+
+	private static String getStringOption(Map<String,Iterable<String>> options, ScriptOption option) {
+		String name = option.getName();
+		Iterable<String> value = options.get(name);
+		Iterator<String> i = value.iterator();
+		String v = option.getDefault();
+		if (i.hasNext()) {
+			v = i.next();
+			if (i.hasNext())
+				throw new IllegalArgumentException(
+						"did not expect more than one value for option" + name + ": " + value);
+		} else if (option.isRequired())
+			throw new IllegalArgumentException("did not expect empty value for option " + name);
+		return v;
 	}
 
 	private static Optional<Integer> getInteger(JSONObject json, String key) {
