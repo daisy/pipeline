@@ -15,6 +15,7 @@ import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -23,6 +24,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
@@ -126,6 +129,8 @@ public class MistralOCRService implements OCRService {
 
 	private String cacheKey = null;
 	private List<OCRProcessor> modelsCache = null;
+	private static final Base64.Decoder base64Decoder = Base64.getDecoder();
+	private static final Pattern DATA_URL = Pattern.compile("data:(image/[^;]+);base64,(.+)=*");
 
 	@Override
 	public Collection<OCRProcessor> getAvailableProcessors(Map<String,String> properties)
@@ -225,6 +230,9 @@ public class MistralOCRService implements OCRService {
 			                                          || "application/x-pdf".equals(input.getMediaType().get()))
 			                                       : input.getPath().toString().endsWith(".pdf")))
 				throw new UnsupportedOperationException("Only supports PDF");
+
+			boolean includeImageBase64 = true; // for some reason, extracting the images from the PDF based on the
+			                                   // bounding boxes is not reliable enough
 
 			// metadata
 			String title = null;
@@ -337,7 +345,7 @@ public class MistralOCRService implements OCRService {
 							.put("bbox_annotation_format",
 							     new JSONObject().put("type", "json_schema")
 							                     .put("json_schema", bboxAnnotationSchema))
-							.put("include_image_base64", false);
+							.put("include_image_base64", includeImageBase64);
 						if (title == null || author == null || language == null)
 							requestBody = requestBody.put("document_annotation_format",
 							                              new JSONObject().put("type", "json_schema")
@@ -363,6 +371,7 @@ public class MistralOCRService implements OCRService {
 					logger.debug(response.body);
 					Resource markdown = null;
 					List<Map<String,Rectangle2D>> imageBoxes = null;
+					List<Map<String,String>> imageData = null;
 					Map<String,String> imageShortDescriptions = null;
 					Map<String,String> imagesTextContent = null;
 					List<String> replaceImages = null;
@@ -390,6 +399,8 @@ public class MistralOCRService implements OCRService {
 						imagesTextContent = new HashMap<>();
 						replaceImages = new ArrayList<>();
 						imageBoxes = new ArrayList<>();
+						if (includeImageBase64)
+							imageData = new ArrayList<>();
 						for (int p = 0; p < pages.length(); p++) {
 							JSONObject pageJson = pages.getJSONObject(p);
 							String md = pageJson.getString("markdown");
@@ -398,6 +409,8 @@ public class MistralOCRService implements OCRService {
 							markdownPages.add(md);
 							JSONArray images = pageJson.getJSONArray("images");
 							imageBoxes.add(images.length() > 0 ? new HashMap<>() : null);
+							if (includeImageBase64)
+								imageData.add(images.length() > 0 ? new HashMap<>() : null);
 							for (int i = 0; i < images.length(); i++) {
 								JSONObject img = images.getJSONObject(i);
 								String id = img.getString("id");
@@ -423,6 +436,13 @@ public class MistralOCRService implements OCRService {
 								                                         topLeftY,
 								                                         bottomRightX - topLeftX,
 								                                         bottomRightY - topLeftY));
+								if (includeImageBase64) {
+									String data = img.getString("image_base64");
+									if (data == null)
+										throw new RuntimeException("missing image data");
+									imageData.get(imageData.size() - 1)
+									         .put(id, data);
+								}
 							}
 						}
 
@@ -445,25 +465,37 @@ public class MistralOCRService implements OCRService {
 								: null;
 							try (PDDocument pdf = PDDocument.load(input.read())) {
 								for (int p = 0; p < imageBoxes.size(); p++) {
-									PDPage page = pdf.getPage(p);
 									Map<String,Rectangle2D> boxes = imageBoxes.get(p);
 									if (boxes != null) {
-										// FIXME: extractRegion appears to be unreliable when it makes use of the source images
-										List<ImageInfo> pdfImages = null; //getImageInfo(page);
-										int pageIndex = p;
-										Supplier<BufferedImage> renderedPage = Suppliers.memoize(
-											() -> {
-												try {
-													return new PDFRenderer(pdf).renderImageWithDPI(pageIndex, IMAGE_DPI); }
-												catch (IOException e) {
-													throw new UncheckedIOException(e); }});
-										for (String id : boxes.keySet()) {
-											ByteArrayOutputStream imageData = new ByteArrayOutputStream();
-											ImageIO.write(extractRegion(page, renderedPage, pdfImages, boxes.get(id)),
-											              "png",
-											              imageData);
-											images.add(Resource.load(imageData.toByteArray(), URI.create(id), "image/png"));
+										for (String id : boxes.keySet())
 											imageWidths.put(id, (int)boxes.get(id).getWidth());
+										if (includeImageBase64) {
+											for (String id : boxes.keySet()) {
+												Matcher m = DATA_URL.matcher(imageData.get(p).get(id));
+												if (!m.matches())
+													throw new IllegalArgumentException("unexpected image data URL");
+												images.add(Resource.load(base64Decoder.decode(m.group(2)),
+												                         URI.create(id),
+												                         m.group(1)));
+											}
+										} else {
+											// FIXME: extractRegion appears to be unreliable when it makes use of the source images
+											PDPage page = pdf.getPage(p);
+											List<ImageInfo> pdfImages = null; //getImageInfo(page);
+											int pageIndex = p;
+											Supplier<BufferedImage> renderedPage = Suppliers.memoize(
+												() -> {
+													try {
+														return new PDFRenderer(pdf).renderImageWithDPI(pageIndex, IMAGE_DPI); }
+													catch (IOException e) {
+														throw new UncheckedIOException(e); }});
+											for (String id : boxes.keySet()) {
+												ByteArrayOutputStream data = new ByteArrayOutputStream();
+												ImageIO.write(extractRegion(page, renderedPage, pdfImages, boxes.get(id)),
+												              "png", // FIXME: should match file extension
+												              data);
+												images.add(Resource.load(data.toByteArray(), URI.create(id), "image/png"));
+											}
 										}
 									}
 									if (progress != null)
