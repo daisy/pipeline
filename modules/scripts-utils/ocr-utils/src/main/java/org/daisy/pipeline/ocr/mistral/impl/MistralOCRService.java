@@ -681,6 +681,12 @@ public class MistralOCRService implements OCRService {
 					if (detail != null) {
 						message = message + ": " + detail;
 						cause = null;
+					} else {
+						detail = errorJson.getString("message");
+						if (detail != null) {
+							message = message + ": " + detail;
+							cause = null;
+						}
 					}
 				}
 			}
