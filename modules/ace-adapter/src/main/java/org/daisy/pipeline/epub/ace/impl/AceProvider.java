@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.URI;
 import java.nio.file.Files;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import javax.xml.transform.stream.StreamSource;
@@ -16,18 +17,16 @@ import com.xmlcalabash.runtime.XAtomicStep;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 
-import org.daisy.common.shell.BinaryFinder;
 import org.daisy.common.shell.CommandRunner;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 import org.daisy.common.xproc.XProcMonitor;
+import org.daisy.pipeline.epub.ace.Ace;
+import org.daisy.pipeline.epub.ace.AceFinder;
 import static org.daisy.pipeline.file.FileUtils.cResultDocument;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * <p>Accessibility Checker for EPUB (Ace) step provider</p>
@@ -43,10 +42,10 @@ import org.slf4j.LoggerFactory;
 public class AceProvider implements XProcStepProvider {
 
 	public XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties) {
-		return new AceStep(runtime, step);
+		return new AceStep(runtime, step, aceProgram);
 	}
 
-	private static File aceProgram = null;
+	private Ace aceProgram = null;
 
 	/**
 	 * Retrieve the Ace executable path
@@ -55,26 +54,26 @@ public class AceProvider implements XProcStepProvider {
 	 */
 	@Activate
 	public void init() {
-		Optional<String> lpath = BinaryFinder.find("ace");
-		if (lpath.isPresent())
-			aceProgram = new File(lpath.get());
-		else
+		try {
+			aceProgram = AceFinder.get();
+		} catch (NoSuchElementException e) {
 			throw new RuntimeException("Ace was not found on your system");
+		}
 	}
 
 	public static class AceStep extends DefaultStep implements XProcStep {
-
-		private final static Logger mLogger = LoggerFactory.getLogger(AceStep.class);
 
 		private static final QName _epubFile = new QName("epub");
 		private static final QName _tempDir = new QName("temp-dir");
 		private static final QName _lang = new QName("lang");
 
+		private final Ace aceProgram;
 		private WritablePipe htmlReport = null;
 		private WritablePipe jsonReport = null;
 
-		private AceStep(XProcRuntime runtime, XAtomicStep step) {
+		private AceStep(XProcRuntime runtime, XAtomicStep step, Ace aceProgram) {
 			super(runtime, step);
+			this.aceProgram = aceProgram;
 		}
 
 		@Override
@@ -99,9 +98,6 @@ public class AceProvider implements XProcStepProvider {
 				URI epubURI = new URI(getOption(_epubFile).getString());
 				File epubFile = new File(epubURI);
 
-				// Note that this should normally never happen because init() would have thrown an Exception
-				if (aceProgram == null) throw new Exception("Ace was not found on your system");
-
 				// Output where the Ace reports (report.html and report.json) and unzipped epub will be stored
 				File tempDir;
 				if (getOption(_tempDir).getString().equals("")) {
@@ -112,17 +108,16 @@ public class AceProvider implements XProcStepProvider {
 
 				String language = getOption(_lang).getString();
 
-				String[] cmd = new String[] {
-					aceProgram.getAbsolutePath(),
-					"-o", tempDir.getAbsolutePath(),
-					"-t", tempDir.getAbsolutePath(),
-					"-l", language.equals("") ? "en" : language,
-					epubFile.getCanonicalPath()
-				};
-
-				new CommandRunner(cmd)
-					.consumeError(mLogger)
-					.run();
+				aceProgram.newCommand()
+				          .withArgument("-o")
+				          .withArgument(tempDir.getAbsolutePath())
+				          .withArgument("-t")
+				          .withArgument(tempDir.getAbsolutePath())
+				          .withArgument("-l")
+				          .withArgument(language.equals("") ? "en" : language)
+				          .withArgument(epubFile.getCanonicalPath())
+				          .runner()
+				          .run();
 
 				File htmlReportFile = new File(tempDir.getAbsolutePath() + File.separator + "report.html");
 				File jsonReportFile = new File(tempDir.getAbsolutePath() + File.separator + "report.json");
