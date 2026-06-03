@@ -2,10 +2,6 @@
 <component>
   <fileSets>
     <fileSet>
-      <directory>target/jars/gui/bootstrap/win</directory>
-      <outputDirectory>system/gui/bootstrap</outputDirectory>
-    </fileSet>
-    <fileSet>
       <directory>target/jars/common/win</directory>
       <outputDirectory>system/common</outputDirectory>
     </fileSet>
