@@ -936,11 +936,15 @@
   <!--====== Emphasis module ====================================-->
 
   <xsl:template match="emph" mode="#all">
-    <em>
-      <!-- TODO translate: => em vs strong ? -->
-      <xsl:apply-templates select="@*"/>
+    <xsl:variable name="class" as="xs:string*" select="tokenize(@class/normalize-space(.),'\s+')[not(.='')]"/>
+    <xsl:element namespace="http://www.w3.org/1999/xhtml"
+                 name="{if ($class='strong') then 'strong' else 'em'}">
+      <xsl:apply-templates select="@* except @class"/>
+      <xsl:if test="$class[not(.=('strong','em'))]">
+        <xsl:attribute name="class" select="string-join($class[not(.=('strong','em'))],' ')"/>
+      </xsl:if>
       <xsl:apply-templates mode="#current"/>
-    </em>
+    </xsl:element>
   </xsl:template>
 
   <!--====== Line module ========================================-->

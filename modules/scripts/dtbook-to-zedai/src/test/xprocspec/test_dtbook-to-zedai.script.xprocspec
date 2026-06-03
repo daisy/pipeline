@@ -86,7 +86,7 @@
 		<x:expect label="the white space in between the 'em' elements should be preserved" type="compare" normalize-space="false">
 			<x:document type="inline">
 				<h xmlns="http://www.daisy.org/ns/z3998/authoring/" xml:id="chapter_1">
-										<emph>CHAPTER 1</emph> <emph>THE LAST JUDGEMENT (MICHAEL ANGELO)</emph>
+										<emph class="em">CHAPTER 1</emph> <emph class="strong">THE LAST JUDGEMENT (MICHAEL ANGELO)</emph>
 									</h>
 			</x:document>
 		</x:expect>

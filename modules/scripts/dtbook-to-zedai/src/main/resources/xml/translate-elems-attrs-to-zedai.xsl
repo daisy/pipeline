@@ -264,6 +264,10 @@
     <xsl:template match="dtb:em|dtb:strong">
         <emph>
             <xsl:call-template name="attrs"/>
+            <xsl:attribute name="class"
+                           select="string-join((tokenize(@class/normalize-space(.),'\s+')[not(.='')],
+                                                local-name(.)),
+                                               ' ')"/>
             <xsl:apply-templates/>
         </emph>
     </xsl:template>

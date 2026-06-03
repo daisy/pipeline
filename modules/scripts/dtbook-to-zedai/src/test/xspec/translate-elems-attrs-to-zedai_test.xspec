@@ -115,8 +115,8 @@
             <strong>STRONG</strong>
         </x:context>
         <x:expect label="">
-            <z:emph>EMphasis</z:emph>
-            <z:emph>STRONG</z:emph>
+            <z:emph class="em">EMphasis</z:emph>
+            <z:emph class="strong">STRONG</z:emph>
         </x:expect>
     </x:scenario>
     <x:scenario label="Translate-DTBook2ZedAI: List #1">
@@ -1111,8 +1111,8 @@
             <z:code/>
             <z:code>
                 <z:p>
-                    <z:emph/>
-                    <z:emph/>
+                    <z:emph class="em"/>
+                    <z:emph class="strong"/>
                     <z:term/>
                     <z:citation xml:id="cite1"/>
                     <z:abbr role="truncation"/>
@@ -1135,7 +1135,7 @@
             </z:code>
             <z:code>
                 <z:p>
-                    <z:emph/>
+                    <z:emph class="em"/>
                 </z:p>
                 <z:pagebreak value="23"/>
             </z:code>
@@ -1166,8 +1166,8 @@
             <z:code>
                 <z:span role="truncation"/>
                 <z:span role="initialism"/>
-                <z:emph/>
-                <z:emph/>
+                <z:emph class="em"/>
+                <z:emph class="strong"/>
             </z:code>
             <z:code>
                 <z:span/>
