@@ -42,7 +42,8 @@
     </p:option>
 
     <p:option name="accessibility-check" required="false" px:type="boolean" select="'false'">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml"
+						 px:resource-bundle="org.daisy.pipeline.epub.ace.EpubAccessibilityCheckOption">
             <h2 px:role="name">Enable accessibility check</h2>
             <p px:role="desc" xml:space="preserve">Check the compliance to the EPUB accessibility specification using the [DAISY Ace](https://daisy.github.io/ace) tool.
 
