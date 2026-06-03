@@ -10,7 +10,6 @@
       </includes>
       <excludes>
         <exclude>etc/pipeline.properties</exclude>
-        <exclude>etc/felix.properties</exclude>
       </excludes>
       <outputDirectory></outputDirectory>
     </fileSet>
@@ -18,7 +17,6 @@
       <directory>src/main/resources</directory>
       <includes>
         <include>etc/pipeline.properties</include>
-        <include>etc/felix.properties</include>
       </includes>
       <filtered>true</filtered>
       <outputDirectory></outputDirectory>
