@@ -98,28 +98,19 @@ rem # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
     call:warn Enabling Java debug options: %JAVA_DEBUG_OPTS%
 :PIPELINE2_DEBUG_END
 
-    set ENABLE_OSGI=false
     set ENABLE_PERSISTENCE=true
-    set ENABLE_SHELL=false
 
 :RUN_LOOP
     if [%1]==[] goto :EXECUTE
-    if "%1" == "osgi" goto :EXECUTE_OSGI
     if "%1" == "remote" goto :EXECUTE_REMOTE
     if "%1" == "local" goto :EXECUTE_LOCAL
     if "%1" == "clean" goto :EXECUTE_CLEAN
     if "%1" == "debug" goto :EXECUTE_DEBUG
-    if "%1" == "shell" goto :EXECUTE_SHELL
     call:warn Unexpected argument: "%1"
     rem user-fixable
     set exitCode=2
     goto END
 goto :EXECUTE
-
-:EXECUTE_OSGI
-    set ENABLE_OSGI=true
-    shift
-goto :RUN_LOOP
 
 :EXECUTE_REMOTE
     set PIPELINE2_WS_LOCALFS=false
@@ -144,41 +135,13 @@ goto :RUN_LOOP
     shift
 goto :RUN_LOOP
 
-:EXECUTE_SHELL
-    set ENABLE_SHELL=true
-    shift
-goto :RUN_LOOP
-
 :EXECUTE
     if not exist "%PIPELINE2_HOME%\system\webservice" (
         rem fatal
         set exitCode=3
         goto END
     )
-    if %ENABLE_OSGI% == true (
-        if not exist "%PIPELINE2_HOME%\system\osgi\bootstrap" (
-            call:warn OSGi can not be enabled
-            set ENABLE_OSGI=false
-        )
-    )
-    if %ENABLE_OSGI% == true (
-        set PATHS=!PATHS! system\osgi\bundles
-    ) else (
-        set PATHS=!PATHS! system\no-osgi
-    )
     set PATHS=!PATHS! system\webservice
-    if %ENABLE_OSGI% == true (
-        set PATHS=!PATHS! system\osgi\webservice
-    ) else (
-        set PATHS=!PATHS! system\no-osgi\webservice
-    )
-    if %ENABLE_SHELL% == true (
-        if %ENABLE_OSGI% == true (
-            set PATHS=!PATHS! system\osgi\gogo
-        ) else (
-            call:warn Shell can only be enabled under OSGi
-        )
-    )
     if %ENABLE_PERSISTENCE% == true (
         if not exist "%PIPELINE2_HOME%\system\persistence" (
             call:warn Running without persistence
@@ -187,42 +150,17 @@ goto :RUN_LOOP
     )
     if %ENABLE_PERSISTENCE% == true (
         set PATHS=!PATHS! system\persistence
-        if %ENABLE_OSGI% == true (
-            set PATHS=!PATHS! system\osgi\persistence
-        ) else (
-            set PATHS=!PATHS! system\no-osgi\persistence
+    )
+    for %%D in (system\common !PATHS! modules) do (
+        if exist "%PIPELINE2_HOME%\%%D" (
+            rem Using wildcard to avoid "The input line is too long" error
+            set CLASSPATH=!CLASSPATH!;%%D\*
+            rem for /f %%F in ('dir /b "%PIPELINE2_HOME%\%%D\*.jar"') do (
+            rem     set CLASSPATH=!CLASSPATH!;%%D\%%F
+            rem )
         )
     )
-    if %ENABLE_OSGI% == true (
-        for %%D in (system\osgi\bootstrap) do (
-            for /f %%F in ('dir /b "%PIPELINE2_HOME%\%%D\*.jar"') do (
-                set CLASSPATH=!CLASSPATH!;%%D\%%F
-            )
-        )
-        set MAIN=org.apache.felix.main.Main
-        for %%D in (%PATHS%) do (
-            for /f %%F in ('dir /b "%PIPELINE2_HOME%\%%D\*.jar"') do (
-                set AUTO_START_BUNDLES=!AUTO_START_BUNDLES! file:%%D\%%F
-            )
-        )
-        rem system/common is included through felix.auto.deploy.dir setting
-        rem  (see felix.properties)
-        rem modules is included through felix.fileinstall.dir settings
-        rem  (see felix.properties and org.apache.felix.fileinstall-modules.cfg)
-        set OSGI_OPTS=-Dfelix.config.properties="file:%PIPELINE2_HOME:\=/%/etc/felix.properties" ^
-                      -Dfelix.auto.start.1="!AUTO_START_BUNDLES!"
-    ) else (
-        for %%D in (system\common !PATHS! modules) do (
-            if exist "%PIPELINE2_HOME%\%%D" (
-                rem Using wildcard to avoid "The input line is too long" error
-                set CLASSPATH=!CLASSPATH!;%%D\*
-                rem for /f %%F in ('dir /b "%PIPELINE2_HOME%\%%D\*.jar"') do (
-                rem     set CLASSPATH=!CLASSPATH!;%%D\%%F
-                rem )
-            )
-        )
-        set MAIN=org.daisy.pipeline.webservice.restlet.impl.PipelineWebService
-    )
+    set MAIN=org.daisy.pipeline.webservice.restlet.impl.PipelineWebService
 
     rem Execute the Java Virtual Machine
     cd "%PIPELINE2_HOME%"
@@ -230,10 +168,6 @@ goto :RUN_LOOP
     rem Logback configuration file
     set SYSTEM_PROPS=%SYSTEM_PROPS% -Dlogback.configurationFile="file:%PIPELINE2_HOME:\=/%/etc/logback.xml"
     set SYSTEM_PROPS=%SYSTEM_PROPS% -Djava.util.logging.config.file="%PIPELINE2_HOME:\=/%/etc/logging.properties"
-    rem to make ${org.daisy.pipeline.data} available in felix.properties (for felix.cache.rootdir)
-    if %ENABLE_OSGI% == true (
-        set SYSTEM_PROPS=%SYSTEM_PROPS% -Dorg.daisy.pipeline.data="%PIPELINE2_DATA%"
-    )
     rem to make ${org.daisy.pipeline.logdir} available in logback.xml
     set SYSTEM_PROPS=%SYSTEM_PROPS% -Dorg.daisy.pipeline.logdir="%PIPELINE2_LOGDIR%"
 
@@ -258,7 +192,6 @@ goto :RUN_LOOP
             --add-exports=java.base/sun.net.www.protocol.jar=ALL-UNNAMED ^
             --add-exports=jdk.xml.dom/org.w3c.dom.html=ALL-UNNAMED ^
             --add-exports=jdk.naming.rmi/com.sun.jndi.url.rmi=ALL-UNNAMED ^
-            %OSGI_OPTS% ^
             -Dorg.daisy.pipeline.properties="%PIPELINE2_HOME%\etc\pipeline.properties" ^
             %SYSTEM_PROPS% ^
             -classpath "%CLASSPATH%" ^
@@ -266,7 +199,6 @@ goto :RUN_LOOP
     ) else (
         rem version 8
         SET COMMAND="%JAVA%" %JAVA_OPTS% ^
-            %OSGI_OPTS% ^
             -Dorg.daisy.pipeline.properties="%PIPELINE2_HOME%\etc\pipeline.properties" ^
             %SYSTEM_PROPS% ^
             -classpath "%CLASSPATH%" ^
@@ -276,27 +208,15 @@ goto :RUN_LOOP
             rem -Djava.ext.dirs="%JAVA_HOME%\jre\lib\ext;%JAVA_HOME%\lib\ext;%PIPELINE2_HOME%\lib\ext" ^
     )
     call:warn Starting java: %COMMAND%
-
-    if %ENABLE_SHELL% == true (
-        rem endlocal & (
-        rem     set "PIPELINE2_HOME=%PIPELINE2_HOME%"
-        rem     set "PIPELINE2_DATA=%PIPELINE2_DATA%"
-        rem     set "PIPELINE2_LOGDIR=%PIPELINE2_LOGDIR%"
-        rem     set "PIPELINE2_WS_LOCALFS=%PIPELINE2_WS_LOCALFS%"
-        rem     set "PIPELINE2_WS_AUTHENTICATION=%PIPELINE2_WS_AUTHENTICATION%"
-        %COMMAND%
-        rem )
-    ) else (
-        call:warn Output is written to daisy-pipeline-java.log
-        rem endlocal & (
-        rem     set "PIPELINE2_HOME=%PIPELINE2_HOME%"
-        rem     set "PIPELINE2_DATA=%PIPELINE2_DATA%"
-        rem     set "PIPELINE2_LOGDIR=%PIPELINE2_LOGDIR%"
-        rem     set "PIPELINE2_WS_LOCALFS=%PIPELINE2_WS_LOCALFS%"
-        rem     set "PIPELINE2_WS_AUTHENTICATION=%PIPELINE2_WS_AUTHENTICATION%"
-        %COMMAND% > "%PIPELINE2_LOGDIR%\daisy-pipeline-java.log"
-        rem )
-    )
+    call:warn Output is written to daisy-pipeline-java.log
+    rem endlocal & (
+    rem     set "PIPELINE2_HOME=%PIPELINE2_HOME%"
+    rem     set "PIPELINE2_DATA=%PIPELINE2_DATA%"
+    rem     set "PIPELINE2_LOGDIR=%PIPELINE2_LOGDIR%"
+    rem     set "PIPELINE2_WS_LOCALFS=%PIPELINE2_WS_LOCALFS%"
+    rem     set "PIPELINE2_WS_AUTHENTICATION=%PIPELINE2_WS_AUTHENTICATION%"
+    %COMMAND% > "%PIPELINE2_LOGDIR%\daisy-pipeline-java.log"
+    rem )
 
 rem # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 

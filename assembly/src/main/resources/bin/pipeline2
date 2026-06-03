@@ -342,19 +342,13 @@ init() {
 
 run() {
     MODE=webservice
-    ENABLE_OSGI=false
     ENABLE_PERSISTENCE=true
-    ENABLE_SHELL=false
 
     while [ "$#" -gt 0 ]; do
       case "$1" in
         'cli')
             MODE=cli
             ENABLE_PERSISTENCE=false
-            shift
-            ;;
-        'osgi')
-            ENABLE_OSGI=true
             shift
             ;;
         'remote')
@@ -376,10 +370,6 @@ run() {
                 JAVA_DEBUG_OPTS="$DEFAULT_JAVA_DEBUG_OPTS"
             fi
             JAVA_OPTS="$JAVA_DEBUG_OPTS $JAVA_OPTS"
-            shift
-            ;;
-        'shell')
-            ENABLE_SHELL=true
             shift
             ;;
         '--')
@@ -406,39 +396,10 @@ run() {
             ENABLE_PERSISTENCE=false
         fi
     fi
-    if [ "$ENABLE_OSGI" = "true" ]; then
-        if ! [ -e "$PIPELINE2_HOME/system/osgi/bootstrap" ]; then
-            warn "OSGi can not be enabled"
-            ENABLE_OSGI=false
-        fi
-    fi
     if [ "$MODE" = "cli" ]; then
         PIPELINE2_WS_LOCALFS=true
-        if [ "$ENABLE_OSGI" = "true" ]; then
-            warn "OSGi can not be enabled in CLI mode"
-            ENABLE_OSGI=false
-        fi
-    fi
-    if [ "$ENABLE_OSGI" = "true" ]; then
-        PATHS="$PATHS system/osgi/bundles"
-    else
-        PATHS="$PATHS system/no-osgi"
     fi
     PATHS="$PATHS system/$MODE"
-    if [ "$MODE" = "webservice" ]; then
-        if [ "$ENABLE_OSGI" = "true" ]; then
-            PATHS="$PATHS system/osgi/$MODE"
-        else
-            PATHS="$PATHS system/no-osgi/$MODE"
-        fi
-    fi
-    if [ "$ENABLE_SHELL" = "true" ]; then
-        if [ "$ENABLE_OSGI" = "true" ]; then
-            PATHS="$PATHS system/osgi/gogo"
-        else
-            warn "Shell can only be enabled under OSGi"
-        fi
-    fi
     if [ "$ENABLE_PERSISTENCE" = "true" ]; then
         if ! [ -e "$PIPELINE2_HOME/system/persistence" ]; then
             warn "Running without persistence"
@@ -447,34 +408,16 @@ run() {
     fi
     if [ "$ENABLE_PERSISTENCE" = "true" ]; then
         PATHS="$PATHS system/persistence"
-        if [ "$ENABLE_OSGI" = "true" ]; then
-            PATHS="$PATHS system/osgi/persistence"
-        else
-            PATHS="$PATHS system/no-osgi/persistence"
-        fi
     fi
-    if [ "$ENABLE_OSGI" = "true" ]; then
-        listJars OSGI_BOOTSTRAP_JARS system/osgi/bootstrap
-        CLASSPATH="$(join : ${OSGI_BOOTSTRAP_JARS[@]})"
-        MAIN=org.apache.felix.main.Main
-        eval listJars AUTO_START_BUNDLES $PATHS
-        # system/common is included through felix.auto.deploy.dir setting
-        #  (see felix.properties)
-        # modules is included through felix.fileinstall.dir settings
-        #  (see felix.properties and org.apache.felix.fileinstall-modules.cfg)
-        OSGI_OPTS="-Dfelix.config.properties=\"file:$PIPELINE2_HOME/etc/felix.properties\" \
-                   -Dfelix.auto.start.1=\"$(join ' ' ${AUTO_START_BUNDLES[@]/#/file:})\""
+    eval listJars JARS system/common $PATHS modules
+    CLASSPATH="$(join : ${JARS[@]})"
+    if [ "$MODE" = "cli" ]; then
+        CLASSPATH="$CLASSPATH:system/simple-api"
+    fi
+    if [ "$MODE" = "webservice" ]; then
+        MAIN=org.daisy.pipeline.webservice.restlet.impl.PipelineWebService
     else
-        eval listJars JARS system/common $PATHS modules
-        CLASSPATH="$(join : ${JARS[@]})"
-        if [ "$MODE" = "cli" ]; then
-            CLASSPATH="$CLASSPATH:system/simple-api"
-        fi
-        if [ "$MODE" = "webservice" ]; then
-            MAIN=org.daisy.pipeline.webservice.restlet.impl.PipelineWebService
-        else
-            MAIN=SimpleAPI
-        fi
+        MAIN=SimpleAPI
     fi
 
     JAVA_ENDORSED_DIRS="${JAVA_HOME}/jre/lib/endorsed:${JAVA_HOME}/lib/endorsed:${PIPELINE2_HOME}/lib/endorsed"
@@ -501,11 +444,6 @@ run() {
     SYSTEM_PROPS="${SYSTEM_PROPS} -Dlogback.configurationFile=\"file:${PIPELINE2_CONFIG}/logback.xml\""
     SYSTEM_PROPS="${SYSTEM_PROPS} -Djava.util.logging.config.file=${PIPELINE2_CONFIG}/logging.properties"
 
-    # to make ${org.daisy.pipeline.data} available in felix.properties (for felix.cache.rootdir)
-    if [ "$ENABLE_OSGI" = "true" ]; then
-        SYSTEM_PROPS="${SYSTEM_PROPS} -Dorg.daisy.pipeline.data=\"$PIPELINE2_DATA\""
-    fi
-
     # to make ${org.daisy.pipeline.logdir} available in logback.xml
     SYSTEM_PROPS="${SYSTEM_PROPS} -Dorg.daisy.pipeline.logdir=\"$PIPELINE2_LOGDIR\""
 
@@ -519,7 +457,6 @@ run() {
         eval exec "\"$JAVA"\" "$JAVA_OPTS" \
              -Djava.endorsed.dirs="\"${JAVA_ENDORSED_DIRS}"\" \
              -Djava.ext.dirs="\"${JAVA_EXT_DIRS}"\" \
-             $OSGI_OPTS \
              -Dorg.daisy.pipeline.properties="\"$PIPELINE2_CONFIG/pipeline.properties\"" \
              $SYSTEM_PROPS \
              -classpath "\"$CLASSPATH"\" \
@@ -540,7 +477,6 @@ run() {
              --add-exports=java.base/sun.net.www.protocol.jar=ALL-UNNAMED \
              --add-exports=jdk.xml.dom/org.w3c.dom.html=ALL-UNNAMED \
              --add-exports=jdk.naming.rmi/com.sun.jndi.url.rmi=ALL-UNNAMED \
-             $OSGI_OPTS \
              -Dorg.daisy.pipeline.properties="\"$PIPELINE2_CONFIG/pipeline.properties\"" \
              $SYSTEM_PROPS \
              -classpath "\"$CLASSPATH"\" \

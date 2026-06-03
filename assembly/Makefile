@@ -354,14 +354,9 @@ clean :
 #                         copy-felix-bundles
 #                         copy-felix-gogo
 #                         copy-framework
-#                         copy-framework-osgi
-#                         copy-framework-no-osgi
 #                         copy-persistence
-#                         copy-persistence-osgi
-#                         copy-persistence-no-osgi
 #                         copy-webservice
 #                         copy-modules
-#                         copy-modules-osgi
 #                         copy-modules-linux
 #                         copy-modules-mac
 #                         copy-modules-win
@@ -409,14 +404,6 @@ ifneq (--with-persistence,$(filter --with-persistence,$(MAKECMDGOALS)))
 PROFILES += without-persistence
 else
 .PHONY : -Pwithout-persistence
-endif
-
-.PHONY : --with-osgi --without-osgi
---with-osgi : -Pwith-osgi
-ifneq (--without-osgi,$(filter --without-osgi,$(MAKECMDGOALS)))
-PROFILES += with-osgi
-else
-.PHONY : -Pwith-osgi
 endif
 
 .PHONY : --with-webservice --without-webservice
