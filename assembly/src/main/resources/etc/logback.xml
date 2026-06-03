@@ -1,7 +1,6 @@
 <configuration debug="false">
 
   <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <filter class="org.daisy.pipeline.logging.OSGIFilter"/>
     <file>${org.daisy.pipeline.logdir}/daisy-pipeline.log</file>
     <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
       <fileNamePattern>${org.daisy.pipeline.logdir}/daisy-pipeline.%i.log.zip</fileNamePattern>
@@ -17,7 +16,6 @@
   </appender>
 
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-    <filter class="org.daisy.pipeline.logging.OSGIFilter"/>
     <encoder>
       <Pattern>%-5level %marker [%40.40logger{40}] %msg   @%class{36}:%L#%M%n</Pattern>
     </encoder>
