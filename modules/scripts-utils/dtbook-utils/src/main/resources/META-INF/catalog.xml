@@ -21,6 +21,10 @@
    <uri name="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl"
         uri="../xml/dtbook-utils-library.xpl"/>
 
+   <uri uri="../xml/validate-dtbook/dtbook-validator.script.xpl"
+        px:content-type="script" px:id="dtbook-validator"
+        px:extends="../../../../../../scripts/common-options.xpl"/>
+
    <uri uri="../css/default-speech.scss" px:content-type="user-agent-stylesheet"
                                          px:stylesheet-for-content-type="application/x-dtbook+xml"
                                          px:stylesheet-for-media="speech"/>

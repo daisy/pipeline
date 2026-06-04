@@ -1,43 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step version="1.0" name="dtbook-validator.store" type="pxi:dtbook-validator.store"
-    xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step"
-    xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
-    xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp" xmlns:d="http://www.daisy.org/ns/pipeline/data"
-    xmlns:l="http://xproc.org/library" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
-    xmlns:m="http://www.w3.org/1998/Math/MathML" exclude-inline-prefixes="#all">
-    
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0" 
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                exclude-inline-prefixes="#all"
+                name="dtbook-validator.store"
+                type="pxi:dtbook-validator.store">
+
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1>DTBook Validator: Store</h1>
         <p>Internal step.</p>
     </p:documentation>
-    
+
     <p:input port="xml-report">
         <p:documentation>
             <p>Validation report XML.</p>
         </p:documentation>
     </p:input>
-    
+
     <p:input port="html-report">
         <p:documentation>
             <p>Validation report HTML.</p>
         </p:documentation>
     </p:input>
-    
+
     <p:option name="output-dir" required="false" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p>Directory where the validation reports are stored. If left blank,
                 nothing is saved to disk.</p>
         </p:documentation>
     </p:option>
-    
+
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
         <p:documentation>
             px:message
         </p:documentation>
     </p:import>
-    
+
     <p:choose>
         <!-- save reports if we specified an output dir -->
         <p:when test="string-length($output-dir) > 0">
@@ -72,5 +70,5 @@
             </p:sink>
         </p:otherwise>
     </p:choose>
-    
+
 </p:declare-step>

@@ -85,7 +85,6 @@
     <module>scripts/dtbook-to-pef</module>
     <module>scripts/dtbook-to-rtf</module>
     <module>scripts/dtbook-to-zedai</module>
-    <module>scripts/dtbook-validator</module>
     <module>scripts/epub-to-daisy</module>
     <module>scripts/epub2-to-epub3</module>
     <module>scripts/epub3-to-daisy202</module>

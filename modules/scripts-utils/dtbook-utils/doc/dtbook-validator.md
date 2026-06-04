@@ -1,5 +1,5 @@
 <link rel="dp2:permalink" href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-validator/"/>
-<link rev="dp2:doc" href="../src/main/resources/xml/dtbook-validator.xpl"/>
+<link rev="dp2:doc" href="../src/main/resources/xml/validate-dtbook/dtbook-validator.script"/>
 <link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/userdoc"/>
 
 # DTBook Validator
