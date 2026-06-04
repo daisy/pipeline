@@ -24,7 +24,6 @@ The code is divided into these modules:
 - [`libhyphen-utils`](libhyphen-utils)
 - [`liblouis-utils`](liblouis-utils)
 - [`pef-utils`](pef-utils)
-- [`texhyph-utils`](texhyph-utils)
 - [`obfl-utils`](obfl-utils)
 
 Each of these modules collect all the XSLT/XPath functions and XProc

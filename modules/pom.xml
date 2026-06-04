@@ -70,7 +70,6 @@
     <module>braille/liblouis-utils</module>
     <module>braille/dotify-utils</module>
     <module>braille/libhyphen-utils</module>
-    <module>braille/texhyph-utils</module>
     <module>scripts/daisy202-to-epub3</module>
     <module>scripts/daisy202-validator</module>
     <module>scripts/daisy202-to-daisy3</module>
