@@ -50,8 +50,6 @@ import org.daisy.pipeline.braille.css.CSSStyledText;
 import org.daisy.pipeline.braille.css.TextStyleParser;
 import org.daisy.pipeline.braille.dotify.DotifyTranslator;
 
-import org.osgi.framework.FrameworkUtil;
-
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
@@ -311,8 +309,7 @@ public class DotifyTranslatorImpl extends AbstractBrailleTranslator implements D
 			policy = ReferencePolicy.STATIC
 		)
 		protected void bindBrailleFilterFactoryService(BrailleFilterFactoryService service) {
-			if (!OSGiHelper.inOSGiContext())
-				service.setCreatedWithSPI();
+			service.setCreatedWithSPI();
 			factoryServices.add(service);
 			invalidateCache();
 		}
@@ -329,14 +326,5 @@ public class DotifyTranslatorImpl extends AbstractBrailleTranslator implements D
 	}
 	
 	private static final Logger logger = LoggerFactory.getLogger(DotifyTranslatorImpl.class);
-	
-	private static abstract class OSGiHelper {
-		static boolean inOSGiContext() {
-			try {
-				return FrameworkUtil.getBundle(OSGiHelper.class) != null;
-			} catch (NoClassDefFoundError e) {
-				return false;
-			}
-		}
-	}
+
 }

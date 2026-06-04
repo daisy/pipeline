@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import com.google.common.cache.CacheBuilder;
@@ -36,11 +35,6 @@ import org.daisy.common.spi.ServiceLoader;
 import org.daisy.pipeline.braille.css.impl.ContentList.ContentFunction;
 import org.daisy.pipeline.braille.css.TextStyleParser;
 
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,7 +51,7 @@ public abstract class BrailleCssParser implements TextStyleParser {
 		if (INSTANCE_WITH_EXTENSIONS == null) {
 			List<BrailleCSSExtension> extensions = new ArrayList<>();
 			try {
-				Iterator<BrailleCSSExtension> i = getCSSExtensions();
+				Iterator<BrailleCSSExtension> i = SPIHelper.getCSSExtensions();
 					while (i.hasNext()) {
 						try {
 							BrailleCSSExtension extension = i.next();
@@ -740,50 +734,6 @@ public abstract class BrailleCssParser implements TextStyleParser {
 					return false;
 			} else
 				return super.parseDeclaration(d, properties, values);
-		}
-	}
-
-	private static Iterator<BrailleCSSExtension> getCSSExtensions() {
-		if (OSGiHelper.inOSGiContext())
-			return OSGiHelper.getCSSExtensions();
-		else
-			return SPIHelper.getCSSExtensions();
-	}
-
-	// static nested class in order to delay class loading
-	private static abstract class OSGiHelper {
-
-		static boolean inOSGiContext() {
-			try {
-				return FrameworkUtil.getBundle(OSGiHelper.class) != null;
-			} catch (NoClassDefFoundError e) {
-				return false;
-			}
-		}
-
-		static Iterator<BrailleCSSExtension> getCSSExtensions() {
-			return new Iterator<BrailleCSSExtension>() {
-				private BundleContext bc = FrameworkUtil.getBundle(BrailleCssParser.class).getBundleContext();
-				private ServiceReference[] refs;
-				private int index = 0;  {
-					try {
-						refs = bc.getServiceReferences(BrailleCSSExtension.class.getName(), null);
-					} catch (InvalidSyntaxException e) {
-						throw new IllegalStateException(e); // should not happen
-					}
-				}
-				public boolean hasNext() {
-					return refs != null && index < refs.length;
-				}
-				public BrailleCSSExtension next() throws NoSuchElementException {
-					if (!hasNext())
-						throw new NoSuchElementException();
-					return (BrailleCSSExtension)bc.getService(refs[index++]);
-				}
-				public void remove() {
-					throw new UnsupportedOperationException();
-				}
-			};
 		}
 	}
 

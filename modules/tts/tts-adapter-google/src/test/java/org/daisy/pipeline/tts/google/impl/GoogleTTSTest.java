@@ -12,7 +12,7 @@ import java.util.Set;
 import javax.sound.sampled.AudioInputStream;
 import javax.xml.transform.sax.SAXSource;
 
-import org.daisy.pipeline.junit.OSGiLessRunner;
+import org.daisy.pipeline.junit.TestRunner;
 import org.daisy.pipeline.tts.TTSRegistry.TTSResource;
 import org.daisy.pipeline.tts.TTSService.SynthesisException;
 import org.daisy.pipeline.tts.Voice;
@@ -30,8 +30,8 @@ import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
-// We run with OSGiLessRunner in order to start the Google TTS server mock
-@RunWith(OSGiLessRunner.class)
+// We run with TestRunner in order to start the Google TTS server mock
+@RunWith(TestRunner.class)
 public class GoogleTTSTest {
 	
 	@Before

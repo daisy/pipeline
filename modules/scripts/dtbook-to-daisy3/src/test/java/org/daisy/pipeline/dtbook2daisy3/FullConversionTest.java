@@ -1,18 +1,6 @@
 package org.daisy.pipeline.dtbook2daisy3;
 
 import org.daisy.pipeline.junit.AbstractTest;
-import static org.daisy.pipeline.pax.exam.Options.mavenBundle;
-import static org.daisy.pipeline.pax.exam.Options.spiflyBundles;
-
-import static org.ops4j.pax.exam.CoreOptions.composite;
-import static org.ops4j.pax.exam.CoreOptions.options;
-import static org.ops4j.pax.exam.CoreOptions.systemPackage;
-import static org.ops4j.pax.exam.CoreOptions.systemProperty;
-import static org.ops4j.pax.exam.CoreOptions.wrappedBundle;
-import org.ops4j.pax.exam.Configuration;
-import org.ops4j.pax.exam.Option;
-import org.ops4j.pax.exam.ProbeBuilder;
-import org.ops4j.pax.exam.TestProbeBuilder;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,10 +9,7 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.Dictionary;
-import java.util.HashSet;
 import java.util.Properties;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.inject.Inject;
@@ -77,25 +62,6 @@ import com.google.common.base.Suppliers;
 public class FullConversionTest extends AbstractTest implements DifferenceListener {
 
 	@Override
-	public String[] testDependencies() {
-		return new String[]{
-			pipelineModule("common-utils"),
-			pipelineModule("css-utils"),
-			pipelineModule("daisy3-utils"),
-			pipelineModule("dtbook-utils"),
-			pipelineModule("fileset-utils"),
-			pipelineModule("file-utils"),
-			pipelineModule("smil-utils"),
-			pipelineModule("mathml-utils"),
-			pipelineModule("dtbook-tts"),
-			"commons-io:commons-io:?",
-			"org.daisy.pipeline:xproc-api:?",
-			pipelineModule("nlp-omnilang-lexer"),
-			pipelineModule("tts-mocks"),
-		};
-	}
-	
-	@Override
 	public Properties systemProperties() {
 		Properties props = calabashConfiguration();
 		props.setProperty("res.on.disk", getClass().getResource("/").toString());
@@ -103,104 +69,8 @@ public class FullConversionTest extends AbstractTest implements DifferenceListen
 		return props;
 	}
 	
-	@Override @Configuration
-	public Option[] config() {
-		
-		// ZedVal and dependencies
-		Option zedval = composite(
-				// Notes:
-				// - When using the instructions method (also exports, imports, etc.) care should
-				//   be taken not to reach the maximum file name length (which is 255 on Mac OS),
-				//   because Pax Exam encodes all this info into the file name of the JAR.
-				// - In the SPI-Consumer instructions, "%23" is used instead of "#". This is because
-				//   of a (probable) bug in Pax Exam.
-				wrappedBundle(mavenBundle("org.daisy:zedval:?"))
-					.instructions("SPI-Consumer=javax.xml.parsers.SAXParserFactory%23newInstance," +
-					                           "javax.xml.parsers.DocumentBuilderFactory%23newInstance"),
-				wrappedBundle(mavenBundle("org.daisy:daisy-util:?"))
-					.instructions("SPI-Consumer=javax.xml.parsers.SAXParserFactory%23newInstance," +
-					                           "javax.xml.transform.TransformerFactory%23newInstance"),
-				wrappedBundle(mavenBundle("xerces:xercesImpl:?"))
-					.instructions("SPI-Provider=*"),
-				// mavenBundle("org.daisy.libs:saxon-he:?"),
-				// mavenBundle("org.daisy.libs:jing:?"),
-				mavenBundle("commons-cli:commons-cli:?"),
-				wrappedBundle(mavenBundle("org.w3c.css:sac:?")),
-				wrappedBundle(mavenBundle("javazoom:jlayer:?")),
-				// wrappedBundle(mavenBundle("batik:batik-css:?")),
-				// wrappedBundle(mavenBundle("batik:batik-util:?")),
-				// wrappedBundle(mavenBundle("net.sourceforge.jchardet:jchardet:?")),
-				// wrappedBundle(mavenBundle("org.idpf:epubcheck:?")),
-				// wrappedBundle(mavenBundle("com.ibm.icu:icu4j:?")),
-				// wrappedBundle(mavenBundle("org.ccil.cowan.tagsoup:tagsoup:?")),
-				// wrappedBundle(mavenBundle("org.codehaus.woodstox:wstx-lgpl:?")),
-				systemPackage("org.w3c.dom"),
-				systemPackage("org.w3c.dom.ranges"),
-				spiflyBundles()
-				);
-
-		// for testing purpose only
-		Option testDeps = wrappedBundle(mavenBundle("xmlunit:xmlunit:?"));
-
-		return options(
-			zedval,
-			testDeps,
-			composite(super.config()));
-	}
-
-	@ProbeBuilder
-	public TestProbeBuilder probeConfiguration(TestProbeBuilder probe) {
-		probe.setHeader("SPI-Consumer", "javax.xml.parsers.SAXParserFactory#newInstance");
-		return probe;
-	}
-
 	@Inject
 	public XProcEngine xprocEngine;
-
-	// @Inject
-	private BundleContext bundleContext;
-
-	//@Test
-	public void noTestButInfo() throws Exception {
-		System.out.println("---------------- START DEBUG INFO ----------------");
-		
-		Set<String> exportedPackages = new HashSet<String>();
-		for (Bundle b : bundleContext.getBundles()) {
-			Dictionary<String, String> headers = b.getHeaders();
-			String exported = headers.get("Export-Package");
-			if (exported != null) {
-				exported = exported.replaceAll(":=\"[^\"]+\"", "");
-				if (b.getSymbolicName().contains("daisy-util")) {
-					System.out.println("daisy-util => " + exported);
-				}
-				for (String instr : exported.split(",")) {
-					String[] details = instr.split(";", 2);
-					exportedPackages.add(details[0].trim());
-					System.out.println(details[0] + " -> "
-							+ b.getSymbolicName());
-
-				}
-			}
-		}
-
-		for (Bundle b : bundleContext.getBundles()) {
-			Dictionary<String, String> headers = b.getHeaders();
-			String imported = headers.get("Import-Package");
-			if (imported != null) {
-				imported = imported.replaceAll(":=\"[^\"]+\"", "");
-				for (String instr : imported.split(",(?![0-9])")) {
-					String[] details = instr.split(";", 2);
-					String pack = details[0];
-					if (!exportedPackages.contains(pack)
-							&& (details.length == 1 || !details[1]
-									.contains("optional"))) {
-						System.out.println("missing package: " + pack);
-					}
-				}
-			}
-		}
-		System.out.println("----------------- END DEBUG INFO -----------------");
-	}
 
 	interface ErrorFilter {
 		boolean isError(FailureMessage m);

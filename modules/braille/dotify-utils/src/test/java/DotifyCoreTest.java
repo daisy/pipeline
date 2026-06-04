@@ -20,21 +20,6 @@ public class DotifyCoreTest extends AbstractTest {
 	@Inject
 	public DotifyTranslator.Provider provider;
 	
-	@Override
-	protected String[] testDependencies() {
-		return new String[] {
-			brailleModule("braille-common"),
-			brailleModule("braille-css-utils"),
-			brailleModule("pef-utils"),
-			pipelineModule("css-utils"),
-			"org.daisy.dotify:dotify.library:?",
-			"org.daisy.pipeline:calabash-adapter:?",
-			// because the exclusion of com.fasterxml.woodstox:woodstox-core from the dotify.library
-			// dependencies causes stax2-api to be excluded too
-			"org.codehaus.woodstox:stax2-api:jar:?",
-		};
-	}
-	
 	@Test
 	public void testSelect() {
 		provider.get(query("(locale:sv-SE)")).iterator().next();

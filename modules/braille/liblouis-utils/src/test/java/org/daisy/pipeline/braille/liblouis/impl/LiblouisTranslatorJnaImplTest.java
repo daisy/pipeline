@@ -22,7 +22,7 @@ import static org.daisy.pipeline.braille.common.util.Files.asFile;
 import org.daisy.pipeline.braille.css.CSSStyledText;
 import org.daisy.pipeline.braille.css.TextStyleParser;
 import org.daisy.pipeline.braille.liblouis.impl.LiblouisTranslatorJnaImplProvider.LiblouisTranslatorImpl;
-import org.daisy.pipeline.junit.OSGiLessRunner;
+import org.daisy.pipeline.junit.TestRunner;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -35,7 +35,7 @@ import org.liblouis.DisplayTable.StandardDisplayTables;
 import org.liblouis.Louis;
 import org.liblouis.Translator;
 
-@RunWith(OSGiLessRunner.class)
+@RunWith(TestRunner.class)
 public class LiblouisTranslatorJnaImplTest {
 	
 	private static String textFromTextTransform(String text, String... textTransform) {

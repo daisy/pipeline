@@ -12,9 +12,6 @@ import org.daisy.pipeline.junit.AbstractTest;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
-import org.ops4j.pax.exam.ProbeBuilder;
-import org.ops4j.pax.exam.TestProbeBuilder;
-
 public class TexHyphenatorCoreTest extends AbstractTest {
 	
 	@Inject
@@ -62,24 +59,5 @@ public class TexHyphenatorCoreTest extends AbstractTest {
 		for (String t : text)
 			styledText.add(new CSSStyledText(t, cssParser.parse("")));
 		return styledText;
-	}
-
-	@Override
-	protected String[] testDependencies() {
-		return new String[] {
-			pipelineModule("common-utils"),
-			brailleModule("braille-common"),
-			"com.googlecode.texhyphj:texhyphj:?",
-			"org.daisy.dotify:dotify.library:?",
-			"org.daisy.libs:saxon-he:?",
-			"org.daisy.pipeline:calabash-adapter:?"
-		};
-	}
-	
-	@ProbeBuilder
-	public TestProbeBuilder probeConfiguration(TestProbeBuilder probe) {
-		// needed because it can not be generated with maven-bundle-plugin
-		probe.setHeader("Service-Component", "OSGI-INF/table-path.xml");
-		return probe;
 	}
 }

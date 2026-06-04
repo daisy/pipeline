@@ -60,8 +60,6 @@ import org.daisy.pipeline.braille.dotify.impl.CounterHandlingBrailleTranslator;
 import org.daisy.pipeline.braille.pef.TableRegistry;
 import org.daisy.pipeline.css.CounterStyle;
 
-import org.osgi.framework.FrameworkUtil;
-
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -487,8 +485,7 @@ public class OBFLToPEFStep extends DefaultStep implements XProcStep {
 			policy = ReferencePolicy.STATIC
 		)
 		protected void bindFormatterEngineFactoryService(FormatterEngineFactoryService service) {
-			if (!OSGiHelper.inOSGiContext())
-				service.setCreatedWithSPI();
+			service.setCreatedWithSPI();
 			formatterEngineFactoryService = service;
 		}
 		
@@ -502,8 +499,7 @@ public class OBFLToPEFStep extends DefaultStep implements XProcStep {
 			policy = ReferencePolicy.STATIC
 		)
 		protected void bindFormatterFactory(FormatterFactory factory) {
-			if (!OSGiHelper.inOSGiContext())
-				factory.setCreatedWithSPI();
+			factory.setCreatedWithSPI();
 			formatterFactory = factory;
 		}
 		
@@ -517,8 +513,7 @@ public class OBFLToPEFStep extends DefaultStep implements XProcStep {
 			policy = ReferencePolicy.STATIC
 		)
 		protected void bindObflParserFactoryService(ObflParserFactoryService service) {
-			if (!OSGiHelper.inOSGiContext())
-				service.setCreatedWithSPI();
+			service.setCreatedWithSPI();
 			obflParserFactoryService = service;
 		}
 		
@@ -532,8 +527,7 @@ public class OBFLToPEFStep extends DefaultStep implements XProcStep {
 			policy = ReferencePolicy.STATIC
 		)
 		protected void bindTextBorderFactoryService(TextBorderFactoryService service) {
-			if (!OSGiHelper.inOSGiContext())
-				service.setCreatedWithSPI();
+			service.setCreatedWithSPI();
 			textBorderFactoryService = service;
 		}
 		
@@ -577,16 +571,7 @@ public class OBFLToPEFStep extends DefaultStep implements XProcStep {
 			tableRegistry = registry;
 		}
 	}
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(OBFLToPEFStep.class);
-	
-	private static abstract class OSGiHelper {
-		static boolean inOSGiContext() {
-			try {
-				return FrameworkUtil.getBundle(OSGiHelper.class) != null;
-			} catch (NoClassDefFoundError e) {
-				return false;
-			}
-		}
-	}
+
 }

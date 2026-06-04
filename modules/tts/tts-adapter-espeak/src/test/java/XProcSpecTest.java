@@ -13,10 +13,4 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 		                  BinaryFinder.find("espeak").isPresent());
 		super.runXSpecAndXProcSpec();
 	}
-
-	@Override
-	protected String[] testDependencies() {
-		return new String[] {
-		};
-	}
 }

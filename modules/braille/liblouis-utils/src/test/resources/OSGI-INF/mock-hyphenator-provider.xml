@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<component name="mock-hyphenator-provider">
-  <implementation class="MockHyphenator$Provider"/>
-  <service>
-    <provide interface="org.daisy.pipeline.braille.common.HyphenatorProvider"/>
-  </service>
-</component>
