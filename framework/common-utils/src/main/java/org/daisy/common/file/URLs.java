@@ -20,17 +20,12 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.ProviderNotFoundException;
 import java.nio.file.SimpleFileVisitor;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterators;
-
-import org.osgi.framework.Bundle;
-import org.osgi.framework.FrameworkUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -329,26 +324,22 @@ public final class URLs {
 	 * @return An encoded absolute URL
 	 */
 	public static URL getResourceFromJAR(String resource, Class<?> context) {
-		if (OSGiHelper.inOSGiContext())
-			return OSGiHelper.getResourceFromJAR(resource, context);
-		else {
-			File jarFile = getCurrentJAR(context);
-			logger.trace("Getting resource {} from JAR (current class: {}; JAR file: {})", resource, context, jarFile);
-			if (!jarFile.exists())
-				throw new RuntimeException("coding error");
-			Path p = getResourceFromJAR(resource, jarFile.toPath());
-			URL u = asURL(p.toUri());
-			if (isDirectory(p) && !u.toString().endsWith("/"))
-				u = asURL(u.toString() + "/");
-			try {
-				p.getFileSystem().close();
-			} catch (UnsupportedOperationException e) {
-				// default file system
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
-			return u;
+		File jarFile = getCurrentJAR(context);
+		logger.trace("Getting resource {} from JAR (current class: {}; JAR file: {})", resource, context, jarFile);
+		if (!jarFile.exists())
+			throw new RuntimeException("coding error");
+		Path p = getResourceFromJAR(resource, jarFile.toPath());
+		URL u = asURL(p.toUri());
+		if (isDirectory(p) && !u.toString().endsWith("/"))
+			u = asURL(u.toString() + "/");
+		try {
+			p.getFileSystem().close();
+		} catch (UnsupportedOperationException e) {
+			// default file system
+		} catch (IOException e) {
+			throw new RuntimeException(e);
 		}
+		return u;
 	}
 
 	public static File getCurrentJAR(Class<?> context) {
@@ -404,17 +395,13 @@ public final class URLs {
 	 * @return A list of resource paths (not URL-encoded)
 	 */
 	public static Iterator<String> listResourcesFromJAR(String directory, Class<?> context) {
-		if (OSGiHelper.inOSGiContext())
-			return OSGiHelper.listResourcesFromJAR(directory, context);
-		else {
-			URL jarFileURL = context.getProtectionDomain().getCodeSource().getLocation();
-			if ("location:local".equals(jarFileURL.toString()) || jarFileURL.toString().startsWith("mvn:"))
-				throw new RuntimeException("expected file URI");
-			File jarFile = new File(asURI(jarFileURL));
-			if (!jarFile.exists())
-				throw new RuntimeException("coding error");
-			return listResourcesFromJAR(directory, jarFile.toPath());
-		}
+		URL jarFileURL = context.getProtectionDomain().getCodeSource().getLocation();
+		if ("location:local".equals(jarFileURL.toString()) || jarFileURL.toString().startsWith("mvn:"))
+			throw new RuntimeException("expected file URI");
+		File jarFile = new File(asURI(jarFileURL));
+		if (!jarFile.exists())
+			throw new RuntimeException("coding error");
+		return listResourcesFromJAR(directory, jarFile.toPath());
 	}
 
 	/**
@@ -483,61 +470,5 @@ public final class URLs {
 			catch (IOException e) {
 				throw new RuntimeException(e); }}
 		return a.isDirectory();
-	}
-	
-	// static nested class in order to delay class loading
-	private static abstract class OSGiHelper {
-		
-		static boolean inOSGiContext() {
-			try {
-				return FrameworkUtil.getBundle(OSGiHelper.class) != null;
-			} catch (NoClassDefFoundError e) {
-				return false;
-			}
-		}
-		
-		static URL getResourceFromJAR(String resource, Class<?> context) {
-			if (resource.startsWith("/"))
-				resource = resource.substring(1);
-			Bundle bundle = FrameworkUtil.getBundle(context);
-			if (bundle == null)
-				throw new IllegalArgumentException("no bundle can be found for class " + context);
-			URL url = bundle.getEntry(resource);
-			if (url == null) {
-				if (resource.endsWith("/")) {
-					url = bundle.getEntry(resource.substring(0, resource.length() - 1));
-					if (url != null)
-						throw new RuntimeException("not a directory: " + resource); }
-				else {
-					url = bundle.getEntry(resource + "/");
-					if (url != null)
-						return asURL(encode(url)); }
-				throw new RuntimeException("file does not exist: " + resource); }
-			else {
-				url = asURL(encode(url));
-				if (!url.toString().endsWith("/")
-				    && (resource.endsWith("/") || bundle.getEntry(resource + "/") != null))
-					return asURL(url.toString() + "/");
-				else
-					return url; }
-		}
-		
-		static Iterator<String> listResourcesFromJAR(String directory, Class<?> context) {
-			if (directory.startsWith("/"))
-				directory = directory.substring(1);
-			if (!directory.endsWith("/"))
-				directory = directory + "/";
-			Bundle bundle = FrameworkUtil.getBundle(context);
-			if (bundle == null)
-				throw new IllegalArgumentException("no bundle can be found for class " + context);
-			Enumeration<String> resources = bundle.getEntryPaths(directory);
-			if (resources == null) {
-				if (bundle.getEntry(directory.substring(0, directory.length() - 1)) != null)
-					throw new RuntimeException("not a directory: " + directory);
-				else
-					throw new RuntimeException("file does not exist: " + directory); }
-			else
-				return Iterators.forEnumeration(resources);
-		}
 	}
 }

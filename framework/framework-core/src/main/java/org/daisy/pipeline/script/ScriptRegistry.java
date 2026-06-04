@@ -23,10 +23,6 @@ import com.google.common.collect.Lists;
 import org.daisy.common.spi.ServiceLoader;
 import org.daisy.pipeline.script.impl.StaxXProcScriptParser;
 
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
@@ -59,12 +55,10 @@ public class ScriptRegistry {
 					return prev;
 				if (prev == null)
 					// this code is called only once
-					for (ScriptService<?> script : OSGiHelper.inOSGiContext() ? OSGiHelper.getScripts()
-					                                                          : SPIHelper.getScripts())
+					for (ScriptService<?> script : SPIHelper.getScripts())
 						registerScriptIfNew(script);
 				List<ScriptServiceProvider> nextScriptProviders
-					= Lists.newArrayList(OSGiHelper.inOSGiContext() ? OSGiHelper.getScriptProviders()
-					                                                : SPIHelper.getScriptProviders());
+					= Lists.newArrayList(SPIHelper.getScriptProviders());
 				if (nextScriptProviders.size() == 0)
 					return CompletableFuture.completedFuture(true);
 				else {
@@ -195,50 +189,6 @@ public class ScriptRegistry {
 		}
 		static Iterable<ScriptServiceProvider> getScriptProviders() {
 			return ServiceLoader.load(ScriptServiceProvider.class);
-		}
-	}
-
-	// static nested class in order to delay class loading
-	private static abstract class OSGiHelper {
-
-		static boolean inOSGiContext() {
-			try {
-				return FrameworkUtil.getBundle(OSGiHelper.class) != null;
-			} catch (NoClassDefFoundError e) {
-				return false;
-			}
-		}
-
-		static Iterable<ScriptService<?>> getScripts() {
-			BundleContext bc = FrameworkUtil.getBundle(ScriptRegistry.class).getBundleContext();
-			List<ScriptService<?>> scripts = new ArrayList<>();
-			try {
-				ServiceReference<?>[] refs = bc.getServiceReferences(ScriptService.class.getName(), null);
-				if (refs != null)
-					for (ServiceReference ref : refs)
-						scripts.add((ScriptService<?>)bc.getService(ref));
-				refs = bc.getServiceReferences(XProcScriptService.class.getName(), null);
-				if (refs != null)
-					for (ServiceReference ref : refs)
-						scripts.add((XProcScriptService)bc.getService(ref));
-			} catch (InvalidSyntaxException e) {
-				throw new IllegalStateException(e); // should not happen
-			}
-			return scripts;
-		}
-
-		static Iterable<ScriptServiceProvider> getScriptProviders() {
-			BundleContext bc = FrameworkUtil.getBundle(ScriptRegistry.class).getBundleContext();
-			List<ScriptServiceProvider> providers = new ArrayList<>();
-			try {
-				ServiceReference<?>[] refs = bc.getServiceReferences(ScriptServiceProvider.class.getName(), null);
-				if (refs != null)
-					for (ServiceReference ref : refs)
-						providers.add((ScriptServiceProvider)bc.getService(ref));
-			} catch (InvalidSyntaxException e) {
-				throw new IllegalStateException(e); // should not happen
-			}
-			return providers;
 		}
 	}
 }

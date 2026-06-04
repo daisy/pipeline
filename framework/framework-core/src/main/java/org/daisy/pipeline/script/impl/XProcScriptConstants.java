@@ -105,6 +105,8 @@ public final class XProcScriptConstants {
 
 		public static final QName CX_AS = new QName(CX_NS, "as");
 
+		public static final QName PX_RESOURCE_BUNDLE = new QName(PX_NS, "resource-bundle");
+
 		private Attributes() {
 			// no instantiations
 		}

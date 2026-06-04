@@ -25,10 +25,6 @@ import org.daisy.pipeline.modules.XSLTPackage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
 import org.osgi.framework.VersionRange;
 
@@ -61,10 +57,7 @@ public class DefaultModuleRegistry implements ModuleRegistry {
 	private int detectEndlessRecursion = 0;
 
 	public DefaultModuleRegistry() {
-		if (OSGiHelper.inOSGiContext())
-			nextModules = OSGiHelper.getModules();
-		else
-			nextModules = SPIHelper.getModules();
+		nextModules = SPIHelper.getModules();
 	}
 
 	private Set<URI> components;
@@ -398,43 +391,6 @@ public class DefaultModuleRegistry implements ModuleRegistry {
 		if (!(location.toString().startsWith("file:") || location.toString().startsWith("bundle:")  || location.toString().startsWith("mvn:")))
 			throw new RuntimeException("unexpected code source location: " + location);
 		return location;
-	}
-
-	// static nested class in order to delay class loading
-	private static abstract class OSGiHelper {
-
-		static boolean inOSGiContext() {
-			try {
-				return FrameworkUtil.getBundle(OSGiHelper.class) != null;
-			} catch (NoClassDefFoundError e) {
-				return false;
-			}
-		}
-
-		static Iterator<Module> getModules() {
-			return new Iterator<Module>() {
-				private BundleContext bc = FrameworkUtil.getBundle(DefaultModuleRegistry.class).getBundleContext();
-				private ServiceReference[] refs;
-				private int index = 0;  {
-					try {
-						refs = bc.getServiceReferences(Module.class.getName(), null);
-					} catch (InvalidSyntaxException e) {
-						throw new IllegalStateException(e); // should not happen
-					}
-				}
-				public boolean hasNext() {
-					return refs != null && index < refs.length;
-				}
-				public Module next() throws NoSuchElementException {
-					if (!hasNext())
-						throw new NoSuchElementException();
-					return (Module)bc.getService(refs[index++]);
-				}
-				public void remove() {
-					throw new UnsupportedOperationException();
-				}
-			};
-		}
 	}
 
 	// static nested class in order to delay class loading

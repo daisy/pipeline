@@ -43,18 +43,13 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 
-import org.osgi.framework.BundleException;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.launch.Framework;
-
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 
-// FIXME: For some reason, without OSGi, this class does not support stopping an instance and then
-// starting another.
+// FIXME: For some reason, this class does not support stopping an instance and then starting another.
 
 /**
  * The Class PipelineWebService.
@@ -286,12 +281,8 @@ public class PipelineWebService extends Application {
         /* FIXME: depending on how the application is invoked, this may not be the desired effect of
          * calling halt */
         private void halt() {
-                if (OSGiHelper.inOSGiContext())
-                        OSGiHelper.stopFramework();
-                else {
-                        close();
-                        System.exit(0);
-                }
+                close();
+                System.exit(0);
         }
 
         /**
@@ -460,27 +451,6 @@ public class PipelineWebService extends Application {
                                         webservice.close(); }} );
                 System.err.println("Press Ctrl-C to exit");
                 // program does not exit until last thread has finished
-        }
-
-        // static nested class in order to delay class loading
-        private static abstract class OSGiHelper {
-
-                static boolean inOSGiContext() {
-                        try {
-                                return FrameworkUtil.getBundle(OSGiHelper.class) != null;
-                        } catch (NoClassDefFoundError e) {
-                                return false;
-                        }
-                }
-
-                /* Stop Felix */
-                static void stopFramework() {
-                        try {
-                                ((Framework)FrameworkUtil.getBundle(OSGiHelper.class).getBundleContext().getBundle(0)).stop();
-                        } catch (BundleException e) {
-                                throw new RuntimeException(e);
-                        }
-                }
         }
 
         // static nested class in order to delay class loading

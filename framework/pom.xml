@@ -38,9 +38,7 @@
     <module>logging-appender</module>
     <module>modules-registry</module>
     <module>persistence-derby</module>
-    <module>persistence-mysql</module>
     <module>webservice</module>
-    <module>woodstox-osgi-adapter</module>
     <module>xproc-api</module>
     <module>pipeline1-adapter</module>
   </modules>

@@ -4,7 +4,7 @@ import javax.inject.Inject;
 
 import com.google.common.base.Optional;
 
-import org.daisy.pipeline.junit.OSGiLessConfiguration;
+import org.daisy.pipeline.junit.TestConfiguration;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.ClientStorage;
 import org.daisy.pipeline.clients.WebserviceStorage;
@@ -19,7 +19,7 @@ import org.ops4j.pax.exam.util.PathUtils;
 public class ExistingDatabaseTest extends TestBase {
 	
 	// copy existing database to PIPELINE_DATA
-	@Override @OSGiLessConfiguration
+	@Override @TestConfiguration
 	public void setup() {
 		super.setup();
 		File existingData = new File(new File(PathUtils.getBaseDir()), "src/test/resources/data");

@@ -8,32 +8,7 @@ import org.daisy.pipeline.script.ScriptService;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
-import org.ops4j.pax.exam.ProbeBuilder;
-import org.ops4j.pax.exam.TestProbeBuilder;
-
 public class FrameworkCoreTest extends AbstractTest {
-	
-	@Override
-	public String[] testDependencies() {
-		return new String[]{
-			"com.google.guava:guava:?",
-			"org.slf4j:slf4j-api:?",
-			"org.daisy.libs:jing:?",
-			"org.daisy.libs:saxon-he:?",
-			"org.daisy.pipeline:common-utils:?",
-			"org.daisy.pipeline:xproc-api:?",
-			"org.daisy.pipeline:woodstox-osgi-adapter:?",
-		};
-	}
-	
-	@ProbeBuilder
-	public TestProbeBuilder probeConfiguration(TestProbeBuilder probe) {
-		// FIXME: can not delete this yet because it can not be generated with maven-bundle-plugin
-		probe.setHeader("Service-Component", "OSGI-INF/script.xml,"
-		                                   + "OSGI-INF/datatype.xml,"
-		                                   + "OSGI-INF/xproc-engine.xml");
-		return probe;
-	}
 	
 	@Inject
 	public ScriptRegistry registry;

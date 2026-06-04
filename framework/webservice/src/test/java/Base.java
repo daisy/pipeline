@@ -13,7 +13,7 @@ import org.apache.commons.io.FileUtils;
 
 import org.daisy.pipeline.client.PipelineClient;
 import org.daisy.pipeline.junit.AbstractTest;
-import org.daisy.pipeline.junit.OSGiLessConfiguration;
+import org.daisy.pipeline.junit.TestConfiguration;
 
 import org.daisy.pipeline.webservice.jaxb.clients.Client;
 import org.daisy.pipeline.webservice.jaxb.job.Job;
@@ -29,15 +29,6 @@ import org.daisy.pipeline.webservice.jaxb.script.Scripts;
 import org.junit.After;
 import org.junit.Before;
 
-import org.ops4j.pax.exam.Configuration;
-import static org.ops4j.pax.exam.CoreOptions.bootDelegationPackage;
-import static org.ops4j.pax.exam.CoreOptions.composite;
-import static org.ops4j.pax.exam.CoreOptions.options;
-import static org.ops4j.pax.exam.CoreOptions.systemPackage;
-import static org.ops4j.pax.exam.CoreOptions.systemProperty;
-import org.ops4j.pax.exam.Option;
-import org.ops4j.pax.exam.ProbeBuilder;
-import org.ops4j.pax.exam.TestProbeBuilder;
 import org.ops4j.pax.exam.util.PathUtils;
 
 import org.slf4j.Logger;
@@ -49,57 +40,10 @@ import org.slf4j.LoggerFactory;
 
 public abstract class Base extends AbstractTest {
 	
-	@Override
-	protected String[] testDependencies() {
-		return new String[]{
-			"org.daisy.pipeline:clientlib-java-jaxb:?",
-			"commons-codec:commons-codec:?",
-			"commons-fileupload:commons-fileupload:?",
-			"commons-io:commons-io:?",
-			// for some reason logging-activator (now in common-utils) needs to start before restlet but after jersey-client (clientlib-java-jaxb)
-			"org.daisy.pipeline:common-utils:?",
-			"org.restlet.osgi:org.restlet:?",
-			"org.restlet.osgi:org.restlet.ext.fileupload:?",
-			"org.restlet.osgi:org.restlet.ext.xml:?",
-			"org.eclipse.jetty.websocket:javax-websocket-server-impl:?",
-			"org.daisy.pipeline:framework-core:?",
-			"org.daisy.pipeline:xproc-api:?",
-			"org.daisy.pipeline:calabash-adapter:?",
-			// required for javax-websocket-server-impl
-			// (Note that PaxExam tests were already failing before the javax-websocket-server-impl
-			// dependency was added, so I haven't been able to verify whether adding these two
-			// artifacts does the trick.)
-			"javax.transaction:javax.transaction-api:1.3",
-			"javax.enterprise:cdi-api:2.0.SP1",
-		};
-	}
-	
-	@Override @Configuration
-	public Option[] config() {
-		setupClass();
-		return options(
-			composite(super.config()),
-			
-			// for clientlib-java-jaxb
-			bootDelegationPackage("com.sun.xml.internal.bind"),
-			
-			// for TestPushNotifications
-			systemPackage("com.sun.net.httpserver")
-		);
-	}
-	
-	@ProbeBuilder
-	public TestProbeBuilder probeConfiguration(TestProbeBuilder probe) {
-		// FIXME: can not delete this yet because it can not be generated with maven-bundle-plugin
-		probe.setHeader("Service-Component", "OSGI-INF/mock-script.xml,"
-		                                   + "OSGI-INF/sleep-step.xml");
-		return probe;
-	}
-	
 	private static final File PIPELINE_BASE = new File(new File(PathUtils.getBaseDir()), "target/tmp");
 	protected static final File PIPELINE_DATA = new File(PIPELINE_BASE, "data");
 	
-	@OSGiLessConfiguration
+	@TestConfiguration
 	public void setupClass() {
 		try {
 			FileUtils.deleteDirectory(PIPELINE_BASE);

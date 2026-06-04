@@ -47,12 +47,6 @@ import org.daisy.pipeline.script.ScriptService;
 import org.junit.Assert;
 import org.junit.Test;
 
-import org.ops4j.pax.exam.Configuration;
-import org.ops4j.pax.exam.Option;
-import org.ops4j.pax.exam.ProbeBuilder;
-import org.ops4j.pax.exam.TestProbeBuilder;
-import org.ops4j.pax.exam.util.PathUtils;
-
 import org.slf4j.LoggerFactory;
 
 /*
@@ -644,45 +638,11 @@ public class FrameworkCoreTest extends AbstractTest {
 			throwable.getThrowable().printStackTrace(out);
 	}
 	
-	// FIXME: can dependencies on modules-registry be eliminated?
-	@Override
-	public String[] testDependencies() {
-		return new String[]{
-			"com.google.guava:guava:?",
-			"org.daisy.libs:com.xmlcalabash:?",
-			"org.daisy.libs:saxon-he:?",
-			"org.slf4j:slf4j-api:?",
-			"org.daisy.pipeline:common-utils:?",
-			"org.daisy.pipeline:framework-core:?",
-			"org.daisy.pipeline:saxon-adapter:?",
-			"org.daisy.pipeline:xproc-api:?",
-			"org.daisy.pipeline:modules-registry:?",
-			"org.apache.httpcomponents:httpclient-osgi:?",
-			"org.apache.httpcomponents:httpcore-osgi:?",
-			"org.daisy.libs:jing:?",
-			"org.daisy.pipeline:logging-appender:?"
-		};
-	}
-	
 	@Override
 	protected Properties systemProperties() {
 		Properties p = new Properties();
 		p.setProperty("org.daisy.pipeline.persistence", "false");
 		return p;
-	}
-	
-	@Override @Configuration
-	public Option[] config() {
-		return super.config();
-	}
-
-	@ProbeBuilder
-	public TestProbeBuilder probeConfiguration(TestProbeBuilder probe) {
-		probe.setHeader("Bundle-Name", "Test module");
-		probe.setHeader("Service-Component", "OSGI-INF/script.xml,"
-		                                   + "OSGI-INF/java-step.xml,"
-		                                   + "OSGI-INF/java-function.xml");
-		return probe;
 	}
 	
 	static class Counter implements Supplier<Integer> {

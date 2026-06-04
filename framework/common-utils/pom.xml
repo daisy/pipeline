@@ -100,6 +100,7 @@
         <artifactId>maven-paxexam-plugin</artifactId>
         <version>1.2.4</version>
         <executions>
+		  <!-- for URLsTest -->
           <execution>
             <id>generate-depends-file</id>
             <goals>
@@ -156,9 +157,6 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <trimStackTrace>false</trimStackTrace>
-          <systemPropertyVariables>
-            <org.daisy.pipeline.junit.runners>PaxExam,OSGiLessRunner</org.daisy.pipeline.junit.runners>
-          </systemPropertyVariables>
         </configuration>
       </plugin>
     </plugins>

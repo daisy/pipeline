@@ -21,7 +21,7 @@ import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobManagerFactory;
 import org.daisy.pipeline.junit.AbstractTest;
-import org.daisy.pipeline.junit.OSGiLessConfiguration;
+import org.daisy.pipeline.junit.TestConfiguration;
 import org.daisy.pipeline.script.BoundScript;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.ScriptService;
@@ -29,10 +29,6 @@ import org.daisy.pipeline.script.ScriptService;
 import org.junit.Assert;
 import org.junit.Test;
 
-import org.ops4j.pax.exam.Configuration;
-import org.ops4j.pax.exam.Option;
-import org.ops4j.pax.exam.ProbeBuilder;
-import org.ops4j.pax.exam.TestProbeBuilder;
 import org.ops4j.pax.exam.util.PathUtils;
 
 import org.slf4j.LoggerFactory;
@@ -119,27 +115,6 @@ public class FrameworkCoreWithDerbyTest extends AbstractTest {
 		                 .get();
 	}
 	
-	@Override
-	public String[] testDependencies() {
-		return new String[]{
-			"com.google.guava:guava:?",
-			"org.daisy.libs:com.xmlcalabash:?",
-			"org.daisy.libs:saxon-he:?",
-			"org.slf4j:slf4j-api:?",
-			"org.daisy.pipeline:common-utils:?",
-			"org.daisy.pipeline:framework-core:?",
-			"org.daisy.pipeline:saxon-adapter:?",
-			"org.daisy.pipeline:xproc-api:?",
-			"org.daisy.pipeline:modules-registry:?",
-			"org.apache.httpcomponents:httpclient-osgi:?",
-			"org.apache.httpcomponents:httpcore-osgi:?",
-			"org.daisy.libs:jing:?",
-			"org.daisy.pipeline:framework-persistence:?",
-			"org.daisy.pipeline:persistence-derby:?",
-			"org.daisy.pipeline:logging-appender:?"
-		};
-	}
-	
 	static final File PIPELINE_BASE = new File(new File(PathUtils.getBaseDir()), "target/tmp");
 	static final File PIPELINE_DATA = new File(PIPELINE_BASE, "data");
 	
@@ -151,7 +126,7 @@ public class FrameworkCoreWithDerbyTest extends AbstractTest {
 		return p;
 	}
 
-	@OSGiLessConfiguration
+	@TestConfiguration
 	public void setup() {
 		try {
 			FileUtils.deleteDirectory(PIPELINE_BASE);
@@ -159,20 +134,5 @@ public class FrameworkCoreWithDerbyTest extends AbstractTest {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	@Override @Configuration
-	public Option[] config() {
-		setup();
-		return super.config();
-	}
-	
-	@ProbeBuilder
-	public TestProbeBuilder probeConfiguration(TestProbeBuilder probe) {
-		probe.setHeader("Bundle-Name", "Test module");
-		probe.setHeader("Service-Component", "OSGI-INF/script.xml,"
-		                                   + "OSGI-INF/java-step.xml,"
-		                                   + "OSGI-INF/java-function.xml");
-		return probe;
 	}
 }

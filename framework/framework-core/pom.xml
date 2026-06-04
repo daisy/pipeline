@@ -46,17 +46,22 @@
       <artifactId>ds-to-spi-runtime</artifactId>
       <scope>provided</scope>
     </dependency>
-    <!--
-        runtime dependencies (for javax.xml.stream.XMLInputFactory)
-    -->
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>woodstox-osgi-adapter</artifactId>
+	<!--
+		runtime dependencies (for javax.xml.stream.XMLInputFactory)
+	-->
+	<dependency>
+      <groupId>org.codehaus.woodstox</groupId>
+      <artifactId>woodstox-core-lgpl</artifactId>
       <scope>runtime</scope>
     </dependency>
     <!--
         test dependencies
     -->
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>modules-registry</artifactId>
@@ -100,26 +105,9 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.ops4j.pax.exam</groupId>
-        <artifactId>maven-paxexam-plugin</artifactId>
-        <version>1.2.4</version>
-        <executions>
-          <execution>
-            <id>generate-depends-file</id>
-            <goals>
-              <goal>generate-depends-file</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
-          <systemPropertyVariables>
-            <pax.exam.logging>none</pax.exam.logging>
-            <org.daisy.pipeline.junit.runners>PaxExam,OSGiLessRunner</org.daisy.pipeline.junit.runners>
-          </systemPropertyVariables>
           <trimStackTrace>false</trimStackTrace>
         </configuration>
       </plugin>

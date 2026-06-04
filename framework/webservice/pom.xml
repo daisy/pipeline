@@ -127,18 +127,6 @@
       <groupId>org.daisy.pipeline.build</groupId>
       <artifactId>modules-test-helper</artifactId>
       <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>org.ops4j.pax.exam</groupId>
-          <artifactId>pax-exam-container-native</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.ops4j.pax.exam</groupId>
-      <artifactId>pax-exam-container-forked</artifactId>
-      <version>4.12.0</version>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
@@ -217,19 +205,6 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>org.ops4j.pax.exam</groupId>
-        <artifactId>maven-paxexam-plugin</artifactId>
-        <version>1.2.4</version>
-        <executions>
-          <execution>
-            <id>generate-depends-file</id>
-            <goals>
-              <goal>generate-depends-file</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <groupId>org.daisy.pipeline.build</groupId>
         <artifactId>modules-build-helper</artifactId>
         <executions>
@@ -248,15 +223,6 @@
         <configuration>
           <!--<skip>true</skip>-->
           <reuseForks>false</reuseForks>
-          <systemPropertyVariables>
-            <pax.exam.logging>none</pax.exam.logging>
-            <!--
-                PaxExam tests disabled by default because they often fail due to "The forked VM
-                terminated without properly saying goodbye." errors. (It is possible that it happens
-                when tests are run with OSGiLessRunner too, but less likely.)
-            -->
-            <org.daisy.pipeline.junit.runners>OSGiLessRunner</org.daisy.pipeline.junit.runners>
-          </systemPropertyVariables>
           <trimStackTrace>false</trimStackTrace>
         </configuration>
       </plugin>
@@ -288,23 +254,6 @@
           <scope>test</scope>
         </dependency>
       </dependencies>
-    </profile>
-    <profile>
-      <id>noSkipPaxExamTests</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <configuration>
-              <skip>false</skip>
-              <systemPropertyVariables>
-                <org.daisy.pipeline.junit.runners>PaxExam,OSGiLessRunner</org.daisy.pipeline.junit.runners>
-              </systemPropertyVariables>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
     </profile>
   </profiles>
 

@@ -9,7 +9,7 @@ import java.util.Properties;
 
 import com.google.common.base.Optional;
 
-import org.daisy.pipeline.junit.OSGiLessConfiguration;
+import org.daisy.pipeline.junit.TestConfiguration;
 
 import org.daisy.pipeline.webservice.jaxb.job.Job;
 import org.daisy.pipeline.webservice.jaxb.job.JobStatus;
@@ -95,7 +95,7 @@ public class TestMessagesWithDerby extends Base {
 		Assert.assertFalse(TestMessages.next(messages).isPresent());
 	}
 	
-	@Override @OSGiLessConfiguration
+	@Override @TestConfiguration
 	public void setupClass() {
 		super.setupClass();
 		new File(PIPELINE_DATA, "log").mkdirs();
@@ -109,27 +109,5 @@ public class TestMessagesWithDerby extends Base {
 		p.setProperty("org.daisy.pipeline.persistence", "true");
 		p.setProperty("org.daisy.pipeline.messaging.cache.buffer", "5");
 		return p;
-	}
-	
-	@Override
-	protected String[] testDependencies() {
-		return new String[]{
-			"org.daisy.pipeline:clientlib-java-jaxb:?",
-			"commons-codec:commons-codec:?",
-			"commons-fileupload:commons-fileupload:?",
-			"commons-io:commons-io:?",
-			"org.daisy.pipeline:common-utils:?",
-			"org.restlet.osgi:org.restlet:?",
-			"org.restlet.osgi:org.restlet.ext.fileupload:?",
-			"org.restlet.osgi:org.restlet.ext.xml:?",
-			"org.eclipse.jetty.websocket:javax-websocket-server-impl:?",
-			"org.daisy.pipeline:framework-core:?",
-			"org.daisy.pipeline:xproc-api:?",
-			"org.daisy.pipeline:framework-persistence:?",
-			"org.daisy.pipeline:persistence-derby:?",
-			"org.daisy.pipeline:calabash-adapter:?",
-			"javax.transaction:javax.transaction-api:1.3",
-			"javax.enterprise:cdi-api:2.0.SP1",
-		};
 	}
 }

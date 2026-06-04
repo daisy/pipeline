@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<component name="pf:java-function">
-  <implementation class="JavaFunction"/>
-  <service>
-    <provide interface="net.sf.saxon.lib.ExtensionFunctionDefinition"/>
-  </service>
-</component>

@@ -46,14 +46,6 @@
       <scope>provided</scope>
     </dependency>
     <!--
-        runtime dependencies (for javax.xml.stream.XMLInputFactory)
-    -->
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>woodstox-osgi-adapter</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <!--
         test dependencies
     -->
     <dependency>

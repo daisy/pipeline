@@ -1,5 +1,3 @@
-// in default package because Pax-Exam would otherwise not find class PatternMatcher
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
@@ -21,17 +19,7 @@ import org.junit.Test;
 
 import org.ops4j.pax.exam.util.PathUtils;
 
-import org.osgi.framework.FrameworkUtil;
-
 public class URLsTest extends AbstractTest {
-	
-	@Override
-	protected String[] testDependencies() {
-		return new String[] {
-			"com.google.guava:guava:?",
-			"org.slf4j:jul-to-slf4j:?",
-		};
-	}
 	
 	@Test
 	public void testGetResourceFromJAR() throws Exception {
@@ -62,24 +50,15 @@ public class URLsTest extends AbstractTest {
 				Assert.assertTrue(e.getMessage().startsWith("not a directory:")); }
 			{
 				String actual = URLs.getResourceFromJAR("/dir/file1", context).toString();
-				if (OSGiHelper.inOSGiContext())
-					Assert.assertThat(actual, matchesPattern("^bundle://.*/dir/file1$"));
-				else
-					Assert.assertEquals(testClassesDir + "dir/file1", actual);
+				Assert.assertEquals(testClassesDir + "dir/file1", actual);
 			}
 			{
 				String actual = URLs.getResourceFromJAR("/dir/file 2", context).toString();
-				if (OSGiHelper.inOSGiContext())
-					Assert.assertThat(actual, matchesPattern("^bundle://.*/dir/file%202$"));
-				else
-					Assert.assertEquals(testClassesDir + "dir/file%202", actual);
+				Assert.assertEquals(testClassesDir + "dir/file%202", actual);
 			}
 			{
 				String actual = URLs.getResourceFromJAR("/dir/subdir", context).toString();
-				if (OSGiHelper.inOSGiContext())
-					Assert.assertThat(actual, matchesPattern("^bundle://.*/dir/subdir/$"));
-				else
-					Assert.assertEquals(testClassesDir + "dir/subdir/", actual);
+				Assert.assertEquals(testClassesDir + "dir/subdir/", actual);
 			}
 		}
 		{
@@ -97,23 +76,17 @@ public class URLsTest extends AbstractTest {
 				Assert.assertTrue(e.getMessage().startsWith("not a directory:")); }
 			{
 				String actual = URLs.getResourceFromJAR("/org/daisy/common/file/URLs.class", context).toString();
-				if (OSGiHelper.inOSGiContext())
-					Assert.assertThat(actual, matchesPattern("^bundle://.*/org/daisy/common/file/URLs\\.class$"));
-				else
-					try {
-						Assert.assertEquals(classesDir + "org/daisy/common/file/URLs.class", actual); }
-					catch (AssertionError e) {
-						Assert.assertEquals("jar:" + jarFile + "!/org/daisy/common/file/URLs.class", actual); }
+				try {
+					Assert.assertEquals(classesDir + "org/daisy/common/file/URLs.class", actual); }
+				catch (AssertionError e) {
+					Assert.assertEquals("jar:" + jarFile + "!/org/daisy/common/file/URLs.class", actual); }
 			}
 			{
 				String actual = URLs.getResourceFromJAR("/org/daisy/common/file", context).toString();
-				if (OSGiHelper.inOSGiContext())
-					Assert.assertThat(actual, matchesPattern("^bundle://.*/org/daisy/common/file/$"));
-				else
-					try {
-						Assert.assertEquals(classesDir + "org/daisy/common/file/", actual); }
-					catch (AssertionError e) {
-						Assert.assertEquals("jar:" + jarFile + "!/org/daisy/common/file/", actual); }
+				try {
+					Assert.assertEquals(classesDir + "org/daisy/common/file/", actual); }
+				catch (AssertionError e) {
+					Assert.assertEquals("jar:" + jarFile + "!/org/daisy/common/file/", actual); }
 			}
 		}
 		{
@@ -131,17 +104,11 @@ public class URLsTest extends AbstractTest {
 				Assert.assertTrue(e.getMessage().startsWith("not a directory:")); }
 			{
 				String actual = URLs.getResourceFromJAR("/com/google/common/base/Function.class", context).toString();
-				if (OSGiHelper.inOSGiContext())
-					Assert.assertThat(actual, matchesPattern("^bundle://.*/com/google/common/base/Function\\.class$"));
-				else
-					Assert.assertThat(actual, matchesPattern("^jar:file:.*!/com/google/common/base/Function\\.class$"));
+				Assert.assertThat(actual, matchesPattern("^jar:file:.*!/com/google/common/base/Function\\.class$"));
 			}
 			{
 				String actual = URLs.getResourceFromJAR("/com/google/common/base", context).toString();
-				if (OSGiHelper.inOSGiContext())
-					Assert.assertThat(actual, matchesPattern("^bundle://.*/com/google/common/base/$"));
-				else
-					Assert.assertThat(actual, matchesPattern("^jar:file:.*!/com/google/common/base/$"));
+				Assert.assertThat(actual, matchesPattern("^jar:file:.*!/com/google/common/base/$"));
 			}
 		}
 	}
@@ -184,6 +151,8 @@ public class URLsTest extends AbstractTest {
 				Assert.assertTrue( e.getMessage().startsWith("not a directory:")); }
 			{
 				Iterator<String> i = sort(URLs.listResourcesFromJAR("/org/daisy/common/file", context));
+				Assert.assertEquals("org/daisy/common/file/Files$1.class", i.next());
+				Assert.assertEquals("org/daisy/common/file/Files.class", i.next());
 				Assert.assertEquals("org/daisy/common/file/Resource$1.class", i.next());
 				Assert.assertEquals("org/daisy/common/file/Resource$FileData.class", i.next());
 				Assert.assertEquals("org/daisy/common/file/Resource$FileDataInMemory$1.class", i.next());
@@ -191,7 +160,6 @@ public class URLsTest extends AbstractTest {
 				Assert.assertEquals("org/daisy/common/file/Resource$FileDataOnDisk.class", i.next());
 				Assert.assertEquals("org/daisy/common/file/Resource.class", i.next());
 				Assert.assertEquals("org/daisy/common/file/URLs$1.class", i.next());
-				Assert.assertEquals("org/daisy/common/file/URLs$OSGiHelper.class", i.next());
 				Assert.assertEquals("org/daisy/common/file/URLs.class", i.next());
 				Assert.assertFalse(i.hasNext());
 			}
@@ -240,7 +208,6 @@ public class URLsTest extends AbstractTest {
 		return list.iterator();
 	}
 	
-	// copied from org.hamcrest.text (because I can't get hamcrest 2.0.0.0 to work with PaxExam)
 	static Matcher<String> matchesPattern(String regex) {
 		return new PatternMatcher(regex);
 	}
@@ -263,16 +230,6 @@ public class URLsTest extends AbstractTest {
 	
 		public void describeTo(Description description) {
 			description.appendText("a string matching the pattern '" + pattern + "'");
-		}
-	}
-	
-	private static abstract class OSGiHelper {
-		static boolean inOSGiContext() {
-			try {
-				return FrameworkUtil.getBundle(OSGiHelper.class) != null;
-			} catch (NoClassDefFoundError e) {
-				return false;
-			}
 		}
 	}
 }

@@ -41,18 +41,4 @@ public class XProcEngineTest extends AbstractTest {
 		                    "<result>foo///bar///baz</result>",
 		                    result.toString());
 	}
-
-	@Override
-	public String[] testDependencies() {
-		return new String[]{
-			"com.google.guava:guava:?",
-			"org.daisy.libs:com.xmlcalabash:?",
-			"org.daisy.libs:saxon-he:?",
-			"org.slf4j:slf4j-api:?",
-			"org.daisy.pipeline:common-utils:?",
-			"org.daisy.pipeline:saxon-adapter:?",
-			"org.daisy.pipeline:xproc-api:?",
-			"org.daisy.pipeline:logging-appender:?",
-		};
-	}
 }

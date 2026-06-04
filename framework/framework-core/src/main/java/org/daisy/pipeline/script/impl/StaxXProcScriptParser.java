@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.function.Predicate;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
@@ -143,7 +145,7 @@ public class StaxXProcScriptParser {
 				is = descUrl.openConnection().getInputStream();
 				reader = xmlInputFactory.createXMLEventReader(is);
 
-				parseStep(reader);
+				parseStep(reader, descriptor.getId());
 				for (XProcOptionMetadataBuilder b : optionBuilders) {
 					scriptBuilder.withOption(info.getOption(b.name), b.build());
 				}
@@ -221,14 +223,10 @@ public class StaxXProcScriptParser {
 
 		/**
 		 * Parses the step.
-		 * 
-		 * @param reader
-		 *            the reader
-		 * @throws XMLStreamException
-		 *             the xML stream exception
 		 */
-		public void parseStep(final XMLEventReader reader)
+		public void parseStep(XMLEventReader reader, String scriptId)
 				throws XMLStreamException {
+			String optionId = null;
 			while (reader.hasNext()) {
 				XMLEvent event = readNext(reader);
 				if (event.isStartElement()
@@ -239,7 +237,7 @@ public class StaxXProcScriptParser {
 						&& event.asStartElement().getName()
 								.equals(Elements.P_DOCUMENTATION)) {
 					DocumentationHolder dHolder = new DocumentationHolder();
-					parseDocumentation(reader, dHolder);
+					parseDocumentation(event.asStartElement(), reader, dHolder, scriptId, optionId);
 					if (isFirstChild()) {
 						scriptBuilder.withDescription(dHolder.description);
 						scriptBuilder.withShortName(dHolder.shortName);
@@ -287,6 +285,7 @@ public class StaxXProcScriptParser {
 									qname = new QName(name);
 								}
 							}
+							optionId = qname.getLocalPart();
 							XProcOptionMetadataBuilder b = new XProcOptionMetadataBuilder(qname);
 							parseOption(event.asStartElement(), b);
 							optionBuilders.add(b);
@@ -305,6 +304,10 @@ public class StaxXProcScriptParser {
 							}
 						}
 					}
+				} else if (event.isEndElement()
+						&& event.asEndElement().getName()
+								.equals(Elements.P_OPTION)) {
+					optionId = null;
 				}
 			}
 		}
@@ -411,22 +414,28 @@ public class StaxXProcScriptParser {
 
 		/**
 		 * Parses the documentation.
-		 * 
-		 * @param reader
-		 *            the reader
-		 * @param dHolder
-		 *            the d holder
-		 * @return the documentation holder
-		 * @throws XMLStreamException
-		 *             the xML stream exception
 		 */
-		private DocumentationHolder parseDocumentation(
-				final XMLEventReader reader, final DocumentationHolder dHolder)
+		private DocumentationHolder parseDocumentation(StartElement event,
+		                                               XMLEventReader reader,
+		                                               DocumentationHolder dHolder,
+		                                               String scriptId,
+		                                               String optionId)
 				throws XMLStreamException {
 
 			Predicate<XMLEvent> pred =
 				EventPredicates.IS_START_ELEMENT.or(
 				EventPredicates.IS_END_ELEMENT);
+
+			ResourceBundle bundle = null; {
+				Attribute attr = event.getAttributeByName(Attributes.PX_RESOURCE_BUNDLE);
+				if (attr != null)
+					try {
+						bundle = ResourceBundle.getBundle(attr.getValue()); }
+					catch (MissingResourceException e) {}}
+			if (bundle != null) {
+				dHolder.shortName = bundle.getString(scriptId + "." + optionId + ".name");
+				dHolder.description = bundle.getString(scriptId + "." + optionId + ".desc");
+			}
 
 			// the tricky thing here is that you have to ignore blocks of markup
 			// for px:role="author" and px:role="maintainer"
@@ -440,11 +449,8 @@ public class StaxXProcScriptParser {
 						int elemsToIgnore = 0;
 
 						@Override
-						public void process(XMLEvent event)
-								throws XMLStreamException {
-
+						public void process(XMLEvent event) throws XMLStreamException {
 							if (event.isStartElement()) {
-
 								// in cases where we need to ignore the child
 								// elements, just keep count of how many open
 								// elements we're seeing so that we can note
@@ -457,16 +463,14 @@ public class StaxXProcScriptParser {
 								else if (elemsToIgnore == 0) {
 									processChildren = true;
 								}
-
 								if (processChildren) {
 									StartElement elm = event.asStartElement();
 									Attribute attr = elm
 											.getAttributeByName(Attributes.PX_ROLE);
 									String role = (attr != null ? attr
 											.getValue() : "");
-                                    attr = elm.getAttributeByName(Attributes.XML_SPACE);
-                                    String xmlSpace = (attr != null ? attr.getValue() : "default");
-
+									attr = elm.getAttributeByName(Attributes.XML_SPACE);
+									String xmlSpace = (attr != null ? attr.getValue() : "default");
 									// ignore blocks of author and maintainer
 									// data
 									if (role.contains(Values.AUTHOR)
@@ -475,29 +479,30 @@ public class StaxXProcScriptParser {
 										processChildren = false;
 										return;
 									}
-                                    
-                                    if (role.equals(Values.NAME)) {
+									if (role.equals(Values.NAME)) {
 										reader.next();
-                                        String data = reader.peek().asCharacters().getData();
-                                        if (!"preserve".equals(xmlSpace)) {
-                                            data = data.replaceAll("\\s+"," ");
-                                        }
-                                        dHolder.shortName = data;
-									}
-
-									else if (role.equals(Values.DESC)) {
+										if (dHolder.shortName == null) {
+											String data = reader.peek().asCharacters().getData();
+											if (!"preserve".equals(xmlSpace)) {
+												data = data.replaceAll("\\s+", " ");
+											}
+											dHolder.shortName = data;
+										}
+									} else if (role.equals(Values.DESC)) {
 										reader.next();
-                                        String data = reader.peek().asCharacters().getData();
-                                        if (!"preserve".equals(xmlSpace)) {
-                                            data = data.replaceAll("\\s+"," ");
-                                        }
-										dHolder.description = data;
+										if (dHolder.description == null) {
+											String data = reader.peek().asCharacters().getData();
+											if (!"preserve".equals(xmlSpace)) {
+												data = data.replaceAll("\\s+", " ");
+											}
+											dHolder.description = data;
+										}
 									} else if (role.equals(Values.HOMEPAGE)) {
 										reader.next();
-                                        String data = reader.peek().asCharacters().getData();
-                                        if (!"preserve".equals(xmlSpace)) {
-                                            data = data.replaceAll("\\s+"," ");
-                                        }
+										String data = reader.peek().asCharacters().getData();
+										if (!"preserve".equals(xmlSpace)) {
+											data = data.replaceAll("\\s+"," ");
+										}
 										// if @href is present, use that
 										if (elm.getAttributeByName(Attributes.HREF) != null) {
 											dHolder.homepage = elm
@@ -510,10 +515,8 @@ public class StaxXProcScriptParser {
 											dHolder.homepage = data;
 										}
 									}
-
 								}
 							} else if (event.isEndElement()) {
-
 								if (processChildren == false) {
 									elemsToIgnore--;
 								}
