@@ -530,16 +530,6 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>daisy202-validator</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>daisy202-to-daisy3</artifactId>
       <exclusions>
         <exclusion>
@@ -670,16 +660,6 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>dtbook-validator</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>epub-utils</artifactId>
       <exclusions>
         <exclusion>
@@ -711,16 +691,6 @@
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>epub3-to-epub3</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>epub3-validator</artifactId>
       <exclusions>
         <exclusion>
           <groupId>*</groupId>
@@ -900,37 +870,7 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>nimas-fileset-validator</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>nlp-common</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>nlp-omnilang-lexer</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>nlp-ruled-lexer</artifactId>
       <exclusions>
         <exclusion>
           <groupId>*</groupId>
@@ -1190,16 +1130,6 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules.braille</groupId>
-      <artifactId>texhyph-utils</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules.braille</groupId>
       <artifactId>zedai-to-pef</artifactId>
       <exclusions>
         <exclusion>
@@ -1261,16 +1191,6 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-text</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>com.googlecode.texhyphj</groupId>
-      <artifactId>texhyphj</artifactId>
       <exclusions>
         <exclusion>
           <groupId>*</groupId>
@@ -2494,10 +2414,6 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
-                  <artifactId>daisy202-validator</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>daisy202-to-daisy3</artifactId>
                 </artifactItem>
                 <artifactItem>
@@ -2550,10 +2466,6 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
-                  <artifactId>dtbook-validator</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>epub-utils</artifactId>
                 </artifactItem>
                 <artifactItem>
@@ -2567,10 +2479,6 @@
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>epub3-to-epub3</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline.modules</groupId>
-                  <artifactId>epub3-validator</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
@@ -2638,19 +2546,7 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
-                  <artifactId>nimas-fileset-validator</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>nlp-common</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline.modules</groupId>
-                  <artifactId>nlp-omnilang-lexer</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline.modules</groupId>
-                  <artifactId>nlp-ruled-lexer</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
@@ -2758,10 +2654,6 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules.braille</groupId>
-                  <artifactId>texhyph-utils</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline.modules.braille</groupId>
                   <artifactId>zedai-to-pef</artifactId>
                 </artifactItem>
                 <!--
@@ -2791,10 +2683,6 @@
                 <artifactItem>
                   <groupId>org.apache.commons</groupId>
                   <artifactId>commons-text</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>com.googlecode.texhyphj</groupId>
-                  <artifactId>texhyphj</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.bindings</groupId>
