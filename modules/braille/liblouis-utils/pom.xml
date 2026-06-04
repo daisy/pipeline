@@ -109,21 +109,6 @@
       <groupId>org.daisy.pipeline.build</groupId>
       <artifactId>modules-test-helper</artifactId>
       <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>org.ops4j.pax.exam</groupId>
-          <artifactId>pax-exam-container-native</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <!--
-        FIXME: why doesn't native work?
-    -->
-    <dependency>
-      <groupId>org.ops4j.pax.exam</groupId>
-      <artifactId>pax-exam-container-forked</artifactId>
-      <version>4.12.0</version>
-      <scope>test</scope>
     </dependency>
   </dependencies>
 

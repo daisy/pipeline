@@ -49,8 +49,6 @@ import org.daisy.pipeline.css.Medium;
 import org.daisy.pipeline.css.Medium.MediumBuilder;
 import org.daisy.pipeline.css.MediumProvider;
 
-import org.osgi.framework.FrameworkUtil;
-
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
@@ -553,8 +551,7 @@ public class FileFormatCatalog implements MediumProvider {
 		policy = ReferencePolicy.STATIC
 	)
 	public void addFileFormatProvider(FileFormatProvider provider) {
-		if (!OSGiHelper.inOSGiContext())
-			provider.setCreatedWithSPI();
+		provider.setCreatedWithSPI();
 		fileFormatProviders.add(provider);
 	}
 	
@@ -568,8 +565,7 @@ public class FileFormatCatalog implements MediumProvider {
 		policy = ReferencePolicy.STATIC
 	)
 	public void addEmbosserProvider(EmbosserProvider provider) {
-		if (!OSGiHelper.inOSGiContext())
-			provider.setCreatedWithSPI();
+		provider.setCreatedWithSPI();
 		embosserProviders.add(provider);
 	}
 	
@@ -665,15 +661,5 @@ public class FileFormatCatalog implements MediumProvider {
 		}
 	}
 	
-	private static abstract class OSGiHelper {
-		static boolean inOSGiContext() {
-			try {
-				return FrameworkUtil.getBundle(OSGiHelper.class) != null;
-			} catch (NoClassDefFoundError e) {
-				return false;
-			}
-		}
-	}
-
 	private static final Logger logger = LoggerFactory.getLogger(FileFormatCatalog.class);
 }

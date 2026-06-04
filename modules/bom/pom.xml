@@ -503,11 +503,6 @@
             <groupId>com.twelvemonkeys.imageio</groupId>
             <artifactId>imageio-jpeg</artifactId>
           </exclusion>
-          <!--
-              Not excluding jackson because it is required for running Pax-Exam tests of any module
-              that depends on epub-utils (even though we don't use JSON reporting), and specifying the
-              dependency in all tests is tedious and hard to maintain.
-          --><!--
           <exclusion>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-core-asl</artifactId>
@@ -515,7 +510,7 @@
           <exclusion>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mapper-asl</artifactId>
-          </exclusion>-->
+          </exclusion>
         </exclusions>
       </dependency>
       <dependency>

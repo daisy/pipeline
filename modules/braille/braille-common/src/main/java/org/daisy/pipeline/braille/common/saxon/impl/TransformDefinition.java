@@ -31,11 +31,6 @@ import org.daisy.pipeline.braille.common.TransformProvider;
 import static org.daisy.pipeline.braille.common.TransformProvider.util.dispatch;
 import org.daisy.pipeline.braille.common.calabash.impl.PxTransformStep;
 
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
-
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
@@ -113,9 +108,7 @@ public class TransformDefinition extends ReflexiveExtensionFunctionProvider {
 				if (runtime == null)
 					if (runtimeFactory == null)
 						try {
-							runtimeFactory = OSGiHelper.inOSGiContext()
-								? OSGiHelper.getXProcRuntimeFactory()
-								: SPIHelper.getXProcRuntimeFactory();
+							runtimeFactory = SPIHelper.getXProcRuntimeFactory();
 						} catch (NoSuchElementException e) {
 							throw new UnsupportedOperationException(); // should not happen
 						}
@@ -151,31 +144,6 @@ public class TransformDefinition extends ReflexiveExtensionFunctionProvider {
 	}
 
 	private static final Logger logger = LoggerFactory.getLogger(TransformDefinition.class);
-
-	// static nested class in order to delay class loading
-	private static abstract class OSGiHelper {
-
-		static boolean inOSGiContext() {
-			try {
-				return FrameworkUtil.getBundle(OSGiHelper.class) != null;
-			} catch (NoClassDefFoundError e) {
-				return false;
-			}
-		}
-
-		static XProcRuntimeFactory getXProcRuntimeFactory() {
-			BundleContext bc = FrameworkUtil.getBundle(TransformDefinition.class).getBundleContext();
-			try {
-				ServiceReference[] refs = bc.getServiceReferences(XProcRuntimeFactory.class.getName(), null);
-				if (refs != null && refs.length > 0)
-					return (XProcRuntimeFactory)bc.getService(refs[0]);
-				else
-					throw new NoSuchElementException();
-			} catch (InvalidSyntaxException e) {
-				throw new IllegalStateException(e); // should not happen
-			}
-		}
-	}
 
 	// static nested class in order to delay class loading
 	private static abstract class SPIHelper {
