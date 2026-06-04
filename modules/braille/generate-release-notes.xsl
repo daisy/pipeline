@@ -37,9 +37,6 @@
 		<xsl:variable name="jhyphen-version" select="/pom:project/pom:dependencyManagement
 		                                             /pom:dependencies/pom:dependency[pom:artifactId='jhyphen']
 		                                             /pom:version"/>
-		<xsl:variable name="texhyphj-version" select="/pom:project/pom:dependencyManagement
-		                                             /pom:dependencies/pom:dependency[pom:artifactId='texhyphj']
-		                                             /pom:version"/>
 		<xsl:text>v</xsl:text>
 		<xsl:value-of select="$version"/>
 		<xsl:text>&#10;</xsl:text>
@@ -88,11 +85,6 @@
 		<xsl:value-of select="$jhyphen-version"/>
 		<xsl:text>](https://github.com/daisy/jhyphen/releases/tag/v</xsl:text>
 		<xsl:value-of select="$jhyphen-version"/>
-		<xsl:text>))&#10;</xsl:text>
-		<xsl:text>- texhyphj ([</xsl:text>
-		<xsl:value-of select="$texhyphj-version"/>
-		<xsl:text>](https://github.com/joeha480/texhyphj/releases/tag/release-</xsl:text>
-		<xsl:value-of select="$texhyphj-version"/>
 		<xsl:text>))&#10;&#10;</xsl:text>
 	</xsl:template>
 </xsl:stylesheet>

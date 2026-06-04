@@ -113,11 +113,6 @@
         <artifactId>pef-utils</artifactId>
         <version>8.0.2-SNAPSHOT</version>
       </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline.modules.braille</groupId>
-        <artifactId>texhyph-utils</artifactId>
-        <version>3.0.7-SNAPSHOT</version>
-      </dependency>
       
       <!--
           common
@@ -639,14 +634,6 @@
         <groupId>org.daisy.bindings</groupId>
         <artifactId>jhyphen</artifactId>
         <version>1.0.4</version>
-      </dependency>
-      <!--
-          for texhyph-utils
-      -->
-      <dependency>
-        <groupId>com.googlecode.texhyphj</groupId>
-        <artifactId>texhyphj</artifactId>
-        <version>1.2</version>
       </dependency>
       <!--
           for pef-utils

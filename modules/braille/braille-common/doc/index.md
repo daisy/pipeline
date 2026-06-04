@@ -47,7 +47,6 @@ CSS property. Hyphenation rules depend on the locale and also on the
 braille system. The known hyphenator implementations are:
 
 - [`(hyphenator:hyphen)`](http://daisy.github.io/pipeline/Get-Help/User-Guide/Braille/Hyphenation/Hyphen/)
-- [`(hyphenator:tex)`](http://daisy.github.io/pipeline/Get-Help/User-Guide/Braille/Hyphenation/TeX/)
 
 
 [CSS]: http://braillespecs.github.io/braille-css
