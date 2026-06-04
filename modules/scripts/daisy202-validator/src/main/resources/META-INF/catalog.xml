@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
-    
-    <uri name="http://www.daisy.org/pipeline/modules/daisy202-validator/daisy202-validator.xpl" uri="../xml/xproc/daisy202-validator.xpl" px:content-type="script" px:id="daisy202-validator"/>
-    <uri name="http://www.daisy.org/pipeline/modules/daisy202-validator/library.xpl" uri="../xml/xproc/library.xpl"/>
-    
-</catalog>

@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/daisy202-validator"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
-                xmlns:html="http://www.w3.org/1999/xhtml"
                 xmlns:l="http://xproc.org/library"
                 exclude-inline-prefixes="#all"
-                type="px:daisy202-validator"
+                type="px:daisy202-validate"
                 name="main">
 
     <p:input port="fileset.in" primary="true"/>
@@ -198,7 +196,7 @@
             <p:when test="ends-with(lower-case(base-uri(/*)),'/master.smil')">
                 <l:relax-ng-report name="for-each.smil.validate-smil-master">
                     <p:input port="schema">
-                        <p:document href="http://www.daisy.org/pipeline/modules/daisy202-utils/d202msmil.rng"/>
+                        <p:document href="../../../schemas/d202/d202msmil.rng"/>
                     </p:input>
                 </l:relax-ng-report>
                 <p:sink/>
@@ -216,13 +214,13 @@
                     </p:output>
                     <l:relax-ng-report name="for-each.smil.validate-smil-other.rng">
                         <p:input port="schema">
-                            <p:document href="http://www.daisy.org/pipeline/modules/daisy202-utils/d202smil.rng"/>
+                            <p:document href="../../../schemas/d202/d202smil.rng"/>
                         </p:input>
                     </l:relax-ng-report>
                     <p:sink/>
                     <px:relax-ng-to-schematron>
                         <p:input port="source">
-                            <p:document href="http://www.daisy.org/pipeline/modules/daisy202-utils/d202smil.rng"/>
+                            <p:document href="../../../schemas/d202/d202smil.rng"/>
                         </p:input>
                     </px:relax-ng-to-schematron>
                     <p:for-each name="for-each.smil.validate-smil-other.sch">
@@ -261,13 +259,13 @@
                 <p:pipe port="result" step="ncc"/>
             </p:input>
             <p:input port="schema">
-                <p:document href="http://www.daisy.org/pipeline/modules/daisy202-utils/d202ncc.rng"/>
+                <p:document href="../../../schemas/d202/d202ncc.rng"/>
             </p:input>
         </l:relax-ng-report>
         <p:sink/>
         <px:relax-ng-to-schematron>
             <p:input port="source">
-                <p:document href="http://www.daisy.org/pipeline/modules/daisy202-utils/d202ncc.rng"/>
+                <p:document href="../../../schemas/d202/d202ncc.rng"/>
             </p:input>
         </px:relax-ng-to-schematron>
         <p:for-each name="ncc.validate-ncc.sch">
