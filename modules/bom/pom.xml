@@ -375,11 +375,6 @@
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
-        <artifactId>epub3-validator</artifactId>
-        <version>2.0.11-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>html-to-dtbook</artifactId>
         <version>2.0.11-SNAPSHOT</version>
       </dependency>

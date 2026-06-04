@@ -3,7 +3,7 @@
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 px:input-filesets="epub3"
-                type="px:epub3-validator">
+                type="px:epub3-validator.script">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">EPUB 3 Validator</h1>
@@ -60,7 +60,7 @@ option is only available for zipped EPUBs.</p>
         <p:pipe step="validate" port="ace-report"/>
     </p:output>
 
-    <p:import href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl">
+    <p:import href="epub-validate.xpl">
         <p:documentation>
             px:epub-validate
         </p:documentation>

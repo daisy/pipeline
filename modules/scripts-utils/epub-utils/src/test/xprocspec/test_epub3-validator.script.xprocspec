@@ -3,15 +3,12 @@
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                xmlns:d="http://www.daisy.org/ns/pipeline/data"
                xmlns:html="http://www.w3.org/1999/xhtml"
-               script="../../main/resources/xml/xproc/epub3-validator.xpl">
+               script="../../main/resources/xml/validate/epub3-validator.script.xpl">
 
     <x:scenario label="moby dick">
-        <x:call step="px:epub3-validator">
-            <!--
-                reusing test data from epub-utils
-            -->
+        <x:call step="px:epub3-validator.script">
             <x:option name="source"
-                      select="resolve-uri('../../../../../scripts-utils/epub-utils/src/test/resources/moby-dick-mo-20120214.OK.epub')"/>
+                      select="resolve-uri('../resources/moby-dick-mo-20120214.OK.epub')"/>
             <x:option name="temp-dir" select="resolve-uri('moby-dick',$temp-dir)"/>
             <x:option name="accessibility-check" select="'true'"/>
         </x:call>
@@ -36,12 +33,9 @@
     </x:scenario>
     
     <x:scenario label="moby dick unzipped">
-        <x:call step="px:epub3-validator">
-            <!--
-                reusing test data from epub-utils
-            -->
+        <x:call step="px:epub3-validator.script">
             <x:option name="source"
-                      select="resolve-uri('../../../../../scripts-utils/epub-utils/src/test/resources/moby-dick-mo-20120214/OPS/package.opf')"/>
+                      select="resolve-uri('../resources/moby-dick-mo-20120214/OPS/package.opf')"/>
             <x:option name="temp-dir" select="resolve-uri('moby-dick-unzipped',$temp-dir)"/>
         </x:call>
         <x:context label="the validation status">
