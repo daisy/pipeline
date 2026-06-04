@@ -337,9 +337,7 @@ $(TARGET_DIR)/state/%/modified-since-release_ : %/pom.xml
 # this recipe is executed only when prerequisites have changed
 # the purpose of the isOutOfDate() is for making "make -B" not affect this rule (to speed thing up)
 $(TARGET_DIR)/effective-pom.xml : export JAVA_REPL_PORT =
-# FIXME: main.mk is not supposed to be aware of settings.xml.in
-$(TARGET_DIR)/effective-pom.xml : export MVN_SETTINGS = settings.xml.in
-$(TARGET_DIR)/effective-pom.xml : poms | $(MVN_SETTINGS)
+$(TARGET_DIR)/effective-pom.xml : poms | $(MVN_SETTINGS) $(TARGET_DIR)/state/properties
 	File optimizedDir = new File("$(TARGET_DIR)/optimized"); \
 	List<String> modules = new ArrayList<>(); { \
 		traverseModules( \
@@ -440,11 +438,20 @@ endif
 
 .maven-init :
 
+# gradle can not handle system properties in settings.xml, so we substitute them
 .gradle-init : | .maven-init $(TARGET_DIR)/gradle-settings/conf/settings.xml
 $(TARGET_DIR)/gradle-settings/conf/settings.xml : $(MVN_SETTINGS)
 	mkdirs("$(dir $@)"); \
 	rm("$@"); \
-	cp("$<", "$@");
+	try (BufferedReader in = new BufferedReader(new FileReader("$<")); \
+	     PrintStream out = new PrintStream(new FileOutputStream("$@"))) { \
+		String line; \
+		while ((line = in.readLine()) != null) { \
+			out.println(line.replace("$${workspace}", "$(CURDIR)/$(MVN_WORKSPACE)") \
+			                .replace("$${cache}", "$(CURDIR)/$(MVN_CACHE)") \
+			                .replace("$${user.home}", "$(USER_HOME)")); \
+		} \
+	}
 
 # FIXME: specifying "--debug" option breaks this code
 # - passing "MAKEFLAGS=" does not fix it for some reason, and also has unwanted side effects
