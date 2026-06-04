@@ -14,7 +14,7 @@
             <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
             <l:relax-ng-report name="report">
                 <p:input port="schema">
-                    <p:document href="http://www.daisy.org/pipeline/modules/daisy202-utils/d202ncc.rng"/>
+                    <p:document href="../../main/resources/xml/schemas/d202/d202ncc.rng"/>
                 </p:input>
             </l:relax-ng-report>
             <p:sink/>
@@ -27,7 +27,7 @@
                 reusing test data from daisy202-to-epub3
             -->
             <x:input port="source">
-                <x:document type="file" href="../../../../daisy202-to-epub3/src/test/resources/input/book1/ncc.html"/>
+                <x:document type="file" href="../../../../../scripts/daisy202-to-epub3/src/test/resources/input/book1/ncc.html"/>
             </x:input>
         </x:call>
         <x:context label="the error report">

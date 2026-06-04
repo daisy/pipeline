@@ -53,14 +53,6 @@
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>smil-utils</artifactId>
     </dependency>
-    <!--
-        test dependencies
-    -->
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>daisy202-validator</artifactId>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 
   <properties>

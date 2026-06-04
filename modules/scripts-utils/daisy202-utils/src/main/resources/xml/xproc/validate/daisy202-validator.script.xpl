@@ -50,10 +50,10 @@
 
     <p:import href="steps/validate.xpl">
        <p:documentation>
-           px:daisy202-validator
+           px:daisy202-validate
        </p:documentation>
     </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/daisy202-utils/library.xpl">
+    <p:import href="../load/load.xpl">
        <p:documentation>
            px:daisy202-load
        </p:documentation>
@@ -64,13 +64,13 @@
         <p:with-option name="ncc" select="$source"/>
     </px:daisy202-load>
 
-    <px:daisy202-validator name="validate">
+    <px:daisy202-validate name="validate">
         <p:with-option name="timeToleranceMs" select="$timeToleranceMs"/>
         <p:with-option name="ncc" select="$source"/>
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="load"/>
         </p:input>
-    </px:daisy202-validator>
+    </px:daisy202-validate>
     <p:sink/>
 
 </p:declare-step>

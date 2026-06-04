@@ -71,7 +71,6 @@
     <module>braille/dotify-utils</module>
     <module>braille/libhyphen-utils</module>
     <module>scripts/daisy202-to-epub3</module>
-    <module>scripts/daisy202-validator</module>
     <module>scripts/daisy202-to-daisy3</module>
     <module>scripts/daisy202-to-mp3</module>
     <module>scripts/daisy3-to-daisy202</module>

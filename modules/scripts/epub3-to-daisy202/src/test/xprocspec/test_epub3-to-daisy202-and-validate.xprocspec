@@ -24,7 +24,7 @@
             <p:import href="../../main/resources/xml/xproc/library.xpl"/>
             <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
             <p:import href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl"/>
-            <p:import href="http://www.daisy.org/pipeline/modules/daisy202-validator/library.xpl"/>
+            <p:import href="http://www.daisy.org/pipeline/modules/daisy202-utils/library.xpl"/>
             <p:choose name="source">
                 <p:when test="p:value-available('epub')">
                     <p:output port="result.fileset" primary="true"/>
@@ -54,11 +54,11 @@
                 </p:input>
                 <p:with-option name="output-dir" select="concat($temp-dir,'store/')"/>
             </px:epub3-to-daisy202>
-            <px:daisy202-validator name="validate" ncc="file:/foo" px:message="Validate">
+            <px:daisy202-validate name="validate" ncc="file:/foo" px:message="Validate">
                 <p:input port="in-memory.in">
                     <p:pipe step="convert" port="result.in-memory"/>
                 </p:input>
-            </px:daisy202-validator>
+            </px:daisy202-validate>
             <p:sink/>
             <p:store name="store-validation-report">
                 <p:input port="source">
