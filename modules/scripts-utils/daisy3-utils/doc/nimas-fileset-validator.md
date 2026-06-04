@@ -60,4 +60,4 @@ The DTBook document type is listed as the DTBook version, e.g. 2005-3, and will 
 
 # See also
 
-* [Developer notes](dev-notes.md)
+* [Developer notes](nimas-fileset-validator-dev-notes.md)
