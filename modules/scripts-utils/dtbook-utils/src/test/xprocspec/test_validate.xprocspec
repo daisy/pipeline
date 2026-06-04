@@ -104,7 +104,7 @@
             <x:input port="source.fileset">
                 <x:document type="inline">
                     <d:fileset>
-                        <d:file href="../../../../../scripts/nimas-fileset-validator/src/test/resources/9781122334455NIMAS/9781122334455NIMAS.xml"
+                        <d:file href="../../../../daisy3-utils/src/test/resources/9781122334455NIMAS/9781122334455NIMAS.xml"
                                 media-type="application/x-dtbook+xml"/>
                     </d:fileset>
                 </x:document>
