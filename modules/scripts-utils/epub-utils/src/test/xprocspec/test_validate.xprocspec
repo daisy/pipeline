@@ -8,7 +8,7 @@
     <x:scenario label="moby dick">
         <x:call step="px:epub-validate">
             <x:option name="version" select="'3'"/>
-            <x:option name="epub" select="resolve-uri('../resources/moby-dick-mo-20120214.OK.epub')"/>
+            <x:option name="epub" select="resolve-uri('../../resources/moby-dick-mo-20120214.OK.epub')"/>
             <x:option name="temp-dir" select="resolve-uri('moby-dick',$temp-dir)"/>
             <x:option name="accessibility-check" select="'true'"/>
         </x:call>
@@ -35,7 +35,7 @@
     <x:scenario label="moby dick unzipped">
         <x:call step="px:epub-validate">
             <x:option name="version" select="'3'"/>
-            <x:option name="epub" select="resolve-uri('../resources/moby-dick-mo-20120214/OPS/package.opf')"/>
+            <x:option name="epub" select="resolve-uri('../../resources/moby-dick-mo-20120214/OPS/package.opf')"/>
             <x:option name="temp-dir" select="resolve-uri('moby-dick-unzipped',$temp-dir)"/>
         </x:call>
         <x:context label="the validation status">

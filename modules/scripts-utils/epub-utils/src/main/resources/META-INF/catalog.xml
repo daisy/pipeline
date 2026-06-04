@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
    <uri name="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl" uri="../xml/library.xpl"/>
    <uri name="http://www.daisy.org/pipeline/modules/epub-utils/library.xsl" uri="../xml/pub/epub3-vocab.xsl"/>
+   <uri uri="../xml/validate/epub3-validator.script.xpl" px:content-type="script" px:id="epub3-validator"/>
 </catalog>

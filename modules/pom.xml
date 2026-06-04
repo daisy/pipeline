@@ -90,7 +90,6 @@
     <module>scripts/epub3-to-daisy3</module>
     <module>scripts/epub3-to-epub3</module>
     <module>scripts/epub3-to-pef</module>
-    <module>scripts/epub3-validator</module>
     <module>scripts/html-to-dtbook</module>
     <module>scripts/html-to-epub3</module>
     <module>scripts/html-to-pef</module>
