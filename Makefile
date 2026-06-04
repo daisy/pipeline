@@ -8,8 +8,9 @@ MVN_CACHE               := .maven-cache
 
 # -----------------------------------
 MVN_SETTINGS            := settings.xml
-MVN_PROPERTIES          := -Dorg.ops4j.pax.url.mvn.localRepository="$(CURDIR)/$(MVN_WORKSPACE)" \
-                           -Dorg.ops4j.pax.url.mvn.settings="$(CURDIR)/settings.xml" \
+MVN_PROPERTIES          := -Dworkspace="$(CURDIR)/$(MVN_WORKSPACE)" \
+                           -Dcache="$(CURDIR)/$(MVN_CACHE)" \
+                           -Duser.home="$(USER_HOME)" \
                            -Djava.awt.headless=true
 MVN_RELEASE_CACHE_REPO  := $(MVN_CACHE)
 
@@ -46,19 +47,6 @@ else
 endif
 
 USER_HOME := $(shell println(System.getProperty("user.home").replace('\\', '/'));)
-
-# instead of passing system properties "workspace" and "cache" we substitute them in the settings.xml file
-# this is required for org.ops4j.pax.url.mvn.settings
-settings.xml : settings.xml.in
-	try (BufferedReader in = new BufferedReader(new FileReader("$<")); \
-	     PrintStream out = new PrintStream(new FileOutputStream("$@"))) { \
-		String line; \
-		while ((line = in.readLine()) != null) { \
-			out.println(line.replace("$${workspace}", "$(CURDIR)/$(MVN_WORKSPACE)") \
-			                .replace("$${cache}", "$(CURDIR)/$(MVN_CACHE)") \
-			                .replace("$${user.home}", "$(USER_HOME)")); \
-		} \
-	}
 
 # -----------------------------------
 
@@ -137,13 +125,6 @@ dp2 : $(dp2)
 .PHONY : run
 run : $(dev_launcher)
 	exec("$<", "local");
-
-ifneq ($(OS), WINDOWS)
-run-with-osgi : export JAVA_REPL_PORT =
-endif
-.PHONY : run-with-osgi
-run-with-osgi : $(dev_launcher)
-	exec("$<", "local", "osgi", "shell");
 
 .PHONY : run-cli
 run-cli :
@@ -238,7 +219,7 @@ cli-$(cli/VERSION)-linux_386.deb \
 comma:= ,
 
 $(dev_launcher) : assembly/.compile-dependencies | .maven-init .group-eval
-	+$(EVAL) $(call make-assembly, "dev-launcher"$(comma) "--"$(comma) "--without-persistence"$(comma) "--with-osgi")
+	+$(EVAL) $(call make-assembly, "dev-launcher"$(comma) "--"$(comma) "--without-persistence")
 
 .SECONDARY : assembly/.install.deb
 assembly/.install.deb : | .maven-init .group-eval

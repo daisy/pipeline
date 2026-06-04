@@ -337,8 +337,6 @@ $(TARGET_DIR)/state/%/modified-since-release_ : %/pom.xml
 # this recipe is executed only when prerequisites have changed
 # the purpose of the isOutOfDate() is for making "make -B" not affect this rule (to speed thing up)
 $(TARGET_DIR)/effective-pom.xml : export JAVA_REPL_PORT =
-# FIXME: main.mk is not supposed to be aware of settings.xml.in
-$(TARGET_DIR)/effective-pom.xml : export MVN_SETTINGS = settings.xml.in
 $(TARGET_DIR)/effective-pom.xml : poms | $(MVN_SETTINGS)
 	File optimizedDir = new File("$(TARGET_DIR)/optimized"); \
 	List<String> modules = new ArrayList<>(); { \

@@ -6,7 +6,6 @@
 /.maven-cache/
 /.maven-workspace/
 /maven.log
-/settings.xml
 /webui/.deps.mk
 # eclipse
 bin/
