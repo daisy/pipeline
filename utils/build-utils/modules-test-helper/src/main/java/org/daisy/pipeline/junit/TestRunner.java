@@ -1,72 +1,81 @@
 package org.daisy.pipeline.junit;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.lang.reflect.Field;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.List;
+import java.util.NoSuchElementException;
 
-import org.junit.runner.Description;
-import org.junit.runner.notification.RunNotifier;
-import org.junit.runner.Runner;
+import javax.inject.Inject;
+
+import org.daisy.common.spi.CreateOnStart;
+import org.daisy.common.spi.ServiceLoader;
+
+import org.junit.runners.BlockJUnit4ClassRunner;
+import org.junit.runners.model.FrameworkField;
+import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
-import org.junit.runners.ParentRunner;
+import org.junit.runners.model.Statement;
 
-import static org.ops4j.pax.exam.Constants.EXAM_REACTOR_STRATEGY_KEY;
-import static org.ops4j.pax.exam.Constants.EXAM_REACTOR_STRATEGY_PER_CLASS;
-import org.ops4j.pax.exam.junit.impl.ProbeRunner;
+public class TestRunner extends BlockJUnit4ClassRunner {
 
-/**
- * Runs a JUnit test both in an OSGi environment (with Pax-Exam) and
- * in a normal environment (using plain SPI to do dependency
- * injection)
- */
-public class TestRunner extends ParentRunner<Runner> {
-	
-	private final ProbeRunner osgiRunner;
-	private final OSGiLessRunner osgilessRunner;
-	
+	/* class loader for creating and injecting services unique to this runner */
+	private final ClassLoader classLoader;
+	private boolean configurationDone = false;
+
 	public TestRunner(Class<?> testClass) throws InitializationError {
 		super(testClass);
-		// set default strategy to PerClass instead of PerMethod
-		System.setProperty(EXAM_REACTOR_STRATEGY_KEY, EXAM_REACTOR_STRATEGY_PER_CLASS);
-		String runnersProperty = System.getProperty("org.daisy.pipeline.junit.runners");
-		if (runnersProperty == null)
-			runnersProperty = "PaxExam,OSGiLessRunner";
-		List<String> runners = Arrays.asList(runnersProperty.replaceAll("\\s+","").split(","));
-		if (runners.contains("PaxExam"))
-			osgiRunner = new ProbeRunner(testClass);
-		else {
-			System.out.println("Skipping tests with OSGi");
-			osgiRunner = null; }
-		if (runners.contains("OSGiLessRunner"))
-			osgilessRunner = new OSGiLessRunner(testClass);
-		else {
-			System.out.println("Skipping tests without OSGi");
-			osgilessRunner = null; }
+		classLoader = new URLClassLoader(new URL[]{}, Thread.currentThread().getContextClassLoader());
 	}
 	
+	// Overriding "withBefores" and not the more logical "methodInvoker" because with
+	// "methodInvoker" it is not possible to inject the services *before* "@Before" methods are
+	// invoked. Because of caching, the same services are injected for every test method in the
+	// class.
 	@Override
-	public void runChild(Runner runner, RunNotifier notifier) {
-		if (runner == osgiRunner)
-			System.out.println("Running test with OSGi");
-		else if (runner == osgilessRunner)
-			System.out.println("Running test without OSGi");
-		else
-			throw new RuntimeException("coding error");
-		runner.run(notifier);
+	protected Statement withBefores(FrameworkMethod method, final Object test, Statement statement) {
+		final Statement invoker = super.withBefores(method, test, statement);
+		final List<FrameworkField> injectFields = getTestClass().getAnnotatedFields(Inject.class);
+		return new Statement() {
+			@Override
+			public void evaluate() throws Throwable {
+				ClassLoader savedContextClassLoader = Thread.currentThread().getContextClassLoader();
+				try {
+					if (!configurationDone) {
+						for (FrameworkMethod c : getTestClass().getAnnotatedMethods(TestConfiguration.class))
+							c.invokeExplosively(test);
+						configurationDone = true;
+					}
+					Thread.currentThread().setContextClassLoader(classLoader);
+					for (CreateOnStart c : ServiceLoader.load(CreateOnStart.class));
+					for (FrameworkField f : injectFields) {
+						Field field = f.getField();
+						Class<?> type = field.getType();
+						Object o; {
+							try {
+								o = ServiceLoader.load(type).iterator().next();
+							} catch (NoSuchElementException e) {
+								throw new RuntimeException("Failed to inject a " + type.getCanonicalName());
+							}
+						}
+						try {
+							field.set(test, o);
+						} catch (IllegalAccessException e) {
+							throw new RuntimeException("Failed to inject a " + type.getCanonicalName() + "; "
+							                           + field.getName() + " field is not visible.");
+						}
+					}
+				} finally {
+					Thread.currentThread().setContextClassLoader(savedContextClassLoader);
+				}
+				invoker.evaluate();
+			}
+		};
 	}
 
 	@Override
-	protected Description describeChild(Runner runner) {
-		return runner.getDescription();
-	}
-
-	@Override
-	protected List<Runner> getChildren() {
-		List<Runner> children = new ArrayList<Runner>();
-		if (osgiRunner != null)
-			children.add(osgiRunner);
-		if (osgilessRunner != null)
-			children.add(osgilessRunner);
-		return children;
+	protected void collectInitializationErrors(List<Throwable> errors) {
+		super.collectInitializationErrors(errors);
+		validatePublicVoidNoArgMethods(TestConfiguration.class, false, errors);
 	}
 }

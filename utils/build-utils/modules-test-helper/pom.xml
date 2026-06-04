@@ -12,21 +12,12 @@
 
   <groupId>org.daisy.pipeline.build</groupId>
   <artifactId>modules-test-helper</artifactId>
-  <version>2.2.7-SNAPSHOT</version>
+  <version>3.0.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 :: Modules Test Helper</name>
   
-  <properties>
-    <pax-exam.version>3.3.0</pax-exam.version>
-  </properties>
-  
   <dependencies>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>pax-exam-helper</artifactId>
-      <version>2.5.1</version>
-    </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -48,6 +39,11 @@
       <version>1.0.5</version>
     </dependency>
     <dependency>
+      <groupId>javax.inject</groupId>
+      <artifactId>javax.inject</artifactId>
+      <version>1</version>
+    </dependency>
+    <dependency>
       <groupId>org.daisy.xprocspec</groupId>
       <artifactId>xprocspec</artifactId>
       <version>1.4.3</version>
@@ -65,26 +61,11 @@
       <version>4.2.0</version>
       <scope>runtime</scope>
     </dependency>
-    <!--
-        for pax-exam annotations
-    -->
-    <!--
-        org.ops4j.pax.exam.spi.reactors
-    -->
+	<!-- for PathUtils -->
     <dependency>
       <groupId>org.ops4j.pax.exam</groupId>
-      <artifactId>pax-exam-spi</artifactId>
-      <version>${pax-exam.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <!--
-        org.ops4j.pax.exam.junit
-    -->
-    <dependency>
-      <groupId>org.ops4j.pax.exam</groupId>
-      <artifactId>pax-exam-junit4</artifactId>
-      <version>${pax-exam.version}</version>
-      <scope>provided</scope>
+      <artifactId>pax-exam</artifactId>
+      <version>4.12.0</version>
     </dependency>
   </dependencies>
   
@@ -123,10 +104,6 @@
               org.daisy.common.spi;resolution:=optional,
               org.daisy.maven.xproc.xprocspec;resolution:=optional,
               org.daisy.maven.xspec;resolution:=optional,
-              org.ops4j.pax.exam.junit;resolution:=optional,
-              org.ops4j.pax.exam.junit.impl;resolution:=optional,
-              org.daisy.pipeline.pax.exam;resolution:=optional,
-              org.ops4j.pax.exam.spi.reactors;resolution:=optional,
               *
             </Import-Package>
           </instructions>

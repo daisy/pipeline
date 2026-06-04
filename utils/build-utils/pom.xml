@@ -23,7 +23,6 @@
     <module>modules-build-helper</module>
     <module>modules-test-helper</module>
     <module>ds-to-spi</module>
-    <module>pax-exam-helper</module>
     <module>archetypes</module>
   </modules>
 

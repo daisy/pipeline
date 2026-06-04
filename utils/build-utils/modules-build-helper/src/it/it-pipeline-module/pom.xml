@@ -270,16 +270,6 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <systemPropertyVariables>
-            <!-- PaxExam disabled because of error "Importing java.* packages not allowed: java.io" -->
-            <org.daisy.pipeline.junit.runners>OSGiLessRunner</org.daisy.pipeline.junit.runners>
-          </systemPropertyVariables>
-        </configuration>
-      </plugin>
     </plugins>
   </build>
 </project>

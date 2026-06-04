@@ -11,16 +11,8 @@ import org.daisy.maven.xproc.xprocspec.XProcSpecRunner;
 import org.daisy.maven.xspec.TestResults;
 import org.daisy.maven.xspec.XSpecRunner;
 
-import org.daisy.pipeline.pax.exam.Options;
-import static org.daisy.pipeline.pax.exam.Options.mavenBundle;
-import static org.daisy.pipeline.pax.exam.Options.mavenBundles;
-import static org.daisy.pipeline.pax.exam.Options.xprocspec;
-import static org.daisy.pipeline.pax.exam.Options.xspec;
-
 import org.junit.Test;
 
-import org.ops4j.pax.exam.Configuration;
-import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.util.PathUtils;
 
 public abstract class AbstractXSpecAndXProcSpecTest extends AbstractTest {
@@ -43,7 +35,7 @@ public abstract class AbstractXSpecAndXProcSpecTest extends AbstractTest {
 			TestResults result = xspecRunner.run(testsDir, reportsDir);
 			if (result.getFailures() > 0 || result.getErrors() > 0) {
 				System.out.println(result.toDetailedString());
-				 throw new AssertionError("There are XSpec test failures.");
+				throw new AssertionError("There are XSpec test failures.");
 			}
 		}
 	}
@@ -104,27 +96,5 @@ public abstract class AbstractXSpecAndXProcSpecTest extends AbstractTest {
 		return mergeProperties(
 			super.allSystemProperties(),
 			calabashConfiguration());
-	}
-	
-	/* ------------- */
-	/* For OSGi only */
-	/* ------------- */
-	
-	@Override @Configuration
-	public Option[] config() {
-		return _.config(
-			Options.systemProperties(allSystemProperties()),
-			mavenBundles(
-				mavenBundles(toStrings(testDependencies())),
-				// xprocspec
-				xprocspec(),
-				 // runtime dependencies of xproc-engine-daisy-pipeline
-				mavenBundle("org.daisy.pipeline:calabash-adapter:?"),
-				mavenBundle("org.daisy.pipeline:logging-appender:?"), // for org.daisy.pipeline.logging.JobProgressAppender
-				mavenBundle("org.daisy.maven:xproc-engine-daisy-pipeline:?"),
-				// xspec
-				xspec(),
-				mavenBundle("org.daisy.pipeline:saxon-adapter:?"))
-		);
 	}
 }

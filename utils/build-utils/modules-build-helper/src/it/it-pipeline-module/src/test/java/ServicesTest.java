@@ -47,17 +47,4 @@ public class ServicesTest extends AbstractXSpecAndXProcSpecTest {
 	public void testScript() {
 		assertEquals("my-script", script.getId());
 	}
-	
-	/* ------------- */
-	/* For OSGi only */
-	/* ------------- */
-	
-	@Override
-	protected String[] testDependencies() {
-		return new String[]{
-			"org.daisy.pipeline:framework-core:?",
-			"org.daisy.pipeline:calabash-adapter:?",
-			"org.daisy.pipeline.modules.braille:liblouis-utils:?"
-		};
-	}
 }

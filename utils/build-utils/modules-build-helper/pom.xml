@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline.build</groupId>
   <artifactId>modules-build-helper</artifactId>
-  <version>3.0.1</version>
+  <version>3.0.2-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
   <name>DAISY Pipeline 2 :: Modules Build Helper</name>
@@ -24,7 +24,7 @@
     <xprocspec.version>1.4.2</xprocspec.version>
     <framework.version>1.15.0</framework.version>
     <modules.version>1.15.0</modules.version>
-    <modules-test-helper.version>2.2.6</modules-test-helper.version>
+    <modules-test-helper.version>3.0.0-SNAPSHOT</modules-test-helper.version>
     <xproc-engine-daisy-pipeline.version>1.14.7</xproc-engine-daisy-pipeline.version>
   </properties>
 
@@ -205,8 +205,6 @@
           <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
           <postBuildHookScript>verify</postBuildHookScript>
           <properties>
-            <org.ops4j.pax.url.mvn.localRepository>${org.ops4j.pax.url.mvn.localRepository}</org.ops4j.pax.url.mvn.localRepository>
-            <org.ops4j.pax.url.mvn.settings>${org.ops4j.pax.url.mvn.settings}</org.ops4j.pax.url.mvn.settings>
             <modules-build-helper.version>${project.version}</modules-build-helper.version>
             <ds-to-spi-maven-plugin.version>${ds-to-spi-maven-plugin.version}</ds-to-spi-maven-plugin.version>
             <ds-to-spi-runtime.version>${ds-to-spi-runtime.version}</ds-to-spi-runtime.version>
@@ -243,8 +241,4 @@
       </plugin>
     </plugins>
   </build>
-
-  <scm>
-    <tag>modules-build-helper-3.0.1</tag>
-  </scm>
 </project>
