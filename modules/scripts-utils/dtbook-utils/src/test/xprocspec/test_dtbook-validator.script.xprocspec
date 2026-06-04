@@ -3,7 +3,7 @@
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                xmlns:d="http://www.daisy.org/ns/pipeline/data"
                xmlns:html="http://www.w3.org/1999/xhtml"
-               script="../../main/resources/xml/dtbook-validator.xpl">
+               script="../../main/resources/xml/validate-dtbook/dtbook-validator.script.xpl">
 
     <x:scenario label="dtbook_valid_2005-2">
         <x:call step="px:dtbook-validator.script">

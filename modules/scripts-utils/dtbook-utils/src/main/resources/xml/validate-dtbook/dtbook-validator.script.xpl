@@ -90,7 +90,7 @@
             px:fileset-add-entry
         </p:documentation>
     </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl">
+    <p:import href="validate-dtbook.xpl">
         <p:documentation>
             px:dtbook-validate
         </p:documentation>
