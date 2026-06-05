@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  
+  <modelVersion>4.0.0</modelVersion>
+  
+  <parent>
+    <groupId>org.daisy.pipeline.modules</groupId>
+    <artifactId>modules-parent</artifactId>
+    <version>1.15.5-SNAPSHOT</version>
+    <relativePath>../parent/</relativePath>
+  </parent>
+  
+  <groupId>org.daisy.pipeline.modules.braille</groupId>
+  <artifactId>obfl-utils</artifactId>
+  <version>2.0.3-SNAPSHOT</version>
+  <packaging>bundle</packaging>
+  
+  <name>DP2 Braille Modules :: obfl-utils</name>
+  
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.modules.impl.Module_obfl_utils
+    </expose-services>
+  </properties>
+  
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.daisy.pipeline.build</groupId>
+        <artifactId>modules-build-helper</artifactId>
+        <executions>
+          <execution>
+            <id>xprocdoc</id>
+            <configuration>
+              <catalogXmlBaseURI>http://daisy.github.io/pipeline/modules/braille/${project.artifactId}/src/main/resources/META-INF/catalog.xml</catalogXmlBaseURI>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

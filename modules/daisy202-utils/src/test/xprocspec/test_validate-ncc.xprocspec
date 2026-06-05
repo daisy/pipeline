@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+               xmlns:l="http://xproc.org/library">
+    
+    <x:script>
+        <p:declare-step version="1.0" type="pxi:validate-ncc">
+            <p:input port="source"/>
+            <p:output port="result" sequence="true">
+                <p:pipe step="report" port="report"/>
+            </p:output>
+            <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
+            <l:relax-ng-report name="report">
+                <p:input port="schema">
+                    <p:document href="../../main/resources/xml/schemas/d202/d202ncc.rng"/>
+                </p:input>
+            </l:relax-ng-report>
+            <p:sink/>
+        </p:declare-step>
+    </x:script>
+    
+    <x:scenario label="issue 82: attribute 'shape' not allowed here">
+        <x:call step="pxi:validate-ncc">
+            <!--
+                reusing test data from daisy202-to-epub3
+            -->
+            <x:input port="source">
+                <x:document type="file" href="../../../../daisy202-to-epub3/src/test/resources/input/book1/ncc.html"/>
+            </x:input>
+        </x:call>
+        <x:context label="the error report">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="the error report must be absent" type="count" max="0"/>
+    </x:scenario>
+    
+</x:description>

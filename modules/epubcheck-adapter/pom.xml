@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.daisy.pipeline.modules</groupId>
+    <artifactId>modules-parent</artifactId>
+    <version>1.15.5-SNAPSHOT</version>
+    <relativePath>../parent/</relativePath>
+  </parent>
+
+  <artifactId>epubcheck-adapter</artifactId>
+  <version>1.1.15-SNAPSHOT</version>
+  <packaging>bundle</packaging>
+
+  <name>DAISY Pipeline 2 module :: EpubCheck Adapter</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>calabash-adapter</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>saxon-he</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.w3c</groupId>
+      <artifactId>epubcheck</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
+  </dependencies>
+  
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.modules.impl.Module_epubcheck_adapter,
+      org.daisy.pipeline.epub.calabash.impl.EpubCheckProvider,
+      org.idpf.epubcheck.util.saxon95.ColumnNumberFunction,
+      org.idpf.epubcheck.util.saxon95.LineNumberFunction,
+      org.idpf.epubcheck.util.saxon95.SystemIdFunction
+    </expose-services>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <configuration>
+          <instructions>
+            <Import-Package>
+              net.sf.saxon.*;version="${saxon.versionRange}",
+              !org.daisy.common.spi,
+              *
+            </Import-Package>
+            <Export-Package/>
+            <Private-Package>
+              org.idpf.epubcheck.util.saxon95,
+              ${generated-packages}
+              {local-packages}
+            </Private-Package>
+          </instructions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
