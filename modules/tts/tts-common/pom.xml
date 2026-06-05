@@ -75,7 +75,7 @@
     -->
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>nlp-omnilang-lexer</artifactId>
+      <artifactId>nlp-common</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>

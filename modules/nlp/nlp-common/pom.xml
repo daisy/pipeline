@@ -65,7 +65,10 @@
     <expose-services>
       org.daisy.pipeline.modules.impl.Module_nlp_common,
       org.daisy.pipeline.nlp.lexing.LexServiceRegistry,
+      org.daisy.pipeline.nlp.lexing.ruled.impl.RuleBasedLexer,
+      org.daisy.pipeline.nlp.lexing.omni.impl.OmnilangLexer,
       org.daisy.pipeline.nlp.calabash.impl.BreakDetectProvider
+      <!-- org.daisy.pipeline.nlp.lexing.light.impl.LightLexer -->
     </expose-services>
   </properties>
   

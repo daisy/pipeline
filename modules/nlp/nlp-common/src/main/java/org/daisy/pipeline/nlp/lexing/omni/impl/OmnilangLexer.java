@@ -109,6 +109,9 @@ public class OmnilangLexer implements LexService {
 
 	@Override
 	public int getLexQuality(Locale lang) {
+		if (Boolean.getBoolean("org.daisy.pipeline.lexing.omni.prioritize"))
+			// for tests
+			return 1000;
 		return 3;
 	}
 
