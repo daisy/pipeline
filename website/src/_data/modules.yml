@@ -7,8 +7,6 @@
 - group: org.daisy.pipeline.modules
   artifact: daisy202-to-mp3
 - group: org.daisy.pipeline.modules
-  artifact: daisy202-validator
-- group: org.daisy.pipeline.modules
   artifact: daisy3-to-daisy202
 - group: org.daisy.pipeline.modules
   artifact: daisy3-to-epub3
@@ -25,27 +23,17 @@
 - group: org.daisy.pipeline.modules
   artifact: dtbook-to-rtf
 - group: org.daisy.pipeline.modules
-  artifact: dtbook-validator
-- group: org.daisy.pipeline.modules
   artifact: epub-to-daisy
-- group: org.daisy.pipeline.modules
-  artifact: epub2-to-epub3
 - group: org.daisy.pipeline.modules
   artifact: epub3-to-daisy202
 - group: org.daisy.pipeline.modules
   artifact: epub3-to-daisy3
 - group: org.daisy.pipeline.modules
-  artifact: epub3-to-epub3
-- group: org.daisy.pipeline.modules
   artifact: epub3-to-html
-- group: org.daisy.pipeline.modules
-  artifact: epub3-validator
 - group: org.daisy.pipeline.modules
   artifact: html-to-dtbook
 - group: org.daisy.pipeline.modules
   artifact: html-to-epub3
-- group: org.daisy.pipeline.modules
-  artifact: nimas-fileset-validator
 - group: org.daisy.pipeline.modules
   artifact: word-to-dtbook
 - group: org.daisy.pipeline.modules
@@ -73,10 +61,8 @@
 - group: org.daisy.pipeline.modules.braille
   artifact: pef-utils
 - group: org.daisy.pipeline.modules.braille
-  artifact: texhyph-utils
-- group: org.daisy.pipeline.modules.braille
   artifact: obfl-utils
-  version: 2.0.1
+  version: 2.0.2
 - group: org.daisy.pipeline.modules
   artifact: common-utils
 - group: org.daisy.pipeline.modules
