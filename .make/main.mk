@@ -93,6 +93,7 @@ poms :
 # this recipe is executed only when prerequisites have changed
 # note that most prerequisites are defined in maven.mk itself
 $(MY_DIR)/mk/maven.mk : $(TARGET_DIR)/effective-settings.xml
+	mkdirs("$(dir $@)"); \
 	try (PrintStream s = new PrintStream(new FileOutputStream("$@"))) { \
 		String localRepo = xpath(new File("$<"), "/*/*[local-name()='localRepository']/text()") \
 		                   .replace('\\', '/') \
