@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.daisy.pipeline.modules</groupId>
+    <artifactId>modules-parent</artifactId>
+    <version>1.15.5-SNAPSHOT</version>
+    <relativePath>../parent/</relativePath>
+  </parent>
+
+  <artifactId>daisy202-to-mp3</artifactId>
+  <version>1.1.10-SNAPSHOT</version>
+  <packaging>bundle</packaging>
+
+  <name>DAISY Pipeline 2 module :: DAISY 2.02 to MP3</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>common-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>audio-common</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>daisy202-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>fileset-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>file-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>smil-utils</artifactId>
+    </dependency>
+    <!--
+        test dependencies
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>audio-encoder-lame</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.script.impl.XProcScript_daisy202_to_mp3,
+      org.daisy.pipeline.datatypes.impl.Datatype_px_daisy202_to_mp3_script_folder_depth
+    </expose-services>
+  </properties>
+
+</project>
