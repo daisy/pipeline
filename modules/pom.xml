@@ -47,9 +47,6 @@
     <module>scripts-utils/pandoc-adapter</module>
     <module>scripts-utils/zedai-utils</module>
     <module>nlp/nlp-common</module>
-    <module>nlp/lexers/ruled-lexer</module>
-    <module>nlp/lexers/light-lexer</module>
-    <module>nlp/lexers/omnilang-lexer</module>
     <module>audio/audio-common</module>
     <module>audio/audio-encoder-lame</module>
     <module>tts/tts-common</module>

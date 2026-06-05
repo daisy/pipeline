@@ -81,11 +81,6 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>nlp-omnilang-lexer</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>tts-mocks</artifactId>
       <scope>test</scope>
     </dependency>

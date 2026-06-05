@@ -160,21 +160,6 @@
         <artifactId>nlp-common</artifactId>
         <version>3.0.6-SNAPSHOT</version>
       </dependency>
-      <!-- <dependency> -->
-      <!--   <groupId>org.daisy.pipeline.modules</groupId> -->
-      <!--   <artifactId>nlp-light-lexer</artifactId> -->
-      <!--   <version>1.0.1-SNAPSHOT</version> -->
-      <!-- </dependency> -->
-      <dependency>
-        <groupId>org.daisy.pipeline.modules</groupId>
-        <artifactId>nlp-omnilang-lexer</artifactId>
-        <version>1.0.6-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline.modules</groupId>
-        <artifactId>nlp-ruled-lexer</artifactId>
-        <version>1.0.6-SNAPSHOT</version>
-      </dependency>
       
       <!--
           scripts-utils
