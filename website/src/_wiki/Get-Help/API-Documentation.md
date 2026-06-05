@@ -116,7 +116,6 @@ FIXME: add short description for every package
 - [`http://www.daisy.org/pipeline/modules/file-utils/library.xpl`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/modules/file-utils/library.xpl)
 - [`http://www.daisy.org/pipeline/modules/common-utils/library.xpl`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/modules/common-utils/library.xpl)
 - [`http://www.daisy.org/pipeline/modules/daisy202-utils/library.xpl`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/modules/daisy202-utils/library.xpl)
-- [`http://www.daisy.org/pipeline/modules/daisy202-validator/library.xpl`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/modules/daisy202-validator/library.xpl)
 - [`http://www.daisy.org/pipeline/modules/daisy3-to-daisy202/library.xpl`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/modules/daisy3-to-daisy202/library.xpl)
 - [`http://www.daisy.org/pipeline/modules/daisy3-utils/library.xpl`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/modules/daisy3-utils/library.xpl)
 - [`http://www.daisy.org/pipeline/modules/dtbook-to-daisy3/library.xpl`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/modules/dtbook-to-daisy3/library.xpl)
