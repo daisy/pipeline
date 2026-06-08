@@ -30,8 +30,6 @@ MAVEN_MODULES += utils/xproc-maven-plugin/xprocspec-runner
 MAVEN_MODULES += utils/xproc-maven-plugin/xproc-maven-plugin
 MAVEN_MODULES += libs/jstyleparser
 MAVEN_MODULES += libs/braille-css
-MAVEN_MODULES += libs/liblouis-java
-MAVEN_MODULES += libs/jhyphen
 MAVEN_MODULES += libs/osgi-libs/jing
 MAVEN_MODULES += libs/osgi-libs/jnaerator
 MAVEN_MODULES += libs/osgi-libs/parboiled
@@ -173,8 +171,6 @@ poms : utils/xproc-maven-plugin/xprocspec-runner/pom.xml
 poms : utils/xproc-maven-plugin/xproc-maven-plugin/pom.xml
 poms : libs/jstyleparser/pom.xml
 poms : libs/braille-css/pom.xml
-poms : libs/liblouis-java/pom.xml
-poms : libs/jhyphen/pom.xml
 poms : libs/osgi-libs/jing/pom.xml
 poms : libs/osgi-libs/jnaerator/pom.xml
 poms : libs/osgi-libs/parboiled/pom.xml
@@ -412,8 +408,6 @@ $(MY_DIR)/mk/maven.mk : utils/xproc-maven-plugin/xprocspec-runner/pom.xml
 $(MY_DIR)/mk/maven.mk : utils/xproc-maven-plugin/xproc-maven-plugin/pom.xml
 $(MY_DIR)/mk/maven.mk : libs/jstyleparser/pom.xml
 $(MY_DIR)/mk/maven.mk : libs/braille-css/pom.xml
-$(MY_DIR)/mk/maven.mk : libs/liblouis-java/pom.xml
-$(MY_DIR)/mk/maven.mk : libs/jhyphen/pom.xml
 $(MY_DIR)/mk/maven.mk : libs/osgi-libs/jing/pom.xml
 $(MY_DIR)/mk/maven.mk : libs/osgi-libs/jnaerator/pom.xml
 $(MY_DIR)/mk/maven.mk : libs/osgi-libs/parboiled/pom.xml
