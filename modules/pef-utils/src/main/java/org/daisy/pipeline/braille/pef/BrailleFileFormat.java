@@ -12,9 +12,9 @@ import org.daisy.dotify.api.paper.Area;
 import org.daisy.dotify.api.table.Table;
 import org.daisy.dotify.api.table.TableFilter;
 
+import org.daisy.braille.css.Dimension;
+import org.daisy.braille.css.Dimension.Unit;
 import org.daisy.pipeline.braille.css.EmbossedMedium;
-import org.daisy.pipeline.css.Dimension;
-import org.daisy.pipeline.css.Dimension.Unit;
 import org.daisy.pipeline.css.Medium.MediumBuilder;
 
 public class BrailleFileFormat extends EmbossedMedium implements FileFormat {

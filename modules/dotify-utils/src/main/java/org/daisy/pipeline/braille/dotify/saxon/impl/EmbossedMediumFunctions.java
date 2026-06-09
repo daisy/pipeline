@@ -10,15 +10,15 @@ import java.util.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
+import org.daisy.braille.css.Dimension;
+import org.daisy.braille.css.Dimension.RelativeDimensionBase;
+import org.daisy.braille.css.Dimension.Unit;
 import org.daisy.common.xpath.saxon.ExtensionFunctionProvider;
 import org.daisy.common.xpath.saxon.ReflexiveExtensionFunctionProvider;
 import org.daisy.dotify.api.paper.Area;
 import org.daisy.pipeline.braille.common.util.Strings;
 import org.daisy.pipeline.braille.css.xpath.Style;
 import org.daisy.pipeline.braille.pef.BrailleFileFormat;
-import org.daisy.pipeline.css.Dimension;
-import org.daisy.pipeline.css.Dimension.RelativeDimensionBase;
-import org.daisy.pipeline.css.Dimension.Unit;
 import org.daisy.pipeline.css.Medium;
 
 import org.osgi.service.component.annotations.Component;
