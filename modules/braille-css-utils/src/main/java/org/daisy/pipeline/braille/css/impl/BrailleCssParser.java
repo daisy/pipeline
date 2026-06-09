@@ -17,6 +17,7 @@ import cz.vutbr.web.css.CSSProperty.CounterIncrement;
 import cz.vutbr.web.css.CSSProperty.CounterSet;
 import cz.vutbr.web.css.CSSProperty.CounterReset;
 import cz.vutbr.web.css.Declaration;
+import cz.vutbr.web.css.MediaSpec;
 import cz.vutbr.web.css.NodeData;
 import cz.vutbr.web.css.Term;
 import cz.vutbr.web.css.TermList;
@@ -655,7 +656,7 @@ public abstract class BrailleCssParser implements TextStyleParser {
 		}
 
 		@Override
-		public boolean parseDeclaration(Declaration d, Map<String,CSSProperty> properties, Map<String,Term<?>> values) {
+		public boolean parseDeclaration(Declaration d, Map<String,CSSProperty> properties, Map<String,Term<?>> values, MediaSpec medium) {
 			if ("text-transform".equalsIgnoreCase(d.getProperty())) {
 				if (super.processTextTransform(d, properties, values)) {
 					if (properties.get("text-transform") == TextTransform.list_values) {
@@ -733,7 +734,7 @@ public abstract class BrailleCssParser implements TextStyleParser {
 				} else
 					return false;
 			} else
-				return super.parseDeclaration(d, properties, values);
+				return super.parseDeclaration(d, properties, values, medium);
 		}
 	}
 

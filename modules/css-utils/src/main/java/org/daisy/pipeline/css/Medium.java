@@ -320,78 +320,8 @@ public class Medium implements Dimension.RelativeDimensionBase {
 	 * Analyzer#evaluateDOM}.
 	 */
 	public MediaSpec asMediaSpec() {
-		if (mediaSpec == null) {
-			Comparator<Dimension> lengthComparator = Dimension.comparator(Medium.this);
-			mediaSpec = new MediaSpec(type.toString()) {
-				@Override
-				protected boolean matchesIgnoreNegation(MediaExpression e) {
-					String f = e.getFeature();
-					boolean isMin = false;
-					boolean isMax = false;
-					if (f.startsWith("min-")) { isMin = true; f = f.substring(4); }
-					else if (f.startsWith("max-")) { isMax = true; f = f.substring(4); }
-					if (knownFeatures.contains(f)) {
-						MediaSpec.Feature ff = getFeatureByName(f);
-						switch (ff) {
-						case WIDTH:
-						case HEIGHT:
-						case DEVICE_WIDTH:
-						case DEVICE_HEIGHT:
-							if (e.size() != 1)
-								return false;
-							Dimension v = null; {
-								switch (ff) {
-								case WIDTH: v = Medium.this.width; break;
-								case HEIGHT: v = Medium.this.height; break;
-								case DEVICE_WIDTH: v = Medium.this.deviceWidth; break;
-								case DEVICE_HEIGHT: v = Medium.this.deviceHeight; break;
-								}
-							}
-							if (v == null)
-								return false;
-							Dimension length; {
-								try {
-									length = parser.parseLength(e.get(0), f);
-								} catch (IllegalArgumentException ex) {
-									return false;
-								}
-							}
-							int comparison = lengthComparator.compare(v, length);
-							return isMin
-								? comparison >= 0
-								: isMax
-									? comparison <= 0
-									: comparison == 0;
-						default:
-							return super.matchesIgnoreNegation(e);
-						}
-					} else {
-						if (isMin || isMax)
-							return false;
-						f = parser.normalizeFeature(f);
-						if (e.size() > 1)
-							return false;
-						else if (e.size() == 0)
-							return Medium.this.matchesFeature(f);
-						else
-							return Medium.this.matchesFeature(f, e.get(0));
-					}
-				}
-			};
-		}
-		if (Medium.this.type == Type.EMBOSSED)
-			mediaSpec.setGrid(1);
-		// These are commented out because the unit conversion may fail and it is not so
-		// important that these are set anyway: the corresponding getter methods in MediaSpec
-		// are not used anywhere within the jStyleParser code anyway.
-		/*if (width != null)
-			mediaSpec.setWidth(width.toUnit(Dimension.Unit.PX, this).getValue().floatValue());
-		if (height != null)
-			mediaSpec.setHeight(height.toUnit(Dimension.Unit.PX, this).getValue().floatValue());
-		if (deviceWidth != null)
-			mediaSpec.setWidth(deviceWidth.toUnit(Dimension.Unit.PX, this).getValue().floatValue());
-		if (deviceHeight != null)
-			mediaSpec.setHeight(deviceHeight.toUnit(Dimension.Unit.PX, this).getValue().floatValue());*/
+		if (mediaSpec == null)
+			mediaSpec = new MediaSpecImpl();
 		return mediaSpec;
 	}
 
@@ -700,6 +630,87 @@ public class Medium implements Dimension.RelativeDimensionBase {
 		return new Medium(type, width, height, deviceWidth, deviceHeight, nonStandardFeatures, parser);
 	}
 
+	private class MediaSpecImpl extends MediaSpec implements Dimension.RelativeDimensionBase {
+
+		private final Comparator<Dimension> lengthComparator = Dimension.comparator(Medium.this);
+
+		private MediaSpecImpl() {
+			super(Medium.this.type.toString());
+			if (Medium.this.type == Type.EMBOSSED)
+				setGrid(1);
+			// These are commented out because the unit conversion may fail and it is not so
+			// important that these are set anyway: the corresponding getter methods in MediaSpec
+			// are not used anywhere within the jStyleParser code anyway.
+			/*if (width != null)
+				setWidth(width.toUnit(Dimension.Unit.PX, this).getValue().floatValue());
+			if (height != null)
+				setHeight(height.toUnit(Dimension.Unit.PX, this).getValue().floatValue());
+			if (deviceWidth != null)
+				setWidth(deviceWidth.toUnit(Dimension.Unit.PX, this).getValue().floatValue());
+			if (deviceHeight != null)
+				setHeight(deviceHeight.toUnit(Dimension.Unit.PX, this).getValue().floatValue());*/
+		}
+
+		@Override
+		protected boolean matchesIgnoreNegation(MediaExpression e) {
+			String f = e.getFeature();
+			boolean isMin = false;
+			boolean isMax = false;
+			if (f.startsWith("min-")) { isMin = true; f = f.substring(4); }
+			else if (f.startsWith("max-")) { isMax = true; f = f.substring(4); }
+			if (knownFeatures.contains(f)) {
+				MediaSpec.Feature ff = getFeatureByName(f);
+				switch (ff) {
+				case WIDTH:
+				case HEIGHT:
+				case DEVICE_WIDTH:
+				case DEVICE_HEIGHT:
+					if (e.size() != 1)
+						return false;
+					Dimension v = null; {
+						switch (ff) {
+						case WIDTH: v = Medium.this.width; break;
+						case HEIGHT: v = Medium.this.height; break;
+						case DEVICE_WIDTH: v = Medium.this.deviceWidth; break;
+						case DEVICE_HEIGHT: v = Medium.this.deviceHeight; break;
+						}
+					}
+					if (v == null)
+						return false;
+					Dimension length; {
+						try {
+							length = parser.parseLength(e.get(0), f);
+						} catch (IllegalArgumentException ex) {
+							return false;
+						}
+					}
+					int comparison = lengthComparator.compare(v, length);
+					return isMin
+						? comparison >= 0
+						: isMax
+						? comparison <= 0
+						: comparison == 0;
+				default:
+					return super.matchesIgnoreNegation(e);
+				}
+			} else {
+				if (isMin || isMax)
+					return false;
+				f = parser.normalizeFeature(f);
+				if (e.size() > 1)
+					return false;
+				else if (e.size() == 0)
+					return Medium.this.matchesFeature(f);
+				else
+					return Medium.this.matchesFeature(f, e.get(0));
+			}
+		}
+
+		@Override public double getCh()             { return Medium.this.getCh(); }
+		@Override public double getEm()             { return Medium.this.getEm(); }
+		@Override public double getViewportWidth()  { return Medium.this.getViewportWidth(); }
+		@Override public double getViewportHeight() { return Medium.this.getViewportHeight(); }
+	}
 	/**
 	 * Implementation of {@link MediaQuery} that is immutable and backed by a {@link Medium}
 	 */

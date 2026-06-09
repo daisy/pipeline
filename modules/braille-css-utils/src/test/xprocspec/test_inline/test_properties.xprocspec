@@ -224,7 +224,7 @@
       <x:document type="inline">
         <body>
           <h style="margin-bottom: 3"/>
-          <p style="line-height: 2.54"/>
+          <p style="line-height: 2.5399999618530273"/>
         </body>
       </x:document>
     </x:expect>

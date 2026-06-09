@@ -13,6 +13,7 @@ import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.CSSProperty.PageBreak;
 import cz.vutbr.web.css.CSSProperty.PageBreakInside;
 import cz.vutbr.web.css.Declaration;
+import cz.vutbr.web.css.MediaSpec;
 import cz.vutbr.web.css.SupportedCSS;
 import cz.vutbr.web.css.Term;
 import cz.vutbr.web.css.TermFactory;
@@ -132,7 +133,7 @@ public class SupportedOBFLProperties extends SupportedBrailleCSS {
 	}
 
 	@Override
-	public boolean parseDeclaration(Declaration d, Map<String,CSSProperty> properties, Map<String,Term<?>> values) {
+	public boolean parseDeclaration(Declaration d, Map<String,CSSProperty> properties, Map<String,Term<?>> values, MediaSpec medium) {
 		String property = d.getProperty().toLowerCase();
 		if (!(css.isSupportedCSSProperty(property) || "display".equals(property) || "volume-break-inside".equals(property))) {
 			if (!property.startsWith(prefix) && css.isSupportedCSSProperty(prefix + property))
