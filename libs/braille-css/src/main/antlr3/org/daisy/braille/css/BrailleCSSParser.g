@@ -72,8 +72,8 @@ vendor_atrule
 pseudo
     : pseudocolon^ (
         MINUS? IDENT
-      | NOT S!* selector (COMMA! S!* selector)* RPAREN!
-      | HAS S!* relative_selector (COMMA! S!* relative_selector)* RPAREN!
+      | PSEUDO_NOT S!* selector (COMMA! S!* selector)* RPAREN!
+      | PSEUDO_HAS S!* relative_selector (COMMA! S!* relative_selector)* RPAREN!
       | LANG
       | MINUS? FUNCTION S!* (IDENT | MINUS? NUMBER | MINUS? INDEX) S!* RPAREN!
       )
