@@ -468,6 +468,16 @@ public class core {
 								// We either found the non-snapshot, or we know there must be a non-snapshot
 								// following this version (and preceding the current version). In both cases
 								// we need to keep looking for changes, but not in this branch.
+								//
+								// There is one caveat. The above relies on the assumption that when a version
+								// changes from a SNAPSHOT to a non-SNAPSHOT, this happens in a separate
+								// commit. This is generally true because we use maven-release-plugin. However
+								// in case a module is moved, this condition is normally not satisfied, which
+								// could result in changes to that module not being tracked. To overcome this
+								// issue, when a pom file did not exist yet, we always mark it as
+								// "changed".
+								if ("".equals(versionBefore))
+									return ModificationType.PATCH.and(modified);
 								continue; // loop
 							}
 							// ignore other changes to pom
