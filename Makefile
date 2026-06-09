@@ -156,11 +156,7 @@ run-docker-detached : dist-docker-image
 
 endif # eq ($(OS), WINDOWS)
 
-SCRIPTS := $(filter modules/scripts/%,$(MAVEN_MODULES)) \
-           modules/scripts-utils/daisy202-utils \
-           modules/scripts-utils/daisy3-utils \
-           modules/scripts-utils/dtbook-utils \
-           modules/scripts-utils/ocr-utils
+SCRIPTS := $(filter modules/%,$(MAVEN_MODULES))
 
 .PHONY : $(addprefix run-,$(SCRIPTS))
 $(addprefix run-,$(SCRIPTS)) : run-% : %/.compile-dependencies %/.test-dependencies
@@ -274,25 +270,25 @@ cli/.install : | .maven-init .group-eval
 .SECONDARY : libs/jstyleparser/.install-sources.jar
 libs/jstyleparser/.install-sources.jar : libs/jstyleparser/.install
 
-modules/scripts/dtbook-to-odt/.install-doc.jar : $(call rwildcard,modules/scripts/dtbook-to-odt/src/test/,*)
+modules/dtbook-to-odt/.install-doc.jar : $(call rwildcard,modules/dtbook-to-odt/src/test/,*)
 
 .SECONDARY : \
-	modules/braille/liblouis-utils/.install-mac.jar \
-	modules/braille/liblouis-utils/.install-linux.jar \
-	modules/braille/liblouis-utils/.install-windows.jar
-modules/braille/liblouis-utils/.install-mac.jar \
-modules/braille/liblouis-utils/.install-linux.jar \
-modules/braille/liblouis-utils/.install-windows.jar: \
-	modules/braille/liblouis-utils/.install
+	modules/liblouis-utils/.install-mac.jar \
+	modules/liblouis-utils/.install-linux.jar \
+	modules/liblouis-utils/.install-windows.jar
+modules/liblouis-utils/.install-mac.jar \
+modules/liblouis-utils/.install-linux.jar \
+modules/liblouis-utils/.install-windows.jar: \
+	modules/liblouis-utils/.install
 
 .SECONDARY : \
-	modules/braille/libhyphen-utils/.install-mac.jar \
-	modules/braille/libhyphen-utils/.install-linux.jar \
-	modules/braille/libhyphen-utils/.install-windows.jar
-modules/braille/libhyphen-utils/.install-mac.jar \
-modules/braille/libhyphen-utils/.install-linux.jar \
-modules/braille/libhyphen-utils/.install-windows.jar: \
-	modules/braille/libhyphen-utils/.install
+	modules/libhyphen-utils/.install-mac.jar \
+	modules/libhyphen-utils/.install-linux.jar \
+	modules/libhyphen-utils/.install-windows.jar
+modules/libhyphen-utils/.install-mac.jar \
+modules/libhyphen-utils/.install-linux.jar \
+modules/libhyphen-utils/.install-windows.jar: \
+	modules/libhyphen-utils/.install
 
 # treat celia-hyphenation-tables as a released artifact
 .PHONY : $(MVN_LOCAL_REPOSITORY)/fi/celia/celia-hyphenation-tables/1.5.1-SNAPSHOT/celia-hyphenation-tables-1.5.1-SNAPSHOT.jar
@@ -415,7 +411,7 @@ help :
 	err.println("	Get the command for compiling and running CLI locally");                         \
 	err.println("make run-docker:");                                                                 \
 	err.println("	Incrementally compile code and run a server inside a Docker container");         \
-	err.println("make run-modules/scripts/[SCRIPT]:");                                               \
+	err.println("make run-modules/[SCRIPT]:");                                                       \
 	err.println("	Incrementally compile code and run a server with a single script");              \
 	err.println("make website:");                                                                    \
 	err.println("	Build the website");                                                             \
