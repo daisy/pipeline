@@ -363,6 +363,10 @@ public final class CSSFactory {
 	}
 	
 	public static final NodeData createNodeData(DeclarationTransformer transformer, SupportedCSS css) {
+		return createNodeData(transformer, css, null);
+	}
+
+	public static final NodeData createNodeData(DeclarationTransformer transformer, SupportedCSS css, MediaSpec media) {
 		if (ndImpl == null) {
 			try {
 				@SuppressWarnings("unchecked")
@@ -374,12 +378,16 @@ public final class CSSFactory {
 			} catch (Exception e) {
 			}
 		}
-
 		try {
-			return ndImpl.getDeclaredConstructor(DeclarationTransformer.class, SupportedCSS.class)
-			             .newInstance(transformer, css);
+			return ndImpl.getDeclaredConstructor(DeclarationTransformer.class, SupportedCSS.class, MediaSpec.class)
+			             .newInstance(transformer, css, media);
 		} catch (Exception e) {
-			throw new RuntimeException("No NodeData implementation registered");
+			try {
+				return ndImpl.getDeclaredConstructor(DeclarationTransformer.class, SupportedCSS.class)
+				             .newInstance(transformer, css);
+			} catch (Exception ee) {
+				throw new RuntimeException("No NodeData implementation registered");
+			}
 		}
 	}
 

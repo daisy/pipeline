@@ -22,6 +22,7 @@ import cz.vutbr.web.css.CSSProperty.BorderRadius;
 import cz.vutbr.web.css.CSSProperty.GenericCSSPropertyProxy;
 import cz.vutbr.web.css.CSSProperty.Opacity;
 import cz.vutbr.web.css.Declaration;
+import cz.vutbr.web.css.MediaSpec;
 import cz.vutbr.web.css.SupportedCSS;
 import cz.vutbr.web.css.Term;
 import cz.vutbr.web.css.TermColor;
@@ -189,8 +190,17 @@ public class DeclarationTransformer {
 	 * @return <code>true</code> in case of success, <code>false</code>
 	 *         otherwise
 	 */
+	public final boolean parseDeclaration(Declaration d, Map<String,CSSProperty> properties, Map<String, Term<?>> values) {
+		return parseDeclaration(d, properties, values, null);
+	}
+
+	/**
+	 * @param media Ignored in the default implementation
+	 */
 	public boolean parseDeclaration(Declaration d,
-			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+	                                Map<String, CSSProperty> properties,
+	                                Map<String, Term<?>> values,
+	                                MediaSpec media) {
 
 		String propertyName = d.getProperty().toLowerCase();
 

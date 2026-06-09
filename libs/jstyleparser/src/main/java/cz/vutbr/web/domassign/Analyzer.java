@@ -135,7 +135,7 @@ public class Analyzer {
 			@Override
 			protected void processNode(StyleMap result, Node current, Object source) {
 
-			    NodeData main = CSSFactory.createNodeData(transformer, css);
+				NodeData main = CSSFactory.createNodeData(transformer, css, media);
 			    
 				// for all declarations available in the main list (pseudo=null)
 				List<Declaration> declarations = ((DeclarationMap) source).get((Element) current, null);
@@ -153,7 +153,7 @@ public class Analyzer {
 				//repeat for the pseudo classes (if any)
 				for (PseudoElement pseudo : ((DeclarationMap) source).pseudoSet((Element) current))
 				{
-				    NodeData pdata = CSSFactory.createNodeData(transformer, css);
+					NodeData pdata = CSSFactory.createNodeData(transformer, css, media);
 	                declarations = ((DeclarationMap) source).get((Element) current, pseudo);
 	                if (declarations != null) 
 	                {

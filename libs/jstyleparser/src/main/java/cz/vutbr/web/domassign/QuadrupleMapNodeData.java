@@ -13,6 +13,7 @@ import java.util.Map.Entry;
 import cz.vutbr.web.css.CSSFactory;
 import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.Declaration;
+import cz.vutbr.web.css.MediaSpec;
 import cz.vutbr.web.css.NodeData;
 import cz.vutbr.web.css.SupportedCSS;
 import cz.vutbr.web.css.Term;
@@ -32,6 +33,7 @@ public class QuadrupleMapNodeData implements NodeData {
 	
 	private final DeclarationTransformer transformer;
 	private final SupportedCSS css;
+	private final MediaSpec media;
 
 	private Map<String,CSSProperty> propertiesOwn;
 	private Map<String,CSSProperty> propertiesInh;
@@ -45,8 +47,13 @@ public class QuadrupleMapNodeData implements NodeData {
 	}
 
 	public QuadrupleMapNodeData(DeclarationTransformer transformer, SupportedCSS css) {
+		this(transformer, css, null);
+	}
+
+	public QuadrupleMapNodeData(DeclarationTransformer transformer, SupportedCSS css, MediaSpec media) {
 		this.transformer = transformer;
 		this.css = css;
+		this.media = media;
 		this.propertiesOwn = new HashMap<String, CSSProperty>(css.getTotalProperties(), 1.0f);
 		this.propertiesInh = new HashMap<String, CSSProperty>(css.getTotalProperties(), 1.0f);
 		this.valuesOwn = new HashMap<String, Term<?>>(css.getTotalProperties(), 1.0f);
@@ -114,7 +121,7 @@ public class QuadrupleMapNodeData implements NodeData {
 		Map<String,Term<?>> terms = 
 			new HashMap<String, Term<?>>(COMMON_DECLARATION_SIZE);
 		
-		boolean result = transformer.parseDeclaration(d, properties, terms);
+		boolean result = transformer.parseDeclaration(d, properties, terms, media);
 		
 		// in case of false do not insert anything
 		if(!result) return this;
