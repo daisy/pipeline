@@ -7,8 +7,8 @@ import cz.vutbr.web.css.TermInteger;
 import cz.vutbr.web.css.TermLength;
 import cz.vutbr.web.css.TermNumeric;
 
-import org.daisy.pipeline.css.Dimension;
-import org.daisy.pipeline.css.Dimension.Unit;
+import org.daisy.braille.css.Dimension;
+import org.daisy.braille.css.Dimension.Unit;
 import org.daisy.pipeline.css.Medium;
 
 public class EmbossedMedium extends Medium {

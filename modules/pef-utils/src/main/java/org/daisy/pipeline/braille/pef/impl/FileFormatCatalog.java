@@ -37,14 +37,14 @@ import org.daisy.dotify.api.table.Table;
 import org.daisy.dotify.api.table.TableFilter;
 import org.daisy.dotify.api.paper.TractorPaperFormat;
 
+import org.daisy.braille.css.Dimension;
+import org.daisy.braille.css.Dimension.RelativeDimensionBase;
+import org.daisy.braille.css.Dimension.Unit;
 import static org.daisy.pipeline.braille.common.Query.util.mutableQuery;
 import org.daisy.pipeline.braille.css.EmbossedMedium;
 import org.daisy.pipeline.braille.css.EmbossedMedium.EmbossedMediumBuilder;
 import org.daisy.pipeline.braille.pef.BrailleFileFormat;
 import org.daisy.pipeline.braille.pef.TableRegistry;
-import org.daisy.pipeline.css.Dimension;
-import org.daisy.pipeline.css.Dimension.RelativeDimensionBase;
-import org.daisy.pipeline.css.Dimension.Unit;
 import org.daisy.pipeline.css.Medium;
 import org.daisy.pipeline.css.Medium.MediumBuilder;
 import org.daisy.pipeline.css.MediumProvider;

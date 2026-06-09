@@ -31,6 +31,7 @@ import cz.vutbr.web.css.TermLength;
 import cz.vutbr.web.css.TermNumeric;
 import cz.vutbr.web.domassign.Analyzer;
 
+import org.daisy.braille.css.Dimension;
 import org.daisy.pipeline.css.impl.UnmodifiableTerm;
 
 import org.unbescape.css.CssEscape;
