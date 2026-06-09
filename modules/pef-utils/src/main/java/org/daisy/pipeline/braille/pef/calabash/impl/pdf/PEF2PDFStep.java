@@ -47,9 +47,8 @@ import net.sf.saxon.dom.NodeOverNodeInfo;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.xpath.XPathFactoryImpl;
 
-import org.daisy.dotify.api.table.BrailleConverter;
-import org.daisy.dotify.api.table.Table;
-import org.daisy.pipeline.braille.pef.TableRegistry;
+import org.daisy.braille.css.Dimension;
+import org.daisy.braille.css.Dimension.Unit;
 import org.daisy.common.file.URLs;
 import org.daisy.common.saxon.SaxonHelper;
 import org.daisy.common.shell.CommandRunner;
@@ -64,12 +63,13 @@ import org.daisy.common.xproc.calabash.XMLCalabashInputValue;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 import org.daisy.common.xproc.XProcMonitor;
+import org.daisy.dotify.api.table.BrailleConverter;
+import org.daisy.dotify.api.table.Table;
 import org.daisy.pipeline.braille.common.Query.MutableQuery;
 import static org.daisy.pipeline.braille.common.Query.util.mutableQuery;
 import static org.daisy.pipeline.braille.common.Query.util.query;
 import org.daisy.pipeline.braille.css.EmbossedMedium;
-import org.daisy.pipeline.css.Dimension;
-import org.daisy.pipeline.css.Dimension.Unit;
+import org.daisy.pipeline.braille.pef.TableRegistry;
 import org.daisy.pipeline.css.Medium;
 import static org.daisy.pipeline.file.FileUtils.cResultDocument;
 
