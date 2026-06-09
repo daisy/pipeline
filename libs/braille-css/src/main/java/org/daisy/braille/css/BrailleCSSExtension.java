@@ -8,6 +8,7 @@ import java.util.Set;
 
 import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.Declaration;
+import cz.vutbr.web.css.MediaSpec;
 import cz.vutbr.web.css.Rule;
 import cz.vutbr.web.css.RuleBlock;
 import cz.vutbr.web.css.Selector.PseudoClass;
@@ -40,7 +41,10 @@ public abstract class BrailleCSSExtension extends DeclarationTransformer impleme
 	}
 
 	@Override
-	public boolean parseDeclaration(Declaration d, Map<String,CSSProperty> properties, Map<String,Term<?>> values) {
+	public boolean parseDeclaration(Declaration d,
+	                                Map<String,CSSProperty> properties,
+	                                Map<String,Term<?>> values,
+	                                MediaSpec medium) {
 		return false;
 	}
 
