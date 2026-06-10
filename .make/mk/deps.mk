@@ -18,6 +18,7 @@ VERSION := 0-SNAPSHOT
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/maven/xprocspec-runner/1.2.9-SNAPSHOT/xprocspec-runner-1.2.9-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/maven/xproc-maven-plugin/1.0.4-SNAPSHOT/xproc-maven-plugin-1.0.4-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/libs/jstyleparser/1.20-p27-SNAPSHOT/jstyleparser-1.20-p27-SNAPSHOT.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/braille/braille-css/1.29.0-SNAPSHOT/braille-css-1.29.0-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/libs/jing/20151127.0.2-SNAPSHOT/jing-20151127.0.2-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/libs/jnaerator/0.11-p2-SNAPSHOT/jnaerator-0.11-p2-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/libs/parboiled/1.0.1-SNAPSHOT/parboiled-1.0.1-SNAPSHOT.jar \

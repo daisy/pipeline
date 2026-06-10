@@ -104,6 +104,7 @@ modules/braille-css-utils/.test modules/braille-css-utils/.install-doc : \
 	modules/braille-css-utils/src/test/xprocspec/test_inline/test_volume.xprocspec \
 	modules/braille-css-utils/src/test/xprocspec/test_inline/test_properties.xprocspec \
 	modules/braille-css-utils/src/test/xprocspec/test_inline/test_invalid.xprocspec \
+	modules/braille-css-utils/src/test/xprocspec/test_inline/test_supports.xprocspec \
 	modules/braille-css-utils/src/test/xprocspec/test_inline/test_inherit.xprocspec \
 	modules/braille-css-utils/src/test/xprocspec/test_inline/test_extension.xprocspec \
 	modules/braille-css-utils/src/test/xprocspec/test_inline/test_content.xprocspec \
