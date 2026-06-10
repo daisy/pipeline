@@ -11,7 +11,7 @@ import java.net.URL;
  * @author kapy
  * @author Jan Svercl, VUT Brno, 2008
  */
-public interface Declaration extends Rule<Term<?>>, PrettyOutput, Comparable<Declaration>, Cloneable {
+public interface Declaration extends Rule<Term<?>>, FeatureCondition, PrettyOutput, Comparable<Declaration>, Cloneable {
 
     public boolean isImportant();
     
@@ -27,4 +27,9 @@ public interface Declaration extends Rule<Term<?>>, PrettyOutput, Comparable<Dec
     
     public Object clone();
     
+    /* FeatureCondition */
+
+    default boolean isSatisfied(FeatureSpec userAgent) {
+        return userAgent.supportsDeclaration(this);
+    }
 }

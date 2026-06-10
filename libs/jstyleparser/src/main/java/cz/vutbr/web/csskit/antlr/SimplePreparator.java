@@ -10,6 +10,7 @@ import org.w3c.dom.Element;
 import cz.vutbr.web.css.CSSFactory;
 import cz.vutbr.web.css.CombinedSelector;
 import cz.vutbr.web.css.Declaration;
+import cz.vutbr.web.css.FeatureCondition;
 import cz.vutbr.web.css.MediaQueryList;
 import cz.vutbr.web.css.RuleBlock;
 import cz.vutbr.web.css.RuleFactory;
@@ -18,6 +19,7 @@ import cz.vutbr.web.css.RuleMargin;
 import cz.vutbr.web.css.RuleMedia;
 import cz.vutbr.web.css.RulePage;
 import cz.vutbr.web.css.RuleSet;
+import cz.vutbr.web.css.RuleSupports;
 import cz.vutbr.web.css.RuleViewport;
 import cz.vutbr.web.css.Selector;
 import cz.vutbr.web.css.Selector.PseudoPage;
@@ -76,6 +78,17 @@ public class SimplePreparator implements Preparator {
 		log.info("Create @media as with:\n{}", rm);
 
 		return (RuleBlock<?>) rm;
+	}
+
+	public RuleBlock<?> prepareRuleSupports(List<RuleBlock<?>> rules, FeatureCondition condition) {
+		if (rules == null || rules.isEmpty()) {
+			log.debug("Empty RuleSupports was omitted");
+			return null;
+		}
+		RuleSupports rs = rf.createSupports(condition);
+		rs.replaceAll(rules);
+		log.info("Create @supports as with:\n{}", rs);
+		return (RuleBlock<?>)rs;
 	}
 
 	public RuleBlock<?> prepareRulePage(List<Declaration> declarations, List<RuleMargin> marginRules, String name, String pseudo) {

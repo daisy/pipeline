@@ -4,6 +4,7 @@ import java.util.List;
 
 import cz.vutbr.web.css.CombinedSelector;
 import cz.vutbr.web.css.Declaration;
+import cz.vutbr.web.css.FeatureCondition;
 import cz.vutbr.web.css.MediaQueryList;
 import cz.vutbr.web.css.RuleBlock;
 import cz.vutbr.web.css.RuleMargin;
@@ -47,7 +48,12 @@ public interface Preparator {
 	 * @return RuleMedia 
 	 */
 	public RuleBlock<?> prepareRuleMedia(List<RuleBlock<?>> rules, MediaQueryList media);
-	
+
+	/**
+	 * Creates RuleSupports, adds rules and sets condition.
+	 */
+	public RuleBlock<?> prepareRuleSupports(List<RuleBlock<?>> rules, FeatureCondition condition);
+
 	/**
 	 * Creates RulePage, block of rules associated with specific page 
      * @param declarations List of declarations
