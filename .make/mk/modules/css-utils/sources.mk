@@ -38,7 +38,6 @@ modules/css-utils/.test modules/css-utils/.install modules/css-utils/.install-do
 	modules/css-utils/src/main/java/org/daisy/pipeline/css/saxon/impl/CssParseParamSetFunctionProvider.java \
 	modules/css-utils/src/main/java/org/daisy/pipeline/css/saxon/impl/CssMediaFunctionProvider.java \
 	modules/css-utils/src/main/java/org/daisy/pipeline/css/Medium.java \
-	modules/css-utils/src/main/java/org/daisy/pipeline/css/Dimension.java \
 	modules/css-utils/src/main/java/org/daisy/pipeline/css/JStyleParserCssCascader.java \
 	modules/css-utils/src/main/java/org/daisy/pipeline/css/XsltProcessor.java \
 	modules/css-utils/src/main/java/org/daisy/pipeline/css/CssAnalyzer.java \
