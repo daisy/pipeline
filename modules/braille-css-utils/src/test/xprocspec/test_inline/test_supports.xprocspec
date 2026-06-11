@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               script="http://www.daisy.org/pipeline/modules/css-utils/library.xpl">
+
+  <x:scenario label="@supports rules">
+    <x:call step="px:css-cascade">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <style type="text/css">
+                @supports (-daisy-volume-break-before: always) {
+                  @supports (display: -foo-bar) {
+                    #a {
+                      display: -foo-bar;
+					  text-align: center;
+                    }
+                  }
+                  @supports (display: bar) {
+                    #b {
+					  display: bar;
+                      text-align: center;
+                    }
+                  }
+                  @supports ((display: -foo-bar) or (display: bar)) and (padding: 1em 1ch) {
+                    #c {
+                      text-align: center;
+                    }
+                  }
+                }
+              </style>
+            </head>
+            <body>
+			  <p id="a"/>
+              <p id="b"/>
+              <p id="c"/>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+		  <p id="a" style="display: -foo-bar; text-align: center"/>
+          <p id="b"/>
+          <p id="c" style="text-align: center"/>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+</x:description>
