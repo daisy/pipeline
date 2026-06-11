@@ -46,9 +46,9 @@ DAISY_XSLT
 	: '@' PREFIX? 'xslt' { $type = XSLT; }
 	;
 
-NOT : 'not(' ;
+PSEUDO_NOT : 'not(' ;
 
-HAS : 'has(' ;
+PSEUDO_HAS : 'has(' ;
 
 // https://drafts.csswg.org/selectors-4/#lang-pseudo
 LANG

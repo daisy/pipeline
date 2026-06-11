@@ -227,10 +227,10 @@ pseudo returns [Selector.PseudoPage pseudoPage]
               $pseudoPage = null;
           }
       }
-    | ^(PSEUDOCLASS NOT sl=selector_list) {
+    | ^(PSEUDOCLASS PSEUDO_NOT sl=selector_list) {
           $pseudoPage = sl == null ? null : new SelectorImpl.NegationPseudoClassImpl(sl);
       }
-    | ^(PSEUDOCLASS HAS rsl=relative_selector_list) {
+    | ^(PSEUDOCLASS PSEUDO_HAS rsl=relative_selector_list) {
           $pseudoPage = rsl == null ? null : new SelectorImpl.RelationalPseudoClassImpl(rsl);
       }
     | ^(PSEUDOCLASS l=LANG) {
