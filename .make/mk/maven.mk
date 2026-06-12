@@ -79,10 +79,8 @@ MAVEN_MODULES += modules/dtbook-to-zedai
 MAVEN_MODULES += modules/dtbook-utils
 MAVEN_MODULES += modules/epub-to-daisy
 MAVEN_MODULES += modules/epub-utils
-MAVEN_MODULES += modules/epub2-to-epub3
 MAVEN_MODULES += modules/epub3-to-daisy202
 MAVEN_MODULES += modules/epub3-to-daisy3
-MAVEN_MODULES += modules/epub3-to-epub3
 MAVEN_MODULES += modules/epub3-to-html
 MAVEN_MODULES += modules/epub3-to-pef
 MAVEN_MODULES += modules/epubcheck-adapter
@@ -209,10 +207,8 @@ poms : modules/dtbook-to-zedai/pom.xml
 poms : modules/dtbook-utils/pom.xml
 poms : modules/epub-to-daisy/pom.xml
 poms : modules/epub-utils/pom.xml
-poms : modules/epub2-to-epub3/pom.xml
 poms : modules/epub3-to-daisy202/pom.xml
 poms : modules/epub3-to-daisy3/pom.xml
-poms : modules/epub3-to-epub3/pom.xml
 poms : modules/epub3-to-html/pom.xml
 poms : modules/epub3-to-pef/pom.xml
 poms : modules/epubcheck-adapter/pom.xml
@@ -303,10 +299,8 @@ $(TARGET_DIR)/optimized/modules/bom/pom.xml : $(TARGET_DIR)/state/modules/dtbook
 $(TARGET_DIR)/optimized/modules/bom/pom.xml : $(TARGET_DIR)/state/modules/dtbook-utils/modified-since-release
 $(TARGET_DIR)/optimized/modules/bom/pom.xml : $(TARGET_DIR)/state/modules/epub-to-daisy/modified-since-release
 $(TARGET_DIR)/optimized/modules/bom/pom.xml : $(TARGET_DIR)/state/modules/epub-utils/modified-since-release
-$(TARGET_DIR)/optimized/modules/bom/pom.xml : $(TARGET_DIR)/state/modules/epub2-to-epub3/modified-since-release
 $(TARGET_DIR)/optimized/modules/bom/pom.xml : $(TARGET_DIR)/state/modules/epub3-to-daisy202/modified-since-release
 $(TARGET_DIR)/optimized/modules/bom/pom.xml : $(TARGET_DIR)/state/modules/epub3-to-daisy3/modified-since-release
-$(TARGET_DIR)/optimized/modules/bom/pom.xml : $(TARGET_DIR)/state/modules/epub3-to-epub3/modified-since-release
 $(TARGET_DIR)/optimized/modules/bom/pom.xml : $(TARGET_DIR)/state/modules/epub3-to-html/modified-since-release
 $(TARGET_DIR)/optimized/modules/bom/pom.xml : $(TARGET_DIR)/state/modules/epub3-to-pef/modified-since-release
 $(TARGET_DIR)/optimized/modules/bom/pom.xml : $(TARGET_DIR)/state/modules/epubcheck-adapter/modified-since-release
@@ -425,10 +419,8 @@ $(MY_DIR)/mk/maven.mk : modules/dtbook-to-zedai/pom.xml
 $(MY_DIR)/mk/maven.mk : modules/dtbook-utils/pom.xml
 $(MY_DIR)/mk/maven.mk : modules/epub-to-daisy/pom.xml
 $(MY_DIR)/mk/maven.mk : modules/epub-utils/pom.xml
-$(MY_DIR)/mk/maven.mk : modules/epub2-to-epub3/pom.xml
 $(MY_DIR)/mk/maven.mk : modules/epub3-to-daisy202/pom.xml
 $(MY_DIR)/mk/maven.mk : modules/epub3-to-daisy3/pom.xml
-$(MY_DIR)/mk/maven.mk : modules/epub3-to-epub3/pom.xml
 $(MY_DIR)/mk/maven.mk : modules/epub3-to-html/pom.xml
 $(MY_DIR)/mk/maven.mk : modules/epub3-to-pef/pom.xml
 $(MY_DIR)/mk/maven.mk : modules/epubcheck-adapter/pom.xml

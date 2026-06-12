@@ -4,6 +4,8 @@ modules/epub-utils/.test modules/epub-utils/.install modules/epub-utils/.install
 	modules/epub-utils/src/main/resources/xml/validate/epub3-validator.script.xpl \
 	modules/epub-utils/src/main/resources/xml/validate/epubcheck-report-to-pipeline-report.xsl \
 	modules/epub-utils/src/main/resources/xml/validate/epubcheck-pipeline-report-to-html-report.xsl \
+	modules/epub-utils/src/main/resources/xml/upgrade/epub2-to-epub3.xpl \
+	modules/epub-utils/src/main/resources/xml/upgrade/epub2-to-epub3.script.xpl \
 	modules/epub-utils/src/main/resources/xml/epub-rename-files.xpl \
 	modules/epub-utils/src/main/resources/xml/mo/create-mediaoverlay.xsl \
 	modules/epub-utils/src/main/resources/xml/mo/clean-mediaoverlay.xsl \
@@ -21,6 +23,14 @@ modules/epub-utils/.test modules/epub-utils/.install modules/epub-utils/.install
 	modules/epub-utils/src/main/resources/xml/ocf/opf-manifest-to-fileset.xsl \
 	modules/epub-utils/src/main/resources/xml/ocf/load.xpl \
 	modules/epub-utils/src/main/resources/xml/epub-update-links.xpl \
+	modules/epub-utils/src/main/resources/xml/enhance/epub3-to-epub3.xpl \
+	modules/epub-utils/src/main/resources/xml/enhance/html-derive-meta-from-package-doc.xsl \
+	modules/epub-utils/src/main/resources/xml/enhance/braille-rendition.package-document.xsl \
+	modules/epub-utils/src/main/resources/xml/enhance/ensure-pagenum-text.xsl \
+	modules/epub-utils/src/main/resources/xml/enhance/braille-rendition.fileset.xsl \
+	modules/epub-utils/src/main/resources/xml/enhance/resource-map.xsl \
+	modules/epub-utils/src/main/resources/xml/enhance/default.css \
+	modules/epub-utils/src/main/resources/xml/enhance/epub3-to-epub3.script.xpl \
 	modules/epub-utils/src/main/resources/xml/pub/create-package-doc.estimate-mediaoverlay-duration.xsl \
 	modules/epub-utils/src/main/resources/xml/pub/ensure-core-media.xpl \
 	modules/epub-utils/src/main/resources/xml/pub/package-doc-update-links.xsl \
@@ -80,6 +90,14 @@ modules/epub-utils/.test modules/epub-utils/.install-doc : \
 	modules/epub-utils/src/test/xspec/pub/merge-prefix.xspec \
 	modules/epub-utils/src/test/xspec/nav/nav-to-ncx.xspec \
 	modules/epub-utils/src/test/resources/logback.xml \
+	modules/epub-utils/src/test/resources/minimal.epub/META-INF/container.xml \
+	modules/epub-utils/src/test/resources/minimal.epub/mimetype \
+	modules/epub-utils/src/test/resources/minimal.epub/EPUB/chapter.xhtml \
+	modules/epub-utils/src/test/resources/minimal.epub/EPUB/cover.xhtml \
+	modules/epub-utils/src/test/resources/minimal.epub/EPUB/front.xhtml \
+	modules/epub-utils/src/test/resources/minimal.epub/EPUB/toc.ncx \
+	modules/epub-utils/src/test/resources/minimal.epub/EPUB/package.opf \
+	modules/epub-utils/src/test/resources/webserver-tts-config.xml \
 	modules/epub-utils/src/test/resources/moby-dick-mo-20120214/META-INF/container.xml \
 	modules/epub-utils/src/test/resources/moby-dick-mo-20120214/mimetype \
 	modules/epub-utils/src/test/resources/moby-dick-mo-20120214/OPS/chapter_099.xhtml \
@@ -262,15 +280,20 @@ modules/epub-utils/.test modules/epub-utils/.install-doc : \
 	modules/epub-utils/src/test/resources/valentin/EPUB/C00000-5-chapter.xhtml \
 	modules/epub-utils/src/test/resources/valentin/EPUB/package.opf \
 	modules/epub-utils/src/test/java/XSpecAndXProcSpecTest.java \
+	modules/epub-utils/src/test/xprocspec/validate/test_validate.xprocspec \
+	modules/epub-utils/src/test/xprocspec/validate/test_epub3-validator.script.xprocspec \
+	modules/epub-utils/src/test/xprocspec/upgrade/test_epub2-to-epub3.script.xprocspec \
+	modules/epub-utils/src/test/xprocspec/upgrade/test_epub2-to-epub3.xprocspec \
 	modules/epub-utils/src/test/xprocspec/mo/part_1.mp3 \
 	modules/epub-utils/src/test/xprocspec/mo/part_3.mp3 \
 	modules/epub-utils/src/test/xprocspec/mo/part_2.mp3 \
 	modules/epub-utils/src/test/xprocspec/mo/test_epub3-create-mediaoverlays.xprocspec \
 	modules/epub-utils/src/test/xprocspec/epub3-vocab.xprocspec \
-	modules/epub-utils/src/test/xprocspec/test_validate.xprocspec \
 	modules/epub-utils/src/test/xprocspec/ocf/test_ocf-finalize.xprocspec \
 	modules/epub-utils/src/test/xprocspec/ocf/test_load.xprocspec \
-	modules/epub-utils/src/test/xprocspec/test_epub3-validator.script.xprocspec \
+	modules/epub-utils/src/test/xprocspec/enhance/test_epub3-to-epub3.xprocspec \
+	modules/epub-utils/src/test/xprocspec/enhance/test_epub3-to-epub3.load.xprocspec \
+	modules/epub-utils/src/test/xprocspec/enhance/test_epub3-to-epub3.script.xprocspec \
 	modules/epub-utils/src/test/xprocspec/pub/test_epub3-pub-merge-prefix.xprocspec \
 	modules/epub-utils/src/test/xprocspec/pub/test_epub3-pub-create-package-doc.xprocspec \
 	modules/epub-utils/src/test/xprocspec/pub/test_opf-spine-to-fileset.xprocspec \
@@ -280,6 +303,9 @@ modules/epub-utils/.test modules/epub-utils/.install-doc : \
 	modules/epub-utils/src/test/xprocspec/nav/test_epub3-nav-create-toc.xprocspec \
 	modules/epub-utils/src/test/xprocspec/epub3-safe-uris.xprocspec
 modules/epub-utils/.install-doc : \
+	modules/epub-utils/doc/epub3-enhancer.md \
+	modules/epub-utils/doc/epub-upgrader.md \
+	modules/epub-utils/doc/epub3-validator.md \
 	modules/epub-utils/doc/index.md
 .make/mk/modules/epub-utils/sources.mk : \
 	modules/epub-utils/src \
@@ -288,6 +314,9 @@ modules/epub-utils/.install-doc : \
 	modules/epub-utils/src/test/xspec/pub \
 	modules/epub-utils/src/test/xspec/nav \
 	modules/epub-utils/src/test/resources \
+	modules/epub-utils/src/test/resources/minimal.epub \
+	modules/epub-utils/src/test/resources/minimal.epub/META-INF \
+	modules/epub-utils/src/test/resources/minimal.epub/EPUB \
 	modules/epub-utils/src/test/resources/moby-dick-mo-20120214 \
 	modules/epub-utils/src/test/resources/moby-dick-mo-20120214/META-INF \
 	modules/epub-utils/src/test/resources/moby-dick-mo-20120214/OPS \
@@ -304,8 +333,11 @@ modules/epub-utils/.install-doc : \
 	modules/epub-utils/src/test/resources/valentin/EPUB/images \
 	modules/epub-utils/src/test/java \
 	modules/epub-utils/src/test/xprocspec \
+	modules/epub-utils/src/test/xprocspec/validate \
+	modules/epub-utils/src/test/xprocspec/upgrade \
 	modules/epub-utils/src/test/xprocspec/mo \
 	modules/epub-utils/src/test/xprocspec/ocf \
+	modules/epub-utils/src/test/xprocspec/enhance \
 	modules/epub-utils/src/test/xprocspec/pub \
 	modules/epub-utils/src/test/xprocspec/nav \
 	modules/epub-utils/src/main \
@@ -313,9 +345,11 @@ modules/epub-utils/.install-doc : \
 	modules/epub-utils/src/main/resources/META-INF \
 	modules/epub-utils/src/main/resources/xml \
 	modules/epub-utils/src/main/resources/xml/validate \
+	modules/epub-utils/src/main/resources/xml/upgrade \
 	modules/epub-utils/src/main/resources/xml/mo \
 	modules/epub-utils/src/main/resources/xml/mo/tts \
 	modules/epub-utils/src/main/resources/xml/ocf \
+	modules/epub-utils/src/main/resources/xml/enhance \
 	modules/epub-utils/src/main/resources/xml/pub \
 	modules/epub-utils/src/main/resources/xml/nav \
 	modules/epub-utils/doc
