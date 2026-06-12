@@ -335,11 +335,6 @@
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
-        <artifactId>epub2-to-epub3</artifactId>
-        <version>1.1.6-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>epub3-to-daisy202</artifactId>
         <version>2.2.12-SNAPSHOT</version>
       </dependency>
@@ -347,11 +342,6 @@
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>epub3-to-daisy3</artifactId>
         <version>1.0.14-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline.modules</groupId>
-        <artifactId>epub3-to-epub3</artifactId>
-        <version>5.1.1-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>

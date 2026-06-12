@@ -116,13 +116,9 @@
 			px:message
 		</p:documentation>
 	</p:import>
-	<p:import href="http://www.daisy.org/pipeline/modules/epub2-to-epub3/library.xpl">
+	<p:import href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl">
 		<p:documentation>
 			px:epub2-to-epub3
-		</p:documentation>
-	</p:import>
-	<p:import href="http://www.daisy.org/pipeline/modules/epub3-to-epub3/library.xpl">
-		<p:documentation>
 			px:epub3-to-epub3
 		</p:documentation>
 	</p:import>
