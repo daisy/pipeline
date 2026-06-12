@@ -17,7 +17,7 @@
   <name>DAISY Pipeline 2 module :: EPUB Utilities</name>
 
   <dependencies>
-	<dependency>
+    <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>framework-core</artifactId>
     </dependency>
@@ -81,12 +81,48 @@
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>ace-adapter</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>braille-css-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>braille-common</artifactId>
+    </dependency>
+    <!--
+        test dependencies
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>liblouis-utils</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>libhyphen-utils</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>calabash-adapter</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>tts-mocks</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <properties>
     <expose-services>
       org.daisy.pipeline.modules.impl.Module_epub_utils,
-      org.daisy.pipeline.script.impl.XProcScript_epub3_validator
+      org.daisy.pipeline.script.impl.XProcScript_epub3_validator,
+      org.daisy.pipeline.script.impl.XProcScript_epub3_to_epub3,
+      org.daisy.pipeline.script.impl.XProcScript_epub2_to_epub3,
+      org.daisy.pipeline.datatypes.impl.Datatype_px_epub3_to_epub3_script_audio,
+      org.daisy.pipeline.datatypes.impl.Datatype_px_epub3_to_epub3_script_ensure_pagenum_text,
+      org.daisy.pipeline.datatypes.impl.Datatype_px_epub2_to_epub3_script_validation
     </expose-services>
   </properties>
 
@@ -104,5 +140,124 @@
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>mac</id>
+      <activation>
+        <os>
+          <family>mac</family>
+        </os>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>org.daisy.pipeline.modules.braille</groupId>
+          <artifactId>liblouis-utils</artifactId>
+          <classifier>mac</classifier>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.daisy.pipeline.modules.braille</groupId>
+          <artifactId>libhyphen-utils</artifactId>
+          <classifier>mac</classifier>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+    <profile>
+      <id>linux</id>
+      <activation>
+        <os>
+          <name>linux</name>
+        </os>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>org.daisy.pipeline.modules.braille</groupId>
+          <artifactId>liblouis-utils</artifactId>
+          <classifier>linux</classifier>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.daisy.pipeline.modules.braille</groupId>
+          <artifactId>libhyphen-utils</artifactId>
+          <classifier>linux</classifier>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+    <profile>
+      <id>win</id>
+      <activation>
+        <os>
+          <family>windows</family>
+        </os>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>org.daisy.pipeline.modules.braille</groupId>
+          <artifactId>liblouis-utils</artifactId>
+          <classifier>windows</classifier>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.daisy.pipeline.modules.braille</groupId>
+          <artifactId>libhyphen-utils</artifactId>
+          <classifier>windows</classifier>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+
+    <profile>
+      <id>run-script-webserver</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.daisy.pipeline.modules</groupId>
+          <artifactId>tts-adapter-osx</artifactId>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.daisy.pipeline.modules</groupId>
+          <artifactId>tts-adapter-google</artifactId>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.daisy.pipeline.modules</groupId>
+          <artifactId>audio-encoder-lame</artifactId>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>run-webserver</id>
+                <configuration>
+                  <systemProperties combine.children="append">
+                    <systemProperty>
+                      <key>org.daisy.pipeline.tts.config</key>
+                      <value>${project.basedir}/src/test/resources/webserver-tts-config.xml</value>
+                    </systemProperty>
+                    <systemProperty>
+                      <key>org.daisy.pipeline.tts.google.address</key>
+                      <value>http://localhost:8080</value>
+                    </systemProperty>
+                    <systemProperty>
+                      <key>org.daisy.pipeline.tts.google.apikey</key>
+                      <value>mykey</value>
+                    </systemProperty>
+                  </systemProperties>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
 </project>

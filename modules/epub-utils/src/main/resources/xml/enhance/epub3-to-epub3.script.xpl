@@ -328,12 +328,12 @@ elements that represent the sentences.</p>
     </p:output>
     <p:serialization port="tts-log" indent="true" omit-xml-declaration="false"/>
     
-    <p:import href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl">
+    <p:import href="../ocf/load.xpl">
         <p:documentation>
             px:epub-load
         </p:documentation>
     </p:import>
-    <p:import href="epub3-to-epub3.convert.xpl">
+    <p:import href="epub3-to-epub3.xpl">
         <p:documentation>
             px:epub3-to-epub3
         </p:documentation>

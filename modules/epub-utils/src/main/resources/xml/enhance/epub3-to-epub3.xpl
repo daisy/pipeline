@@ -127,7 +127,7 @@
             px:html-unwrap-words
         </p:documentation>
     </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl">
+    <p:import href="../library.xpl">
         <p:documentation>
             px:epub-update-links
             px:epub3-create-mediaoverlays
@@ -160,7 +160,7 @@
         </p:documentation>
     </p:import>
     
-    <p:variable name="default-stylesheet" select="resolve-uri('../css/default.css')">
+    <p:variable name="default-stylesheet" select="resolve-uri('default.css')">
         <p:inline>
             <irrelevant/>
         </p:inline>

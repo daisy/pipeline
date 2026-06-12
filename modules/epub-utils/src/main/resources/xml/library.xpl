@@ -51,4 +51,6 @@
 	</p:documentation>
 	<p:import href="epub-rename-files.xpl"/>
 	<p:import href="epub-update-links.xpl"/>
+    <p:import href="upgrade/epub2-to-epub3.xpl"/>
+    <p:import href="enhance/epub3-to-epub3.xpl"/>
 </p:library>

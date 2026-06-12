@@ -48,7 +48,7 @@ You may alternatively use the "mimetype" document if your input is a unzipped/"e
 		<p:pipe step="status" port="result"/>
 	</p:output>
 
-	<p:import href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl">
+	<p:import href="../ocf/load.xpl">
 		<p:documentation>
 			px:epub-load
 		</p:documentation>

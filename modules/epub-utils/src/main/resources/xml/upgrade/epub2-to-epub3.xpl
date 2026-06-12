@@ -49,7 +49,7 @@
 			px:html-upgrade
 		</p:documentation>
 	</p:import>
-	<p:import href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl">
+	<p:import href="../library.xpl">
 		<p:documentation>
 			px:epub3-ensure-core-media
 			px:epub-upgrade-package-doc

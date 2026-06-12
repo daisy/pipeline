@@ -49,10 +49,8 @@
     <module>dtbook-utils</module>
     <module>epub-to-daisy</module>
     <module>epub-utils</module>
-    <module>epub2-to-epub3</module>
     <module>epub3-to-daisy202</module>
     <module>epub3-to-daisy3</module>
-    <module>epub3-to-epub3</module>
     <module>epub3-to-html</module>
     <module>epub3-to-pef</module>
     <module>epubcheck-adapter</module>

@@ -4,7 +4,7 @@
                xmlns:p="http://www.w3.org/ns/xproc"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                xmlns:d="http://www.daisy.org/ns/pipeline/data"
-               script="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl">
+               script="../../../main/resources/xml/ocf/load.xpl">
 	
 	<x:scenario label="zipped">
 		<x:call step="px:epub-load">

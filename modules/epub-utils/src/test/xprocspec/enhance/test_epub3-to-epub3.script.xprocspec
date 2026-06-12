@@ -7,11 +7,11 @@
                xmlns:html="http://www.w3.org/1999/xhtml"
                xmlns:opf="http://www.idpf.org/2007/opf"
                xmlns:dc="http://purl.org/dc/elements/1.1/"
-               script="../../main/resources/xml/epub3-to-epub3.xpl">
+               script="../../../main/resources/xml/enhance/epub3-to-epub3.script.xpl">
 	
 	<x:scenario label="valentin">
 		<x:call step="px:epub3-to-epub3.script">
-			<x:option name="source" select="resolve-uri('../resources/valentin.epub',base-uri(.))"/>
+			<x:option name="source" select="resolve-uri('../../resources/valentin.epub',base-uri(.))"/>
 			<x:option name="braille" select="true()"/>
 			<x:option name="braille-translator" select="'(translator:liblouis)(contraction:full)'"/>
 			<x:option name="result" select="concat($temp-dir,'valentin/')"/>
