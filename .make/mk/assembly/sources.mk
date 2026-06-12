@@ -30,9 +30,7 @@ assembly/.test assembly/.install $(TARGET_DIR)/state/assembly/modified-since-rel
 	assembly/src/main/resources/bin/pipeline2 \
 	assembly/src/main/resources/etc/logback.xml \
 	assembly/src/main/resources/etc/logging.properties \
-	assembly/src/main/resources/etc/felix.properties \
 	assembly/src/main/resources/etc/pipeline.properties \
-	assembly/src/main/resources/etc/org.apache.felix.fileinstall-modules.cfg \
 	assembly/src/main/resources/cli/config.yml \
 	assembly/src/main/resources/NOTICE.txt \
 	assembly/src/main/resources/README.txt \

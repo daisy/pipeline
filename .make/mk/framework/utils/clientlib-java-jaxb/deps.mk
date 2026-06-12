@@ -51,7 +51,7 @@ framework/utils/clientlib-java-jaxb/.install-doc : | .maven-init .group-eval
 framework/utils/clientlib-java-jaxb/.install-doc : %/.install-doc : %/pom.xml | %/.compile-dependencies %/.test-dependencies
 
 .SECONDARY : framework/utils/clientlib-java-jaxb/.compile-dependencies framework/utils/clientlib-java-jaxb/.test-dependencies
-framework/utils/clientlib-java-jaxb/.compile-dependencies : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/framework-parent/1.15.7-SNAPSHOT/framework-parent-1.15.7-SNAPSHOT.pom
+framework/utils/clientlib-java-jaxb/.compile-dependencies : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/framework-parent/1.15.8-SNAPSHOT/framework-parent-1.15.8-SNAPSHOT.pom
 framework/utils/clientlib-java-jaxb/.test-dependencies :
 
 $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/clientlib-java-jaxb/3.1.1/clientlib-java-jaxb-3.1.1.% \
@@ -62,7 +62,7 @@ $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/clientlib-java-jaxb/3.1.1/clientlib-j
 framework/utils/clientlib-java-jaxb/.release : framework/.release
 	+$(EVAL) mvn.releaseModulesInDir("framework").apply("utils/clientlib-java-jaxb");
 
-framework/utils/clientlib-java-jaxb/.release : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/framework-parent/1.15.7/framework-parent-1.15.7.pom
+framework/utils/clientlib-java-jaxb/.release : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/framework-parent/1.15.8/framework-parent-1.15.8.pom
 
 clean : framework/utils/clientlib-java-jaxb/.clean
 .PHONY : framework/utils/clientlib-java-jaxb/.clean

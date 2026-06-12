@@ -49,6 +49,7 @@ framework/webservice/.test framework/webservice/.install framework/webservice/.i
 	framework/webservice/src/main/java/org/daisy/pipeline/webservice/xml/ScriptXmlWriter.java \
 	framework/webservice/src/main/java/org/daisy/pipeline/webservice/xml/ScriptsXmlWriter.java \
 	framework/webservice/src/main/java/org/daisy/pipeline/webservice/xml/XmlValidator.java \
+	framework/webservice/src/main/java/org/daisy/pipeline/webservice/restlet/JobSubmitter.java \
 	framework/webservice/src/main/java/org/daisy/pipeline/webservice/restlet/impl/SizesResource.java \
 	framework/webservice/src/main/java/org/daisy/pipeline/webservice/restlet/impl/PortResultResource.java \
 	framework/webservice/src/main/java/org/daisy/pipeline/webservice/restlet/impl/JobBatchResource.java \
@@ -56,6 +57,8 @@ framework/webservice/.test framework/webservice/.install framework/webservice/.i
 	framework/webservice/src/main/java/org/daisy/pipeline/webservice/restlet/impl/QueueResource.java \
 	framework/webservice/src/main/java/org/daisy/pipeline/webservice/restlet/impl/JobsResource.java \
 	framework/webservice/src/main/java/org/daisy/pipeline/webservice/restlet/impl/JobResource.java \
+	framework/webservice/src/main/java/org/daisy/pipeline/webservice/restlet/impl/AdminPropertyResource.java \
+	framework/webservice/src/main/java/org/daisy/pipeline/webservice/restlet/impl/AdminPropertiesResource.java \
 	framework/webservice/src/main/java/org/daisy/pipeline/webservice/restlet/impl/PropertyResource.java \
 	framework/webservice/src/main/java/org/daisy/pipeline/webservice/restlet/impl/QueueDownResource.java \
 	framework/webservice/src/main/java/org/daisy/pipeline/webservice/restlet/impl/QueueMoveResource.java \
@@ -98,8 +101,6 @@ framework/webservice/.test framework/webservice/.install-doc : \
 	framework/webservice/src/test/resources/data2.zip \
 	framework/webservice/src/test/resources/cover\ image.jpg \
 	framework/webservice/src/test/resources/META-INF/catalog.xml \
-	framework/webservice/src/test/resources/OSGI-INF/sleep-step.xml \
-	framework/webservice/src/test/resources/OSGI-INF/mock-script.xml \
 	framework/webservice/src/test/resources/hello.xml \
 	framework/webservice/src/test/resources/mock-module/script.xpl \
 	framework/webservice/src/test/resources/mock-module/foo.xsl \
@@ -140,7 +141,6 @@ framework/webservice/.install-doc : \
 	framework/webservice/src/test \
 	framework/webservice/src/test/resources \
 	framework/webservice/src/test/resources/META-INF \
-	framework/webservice/src/test/resources/OSGI-INF \
 	framework/webservice/src/test/resources/mock-module \
 	framework/webservice/src/test/java \
 	framework/webservice/src/test/java/org \

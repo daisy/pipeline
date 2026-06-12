@@ -1,7 +1,6 @@
 framework/logging-appender/.test framework/logging-appender/.install framework/logging-appender/.install-doc $(TARGET_DIR)/state/framework/logging-appender/modified-since-release_ : \
 	framework/logging-appender/src/main/resources/org/daisy/pipeline/logging/appenders.xml \
 	framework/logging-appender/src/main/java/org/daisy/pipeline/logging/JobProgressAppender.java \
-	framework/logging-appender/src/main/java/org/daisy/pipeline/logging/OSGIFilter.java \
 	framework/logging-appender/src/main/java/org/daisy/pipeline/logging/JobLogFileAppender.java \
 	framework/logging-appender/src/main/java/org/daisy/pipeline/logging/ThresholdFilter.java \
 	framework/logging-appender/src/main/java/org/daisy/pipeline/logging/package-info.java

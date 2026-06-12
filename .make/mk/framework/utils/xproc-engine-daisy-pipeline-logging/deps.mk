@@ -51,7 +51,7 @@ framework/utils/xproc-engine-daisy-pipeline-logging/.install-doc : | .maven-init
 framework/utils/xproc-engine-daisy-pipeline-logging/.install-doc : %/.install-doc : %/pom.xml | %/.compile-dependencies %/.test-dependencies
 
 .SECONDARY : framework/utils/xproc-engine-daisy-pipeline-logging/.compile-dependencies framework/utils/xproc-engine-daisy-pipeline-logging/.test-dependencies
-framework/utils/xproc-engine-daisy-pipeline-logging/.compile-dependencies : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/framework-parent/1.15.7-SNAPSHOT/framework-parent-1.15.7-SNAPSHOT.pom
+framework/utils/xproc-engine-daisy-pipeline-logging/.compile-dependencies : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/framework-parent/1.15.8-SNAPSHOT/framework-parent-1.15.8-SNAPSHOT.pom
 framework/utils/xproc-engine-daisy-pipeline-logging/.test-dependencies :
 
 $(MVN_LOCAL_REPOSITORY)/org/daisy/maven/xproc-engine-daisy-pipeline-logging/1.0.1/xproc-engine-daisy-pipeline-logging-1.0.1.% \
@@ -62,7 +62,7 @@ $(MVN_LOCAL_REPOSITORY)/org/daisy/maven/xproc-engine-daisy-pipeline-logging/1.0.
 framework/utils/xproc-engine-daisy-pipeline-logging/.release : framework/.release
 	+$(EVAL) mvn.releaseModulesInDir("framework").apply("utils/xproc-engine-daisy-pipeline-logging");
 
-framework/utils/xproc-engine-daisy-pipeline-logging/.release : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/framework-parent/1.15.7/framework-parent-1.15.7.pom
+framework/utils/xproc-engine-daisy-pipeline-logging/.release : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/framework-parent/1.15.8/framework-parent-1.15.8.pom
 
 clean : framework/utils/xproc-engine-daisy-pipeline-logging/.clean
 .PHONY : framework/utils/xproc-engine-daisy-pipeline-logging/.clean
