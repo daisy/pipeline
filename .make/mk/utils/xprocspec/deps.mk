@@ -6,10 +6,7 @@ $(TARGET_DIR)/state/utils/xprocspec/last-tested : $(TARGET_DIR)/state/%/last-tes
 # this rule overrides the implicit rule in main.mk
 # note that because the modified-since-release_ files created by main.mk, are deleted,
 # this rule gets executed at least once
-$(TARGET_DIR)/state/utils/xprocspec/modified-since-release_ : utils/xprocspec/pom.xml \
-	$(TARGET_DIR)/state/utils/xproc-maven-plugin/xproc-maven-plugin/modified-since-release \
-	$(TARGET_DIR)/state/utils/xprocspec/modified-since-release \
-	$(TARGET_DIR)/state/utils/xproc-maven-plugin/xproc-engine-calabash/modified-since-release
+$(TARGET_DIR)/state/utils/xprocspec/modified-since-release_ : utils/xprocspec/pom.xml $(TARGET_DIR)/state/utils/xprocspec/modified-since-release
 	mkdirs("$(dir $@)"); \
 	try (OutputStream s = new FileOutputStream("$@")) { \
 		ModificationType modified = isModifiedSinceLastRelease(new File("$<").getParentFile()); \
@@ -54,10 +51,7 @@ utils/xprocspec/.install-doc : | .maven-init .group-eval
 utils/xprocspec/.install-doc : %/.install-doc : %/pom.xml | %/.compile-dependencies %/.test-dependencies
 
 .SECONDARY : utils/xprocspec/.compile-dependencies utils/xprocspec/.test-dependencies
-utils/xprocspec/.compile-dependencies : \
-	$(MVN_LOCAL_REPOSITORY)/org/daisy/maven/xproc-maven-plugin/1.0.4-SNAPSHOT/xproc-maven-plugin-1.0.4-SNAPSHOT.jar \
-	$(MVN_LOCAL_REPOSITORY)/org/daisy/xprocspec/xprocspec/1.4.4-SNAPSHOT/xprocspec-1.4.4-SNAPSHOT.jar \
-	$(MVN_LOCAL_REPOSITORY)/org/daisy/maven/xproc-engine-calabash/1.2.1-SNAPSHOT/xproc-engine-calabash-1.2.1-SNAPSHOT.jar
+utils/xprocspec/.compile-dependencies : $(MVN_LOCAL_REPOSITORY)/org/daisy/xprocspec/xprocspec/1.4.4-SNAPSHOT/xprocspec-1.4.4-SNAPSHOT.jar
 utils/xprocspec/.test-dependencies :
 
 $(MVN_LOCAL_REPOSITORY)/org/daisy/xprocspec/xprocspec/1.4.4/xprocspec-1.4.4.% \
@@ -68,10 +62,7 @@ $(MVN_LOCAL_REPOSITORY)/org/daisy/xprocspec/xprocspec/1.4.4/xprocspec-1.4.4-% : 
 utils/xprocspec/.release : | .maven-init .group-eval
 	+$(EVAL) mvn.releaseDir("$(patsubst %/,%,$(dir $@))");
 
-utils/xprocspec/.release : \
-	$(MVN_LOCAL_REPOSITORY)/org/daisy/maven/xproc-maven-plugin/1.0.4/xproc-maven-plugin-1.0.4.jar \
-	$(MVN_LOCAL_REPOSITORY)/org/daisy/xprocspec/xprocspec/1.4.4/xprocspec-1.4.4.jar \
-	$(MVN_LOCAL_REPOSITORY)/org/daisy/maven/xproc-engine-calabash/1.2.1/xproc-engine-calabash-1.2.1.jar
+utils/xprocspec/.release : $(MVN_LOCAL_REPOSITORY)/org/daisy/xprocspec/xprocspec/1.4.4/xprocspec-1.4.4.jar
 
 clean : utils/xprocspec/.clean
 .PHONY : utils/xprocspec/.clean

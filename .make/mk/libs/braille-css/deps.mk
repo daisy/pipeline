@@ -1,4 +1,4 @@
-libs/braille-css/VERSION := 1.28.0
+libs/braille-css/VERSION := 1.29.0
 
 $(TARGET_DIR)/state/libs/braille-css/last-tested : $(TARGET_DIR)/state/%/last-tested : %/.test | .group-eval
 	+$(EVAL) mkdirs("$(dir $@)"); touch("$@");
@@ -9,10 +9,10 @@ libs/braille-css/.test : | .maven-init .group-eval
 
 libs/braille-css/.test : %/.test : %/pom.xml %/.compile-dependencies %/.test-dependencies
 
-$(MVN_LOCAL_REPOSITORY)/org/daisy/braille/braille-css/1.28.0/braille-css-1.28.0.pom : libs/braille-css/.install.pom | .group-eval
+$(MVN_LOCAL_REPOSITORY)/org/daisy/braille/braille-css/1.29.0/braille-css-1.29.0.pom : libs/braille-css/.install.pom | .group-eval
 	+$(EVAL) if (new File("$@").exists()) touch("$@"); else exit(1);
 
-$(MVN_LOCAL_REPOSITORY)/org/daisy/braille/braille-css/1.28.0/braille-css-1.28.0% : libs/braille-css/.install% | .group-eval
+$(MVN_LOCAL_REPOSITORY)/org/daisy/braille/braille-css/1.29.0/braille-css-1.29.0% : libs/braille-css/.install% | .group-eval
 	+$(EVAL) if (new File("$@").exists()) touch("$@"); else exit(1);
 
 .SECONDARY : libs/braille-css/.install.pom
