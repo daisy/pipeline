@@ -88,6 +88,7 @@ libs/jstyleparser/.test : \
 	libs/jstyleparser/src/main/java/cz/vutbr/web/css/MatchCondition.java \
 	libs/jstyleparser/src/main/java/cz/vutbr/web/css/TermLengthOrPercent.java \
 	libs/jstyleparser/src/main/java/cz/vutbr/web/css/TermResolution.java \
+	libs/jstyleparser/src/main/java/cz/vutbr/web/css/FeatureCondition.java \
 	libs/jstyleparser/src/main/java/cz/vutbr/web/css/RuleFactory.java \
 	libs/jstyleparser/src/main/java/cz/vutbr/web/css/MediaQueryList.java \
 	libs/jstyleparser/src/main/java/cz/vutbr/web/css/NetworkProcessor.java \
@@ -103,6 +104,7 @@ libs/jstyleparser/.test : \
 	libs/jstyleparser/src/main/java/cz/vutbr/web/css/TermNumber.java \
 	libs/jstyleparser/src/main/java/cz/vutbr/web/css/TermFactory.java \
 	libs/jstyleparser/src/main/java/cz/vutbr/web/css/TermString.java \
+	libs/jstyleparser/src/main/java/cz/vutbr/web/css/RuleSupports.java \
 	libs/jstyleparser/src/main/java/cz/vutbr/web/css/RuleImport.java \
 	libs/jstyleparser/src/main/java/cz/vutbr/web/css/TermTime.java \
 	libs/jstyleparser/src/main/java/cz/vutbr/web/css/MediaQuery.java \
@@ -118,6 +120,7 @@ libs/jstyleparser/.test : \
 	libs/jstyleparser/src/main/java/cz/vutbr/web/css/Selector.java \
 	libs/jstyleparser/src/main/java/cz/vutbr/web/css/NodeData.java \
 	libs/jstyleparser/src/main/java/cz/vutbr/web/css/SourceLocator.java \
+	libs/jstyleparser/src/main/java/cz/vutbr/web/css/FeatureSpec.java \
 	libs/jstyleparser/src/main/java/cz/vutbr/web/css/TermAngle.java \
 	libs/jstyleparser/src/main/java/cz/vutbr/web/css/MediaSpecNone.java \
 	libs/jstyleparser/src/main/java/cz/vutbr/web/css/RulePage.java \
@@ -130,11 +133,13 @@ libs/jstyleparser/.test : \
 	libs/jstyleparser/src/main/java/cz/vutbr/web/css/TermIdent.java \
 	libs/jstyleparser/src/main/java/cz/vutbr/web/css/RuleBlock.java \
 	libs/jstyleparser/src/main/java/cz/vutbr/web/css/CSSProperty.java \
+	libs/jstyleparser/src/main/java/cz/vutbr/web/css/FeatureQuery.java \
 	libs/jstyleparser/src/main/java/cz/vutbr/web/css/Rule.java \
 	libs/jstyleparser/src/main/java/cz/vutbr/web/css/RuleSet.java \
 	libs/jstyleparser/src/main/java/cz/vutbr/web/css/TermURI.java \
 	libs/jstyleparser/src/main/java/cz/vutbr/web/csskit/TermTimeImpl.java \
 	libs/jstyleparser/src/main/java/cz/vutbr/web/csskit/TermNumberImpl.java \
+	libs/jstyleparser/src/main/java/cz/vutbr/web/csskit/FeatureQueryImpl.java \
 	libs/jstyleparser/src/main/java/cz/vutbr/web/csskit/StyleSheetImpl.java \
 	libs/jstyleparser/src/main/java/cz/vutbr/web/csskit/TermListImpl.java \
 	libs/jstyleparser/src/main/java/cz/vutbr/web/csskit/RulePageImpl.java \
@@ -187,6 +192,7 @@ libs/jstyleparser/.test : \
 	libs/jstyleparser/src/main/java/cz/vutbr/web/csskit/RuleArrayList.java \
 	libs/jstyleparser/src/main/java/cz/vutbr/web/csskit/RuleSetImpl.java \
 	libs/jstyleparser/src/main/java/cz/vutbr/web/csskit/TermIntegerImpl.java \
+	libs/jstyleparser/src/main/java/cz/vutbr/web/csskit/RuleSupportsImpl.java \
 	libs/jstyleparser/src/main/java/cz/vutbr/web/csskit/DefaultNetworkProcessor.java \
 	libs/jstyleparser/src/main/java/cz/vutbr/web/csskit/AbstractRule.java \
 	libs/jstyleparser/src/main/java/cz/vutbr/web/csskit/TermNumericImpl.java \

@@ -1,4 +1,35 @@
-utils/build-utils/modules-build-helper/.test : \
+utils/build-utils/modules-build-helper/.test utils/build-utils/modules-build-helper/.install utils/build-utils/modules-build-helper/.install-doc $(TARGET_DIR)/state/utils/build-utils/modules-build-helper/modified-since-release_ : \
+	utils/build-utils/modules-build-helper/src/main/resources/process-catalog/process-catalog.xsl \
+	utils/build-utils/modules-build-helper/src/main/resources/process-catalog/process-catalog.xpl \
+	utils/build-utils/modules-build-helper/src/main/resources/xprocdoc/process-sources.xpl \
+	utils/build-utils/modules-build-helper/src/main/resources/xprocdoc/summary-to-xhtml.xpl \
+	utils/build-utils/modules-build-helper/src/main/resources/xprocdoc/xd2html.xsl \
+	utils/build-utils/modules-build-helper/src/main/resources/xprocdoc/README.md \
+	utils/build-utils/modules-build-helper/src/main/resources/xprocdoc/xprocdoc.xpl \
+	utils/build-utils/modules-build-helper/src/main/resources/xprocdoc/.gitrepo \
+	utils/build-utils/modules-build-helper/src/main/resources/xprocdoc/catalog-to-xprocdoc.xpl \
+	utils/build-utils/modules-build-helper/src/main/resources/lib/extend-script.xsl \
+	utils/build-utils/modules-build-helper/src/main/resources/lib/uri-functions.xsl \
+	utils/build-utils/modules-build-helper/src/main/resources/htmlize-sources/htmlize-params-file.xsl \
+	utils/build-utils/modules-build-helper/src/main/resources/htmlize-sources/htmlize-catalog.xsl \
+	utils/build-utils/modules-build-helper/src/main/resources/htmlize-sources/htmlize-catalog.xpl \
+	utils/build-utils/modules-build-helper/src/main/resources/htmlize-sources/htmlize-xslt.xpl \
+	utils/build-utils/modules-build-helper/src/main/resources/htmlize-sources/htmlize-xproc-script.xsl \
+	utils/build-utils/modules-build-helper/src/main/resources/htmlize-sources/htmlize-xslt.xsl \
+	utils/build-utils/modules-build-helper/src/main/resources/htmlize-sources/serialize.xsl \
+	utils/build-utils/modules-build-helper/src/main/resources/htmlize-sources/htmlize-xproc.xpl \
+	utils/build-utils/modules-build-helper/src/main/resources/htmlize-sources/htmlize-xproc.xsl \
+	utils/build-utils/modules-build-helper/src/main/resources/htmlize-sources/htmlize-xml.xsl \
+	utils/build-utils/modules-build-helper/src/main/resources/htmlize-sources/htmlize-xml.xpl \
+	utils/build-utils/modules-build-helper/src/main/java/org/daisy/pipeline/maven/plugin/ProcessTestCatalogMojo.java \
+	utils/build-utils/modules-build-helper/src/main/java/org/daisy/pipeline/maven/plugin/ProcessCatalogMojo.java \
+	utils/build-utils/modules-build-helper/src/main/java/org/daisy/pipeline/maven/plugin/DependenciesPackageListMojo.java \
+	utils/build-utils/modules-build-helper/src/main/java/org/daisy/pipeline/maven/plugin/utils.java \
+	utils/build-utils/modules-build-helper/src/main/java/org/daisy/pipeline/maven/plugin/XProcDocMojo.java \
+	utils/build-utils/modules-build-helper/src/main/java/org/daisy/pipeline/maven/plugin/GenerateModuleClassFunctionProvider.java \
+	utils/build-utils/modules-build-helper/src/main/java/org/daisy/pipeline/maven/plugin/CalabashWithPipelineModules.java \
+	utils/build-utils/modules-build-helper/src/main/java/org/daisy/pipeline/maven/plugin/HtmlizeSourcesMojo.java
+utils/build-utils/modules-build-helper/.test utils/build-utils/modules-build-helper/.install-doc : \
 	utils/build-utils/modules-build-helper/src/it/it-pipeline-module/pom.xml \
 	utils/build-utils/modules-build-helper/src/it/it-pipeline-module/index.md \
 	utils/build-utils/modules-build-helper/src/it/it-pipeline-module/src/test/xspec/test_foo.xspec \
@@ -30,37 +61,7 @@ utils/build-utils/modules-build-helper/.test : \
 	utils/build-utils/modules-build-helper/src/it/it-pipeline-module/src/main/java/impl/JavaStep.java \
 	utils/build-utils/modules-build-helper/src/it/it-pipeline-module/src/main/java/org/daisy/impl/FooImpl.java \
 	utils/build-utils/modules-build-helper/src/it/it-pipeline-module/src/main/java/org/daisy/Foo.java \
-	utils/build-utils/modules-build-helper/src/it/settings.xml \
-	utils/build-utils/modules-build-helper/src/main/resources/process-catalog/process-catalog.xsl \
-	utils/build-utils/modules-build-helper/src/main/resources/process-catalog/process-catalog.xpl \
-	utils/build-utils/modules-build-helper/src/main/resources/xprocdoc/process-sources.xpl \
-	utils/build-utils/modules-build-helper/src/main/resources/xprocdoc/summary-to-xhtml.xpl \
-	utils/build-utils/modules-build-helper/src/main/resources/xprocdoc/xd2html.xsl \
-	utils/build-utils/modules-build-helper/src/main/resources/xprocdoc/README.md \
-	utils/build-utils/modules-build-helper/src/main/resources/xprocdoc/xprocdoc.xpl \
-	utils/build-utils/modules-build-helper/src/main/resources/xprocdoc/.gitrepo \
-	utils/build-utils/modules-build-helper/src/main/resources/xprocdoc/catalog-to-xprocdoc.xpl \
-	utils/build-utils/modules-build-helper/src/main/resources/lib/extend-script.xsl \
-	utils/build-utils/modules-build-helper/src/main/resources/lib/uri-functions.xsl \
-	utils/build-utils/modules-build-helper/src/main/resources/htmlize-sources/htmlize-params-file.xsl \
-	utils/build-utils/modules-build-helper/src/main/resources/htmlize-sources/htmlize-catalog.xsl \
-	utils/build-utils/modules-build-helper/src/main/resources/htmlize-sources/htmlize-catalog.xpl \
-	utils/build-utils/modules-build-helper/src/main/resources/htmlize-sources/htmlize-xslt.xpl \
-	utils/build-utils/modules-build-helper/src/main/resources/htmlize-sources/htmlize-xproc-script.xsl \
-	utils/build-utils/modules-build-helper/src/main/resources/htmlize-sources/htmlize-xslt.xsl \
-	utils/build-utils/modules-build-helper/src/main/resources/htmlize-sources/serialize.xsl \
-	utils/build-utils/modules-build-helper/src/main/resources/htmlize-sources/htmlize-xproc.xpl \
-	utils/build-utils/modules-build-helper/src/main/resources/htmlize-sources/htmlize-xproc.xsl \
-	utils/build-utils/modules-build-helper/src/main/resources/htmlize-sources/htmlize-xml.xsl \
-	utils/build-utils/modules-build-helper/src/main/resources/htmlize-sources/htmlize-xml.xpl \
-	utils/build-utils/modules-build-helper/src/main/java/org/daisy/pipeline/maven/plugin/ProcessTestCatalogMojo.java \
-	utils/build-utils/modules-build-helper/src/main/java/org/daisy/pipeline/maven/plugin/ProcessCatalogMojo.java \
-	utils/build-utils/modules-build-helper/src/main/java/org/daisy/pipeline/maven/plugin/DependenciesPackageListMojo.java \
-	utils/build-utils/modules-build-helper/src/main/java/org/daisy/pipeline/maven/plugin/utils.java \
-	utils/build-utils/modules-build-helper/src/main/java/org/daisy/pipeline/maven/plugin/XProcDocMojo.java \
-	utils/build-utils/modules-build-helper/src/main/java/org/daisy/pipeline/maven/plugin/GenerateModuleClassFunctionProvider.java \
-	utils/build-utils/modules-build-helper/src/main/java/org/daisy/pipeline/maven/plugin/CalabashWithPipelineModules.java \
-	utils/build-utils/modules-build-helper/src/main/java/org/daisy/pipeline/maven/plugin/HtmlizeSourcesMojo.java
+	utils/build-utils/modules-build-helper/src/it/settings.xml
 .make/mk/utils/build-utils/modules-build-helper/sources.mk : \
 	utils/build-utils/modules-build-helper/src \
 	utils/build-utils/modules-build-helper/src/it \

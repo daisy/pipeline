@@ -20,6 +20,7 @@ libs/braille-css/.test : \
 	libs/braille-css/src/main/java/org/daisy/braille/css/RuleMarginImpl.java \
 	libs/braille-css/src/main/java/org/daisy/braille/css/LanguageTag.java \
 	libs/braille-css/src/main/java/org/daisy/braille/css/LanguageRange.java \
+	libs/braille-css/src/main/java/org/daisy/braille/css/Dimension.java \
 	libs/braille-css/src/main/java/org/daisy/braille/css/RuleHyphenationResource.java \
 	libs/braille-css/src/main/java/org/daisy/braille/css/BrailleCSSRuleFactory.java \
 	libs/braille-css/src/main/java/org/daisy/braille/css/BrailleCSSParserFactory.java \

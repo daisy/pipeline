@@ -1,4 +1,4 @@
-framework/xproc-api/VERSION := 8.1.1-SNAPSHOT
+framework/xproc-api/VERSION := 8.1.2-SNAPSHOT
 
 $(TARGET_DIR)/state/framework/xproc-api/last-tested : $(TARGET_DIR)/state/%/last-tested : %/.test | .group-eval
 	+$(EVAL) mkdirs("$(dir $@)"); touch("$@");
@@ -25,10 +25,10 @@ framework/xproc-api/.test : | .maven-init .group-eval
 
 framework/xproc-api/.test : %/.test : %/pom.xml %/.compile-dependencies %/.test-dependencies
 
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/xproc-api/8.1.1-SNAPSHOT/xproc-api-8.1.1-SNAPSHOT.pom : framework/xproc-api/.install.pom | .group-eval
+$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/xproc-api/8.1.2-SNAPSHOT/xproc-api-8.1.2-SNAPSHOT.pom : framework/xproc-api/.install.pom | .group-eval
 	+$(EVAL) if (new File("$@").exists()) touch("$@"); else exit(1);
 
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/xproc-api/8.1.1-SNAPSHOT/xproc-api-8.1.1-SNAPSHOT% : framework/xproc-api/.install% | .group-eval
+$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/xproc-api/8.1.2-SNAPSHOT/xproc-api-8.1.2-SNAPSHOT% : framework/xproc-api/.install% | .group-eval
 	+$(EVAL) if (new File("$@").exists()) touch("$@"); else exit(1);
 
 .SECONDARY : framework/xproc-api/.install.pom
@@ -57,12 +57,12 @@ framework/xproc-api/.install-doc : %/.install-doc : %/pom.xml | %/.compile-depen
 
 .SECONDARY : framework/xproc-api/.compile-dependencies framework/xproc-api/.test-dependencies
 framework/xproc-api/.compile-dependencies : \
-	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/framework-parent/1.15.7-SNAPSHOT/framework-parent-1.15.7-SNAPSHOT.pom \
-	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/common-utils/6.6.1-SNAPSHOT/common-utils-6.6.1-SNAPSHOT.jar
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/framework-parent/1.15.8-SNAPSHOT/framework-parent-1.15.8-SNAPSHOT.pom \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/common-utils/6.7.1-SNAPSHOT/common-utils-6.7.1-SNAPSHOT.jar
 framework/xproc-api/.test-dependencies :
 
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/xproc-api/8.1.1/xproc-api-8.1.1.% \
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/xproc-api/8.1.1/xproc-api-8.1.1-% : framework/xproc-api/.release
+$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/xproc-api/8.1.2/xproc-api-8.1.2.% \
+$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/xproc-api/8.1.2/xproc-api-8.1.2-% : framework/xproc-api/.release
 	+//
 
 .SECONDARY : framework/xproc-api/.release
@@ -70,8 +70,8 @@ framework/xproc-api/.release : framework/.release
 	+$(EVAL) mvn.releaseModulesInDir("framework").apply("xproc-api");
 
 framework/xproc-api/.release : \
-	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/framework-parent/1.15.7/framework-parent-1.15.7.pom \
-	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/common-utils/6.6.1/common-utils-6.6.1.jar
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/framework-parent/1.15.8/framework-parent-1.15.8.pom \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/common-utils/6.7.1/common-utils-6.7.1.jar
 
 clean : framework/xproc-api/.clean
 .PHONY : framework/xproc-api/.clean

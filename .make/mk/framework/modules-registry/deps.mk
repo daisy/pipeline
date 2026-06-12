@@ -1,4 +1,4 @@
-framework/modules-registry/VERSION := 5.0.2-SNAPSHOT
+framework/modules-registry/VERSION := 5.0.3-SNAPSHOT
 
 $(TARGET_DIR)/state/framework/modules-registry/last-tested : $(TARGET_DIR)/state/%/last-tested : %/.test | .group-eval
 	+$(EVAL) mkdirs("$(dir $@)"); touch("$@");
@@ -25,10 +25,10 @@ framework/modules-registry/.test : | .maven-init .group-eval
 
 framework/modules-registry/.test : %/.test : %/pom.xml %/.compile-dependencies %/.test-dependencies
 
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules-registry/5.0.2-SNAPSHOT/modules-registry-5.0.2-SNAPSHOT.pom : framework/modules-registry/.install.pom | .group-eval
+$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules-registry/5.0.3-SNAPSHOT/modules-registry-5.0.3-SNAPSHOT.pom : framework/modules-registry/.install.pom | .group-eval
 	+$(EVAL) if (new File("$@").exists()) touch("$@"); else exit(1);
 
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules-registry/5.0.2-SNAPSHOT/modules-registry-5.0.2-SNAPSHOT% : framework/modules-registry/.install% | .group-eval
+$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules-registry/5.0.3-SNAPSHOT/modules-registry-5.0.3-SNAPSHOT% : framework/modules-registry/.install% | .group-eval
 	+$(EVAL) if (new File("$@").exists()) touch("$@"); else exit(1);
 
 .SECONDARY : framework/modules-registry/.install.pom
@@ -57,12 +57,12 @@ framework/modules-registry/.install-doc : %/.install-doc : %/pom.xml | %/.compil
 
 .SECONDARY : framework/modules-registry/.compile-dependencies framework/modules-registry/.test-dependencies
 framework/modules-registry/.compile-dependencies : \
-	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/framework-parent/1.15.7-SNAPSHOT/framework-parent-1.15.7-SNAPSHOT.pom \
-	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/common-utils/6.6.1-SNAPSHOT/common-utils-6.6.1-SNAPSHOT.jar
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/framework-parent/1.15.8-SNAPSHOT/framework-parent-1.15.8-SNAPSHOT.pom \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/common-utils/6.7.1-SNAPSHOT/common-utils-6.7.1-SNAPSHOT.jar
 framework/modules-registry/.test-dependencies :
 
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules-registry/5.0.2/modules-registry-5.0.2.% \
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules-registry/5.0.2/modules-registry-5.0.2-% : framework/modules-registry/.release
+$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules-registry/5.0.3/modules-registry-5.0.3.% \
+$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules-registry/5.0.3/modules-registry-5.0.3-% : framework/modules-registry/.release
 	+//
 
 .SECONDARY : framework/modules-registry/.release
@@ -70,8 +70,8 @@ framework/modules-registry/.release : framework/.release
 	+$(EVAL) mvn.releaseModulesInDir("framework").apply("modules-registry");
 
 framework/modules-registry/.release : \
-	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/framework-parent/1.15.7/framework-parent-1.15.7.pom \
-	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/common-utils/6.6.1/common-utils-6.6.1.jar
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/framework-parent/1.15.8/framework-parent-1.15.8.pom \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/common-utils/6.7.1/common-utils-6.7.1.jar
 
 clean : framework/modules-registry/.clean
 .PHONY : framework/modules-registry/.clean

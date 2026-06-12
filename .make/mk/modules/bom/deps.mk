@@ -1,4 +1,4 @@
-modules/bom/VERSION := 1.15.5-SNAPSHOT
+modules/bom/VERSION := 1.15.6-SNAPSHOT
 
 $(TARGET_DIR)/state/modules/bom/last-tested : $(TARGET_DIR)/state/%/last-tested : %/.test | .group-eval
 	+$(EVAL) mkdirs("$(dir $@)"); touch("$@");
@@ -9,10 +9,10 @@ modules/bom/.test : | .maven-init .group-eval
 
 modules/bom/.test : %/.test : %/pom.xml %/.compile-dependencies %/.test-dependencies
 
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-bom/1.15.5-SNAPSHOT/modules-bom-1.15.5-SNAPSHOT.pom : modules/bom/.install.pom | .group-eval
+$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-bom/1.15.6-SNAPSHOT/modules-bom-1.15.6-SNAPSHOT.pom : modules/bom/.install.pom | .group-eval
 	+$(EVAL) if (new File("$@").exists()) touch("$@"); else exit(1);
 
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-bom/1.15.5-SNAPSHOT/modules-bom-1.15.5-SNAPSHOT% : modules/bom/.install% | .group-eval
+$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-bom/1.15.6-SNAPSHOT/modules-bom-1.15.6-SNAPSHOT% : modules/bom/.install% | .group-eval
 	+$(EVAL) if (new File("$@").exists()) touch("$@"); else exit(1);
 
 .SECONDARY : modules/bom/.install.pom
@@ -31,8 +31,8 @@ modules/bom/.install-doc : %/.install-doc : %/pom.xml | %/.compile-dependencies 
 modules/bom/.compile-dependencies :
 modules/bom/.test-dependencies :
 
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-bom/1.15.5/modules-bom-1.15.5.% \
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-bom/1.15.5/modules-bom-1.15.5-% : modules/bom/.release
+$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-bom/1.15.6/modules-bom-1.15.6.% \
+$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-bom/1.15.6/modules-bom-1.15.6-% : modules/bom/.release
 	+//
 
 .SECONDARY : modules/bom/.release

@@ -1,0 +1,76 @@
+modules/validation-utils/VERSION := 2.0.5-SNAPSHOT
+
+$(TARGET_DIR)/state/modules/validation-utils/last-tested : $(TARGET_DIR)/state/%/last-tested : %/.test | .group-eval
+	+$(EVAL) mkdirs("$(dir $@)"); touch("$@");
+
+# this rule overrides the implicit rule in main.mk
+# note that because the modified-since-release_ files created by main.mk, are deleted,
+# this rule gets executed at least once
+$(TARGET_DIR)/state/modules/validation-utils/modified-since-release_ : modules/validation-utils/pom.xml $(TARGET_DIR)/state/modules/parent/modified-since-release
+	mkdirs("$(dir $@)"); \
+	try (OutputStream s = new FileOutputStream("$@")) { \
+		ModificationType modified = isModifiedSinceLastRelease(new File("$<").getParentFile()); \
+		if (modified == null) \
+			for (String d : "$(filter %/modified-since-release,$^)".trim().split("\\s+")) \
+				if ("major".equals(slurp(new File(d)).trim())) { \
+					modified = ModificationType.PATCH; \
+					break; } \
+		new PrintStream(s).print("" + modified); }
+
+.SECONDARY : modules/validation-utils/.test
+modules/validation-utils/.test : | .maven-init .group-eval
+	+$(EVAL) mvn.test("$(patsubst %/,%,$(dir $@))");
+
+modules/validation-utils/.test : %/.test : %/pom.xml %/.compile-dependencies %/.test-dependencies
+
+$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/validation-utils/2.0.5-SNAPSHOT/validation-utils-2.0.5-SNAPSHOT.pom : modules/validation-utils/.install.pom | .group-eval
+	+$(EVAL) if (new File("$@").exists()) touch("$@"); else exit(1);
+
+$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/validation-utils/2.0.5-SNAPSHOT/validation-utils-2.0.5-SNAPSHOT% : modules/validation-utils/.install% | .group-eval
+	+$(EVAL) if (new File("$@").exists()) touch("$@"); else exit(1);
+
+.SECONDARY : modules/validation-utils/.install.pom
+modules/validation-utils/.install.pom : | .maven-init .group-eval
+	+$(EVAL) mvn.installPom("modules/validation-utils");
+
+modules/validation-utils/.install.pom : %/.install.pom : %/pom.xml %/.compile-dependencies | %/.test-dependencies
+
+.SECONDARY : modules/validation-utils/.install.jar
+modules/validation-utils/.install.jar : %/.install.jar : %/.install
+
+.SECONDARY : modules/validation-utils/.install
+modules/validation-utils/.install : | .maven-init .group-eval
+	+$(EVAL) mvn.install("$(patsubst %/,%,$(dir $@))");
+
+modules/validation-utils/.install : %/.install : %/pom.xml %/.compile-dependencies | %/.test-dependencies
+
+.SECONDARY : modules/validation-utils/.install-doc.jar
+modules/validation-utils/.install-doc.jar : %/.install-doc.jar : %/.install-doc
+
+.SECONDARY : modules/validation-utils/.install-xprocdoc.jar
+modules/validation-utils/.install-xprocdoc.jar : %/.install-xprocdoc.jar : %/.install-doc
+
+.SECONDARY : modules/validation-utils/.install-doc
+modules/validation-utils/.install-doc : | .maven-init .group-eval
+	+$(EVAL) mvn.installDoc("$(patsubst %/,%,$(dir $@))");
+
+modules/validation-utils/.install-doc : %/.install-doc : %/pom.xml | %/.compile-dependencies %/.test-dependencies
+
+.SECONDARY : modules/validation-utils/.compile-dependencies modules/validation-utils/.test-dependencies
+modules/validation-utils/.compile-dependencies : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-parent/1.15.6-SNAPSHOT/modules-parent-1.15.6-SNAPSHOT.pom
+modules/validation-utils/.test-dependencies :
+
+$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/validation-utils/2.0.5/validation-utils-2.0.5.% \
+$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/validation-utils/2.0.5/validation-utils-2.0.5-% : modules/validation-utils/.release
+	+//
+
+.SECONDARY : modules/validation-utils/.release
+modules/validation-utils/.release : modules/.release
+	+$(EVAL) mvn.releaseModulesInDir("modules").apply("validation-utils");
+
+modules/validation-utils/.release : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-parent/1.15.6/modules-parent-1.15.6.pom
+
+clean : modules/validation-utils/.clean
+.PHONY : modules/validation-utils/.clean
+modules/validation-utils/.clean :
+	rm("modules/validation-utils/target");

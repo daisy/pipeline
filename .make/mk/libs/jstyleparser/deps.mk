@@ -1,4 +1,4 @@
-libs/jstyleparser/VERSION := 1.20-p26
+libs/jstyleparser/VERSION := 1.20-p27
 
 $(TARGET_DIR)/state/libs/jstyleparser/last-tested : $(TARGET_DIR)/state/%/last-tested : %/.test | .group-eval
 	+$(EVAL) mkdirs("$(dir $@)"); touch("$@");
@@ -9,10 +9,10 @@ libs/jstyleparser/.test : | .maven-init .group-eval
 
 libs/jstyleparser/.test : %/.test : %/pom.xml %/.compile-dependencies %/.test-dependencies
 
-$(MVN_LOCAL_REPOSITORY)/org/daisy/libs/jstyleparser/1.20-p26/jstyleparser-1.20-p26.pom : libs/jstyleparser/.install.pom | .group-eval
+$(MVN_LOCAL_REPOSITORY)/org/daisy/libs/jstyleparser/1.20-p27/jstyleparser-1.20-p27.pom : libs/jstyleparser/.install.pom | .group-eval
 	+$(EVAL) if (new File("$@").exists()) touch("$@"); else exit(1);
 
-$(MVN_LOCAL_REPOSITORY)/org/daisy/libs/jstyleparser/1.20-p26/jstyleparser-1.20-p26% : libs/jstyleparser/.install% | .group-eval
+$(MVN_LOCAL_REPOSITORY)/org/daisy/libs/jstyleparser/1.20-p27/jstyleparser-1.20-p27% : libs/jstyleparser/.install% | .group-eval
 	+$(EVAL) if (new File("$@").exists()) touch("$@"); else exit(1);
 
 .SECONDARY : libs/jstyleparser/.install.pom
