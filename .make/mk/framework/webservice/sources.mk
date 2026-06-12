@@ -98,8 +98,6 @@ framework/webservice/.test framework/webservice/.install-doc : \
 	framework/webservice/src/test/resources/data2.zip \
 	framework/webservice/src/test/resources/cover\ image.jpg \
 	framework/webservice/src/test/resources/META-INF/catalog.xml \
-	framework/webservice/src/test/resources/OSGI-INF/sleep-step.xml \
-	framework/webservice/src/test/resources/OSGI-INF/mock-script.xml \
 	framework/webservice/src/test/resources/hello.xml \
 	framework/webservice/src/test/resources/mock-module/script.xpl \
 	framework/webservice/src/test/resources/mock-module/foo.xsl \
@@ -140,7 +138,6 @@ framework/webservice/.install-doc : \
 	framework/webservice/src/test \
 	framework/webservice/src/test/resources \
 	framework/webservice/src/test/resources/META-INF \
-	framework/webservice/src/test/resources/OSGI-INF \
 	framework/webservice/src/test/resources/mock-module \
 	framework/webservice/src/test/java \
 	framework/webservice/src/test/java/org \

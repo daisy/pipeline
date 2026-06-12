@@ -1,4 +1,4 @@
-utils/build-utils/modules-test-helper/VERSION := 2.2.7-SNAPSHOT
+utils/build-utils/modules-test-helper/VERSION := 3.0.0-SNAPSHOT
 
 $(TARGET_DIR)/state/utils/build-utils/modules-test-helper/last-tested : $(TARGET_DIR)/state/%/last-tested : %/.test | .group-eval
 	+$(EVAL) mkdirs("$(dir $@)"); touch("$@");
@@ -9,10 +9,10 @@ utils/build-utils/modules-test-helper/.test : | .maven-init .group-eval
 
 utils/build-utils/modules-test-helper/.test : %/.test : %/pom.xml %/.compile-dependencies %/.test-dependencies
 
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/build/modules-test-helper/2.2.7-SNAPSHOT/modules-test-helper-2.2.7-SNAPSHOT.pom : utils/build-utils/modules-test-helper/.install.pom | .group-eval
+$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/build/modules-test-helper/3.0.0-SNAPSHOT/modules-test-helper-3.0.0-SNAPSHOT.pom : utils/build-utils/modules-test-helper/.install.pom | .group-eval
 	+$(EVAL) if (new File("$@").exists()) touch("$@"); else exit(1);
 
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/build/modules-test-helper/2.2.7-SNAPSHOT/modules-test-helper-2.2.7-SNAPSHOT% : utils/build-utils/modules-test-helper/.install% | .group-eval
+$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/build/modules-test-helper/3.0.0-SNAPSHOT/modules-test-helper-3.0.0-SNAPSHOT% : utils/build-utils/modules-test-helper/.install% | .group-eval
 	+$(EVAL) if (new File("$@").exists()) touch("$@"); else exit(1);
 
 .SECONDARY : utils/build-utils/modules-test-helper/.install.pom
@@ -40,8 +40,8 @@ utils/build-utils/modules-test-helper/.install-doc : %/.install-doc : %/pom.xml 
 utils/build-utils/modules-test-helper/.compile-dependencies :
 utils/build-utils/modules-test-helper/.test-dependencies :
 
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/build/modules-test-helper/2.2.7/modules-test-helper-2.2.7.% \
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/build/modules-test-helper/2.2.7/modules-test-helper-2.2.7-% : utils/build-utils/modules-test-helper/.release
+$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/build/modules-test-helper/3.0.0/modules-test-helper-3.0.0.% \
+$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/build/modules-test-helper/3.0.0/modules-test-helper-3.0.0-% : utils/build-utils/modules-test-helper/.release
 	+//
 
 .SECONDARY : utils/build-utils/modules-test-helper/.release

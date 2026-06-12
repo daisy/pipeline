@@ -19,7 +19,6 @@ MAVEN_MODULES += utils/build-utils/ds-to-spi/ds-to-spi-annotations
 MAVEN_MODULES += utils/build-utils/ds-to-spi/ds-to-spi-annotations-processor
 MAVEN_MODULES += utils/build-utils/ds-to-spi/ds-to-spi-runtime
 MAVEN_MODULES += utils/build-utils/ds-to-spi/ds-to-spi-maven-plugin
-MAVEN_MODULES += utils/build-utils/pax-exam-helper
 MAVEN_MODULES += utils/build-utils/archetypes/basic-module
 MAVEN_MODULES += utils/xspec-maven-plugin/xspec-runner
 MAVEN_MODULES += utils/xspec-maven-plugin/xspec-maven-plugin
@@ -48,9 +47,7 @@ MAVEN_MODULES += framework/framework-persistence
 MAVEN_MODULES += framework/logging-appender
 MAVEN_MODULES += framework/modules-registry
 MAVEN_MODULES += framework/persistence-derby
-MAVEN_MODULES += framework/persistence-mysql
 MAVEN_MODULES += framework/webservice
-MAVEN_MODULES += framework/woodstox-osgi-adapter
 MAVEN_MODULES += framework/xproc-api
 MAVEN_MODULES += framework/pipeline1-adapter
 MAVEN_MODULES += modules/parent
@@ -160,7 +157,6 @@ poms : utils/build-utils/ds-to-spi/ds-to-spi-annotations/pom.xml
 poms : utils/build-utils/ds-to-spi/ds-to-spi-annotations-processor/pom.xml
 poms : utils/build-utils/ds-to-spi/ds-to-spi-runtime/pom.xml
 poms : utils/build-utils/ds-to-spi/ds-to-spi-maven-plugin/pom.xml
-poms : utils/build-utils/pax-exam-helper/pom.xml
 poms : utils/build-utils/archetypes/basic-module/pom.xml
 poms : utils/xspec-maven-plugin/xspec-runner/pom.xml
 poms : utils/xspec-maven-plugin/xspec-maven-plugin/pom.xml
@@ -189,9 +185,7 @@ poms : framework/framework-persistence/pom.xml
 poms : framework/logging-appender/pom.xml
 poms : framework/modules-registry/pom.xml
 poms : framework/persistence-derby/pom.xml
-poms : framework/persistence-mysql/pom.xml
 poms : framework/webservice/pom.xml
-poms : framework/woodstox-osgi-adapter/pom.xml
 poms : framework/xproc-api/pom.xml
 poms : framework/pipeline1-adapter/pom.xml
 poms : modules/parent/pom.xml
@@ -293,9 +287,7 @@ $(TARGET_DIR)/optimized/framework/bom/pom.xml : $(TARGET_DIR)/state/framework/fr
 $(TARGET_DIR)/optimized/framework/bom/pom.xml : $(TARGET_DIR)/state/framework/logging-appender/modified-since-release
 $(TARGET_DIR)/optimized/framework/bom/pom.xml : $(TARGET_DIR)/state/framework/modules-registry/modified-since-release
 $(TARGET_DIR)/optimized/framework/bom/pom.xml : $(TARGET_DIR)/state/framework/persistence-derby/modified-since-release
-$(TARGET_DIR)/optimized/framework/bom/pom.xml : $(TARGET_DIR)/state/framework/persistence-mysql/modified-since-release
 $(TARGET_DIR)/optimized/framework/bom/pom.xml : $(TARGET_DIR)/state/framework/webservice/modified-since-release
-$(TARGET_DIR)/optimized/framework/bom/pom.xml : $(TARGET_DIR)/state/framework/woodstox-osgi-adapter/modified-since-release
 $(TARGET_DIR)/optimized/framework/bom/pom.xml : $(TARGET_DIR)/state/framework/xproc-api/modified-since-release
 $(TARGET_DIR)/optimized/framework/bom/pom.xml : $(TARGET_DIR)/state/framework/pipeline1-adapter/modified-since-release
 $(TARGET_DIR)/optimized/modules/bom/pom.xml : $(TARGET_DIR)/state/modules/parent/modified-since-release
@@ -397,7 +389,6 @@ $(MY_DIR)/mk/maven.mk : utils/build-utils/ds-to-spi/ds-to-spi-annotations/pom.xm
 $(MY_DIR)/mk/maven.mk : utils/build-utils/ds-to-spi/ds-to-spi-annotations-processor/pom.xml
 $(MY_DIR)/mk/maven.mk : utils/build-utils/ds-to-spi/ds-to-spi-runtime/pom.xml
 $(MY_DIR)/mk/maven.mk : utils/build-utils/ds-to-spi/ds-to-spi-maven-plugin/pom.xml
-$(MY_DIR)/mk/maven.mk : utils/build-utils/pax-exam-helper/pom.xml
 $(MY_DIR)/mk/maven.mk : utils/build-utils/archetypes/basic-module/pom.xml
 $(MY_DIR)/mk/maven.mk : utils/xspec-maven-plugin/xspec-runner/pom.xml
 $(MY_DIR)/mk/maven.mk : utils/xspec-maven-plugin/xspec-maven-plugin/pom.xml
@@ -426,9 +417,7 @@ $(MY_DIR)/mk/maven.mk : framework/framework-persistence/pom.xml
 $(MY_DIR)/mk/maven.mk : framework/logging-appender/pom.xml
 $(MY_DIR)/mk/maven.mk : framework/modules-registry/pom.xml
 $(MY_DIR)/mk/maven.mk : framework/persistence-derby/pom.xml
-$(MY_DIR)/mk/maven.mk : framework/persistence-mysql/pom.xml
 $(MY_DIR)/mk/maven.mk : framework/webservice/pom.xml
-$(MY_DIR)/mk/maven.mk : framework/woodstox-osgi-adapter/pom.xml
 $(MY_DIR)/mk/maven.mk : framework/xproc-api/pom.xml
 $(MY_DIR)/mk/maven.mk : framework/pipeline1-adapter/pom.xml
 $(MY_DIR)/mk/maven.mk : modules/parent/pom.xml

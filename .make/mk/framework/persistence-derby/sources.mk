@@ -4,8 +4,6 @@ framework/persistence-derby/.test framework/persistence-derby/.install-doc : \
 	framework/persistence-derby/src/test/resources/logback.xml \
 	framework/persistence-derby/src/test/resources/script.xpl \
 	framework/persistence-derby/src/test/resources/META-INF/catalog.xml \
-	framework/persistence-derby/src/test/resources/OSGI-INF/script.xml \
-	framework/persistence-derby/src/test/resources/OSGI-INF/xproc-engine.xml \
 	framework/persistence-derby/src/test/resources/data/db/dbex.lck \
 	framework/persistence-derby/src/test/resources/data/db/db.lck \
 	framework/persistence-derby/src/test/resources/data/db/seg0/c6d1.dat \
@@ -137,7 +135,6 @@ framework/persistence-derby/.test framework/persistence-derby/.install-doc : \
 	framework/persistence-derby/src/test \
 	framework/persistence-derby/src/test/resources \
 	framework/persistence-derby/src/test/resources/META-INF \
-	framework/persistence-derby/src/test/resources/OSGI-INF \
 	framework/persistence-derby/src/test/resources/data \
 	framework/persistence-derby/src/test/resources/data/db \
 	framework/persistence-derby/src/test/resources/data/db/seg0 \

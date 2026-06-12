@@ -80,9 +80,6 @@ framework/framework-core/.test framework/framework-core/.install-doc : \
 	framework/framework-core/src/test/resources/test/1.txt \
 	framework/framework-core/src/test/resources/META-INF/catalog.xml \
 	framework/framework-core/src/test/resources/test.zip \
-	framework/framework-core/src/test/resources/OSGI-INF/script.xml \
-	framework/framework-core/src/test/resources/OSGI-INF/xproc-engine.xml \
-	framework/framework-core/src/test/resources/OSGI-INF/datatype.xml \
 	framework/framework-core/src/test/resources/datatype.xml \
 	framework/framework-core/src/test/java/MockXProcEngine.java \
 	framework/framework-core/src/test/java/org/daisy/pipeline/datatypes/ValidationResultTest.java \
@@ -115,7 +112,6 @@ framework/framework-core/.test framework/framework-core/.install-doc : \
 	framework/framework-core/src/test/resources/test \
 	framework/framework-core/src/test/resources/test/folder \
 	framework/framework-core/src/test/resources/META-INF \
-	framework/framework-core/src/test/resources/OSGI-INF \
 	framework/framework-core/src/test/java \
 	framework/framework-core/src/test/java/org \
 	framework/framework-core/src/test/java/org/daisy \

@@ -3,12 +3,12 @@ VERSION := 0-SNAPSHOT
 .SECONDARY : .install
 .install : \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/daisy/6-SNAPSHOT/daisy-6-SNAPSHOT.pom \
-	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/build/modules-test-helper/2.2.7-SNAPSHOT/modules-test-helper-2.2.7-SNAPSHOT.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/build/modules-build-helper/3.0.2-SNAPSHOT/modules-build-helper-3.0.2-SNAPSHOT.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/build/modules-test-helper/3.0.0-SNAPSHOT/modules-test-helper-3.0.0-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/ds-to-spi-annotations/1.0.1-SNAPSHOT/ds-to-spi-annotations-1.0.1-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/build/ds-to-spi-annotations-processor/1.1.5-SNAPSHOT/ds-to-spi-annotations-processor-1.1.5-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/ds-to-spi-runtime/1.2.2-SNAPSHOT/ds-to-spi-runtime-1.2.2-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/build/ds-to-spi-maven-plugin/1.1.6-SNAPSHOT/ds-to-spi-maven-plugin-1.1.6-SNAPSHOT.jar \
-	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/pax-exam-helper/2.5.2-SNAPSHOT/pax-exam-helper-2.5.2-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/archetypes/basic-module/1.0.0-SNAPSHOT/basic-module-1.0.0-SNAPSHOT.maven-archetype \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/maven/xspec-runner/1.0.6-SNAPSHOT/xspec-runner-1.0.6-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/maven/xspec-maven-plugin/1.0.2-SNAPSHOT/xspec-maven-plugin-1.0.2-SNAPSHOT.jar \
@@ -17,7 +17,6 @@ VERSION := 0-SNAPSHOT
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/maven/xproc-engine-calabash/1.2.1-SNAPSHOT/xproc-engine-calabash-1.2.1-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/maven/xprocspec-runner/1.2.9-SNAPSHOT/xprocspec-runner-1.2.9-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/maven/xproc-maven-plugin/1.0.4-SNAPSHOT/xproc-maven-plugin-1.0.4-SNAPSHOT.jar \
-	$(MVN_LOCAL_REPOSITORY)/org/daisy/bindings/jhyphen/1.0.5-SNAPSHOT/jhyphen-1.0.5-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/libs/jing/20151127.0.2-SNAPSHOT/jing-20151127.0.2-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/libs/jnaerator/0.11-p2-SNAPSHOT/jnaerator-0.11-p2-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/libs/parboiled/1.0.1-SNAPSHOT/parboiled-1.0.1-SNAPSHOT.jar \
@@ -36,9 +35,7 @@ VERSION := 0-SNAPSHOT
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/logging-appender/2.1.8-SNAPSHOT/logging-appender-2.1.8-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules-registry/5.0.2-SNAPSHOT/modules-registry-5.0.2-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/persistence-derby/2.0.12-SNAPSHOT/persistence-derby-2.0.12-SNAPSHOT.jar \
-	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/persistence-mysql/2.0.2-SNAPSHOT/persistence-mysql-2.0.2-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/webservice/4.0.1-SNAPSHOT/webservice-4.0.1-SNAPSHOT.jar \
-	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/woodstox-osgi-adapter/2.1.1-SNAPSHOT/woodstox-osgi-adapter-2.1.1-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/xproc-api/8.1.1-SNAPSHOT/xproc-api-8.1.1-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/pipeline1-adapter/1.1.3-SNAPSHOT/pipeline1-adapter-1.1.3-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-bom/1.15.5-SNAPSHOT/modules-bom-1.15.5-SNAPSHOT.pom \
@@ -139,8 +136,6 @@ $(TARGET_DIR)/state/last-tested : \
 	$(TARGET_DIR)/state/utils/xproc-maven-plugin/last-tested \
 	$(TARGET_DIR)/state/libs/jstyleparser/last-tested \
 	$(TARGET_DIR)/state/libs/braille-css/last-tested \
-	$(TARGET_DIR)/state/libs/liblouis-java/last-tested \
-	$(TARGET_DIR)/state/libs/jhyphen/last-tested \
 	$(TARGET_DIR)/state/libs/osgi-libs/last-tested \
 	$(TARGET_DIR)/state/framework/last-tested \
 	$(TARGET_DIR)/state/modules/last-tested \

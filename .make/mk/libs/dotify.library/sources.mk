@@ -1146,6 +1146,7 @@ libs/dotify.library/.test : \
 	libs/dotify.library/integrationtest/org/daisy/dotify/formatter/test/resource-files/volume-break/volume-breaks-advanced4-expected.pef \
 	libs/dotify.library/integrationtest/org/daisy/dotify/formatter/test/resource-files/volume-break/volume-breaks1-input.obfl \
 	libs/dotify.library/integrationtest/org/daisy/dotify/formatter/test/resource-files/volume-break/volume-breaks-advanced-input.obfl \
+	libs/dotify.library/integrationtest/org/daisy/dotify/formatter/test/resource-files/volume-break/pad-with-empty-sheets-expected.pef \
 	libs/dotify.library/integrationtest/org/daisy/dotify/formatter/test/resource-files/volume-break/display-when-starts-at-top-of-page-inside-volume-transition-input.obfl \
 	libs/dotify.library/integrationtest/org/daisy/dotify/formatter/test/resource-files/volume-break/volume-breaks-keep-next-input.obfl \
 	libs/dotify.library/integrationtest/org/daisy/dotify/formatter/test/resource-files/volume-break/volume-breaks-uneven-input.obfl \
@@ -1161,6 +1162,7 @@ libs/dotify.library/.test : \
 	libs/dotify.library/integrationtest/org/daisy/dotify/formatter/test/resource-files/volume-break/volume-breaks1-expected.pef \
 	libs/dotify.library/integrationtest/org/daisy/dotify/formatter/test/resource-files/volume-break/volume-breaks-priority3-expected.pef \
 	libs/dotify.library/integrationtest/org/daisy/dotify/formatter/test/resource-files/volume-break/volume-breaks-keep-previous-input.obfl \
+	libs/dotify.library/integrationtest/org/daisy/dotify/formatter/test/resource-files/volume-break/pad-with-empty-sheets-input.obfl \
 	libs/dotify.library/integrationtest/org/daisy/dotify/formatter/test/resource-files/volume-break/volume-breaks-advanced-expected.pef \
 	libs/dotify.library/integrationtest/org/daisy/dotify/formatter/test/resource-files/volume-break/volume-breaks-priority2-expected.pef \
 	libs/dotify.library/integrationtest/org/daisy/dotify/formatter/test/resource-files/keep-input.obfl \

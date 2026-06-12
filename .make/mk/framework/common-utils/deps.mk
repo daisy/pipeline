@@ -6,7 +6,9 @@ $(TARGET_DIR)/state/framework/common-utils/last-tested : $(TARGET_DIR)/state/%/l
 # this rule overrides the implicit rule in main.mk
 # note that because the modified-since-release_ files created by main.mk, are deleted,
 # this rule gets executed at least once
-$(TARGET_DIR)/state/framework/common-utils/modified-since-release_ : framework/common-utils/pom.xml $(TARGET_DIR)/state/framework/parent/modified-since-release
+$(TARGET_DIR)/state/framework/common-utils/modified-since-release_ : framework/common-utils/pom.xml \
+	$(TARGET_DIR)/state/framework/parent/modified-since-release \
+	$(TARGET_DIR)/state/utils/build-utils/modules-test-helper/modified-since-release
 	mkdirs("$(dir $@)"); \
 	try (OutputStream s = new FileOutputStream("$@")) { \
 		ModificationType modified = isModifiedSinceLastRelease(new File("$<").getParentFile()); \
@@ -55,7 +57,7 @@ framework/common-utils/.install-doc : %/.install-doc : %/pom.xml | %/.compile-de
 
 .SECONDARY : framework/common-utils/.compile-dependencies framework/common-utils/.test-dependencies
 framework/common-utils/.compile-dependencies : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/framework-parent/1.15.7-SNAPSHOT/framework-parent-1.15.7-SNAPSHOT.pom
-framework/common-utils/.test-dependencies :
+framework/common-utils/.test-dependencies : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/build/modules-test-helper/3.0.0-SNAPSHOT/modules-test-helper-3.0.0-SNAPSHOT.jar
 
 $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/common-utils/6.6.1/common-utils-6.6.1.% \
 $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/common-utils/6.6.1/common-utils-6.6.1-% : framework/common-utils/.release
@@ -65,7 +67,9 @@ $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/common-utils/6.6.1/common-utils-6.6.1
 framework/common-utils/.release : framework/.release
 	+$(EVAL) mvn.releaseModulesInDir("framework").apply("common-utils");
 
-framework/common-utils/.release : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/framework-parent/1.15.7/framework-parent-1.15.7.pom
+framework/common-utils/.release : \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/framework-parent/1.15.7/framework-parent-1.15.7.pom \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/build/modules-test-helper/3.0.0/modules-test-helper-3.0.0.jar
 
 clean : framework/common-utils/.clean
 .PHONY : framework/common-utils/.clean

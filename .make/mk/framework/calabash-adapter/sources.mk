@@ -37,9 +37,6 @@ framework/calabash-adapter/.test framework/calabash-adapter/.install-doc : \
 	framework/calabash-adapter/src/test/resources/module/xproc-error.xpl \
 	framework/calabash-adapter/src/test/resources/module/java-step-runtime-error.xpl \
 	framework/calabash-adapter/src/test/resources/META-INF/catalog.xml \
-	framework/calabash-adapter/src/test/resources/OSGI-INF/java-function.xml \
-	framework/calabash-adapter/src/test/resources/OSGI-INF/script.xml \
-	framework/calabash-adapter/src/test/resources/OSGI-INF/java-step.xml \
 	framework/calabash-adapter/src/test/resources/step.xpl \
 	framework/calabash-adapter/src/test/java/ignore \
 	framework/calabash-adapter/src/test/java/FrameworkCoreTest.java \
@@ -53,7 +50,6 @@ framework/calabash-adapter/.test framework/calabash-adapter/.install-doc : \
 	framework/calabash-adapter/src/test/resources \
 	framework/calabash-adapter/src/test/resources/module \
 	framework/calabash-adapter/src/test/resources/META-INF \
-	framework/calabash-adapter/src/test/resources/OSGI-INF \
 	framework/calabash-adapter/src/test/java \
 	framework/calabash-adapter/src/main \
 	framework/calabash-adapter/src/main/java \
