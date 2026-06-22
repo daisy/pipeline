@@ -44,9 +44,9 @@ contained in a directory.</p>
         </p:documentation>
     </p:option>
 
-    <p:input port="metadata" sequence="true" px:media-type="application/xml">
-        <p:empty/>
-    </p:input>
+    <!-- <p:input port="metadata" sequence="true" px:media-type="application/xml"> -->
+    <!--     <p:empty/> -->
+    <!-- </p:input> -->
 
     <p:option name="attach-stylesheet" required="false" px:type="anyFileURI" select="''" px:sequence="true" px:separator=" "
               px:reusable="false" px:media-type="text/css text/x-scss">
