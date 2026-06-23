@@ -2,6 +2,9 @@ package org.daisy.pipeline.mathml.tts.saxon.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -16,6 +19,7 @@ import com.xmlcalabash.core.XProcRuntime;
 import net.sf.saxon.lib.ExtensionFunctionDefinition;
 
 import org.daisy.common.transform.InputValue;
+import org.daisy.common.transform.Mult;
 import org.daisy.common.transform.SingleInSingleOutXMLTransformer;
 import org.daisy.common.transform.XMLInputValue;
 import org.daisy.common.transform.XMLOutputValue;
@@ -31,6 +35,9 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Component(
 	name = "pf:mathml-to-ssml",
@@ -80,42 +87,58 @@ public class MathMLToSSMLFunctionProvider implements ExtensionFunctionProvider {
 		private final XProcRuntime runtime;
 		private final XProcMonitor monitor;
 		private final Map<String,String> properties;
+		private final List<TTSInputProcessor> mathmlProcessorChain;
 
 		private MathMLToSSML(XProcRuntime runtime, XProcMonitor monitor, Map<String,String> properties) {
 			this.runtime = runtime;
 			this.monitor = monitor;
 			this.properties = properties;
+			this.mathmlProcessorChain = new ArrayList<>(); {
+				for (TTSInputProcessor p : processors)
+					if (p.supportsInputMediaType(MIME_MATHML))
+						mathmlProcessorChain.add(p.forInputMediaType(MIME_MATHML));
+				Collections.sort(mathmlProcessorChain,
+				                 Comparator.comparingInt(TTSInputProcessor::getPriority)
+				                           .reversed());
+			}
 		}
 
 		public void transform(XMLInputValue<?> mathml, XMLOutputValue<?> ssml, Locale language) {
-			mathml = mathml.ensureSingleItem();
-			TTSInputProcessor processor = null; {
-				for (TTSInputProcessor p : processors)
-					if (p.supportsInputMediaType(MIME_MATHML)
-					    && (processor == null || p.getPriority() > processor.getPriority()))
-						processor = p.forInputMediaType(MIME_MATHML);
-			}
-			if (processor != null) {
+			Mult<? extends XMLInputValue<?>> mmlCopies = mathml.ensureSingleItem().mult(mathmlProcessorChain.size());
+			Iterator<TTSInputProcessor> pp = mathmlProcessorChain.iterator();
+			if (!pp.hasNext())
+				throw new UnsupportedOperationException("No MathML to SSML processor found");
+			while (pp.hasNext()) {
+				TTSInputProcessor p = pp.next();
 				SingleInSingleOutXMLTransformer transformer = null; {
-					if (processor instanceof XProcStepProvider) {
+					if (p instanceof XProcStepProvider) {
 						if (runtime != null)
 							transformer = SingleInSingleOutXMLTransformer.from(
-								((XProcStepProvider)processor).newStep(runtime, null, monitor, properties));
-					} else if (processor instanceof XMLTransformer)
-						transformer = SingleInSingleOutXMLTransformer.from((XMLTransformer)processor);
+								((XProcStepProvider)p).newStep(runtime, null, monitor, properties));
+					} else if (p instanceof XMLTransformer)
+						transformer = SingleInSingleOutXMLTransformer.from((XMLTransformer)p);
 					else
 						; // should not happen
 				}
 				if (transformer != null) {
-					transformer.transform(
-						mathml,
-						ssml,
-						new InputValue<>(ImmutableMap.of(new QName("language"), new InputValue<>(language)))
-					).run();
-					return;
+					try {
+						transformer.transform(
+							mmlCopies.get(),
+							ssml,
+							new InputValue<>(ImmutableMap.of(new QName("language"), new InputValue<>(language)))
+						).run();
+						return;
+					} catch (Throwable e) {
+						logger.warn(p.getDisplayName() + " failed to process MathML. (Please see detailed log for more info.)");
+						logger.debug("Error stack trace:", e);
+						if (pp.hasNext())
+							logger.warn("Processing MathML with fallback...");
+					}
 				}
 			}
-			throw new UnsupportedOperationException("No MathML to SSML processor found");
+			throw new UnsupportedOperationException("MathML could not be converted to SSML");
 		}
 	}
+
+	private final static Logger logger = LoggerFactory.getLogger(MathMLToSSMLFunctionProvider.class);
 }

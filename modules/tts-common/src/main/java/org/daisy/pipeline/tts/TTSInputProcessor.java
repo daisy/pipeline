@@ -31,6 +31,10 @@ public interface TTSInputProcessor {
 
 	public TTSInputProcessor forInputMediaType(String mediaType) throws UnsupportedOperationException;
 
+	public default String getDisplayName() {
+		return getClass().getSimpleName();
+	}
+
 	/**
 	 * Priority of this processor compared to other processors (that supports a given media type).
 	 */

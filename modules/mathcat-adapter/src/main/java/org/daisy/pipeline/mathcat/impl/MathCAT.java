@@ -106,6 +106,11 @@ public class MathCAT extends SingleInSingleOutXMLTransformer implements TTSInput
 	}
 
 	@Override
+	public String getDisplayName() {
+		return "MathCAT";
+	}
+
+	@Override
 	public int getPriority() {
 		return 10;
 	}
@@ -131,7 +136,8 @@ public class MathCAT extends SingleInSingleOutXMLTransformer implements TTSInput
 		};
 	}
 
-	private void transform(XMLInputValue<?> source, XMLOutputValue<?> result, Map<QName,InputValue<?>> params) throws TransformerException {
+	private void transform(XMLInputValue<?> source, XMLOutputValue<?> result, Map<QName,InputValue<?>> params)
+			throws TransformerException {
 		try {
 			source = source.ensureSingleItem();
 			Locale language = params != null ? TTSInputProcessor.getLanguage(params).orElse(null) : null;
@@ -142,43 +148,52 @@ public class MathCAT extends SingleInSingleOutXMLTransformer implements TTSInput
 			source = buf.asInput();
 			Node mathmlNode = source.asNodeIterator().next();
 			String mathml = serializeXML(mathmlNode);
-			if (brailleCode != null) {
-				String braille = mathCAT(m -> {
-						m.setRulesDir(rulesDir.getAbsolutePath());
-						m.setMathml(mathml);
-						m.setPreference("BrailleCode", brailleCode);
-						if (language != null)
-							m.setPreference("Language", language.toLanguageTag());
-						return m.getBraille("");
+			try {
+				if (brailleCode != null) {
+					String mml = mathml;
+					String braille = mathCAT(m -> {
+							m.setRulesDir(rulesDir.getAbsolutePath());
+							m.setMathml(mathml);
+							m.setPreference("BrailleCode", brailleCode);
+							if (language != null)
+								m.setPreference("Language", language.toLanguageTag());
+							return m.getBraille("");
+						}
+					);
+					try (BaseURIAwareXMLStreamWriter writer = result.asXMLStreamWriter()) {
+						writer.setBaseURI(URI.create(mathmlNode.getBaseURI()));
+						writer.writeStartDocument();
+						XMLStreamWriterHelper.writeStartElement(writer, new QName("http://www.w3.org/ns/xproc-step", "result", "c"));
+						writer.writeCharacters(braille);
+						writer.writeEndElement();
+						writer.writeEndDocument();
+					} catch (XMLStreamException e) {
+						throw new TransformerException(e);
 					}
-				);
-				try (BaseURIAwareXMLStreamWriter writer = result.asXMLStreamWriter()) {
-					writer.setBaseURI(URI.create(mathmlNode.getBaseURI()));
-					writer.writeStartDocument();
-					XMLStreamWriterHelper.writeStartElement(writer, new QName("http://www.w3.org/ns/xproc-step", "result", "c"));
-					writer.writeCharacters(braille);
-					writer.writeEndElement();
-					writer.writeEndDocument();
-				} catch (XMLStreamException e) {
-					throw new TransformerException(e);
+				} else {
+					String ssml = mathCAT(m -> {
+							m.setRulesDir(rulesDir.getAbsolutePath());
+							m.setMathml(mathml);
+							m.setPreference("TTS", "SSML");
+							m.setPreference("SpeechStyle", "ClearSpeak");
+							m.setPreference("Verbosity", "Verbose");
+							if (language != null)
+								m.setPreference("Language", language.toLanguageTag());
+							return m.getSpokenText();
+						}
+					);
+					ssml = "<speak xmlns=\"http://www.w3.org/2001/10/synthesis\""
+						+ " version=\"1.1\""
+						+ ">" + ssml + "</speak>";
+					Node ssmlNode = parseXML(ssml, mathmlNode.getBaseURI());
+					result.asNodeConsumer().accept(ssmlNode);
 				}
-			} else {
-				String ssml = mathCAT(m -> {
-						m.setRulesDir(rulesDir.getAbsolutePath());
-						m.setMathml(mathml);
-						m.setPreference("TTS", "SSML");
-						m.setPreference("SpeechStyle", "ClearSpeak");
-						m.setPreference("Verbosity", "Verbose");
-						if (language != null)
-							m.setPreference("Language", language.toLanguageTag());
-						return m.getSpokenText();
-					}
-				);
-				ssml = "<speak xmlns=\"http://www.w3.org/2001/10/synthesis\""
-					+ " version=\"1.1\""
-					+ ">" + ssml + "</speak>";
-				Node ssmlNode = parseXML(ssml, mathmlNode.getBaseURI());
-				result.asNodeConsumer().accept(ssmlNode);
+			} catch (Throwable e) {
+				throw new RuntimeException(
+					String.format("Failed to convert MathML to %s: %s",
+					              brailleCode != null ? "braille" : "SSML",
+					              mathml),
+					e);
 			}
 		} catch (Throwable e) {
 			throw new TransformerException(e);
