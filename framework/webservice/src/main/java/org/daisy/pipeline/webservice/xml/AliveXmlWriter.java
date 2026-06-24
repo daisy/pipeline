@@ -6,6 +6,8 @@ import java.io.IOException;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.daisy.common.properties.Properties;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +43,7 @@ public class AliveXmlWriter {
 
 	private static String getVersion() {
 		if (version == null) {
-			String home = org.daisy.common.properties.Properties.getProperty("org.daisy.pipeline.home");
+			String home = Properties.getGlobalProperty("org.daisy.pipeline.home");
 			if (home != null) {
 				// pipeline-assembly is responsible for placing the file at this location
 				File releaseDescriptor = new File(home + "/etc/releaseDescriptor.xml");

@@ -35,7 +35,6 @@ import net.sf.saxon.s9api.XdmItem;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.XdmValue;
 
-import org.daisy.common.properties.Properties;
 import org.daisy.common.saxon.SaxonHelper;
 import org.daisy.common.saxon.SaxonInputValue;
 import org.daisy.common.xproc.XProcError;
@@ -73,8 +72,7 @@ public class CalabashXProcPipeline implements XProcPipeline {
 	private final XProcRuntimeFactory runtimeFactory;
 	private final EntityResolver entityResolver;
 
-	private final boolean AUTO_NAME_STEPS = Boolean.parseBoolean(
-		Properties.getProperty("org.daisy.pipeline.calabash.autonamesteps", "false"));
+	private final boolean AUTO_NAME_STEPS = Boolean.getBoolean("org.daisy.pipeline.calabash.autonamesteps");
 
 	/** Suplies the current Pipeline info for this pipeline object */
 	private final Supplier<XProcPipelineInfo> info = Suppliers.memoize(
@@ -136,7 +134,7 @@ public class CalabashXProcPipeline implements XProcPipeline {
 
 	@Override
 	public XProcResult run(XProcInput data) throws XProcErrorException {
-		return run(data, null, null);
+		return run(data, null, (Map<String,String>)null);
 	}
 
 	@Override
@@ -156,13 +154,9 @@ public class CalabashXProcPipeline implements XProcPipeline {
 					new XProcSystemPropertySet() {
 						@Override
 						public String systemProperty(XProcRuntime runtime, net.sf.saxon.s9api.QName propertyName) throws XProcException {
-							if ("http://www.daisy.org/ns/pipeline/data".equals(propertyName.getNamespaceURI())) {
-								String p = propertyName.getLocalName();
-								String v = properties.get(p);
-								if (v == null) // if property not settable
-									v = Properties.getProperty(p);
-								return v;
-							} else
+							if ("http://www.daisy.org/ns/pipeline/data".equals(propertyName.getNamespaceURI()))
+								return properties.get(propertyName.getLocalName());
+							else
 								return null; }});
 			// bind inputs
 			for (String name : pipeline.xpipe.getInputs()) {

@@ -36,11 +36,11 @@ public class DerbyEntityManagerFactory extends ForwardingEntityManagerFactory {
 		} catch (Exception e) {
 			throw new IllegalStateException("'org.daisy.pipeline.data' property is not set, can not create DerbyEntityManagerFactory", e);
 		}
-		DERBY_DB_URL = "jdbc:derby:" + Properties.getProperty("org.daisy.pipeline.data") + "/db;create=true";
+		DERBY_DB_URL = "jdbc:derby:" + Properties.getGlobalProperty("org.daisy.pipeline.data") + "/db;create=true";
 		props.put(JAVAX_PERSISTENCE_JDBC_DRIVER, DERBY_JDBC_DRIVER);
 		props.put(JAVAX_PERSISTENCE_JDBC_URL, DERBY_DB_URL);
 		logger.debug(DERBY_DB_URL);
-		String logfile = Properties.getProperty("org.daisy.pipeline.data") + "/log/derby.log";
+		String logfile = Properties.getGlobalProperty("org.daisy.pipeline.data") + "/log/derby.log";
 		new File(logfile).getParentFile().mkdirs();
 		System.setProperty("derby.stream.error.file", logfile);
 		logger.info("Writing Derby log messages to " + logfile);

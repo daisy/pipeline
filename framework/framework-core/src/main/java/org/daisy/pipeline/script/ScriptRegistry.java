@@ -13,7 +13,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeoutException;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
@@ -42,23 +41,39 @@ public class ScriptRegistry {
 
 	private static final Logger logger = LoggerFactory.getLogger(ScriptRegistry.class);
 
+	private final boolean dynamic;
+	private Iterable<ScriptService<?>> staticScripts = null;
 	private final ConcurrentMap<String,ScriptService<?>> scripts = new ConcurrentHashMap<>();
 	private final AtomicReference<Future<Boolean>> updated = new AtomicReference<>();
 
 	public ScriptRegistry() {
+		this(false);
+	}
+
+	/**
+	 * @param dynamic Whether the list of scripts is dynamic (recomputed every time) or not.
+	 */
+	protected ScriptRegistry(boolean dynamic) {
+		this.dynamic = dynamic;
 	}
 
 	private synchronized Future<Boolean> update() {
 		return updated.updateAndGet(
 			prev -> {
-				if (prev != null && !prev.isDone())
+				if (prev != null && (!dynamic || !prev.isDone()))
 					return prev;
-				if (prev == null)
-					// this code is called only once
-					for (ScriptService<?> script : SPIHelper.getScripts())
-						registerScriptIfNew(script);
-				List<ScriptServiceProvider> nextScriptProviders
-					= Lists.newArrayList(SPIHelper.getScriptProviders());
+				if (dynamic)
+					scripts.clear();
+				if (prev == null || dynamic) {
+					synchronized (this) {
+						// even if the list of scripts is dynamic, there is a static part that is never recomputed
+						if (staticScripts == null)
+							staticScripts = ImmutableList.copyOf(SPIHelper.getScripts());
+					}
+					for (ScriptService<?> script : staticScripts)
+						registerScript(script);
+				}
+				List<ScriptServiceProvider> nextScriptProviders = Lists.newArrayList(getScriptProviders());
 				if (nextScriptProviders.size() == 0)
 					return CompletableFuture.completedFuture(true);
 				else {
@@ -78,7 +93,7 @@ public class ScriptRegistry {
 										if (updated.isCancelled())
 											return;
 										else
-											registerScriptIfNew(script);
+											registerScript(script);
 									if (remaining.decrementAndGet() == 0)
 										updated.complete(true);
 									return;
@@ -118,7 +133,7 @@ public class ScriptRegistry {
 	 * Get the script looking it up by its ID
 	 */
 	// note that this method may be called from ScriptServiceProvider.getScripts(), from one of
-	// the threads created in init()
+	// the threads created in update()
 	public ScriptService<?> getScript(String name) {
 		ScriptService<?> script = scripts.get(name);
 		if (script != null)
@@ -136,7 +151,7 @@ public class ScriptRegistry {
 				break;
 			}
 		} while (!(updated.isDone() || updated.isCancelled()));
-		// try one last time just in case registerScriptIfNew() was called from another thread at a
+		// try one last time just in case registerScript() was called from another thread at a
 		// bad time
 		script = scripts.get(name);
 		if (script == null)
@@ -144,19 +159,23 @@ public class ScriptRegistry {
 		return script;
 	}
 
-	/*
-	 * Script list can grow dynamically, but no scripts are ever removed or replaced
-	 */
-	private void registerScriptIfNew(ScriptService<?> script) {
+	private void registerScript(ScriptService<?> script) {
 		scripts.computeIfAbsent(
 			script.getId(),
 			id -> {
 				logger.debug("Registering script {}", id);
-				if (script instanceof XProcScriptService)
+				if (script instanceof XProcScriptService) {
+					if (parser == null)
+						throw new IllegalStateException("no StaxXProcScriptParser set");
 					((XProcScriptService) script).setParser(parser);
+				}
 				return script;
 			}
 		);
+	}
+
+	protected Iterable<ScriptServiceProvider> getScriptProviders() {
+		return SPIHelper.getScriptProviders();
 	}
 
 	/**

@@ -17,7 +17,6 @@ import com.google.common.base.Supplier;
 
 import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.messaging.MessageBus;
-import org.daisy.common.properties.Properties;
 import org.daisy.common.transform.LazySaxResultProvider;
 import org.daisy.common.transform.LazySaxSourceProvider;
 import org.daisy.common.xproc.XProcEngine;
@@ -45,14 +44,11 @@ public class DaisyPipeline2 implements org.daisy.maven.xproc.api.XProcEngine {
 	private static Level messagesThreshold;
 	static {
 		try {
-			messagesThreshold = Level.valueOf(
-				Properties.getProperty("org.daisy.pipeline.log.level", "INFO"));
+			messagesThreshold = Level.valueOf(System.getProperty("org.daisy.pipeline.log.level", "INFO"));
 		} catch (IllegalArgumentException e) {
 			messagesThreshold = Level.INFO;
 		}
 	}
-	private final boolean AUTO_NAME_STEPS = Boolean.parseBoolean(
-		Properties.getProperty("org.daisy.pipeline.calabash.autonamesteps", "false"));
 	
 	@Reference(
 		name = "XProcEngine",
@@ -116,7 +112,7 @@ public class DaisyPipeline2 implements org.daisy.maven.xproc.api.XProcEngine {
 					MessageBus messageBus = new MessageBus(jobId, messagesThreshold);
 					MessageEventListener listener = new MessageEventListener(messageBus);
 					try {
-						results = xprocPipeline.run(inputBuilder.build(), () -> messageBus, Properties.getSnapshot());
+						results = xprocPipeline.run(inputBuilder.build(), () -> messageBus, System.getProperties());
 						// store messages XML
 						try {
 							Class.forName("org.daisy.pipeline.webservice.xml.JobXmlWriter");

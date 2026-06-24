@@ -5,8 +5,9 @@ import java.util.Optional;
 
 import org.daisy.common.properties.Properties;
 import org.daisy.common.properties.Properties.SettableProperty;
+import org.daisy.pipeline.webservice.Routes;
 import org.daisy.pipeline.webservice.request.PropertyRequest;
-import org.daisy.pipeline.webservice.restlet.AdminResource;
+import org.daisy.pipeline.webservice.restlet.AuthenticatedResource;
 import org.daisy.pipeline.webservice.xml.PropertyXmlWriter;
 import org.daisy.pipeline.webservice.xml.XmlUtils;
 
@@ -20,7 +21,7 @@ import org.restlet.resource.Put;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PropertyResource extends AdminResource {
+public class PropertyResource extends AuthenticatedResource {
 
 	private static Logger logger = LoggerFactory.getLogger(PropertyResource.class.getName());
 	private Optional<SettableProperty> property;
@@ -28,7 +29,7 @@ public class PropertyResource extends AdminResource {
 	@Override
 	public void doInit() {
 		super.doInit();
-		if (!isAuthorized()) {
+		if (!isAuthenticated()) {
 			setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
 			return;
 		}
@@ -47,7 +48,7 @@ public class PropertyResource extends AdminResource {
 	public Representation getResource() {
 		logRequest();
 		maybeEnableCORS();
-		if (!isAuthorized()) {
+		if (!isAuthenticated()) {
 			setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
 			return null;
 		}
@@ -55,26 +56,37 @@ public class PropertyResource extends AdminResource {
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
 			return this.getErrorRepresentation("Property not found");
 		}
-		PropertyXmlWriter writer = new PropertyXmlWriter(property.get(), getRequest().getRootRef().toString(), false);
+		if (!property.get().isClientLevel()) {
+			setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
+			return getErrorRepresentation("Property not settable by non-admin clients");
+		}
+		PropertyXmlWriter writer = new PropertyXmlWriter(
+			property.get(), getClient(), getRequest().getRootRef().toString(), Routes.PROPERTY_ROUTE, false);
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, writer.getXmlDocument());
 		setStatus(Status.SUCCESS_OK);
 		if (logger.isDebugEnabled())
 			logger.debug(
 				XmlUtils.nodeToString(
-					new PropertyXmlWriter(property.get(), getRequest().getRootRef().toString(), true).getXmlDocument()));
+					new PropertyXmlWriter(
+						property.get(), getClient(), getRequest().getRootRef().toString(), Routes.PROPERTY_ROUTE, true
+					).getXmlDocument()));
 		return dom;
 	}
 
 	@Put
 	public Representation putResource(Representation representation) {
 		logRequest();
-		if (!isAuthorized()) {
+		if (!isAuthenticated()) {
 			setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
 			return null;
 		}
 		if (!property.isPresent()) {
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-			return this.getErrorRepresentation("Property not found");
+			return getErrorRepresentation("Property not found");
+		}
+		if (!property.get().isClientLevel()) {
+			setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
+			return getErrorRepresentation("Property not settable by non-admin clients");
 		}
 		String name = property.get().getName();
 		PropertyRequest req; {
@@ -101,13 +113,16 @@ public class PropertyResource extends AdminResource {
 			}
 		}
 		property.get().setValue(req.getValue());
-		PropertyXmlWriter writer = new PropertyXmlWriter(property.get(), getRequest().getRootRef().toString(), false);
+		PropertyXmlWriter writer = new PropertyXmlWriter(
+			property.get(), getClient(), getRequest().getRootRef().toString(), Routes.PROPERTY_ROUTE, false);
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, writer.getXmlDocument());
 		setStatus(Status.SUCCESS_OK);
 		if (logger.isDebugEnabled())
 			logger.debug(
 				XmlUtils.nodeToString(
-					new PropertyXmlWriter(property.get(), getRequest().getRootRef().toString(), true).getXmlDocument()));
+					new PropertyXmlWriter(
+						property.get(), getClient(), getRequest().getRootRef().toString(), Routes.PROPERTY_ROUTE, true
+					).getXmlDocument()));
 		return dom;
 	}
 }

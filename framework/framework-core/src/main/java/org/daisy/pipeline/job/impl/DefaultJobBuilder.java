@@ -107,7 +107,10 @@ public class DefaultJobBuilder implements JobManager.JobBuilder {
 					                            // systemId of ScriptInput are persisted
 				File contextDir = IOHelper.makeDirs(JobURIUtils.getJobContextDir(id.toString()));
 				input = input.storeToDisk(contextDir);
-				properties = Properties.getSnapshot();
+				properties = (client != null
+				                  ? Properties.getProperties(client.getId())
+				                  : Properties.getGlobalProperties()
+				             ).getSnapshot();
 				Level messagesThreshold; {
 					try {
 						messagesThreshold = Level.valueOf(logLevelProperty.getValue(properties));

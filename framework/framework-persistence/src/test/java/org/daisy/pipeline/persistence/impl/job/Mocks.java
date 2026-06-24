@@ -122,7 +122,7 @@ public class Mocks   {
 
 	public static XProcScript buildScript(){
 		XProcScript.Builder builder = new XProcScript.Builder(Mocks.scriptId, "", URI.create(Mocks.scriptUri),
-		                                                      null, null, null);
+		                                                      null, null, null, null);
 		builder = builder.withInputPort(XProcPortInfo.newInputPort("source", true, false, true),
 		                                new XProcPortMetadata("", "", ""));
 		builder = builder.withOutputPort(XProcPortInfo.newOutputPort(portResult, true, true),

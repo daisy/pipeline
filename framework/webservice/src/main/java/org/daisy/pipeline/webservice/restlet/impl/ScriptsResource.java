@@ -2,7 +2,9 @@ package org.daisy.pipeline.webservice.restlet.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import org.daisy.common.properties.Properties;
 import org.daisy.pipeline.script.Script;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.ScriptService;
@@ -39,9 +41,10 @@ public class ScriptsResource extends AuthenticatedResource {
 		}
 		ScriptRegistry scriptRegistry = getScriptRegistry();
 		scripts = new ArrayList<Script>();
+		Map<String,String> props = Properties.getProperties(getClient().getId()).getSnapshot();
 		for (ScriptService<?> script : scriptRegistry.getScripts()) {
 			try {
-				scripts.add(script.load());
+				scripts.add(script.load(props));
 			} catch (Throwable e) {
 				// skip script instead of failing to respond to request
 				logger.debug("Failed to load script", e);
@@ -59,16 +62,14 @@ public class ScriptsResource extends AuthenticatedResource {
 		logRequest();
 		maybeEnableCORS();
 		if (!isAuthenticated()) {
-    		setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
-    		return null;
-    	}		
-		
+			setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
+			return null;
+		}
 		this.setStatus(Status.SUCCESS_OK);
 		ScriptsXmlWriter writer = new ScriptsXmlWriter(scripts, getRequest().getRootRef().toString());
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
 				writer.getXmlDocument());
 		logResponse(dom);
 		return dom;
-
 	}
 }

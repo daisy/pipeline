@@ -1,5 +1,6 @@
 package org.daisy.pipeline.webservice.xml;
 
+import org.daisy.common.messaging.Message.Level;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobQueue;
 import org.daisy.pipeline.webservice.Routes;
@@ -15,11 +16,12 @@ import org.w3c.dom.Element;
 public class JobsXmlWriter {
 	
 	private final String baseUrl;
+	private final String route;
 	private final String notificationBaseUrl;
 	private final Iterable<? extends Job> jobs;
 	private final JobQueue queue;
 	private static Logger logger = LoggerFactory.getLogger(JobsXmlWriter.class.getName());
-        private boolean localPaths=false; 
+	private boolean localPaths = false;
 
 	/**
 	 * @param baseUrl Prefix to be included at the beginning of <code>href</code>
@@ -33,10 +35,16 @@ public class JobsXmlWriter {
 	public JobsXmlWriter(Iterable<? extends Job> jobs, JobQueue queue, String baseUrl) {
 		this(jobs, queue, baseUrl, null);
 	}
+
 	public JobsXmlWriter(Iterable<? extends Job> jobs, JobQueue queue, String baseUrl, String notificationBaseUrl) {
+		this(jobs, queue, baseUrl, notificationBaseUrl, Routes.JOBS_ROUTE);
+	}
+
+	public JobsXmlWriter(Iterable<? extends Job> jobs, JobQueue queue, String baseUrl, String notificationBaseUrl, String route) {
 		this.jobs = jobs;
 		this.queue = queue;
 		this.baseUrl = baseUrl;
+		this.route = route;
 		this.notificationBaseUrl = notificationBaseUrl;
 	}
 
@@ -52,10 +60,10 @@ public class JobsXmlWriter {
 	private Document jobsToXml(Iterable<? extends Job> jobs) {
 		Document doc = XmlUtils.createDom("jobs");
 		Element jobsElm = doc.getDocumentElement();
-		jobsElm.setAttribute("href", baseUrl + Routes.JOBS_ROUTE);
+		jobsElm.setAttribute("href", baseUrl + route);
 		
 		for (Job job : jobs) {
-			JobXmlWriter writer = new JobXmlWriter(job, baseUrl, notificationBaseUrl);
+			JobXmlWriter writer = new JobXmlWriter(job, Level.TRACE, baseUrl, notificationBaseUrl, route + "/{id}");
                         writer.withFullResults(true);
                         writer.withOnlyPrimaries(true);
                         writer.withNotificationsAttribute();

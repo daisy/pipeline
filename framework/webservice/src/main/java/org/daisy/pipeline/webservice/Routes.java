@@ -8,13 +8,13 @@ public class Routes {
 	/** The logger. */
 	private static Logger logger = LoggerFactory.getLogger(Routes.class.getName());
 
+	public static final String ALIVE_ROUTE = "/alive";
 	public static final String SCRIPTS_ROUTE = "/scripts";
 	public static final String SCRIPT_ROUTE = "/scripts/{id}";
 	public static final String JOBS_ROUTE = "/jobs";
 	public static final String JOB_ROUTE = "/jobs/{id}";
 	public static final String LOG_ROUTE = "/jobs/{id}/log";
 	public static final String JOB_CONF_ROUTE = "/jobs/{id}/configuration";
-	public static final String ALIVE_ROUTE = "/alive";
 	public static final String RESULT_ROUTE = "/jobs/{id}/result";
 	public static final String RESULT_OPTION_ROUTE = "/jobs/{id}/result/option/{name}";               // kept for backward compatibility (but will result in error)
 	public static final String RESULT_OPTION_ROUTE_IDX = "/jobs/{id}/result/option/{name}/idx/{idx}"; // kept for backward compatibility (but will result in error)
@@ -23,8 +23,10 @@ public class Routes {
 	public static final String HALT_ROUTE = "/admin/halt/{key}";
 	public static final String CLIENTS_ROUTE = "/admin/clients";
 	public static final String CLIENT_ROUTE = "/admin/clients/{id}";
-	public static final String PROPERTIES_ROUTE = "/admin/properties";
-	public static final String PROPERTY_ROUTE = "/admin/properties/{name}";
+	public static final String PROPERTIES_ROUTE = "/properties";
+	public static final String PROPERTY_ROUTE = "/properties/{name}";
+	public static final String ADMIN_PROPERTIES_ROUTE = "/admin/properties";
+	public static final String ADMIN_PROPERTY_ROUTE = "/admin/properties/{name}";
 	public static final String SIZES_ROUTE = "/admin/sizes";
 	public static final String QUEUE_ROUTE= "/queue";
 	public static final String QUEUE_UP_ROUTE= "/queue/up/{jobId}";

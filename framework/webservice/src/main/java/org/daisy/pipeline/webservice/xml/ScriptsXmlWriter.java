@@ -14,6 +14,7 @@ import org.w3c.dom.Element;
 public class ScriptsXmlWriter {
 	
 	private final String baseUrl;
+	private final String route;
 	Iterable<Script> scripts = null;
 	private static Logger logger = LoggerFactory.getLogger(ScriptsXmlWriter.class.getName());
 
@@ -24,8 +25,13 @@ public class ScriptsXmlWriter {
 	 *                absolute paths relative to the domain name.
 	 */
 	public ScriptsXmlWriter(Iterable<Script> scripts, String baseUrl) {
+		this(scripts, baseUrl, Routes.SCRIPTS_ROUTE);
+	}
+
+	public ScriptsXmlWriter(Iterable<Script> scripts, String baseUrl, String route) {
 		this.scripts = scripts;
 		this.baseUrl = baseUrl;
+		this.route = route;
 	}
 	
 	public Document getXmlDocument() {
@@ -39,18 +45,15 @@ public class ScriptsXmlWriter {
 	private Document scriptsToXml(Iterable<Script> scripts) {
 		Document doc = XmlUtils.createDom("scripts");
 		Element scriptsElm = doc.getDocumentElement();
-		scriptsElm.setAttribute("href", baseUrl + Routes.SCRIPTS_ROUTE);
-		
+		scriptsElm.setAttribute("href", baseUrl + route);
 		for (Script script : scripts) {
-			ScriptXmlWriter writer = new ScriptXmlWriter(script, baseUrl);
+			ScriptXmlWriter writer = new ScriptXmlWriter(script, baseUrl, route + "/{id}");
 			writer.addAsElementChild(scriptsElm);
 		}
-		
 		// for debugging only
 		if (!XmlValidator.validate(doc, XmlValidator.SCRIPTS_SCHEMA_URL)) {
 			logger.error("INVALID XML:\n" + XmlUtils.nodeToString(doc));
 		}
-
 		return doc;
 	}	
 }
