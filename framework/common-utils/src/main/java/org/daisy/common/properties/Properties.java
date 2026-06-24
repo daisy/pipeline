@@ -53,6 +53,9 @@ public final class Properties {
 			if (envKey.startsWith("PIPELINE2_")) {
 				String p = "org.daisy.pipeline." + envKey.substring(10).replace('_','.').toLowerCase();
 				keys.add(p); }
+			else if (envKey.startsWith("PIPELINE_")) {
+				String p = "org.daisy.pipeline." + envKey.substring(9).replace('_','.').toLowerCase();
+				keys.add(p); }
 		return keys;
 	}
 
@@ -115,6 +118,11 @@ public final class Properties {
 			String envKey = "PIPELINE2_" + key.substring(19).replace('.', '_').toUpperCase();
 			if (systemEnv.containsKey(envKey))
 				return expand(systemEnv.get(envKey));
+			else {
+				envKey = "PIPELINE_" + key.substring(19).replace('.', '_').toUpperCase();
+				if (systemEnv.containsKey(envKey))
+					return expand(systemEnv.get(envKey));
+			}
 		}
 		// then come system properties
 		String v = systemProperties.get(key);
