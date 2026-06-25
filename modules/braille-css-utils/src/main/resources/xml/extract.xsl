@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:map="http://www.w3.org/2005/xpath-functions/map"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                 xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
@@ -11,7 +12,15 @@
 	<xsl:param name="attribute-name" required="yes"/>
 	
 	<xsl:include href="library.xsl"/>
-	
+	<xsl:include href="http://www.daisy.org/pipeline/modules/common-utils/generate-id.xsl"/>
+
+	<xsl:template match="/" priority="1">
+		<xsl:call-template name="pf:next-match-with-generated-ids">
+			<xsl:with-param name="for-elements" select="//*[not(@id|@xml:id)][@*[local-name()=$attribute-name and namespace-uri()='']]"/>
+			<xsl:with-param name="prefix" select="'css_'"/>
+		</xsl:call-template>
+	</xsl:template>
+
 	<xsl:template match="/">
 		<xsl:apply-templates select="/*"/>
 		<xsl:result-document href="irrelevant">
@@ -19,7 +28,21 @@
 				<xsl:variable name="id-to-style" as="map(xs:string,xs:string)">
 					<xsl:map>
 						<xsl:for-each select="//*/@*[local-name()=$attribute-name and namespace-uri()='']">
-							<xsl:variable name="id" select="(parent::*/@id/string(.),parent::*/@xml:id/string(.),parent::*/generate-id(.))[1]"/>
+							<xsl:variable name="id" as="xs:string">
+								<xsl:for-each select="parent::*">
+									<xsl:choose>
+										<xsl:when test="@id">
+											<xsl:sequence select="@id"/>
+										</xsl:when>
+										<xsl:when test="@xml:id">
+											<xsl:sequence select="@xml:id"/>
+										</xsl:when>
+										<xsl:otherwise>
+											<xsl:call-template name="pf:generate-id"/>
+										</xsl:otherwise>
+									</xsl:choose>
+								</xsl:for-each>
+							</xsl:variable>
 							<xsl:map-entry key="$id" select="string(.)"/>
 						</xsl:for-each>
 					</xsl:map>
@@ -164,7 +187,14 @@
 	
 	<xsl:template match="*[not(@id)][@*[local-name()=$attribute-name and namespace-uri()='']]">
 		<xsl:copy>
-			<xsl:attribute name="id" select="(@xml:id/string(.),generate-id(.))[1]"/>
+			<xsl:choose>
+				<xsl:when test="@xml:id">
+					<xsl:attribute name="id" select="@xml:id"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:call-template name="pf:generate-id"/>
+				</xsl:otherwise>
+			</xsl:choose>
 			<!--
 			    XML elements may only have a single attribute of type ID
 			-->
