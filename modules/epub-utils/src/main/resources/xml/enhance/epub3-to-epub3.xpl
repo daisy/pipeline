@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                 xmlns:ocf="urn:oasis:names:tc:opendocument:xmlns:container"
@@ -118,6 +120,7 @@
             px:fileset-load
             px:fileset-filter
             px:fileset-update
+            px:fileset-intersect
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl">
@@ -159,6 +162,19 @@
             px:isolate-skippable
         </p:documentation>
     </p:import>
+    <p:import href="../ocf/opf-manifest-to-fileset.xpl">
+        <p:documentation>
+            pxi:opf-manifest-to-fileset
+        </p:documentation>
+    </p:import>
+    
+    <p:declare-step type="pxi:html-insert-sync-points">
+        <p:input port="source" sequence="true"/>
+        <p:output port="result" sequence="true"/>
+        <!--
+            Implemented in ../../../java/org/daisy/pipeline/epub/calabash/impl/HtmlInsertSyncPointsStep.java
+        -->
+    </p:declare-step>
     
     <p:variable name="default-stylesheet" select="resolve-uri('default.css')">
         <p:inline>
@@ -846,34 +862,119 @@
             </p:output>
             
             <!--
-                load default rendition package document
+                load default rendition
             -->
             
             <px:fileset-filter media-types="application/oebps-package+xml"/>
             <p:delete match="d:file[preceding::d:file]"/>
-            <px:fileset-load name="default-rendition.package-document">
+            <px:fileset-load>
                 <p:input port="in-memory">
                     <p:pipe step="add-mediaoverlays" port="in-memory"/>
                 </p:input>
             </px:fileset-load>
+            <!-- perform a unity XSL transformation because otherwise for some reason the
+                 base URI is not available within resource-map.xsl -->
+            <p:xslt>
+                <p:input port="stylesheet">
+                    <p:inline>
+                        <xsl:stylesheet version="2.0">
+                            <xsl:template match="@*|node()">
+                                <xsl:copy>
+                                    <xsl:apply-templates select="@*|node()"/>
+                                </xsl:copy>
+                            </xsl:template>
+                        </xsl:stylesheet>
+                    </p:inline>
+                </p:input>
+                <p:input port="parameters">
+                    <p:empty/>
+                </p:input>
+            </p:xslt>
+            <p:identity name="default-rendition.package-document"/>
+            <p:group name="default-rendition.fileset">
+                <p:output port="result"/>
+                <pxi:opf-manifest-to-fileset name="fileset"/>
+                <p:sink/>
+                <px:fileset-intersect>
+                    <p:input port="source">
+                        <p:pipe step="add-mediaoverlays" port="fileset"/>
+                        <p:pipe step="fileset" port="result"/>
+                    </p:input>
+                </px:fileset-intersect>
+            </p:group>
             
             <!--
-                create braille rendition file set
+                insert synchronization anchors in original html
+                (for creating mapping document later)
             -->
             
-            <p:group name="braille-rendition.fileset">
+            <p:group name="default-rendition.html-with-sync-points">
+                <p:output port="fileset">
+                    <p:pipe step="load" port="result.fileset"/>
+                </p:output>
+                <p:output port="in-memory" sequence="true" primary="true"/>
+                <px:fileset-load name="load">
+                    <p:input port="in-memory">
+                        <p:pipe step="add-mediaoverlays" port="in-memory"/>
+                    </p:input>
+                    <p:with-option name="media-types" select="$content-media-types"/>
+                </px:fileset-load>
+                <p:for-each>
+                    <pxi:html-insert-sync-points>
+                        <!--
+                            insert synchronization anchors at the start of blocks (first text node
+                            after the beginning or end of a block element, and skipping any white
+                            space)
+                        -->
+                    </pxi:html-insert-sync-points>
+                </p:for-each>
+                <px:add-ids match="*[@class='__tmp__sync__']" prefix="__sync__"/>
+                <p:for-each>
+                    <!-- perform a unity XSL transformation because otherwise for some reason the
+                         base URI is not available within resource-map.xsl -->
+                    <p:xslt>
+                        <p:input port="stylesheet">
+                            <p:inline>
+                                <xsl:stylesheet version="2.0">
+                                    <xsl:template match="@*|node()">
+                                        <xsl:copy>
+                                            <xsl:apply-templates select="@*|node()"/>
+                                        </xsl:copy>
+                                    </xsl:template>
+                                </xsl:stylesheet>
+                            </p:inline>
+                        </p:input>
+                        <p:input port="parameters">
+                            <p:empty/>
+                        </p:input>
+                    </p:xslt>
+                </p:for-each>
+            </p:group>
+            
+            <!--
+                copy html and smil files
+            -->
+            
+            <p:sink/>
+            <p:group name="braille-rendition.copy">
                 <p:output port="fileset" primary="true"/>
                 <p:output port="in-memory" sequence="true">
                     <p:pipe step="apply" port="result.in-memory"/>
                 </p:output>
-                <p:output port="mapping">
-                    <p:pipe step="mapping" port="result"/>
-                </p:output>
+                <px:fileset-filter name="filter">
+                    <p:input port="source">
+                        <p:pipe step="default-rendition.fileset" port="result"/>
+                    </p:input>
+                    <p:with-option name="media-types"
+                                   select="string-join(('application/oebps-package+xml','application/smil+xml',
+                                                        $content-media-types),
+                                                       ' ')"/>
+                </px:fileset-filter>
                 <p:xslt name="mapping">
                     <p:input port="stylesheet">
                         <p:document href="braille-rendition.fileset.xsl"/>
                     </p:input>
-                    <p:with-param name="content-media-types" select="$content-media-types"/>
+                    <p:with-param name="content-media-types" select="tokenize($content-media-types,'\s+')[not(.='')]"/>
                     <p:with-param name="braille-rendition.package-document.base"
                                   select="resolve-uri('EPUB/package-braille.opf',base-uri(/*))">
                         <p:pipe step="maybe-copy" port="fileset"/>
@@ -881,21 +982,35 @@
                 </p:xslt>
                 <p:sink/>
                 <!--
-                    update cross references
+                    take html with sync points
                 -->
-                <px:epub-update-links name="update-links">
+                <px:fileset-update name="update-html">
                     <p:input port="source.fileset">
-                        <p:pipe step="add-mediaoverlays" port="fileset"/>
+                        <p:pipe step="filter" port="result"/>
                     </p:input>
                     <p:input port="source.in-memory">
                         <p:pipe step="add-mediaoverlays" port="in-memory"/>
+                    </p:input>
+                    <p:input port="update.fileset">
+                        <p:pipe step="default-rendition.html-with-sync-points" port="fileset"/>
+                    </p:input>
+                    <p:input port="update.in-memory">
+                        <p:pipe step="default-rendition.html-with-sync-points" port="in-memory"/>
+                    </p:input>
+                </px:fileset-update>
+                <!--
+                    update cross references
+                -->
+                <px:epub-update-links name="update-links">
+                    <p:input port="source.in-memory">
+                        <p:pipe step="update-html" port="result.in-memory"/>
                     </p:input>
                     <p:input port="mapping">
                         <p:pipe step="mapping" port="result"/>
                     </p:input>
                 </px:epub-update-links>
                 <!--
-                    perform rename
+                    perform the rename
                 -->
                 <px:fileset-apply name="apply">
                     <p:input port="source.in-memory">
@@ -920,31 +1035,38 @@
                     <p:pipe step="load" port="result.fileset"/>
                 </p:output>
                 <p:output port="html.in-memory" sequence="true">
-                    <p:pipe step="for-each" port="html"/>
+                    <p:pipe step="processed" port="html"/>
+                </p:output>
+                <p:output port="html-with-sync-points.in-memory" sequence="true">
+                    <p:pipe step="processed" port="html-with-sync-points"/>
                 </p:output>
                 <p:output port="css.fileset">
                     <p:pipe step="css.fileset" port="result"/>
                 </p:output>
                 <p:output port="css.in-memory" sequence="true">
-                    <p:pipe step="for-each" port="css"/>
+                    <p:pipe step="processed" port="css"/>
                 </p:output>
                 <px:fileset-load name="load">
                     <p:input port="in-memory">
-                        <p:pipe step="braille-rendition.fileset" port="in-memory"/>
+                        <p:pipe step="braille-rendition.copy" port="in-memory"/>
                     </p:input>
                     <p:with-option name="media-types" select="$content-media-types"/>
                 </px:fileset-load>
-                <p:for-each name="for-each">
+                <p:for-each name="processed">
                     <p:output port="html" primary="true"/>
+                    <p:output port="html-with-sync-points">
+                        <p:pipe step="with-sync-points" port="result"/>
+                    </p:output>
                     <p:output port="css" sequence="true">
                         <p:pipe step="extract-css" port="css"/>
                     </p:output>
                     <p:variable name="lang" select="(/*/opf:metadata/dc:language[not(@refines)])[1]/text()">
-                        <p:pipe port="result" step="default-rendition.package-document"/>
+                        <p:pipe step="default-rendition.package-document" port="result"/>
                     </p:variable>
                     <px:message message="Generating $1" severity="INFO">
                         <p:with-option name="param1" select="substring-after(base-uri(/*),'!/')"/>
                     </px:message>
+                    <!-- style -->
                     <p:choose>
                         <p:when test="$apply-document-specific-stylesheets='true'">
                             <px:message severity="DEBUG" message="Inlining document-specific CSS"/>
@@ -1037,6 +1159,8 @@
                         </p:choose>
                         <p:identity name="css"/>
                     </p:group>
+                    <p:identity name="with-sync-points"/>
+                    <p:delete match="*[@class='__tmp__sync__']"/>
                 </p:for-each>
                 <p:sink/>
                 <!--
@@ -1045,7 +1169,7 @@
                 <px:fileset-create name="base"/>
                 <p:for-each>
                     <p:iteration-source>
-                        <p:pipe step="for-each" port="css"/>
+                        <p:pipe step="processed" port="css"/>
                     </p:iteration-source>
                     <px:fileset-add-entry>
                         <p:input port="source.fileset">
@@ -1062,20 +1186,20 @@
                 -->
                 <px:fileset-join>
                     <p:input port="source">
-                        <p:pipe step="braille-rendition.fileset" port="fileset"/>
+                        <p:pipe step="braille-rendition.copy" port="fileset"/>
                         <p:pipe step="css.fileset" port="result"/>
                     </p:input>
                 </px:fileset-join>
                 <px:fileset-update name="update-fileset">
                     <p:input port="source.in-memory">
-                        <p:pipe step="braille-rendition.fileset" port="in-memory"/>
-                        <p:pipe step="for-each" port="css"/>
+                        <p:pipe step="braille-rendition.copy" port="in-memory"/>
+                        <p:pipe step="processed" port="css"/>
                     </p:input>
                     <p:input port="update.fileset">
                         <p:pipe step="load" port="result.fileset"/>
                     </p:input>
                     <p:input port="update.in-memory">
-                        <p:pipe step="for-each" port="html"/>
+                        <p:pipe step="processed" port="html"/>
                     </p:input>
                 </px:fileset-update>
             </p:group>
@@ -1229,57 +1353,34 @@
                     <p:with-param port="file-attributes" name="indent" select="'true'"/>
                 </px:fileset-add-entry>
                 <p:sink/>
-                <p:group name="rendition-mapping">
-                    <p:output port="result"/>
-                    <p:for-each name="resource-maps">
-                        <p:iteration-source select="/*/d:file">
-                            <p:pipe step="braille-rendition.process-html" port="html.fileset"/>
-                        </p:iteration-source>
-                        <p:output port="result"/>
-                        <p:variable name="braille-rendition.html.base" select="/d:file/resolve-uri(@href,base-uri(.))"/>
-                        <p:variable name="default-rendition.html.base"
-                                    select="//d:file[resolve-uri(@href,base-uri(.))=$braille-rendition.html.base]
-                                            /resolve-uri(@original-href,base-uri(.))">
-                            <p:pipe step="braille-rendition.fileset" port="mapping"/>
-                        </p:variable>
-                        <p:xslt template-name="main">
-                            <p:input port="stylesheet">
-                                <p:document href="resource-map.xsl"/>
-                            </p:input>
-                            <p:input port="source">
-                                <p:pipe step="default-rendition.package-document" port="result"/>
-                                <p:pipe step="braille-rendition.package-document" port="result"/>
-                            </p:input>
-                            <p:with-param name="default-rendition.html.base" select="$default-rendition.html.base"/>
-                            <p:with-param name="braille-rendition.html.base" select="$braille-rendition.html.base"/>
-                            <p:with-param name="rendition-mapping.base" select="resolve-uri('EPUB/renditionMapping.html',base-uri(/*))">
-                                <p:pipe step="maybe-copy" port="fileset"/>
-                            </p:with-param>
-                        </p:xslt>
-                    </p:for-each>
-                    <p:sink/>
-                    <p:insert match="//html:nav" position="last-child">
-                        <p:input port="source">
-                            <p:inline xmlns="http://www.w3.org/1999/xhtml">
-        <html>
-           <head>
-              <meta charset="utf-8"/>
-           </head>
-           <body>
-              <nav epub:type="resource-map"/>
-           </body>
-        </html></p:inline>
-                        </p:input>
-                        <p:input port="insertion" select="/html:nav[@epub:type='resource-map']/*">
-                            <p:pipe step="resource-maps" port="result"/>
-                        </p:input>
-                    </p:insert>
-                    <px:set-base-uri>
-                        <p:with-option name="base-uri" select="resolve-uri('EPUB/renditionMapping.html',base-uri(/*))">
-                            <p:pipe step="maybe-copy" port="fileset"/>
-                        </p:with-option>
-                    </px:set-base-uri>
-                </p:group>
+                <p:xslt template-name="main">
+                    <p:input port="stylesheet">
+                        <p:document href="resource-map.xsl"/>
+                    </p:input>
+                    <p:input port="source">
+                        <p:empty/>
+                    </p:input>
+                    <p:with-param name="default-rendition.package-document" select="/">
+                        <p:pipe step="default-rendition.package-document" port="result"/>
+                    </p:with-param>
+                    <p:with-param name="braille-rendition.package-document" select="/">
+                        <p:pipe step="braille-rendition.package-document" port="result"/>
+                    </p:with-param>
+                    <p:with-param name="default-rendition.html" select="collection()">
+                        <p:pipe step="default-rendition.html-with-sync-points" port="in-memory"/>
+                    </p:with-param>
+                    <p:with-param name="braille-rendition.html" select="collection()">
+                        <p:pipe step="braille-rendition.process-html" port="html-with-sync-points.in-memory"/>
+                    </p:with-param>
+                    <p:with-param name="output-base-uri" select="resolve-uri('EPUB/renditionMapping.html',base-uri(/*))">
+                        <p:pipe step="maybe-copy" port="fileset"/>
+                    </p:with-param>
+                </p:xslt>
+                <px:set-base-uri name="rendition-mapping">
+                    <p:with-option name="base-uri" select="resolve-uri('EPUB/renditionMapping.html',base-uri(/*))">
+                        <p:pipe step="maybe-copy" port="fileset"/>
+                    </p:with-option>
+                </px:set-base-uri>
                 <p:sink/>
             </p:group>
             
