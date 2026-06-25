@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
@@ -159,6 +160,14 @@
             px:isolate-skippable
         </p:documentation>
     </p:import>
+    
+    <p:declare-step type="pxi:html-insert-sync-points">
+        <p:input port="source" sequence="true"/>
+        <p:output port="result" sequence="true"/>
+        <!--
+            Implemented in ../../../java/org/daisy/pipeline/epub/calabash/impl/HtmlInsertSyncPointsStep.java
+        -->
+    </p:declare-step>
     
     <p:variable name="default-stylesheet" select="resolve-uri('default.css')">
         <p:inline>
@@ -941,6 +950,15 @@
                     <px:message message="Generating $1" severity="INFO">
                         <p:with-option name="param1" select="substring-after(base-uri(/*),'!/')"/>
                     </px:message>
+                    <!--
+                        insert synchronization anchors at the start of blocks (first text node after the beginning or
+                        end of a block element, and skipping any white space)
+                    -->
+                    <pxi:html-insert-sync-points/>
+                    <px:add-ids match="*[@class='__tmp__sync__']" prefix="__sync__">
+                        <!-- no need for unique ids across all documents, so apply on each -->
+                    </px:add-ids>
+                    <!-- style -->
                     <p:choose>
                         <p:when test="$apply-document-specific-stylesheets='true'">
                             <px:message severity="DEBUG" message="Inlining document-specific CSS"/>

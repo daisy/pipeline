@@ -18,6 +18,22 @@
 
   <dependencies>
     <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>common-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>calabash-adapter</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>saxon-adapter</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>framework-core</artifactId>
     </dependency>
@@ -103,11 +119,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>calabash-adapter</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>tts-mocks</artifactId>
       <scope>test</scope>
@@ -122,7 +133,8 @@
       org.daisy.pipeline.script.impl.XProcScript_epub2_to_epub3,
       org.daisy.pipeline.datatypes.impl.Datatype_px_epub3_to_epub3_script_audio,
       org.daisy.pipeline.datatypes.impl.Datatype_px_epub3_to_epub3_script_ensure_pagenum_text,
-      org.daisy.pipeline.datatypes.impl.Datatype_px_epub2_to_epub3_script_validation
+      org.daisy.pipeline.datatypes.impl.Datatype_px_epub2_to_epub3_script_validation,
+      org.daisy.pipeline.epub.calabash.impl.HtmlInsertSyncPointsStep$Provider
     </expose-services>
   </properties>
 
