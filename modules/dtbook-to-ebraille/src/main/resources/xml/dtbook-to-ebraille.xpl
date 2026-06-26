@@ -236,7 +236,7 @@
 				</p:output>
 				<p:xslt name="xslt">
 					<p:input port="stylesheet">
-						<p:document href="get-used-braille-codes.xsl"/>
+						<p:document href="http://www.daisy.org/pipeline/modules/braille/common-utils/get-used-braille-codes.xsl"/>
 					</p:input>
 					<p:input port="parameters">
 						<p:empty/>

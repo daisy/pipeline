@@ -839,6 +839,8 @@
 		<x:scenario label="braille-rendition">
 			<x:call>
 				<x:option name="braille" select="true()"/>
+				<x:option name="ebraille-compatibility" select="'soft'"/>
+				<x:option name="braille-translator" select="'(system:ueb)(grade:1)'"/>
 				<x:option name="tts" select="false()"/>
 				<x:option name="sentence-detection" select="false()"/>
 			</x:call>
@@ -915,22 +917,27 @@
 			          href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl" step="x:epub3-compare-package-doc">
 				<x:document type="inline">
 					<package xmlns="http://www.idpf.org/2007/opf" unique-identifier="pub-identifier" version="3.0"
-					         prefix="nordic: http://www.mtm.se/epub/">
+					         prefix="nordic: http://www.mtm.se/epub/"
+					         xml:lang="en-Brai">
 						<metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
-							<dc:identifier id="pub-identifier">C00000</dc:identifier>
 							<dc:title>Valentin Haüy - the father of the education for the blind</dc:title>
+							<dc:identifier id="pub-identifier">C00000</dc:identifier>
+							<dc:language>en-Brai</dc:language>
+							<meta property="dcterms:modified">2020-03-09T15:37:52Z</meta>
+							<meta name="dcterms:modified" content="2020-03-09T15:37:52Z"/>
 							<dc:creator>Beatrice Christensen Sköld</dc:creator>
 							<dc:source>urn:isbn:123456789</dc:source>
 							<dc:format>EPUB3</dc:format>
 							<dc:publisher>MTM</dc:publisher>
 							<dc:date>2006-03-23</dc:date>
-							<meta property="dcterms:modified">2020-03-09T15:37:52Z</meta>
-							<meta name="dcterms:modified" content="2020-03-09T15:37:52Z"/>
+							<meta property="a11y:brailleCellType">6</meta>
+							<meta name="a11y:brailleCellType" content="6"/>
+							<meta property="a11y:brailleSystem">UEB grade1</meta>
+							<meta name="a11y:brailleSystem" content="UEB grade1"/>
 							<meta property="nordic:guidelines">2015-1</meta>
 							<meta name="nordic:guidelines" content="2015-1"/>
 							<meta property="nordic:supplier">MTM</meta>
 							<meta name="nordic:supplier" content="MTM"/>
-							<dc:language>en-Brai</dc:language>
 						</metadata>
 						<manifest>
 							<item id="item_1" href="css/accessibility.css" media-type="text/css"/>
