@@ -965,6 +965,7 @@
                                                                    $braille-translator,
                                                                    '(document-locale:',$lang,')')"/>
                     </px:transform>
+                    <p:label-elements match="*[@xml:lang]" attribute="lang" label="@xml:lang" replace="true"/>
                     <p:group name="extract-css">
                         <p:output port="result" primary="true">
                             <p:pipe step="extract-css.result" port="result"/>
