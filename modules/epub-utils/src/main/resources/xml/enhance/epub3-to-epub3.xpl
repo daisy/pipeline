@@ -243,6 +243,7 @@
                 <p:pipe step="add" port="result.in-memory"/>
             </p:output>
             <p:sink/>
+            <!-- note that px:epub3-add-metadata does not support multiple renditions in the fileset -->
             <px:epub3-add-metadata name="add" px:message="Adding metadata" px:progress="1">
                 <p:input port="source.fileset">
                     <p:pipe step="maybe-copy" port="fileset"/>
@@ -268,7 +269,10 @@
             <p:output port="in-memory" sequence="true">
                 <p:pipe step="update-html" port="in-memory"/>
             </p:output>
-            <px:fileset-load media-types="application/oebps-package+xml" name="package-doc">
+            <!-- load default rendition -->
+            <px:fileset-filter media-types="application/oebps-package+xml"/>
+            <p:delete match="d:file[preceding::d:file]"/>
+            <px:fileset-load name="package-doc">
                 <p:input port="in-memory">
                     <p:pipe step="add-metadata" port="in-memory"/>
                 </p:input>
