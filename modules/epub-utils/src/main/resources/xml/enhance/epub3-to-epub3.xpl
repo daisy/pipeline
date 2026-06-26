@@ -2,10 +2,12 @@
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:map="http://www.w3.org/2005/xpath-functions/map"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                 xmlns:ocf="urn:oasis:names:tc:opendocument:xmlns:container"
@@ -40,7 +42,14 @@
     <p:option name="update-title-in-content-docs" required="false" select="'false'" cx:as="xs:string"/>
     <p:option name="ensure-pagenum-text" required="false" select="'false'" cx:as="xs:string"/>
     <p:option name="ensure-section-headings" required="false" select="'false'" cx:as="xs:string"/>
-    <p:option name="braille" required="false" select="'false'" cx:as="xs:string"/>
+    <p:option name="braille" cx:as="xs:boolean" select="false()"/>
+    <p:option name="ebraille-compatibility" cx:as="xs:string?" select="()">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>When a braille rendition is added, ensure the output is a valid eBraille publication.</p>
+            <p>"Soft" means be compatible with the eBraille standard as much as possible, but don't break
+            other features.</p>
+        </p:documentation>
+    </p:option>
     <p:option name="tts" required="false" select="'default'" cx:as="xs:string"/>
     <p:option name="sentence-detection" required="false" select="'false'" cx:as="xs:string"/>
     <p:option name="braille-translator" select="''"/>
@@ -167,7 +176,12 @@
             pxi:opf-manifest-to-fileset
         </p:documentation>
     </p:import>
-    
+    <cx:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xsl" type="application/xslt+xml">
+        <p:documentation>
+            pf:get-braille-code-info
+        </p:documentation>
+    </cx:import>
+
     <p:declare-step type="pxi:html-insert-sync-points">
         <p:input port="source" sequence="true"/>
         <p:output port="result" sequence="true"/>
@@ -848,7 +862,7 @@
     </p:group>
     
     <p:choose name="add-braille-rendition" px:progress="1/4">
-        <p:when test="not($braille='true')">
+        <p:when test="not($braille)">
             <p:output port="fileset" primary="true"/>
             <p:output port="in-memory" sequence="true">
                 <p:pipe step="add-mediaoverlays" port="in-memory"/>
@@ -1046,6 +1060,9 @@
                 <p:output port="css.in-memory" sequence="true">
                     <p:pipe step="processed" port="css"/>
                 </p:output>
+                <p:output port="braille-codes">
+                    <p:pipe step="braille-codes" port="result"/>
+                </p:output>
                 <px:fileset-load name="load">
                     <p:input port="in-memory">
                         <p:pipe step="braille-rendition.copy" port="in-memory"/>
@@ -1059,6 +1076,9 @@
                     </p:output>
                     <p:output port="css" sequence="true">
                         <p:pipe step="extract-css" port="css"/>
+                    </p:output>
+                    <p:output port="braille-codes">
+                        <p:pipe step="get-braille-codes" port="secondary"/>
                     </p:output>
                     <p:variable name="lang" select="(/*/opf:metadata/dc:language[not(@refines)])[1]/text()">
                         <p:pipe step="default-rendition.package-document" port="result"/>
@@ -1088,10 +1108,10 @@
                     </px:css-cascade>
                     <px:transform name="transform">
                         <p:with-option name="query" select="concat('(input:html)(input:css)(output:html)(output:css)(output:braille)',
+                                                                   '(include-braille-code-in-language)',
                                                                    $braille-translator,
                                                                    '(document-locale:',$lang,')')"/>
                     </px:transform>
-                    <p:label-elements match="*[@xml:lang]" attribute="lang" label="@xml:lang" replace="true"/>
                     <p:group name="extract-css">
                         <p:output port="result" primary="true">
                             <p:pipe step="extract-css.result" port="result"/>
@@ -1161,7 +1181,59 @@
                     </p:group>
                     <p:identity name="with-sync-points"/>
                     <p:delete match="*[@class='__tmp__sync__']"/>
+                    <!-- get list of used braille codes with usage count, and remove -t- extension from xml:lang attributes. -->
+                    <p:xslt name="get-braille-codes">
+                        <p:input port="stylesheet">
+                            <p:document href="http://www.daisy.org/pipeline/modules/braille/common-utils/get-used-braille-codes.xsl"/>
+                        </p:input>
+                        <p:input port="parameters">
+                            <p:empty/>
+                        </p:input>
+                    </p:xslt>
+                    <p:label-elements match="*[@xml:lang]" attribute="lang" label="@xml:lang" replace="true"/>
+                    <px:set-base-uri>
+                        <p:with-option name="base-uri" select="base-uri(/*)">
+                            <p:pipe step="processed" port="current"/>
+                        </p:with-option>
+                    </px:set-base-uri>
                 </p:for-each>
+                <p:sink/>
+                <!--
+                    get list of used braille codes in all HTML, sorted by use
+                -->
+                <p:xslt name="braille-codes" template-name="main">
+                    <p:input port="source">
+                        <p:empty/>
+                    </p:input>
+                    <p:with-param name="codes" select="distinct-values(collection()//d:code/string(.))">
+                        <p:pipe step="processed" port="braille-codes"/>
+                    </p:with-param>
+                    <p:with-param name="weights"
+                                  select="map:merge(
+                                            for $code in distinct-values(collection()//d:code/string(.))
+                                            return map:entry(
+                                              $code,
+                                              sum(collection()//d:code[string(.)=$code]/@weight
+                                                              /xs:integer(number(.)))))">
+                        <p:pipe step="processed" port="braille-codes"/>
+                    </p:with-param>
+                    <p:input port="stylesheet">
+                        <p:inline>
+                            <xsl:stylesheet version="2.0">
+                                <xsl:param name="codes"/>
+                                <xsl:param name="weights"/>
+                                <xsl:template name="main">
+                                    <d:codes>
+                                        <xsl:for-each select="$codes">
+                                            <xsl:sort order="descending" select="$weights(.)"/>
+                                            <d:code><xsl:value-of select="."/></d:code>
+                                        </xsl:for-each>
+                                    </d:codes>
+                                </xsl:template>
+                            </xsl:stylesheet>
+                        </p:inline>
+                    </p:input>
+                </p:xslt>
                 <p:sink/>
                 <!--
                     extracted css fileset
@@ -1211,7 +1283,7 @@
             <p:group name="braille-rendition.process-package-doc">
                 <p:output port="fileset" primary="true"/>
                 <p:output port="in-memory" sequence="true">
-                    <p:pipe step="update-fileset" port="result.in-memory"/>
+                    <p:pipe step="add-ebraille-metadata" port="in-memory"/>
                 </p:output>
                 <px:fileset-load media-types="application/oebps-package+xml" name="copied-package-doc">
                     <p:input port="in-memory">
@@ -1250,6 +1322,43 @@
                         <p:pipe step="package-doc" port="result"/>
                     </p:input>
                 </px:fileset-update>
+                <p:group name="add-ebraille-metadata">
+                    <p:output port="fileset" primary="true">
+                        <p:pipe step="add" port="result.fileset"/>
+                    </p:output>
+                    <p:output port="in-memory" sequence="true">
+                        <p:pipe step="add" port="result.in-memory"/>
+                    </p:output>
+                    <px:epub3-add-metadata name="add">
+                        <p:input port="source.in-memory">
+                            <p:pipe step="update-fileset" port="result.in-memory"/>
+                        </p:input>
+                        <p:input port="metadata">
+                            <p:pipe step="metadata" port="result"/>
+                        </p:input>
+                    </px:epub3-add-metadata>
+                    <p:sink/>
+                    <p:xslt name="metadata">
+                        <p:input port="source">
+                            <p:pipe step="package-doc" port="result"/>
+                        </p:input>
+                        <p:input port="stylesheet">
+                            <p:document href="ebraille-metadata.xsl"/>
+                        </p:input>
+                        <p:with-param name="brailleCellType"
+                                      select="string-join(
+                                                distinct-values(
+                                                  //d:code/pf:get-braille-code-info(string(.))('dots')),
+                                                ', ')">
+                            <p:pipe step="braille-rendition.process-html" port="braille-codes"/>
+                        </p:with-param>
+                        <p:with-param name="brailleSystem" select="//d:code/string(.)">
+                            <p:pipe step="braille-rendition.process-html" port="braille-codes"/>
+                        </p:with-param>
+                        <p:with-param name="ebraille-compatibility" select="$ebraille-compatibility"/>
+                    </p:xslt>
+                    <p:sink/>
+                </p:group>
             </p:group>
             
             <!--
