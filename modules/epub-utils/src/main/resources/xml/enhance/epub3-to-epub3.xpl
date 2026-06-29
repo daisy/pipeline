@@ -1431,12 +1431,14 @@
                                                                then 'first-child'
                                                                else 'last-child'"/>
                     </p:insert>
-                    <p:add-attribute match="/ocf:container/ocf:rootfiles/ocf:rootfile[last()]" attribute-name="rendition:language">
+                    <p:add-attribute match="/ocf:container/ocf:rootfiles/ocf:rootfile[@full-path='EPUB/package-braille.opf']"
+                                     attribute-name="rendition:language">
                         <p:with-option name="attribute-value" select="/opf:package/opf:metadata/dc:language[1]/string(.)">
                             <p:pipe step="braille-rendition.package-document" port="result"/>
                         </p:with-option>
                     </p:add-attribute>
-                    <p:add-attribute match="/ocf:container/ocf:rootfiles/ocf:rootfile[last()]" attribute-name="rendition:layout">
+                    <p:add-attribute match="/ocf:container/ocf:rootfiles/ocf:rootfile[@full-path='EPUB/package-braille.opf']"
+                                     attribute-name="rendition:layout">
                         <p:with-option name="attribute-value"
                                        select="(/opf:package/opf:metadata/opf:meta[@property='rendition:layout']/string(.),'reflowable')[1]">
                             <p:pipe step="braille-rendition.package-document" port="result"/>
