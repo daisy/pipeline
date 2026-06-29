@@ -1424,7 +1424,7 @@
                         <p:input port="insertion">
                             <p:inline xmlns="urn:oasis:names:tc:opendocument:xmlns:container">
                                 <rootfile full-path="EPUB/package-braille.opf" media-type="application/oebps-package+xml"
-                                          rendition:accessMode="tactile" rendition:label="Pre-translated to braille"/>
+                                          rendition:accessMode="tactile" rendition:label="Transcribed to braille"/>
                             </p:inline>
                         </p:input>
                         <p:with-option name="position" select="if ($set-default-rendition-to-braille='true')
