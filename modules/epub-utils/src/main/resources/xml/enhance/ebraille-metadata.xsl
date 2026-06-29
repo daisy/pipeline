@@ -169,6 +169,16 @@
 					</xsl:if>
 				</xsl:if>
 			</xsl:if>
+			<!-- ========================================
+			     other metadata not required for eBraille
+			     ======================================== -->
+			<!--
+			    add accessMode 'tactile' but also keep other accessModes except 'textual'
+			-->
+			<xsl:sequence select="//meta[not(@refines)]
+			                            [@property='schema:accessMode']
+			                            [not(normalize-space(.)=('tactile','textual'))]"/>
+			<meta property="schema:accessMode">tactile</meta>
 		</metadata>
 	</xsl:template>
 

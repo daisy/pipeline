@@ -949,6 +949,8 @@
 							<meta name="a11y:producer" content="Unknown"/>
 							<meta property="a11y:tactileGraphics">false</meta>
 							<meta name="a11y:tactileGraphics" content="false"/>
+							<meta property="schema:accessMode">tactile</meta>
+							<meta name="schema:accessMode" content="tactile"/>
 							<meta property="nordic:guidelines">2015-1</meta>
 							<meta name="nordic:guidelines" content="2015-1"/>
 							<meta property="nordic:supplier">MTM</meta>
