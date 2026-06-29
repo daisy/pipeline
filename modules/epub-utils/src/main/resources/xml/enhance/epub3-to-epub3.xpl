@@ -70,7 +70,12 @@
         </p:documentation>
     </p:option>
     <p:option name="apply-document-specific-stylesheets" select="'false'" cx:as="xs:string"/>
-    <p:option name="set-default-rendition-to-braille" select="'false'" cx:as="xs:string"/>
+    <p:option name="set-default-rendition-to-braille" select="false()" cx:as="xs:boolean">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>Note that when the ebraille-compatibility option is set, the default rendition is
+            always the braille rendition.</p>
+        </p:documentation>
+    </p:option>
     <p:option name="content-media-types" select="'application/xhtml+xml'">
         <!--
             space separated list of content document media-types to include in the braille rendition
@@ -1552,7 +1557,8 @@
                                           rendition:accessMode="tactile" rendition:label="Transcribed to braille"/>
                             </p:inline>
                         </p:input>
-                        <p:with-option name="position" select="if ($set-default-rendition-to-braille='true')
+                        <p:with-option name="position" select="if ($set-default-rendition-to-braille
+                                                                   or $ebraille-compatibility)
                                                                then 'first-child'
                                                                else 'last-child'"/>
                     </p:insert>

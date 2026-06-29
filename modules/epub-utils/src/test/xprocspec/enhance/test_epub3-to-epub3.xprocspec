@@ -1008,10 +1008,10 @@
 					<container xmlns="urn:oasis:names:tc:opendocument:xmlns:container" version="1.0"
 					           xmlns:rendition="http://www.idpf.org/2013/rendition">
 						<rootfiles>
-							<rootfile full-path="EPUB/package.opf" media-type="application/oebps-package+xml"/>
 							<rootfile full-path="EPUB/package-braille.opf" media-type="application/oebps-package+xml"
 							          rendition:accessMode="tactile" rendition:label="Transcribed to braille"
 							          rendition:language="en-Brai" rendition:layout="reflowable"/>
+							<rootfile full-path="EPUB/package.opf" media-type="application/oebps-package+xml"/>
 						</rootfiles>
 						<links>
 							<link href="EPUB/renditionMapping.html" rel="mapping" media-type="application/xhtml+xml"/>
