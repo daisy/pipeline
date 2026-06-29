@@ -839,7 +839,7 @@
 		<x:scenario label="braille-rendition">
 			<x:call>
 				<x:option name="braille" select="true()"/>
-				<x:option name="ebraille-compatibility" select="'soft'"/>
+				<x:option name="ebraille-compatibility" select="'strict'"/>
 				<x:input port="ebraille-metadata">
 					<x:document type="inline" xmlns="http://www.idpf.org/2007/opf">
 						<metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
@@ -899,7 +899,6 @@
 						<d:file href="result/ebraille/C00000-7-chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
 						<d:file href="result/ebraille/C00000-8-conclusion.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
 						<d:file href="result/ebraille/C00000-9-footnotes.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
-						<d:file href="result/ebraille/nav.ncx" media-type="application/x-dtbncx+xml"/>
 						<d:file href="result/index.xhtml" role="nav" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
 						<d:file href="result/package.opf" media-type="application/oebps-package+xml" indent="true"/>
 						<d:file href="result/ebraille/C00000-1-cover.css" media-type="text/plain"/>
@@ -931,29 +930,19 @@
 							<dc:identifier id="pub-identifier">ebraille-id</dc:identifier>
 							<dc:language>en-Brai</dc:language>
 							<meta property="dcterms:modified">2020-03-09T15:37:52Z</meta>
-							<meta name="dcterms:modified" content="2020-03-09T15:37:52Z"/>
+							<dc:format>eBraille 1.0</dc:format>
 							<dc:date>2026-07-02</dc:date>
 							<dc:creator>Beatrice Christensen Sköld</dc:creator>
 							<dc:source>urn:isbn:123456789</dc:source>
-							<dc:format>EPUB3</dc:format>
 							<meta property="dcterms:dateCopyrighted">Unknown</meta>
-							<meta name="dcterms:dateCopyrighted" content="Unknown"/>
 							<meta property="a11y:brailleCellType">6</meta>
-							<meta name="a11y:brailleCellType" content="6"/>
 							<meta property="a11y:brailleSystem">UEB grade1</meta>
-							<meta name="a11y:brailleSystem" content="UEB grade1"/>
 							<meta property="a11y:completeTranscription">true</meta>
-							<meta name="a11y:completeTranscription" content="true"/>
 							<meta property="a11y:producer">Unknown</meta>
-							<meta name="a11y:producer" content="Unknown"/>
 							<meta property="a11y:tactileGraphics">false</meta>
-							<meta name="a11y:tactileGraphics" content="false"/>
 							<meta property="schema:accessMode">tactile</meta>
-							<meta name="schema:accessMode" content="tactile"/>
 							<meta property="nordic:guidelines">2015-1</meta>
-							<meta name="nordic:guidelines" content="2015-1"/>
 							<meta property="nordic:supplier">MTM</meta>
-							<meta name="nordic:supplier" content="MTM"/>
 						</metadata>
 						<manifest>
 							<item id="item_1" href="original/css/accessibility.css" media-type="text/css"/>
@@ -964,7 +953,6 @@
 							<item id="item_6" href="original/css/fonts/opendyslexic/OpenDyslexicMono-Regular.otf" media-type="application/x-font-opentype"/>
 							<item id="item_7" href="original/css/fonts/opendyslexic/LICENSE.txt" media-type="text/plain"/>
 							<item id="item_8" href="original/images/valentin.jpg" media-type="image/jpeg"/>
-							<item id="item_9" href="ebraille/nav.ncx" media-type="application/x-dtbncx+xml"/>
 							<item id="item_10" href="ebraille/C00000-1-cover.xhtml" media-type="application/xhtml+xml"/>
 							<item id="item_11" href="ebraille/C00000-2-frontmatter.xhtml" media-type="application/xhtml+xml"/>
 							<item id="item_12" href="ebraille/C00000-3-chapter.xhtml" media-type="application/xhtml+xml"/>
@@ -975,18 +963,18 @@
 							<item id="item_17" href="ebraille/C00000-8-conclusion.xhtml" media-type="application/xhtml+xml"/>
 							<item id="item_18" href="ebraille/C00000-9-footnotes.xhtml" media-type="application/xhtml+xml"/>
 							<item id="item_19" href="index.xhtml" properties="nav" media-type="application/xhtml+xml"/>
-							<item id="item_20" href="ebraille/C00000-1-cover.css" media-type="text/css"/>
-							<item id="item_21" href="index.css" media-type="text/css"/>
-							<item id="item_22" href="ebraille/C00000-9-footnotes.css" media-type="text/css"/>
-							<item id="item_23" href="ebraille/C00000-5-chapter.css" media-type="text/css"/>
-							<item id="item_24" href="ebraille/C00000-6-rearnotes.css" media-type="text/css"/>
-							<item id="item_25" href="ebraille/C00000-7-chapter.css" media-type="text/css"/>
-							<item id="item_26" href="ebraille/C00000-8-conclusion.css" media-type="text/css"/>
-							<item id="item_27" href="ebraille/C00000-4-chapter.css" media-type="text/css"/>
-							<item id="item_28" href="ebraille/C00000-2-frontmatter.css" media-type="text/css"/>
-							<item id="item_29" href="ebraille/C00000-3-chapter.css" media-type="text/css"/>
+							<item id="item_9" href="ebraille/C00000-1-cover.css" media-type="text/css"/>
+							<item id="item_20" href="index.css" media-type="text/css"/>
+							<item id="item_21" href="ebraille/C00000-9-footnotes.css" media-type="text/css"/>
+							<item id="item_22" href="ebraille/C00000-5-chapter.css" media-type="text/css"/>
+							<item id="item_23" href="ebraille/C00000-6-rearnotes.css" media-type="text/css"/>
+							<item id="item_24" href="ebraille/C00000-7-chapter.css" media-type="text/css"/>
+							<item id="item_25" href="ebraille/C00000-8-conclusion.css" media-type="text/css"/>
+							<item id="item_26" href="ebraille/C00000-4-chapter.css" media-type="text/css"/>
+							<item id="item_27" href="ebraille/C00000-2-frontmatter.css" media-type="text/css"/>
+							<item id="item_28" href="ebraille/C00000-3-chapter.css" media-type="text/css"/>
 						</manifest>
-						<spine toc="item_9">
+						<spine>
 							<itemref id="itemref_1" idref="item_10" linear="no"/>
 							<itemref id="itemref_2" idref="item_11"/>
 							<itemref id="itemref_3" idref="item_12"/>

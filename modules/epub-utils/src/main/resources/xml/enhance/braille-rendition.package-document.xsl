@@ -8,6 +8,7 @@
                 xpath-default-namespace="http://www.idpf.org/2007/opf">
 	
 	<xsl:include href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
+	<xsl:include href="http://www.daisy.org/pipeline/modules/common-utils/library.xsl"/>
 	<xsl:include href="http://www.daisy.org/pipeline/modules/common-utils/generate-id.xsl"/>
 	
 	<xsl:param name="ebraille-compatibility" as="xs:string?" static="true"/> <!-- soft|strict -->
@@ -44,13 +45,34 @@
 	                     metadata/dc:publisher[not(@refines)]"/>
 
 	<!--
+	    Warn about rendition:layout "pre-paginated" and rendition:layout-pre-paginated properties
+	-->
+	<xsl:template use-when="$ebraille-compatibility='strict'"
+	              match="spine/itemref[@property/tokenize(.,'\s+')='rendition:layout-pre-paginated']">
+		<xsl:call-template name="pf:warn">
+			<xsl:with-param name="msg" select="
+			                                   'Spine items with property ''rendition:layout-pre-paginated'' are not allowed by eBraille'"/>
+		</xsl:call-template>
+		<xsl:next-match/>
+	</xsl:template>
+
+	<!--
+	    Drop legacy elements (see also upgrade-package-doc.xsl)
+	-->
+	<xsl:template use-when="$ebraille-compatibility='strict'"
+	              match="metadata/meta[@name]|
+	                     manifest/item[@media-type='application/x-dtbncx+xml']|
+	                     spine/@toc|
+	                     guide|
+	                     tours"/>
+	<!--
 	    Add CSS files
 	-->
 	<xsl:template match="manifest">
 		<xsl:variable name="output-base-uri" select="pf:base-uri(/*)"/>
 		<xsl:variable name="manifest-with-css">
 			<xsl:copy>
-				<xsl:sequence select="@*|node()"/>
+				<xsl:apply-templates select="@*|node()"/>
 				<xsl:for-each select="$css.fileset//d:file">
 					<xsl:element name="item" xmlns="http://www.idpf.org/2007/opf">
 						<xsl:attribute name="href" select="pf:relativize-uri(

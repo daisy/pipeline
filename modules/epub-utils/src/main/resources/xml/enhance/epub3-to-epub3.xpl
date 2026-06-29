@@ -1061,10 +1061,12 @@
                         <p:pipe step="maybe-move-default-rendition" port="default-rendition.fileset"/>
                     </p:input>
                     <p:with-option name="media-types"
-                                   select="string-join(('application/oebps-package+xml','application/smil+xml',
-                                                        'application/x-dtbncx+xml',
-                                                        $content-media-types),
-                                                       ' ')"/>
+                                   select="string-join(
+                                             ('application/oebps-package+xml','application/smil+xml',
+                                              if ($ebraille-compatibility='strict') then ()
+                                                                                    else 'application/x-dtbncx+xml',
+                                              $content-media-types),
+                                             ' ')"/>
                 </px:fileset-filter>
                 <p:xslt name="mapping">
                     <p:input port="stylesheet">
@@ -1442,6 +1444,8 @@
                             <p:pipe step="metadata" port="result"/>
                             <p:pipe step="main" port="ebraille-metadata"/>
                         </p:input>
+                        <p:with-option name="compatibility-mode"
+                                       select="if ($ebraille-compatibility='strict') then 'false' else 'true'"/>
                     </px:epub3-add-metadata>
                     <p:sink/>
                     <p:xslt>
