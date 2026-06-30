@@ -998,11 +998,10 @@
                     <p:input port="stylesheet">
                         <p:document href="braille-rendition.fileset.xsl"/>
                     </p:input>
-                    <p:with-param name="content-media-types" select="tokenize($content-media-types,'\s+')[not(.='')]"/>
-                    <p:with-param name="braille-rendition.package-document.base"
-                                  select="resolve-uri('EPUB/package-braille.opf',base-uri(/*))">
+                    <p:with-param name="epub-base" select="base-uri(/*)">
                         <p:pipe step="maybe-copy" port="fileset"/>
                     </p:with-param>
+                    <p:with-param name="content-media-types" select="tokenize($content-media-types,'\s+')[not(.='')]"/>
                 </p:xslt>
                 <p:sink/>
                 <!--
@@ -1554,7 +1553,7 @@
                     <p:insert match="/ocf:container/ocf:rootfiles">
                         <p:input port="insertion">
                             <p:inline xmlns="urn:oasis:names:tc:opendocument:xmlns:container">
-                                <rootfile full-path="EPUB/package-braille.opf" media-type="application/oebps-package+xml"
+                                <rootfile full-path="braille/package.opf" media-type="application/oebps-package+xml"
                                           rendition:accessMode="tactile" rendition:label="Transcribed to braille"/>
                             </p:inline>
                         </p:input>
@@ -1563,13 +1562,13 @@
                                                                then 'first-child'
                                                                else 'last-child'"/>
                     </p:insert>
-                    <p:add-attribute match="/ocf:container/ocf:rootfiles/ocf:rootfile[@full-path='EPUB/package-braille.opf']"
+                    <p:add-attribute match="/ocf:container/ocf:rootfiles/ocf:rootfile[@full-path='braille/package.opf']"
                                      attribute-name="rendition:language">
                         <p:with-option name="attribute-value" select="/opf:package/opf:metadata/dc:language[1]/string(.)">
                             <p:pipe step="braille-rendition.package-document" port="result"/>
                         </p:with-option>
                     </p:add-attribute>
-                    <p:add-attribute match="/ocf:container/ocf:rootfiles/ocf:rootfile[@full-path='EPUB/package-braille.opf']"
+                    <p:add-attribute match="/ocf:container/ocf:rootfiles/ocf:rootfile[@full-path='braille/package.opf']"
                                      attribute-name="rendition:layout">
                         <p:with-option name="attribute-value"
                                        select="(/opf:package/opf:metadata/opf:meta[@property='rendition:layout']/string(.),'reflowable')[1]">

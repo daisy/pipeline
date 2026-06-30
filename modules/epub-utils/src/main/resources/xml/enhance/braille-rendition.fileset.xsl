@@ -7,9 +7,17 @@
 	
 	<xsl:include href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
 	
-	<xsl:param name="braille-rendition.package-document.base" required="yes"/>
+	<xsl:param name="epub-base" required="yes" as="xs:string"/>
 	<xsl:param name="content-media-types" required="yes" as="xs:string*"/>
 	
+	<xsl:variable name="original-base" as="xs:string"
+	              select="pf:longest-common-uri(//d:file/resolve-uri(@href,base-uri(.)))"/>
+
+	<!--
+	    FIXME: assuming that the input does not have a "braille" folder
+	-->
+	<xsl:variable name="braille-base" as="xs:string" select="resolve-uri('braille/',$epub-base)"/>
+
 	<xsl:template match="/">
 		<d:fileset>
 			<xsl:apply-templates select="//d:file"/>
@@ -18,24 +26,21 @@
 	
 	<xsl:template match="d:fileset/d:file">
 		<xsl:choose>
-			<xsl:when test="@media-type=$content-media-types">
-				<xsl:variable name="default-href" select="resolve-uri(@href,pf:base-uri(.))"/>
+			<xsl:when test="@media-type=($content-media-types,'application/smil+xml')">
+				<xsl:variable name="original-href" select="resolve-uri(@href,pf:base-uri(.))"/>
+				<xsl:variable name="braille-href" select="resolve-uri(pf:relativize-uri($original-href,$original-base),
+				                                                      $braille-base)"/>
 				<xsl:element name="d:file">
-					<xsl:attribute name="href" select="replace($default-href,'^(.+)\.x?html|(.+)$','$1$2_braille.xhtml')"/>
-					<xsl:attribute name="original-href" select="$default-href"/>
-				</xsl:element>
-			</xsl:when>
-			<xsl:when test="@media-type='application/smil+xml'">
-				<xsl:variable name="default-href" select="resolve-uri(@href,pf:base-uri(.))"/>
-				<xsl:element name="d:file">
-					<xsl:attribute name="href" select="replace($default-href,'^(.+)\.smil|(.+)$','$1$2_braille.smil')"/>
-					<xsl:attribute name="original-href" select="$default-href"/>
+					<xsl:attribute name="href" select="$braille-href"/>
+					<xsl:attribute name="original-href" select="$original-href"/>
 				</xsl:element>
 			</xsl:when>
 			<xsl:when test="@media-type='application/oebps-package+xml'">
+				<xsl:variable name="original-href" select="resolve-uri(@href,pf:base-uri(.))"/>
+				<xsl:variable name="braille-href" select="resolve-uri('package.opf',$braille-base)"/>
 				<xsl:element name="d:file">
-					<xsl:attribute name="href" select="$braille-rendition.package-document.base"/>
-					<xsl:attribute name="original-href" select="resolve-uri(@href,pf:base-uri(.))"/>
+					<xsl:attribute name="href" select="$braille-href"/>
+					<xsl:attribute name="original-href" select="$original-href"/>
 				</xsl:element>
 			</xsl:when>
 		</xsl:choose>

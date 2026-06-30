@@ -892,34 +892,34 @@
 						<d:file href="result/EPUB/images/valentin.jpg" media-type="image/jpeg"
 						        original-href="../../resources/valentin.epub!/EPUB/images/valentin.jpg"/>
 						<d:file href="result/META-INF/container.xml" media-type="application/xml"/>
-						<d:file href="result/EPUB/C00000-1-cover_braille.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
-						<d:file href="result/EPUB/C00000-2-frontmatter_braille.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
-						<d:file href="result/EPUB/C00000-3-chapter_braille.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
-						<d:file href="result/EPUB/C00000-4-chapter_braille.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
-						<d:file href="result/EPUB/C00000-5-chapter_braille.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
-						<d:file href="result/EPUB/C00000-6-rearnotes_braille.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
-						<d:file href="result/EPUB/C00000-7-chapter_braille.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
-						<d:file href="result/EPUB/C00000-8-conclusion_braille.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
-						<d:file href="result/EPUB/C00000-9-footnotes_braille.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
-						<d:file href="result/EPUB/nav_braille.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
-						<d:file href="result/EPUB/C00000-1-cover_braille.css" media-type="text/plain"/>
-						<d:file href="result/EPUB/C00000-2-frontmatter_braille.css" media-type="text/plain"/>
-						<d:file href="result/EPUB/C00000-3-chapter_braille.css" media-type="text/plain"/>
-						<d:file href="result/EPUB/C00000-4-chapter_braille.css" media-type="text/plain"/>
-						<d:file href="result/EPUB/C00000-5-chapter_braille.css" media-type="text/plain"/>
-						<d:file href="result/EPUB/C00000-6-rearnotes_braille.css" media-type="text/plain"/>
-						<d:file href="result/EPUB/C00000-7-chapter_braille.css" media-type="text/plain"/>
-						<d:file href="result/EPUB/C00000-8-conclusion_braille.css" media-type="text/plain"/>
-						<d:file href="result/EPUB/C00000-9-footnotes_braille.css" media-type="text/plain"/>
-						<d:file href="result/EPUB/nav_braille.css" media-type="text/plain"/>
+						<d:file href="result/braille/C00000-1-cover.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/braille/C00000-2-frontmatter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/braille/C00000-3-chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/braille/C00000-4-chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/braille/C00000-5-chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/braille/C00000-6-rearnotes.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/braille/C00000-7-chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/braille/C00000-8-conclusion.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/braille/C00000-9-footnotes.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/braille/nav.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/braille/C00000-1-cover.css" media-type="text/plain"/>
+						<d:file href="result/braille/C00000-2-frontmatter.css" media-type="text/plain"/>
+						<d:file href="result/braille/C00000-3-chapter.css" media-type="text/plain"/>
+						<d:file href="result/braille/C00000-4-chapter.css" media-type="text/plain"/>
+						<d:file href="result/braille/C00000-5-chapter.css" media-type="text/plain"/>
+						<d:file href="result/braille/C00000-6-rearnotes.css" media-type="text/plain"/>
+						<d:file href="result/braille/C00000-7-chapter.css" media-type="text/plain"/>
+						<d:file href="result/braille/C00000-8-conclusion.css" media-type="text/plain"/>
+						<d:file href="result/braille/C00000-9-footnotes.css" media-type="text/plain"/>
+						<d:file href="result/braille/nav.css" media-type="text/plain"/>
 						<d:file href="result/META-INF/metadata.xml"/>
-						<d:file href="result/EPUB/package-braille.opf" media-type="application/oebps-package+xml" indent="true"/>
+						<d:file href="result/braille/package.opf" media-type="application/oebps-package+xml" indent="true"/>
 						<d:file href="result/EPUB/renditionMapping.html" indent="true"/>
 					</d:fileset>
 				</x:document>
 			</x:expect>
 			<x:context label="the package document">
-				<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/package-braille.opf')]"/>
+				<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/braille/package.opf')]"/>
 			</x:context>
 			<x:expect label="the package document" type="custom"
 			          href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl" step="x:epub3-compare-package-doc">
@@ -957,35 +957,35 @@
 							<meta name="nordic:supplier" content="MTM"/>
 						</metadata>
 						<manifest>
-							<item id="item_1" href="css/accessibility.css" media-type="text/css"/>
-							<item id="item_2" href="css/fonts/opendyslexic/OpenDyslexic-Regular.otf" media-type="application/x-font-opentype"/>
-							<item id="item_3" href="css/fonts/opendyslexic/OpenDyslexic-Italic.otf" media-type="application/x-font-opentype"/>
-							<item id="item_4" href="css/fonts/opendyslexic/OpenDyslexic-Bold.otf" media-type="application/x-font-opentype"/>
-							<item id="item_5" href="css/fonts/opendyslexic/OpenDyslexic-BoldItalic.otf" media-type="application/x-font-opentype"/>
-							<item id="item_6" href="css/fonts/opendyslexic/OpenDyslexicMono-Regular.otf" media-type="application/x-font-opentype"/>
-							<item id="item_7" href="css/fonts/opendyslexic/LICENSE.txt" media-type="text/plain"/>
-							<item id="item_8" href="images/valentin.jpg" media-type="image/jpeg"/>
-							<item id="item_9" href="nav.ncx" media-type="application/x-dtbncx+xml"/>
-							<item id="item_10" href="C00000-1-cover_braille.xhtml" media-type="application/xhtml+xml"/>
-							<item id="item_11" href="C00000-2-frontmatter_braille.xhtml" media-type="application/xhtml+xml"/>
-							<item id="item_12" href="C00000-3-chapter_braille.xhtml" media-type="application/xhtml+xml"/>
-							<item id="item_13" href="C00000-4-chapter_braille.xhtml" media-type="application/xhtml+xml"/>
-							<item id="item_14" href="C00000-5-chapter_braille.xhtml" media-type="application/xhtml+xml"/>
-							<item id="item_15" href="C00000-6-rearnotes_braille.xhtml" media-type="application/xhtml+xml"/>
-							<item id="item_16" href="C00000-7-chapter_braille.xhtml" media-type="application/xhtml+xml"/>
-							<item id="item_17" href="C00000-8-conclusion_braille.xhtml" media-type="application/xhtml+xml"/>
-							<item id="item_18" href="C00000-9-footnotes_braille.xhtml" media-type="application/xhtml+xml"/>
-							<item id="item_19" href="nav_braille.xhtml" properties="nav" media-type="application/xhtml+xml"/>
-							<item id="item_20" href="C00000-1-cover_braille.css" media-type="text/css"/>
-							<item id="item_21" href="nav_braille.css" media-type="text/css"/>
-							<item id="item_22" href="C00000-9-footnotes_braille.css" media-type="text/css"/>
-							<item id="item_23" href="C00000-5-chapter_braille.css" media-type="text/css"/>
-							<item id="item_24" href="C00000-6-rearnotes_braille.css" media-type="text/css"/>
-							<item id="item_25" href="C00000-7-chapter_braille.css" media-type="text/css"/>
-							<item id="item_26" href="C00000-8-conclusion_braille.css" media-type="text/css"/>
-							<item id="item_27" href="C00000-4-chapter_braille.css" media-type="text/css"/>
-							<item id="item_28" href="C00000-2-frontmatter_braille.css" media-type="text/css"/>
-							<item id="item_29" href="C00000-3-chapter_braille.css" media-type="text/css"/>
+							<item id="item_1" href="../EPUB/css/accessibility.css" media-type="text/css"/>
+							<item id="item_2" href="../EPUB/css/fonts/opendyslexic/OpenDyslexic-Regular.otf" media-type="application/x-font-opentype"/>
+							<item id="item_3" href="../EPUB/css/fonts/opendyslexic/OpenDyslexic-Italic.otf" media-type="application/x-font-opentype"/>
+							<item id="item_4" href="../EPUB/css/fonts/opendyslexic/OpenDyslexic-Bold.otf" media-type="application/x-font-opentype"/>
+							<item id="item_5" href="../EPUB/css/fonts/opendyslexic/OpenDyslexic-BoldItalic.otf" media-type="application/x-font-opentype"/>
+							<item id="item_6" href="../EPUB/css/fonts/opendyslexic/OpenDyslexicMono-Regular.otf" media-type="application/x-font-opentype"/>
+							<item id="item_7" href="../EPUB/css/fonts/opendyslexic/LICENSE.txt" media-type="text/plain"/>
+							<item id="item_8" href="../EPUB/images/valentin.jpg" media-type="image/jpeg"/>
+							<item id="item_9" href="../EPUB/nav.ncx" media-type="application/x-dtbncx+xml"/>
+							<item id="item_10" href="C00000-1-cover.xhtml" media-type="application/xhtml+xml"/>
+							<item id="item_11" href="C00000-2-frontmatter.xhtml" media-type="application/xhtml+xml"/>
+							<item id="item_12" href="C00000-3-chapter.xhtml" media-type="application/xhtml+xml"/>
+							<item id="item_13" href="C00000-4-chapter.xhtml" media-type="application/xhtml+xml"/>
+							<item id="item_14" href="C00000-5-chapter.xhtml" media-type="application/xhtml+xml"/>
+							<item id="item_15" href="C00000-6-rearnotes.xhtml" media-type="application/xhtml+xml"/>
+							<item id="item_16" href="C00000-7-chapter.xhtml" media-type="application/xhtml+xml"/>
+							<item id="item_17" href="C00000-8-conclusion.xhtml" media-type="application/xhtml+xml"/>
+							<item id="item_18" href="C00000-9-footnotes.xhtml" media-type="application/xhtml+xml"/>
+							<item id="item_19" href="nav.xhtml" properties="nav" media-type="application/xhtml+xml"/>
+							<item id="item_20" href="C00000-1-cover.css" media-type="text/css"/>
+							<item id="item_21" href="nav.css" media-type="text/css"/>
+							<item id="item_22" href="C00000-9-footnotes.css" media-type="text/css"/>
+							<item id="item_23" href="C00000-5-chapter.css" media-type="text/css"/>
+							<item id="item_24" href="C00000-6-rearnotes.css" media-type="text/css"/>
+							<item id="item_25" href="C00000-7-chapter.css" media-type="text/css"/>
+							<item id="item_26" href="C00000-8-conclusion.css" media-type="text/css"/>
+							<item id="item_27" href="C00000-4-chapter.css" media-type="text/css"/>
+							<item id="item_28" href="C00000-2-frontmatter.css" media-type="text/css"/>
+							<item id="item_29" href="C00000-3-chapter.css" media-type="text/css"/>
 						</manifest>
 						<spine toc="item_9">
 							<itemref id="itemref_1" idref="item_10" linear="no"/>
@@ -1010,7 +1010,7 @@
 					<container xmlns="urn:oasis:names:tc:opendocument:xmlns:container" version="1.0"
 					           xmlns:rendition="http://www.idpf.org/2013/rendition">
 						<rootfiles>
-							<rootfile full-path="EPUB/package-braille.opf" media-type="application/oebps-package+xml"
+							<rootfile full-path="braille/package.opf" media-type="application/oebps-package+xml"
 							          rendition:accessMode="tactile" rendition:label="Transcribed to braille"
 							          rendition:language="en-Brai" rendition:layout="reflowable"/>
 							<rootfile full-path="EPUB/package.opf" media-type="application/oebps-package+xml"/>
@@ -1023,10 +1023,10 @@
 			</x:expect>
 			<x:context label="the first content document">
 				<x:document type="port" port="result.in-memory"
-				            select="/*[base-uri()=resolve-uri('result/EPUB/C00000-1-cover_braille.xhtml')]"/>
+				            select="/*[base-uri()=resolve-uri('result/braille/C00000-1-cover.xhtml')]"/>
 			</x:context>
 			<x:expect label="cross-references should be correct" type="xpath"
-			          test="/html:html/html:head/html:link[@rel='next']/@href" equals="'C00000-2-frontmatter_braille.xhtml'"/>
+			          test="/html:html/html:head/html:link[@rel='next']/@href" equals="'C00000-2-frontmatter.xhtml'"/>
 			<x:context label="the renditionMapping document">
 				<x:document type="port" port="result.in-memory"
 				            select="/*[base-uri()=resolve-uri('result/EPUB/renditionMapping.html')]"/>
@@ -1044,7 +1044,7 @@
 							<a href="package.opf#epubcfi(/6/2[itemref_1]!/4/2/2/1)"/>
 						</li>
 						<li>
-							<a href="package-braille.opf#epubcfi(/6/2[itemref_1]!/4/2/2/1)"/>
+							<a href="../braille/package.opf#epubcfi(/6/2[itemref_1]!/4/2/2/1)"/>
 						</li>
 					</ul>
 				</x:document>
