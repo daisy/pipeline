@@ -1447,7 +1447,9 @@
                     <p:insert position="last-child" match="/ocf:container">
                         <p:input port="insertion">
                             <p:inline xmlns="urn:oasis:names:tc:opendocument:xmlns:container">
-                                <link href="EPUB/renditionMapping.html" rel="mapping" media-type="application/xhtml+xml"/>
+                                <links>
+                                    <link href="EPUB/renditionMapping.html" rel="mapping" media-type="application/xhtml+xml"/>
+                                </links>
                             </p:inline>
                         </p:input>
                     </p:insert>

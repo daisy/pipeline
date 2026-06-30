@@ -99,7 +99,9 @@
 								  rendition:accessMode="tactile" rendition:label="Transcribed to braille"
 								  rendition:language="en-Brai" rendition:layout="reflowable"/>
 					</rootfiles>
-					<link href="EPUB/renditionMapping.html" rel="mapping" media-type="application/xhtml+xml"/>
+					<links>
+						<link href="EPUB/renditionMapping.html" rel="mapping" media-type="application/xhtml+xml"/>
+					</links>
 				</container>
 			</x:document>
 		</x:expect>
