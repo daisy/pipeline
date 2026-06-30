@@ -1121,6 +1121,7 @@
                                                                    '(include-braille-code-in-language)',
                                                                    $braille-translator,
                                                                    '(document-locale:',$lang,')')"/>
+                        <p:with-param port="parameters" name="translate-attributes" select="'@alt|@abbr|@title'"/>
                     </px:transform>
                     <p:group name="extract-css">
                         <p:output port="result" primary="true">
