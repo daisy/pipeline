@@ -915,7 +915,7 @@
 						<d:file href="result/braille/nav.css" media-type="text/plain"/>
 						<d:file href="result/META-INF/metadata.xml"/>
 						<d:file href="result/braille/package.opf" media-type="application/oebps-package+xml" indent="true"/>
-						<d:file href="result/EPUB/renditionMapping.html" indent="true"/>
+						<d:file href="result/renditionMapping.html" indent="true"/>
 					</d:fileset>
 				</x:document>
 			</x:expect>
@@ -1017,7 +1017,7 @@
 							<rootfile full-path="EPUB/package.opf" media-type="application/oebps-package+xml"/>
 						</rootfiles>
 						<links>
-							<link href="EPUB/renditionMapping.html" rel="mapping" media-type="application/xhtml+xml"/>
+							<link href="renditionMapping.html" rel="mapping" media-type="application/xhtml+xml"/>
 						</links>
 					</container>
 				</x:document>
@@ -1030,22 +1030,22 @@
 			          test="/html:html/html:head/html:link[@rel='next']/@href" equals="'C00000-2-frontmatter.xhtml'"/>
 			<x:context label="the renditionMapping document">
 				<x:document type="port" port="result.in-memory"
-				            select="/*[base-uri()=resolve-uri('result/EPUB/renditionMapping.html')]"/>
+				            select="/*[base-uri()=resolve-uri('result/renditionMapping.html')]"/>
 			</x:context>
 			<x:expect label="there should be 415 synchronization points" type="xpath"
 			          test="count(//html:nav/*)" equals="415"/>
 			<x:context label="the first synchronization point">
 				<x:document type="port" port="result.in-memory"
-				            select="/*[base-uri()=resolve-uri('result/EPUB/renditionMapping.html')]//html:ul[1]"/>
+				            select="/*[base-uri()=resolve-uri('result/renditionMapping.html')]//html:ul[1]"/>
 			</x:context>
 			<x:expect label="the first synchronization point should be as expected" type="compare">
 				<x:document type="inline" xmlns="http://www.w3.org/1999/xhtml">
 					<ul>
 						<li>
-							<a href="package.opf#epubcfi(/6/2[itemref_1]!/4/2/2/1)"/>
+							<a href="EPUB/package.opf#epubcfi(/6/2[itemref_1]!/4/2/2/1)"/>
 						</li>
 						<li>
-							<a href="../braille/package.opf#epubcfi(/6/2[itemref_1]!/4/2/2/1)"/>
+							<a href="braille/package.opf#epubcfi(/6/2[itemref_1]!/4/2/2/1)"/>
 						</li>
 					</ul>
 				</x:document>

@@ -1503,12 +1503,13 @@
                     <p:with-param name="braille-rendition.html" select="collection()">
                         <p:pipe step="braille-rendition.process-html" port="html-with-sync-points.in-memory"/>
                     </p:with-param>
-                    <p:with-param name="output-base-uri" select="resolve-uri('EPUB/renditionMapping.html',base-uri(/*))">
+                    <!-- FIXME: assumes there is no file named "renditionMapping.html" yet -->
+                    <p:with-param name="output-base-uri" select="resolve-uri('renditionMapping.html',base-uri(/*))">
                         <p:pipe step="maybe-copy" port="fileset"/>
                     </p:with-param>
                 </p:xslt>
                 <px:set-base-uri name="rendition-mapping">
-                    <p:with-option name="base-uri" select="resolve-uri('EPUB/renditionMapping.html',base-uri(/*))">
+                    <p:with-option name="base-uri" select="resolve-uri('renditionMapping.html',base-uri(/*))">
                         <p:pipe step="maybe-copy" port="fileset"/>
                     </p:with-option>
                 </px:set-base-uri>
@@ -1580,7 +1581,7 @@
                         <p:input port="insertion">
                             <p:inline xmlns="urn:oasis:names:tc:opendocument:xmlns:container">
                                 <links>
-                                    <link href="EPUB/renditionMapping.html" rel="mapping" media-type="application/xhtml+xml"/>
+                                    <link href="renditionMapping.html" rel="mapping" media-type="application/xhtml+xml"/>
                                 </links>
                             </p:inline>
                         </p:input>

@@ -54,7 +54,6 @@
 					<c:file name="EPUB/nav.ncx"/>
 					<c:file name="EPUB/nav.xhtml"/>
 					<c:file name="EPUB/package.opf"/>
-					<c:file name="EPUB/renditionMapping.html"/>
 					<c:file name="META-INF/container.xml"/>
 					<c:file name="META-INF/metadata.xml"/>
 					<c:file name="braille/C00000-1-cover.css"/>
@@ -80,6 +79,7 @@
 					<c:file name="braille/nav.xhtml"/>
 					<c:file name="braille/package.opf"/>
 					<c:file name="mimetype"/>
+					<c:file name="renditionMapping.html"/>
 				</c:zipfile>
 			</x:document>
 		</x:expect>
@@ -101,7 +101,7 @@
 								  rendition:language="en-Brai" rendition:layout="reflowable"/>
 					</rootfiles>
 					<links>
-						<link href="EPUB/renditionMapping.html" rel="mapping" media-type="application/xhtml+xml"/>
+						<link href="renditionMapping.html" rel="mapping" media-type="application/xhtml+xml"/>
 					</links>
 				</container>
 			</x:document>
