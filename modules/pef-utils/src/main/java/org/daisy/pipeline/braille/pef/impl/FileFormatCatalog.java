@@ -288,7 +288,8 @@ public class FileFormatCatalog implements MediumProvider {
 												// setting a specific cell-width and cell-height is useful for PDF
 												// output, namely to align the PDF output with the output of an embosser
 												// that is not managed by Pipeline
-												if (format instanceof PEFFileFormat && ("cell-width".equals(k) || "cell-height".equals(k))) {
+												if ((format instanceof PEFFileFormat || format instanceof ConfigurableFileFormat)
+												    && ("cell-width".equals(k) || "cell-height".equals(k))) {
 													try {
 														Double d = parseLength(f.getValue(), k).toUnit(Unit.MM).getValue().doubleValue();
 														if ("cell-width".equals(k))
