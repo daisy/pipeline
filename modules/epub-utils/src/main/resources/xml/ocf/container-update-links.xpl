@@ -2,19 +2,16 @@
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc-internal"
-                type="pxi:epub-package-doc-update-links"
+                type="pxi:epub3-ocf-container-update-links"
                 name="main">
 
 	<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-		<p>Update the links in a EPUB package document after resources have been
-		relocated.</p>
+		<p>Update the links in a EPUB container file after resources have been relocated.</p>
 	</p:documentation>
 	
 	<p:input port="source" primary="true">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			<p>The input package document</p>
-			<p>If the package document itself is being relocated, the base URI of this document is
-			assumed to correspond with the original location.</p>
+			<p>The input container file</p>
 		</p:documentation>
 	</p:input>
 	
@@ -26,7 +23,7 @@
 	
 	<p:output port="result">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			<p>The output package document with updated links</p>
+			<p>The output container file with updated links</p>
 		</p:documentation>
 	</p:output>
 	
@@ -50,7 +47,7 @@
 			<p:pipe step="mapping" port="result"/>
 		</p:input>
 		<p:input port="stylesheet">
-			<p:document href="package-doc-update-links.xsl"/>
+			<p:document href="container-update-links.xsl"/>
 		</p:input>
 		<p:input port="parameters">
 			<p:empty/>

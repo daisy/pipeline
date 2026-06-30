@@ -21,7 +21,12 @@
                 name="main">
     
     <p:input port="source.fileset" primary="true"/>
-    <p:input port="source.in-memory" sequence="true"/>
+    <p:input port="source.in-memory" sequence="true">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>Must include exactly one navigation document, which should be marked with a
+            <code>role</code> attribute with value <code>nav</code> in the fileset manifest.</p>
+        </p:documentation>
+    </p:input>
     
     <p:output port="result.fileset" primary="true"/>
     <p:output port="result.in-memory" sequence="true">
@@ -151,7 +156,7 @@
     </p:import>
     <p:import href="../library.xpl">
         <p:documentation>
-            px:epub-update-links
+            px:epub-rename-files
             px:epub3-create-mediaoverlays
             px:epub3-add-mediaoverlays
             px:epub3-add-metadata
@@ -189,6 +194,12 @@
     <cx:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xsl" type="application/xslt+xml">
         <p:documentation>
             pf:get-braille-code-info
+        </p:documentation>
+    </cx:import>
+    <cx:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl" type="application/xslt+xml">
+        <p:documentation>
+            pf:relativize-uri
+            pf:longest-common-uri
         </p:documentation>
     </cx:import>
 
@@ -889,11 +900,78 @@
                 load default rendition
             -->
             
-            <px:fileset-filter media-types="application/oebps-package+xml"/>
-            <p:delete match="d:file[preceding::d:file]"/>
-            <px:fileset-load>
+            <p:group>
+                <p:output port="result"/>
+                <px:fileset-filter media-types="application/oebps-package+xml"/>
+                <p:delete match="d:file[preceding::d:file]"/>
+                <px:fileset-load>
+                    <p:input port="in-memory">
+                        <p:pipe step="add-mediaoverlays" port="in-memory"/>
+                    </p:input>
+                </px:fileset-load>
+                <pxi:opf-manifest-to-fileset name="fileset"/>
+                <p:sink/>
+                <px:fileset-intersect>
+                    <p:input port="source">
+                        <p:pipe step="add-mediaoverlays" port="fileset"/>
+                        <p:pipe step="fileset" port="result"/>
+                    </p:input>
+                </px:fileset-intersect>
+            </p:group>
+            <p:choose name="maybe-move-default-rendition">
+                <p:when test="$ebraille-compatibility">
+                    <!--
+                        move the default rendition to another folder
+                    -->
+                    <p:output port="fileset" primary="true"/>
+                    <p:output port="in-memory" sequence="true">
+                        <p:pipe step="rename" port="result.in-memory"/>
+                    </p:output>
+                    <p:output port="default-rendition.fileset">
+                        <p:pipe step="move" port="result.fileset"/>
+                    </p:output>
+                    <p:variable name="epub-base" select="base-uri(/*)">
+                        <p:pipe step="maybe-copy" port="fileset"/>
+                    </p:variable>
+                    <px:fileset-rebase>
+                        <p:with-option name="new-base" select="pf:longest-common-uri(//d:file/resolve-uri(@href,base-uri(.)))"/>
+                    </px:fileset-rebase>
+                    <px:fileset-copy name="move">
+                        <p:with-option name="target" select="resolve-uri('original/',$epub-base)"/>
+                    </px:fileset-copy>
+                    <p:sink/>
+                    <!--
+                        rename files and update cross references (notably in container.xml)
+                    -->
+                    <px:epub-rename-files name="rename">
+                        <p:input port="source.fileset">
+                            <p:pipe step="add-mediaoverlays" port="fileset"/>
+                        </p:input>
+                        <p:input port="source.in-memory">
+                            <p:pipe step="add-mediaoverlays" port="in-memory"/>
+                        </p:input>
+                        <p:input port="mapping">
+                            <p:pipe step="move" port="mapping"/>
+                        </p:input>
+                    </px:epub-rename-files>
+                </p:when>
+                <p:otherwise>
+                    <p:output port="fileset" primary="true">
+                        <p:pipe step="add-mediaoverlays" port="fileset"/>
+                    </p:output>
+                    <p:output port="in-memory" sequence="true">
+                        <p:pipe step="add-mediaoverlays" port="in-memory"/>
+                    </p:output>
+                    <p:output port="default-rendition.fileset">
+                        <p:pipe step="identity" port="result"/>
+                    </p:output>
+                    <p:identity name="identity"/>
+                    <p:sink/>
+                </p:otherwise>
+            </p:choose>
+            <px:fileset-load media-types="application/oebps-package+xml">
                 <p:input port="in-memory">
-                    <p:pipe step="add-mediaoverlays" port="in-memory"/>
+                    <p:pipe step="maybe-move-default-rendition" port="in-memory"/>
                 </p:input>
             </px:fileset-load>
             <!-- perform a unity XSL transformation because otherwise for some reason the
@@ -915,17 +993,7 @@
                 </p:input>
             </p:xslt>
             <p:identity name="default-rendition.package-document"/>
-            <p:group name="default-rendition.fileset">
-                <p:output port="result"/>
-                <pxi:opf-manifest-to-fileset name="fileset"/>
-                <p:sink/>
-                <px:fileset-intersect>
-                    <p:input port="source">
-                        <p:pipe step="add-mediaoverlays" port="fileset"/>
-                        <p:pipe step="fileset" port="result"/>
-                    </p:input>
-                </px:fileset-intersect>
-            </p:group>
+            <p:sink/>
             
             <!--
                 insert synchronization anchors in original html
@@ -938,8 +1006,11 @@
                 </p:output>
                 <p:output port="in-memory" sequence="true" primary="true"/>
                 <px:fileset-load name="load">
+                    <p:input port="fileset">
+                        <p:pipe step="maybe-move-default-rendition" port="default-rendition.fileset"/>
+                    </p:input>
                     <p:input port="in-memory">
-                        <p:pipe step="add-mediaoverlays" port="in-memory"/>
+                        <p:pipe step="maybe-move-default-rendition" port="in-memory"/>
                     </p:input>
                     <p:with-option name="media-types" select="$content-media-types"/>
                 </px:fileset-load>
@@ -983,11 +1054,11 @@
             <p:group name="braille-rendition.copy">
                 <p:output port="fileset" primary="true"/>
                 <p:output port="in-memory" sequence="true">
-                    <p:pipe step="apply" port="result.in-memory"/>
+                    <p:pipe step="rename" port="result.in-memory"/>
                 </p:output>
                 <px:fileset-filter name="filter">
                     <p:input port="source">
-                        <p:pipe step="default-rendition.fileset" port="result"/>
+                        <p:pipe step="maybe-move-default-rendition" port="default-rendition.fileset"/>
                     </p:input>
                     <p:with-option name="media-types"
                                    select="string-join(('application/oebps-package+xml','application/smil+xml',
@@ -1002,6 +1073,7 @@
                     <p:with-param name="epub-base" select="base-uri(/*)">
                         <p:pipe step="maybe-copy" port="fileset"/>
                     </p:with-param>
+                    <p:with-param name="ebraille-compatibility" select="$ebraille-compatibility"/>
                     <p:with-param name="content-media-types" select="tokenize($content-media-types,'\s+')[not(.='')]"/>
                 </p:xslt>
                 <p:sink/>
@@ -1013,7 +1085,7 @@
                         <p:pipe step="filter" port="result"/>
                     </p:input>
                     <p:input port="source.in-memory">
-                        <p:pipe step="add-mediaoverlays" port="in-memory"/>
+                        <p:pipe step="maybe-move-default-rendition" port="in-memory"/>
                     </p:input>
                     <p:input port="update.fileset">
                         <p:pipe step="default-rendition.html-with-sync-points" port="fileset"/>
@@ -1023,27 +1095,16 @@
                     </p:input>
                 </px:fileset-update>
                 <!--
-                    update cross references
+                    rename files and update cross references
                 -->
-                <px:epub-update-links name="update-links">
+                <px:epub-rename-files name="rename">
                     <p:input port="source.in-memory">
                         <p:pipe step="update-html" port="result.in-memory"/>
                     </p:input>
                     <p:input port="mapping">
                         <p:pipe step="mapping" port="result"/>
                     </p:input>
-                </px:epub-update-links>
-                <!--
-                    perform the rename
-                -->
-                <px:fileset-apply name="apply">
-                    <p:input port="source.in-memory">
-                        <p:pipe step="update-links" port="result.in-memory"/>
-                    </p:input>
-                    <p:input port="mapping">
-                        <p:pipe step="mapping" port="result"/>
-                    </p:input>
-                </px:fileset-apply>
+                </px:epub-rename-files>
             </p:group>
             
             <!--
@@ -1103,7 +1164,7 @@
                             <!-- media="braille" would be more appropriate, see https://github.com/braillespecs/braille-css/issues/1 -->
                             <px:css-cascade type="text/css text/x-scss" media="embossed">
                                 <p:input port="source.in-memory">
-                                    <p:pipe step="add-mediaoverlays" port="in-memory"/>
+                                    <p:pipe step="maybe-move-default-rendition" port="in-memory"/>
                                 </p:input>
                             </px:css-cascade>
                         </p:when>
@@ -1400,12 +1461,12 @@
             <p:group name="add-rendition">
                 <p:output port="fileset" primary="true"/>
                 <p:output port="in-memory" sequence="true">
-                    <p:pipe step="add-mediaoverlays" port="in-memory"/>
+                    <p:pipe step="maybe-move-default-rendition" port="in-memory"/>
                     <p:pipe step="braille-rendition.process-package-doc" port="in-memory"/>
                 </p:output>
                 <px:fileset-join>
                     <p:input port="source">
-                        <p:pipe step="add-mediaoverlays" port="fileset"/>
+                        <p:pipe step="maybe-move-default-rendition" port="fileset"/>
                         <p:pipe step="braille-rendition.process-package-doc" port="fileset"/>
                     </p:input>
                 </px:fileset-join>
@@ -1552,10 +1613,13 @@
                 </px:fileset-load>
                 <p:group name="container">
                     <p:output port="result"/>
+                    <p:variable name="epub-base" select="base-uri(/*)">
+                        <p:pipe step="maybe-copy" port="fileset"/>
+                    </p:variable>
                     <p:insert match="/ocf:container/ocf:rootfiles">
                         <p:input port="insertion">
                             <p:inline xmlns="urn:oasis:names:tc:opendocument:xmlns:container">
-                                <rootfile full-path="braille/package.opf" media-type="application/oebps-package+xml"
+                                <rootfile full-path="@@@" media-type="application/oebps-package+xml"
                                           rendition:accessMode="tactile" rendition:label="Transcribed to braille"/>
                             </p:inline>
                         </p:input>
@@ -1564,16 +1628,22 @@
                                                                then 'first-child'
                                                                else 'last-child'"/>
                     </p:insert>
-                    <p:add-attribute match="/ocf:container/ocf:rootfiles/ocf:rootfile[@full-path='braille/package.opf']"
+                    <p:add-attribute match="/ocf:container/ocf:rootfiles/ocf:rootfile[@full-path='@@@']"
                                      attribute-name="rendition:language">
                         <p:with-option name="attribute-value" select="/opf:package/opf:metadata/dc:language[1]/string(.)">
                             <p:pipe step="braille-rendition.package-document" port="result"/>
                         </p:with-option>
                     </p:add-attribute>
-                    <p:add-attribute match="/ocf:container/ocf:rootfiles/ocf:rootfile[@full-path='braille/package.opf']"
+                    <p:add-attribute match="/ocf:container/ocf:rootfiles/ocf:rootfile[@full-path='@@@']"
                                      attribute-name="rendition:layout">
                         <p:with-option name="attribute-value"
                                        select="(/opf:package/opf:metadata/opf:meta[@property='rendition:layout']/string(.),'reflowable')[1]">
+                            <p:pipe step="braille-rendition.package-document" port="result"/>
+                        </p:with-option>
+                    </p:add-attribute>
+                    <p:add-attribute match="/ocf:container/ocf:rootfiles/ocf:rootfile[@full-path='@@@']"
+                                     attribute-name="full-path">
+                        <p:with-option name="attribute-value" select="pf:relativize-uri(base-uri(/*),$epub-base)">
                             <p:pipe step="braille-rendition.package-document" port="result"/>
                         </p:with-option>
                     </p:add-attribute>

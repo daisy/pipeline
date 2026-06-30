@@ -55,6 +55,11 @@
             pxi:epub-package-doc-update-links
         </p:documentation>
     </p:import>
+    <p:import href="ocf/container-update-links.xpl">
+        <p:documentation>
+            pxi:epub3-ocf-container-update-links
+        </p:documentation>
+    </p:import>
 
     <p:documentation>Update cross-references in package document</p:documentation>
     <px:fileset-filter media-types="application/oebps-package+xml" name="opf">
@@ -95,8 +100,8 @@
     </px:fileset-update>
     <p:sink/>
 
-    <p:documentation>Update cross-references in NCX document</p:documentation>
-    <px:fileset-filter media-types="application/x-dtbncx+xml" name="ncx">
+    <p:documentation>Update cross-references in container file</p:documentation>
+    <px:fileset-filter href="*/META-INF/container.xml" name="container">
         <p:input port="source">
             <p:pipe step="opf" port="not-matched"/>
         </p:input>
@@ -107,6 +112,45 @@
     <px:fileset-load>
         <p:input port="in-memory">
             <p:pipe step="opf" port="not-matched.in-memory"/>
+        </p:input>
+    </px:fileset-load>
+    <p:for-each name="updated-links-in-container.in-memory">
+        <p:output port="result"/>
+        <pxi:epub3-ocf-container-update-links>
+            <p:input port="mapping">
+                <p:pipe step="main" port="mapping"/>
+            </p:input>
+        </pxi:epub3-ocf-container-update-links>
+    </p:for-each>
+    <p:sink/>
+    <px:fileset-update name="updated-links-in-container">
+        <p:input port="source.fileset">
+            <p:pipe step="updated-links-in-opf" port="result.fileset"/>
+        </p:input>
+        <p:input port="source.in-memory">
+            <p:pipe step="updated-links-in-opf" port="result.in-memory"/>
+        </p:input>
+        <p:input port="update.fileset">
+            <p:pipe step="container" port="result"/>
+        </p:input>
+        <p:input port="update.in-memory">
+            <p:pipe step="updated-links-in-container.in-memory" port="result"/>
+        </p:input>
+    </px:fileset-update>
+    <p:sink/>
+    
+    <p:documentation>Update cross-references in NCX document</p:documentation>
+    <px:fileset-filter media-types="application/x-dtbncx+xml" name="ncx">
+        <p:input port="source">
+            <p:pipe step="container" port="not-matched"/>
+        </p:input>
+        <p:input port="source.in-memory">
+            <p:pipe step="container" port="not-matched.in-memory"/>
+        </p:input>
+    </px:fileset-filter>
+    <px:fileset-load>
+        <p:input port="in-memory">
+            <p:pipe step="container" port="not-matched.in-memory"/>
         </p:input>
     </px:fileset-load>
     <p:for-each name="updated-links-in-ncx.in-memory">
@@ -120,10 +164,10 @@
     <p:sink/>
     <px:fileset-update name="updated-links-in-ncx">
         <p:input port="source.fileset">
-            <p:pipe step="updated-links-in-opf" port="result.fileset"/>
+            <p:pipe step="updated-links-in-container" port="result.fileset"/>
         </p:input>
         <p:input port="source.in-memory">
-            <p:pipe step="updated-links-in-opf" port="result.in-memory"/>
+            <p:pipe step="updated-links-in-container" port="result.in-memory"/>
         </p:input>
         <p:input port="update.fileset">
             <p:pipe step="ncx" port="result"/>

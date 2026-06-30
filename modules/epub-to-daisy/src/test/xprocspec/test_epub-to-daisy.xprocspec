@@ -64,8 +64,7 @@
 					<d:file href="out/epub3/EPUB/front.xhtml" media-type="application/xhtml+xml"
 					        doctype="&lt;!DOCTYPE html&gt;"/>
 					<d:file href="out/epub3/EPUB/toc.ncx" media-type="application/x-dtbncx+xml"/>
-					<d:file href="out/epub3/META-INF/container.xml" media-type="application/xml"
-					        original-href="../../../../epub-utils/src/test/resources/minimal.epub/META-INF/container.xml"/>
+					<d:file href="out/epub3/META-INF/container.xml" media-type="application/xml"/>
 					<d:file href="out/epub3/EPUB/nav.xhtml" media-type="application/xhtml+xml"
 					        doctype="&lt;!DOCTYPE html&gt;"/>
 					<d:file href="out/epub3/EPUB/package.opf" media-type="application/oebps-package+xml" media-version="2.0" indent="true"/>
