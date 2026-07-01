@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:opf="http://www.idpf.org/2007/opf"
@@ -9,6 +9,8 @@
 	
 	<xsl:include href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
 	<xsl:include href="http://www.daisy.org/pipeline/modules/common-utils/generate-id.xsl"/>
+	
+	<xsl:param name="ebraille-compatibility" as="xs:string?" static="true"/> <!-- soft|strict -->
 	
 	<xsl:variable name="css.fileset" select="collection()[2]"/>
 	<xsl:variable name="html" select="collection()[position() &gt; 2]"/>
@@ -34,6 +36,13 @@
 		</xsl:copy>
 	</xsl:template>
 	
+	<!--
+	    Don't use dc:rights and dc:publisher of original for eBraille
+	-->
+	<xsl:template use-when="$ebraille-compatibility"
+	              match="metadata/dc:rights[not(@refines)]|
+	                     metadata/dc:publisher[not(@refines)]"/>
+
 	<!--
 	    Add CSS files
 	-->

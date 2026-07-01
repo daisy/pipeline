@@ -32,6 +32,11 @@
         <p:empty/>
     </p:input>
     
+    <!-- for tests -->
+    <p:input port="ebraille-metadata" sequence="true">
+        <p:empty/>
+    </p:input>
+    
     <p:option name="result-base" required="false">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p>If not specified, will not copy EPUB before modifying it.</p>
@@ -1303,9 +1308,9 @@
                     <p:input port="stylesheet">
                         <p:document href="braille-rendition.package-document.xsl"/>
                     </p:input>
-                    <p:input port="parameters">
+                    <p:with-param name="ebraille-compatibility" select="$ebraille-compatibility">
                         <p:empty/>
-                    </p:input>
+                    </p:with-param>
                 </p:xslt>
                 <p:sink/>
                 <px:fileset-update name="update-fileset">
@@ -1335,12 +1340,14 @@
                         </p:input>
                         <p:input port="metadata">
                             <p:pipe step="metadata" port="result"/>
+                            <p:pipe step="main" port="ebraille-metadata"/>
                         </p:input>
                     </px:epub3-add-metadata>
                     <p:sink/>
-                    <p:xslt name="metadata">
+                    <p:xslt>
                         <p:input port="source">
-                            <p:pipe step="package-doc" port="result"/>
+                            <p:pipe step="copied-package-doc" port="result"/>
+                            <p:pipe step="main" port="ebraille-metadata"/>
                         </p:input>
                         <p:input port="stylesheet">
                             <p:document href="ebraille-metadata.xsl"/>
@@ -1357,6 +1364,15 @@
                         </p:with-param>
                         <p:with-param name="ebraille-compatibility" select="$ebraille-compatibility"/>
                     </p:xslt>
+                    <p:choose>
+                        <p:when test="$ebraille-compatibility='strict'">
+                            <p:uuid match="dc:identifier[@id='pub-id']/text()"/>
+                        </p:when>
+                        <p:otherwise>
+                            <p:identity/>
+                        </p:otherwise>
+                    </p:choose>
+                    <p:identity name="metadata"/>
                     <p:sink/>
                 </p:group>
             </p:group>

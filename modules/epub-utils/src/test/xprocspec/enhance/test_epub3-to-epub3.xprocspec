@@ -840,6 +840,14 @@
 			<x:call>
 				<x:option name="braille" select="true()"/>
 				<x:option name="ebraille-compatibility" select="'soft'"/>
+				<x:input port="ebraille-metadata">
+					<x:document type="inline" xmlns="http://www.idpf.org/2007/opf">
+						<metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+							<dc:identifier id="pub-identifier">ebraille-id</dc:identifier>
+							<dc:date>2026-07-02</dc:date>
+						</metadata>
+					</x:document>
+				</x:input>
 				<x:option name="braille-translator" select="'(system:ueb)(grade:1)'"/>
 				<x:option name="tts" select="false()"/>
 				<x:option name="sentence-detection" select="false()"/>
@@ -921,19 +929,26 @@
 					         xml:lang="en-Brai">
 						<metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
 							<dc:title>Valentin Haüy - the father of the education for the blind</dc:title>
-							<dc:identifier id="pub-identifier">C00000</dc:identifier>
+							<dc:identifier id="pub-identifier">ebraille-id</dc:identifier>
 							<dc:language>en-Brai</dc:language>
 							<meta property="dcterms:modified">2020-03-09T15:37:52Z</meta>
 							<meta name="dcterms:modified" content="2020-03-09T15:37:52Z"/>
+							<dc:date>2026-07-02</dc:date>
 							<dc:creator>Beatrice Christensen Sköld</dc:creator>
 							<dc:source>urn:isbn:123456789</dc:source>
 							<dc:format>EPUB3</dc:format>
-							<dc:publisher>MTM</dc:publisher>
-							<dc:date>2006-03-23</dc:date>
+							<meta property="dcterms:dateCopyrighted">Unknown</meta>
+							<meta name="dcterms:dateCopyrighted" content="Unknown"/>
 							<meta property="a11y:brailleCellType">6</meta>
 							<meta name="a11y:brailleCellType" content="6"/>
 							<meta property="a11y:brailleSystem">UEB grade1</meta>
 							<meta name="a11y:brailleSystem" content="UEB grade1"/>
+							<meta property="a11y:completeTranscription">true</meta>
+							<meta name="a11y:completeTranscription" content="true"/>
+							<meta property="a11y:producer">Unknown</meta>
+							<meta name="a11y:producer" content="Unknown"/>
+							<meta property="a11y:tactileGraphics">false</meta>
+							<meta name="a11y:tactileGraphics" content="false"/>
 							<meta property="nordic:guidelines">2015-1</meta>
 							<meta name="nordic:guidelines" content="2015-1"/>
 							<meta property="nordic:supplier">MTM</meta>
