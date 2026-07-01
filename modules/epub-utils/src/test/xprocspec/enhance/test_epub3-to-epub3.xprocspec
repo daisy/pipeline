@@ -1000,6 +1000,18 @@
 					</package>
 				</x:document>
 			</x:expect>
+			<x:context label="the navigation document">
+				<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/index.xhtml')]"/>
+			</x:context>
+			<x:expect label="the navigation document has a link to the package document" type="xpath"
+			          test="//html:head/html:link[@rel='publication']
+			                                     [@type='application/oebps-package+xml']
+			                                     [@href='package.opf']"/>
+			<x:expect label="page numbers in the page list have original text in title attribute (but the text content is braille)"
+			          type="xpath"
+			          test="//html:nav[@role='doc-pagelist']
+			                //html:a[1]/(string(@title),string(.))"
+			          equals="('4','⠼⠙')"/>
 			<x:context label="the container document">
 				<x:document type="port" port="result.in-memory"
 				            select="/*[base-uri()=resolve-uri('result/META-INF/container.xml')]"/>
