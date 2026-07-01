@@ -1134,6 +1134,9 @@
                 <p:output port="braille-codes">
                     <p:pipe step="braille-codes" port="result"/>
                 </p:output>
+                <p:variable name="nav-base" select="//d:file[@role='nav']/resolve-uri(@href,base-uri(.))"/>
+                <p:variable name="opf-base" select="//d:file[@media-type='application/oebps-package+xml']
+                                                     /resolve-uri(@href,base-uri(.))"/>
                 <px:fileset-load name="load">
                     <p:input port="in-memory">
                         <p:pipe step="braille-rendition.copy" port="in-memory"/>
@@ -1154,9 +1157,26 @@
                     <p:variable name="lang" select="(/*/opf:metadata/dc:language[not(@refines)])[1]/text()">
                         <p:pipe step="default-rendition.package-document" port="result"/>
                     </p:variable>
+                    <p:variable name="base" select="base-uri(/*)"/>
                     <px:message message="Generating $1" severity="INFO">
-                        <p:with-option name="param1" select="substring-after(base-uri(/*),'!/')"/>
+                        <p:with-option name="param1" select="substring-after($base,'!/')"/>
                     </px:message>
+                    <p:choose>
+                        <p:when test="$ebraille-compatibility and $base=$nav-base">
+                            <!--
+                                make navigation document a valid eBraille primary entry page
+                            -->
+                            <p:xslt>
+                                <p:input port="stylesheet">
+                                    <p:document href="ebraille-navigation-document.xsl"/>
+                                </p:input>
+                                <p:with-param name="package-document-base" select="$opf-base"/>
+                            </p:xslt>
+                        </p:when>
+                        <p:otherwise>
+                            <p:identity/>
+                        </p:otherwise>
+                    </p:choose>
                     <!-- style -->
                     <p:choose>
                         <p:when test="$apply-document-specific-stylesheets='true'">
@@ -1184,6 +1204,19 @@
                                                                    '(document-locale:',$lang,')')"/>
                         <p:with-param port="parameters" name="translate-attributes" select="'@alt|@abbr|@title'"/>
                     </px:transform>
+                    <p:choose>
+                        <p:when test="$ebraille-compatibility and $base=$nav-base">
+                            <!--
+                                post-process navigation document
+                            -->
+                            <p:label-elements match="*[@__original-title__]" attribute="title" replace="true"
+                                              label="@__original-title__"/>
+                            <p:delete match="@__original-title__"/>
+                        </p:when>
+                        <p:otherwise>
+                            <p:identity/>
+                        </p:otherwise>
+                    </p:choose>
                     <p:group name="extract-css">
                         <p:output port="result" primary="true">
                             <p:pipe step="extract-css.result" port="result"/>
