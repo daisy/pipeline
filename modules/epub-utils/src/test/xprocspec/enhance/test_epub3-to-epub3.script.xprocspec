@@ -76,6 +76,7 @@
 					<c:file name="braille/C00000-9-footnotes.css"/>
 					<c:file name="braille/C00000-9-footnotes.xhtml"/>
 					<c:file name="braille/nav.css"/>
+					<c:file name="braille/nav.ncx"/>
 					<c:file name="braille/nav.xhtml"/>
 					<c:file name="braille/package.opf"/>
 					<c:file name="mimetype"/>
