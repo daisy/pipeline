@@ -991,6 +991,7 @@
                     </p:input>
                     <p:with-option name="media-types"
                                    select="string-join(('application/oebps-package+xml','application/smil+xml',
+                                                        'application/x-dtbncx+xml',
                                                         $content-media-types),
                                                        ' ')"/>
                 </px:fileset-filter>

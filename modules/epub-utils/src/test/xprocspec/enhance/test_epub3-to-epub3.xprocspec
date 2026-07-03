@@ -901,6 +901,7 @@
 						<d:file href="result/braille/C00000-7-chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
 						<d:file href="result/braille/C00000-8-conclusion.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
 						<d:file href="result/braille/C00000-9-footnotes.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/braille/nav.ncx" media-type="application/x-dtbncx+xml"/>
 						<d:file href="result/braille/nav.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
 						<d:file href="result/braille/C00000-1-cover.css" media-type="text/plain"/>
 						<d:file href="result/braille/C00000-2-frontmatter.css" media-type="text/plain"/>
@@ -965,7 +966,7 @@
 							<item id="item_6" href="../EPUB/css/fonts/opendyslexic/OpenDyslexicMono-Regular.otf" media-type="application/x-font-opentype"/>
 							<item id="item_7" href="../EPUB/css/fonts/opendyslexic/LICENSE.txt" media-type="text/plain"/>
 							<item id="item_8" href="../EPUB/images/valentin.jpg" media-type="image/jpeg"/>
-							<item id="item_9" href="../EPUB/nav.ncx" media-type="application/x-dtbncx+xml"/>
+							<item id="item_9" href="nav.ncx" media-type="application/x-dtbncx+xml"/>
 							<item id="item_10" href="C00000-1-cover.xhtml" media-type="application/xhtml+xml"/>
 							<item id="item_11" href="C00000-2-frontmatter.xhtml" media-type="application/xhtml+xml"/>
 							<item id="item_12" href="C00000-3-chapter.xhtml" media-type="application/xhtml+xml"/>

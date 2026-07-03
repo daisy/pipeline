@@ -28,7 +28,7 @@
 	
 	<xsl:template match="d:fileset/d:file">
 		<xsl:choose>
-			<xsl:when test="@media-type=($content-media-types,'application/smil+xml')">
+			<xsl:when test="@media-type=($content-media-types,'application/smil+xml','application/x-dtbncx+xml')">
 				<xsl:variable name="original-href" select="resolve-uri(@href,pf:base-uri(.))"/>
 				<xsl:variable name="braille-href" select="resolve-uri(pf:relativize-uri($original-href,$original-base),
 				                                                      $braille-base)"/>
