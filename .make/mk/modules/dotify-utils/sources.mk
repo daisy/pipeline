@@ -8,6 +8,7 @@ modules/dotify-utils/.test modules/dotify-utils/.install modules/dotify-utils/.i
 	modules/dotify-utils/src/main/resources/xml/make-table-grid.xsl \
 	modules/dotify-utils/src/main/resources/xml/shift-string-set.xpl \
 	modules/dotify-utils/src/main/resources/xml/make-pseudo-elements.xpl \
+	modules/dotify-utils/src/main/resources/xml/delete-implied-translate-attrs.xsl \
 	modules/dotify-utils/src/main/resources/xml/eval-target-content.xsl \
 	modules/dotify-utils/src/main/resources/xml/label-targets.xsl \
 	modules/dotify-utils/src/main/resources/xml/obfl-css-definition.xpl \

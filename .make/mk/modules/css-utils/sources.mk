@@ -6,6 +6,7 @@ modules/css-utils/.test modules/css-utils/.install modules/css-utils/.install-do
 	modules/css-utils/src/main/resources/xml/clean-up-namespaces.xpl \
 	modules/css-utils/src/main/resources/xml/css-speech-clean.xpl \
 	modules/css-utils/src/main/resources/xml/css-speech-cascade.xpl \
+	modules/css-utils/src/main/resources/xml/sass-compile.xpl \
 	modules/css-utils/src/main/resources/xml/css-to-fileset.xpl \
 	modules/css-utils/src/main/resources/xml/css-to-fileset.xsl \
 	modules/css-utils/src/main/resources/xml/css-cascade.xpl \
@@ -28,6 +29,7 @@ modules/css-utils/.test modules/css-utils/.install modules/css-utils/.install-do
 	modules/css-utils/src/main/java/org/daisy/pipeline/css/calabash/impl/CssCascadeStep.java \
 	modules/css-utils/src/main/java/org/daisy/pipeline/css/calabash/impl/CssAnalyzeStep.java \
 	modules/css-utils/src/main/java/org/daisy/pipeline/css/calabash/impl/InMemoryURIResolver.java \
+	modules/css-utils/src/main/java/org/daisy/pipeline/css/calabash/impl/SassCompileStep.java \
 	modules/css-utils/src/main/java/org/daisy/pipeline/css/CssSerializer.java \
 	modules/css-utils/src/main/java/org/daisy/pipeline/css/CounterEvaluator.java \
 	modules/css-utils/src/main/java/org/daisy/pipeline/css/CssCascader.java \
@@ -87,6 +89,7 @@ modules/css-utils/.test modules/css-utils/.install-doc : \
 	modules/css-utils/src/test/java/SassTest.java \
 	modules/css-utils/src/test/xprocspec/test_css-analyze.xprocspec \
 	modules/css-utils/src/test/xprocspec/test_format-lists.xprocspec \
+	modules/css-utils/src/test/xprocspec/test_sass-compile.xprocspec \
 	modules/css-utils/src/test/xprocspec/test_css-speech-cascade.xprocspec \
 	modules/css-utils/src/test/xprocspec/test_css-to-fileset.xprocspec
 .make/mk/modules/css-utils/sources.mk : \

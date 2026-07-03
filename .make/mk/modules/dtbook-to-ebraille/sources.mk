@@ -1,6 +1,5 @@
 modules/dtbook-to-ebraille/.test modules/dtbook-to-ebraille/.install modules/dtbook-to-ebraille/.install-doc $(TARGET_DIR)/state/modules/dtbook-to-ebraille/modified-since-release_ : \
 	modules/dtbook-to-ebraille/src/main/resources/META-INF/catalog.xml \
-	modules/dtbook-to-ebraille/src/main/resources/xml/get-used-braille-codes.xsl \
 	modules/dtbook-to-ebraille/src/main/resources/xml/ebraille-metadata.xsl \
 	modules/dtbook-to-ebraille/src/main/resources/xml/resource-map.xsl \
 	modules/dtbook-to-ebraille/src/main/resources/xml/dtbook-to-ebraille.xpl \

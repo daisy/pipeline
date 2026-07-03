@@ -6,6 +6,7 @@ modules/braille-common/.test modules/braille-common/.install modules/braille-com
 	modules/braille-common/src/main/resources/xml/select-by-base.xpl \
 	modules/braille-common/src/main/resources/xml/select-by-position.xpl \
 	modules/braille-common/src/main/resources/xml/data-types/transform-query.xml \
+	modules/braille-common/src/main/resources/xml/get-used-braille-codes.xsl \
 	modules/braille-common/src/main/resources/xml/abstract-block-translator.xsl \
 	modules/braille-common/src/main/resources/xml/expand-pseudo-elements.xsl \
 	modules/braille-common/src/main/resources/xml/mark-transitions.xpl \

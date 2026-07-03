@@ -16,20 +16,24 @@ modules/epub-utils/.test modules/epub-utils/.install modules/epub-utils/.install
 	modules/epub-utils/src/main/resources/xml/ocf/epub3-safe-uris.xpl \
 	modules/epub-utils/src/main/resources/xml/ocf/epub3-safe-uris.xsl \
 	modules/epub-utils/src/main/resources/xml/ocf/ocf-finalize.create-container-descriptor.xsl \
+	modules/epub-utils/src/main/resources/xml/ocf/container-update-links.xpl \
 	modules/epub-utils/src/main/resources/xml/ocf/ocf-zip.xpl \
+	modules/epub-utils/src/main/resources/xml/ocf/container-update-links.xsl \
 	modules/epub-utils/src/main/resources/xml/ocf/ocf-finalize.xpl \
 	modules/epub-utils/src/main/resources/xml/ocf/opf-manifest-to-fileset.xpl \
 	modules/epub-utils/src/main/resources/xml/ocf/store.xpl \
 	modules/epub-utils/src/main/resources/xml/ocf/opf-manifest-to-fileset.xsl \
 	modules/epub-utils/src/main/resources/xml/ocf/load.xpl \
 	modules/epub-utils/src/main/resources/xml/epub-update-links.xpl \
+	modules/epub-utils/src/main/resources/xml/enhance/ebraille-navigation-document.xsl \
 	modules/epub-utils/src/main/resources/xml/enhance/epub3-to-epub3.xpl \
 	modules/epub-utils/src/main/resources/xml/enhance/html-derive-meta-from-package-doc.xsl \
 	modules/epub-utils/src/main/resources/xml/enhance/braille-rendition.package-document.xsl \
+	modules/epub-utils/src/main/resources/xml/enhance/ebraille-metadata.xsl \
 	modules/epub-utils/src/main/resources/xml/enhance/ensure-pagenum-text.xsl \
+	modules/epub-utils/src/main/resources/xml/enhance/braille-rendition.attach-css.xsl \
 	modules/epub-utils/src/main/resources/xml/enhance/braille-rendition.fileset.xsl \
 	modules/epub-utils/src/main/resources/xml/enhance/resource-map.xsl \
-	modules/epub-utils/src/main/resources/xml/enhance/default.css \
 	modules/epub-utils/src/main/resources/xml/enhance/epub3-to-epub3.script.xpl \
 	modules/epub-utils/src/main/resources/xml/pub/create-package-doc.estimate-mediaoverlay-duration.xsl \
 	modules/epub-utils/src/main/resources/xml/pub/ensure-core-media.xpl \
@@ -83,13 +87,15 @@ modules/epub-utils/.test modules/epub-utils/.install modules/epub-utils/.install
 	modules/epub-utils/src/main/resources/xml/nav/guide-to-landmarks.xpl \
 	modules/epub-utils/src/main/resources/xml/nav/list-pagebreaks-from-nav.xsl \
 	modules/epub-utils/src/main/resources/xml/nav/guide-to-landmarks.xsl \
-	modules/epub-utils/src/main/resources/xml/library.xpl
+	modules/epub-utils/src/main/resources/xml/library.xpl \
+	modules/epub-utils/src/main/java/org/daisy/pipeline/epub/calabash/impl/HTMLInsertSyncPointsStep.java
 modules/epub-utils/.test modules/epub-utils/.install-doc : \
 	modules/epub-utils/src/test/xspec/pub/opf-manifest-to-fileset.xspec \
 	modules/epub-utils/src/test/xspec/pub/create-metadata.merge.xspec \
 	modules/epub-utils/src/test/xspec/pub/merge-prefix.xspec \
 	modules/epub-utils/src/test/xspec/nav/nav-to-ncx.xspec \
 	modules/epub-utils/src/test/resources/logback.xml \
+	modules/epub-utils/src/test/resources/braille.scss \
 	modules/epub-utils/src/test/resources/minimal.epub/META-INF/container.xml \
 	modules/epub-utils/src/test/resources/minimal.epub/mimetype \
 	modules/epub-utils/src/test/resources/minimal.epub/EPUB/chapter.xhtml \
@@ -256,6 +262,7 @@ modules/epub-utils/.test modules/epub-utils/.install-doc : \
 	modules/epub-utils/src/test/resources/moby-dick-mo-20120214/OPS/chapter_095.xhtml \
 	modules/epub-utils/src/test/resources/moby-dick-mo-20120214/OPS/chapter_068.xhtml \
 	modules/epub-utils/src/test/resources/valentin.epub \
+	modules/epub-utils/src/test/resources/braille.css \
 	modules/epub-utils/src/test/resources/moby-dick-mo-20120214.OK.epub \
 	modules/epub-utils/src/test/resources/valentin/META-INF/container.xml \
 	modules/epub-utils/src/test/resources/valentin/mimetype \
@@ -352,4 +359,11 @@ modules/epub-utils/.install-doc : \
 	modules/epub-utils/src/main/resources/xml/enhance \
 	modules/epub-utils/src/main/resources/xml/pub \
 	modules/epub-utils/src/main/resources/xml/nav \
+	modules/epub-utils/src/main/java \
+	modules/epub-utils/src/main/java/org \
+	modules/epub-utils/src/main/java/org/daisy \
+	modules/epub-utils/src/main/java/org/daisy/pipeline \
+	modules/epub-utils/src/main/java/org/daisy/pipeline/epub \
+	modules/epub-utils/src/main/java/org/daisy/pipeline/epub/calabash \
+	modules/epub-utils/src/main/java/org/daisy/pipeline/epub/calabash/impl \
 	modules/epub-utils/doc
