@@ -141,6 +141,16 @@
                     display: block;
                   }
                 }
+                @media (overflow-block: paged) {
+                  p {
+                    text-indent: 2;
+                  }
+                }
+                @media (update: fast) {
+                  p {
+                    text-align: center;
+                  }
+                }
               </style>
             </head>
             <body>
@@ -159,7 +169,7 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body>
-          <p style="display: inline">
+          <p style="display: inline; text-indent: 2">
             foobar
           </p>
         </body>
