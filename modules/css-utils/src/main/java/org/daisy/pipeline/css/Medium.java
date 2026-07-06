@@ -55,11 +55,25 @@ public class Medium implements Dimension.RelativeDimensionBase {
 		}
 	}
 
+	public enum OverflowBlock {
+		NONE,
+		SCROLL,
+		PAGED;
+	}
+
+	public enum Update {
+		NONE,
+		SLOW,
+		FAST;
+	}
+
 	private final Type type;
 	private final Dimension width;
 	private final Dimension height;
 	private final Dimension deviceWidth;
 	private final Dimension deviceHeight;
+	private final OverflowBlock overflowBlock;
+	private final Update update;
 	private final Map<String,Object> nonStandardFeatures;
 	private final MediumBuilder parser;
 
@@ -104,11 +118,26 @@ public class Medium implements Dimension.RelativeDimensionBase {
 	 */
 	protected Medium(Type type, Dimension width, Dimension height, Dimension deviceWidth, Dimension deviceHeight,
 	                 Map<String,Object> otherFeatures, MediumBuilder parser) {
+		this(type, width, height, deviceWidth, deviceHeight,
+		     (type == Type.EMBOSSED || type == Type.PRINT) ? OverflowBlock.PAGED : null,
+		     (type == Type.EMBOSSED || type == Type.PRINT) ? Update.NONE : null,
+		     otherFeatures, parser);
+	}
+
+	/**
+	 * @param overflowBlock can be null (undefined)
+	 * @param update can be null (undefined)
+	 */
+	protected Medium(Type type, Dimension width, Dimension height, Dimension deviceWidth, Dimension deviceHeight,
+	                 OverflowBlock overflowBlock, Update update, Map<String,Object> otherFeatures,
+	                 MediumBuilder parser) {
 		this.type = type;
 		this.width = width;
 		this.height = height;
 		this.deviceWidth = deviceWidth;
 		this.deviceHeight = deviceHeight;
+		this.overflowBlock = overflowBlock;
+		this.update = update;
 		this.nonStandardFeatures = otherFeatures != null
 			? Collections.unmodifiableMap(otherFeatures)
 			: Collections.emptyMap();
@@ -172,13 +201,18 @@ public class Medium implements Dimension.RelativeDimensionBase {
 	}
 
 	/**
-	 * Evaluate a media expression about a non-standard feature, in <a
+	 * Evaluate a media expression about a non-standard feature or other feature not handled by the
+	 * {@link MediaSpec} class, in <a
 	 * href="https://drafts.csswg.org/mediaqueries-5/#mq-boolean-context">boolean context</a>.
 	 */
 	protected boolean matchesFeature(String feature) {
 		if ("-daisy-document-locale".equals(feature))
 			return false; // intended for medium selection, not valid in regular media queries
-		Object v = getNonStandardFeature(feature);
+		Object v = "overflow-block".equals(feature)
+			? overflowBlock
+			: "update".equals(feature)
+				? update
+				: getNonStandardFeature(feature);
 		if (v == null)
 			return false;
 		else if (v instanceof String)
@@ -189,22 +223,41 @@ public class Medium implements Dimension.RelativeDimensionBase {
 			return (Boolean)v == true;
 		else if (v instanceof Dimension)
 			return ((Dimension)v).getValue().equals(BigDecimal.ZERO);
+		else if (v instanceof OverflowBlock)
+			return !OverflowBlock.NONE.equals(v);
+		else if (v instanceof Update)
+			return !Update.NONE.equals(v);
 		else
 			return true;
 	}
 
 	/**
-	 * Evaluate a media expression about a non-standard feature.
+	 * Evaluate a media expression about a non-standard feature or other feature not handled by the
+	 * {@link MediaSpec} class.
 	 */
 	protected boolean matchesFeature(String feature, Term<?> value) {
 		if ("-daisy-document-locale".equals(feature))
 			return false; // intended for medium selection, not valid in regular media queries
-		Object v = getNonStandardFeature(feature);
+		Object v = "overflow-block".equals(feature)
+			? overflowBlock
+			: "update".equals(feature)
+				? update
+				: getNonStandardFeature(feature);
 		if (v != null)
 			try {
 				if (value instanceof TermIdent)
 					if (v instanceof Locale)
 						return v.equals(parser.parseLocale(value));
+					else if (v instanceof OverflowBlock)
+						try {
+							return v.equals(OverflowBlock.valueOf(value.toString().toUpperCase()));
+						} catch (IllegalArgumentException e) {
+						}
+					else if (v instanceof Update)
+						try {
+							return v.equals(Update.valueOf(value.toString().toUpperCase()));
+						} catch (IllegalArgumentException e) {
+						}
 					else
 						return v.equals(parser.parseIdent(value));
 				else if (value instanceof TermInteger)
@@ -658,7 +711,8 @@ public class Medium implements Dimension.RelativeDimensionBase {
 			boolean isMax = false;
 			if (f.startsWith("min-")) { isMin = true; f = f.substring(4); }
 			else if (f.startsWith("max-")) { isMax = true; f = f.substring(4); }
-			if (knownFeatures.contains(f)) {
+			if (knownFeatures.contains(f)
+			    && !("overflow-block".equals(f) || "update".equals(f))) { // this are not handled by jStyleParser
 				MediaSpec.Feature ff = getFeatureByName(f);
 				switch (ff) {
 				case WIDTH:
@@ -688,9 +742,18 @@ public class Medium implements Dimension.RelativeDimensionBase {
 					return isMin
 						? comparison >= 0
 						: isMax
-						? comparison <= 0
-						: comparison == 0;
+							? comparison <= 0
+							: comparison == 0;
 				default:
+					// note that `ff' will be null and `super.matchesIgnoreNegation()' will return
+					// false for these features that are not handled by jStyleparser:
+					//
+					// * any-hover       (none | hover)
+					// * any-pointer     (none | coarse | fine)
+					// * color-gamut     (srgb | p3 | rec2020)
+					// * hover           (none | hover)
+					// * overflow-inline (none | scroll)
+					// * pointer         (none | coarse | fine)
 					return super.matchesIgnoreNegation(e);
 				}
 			} else {
