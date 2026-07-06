@@ -162,45 +162,56 @@ br::before {
 
 /* ======= Other braille formatting ======= */
 
-/* Everything below mostly makes sense for embossed braille or multiline braille displays.
+/* Everything below mostly makes sense for embossed braille or possibly multiline braille
+ * displays. For now it is all limited to embossed braille, for these reasons:
+ *
+ * - So that the style sheet parameters are not exposed for the DTBook to braille script, which only
+ *   uses this style sheet for braille transcription. (This is a bit of a hack!)
+ * - Volume breaking and notes placement (which assumes page breaking) use braille CSS,
+ *   i.e. features specific to DAISY Pipeline. Even though a braille display may also do page
+ *   breaking and even volume breaking, it is unlikely to use braille CSS for this. Basically, we are
+ *   using "embossed" as a replacement for "formatted using DAISY Pipeline".
  */
 
-/**
- * @var $line-spacing
- *
- * @brief Line spacing
- *
- * Single or double line spacing.
- *
- * The following CSS rule is included by default (where `$line-spacing` is the value of this option):
- *
- * ~~~sass
- * @if $line-spacing == double {
- *   :root {
- *     line-height: 2;
- *   }
- * }
- * ~~~
- *
- * See the CSS specification for more info:
- *
- * - the [`line-height`](http://braillespecs.github.io/braille-css/#h3_the-line-height-property)
- *   property
- *
- * <px:type xmlns:px="http://www.daisy.org/ns/pipeline/xproc">
- *     <choice>
- *         <value>single</value>
- *         <documentation xml:lang="en">Single</documentation>
- *         <value>double</value>
- *         <documentation xml:lang="en">Double</documentation>
- *     </choice>
- * </px:type>
- */
-$line-spacing: single !default;
+@media embossed {
 
-@if $line-spacing == double {
-	:root {
-		line-height: 2;
+	/**
+	 * @var $line-spacing
+	 *
+	 * @brief Line spacing
+	 *
+	 * Single or double line spacing.
+	 *
+	 * The following CSS rule is included by default (where `$line-spacing` is the value of this option):
+	 *
+	 * ~~~sass
+	 * @if $line-spacing == double {
+	 *   :root {
+	 *     line-height: 2;
+	 *   }
+	 * }
+	 * ~~~
+	 *
+	 * See the CSS specification for more info:
+	 *
+	 * - the [`line-height`](http://braillespecs.github.io/braille-css/#h3_the-line-height-property)
+	 *   property
+	 *
+	 * <px:type xmlns:px="http://www.daisy.org/ns/pipeline/xproc">
+	 *     <choice>
+	 *         <value>single</value>
+	 *         <documentation xml:lang="en">Single</documentation>
+	 *         <value>double</value>
+	 *         <documentation xml:lang="en">Double</documentation>
+	 *     </choice>
+	 * </px:type>
+	 */
+	$line-spacing: single !default;
+
+	@if $line-spacing == double {
+		:root {
+			line-height: 2;
+		}
 	}
 }
 
