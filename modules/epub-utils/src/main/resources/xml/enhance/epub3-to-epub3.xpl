@@ -214,11 +214,6 @@
         -->
     </p:declare-step>
     
-    <p:variable name="default-stylesheet" select="resolve-uri('default.css')">
-        <p:inline>
-            <irrelevant/>
-        </p:inline>
-    </p:variable>
     <p:variable name="parameter-map" select="pf:css-parse-param-set($stylesheet-parameters)"> <!-- cx:as="map(xs:string,item())" -->
         <!-- takes first in case of duplicates -->
     </p:variable>
@@ -1197,8 +1192,8 @@
                         </p:otherwise>
                     </p:choose>
                     <px:css-detach/>
-                    <px:css-cascade type="text/css text/x-scss" media="braille">
-                        <p:with-option name="user-stylesheet" select="($stylesheet,$default-stylesheet)[not(.='')][1]"/>
+                    <px:css-cascade type="text/css text/x-scss" media="braille" include-user-agent-stylesheet="true">
+                        <p:with-option name="user-stylesheet" select="$stylesheet"/>
                     </px:css-cascade>
                     <px:transform name="transform">
                         <p:with-option name="query" select="concat('(input:html)(input:css)(output:html)(output:css)(output:braille)',
