@@ -689,7 +689,7 @@ public class Medium implements Dimension.RelativeDimensionBase {
 
 		private MediaSpecImpl() {
 			super(Medium.this.type.toString());
-			if (Medium.this.type == Type.EMBOSSED)
+			if (Medium.this.type == Type.EMBOSSED || Medium.this.type == Type.BRAILLE)
 				setGrid(1);
 			// These are commented out because the unit conversion may fail and it is not so
 			// important that these are set anyway: the corresponding getter methods in MediaSpec
