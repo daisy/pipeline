@@ -6,6 +6,7 @@ import java.util.Map;
 
 import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.Declaration;
+import cz.vutbr.web.css.MediaSpec;
 import cz.vutbr.web.css.PrettyOutput;
 import cz.vutbr.web.css.Rule;
 import cz.vutbr.web.css.RuleBlock;
@@ -339,8 +340,8 @@ public class OBFLExtension extends BrailleCSSExtension {
 	///////////////////////////////////////////////////////////////
 
 	@Override
-	public boolean parseDeclaration(Declaration d, Map<String,CSSProperty> properties, Map<String,Term<?>> values) {
+	public boolean parseDeclaration(Declaration d, Map<String,CSSProperty> properties, Map<String,Term<?>> values, MediaSpec medium) {
 		// note that SupportedBrailleCSS already normalizes property names, so no need to do it here
-		return transformer.parseDeclaration(d, properties, values);
+		return transformer.parseDeclaration(d, properties, values, medium);
 	}
 }
