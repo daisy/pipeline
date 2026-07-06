@@ -744,6 +744,12 @@ public class Medium implements Dimension.RelativeDimensionBase {
 						: isMax
 							? comparison <= 0
 							: comparison == 0;
+				case GRID:
+					// boolean context not handled in jStyleParser
+					if (e.size() == 0)
+						return getGrid() == 1;
+					else
+						return super.matchesIgnoreNegation(e);
 				default:
 					// note that `ff' will be null and `super.matchesIgnoreNegation()' will return
 					// false for these features that are not handled by jStyleparser:
