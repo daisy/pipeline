@@ -231,14 +231,16 @@ translator that is selected.</p>
         </p:documentation>
     </p:option>
     
-    <p:option name="stylesheet" select="''">
-        <!-- defined in ../../../../../common-options.xpl -->
+    <p:option name="stylesheet" required="false" px:type="anyURI" select="''" px:sequence="true" px:separator=" "
+              px:reusable="true" px:media-type="text/css text/x-scss">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Style sheets</h2>
             <p px:role="desc" xml:space="preserve">A list of CSS/Sass style sheets to take into account.
 
-A list of CSS/Sass style sheets to take into account, both for braille transcription (if a braille
-rendition is requested), and for text-to-speech (if text-to-speech is enabled).
+A list of CSS/Sass style sheets to take into account, both for text-to-speech (if text-to-speech is
+enabled), and for braille transcription (if a braille rendition is requested). Furthermore, in order
+to support formatting of the braille rendition, the style sheets are also attached to the HTML files
+in the output.
 
 Must be a space separated list of URIs, absolute or relative to the input.
 
@@ -253,6 +255,12 @@ sheets](https://www.w3.org/TR/CSS2/cascade.html#cascade)).
 When generating the braille rendition, style sheets are interpreted according to [braille
 CSS](http://braillespecs.github.io/braille-css) rules. When performing text-to-speech, they are
 interpreted as [aural CSS](https://www.w3.org/TR/CSS2/aural.html).
+
+In the output, the style sheets are attached to the braille rendition using HTML `link` elements. No
+media query (`media` attribute) is specified on the links. If media queries are needed, they must be
+specified in the CSS itself, through `@media` and `@import` rules. If the output is eBraille, the
+user is responsible for ensuring the style sheets conform to the [eBraille standard for
+CSS](https://daisy.github.io/ebraille/#html-css).
 
 For info on how to use Sass (Syntactically Awesome StyleSheets) see the [Sass
 manual](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).
@@ -271,10 +279,10 @@ manual](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).
     <p:option name="apply-document-specific-stylesheets" px:type="boolean" select="'false'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Apply author CSS style sheets</h2>
-            <p px:role="desc" xml:space="preserve">If this option is enabled, any CSS style sheets attached to the EPUB's content documents for media "embossed" or "speech" will be taken into account.
+            <p px:role="desc" xml:space="preserve">If this option is enabled, any CSS style sheets attached to the EPUB's content documents for media "braille" or "speech" will be taken into account.
 
 The EPUB's content documents may contain CSS ([author style
-sheets](https://www.w3.org/TR/CSS2/cascade.html#cascade)) that apply to "embossed" or
+sheets](https://www.w3.org/TR/CSS2/cascade.html#cascade)) that apply to "braille" or
 "[speech](https://www.w3.org/TR/CSS2/aural.html)" media. Style sheets can be associated with an HTML
 file in several ways: linked (using an 'xml-stylesheet' processing instruction or a 'link' element),
 embedded (using a 'style' element) and/or inlined (using 'style' attributes).

@@ -282,7 +282,6 @@ manual](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).</p>
 	</p:option>
 	
 	<!--
-	    epub3-to-epub3
 	    zedai-to-pef
 	-->
 	<p:option xmlns:_="braille" name="_:stylesheet" required="false" px:type="anyURI" select="''" px:sequence="true" px:separator=" "

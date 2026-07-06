@@ -80,7 +80,7 @@
 			<p:input port="context">
 				<p:pipe step="context" port="result"/>
 			</p:input>
-			<p:with-param name="parameters" select="$parameters"/>
+			<p:with-option name="parameters" select="$parameters"/>
 		</pxi:sass-compile>
 	</p:for-each>
 	<p:identity name="css"/>

@@ -68,7 +68,7 @@
             <p>CSS style sheets as space separated list of absolute URIs.</p>
         </p:documentation>
     </p:option>
-    <p:option name="stylesheet-parameters" cx:as="xs:string" select="'()'"/>
+    <p:option name="stylesheet-parameters" select="map{}"/> <!-- (map(xs:string,item()) | xs:string)* -->
     <p:option name="lexicon" cx:as="xs:anyURI*" select="()">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p>PLS lexicons as list of absolute URIs.</p>
@@ -127,6 +127,7 @@
         <p:documentation>
             px:error
             px:message
+            px:tokenize
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
@@ -174,11 +175,8 @@
         <p:documentation>
             px:css-cascade
             px:css-detach
-        </p:documentation>
-    </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xpl">
-        <p:documentation>
-            css:extract
+            px:sass-compile
+            px:css-to-fileset
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/tts-common/library.xpl">
@@ -202,6 +200,11 @@
             pf:longest-common-uri
         </p:documentation>
     </cx:import>
+    <cx:import href="http://www.daisy.org/pipeline/modules/css-utils/library.xsl" type="application/xslt+xml">
+        <p:documentation>
+            pf:css-parse-param-set
+        </p:documentation>
+    </cx:import>
 
     <p:declare-step type="pxi:html-insert-sync-points">
         <p:input port="source" sequence="true"/>
@@ -215,6 +218,9 @@
         <p:inline>
             <irrelevant/>
         </p:inline>
+    </p:variable>
+    <p:variable name="parameter-map" select="pf:css-parse-param-set($stylesheet-parameters)"> <!-- cx:as="map(xs:string,item())" -->
+        <!-- takes first in case of duplicates -->
     </p:variable>
     
     <p:identity>
@@ -737,7 +743,7 @@
                             <p:pipe step="main" port="tts-config"/>
                         </p:input>
                         <p:with-option name="stylesheet" select="$stylesheet"/>
-                        <p:with-option name="stylesheet-parameters" select="$stylesheet-parameters"/>
+                        <p:with-option name="stylesheet-parameters" select="$parameter-map"/>
                         <p:with-option name="lexicon" select="$lexicon"/>
                         <p:with-option name="audio-file-type" select="$tts-audio-file-type"/>
                         <p:with-option name="include-log" select="$include-tts-log"/>
@@ -1128,10 +1134,10 @@
                     <p:pipe step="processed" port="html-with-sync-points"/>
                 </p:output>
                 <p:output port="css.fileset">
-                    <p:pipe step="css.fileset" port="result"/>
+                    <p:pipe step="css" port="fileset"/>
                 </p:output>
                 <p:output port="css.in-memory" sequence="true">
-                    <p:pipe step="processed" port="css"/>
+                    <p:pipe step="css" port="in-memory"/>
                 </p:output>
                 <p:output port="braille-codes">
                     <p:pipe step="braille-codes" port="result"/>
@@ -1149,9 +1155,6 @@
                     <p:output port="html" primary="true"/>
                     <p:output port="html-with-sync-points">
                         <p:pipe step="with-sync-points" port="result"/>
-                    </p:output>
-                    <p:output port="css" sequence="true">
-                        <p:pipe step="extract-css" port="css"/>
                     </p:output>
                     <p:output port="braille-codes">
                         <p:pipe step="get-braille-codes" port="secondary"/>
@@ -1183,8 +1186,7 @@
                     <p:choose>
                         <p:when test="$apply-document-specific-stylesheets='true'">
                             <px:message severity="DEBUG" message="Inlining document-specific CSS"/>
-                            <!-- media="braille" would be more appropriate, see https://github.com/braillespecs/braille-css/issues/1 -->
-                            <px:css-cascade type="text/css text/x-scss" media="embossed">
+                            <px:css-cascade type="text/css text/x-scss" media="braille">
                                 <p:input port="source.in-memory">
                                     <p:pipe step="maybe-move-default-rendition" port="in-memory"/>
                                 </p:input>
@@ -1195,8 +1197,7 @@
                         </p:otherwise>
                     </p:choose>
                     <px:css-detach/>
-                    <!-- media="braille" would be more appropriate, see https://github.com/braillespecs/braille-css/issues/1 -->
-                    <px:css-cascade type="text/css text/x-scss" media="embossed">
+                    <px:css-cascade type="text/css text/x-scss" media="braille">
                         <p:with-option name="user-stylesheet" select="($stylesheet,$default-stylesheet)[not(.='')][1]"/>
                     </px:css-cascade>
                     <px:transform name="transform">
@@ -1219,73 +1220,20 @@
                             <p:identity/>
                         </p:otherwise>
                     </p:choose>
-                    <p:group name="extract-css">
-                        <p:output port="result" primary="true">
-                            <p:pipe step="extract-css.result" port="result"/>
-                        </p:output>
-                        <p:output port="css" sequence="true">
-                            <p:pipe step="css" port="result"/>
-                        </p:output>
-                        <css:extract name="extract"/>
-                        <p:delete match="@style" name="without-css"/>
-                        <p:choose>
-                            <p:xpath-context>
-                                <p:pipe step="extract" port="stylesheet"/>
-                            </p:xpath-context>
-                            <p:when test="normalize-space(string(/*))=''">
-                                <p:identity/>
-                            </p:when>
-                            <p:otherwise>
-                                <p:add-attribute match="/html:link" attribute-name="href" name="css-link">
-                                    <p:input port="source">
-                                        <p:inline xmlns="http://www.w3.org/1999/xhtml">
-                                            <link rel="stylesheet" type="text/css" media="embossed"/>
-                                        </p:inline>
-                                    </p:input>
-                                    <p:with-option name="attribute-value" select="replace(base-uri(/*),'^.*/(([^/]+)\.x?html|([^/]+))$','$2$3.css')"/>
-                                </p:add-attribute>
-                                <!--
-                                    assuming there is one and only one head element
-                                -->
-                                <p:insert match="html:head" position="last-child">
-                                    <p:input port="source">
-                                        <p:pipe step="without-css" port="result"/>
-                                    </p:input>
-                                    <p:input port="insertion">
-                                        <p:pipe step="css-link" port="result"/>
-                                    </p:input>
-                                </p:insert>
-                            </p:otherwise>
-                        </p:choose>
-                        <p:identity name="extract-css.result"/>
-                        <p:identity>
-                            <p:input port="source">
-                                <p:pipe step="extract" port="stylesheet"/>
-                            </p:input>
-                        </p:identity>
-                        <p:choose>
-                            <p:when test="normalize-space(string(/*))=''">
-                                <p:identity>
-                                    <p:input port="source">
-                                        <p:empty/>
-                                    </p:input>
-                                </p:identity>
-                            </p:when>
-                            <p:otherwise>
-                                <px:set-base-uri>
-                                    <!--
-                                        using "base-uri(parent::*)" because link has the base-uri of this XProc file
-                                    -->
-                                    <p:with-option name="base-uri"
-                                                   select="//html:link[@rel='stylesheet' and @type='text/css' and @media='embossed']
-                                                           /resolve-uri(@href,base-uri(parent::*))">
-                                        <p:pipe step="extract-css.result" port="result"/>
-                                    </p:with-option>
-                                </px:set-base-uri>
-                            </p:otherwise>
-                        </p:choose>
-                        <p:identity name="css"/>
-                    </p:group>
+                    <p:delete match="@style">
+                        <p:documentation>Delete styles added by px:css-cascade before attaching full style sheet
+                        <!-- insert note about styles being applied twice  -->
+                        </p:documentation>
+                    </p:delete>
+                    <p:xslt name="attach-css">
+                        <p:documentation>Attach CSS style sheets by inserting <code>link</code> elements in the HTML</p:documentation>
+                        <p:input port="stylesheet">
+                            <p:document href="braille-rendition.attach-css.xsl"/>
+                        </p:input>
+                        <p:with-param name="stylesheet-links" select="//d:file[@role='stylesheet']/resolve-uri(@href,base-uri(.))">
+                            <p:pipe step="css" port="fileset"/>
+                        </p:with-param>
+                    </p:xslt>
                     <p:identity name="with-sync-points"/>
                     <p:delete match="*[@class='__tmp__sync__']"/>
                     <!-- get list of used braille codes with usage count, and remove -t- extension from xml:lang attributes. -->
@@ -1305,6 +1253,64 @@
                     </px:set-base-uri>
                 </p:for-each>
                 <p:sink/>
+
+                <p:group name="css">
+                    <p:output port="fileset" primary="true"/>
+                    <p:output port="in-memory" sequence="true">
+                        <p:pipe step="each" port="in-memory"/>
+                    </p:output>
+                    <p:documentation>CSS style sheets to be attached to the HTML documents, together with any
+                    referenced resources (fonts, images, imported style sheets). The top-level files are
+                    marked with a <code>role</code> attribute with value <code>stylesheet</code>. The order of
+                    the style sheets in the fileset determines the order in which <code>link</code> elements
+                    are inserted in the HTML.</p:documentation>
+                    <px:tokenize regex="\s+">
+                        <p:with-option name="string" select="normalize-space($stylesheet)"/>
+                    </px:tokenize>
+                    <p:for-each name="each">
+                        <p:output port="fileset" primary="true"/>
+                        <p:output port="in-memory" sequence="true">
+                            <p:pipe step="copy" port="result.in-memory"/>
+                        </p:output>
+                        <p:variable name="href" select="string(.)"/>
+                        <px:fileset-create>
+                            <p:with-option name="base" select="resolve-uri('./',$href)"/>
+                        </px:fileset-create>
+                        <px:fileset-add-entry>
+                            <p:with-option name="href" select="$href"/>
+                            <p:with-option name="media-type" select="if (ends-with($href,'.scss')) then 'text/x-scss' else 'text/css'"/>
+                        </px:fileset-add-entry>
+                        <!-- remote Sass files are supported (will be downloaded and compiled) -->
+                        <px:sass-compile name="compile">
+                            <p:with-option name="parameters" select="$parameter-map"/>
+                        </px:sass-compile>
+                        <p:add-attribute match="d:file[@media-type='text/css']" attribute-name="role" attribute-value="stylesheet"/>
+                        <!-- remote plain CSS files aren't -->
+                        <px:css-to-fileset>
+                            <!-- warns about missing (including remote) resources -->
+                            <p:input port="source.in-memory">
+                                <p:pipe step="compile" port="result.in-memory"/>
+                            </p:input>
+                        </px:css-to-fileset>
+                        <px:fileset-copy name="copy">
+                            <p:documentation>Copy all style sheets to a common place within the braille
+                            rendition. This will raise an error if some referenced resources fall outside the
+                            directory that contains the style sheet.</p:documentation>
+                            <p:input port="source.in-memory">
+                                <p:pipe step="compile" port="result.in-memory"/>
+                            </p:input>
+                            <p:with-option name="target"
+                                           select="resolve-uri(
+                                                     if ($ebraille-compatibility) then 'ebraille/css/' else 'braille/css/',
+                                                     base-uri(/*))">
+                                <p:pipe step="maybe-copy" port="fileset"/>
+                            </p:with-option>
+                        </px:fileset-copy>
+                    </p:for-each>
+                    <px:fileset-join/>
+                </p:group>
+                <p:sink/>
+
                 <!--
                     get list of used braille codes in all HTML, sorted by use
                 -->
@@ -1342,37 +1348,20 @@
                     </p:input>
                 </p:xslt>
                 <p:sink/>
-                <!--
-                    extracted css fileset
-                -->
-                <px:fileset-create name="base"/>
-                <p:for-each>
-                    <p:iteration-source>
-                        <p:pipe step="processed" port="css"/>
-                    </p:iteration-source>
-                    <px:fileset-add-entry>
-                        <p:input port="source.fileset">
-                            <p:pipe step="base" port="result"/>
-                        </p:input>
-                        <p:with-option name="href" select="base-uri(/*)"/>
-                        <p:with-option name="media-type" select="/c:result/@content-type"/> <!-- text/plain -->
-                    </px:fileset-add-entry>
-                </p:for-each>
-                <px:fileset-join name="css.fileset"/>
-                <p:sink/>
+
                 <!--
                     update braille rendition fileset
                 -->
                 <px:fileset-join>
                     <p:input port="source">
                         <p:pipe step="braille-rendition.copy" port="fileset"/>
-                        <p:pipe step="css.fileset" port="result"/>
+                        <p:pipe step="css" port="fileset"/>
                     </p:input>
                 </px:fileset-join>
                 <px:fileset-update name="update-fileset">
                     <p:input port="source.in-memory">
                         <p:pipe step="braille-rendition.copy" port="in-memory"/>
-                        <p:pipe step="processed" port="css"/>
+                        <p:pipe step="css" port="in-memory"/>
                     </p:input>
                     <p:input port="update.fileset">
                         <p:pipe step="load" port="result.fileset"/>

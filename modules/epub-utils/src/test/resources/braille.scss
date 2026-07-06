@@ -1,0 +1,35 @@
+%h1 {
+	page-break-before: always;
+	text-align: center;
+	margin-left: 3;
+	margin-right: 3;
+	margin-bottom: 1;
+}
+
+%h2 {
+	margin-left: 4;
+}
+
+%h3 {
+	margin-left: 6;
+}
+
+%h1, %h2, %h3 {
+	margin-top: 1;
+	page-break-after: avoid;
+}
+
+$h-mapping: (
+	h1: h1,
+	h2: h2,
+	h3: [h3, h4, h5, h6]
+) !default;
+
+@for $rank from 1 through 3 {
+	@if map-has-key($h-mapping, h#{$rank}) {
+		$selector: map-get($h-mapping, h#{$rank});
+		#{$selector} {
+			@extend %h#{$rank};
+		}
+	}
+}
