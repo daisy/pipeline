@@ -8,6 +8,22 @@
 
 @namespace xml "http://www.w3.org/XML/1998/namespace";
 
+/* ======= Braille transcription ======= */
+
+/* The following styles are required for transcription of content to braille. It is the set of rules
+ * within this style sheet that you want to include for pure transcription, i.e. replacing the text
+ * of a DTBook document with braille nodes.
+ *
+ * The display property is needed to determine the boundaries of blocks, the units of text processed
+ * by the "block translator".
+ *
+ * Hyphenation is seen as part of braille transcription because it is easier to transcribe
+ * pre-hyphenated text to braille, than to hyphenate braille text.
+ */
+
+/* Put "display: block" on all elements that are defined as block-level. The rules defined here can
+ * be reset with http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/reset.css
+ */
 address,
 annotation,
 author,
@@ -57,39 +73,14 @@ li {
 	display: list-item;
 }
 
-list {
-	counter-reset: list-item;
-}
-
-list[type="ol"],
-list[type="ol"][enum="1"] { list-style-type: decimal;     }
-list[type="ol"][enum="a"] { list-style-type: lower-alpha; }
-list[type="ol"][enum="U"] { list-style-type: upper-alpha; }
-list[type="ol"][enum="i"] { list-style-type: lower-roman; }
-list[type="ol"][enum="X"] { list-style-type: upper-roman; }
-
-/* handle list[start] */
-@-daisy-xslt "lists.xsl";
-
 head {
 	display: none;
-}
-
-br::before {
-	content: "\A";
-	white-space: pre-line;
-}
-
-[xml|space=preserve] {
-	white-space: pre-wrap;
 }
 
 @-daisy-text-transform uncontracted {
 	system: braille;
 	contraction: no;
 }
-
-/* ======= Implementation of script options =============== */
 
 /**
  * @var $hyphenation
@@ -132,6 +123,47 @@ $hyphenation: manual !default;
 		hyphens: $hyphenation;
 	}
 }
+
+/* ======= List numbering ======= */
+
+/* The rules below could in theory be used to generate marker contents of list items, resulting in
+ * so-called "pre-formatted lists".
+ */
+
+list {
+	counter-reset: list-item;
+}
+
+list[type="ol"],
+list[type="ol"][enum="1"] { list-style-type: decimal;     }
+list[type="ol"][enum="a"] { list-style-type: lower-alpha; }
+list[type="ol"][enum="U"] { list-style-type: upper-alpha; }
+list[type="ol"][enum="i"] { list-style-type: lower-roman; }
+list[type="ol"][enum="X"] { list-style-type: upper-roman; }
+
+/* handle list[start] */
+@-daisy-xslt "lists.xsl";
+
+/* ======= Simple braille formatting ======= */
+
+/* This is the set of rules within this style sheet that you want to include for simple braille
+ * formatting, i.e. the kind of braille formatting that makes sense for refreshable braille displays
+ * (but not the multiline kind): line breaking, indentation, etc.
+ */
+
+br::before {
+	content: "\A";
+	white-space: pre-line;
+}
+
+[xml|space=preserve] {
+	white-space: pre-wrap;
+}
+
+/* ======= Other braille formatting ======= */
+
+/* Everything below mostly makes sense for embossed braille or multiline braille displays.
+ */
 
 /**
  * @var $line-spacing
