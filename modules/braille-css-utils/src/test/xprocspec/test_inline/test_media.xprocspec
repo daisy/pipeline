@@ -141,7 +141,7 @@
                     display: block;
                   }
                 }
-                @media (overflow-block: paged) {
+                @media (grid) AND (overflow-block: paged) {
                   p {
                     text-indent: 2;
                   }
