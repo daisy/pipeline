@@ -10,6 +10,7 @@ import java.util.Set;
 import cz.vutbr.web.css.CSSFactory;
 import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.Declaration;
+import cz.vutbr.web.css.MediaSpec;
 import cz.vutbr.web.css.Rule;
 import cz.vutbr.web.css.Selector.PseudoElement;
 import cz.vutbr.web.css.SupportedCSS;
@@ -131,7 +132,7 @@ public class MockCSSExtension extends BrailleCSSExtension {
 	}
 
 	@Override
-	public boolean parseDeclaration(Declaration d, Map<String,CSSProperty> properties, Map<String,Term<?>> values) {
+	public boolean parseDeclaration(Declaration d, Map<String,CSSProperty> properties, Map<String,Term<?>> values, MediaSpec medium) {
 		String property = d.getProperty().toLowerCase();
 		if (!(css.isSupportedCSSProperty(property) || "display".equals(property))) {
 			if (!property.startsWith(prefix) && css.isSupportedCSSProperty(prefix + property))
