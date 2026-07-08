@@ -43,7 +43,7 @@
 			<p>Parameters that are passed to SCSS style sheets (as <a
 			href="https://sass-lang.com/documentation/variables#scope">global variables</a>). They
 			are also passed to XSLT transformations that are included from CSS through
-			<code>@xslt</code> rules.</p>
+			<code>@-daisy-xslt</code> rules.</p>
 		</p:documentation>
 	</p:input>
 	
