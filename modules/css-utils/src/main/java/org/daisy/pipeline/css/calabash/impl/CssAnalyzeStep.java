@@ -236,7 +236,7 @@ public class CssAnalyzeStep extends DefaultStep implements XProcStep {
 
 	private static URIResolver fallback(URIResolver... resolvers) {
 		return new URIResolver() {
-			public Source resolve(String href, String base) throws javax.xml.transform.TransformerException {
+			public Source resolve(String href, String base) throws TransformerException {
 				Iterator<URIResolver> iterator = forArray(resolvers);
 				while (iterator.hasNext()) {
 					Source source = iterator.next().resolve(href, base);

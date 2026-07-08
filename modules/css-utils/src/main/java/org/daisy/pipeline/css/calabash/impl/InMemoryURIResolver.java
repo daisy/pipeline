@@ -31,7 +31,7 @@ class InMemoryURIResolver implements URIResolver {
 		this.documents = documents;
 	}
 
-	private static final QName c_encoding = new QName("c", XProcConstants.NS_XPROC_STEP, "encoding");
+	private static final QName _encoding = new QName("encoding");
 	private static final QName _content_type = new QName("content-type");
 
 	public Source resolve(String href, String base) throws TransformerException {
@@ -52,7 +52,7 @@ class InMemoryURIResolver implements URIResolver {
 					    && root.getAttributeValue(_content_type).startsWith("text/"))
 						return new StreamSource(new ByteArrayInputStream(doc.getStringValue().getBytes()),
 						                        uri.toASCIIString());
-					else if ("base64".equals(root.getAttributeValue(c_encoding)))
+					else if ("base64".equals(root.getAttributeValue(_encoding)))
 						return new StreamSource(new ByteArrayInputStream(Base64.decode(doc.getStringValue())),
 						                        uri.toASCIIString());
 					else if (XProcConstants.c_data.equals(root.getNodeName()))
