@@ -188,6 +188,11 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 		else
 			v = "false";
 		boolean includeBrailleCodeInLanguage = v.equalsIgnoreCase("true");
+		if (q.containsKey("handle-letter-spacing-during-translation"))
+			v = q.removeOnly("handle-letter-spacing-during-translation").getValue().orElse("true");
+		else
+			v = "true";
+		boolean handleLetterSpacing = v.equalsIgnoreCase("true");
 		if (table != null)
 			q.add("table", table);
 		q.add("white-space");
@@ -195,6 +200,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 			getSimpleTranslator(
 				q.asImmutable(),
 				handleNonStandardHyphenation,
+				handleLetterSpacing,
 				includeBrailleCodeInLanguage));
 		if (translators.apply(NOP_LOGGER).iterator().hasNext()) {
 			// all translators use the same display table
@@ -216,6 +222,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 
 	private Iterable<LiblouisTranslator> getSimpleTranslator(Query query,
 	                                                         int handleNonStandardHyphenation,
+	                                                         boolean handleLetterSpacing,
 	                                                         boolean includeBrailleCodeInLanguage) {
 		return transform(
 			logSelect(query, tableProvider),
@@ -226,6 +233,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 									table,
 									null,
 									handleNonStandardHyphenation,
+									handleLetterSpacing,
 									includeBrailleCodeInLanguage)));
 				}
 			}
@@ -278,6 +286,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 		// contains non-braille characters, the result is an exact copy of the input with no styles
 		// applied.
 		private final int handleNonStandardHyphenation;
+		private final boolean handleLetterSpacing;
 		private final boolean includeBrailleCodeInLanguage;
 		private final Normalizer.Form unicodeNormalization;
 		
@@ -299,12 +308,14 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 		LiblouisTranslatorImpl(LiblouisTableJnaImpl table,
 		                       Hyphenator hyphenator,
 		                       int handleNonStandardHyphenation,
+		                       boolean handleLetterSpacing,
 		                       boolean includeBrailleCodeInLanguage) {
 			super(hyphenator, null);
 			this.table = table;
 			this.translator = table.getTranslator();
 			this.displayTable = table.getDisplayTable();
 			this.handleNonStandardHyphenation = handleNonStandardHyphenation;
+			this.handleLetterSpacing = handleLetterSpacing;
 			this.includeBrailleCodeInLanguage = includeBrailleCodeInLanguage;
 			this.supportedTypeforms
 				= translator.getSupportedTypeforms().stream().collect(Collectors.toMap(Typeform::getName, e -> e));
@@ -327,6 +338,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 			this.translator = from.translator;
 			this.displayTable = from.displayTable;
 			this.handleNonStandardHyphenation = from.handleNonStandardHyphenation;
+			this.handleLetterSpacing = from.handleLetterSpacing;
 			this.includeBrailleCodeInLanguage = from.includeBrailleCodeInLanguage;
 			this.supportedTypeforms = from.supportedTypeforms;
 			this.unicodeNormalization = from.unicodeNormalization;
@@ -730,14 +742,15 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 									else if (val == Hyphens.NONE)
 										text[i] = extractHyphens(text[i], false, SHY, ZWSP)._1;
 									style.removeProperty("hyphens"); }
-								val = style.getProperty("letter-spacing");
-								if (val != null) {
-									if (val == LetterSpacing.length) {
-										letterSpacing[i] = style.getValue(TermInteger.class, "letter-spacing").getIntValue();
-										if (letterSpacing[i] < 0) {
-											logger.warn("{} not supported, must be non-negative", val);
-											letterSpacing[i] = 0; }}
-									style.removeProperty("letter-spacing"); }
+								if (handleLetterSpacing) {
+									val = style.getProperty("letter-spacing");
+									if (val != null) {
+										if (val == LetterSpacing.length) {
+											letterSpacing[i] = style.getValue(TermInteger.class, "letter-spacing").getIntValue();
+											if (letterSpacing[i] < 0) {
+												logger.warn("{} not supported, must be non-negative", val);
+												letterSpacing[i] = 0; }}
+										style.removeProperty("letter-spacing"); }}
 								typeform[i] = typeform[i].add(typeformFromInlineCSS(style, translator, supportedTypeforms));
 								for (String prop : style.getPropertyNames())
 									logger.warn("{} not supported", style.get(prop)); }}
@@ -1347,14 +1360,15 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 							TermList values = style.getValue(TermList.class, "text-transform");
 							text[i] = textFromTextTransform(text[i], values);
 							typeform[i] = typeform[i].add(typeformFromTextTransform(values, translator, supportedTypeforms)); }}
-					val = style.getProperty("letter-spacing");
-					if (val != null) {
-						if (val == LetterSpacing.length) {
-							letterSpacing[i] = style.getValue(TermInteger.class, "letter-spacing").getIntValue();
-							if (letterSpacing[i] < 0) {
-								logger.warn("{} not supported, must be non-negative", val);
-								letterSpacing[i] = 0; }}
-						style.removeProperty("letter-spacing"); }
+					if (handleLetterSpacing) {
+						val = style.getProperty("letter-spacing");
+						if (val != null) {
+							if (val == LetterSpacing.length) {
+								letterSpacing[i] = style.getValue(TermInteger.class, "letter-spacing").getIntValue();
+								if (letterSpacing[i] < 0) {
+									logger.warn("{} not supported, must be non-negative", val);
+									letterSpacing[i] = 0; }}
+							style.removeProperty("letter-spacing"); }}
 					typeform[i] = typeform[i].add(typeformFromInlineCSS(style, translator, supportedTypeforms));}}
 			
 			return transform(text, typeform, preserveLines, preserveSpace, letterSpacing);
@@ -1677,6 +1691,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 			hash = prime * hash + translator.hashCode();
 			hash = prime * hash + ((hyphenator == null) ? 0 : hyphenator.hashCode());
 			hash = prime * hash + handleNonStandardHyphenation;
+			hash = prime * hash + (handleLetterSpacing ? 1 : 0);
 			hash = prime * hash + (includeBrailleCodeInLanguage ? 1 : 0);
 			return hash;
 		}

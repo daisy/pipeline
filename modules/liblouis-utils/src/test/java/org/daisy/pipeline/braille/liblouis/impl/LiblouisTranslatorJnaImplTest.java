@@ -110,6 +110,7 @@ public class LiblouisTranslatorJnaImplTest {
 					public LineBreaker asLineBreaker() throws UnsupportedOperationException {
 						return hyphenator; }},
 				LiblouisTranslatorImpl.NON_STANDARD_HYPH_FAIL,
+				true,
 				false
 			).new LineBreaker(
 				null
