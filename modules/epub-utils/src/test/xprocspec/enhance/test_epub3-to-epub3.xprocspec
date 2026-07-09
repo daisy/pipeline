@@ -848,9 +848,7 @@
 						</metadata>
 					</x:document>
 				</x:input>
-				<x:option name="stylesheet" select="resolve-uri('../../resources/braille.scss')"/>
-				<x:option name="stylesheet-parameters"
-				          select="map{'h-mapping': '(h1: [h1, h2], h2: h3, h3: [h4, h5, h6])'}"/>
+				<x:option name="ebraille-stylesheet" select="resolve-uri('../../resources/braille.css')"/>
 				<x:option name="braille-translator" select="'(system:ueb)(grade:1)'"/>
 				<x:option name="tts" select="false()"/>
 				<x:option name="sentence-detection" select="false()"/>
@@ -904,7 +902,8 @@
 						<d:file href="result/ebraille/C00000-9-footnotes.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
 						<d:file href="result/index.xhtml" role="nav" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
 						<d:file href="result/package.opf" media-type="application/oebps-package+xml" indent="true"/>
-						<d:file href="result/ebraille/css/braille.css" media-type="text/css" role="stylesheet"/>
+						<d:file href="result/ebraille/css/braille.css" media-type="text/css" role="stylesheet"
+						        original-href="../../resources/braille.css"/>
 						<d:file href="result/META-INF/metadata.xml"/>
 						<d:file href="result/renditionMapping.html" indent="true"/>
 					</d:fileset>
@@ -1013,34 +1012,6 @@
 			          test="/html:html/html:head/html:link[@rel='stylesheet']/@href" equals="'css/braille.css'"/>
 			<x:expect label="cross-references should be correct" type="xpath"
 			          test="/html:html/html:head/html:link[@rel='next']/@href" equals="'C00000-2-frontmatter.xhtml'"/>
-			<x:context label="the css file">
-				<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/ebraille/css/braille.css')]"/>
-			</x:context>
-			<x:expect label="the css file" type="compare">
-				<x:document type="inline">
-					<c:data content-type="text/css">h1, h2 {
-  page-break-before: always;
-  text-align: center;
-  margin-left: 3;
-  margin-right: 3;
-  margin-bottom: 1;
-}
-
-h3 {
-  margin-left: 4;
-}
-
-h4, h5, h6 {
-  margin-left: 6;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  margin-top: 1;
-  page-break-after: avoid;
-}
-</c:data>
-				</x:document>
-			</x:expect>
 			<x:context label="the renditionMapping document">
 				<x:document type="port" port="result.in-memory"
 				            select="/*[base-uri()=resolve-uri('result/renditionMapping.html')]"/>
