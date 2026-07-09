@@ -238,9 +238,8 @@ translator that is selected.</p>
             <p px:role="desc" xml:space="preserve">A list of CSS/Sass style sheets to take into account.
 
 A list of CSS/Sass style sheets to take into account, both for text-to-speech (if text-to-speech is
-enabled), and for braille transcription (if a braille rendition is requested). Furthermore, in order
-to support formatting of the braille rendition, the style sheets are also attached to the HTML files
-in the output.
+enabled), and for braille transcription (if a braille rendition is requested). (Note that in order
+to support _formatting_ of the braille rendition, the "eBraille style sheets" option is provided.)
 
 Must be a space separated list of URIs, absolute or relative to the input.
 
@@ -255,12 +254,6 @@ sheets](https://www.w3.org/TR/CSS2/cascade.html#cascade)).
 When generating the braille rendition, style sheets are interpreted according to [braille
 CSS](http://braillespecs.github.io/braille-css) rules. When performing text-to-speech, they are
 interpreted as [aural CSS](https://www.w3.org/TR/CSS2/aural.html).
-
-In the output, the style sheets are attached to the braille rendition using HTML `link` elements. No
-media query (`media` attribute) is specified on the links. If media queries are needed, they must be
-specified in the CSS itself, through `@media` and `@import` rules. If the output is eBraille, the
-user is responsible for ensuring the style sheets conform to the [eBraille standard for
-CSS](https://daisy.github.io/ebraille/#html-css).
 
 For info on how to use Sass (Syntactically Awesome StyleSheets) see the [Sass
 manual](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).
@@ -324,6 +317,21 @@ Be compatible with the eBraille standard as much as possible, while not breaking
                 </choice>
             </px:type>
         </p:pipeinfo>
+    </p:option>
+    
+    <p:option name="ebraille-stylesheet" required="false" px:type="anyURI" select="''" px:sequence="true" px:separator=" "
+              px:reusable="true" px:media-type="text/css text/x-scss">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">eBraille style sheets</h2>
+            <p px:role="desc" xml:space="preserve">CSS style sheet(s) to be attached to the HTML documents of the eBraille publication.
+
+The style sheets are associated with each HTML file through `link` elements. No media query (`media`
+attribute) is specified on the `link` elements. If media queries are needed, they must be specified
+in the CSS itself, through `@media` and `@import` rules.
+
+The style sheets are included as-is, and should therefore conform to the [eBraille standard for
+CSS](https://daisy.github.io/ebraille/#html-css).</p>
+        </p:documentation>
     </p:option>
     
     <p:input port="tts-config" primary="false">
@@ -407,6 +415,7 @@ elements that represent the sentences.</p>
         <p:with-option name="braille" select="$braille"/>
         <p:with-option name="set-default-rendition-to-braille" select="$set-default-rendition-to-braille"/>
         <p:with-option name="ebraille-compatibility" select="$ebraille-compatibility[not(.='none')]"/>
+        <p:with-option name="ebraille-stylesheet" select="tokenize($ebraille-stylesheet,'\s+')[not(.='')]"/>
         <p:with-option name="tts" select="$audio"/>
         <p:with-option name="sentence-detection" select="$sentence-detection"/>
         <p:with-option name="update-lang-attributes" select="$update-lang-attributes"/>

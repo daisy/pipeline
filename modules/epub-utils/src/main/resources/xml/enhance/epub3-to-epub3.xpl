@@ -60,6 +60,7 @@
             other features.</p>
         </p:documentation>
     </p:option>
+    <p:option name="ebraille-stylesheet" cx:as="xs:string*" select="()"/>
     <p:option name="tts" required="false" select="'default'" cx:as="xs:string"/>
     <p:option name="sentence-detection" required="false" select="'false'" cx:as="xs:string"/>
     <p:option name="braille-translator" select="''"/>
@@ -1259,8 +1260,17 @@
                     marked with a <code>role</code> attribute with value <code>stylesheet</code>. The order of
                     the style sheets in the fileset determines the order in which <code>link</code> elements
                     are inserted in the HTML.</p:documentation>
+                    <p:variable name="attach-stylesheet" select="false()">
+                        <!-- Whether to attach the style sheets specified through the "stylesheet" option if
+                             the "ebraille-stylesheet" option is left empty. Disabled for now because too many
+                             issues. -->
+                    </p:variable>
                     <px:tokenize regex="\s+">
-                        <p:with-option name="string" select="normalize-space($stylesheet)"/>
+                        <p:with-option name="string" select="if ($ebraille-stylesheet)
+                                                             then string-join($ebraille-stylesheet,' ')
+                                                             else if ($attach-stylesheet)
+                                                             then normalize-space($stylesheet)
+                                                             else ''"/>
                     </px:tokenize>
                     <p:for-each name="each">
                         <p:output port="fileset" primary="true"/>
@@ -1273,7 +1283,10 @@
                         </px:fileset-create>
                         <px:fileset-add-entry>
                             <p:with-option name="href" select="$href"/>
-                            <p:with-option name="media-type" select="if (ends-with($href,'.scss')) then 'text/x-scss' else 'text/css'"/>
+                            <p:with-option name="media-type"
+                                           select="if (empty($ebraille-stylesheet) and $attach-stylesheet and ends-with($href,'.scss'))
+                                                   then 'text/x-scss'
+                                                   else 'text/css'"/>
                         </px:fileset-add-entry>
                         <!-- remote Sass files are supported (will be downloaded and compiled) -->
                         <px:sass-compile name="compile">
