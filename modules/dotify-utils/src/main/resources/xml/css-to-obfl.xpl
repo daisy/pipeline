@@ -243,6 +243,8 @@
         </p:choose>
     </p:declare-step>
     
+    <p:variable name="imply-text-transform-none-on-braille-content" select="true()"/>
+
     <p:add-xml-base/>
     <!--
         Force the obfl and css namespaces on the root element so that they do not end up on every
@@ -983,8 +985,29 @@
         <p:with-param name="counter-styles" select="/_/*/@css:counter-style/css:parse-stylesheet(.)">
             <p:pipe step="assert-counter-style-only-on-root" port="result"/>
         </p:with-param>
+        <p:with-param name="imply-text-transform-none-on-braille-content"
+                      select="$imply-text-transform-none-on-braille-content"/>
     </p:xslt>
     
+    <p:choose>
+        <p:when test="$imply-text-transform-none-on-braille-content">
+            <!--
+                Delete unneeded translate attributes that are already implied in the output.
+            -->
+            <p:xslt>
+                <p:input port="stylesheet">
+                    <p:document href="delete-implied-translate-attrs.xsl"/>
+                </p:input>
+                <p:input port="parameters">
+                    <p:empty/>
+                </p:input>
+            </p:xslt>
+        </p:when>
+        <p:otherwise>
+            <p:identity/>
+        </p:otherwise>
+    </p:choose>
+
     <!--
         generate layout-masters
     -->

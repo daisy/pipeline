@@ -32,7 +32,18 @@
     <xsl:param name="counter-styles" as="item()?" required="no"/>
     <xsl:param name="page-and-volume-styles" as="item()*" required="no"/>
     <xsl:param name="pages-per-sheet" as="xs:integer" required="no" select="2"/> <!-- 2 | 4 -->
-    
+    <!--
+        Whether to treat all braille content as content that should be included as-is,
+        as if `text-transform: none` was declared on it. When true, it is also true in
+        the output, i.e. translate="pre-translated-text-css" is implied on elements with
+        xml:lang="*-Brai".
+        
+        Note that text-transform properties have precedence over xml:lang="*-Brai", that is, if they
+        are declared on the same element, text-transform wins. If either a text-transform property
+        or a xml:lang="*-Brai" is declared on a descendant element, it wins.
+    -->
+    <xsl:param name="imply-text-transform-none-on-braille-content" as="xs:boolean" select="true()"/>
+
     <xsl:variable name="sections" select="collection()"/>
     
     <xsl:variable name="custom-counter-style-names" as="xs:string*"
@@ -271,7 +282,15 @@
             <xsl:with-param name="progress" select="concat('1/',$progress-total)"/>
         </xsl:call-template>
         <obfl version="2011-1">
-            <xsl:variable name="translate" as="xs:string" select="if ($initial-text-transform='none') then 'pre-translated-text-css' else ''"/>
+            <xsl:variable name="implied-text-transform" as="xs:string"
+                          select="if ($imply-text-transform-none-on-braille-content
+                                      and tokenize($initial-language,'-')='Brai')
+                                  then 'none'
+                                  else $initial-text-transform"/>
+            <xsl:variable name="translate" as="xs:string"
+                          select="if ($implied-text-transform='none')
+                                  then 'pre-translated-text-css'
+                                  else ''"/>
             <xsl:variable name="hyphenate" as="xs:string" select="string($initial-hyphens='auto')"/>
             <xsl:attribute name="xml:lang" select="$initial-language"/>
             <xsl:attribute name="hyphenate" select="$hyphenate"/>
@@ -314,6 +333,7 @@
             <xsl:call-template name="_start">
                 <xsl:with-param name="language" tunnel="yes" select="$initial-language"/>
                 <xsl:with-param name="text-transform" tunnel="yes" select="$initial-text-transform"/>
+                <xsl:with-param name="implied-text-transform" tunnel="yes" select="$implied-text-transform"/>
                 <xsl:with-param name="braille-charset" tunnel="yes" select="$initial-braille-charset"/>
                 <xsl:with-param name="hyphens" tunnel="yes" select="$initial-hyphens"/>
                 <xsl:with-param name="hyphenate-character" tunnel="yes" select="$initial-hyphenate-character"/>
@@ -1238,6 +1258,7 @@
                   name="insert-text-attributes-and-next-match">
         <xsl:param name="language" as="xs:string" tunnel="yes"/>
         <xsl:param name="text-transform" as="xs:string" tunnel="yes"/>
+        <xsl:param name="implied-text-transform" as="xs:string" tunnel="yes"/>
         <xsl:param name="hyphens" as="xs:string" tunnel="yes"/>
         <xsl:param name="pending-braille-charset" as="xs:string?" tunnel="yes" select="()"/>
         <xsl:param name="pending-hyphenate-character" as="xs:string?" tunnel="yes" select="()"/>
@@ -1247,6 +1268,13 @@
         <xsl:variable name="new-text-transform" as="xs:string?">
             <xsl:apply-templates mode="css:text-transform" select="."/>
         </xsl:variable>
+        <xsl:variable name="new-implied-text-transform" as="xs:string"
+                      select="if ($new-text-transform)
+                              then $new-text-transform
+                              else if ($imply-text-transform-none-on-braille-content
+                                       and tokenize(($new-language,$language)[1],'-')='Brai')
+                              then 'none'
+                              else $text-transform"/>
         <xsl:variable name="new-hyphens" as="xs:string?">
             <xsl:apply-templates mode="css:hyphens" select="."/>
         </xsl:variable>
@@ -1254,7 +1282,8 @@
             <xsl:with-param name="new-language" select="$new-language"/>
         </xsl:call-template>
         <xsl:call-template name="obfl:translate">
-            <xsl:with-param name="new-text-transform" select="$new-text-transform"/>
+            <xsl:with-param name="text-transform" tunnel="yes" select="$implied-text-transform"/>
+            <xsl:with-param name="new-text-transform" select="$new-implied-text-transform"/>
         </xsl:call-template>
         <xsl:call-template name="obfl:hyphenate">
             <xsl:with-param name="new-hyphens" select="$new-hyphens"/>
@@ -1266,6 +1295,7 @@
         <xsl:next-match>
             <xsl:with-param name="language" tunnel="yes" select="($new-language,$language)[1]"/>
             <xsl:with-param name="text-transform" tunnel="yes" select="($new-text-transform,$text-transform)[1]"/>
+            <xsl:with-param name="implied-text-transform" tunnel="yes" select="$new-implied-text-transform"/>
             <xsl:with-param name="hyphens" tunnel="yes" select="($new-hyphens,$hyphens)[1]"/>
             <xsl:with-param name="pending-language" tunnel="yes" select="()"/>
             <xsl:with-param name="pending-text-transform" tunnel="yes" select="()"/>
@@ -1649,6 +1679,7 @@
                   match="css:box[@type='inline']">
         <xsl:param name="language" as="xs:string" tunnel="yes"/>
         <xsl:param name="text-transform" as="xs:string" tunnel="yes"/>
+        <xsl:param name="implied-text-transform" as="xs:string" tunnel="yes"/>
         <xsl:param name="hyphens" as="xs:string" tunnel="yes"/>
         <xsl:param name="pending-language" as="xs:string?" tunnel="yes" select="()"/>
         <xsl:param name="pending-text-transform" as="xs:string?" tunnel="yes" select="()"/>
@@ -1707,13 +1738,21 @@
                 <xsl:otherwise>
                     <xsl:variable name="new-language" as="xs:string" select="($pending-language,$language)[1]"/>
                     <xsl:variable name="new-text-transform" as="xs:string" select="($pending-text-transform,$text-transform)[1]"/>
+                    <xsl:variable name="new-implied-text-transform" as="xs:string"
+                                  select="if ($new-text-transform)
+                                          then $new-text-transform
+                                          else if ($imply-text-transform-none-on-braille-content
+                                                   and tokenize(($new-language,$language)[1],'-')='Brai')
+                                          then 'none'
+                                          else $text-transform"/>
                     <xsl:variable name="new-hyphens" as="xs:string" select="($pending-hyphens,$hyphens)[1]"/>
                     <xsl:variable name="attrs" as="attribute()*">
                         <xsl:call-template name="lang">
                             <xsl:with-param name="new-language" select="$new-language"/>
                         </xsl:call-template>
                         <xsl:call-template name="obfl:translate">
-                            <xsl:with-param name="new-text-transform" select="$new-text-transform"/>
+                            <xsl:with-param name="text-transform" tunnel="yes" select="$implied-text-transform"/>
+                            <xsl:with-param name="new-text-transform" select="$new-implied-text-transform"/>
                         </xsl:call-template>
                         <xsl:call-template name="obfl:hyphenate">
                             <xsl:with-param name="new-hyphens" select="$new-hyphens"/>
@@ -1731,6 +1770,7 @@
                                     <xsl:with-param name="pending-hyphenate-character" tunnel="yes" select="$pending-hyphenate-character"/>
                                     <xsl:with-param name="language" tunnel="yes" select="$new-language"/>
                                     <xsl:with-param name="text-transform" tunnel="yes" select="$new-text-transform"/>
+                                    <xsl:with-param name="implied-text-transform" tunnel="yes" select="$new-implied-text-transform"/>
                                     <xsl:with-param name="hyphens" tunnel="yes" select="$new-hyphens"/>
                                 </xsl:apply-templates>
                             </span>
@@ -1744,6 +1784,7 @@
                                 <xsl:with-param name="pending-hyphenate-character" tunnel="yes" select="$pending-hyphenate-character"/>
                                 <xsl:with-param name="language" tunnel="yes" select="$new-language"/>
                                 <xsl:with-param name="text-transform" tunnel="yes" select="$new-text-transform"/>
+                                <xsl:with-param name="implied-text-transform" tunnel="yes" select="$new-implied-text-transform"/>
                                 <xsl:with-param name="hyphens" tunnel="yes" select="$new-hyphens"/>
                             </xsl:apply-templates>
                         </xsl:otherwise>
@@ -1829,15 +1870,24 @@
             with 'translate="pre-translated-text-css"'. Other values of text-transform are handled
             through style elements and text-style attributes.
         -->
-        <xsl:choose>
-            <xsl:when test="not(exists($new-text-transform))"/>
-            <xsl:when test="$new-text-transform='none' and not($text-transform='none')">
-                <xsl:attribute name="translate" select="'pre-translated-text-css'"/>
-            </xsl:when>
-            <xsl:when test="not($new-text-transform='none') and $text-transform='none'">
-                <xsl:attribute name="translate" select="''"/>
-            </xsl:when>
-        </xsl:choose>
+        <xsl:if test="exists($new-text-transform[not(.=$text-transform)])">
+            <xsl:variable name="new-mode"
+                          select="if (($new-text-transform,$text-transform)[1]='none')
+                                  then 'pre-translated-text-css'
+                                  else ''"/>
+            <xsl:variable name="current-mode"
+                          select="if ($text-transform='none')
+                                  then 'pre-translated-text-css'
+                                  else ''"/>
+            <xsl:if test="not($new-mode=$current-mode)">
+                <!--
+                    Note that the translate attribute might not be needed because it might be implied
+                    in the output. To not complicate the code too much, the OBFL is optimized in a
+                    subsequent step and not here.
+                -->
+                <xsl:attribute name="translate" select="$new-mode"/>
+            </xsl:if>
+        </xsl:if>
     </xsl:template>
     
     <xsl:template priority="1"
