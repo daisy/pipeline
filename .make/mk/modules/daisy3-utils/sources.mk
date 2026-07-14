@@ -273,6 +273,7 @@ modules/daisy3-utils/.test modules/daisy3-utils/.install-doc : \
 	modules/daisy3-utils/src/test/xprocspec/upgrade.script.xprocspec
 modules/daisy3-utils/.install-doc : \
 	modules/daisy3-utils/doc/index.md \
+	modules/daisy3-utils/doc/daisy3-upgrader.md \
 	modules/daisy3-utils/doc/nimas-fileset-validator.md \
 	modules/daisy3-utils/doc/nimas-fileset-validator-dev-notes.md
 .make/mk/modules/daisy3-utils/sources.mk : \
