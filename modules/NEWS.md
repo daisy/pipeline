@@ -1,3 +1,19 @@
+v1.15.5
+==========
+
+Changes
+-------
+
+- Optimize volume breaking in saddle stitch mode
+- Make `orphans` and `widows` work as expected on blocks that have child blocks
+- Support for `@supports` rules.
+- For medium selection, allow setting `cell-width` and `cell-height` in combination with
+  features such as `-daisy-table`, `-daisy-pad`, `-daisy-line-breaks`.
+- Support media features `overflow-block` and `update`, and improve support for `grid`.
+- Optimize generated OBFL by adding less `translate` attributes.
+- Drop support for TeX-based hyphenation
+- Various other bugfixes
+
 v1.15.4
 ==========
 
@@ -18,8 +34,6 @@ Changes
 - Allow optional `-daisy-` prefix before more rules (`@left`, `@right` and `@footnotes`)
 - Fix support for length units in braille CSS
 - Various other bugfixes
-<!-- Optimize volume breaking in saddle stitch mode -->
-<!-- Make `orphans` and `widows` work as expected on blocks that have child blocks -->
 
 v1.15.3
 ==========
