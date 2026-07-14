@@ -1,3 +1,25 @@
+Changes in release v1.15.5
+==========================
+
+## Framework
+
+- **FIX** Improved management of temporary files
+- **NEW** `PIPELINE_` is recognized as a prefix for environment variables (in addition to `PIPELINE2_`)
+- Support for OSGi has been officially dropped.
+
+## Modules
+
+- **NEW** Support eBraille output from EPUB 3 Enhancer script.
+- **NEW** Ace version check and installation or update instructions in the description of the "Accessibility check" option.
+- **FIX** Preserve emphasis type info (strong/em) when converting from DTBook to ZedAI and HTML.
+- **FIX** Use a fallback MathML to SSML solution when MathCAT fails to process a formula.
+- **FIX** Word to eBraille was missing the "Attach CSS style sheets" option.
+- **FIX** Rename the "Attach CSS style sheets" option to "eBraille style sheets".
+- **FIX** Remove the "Line spacing" option from DTBook to eBraille
+- Changes to braille production scripts, see release notes of braille modules [v1.15.5](https://github.com/daisy/pipeline-modules/blob/master/braille/NEWS.md#v1155)
+- Various other bugfixes and improvements
+<!-- **FIX** Bugfixes and improvements to PDF to Word script powered by Mistral OCR -->
+
 Changes in release v1.15.4
 ==========================
 
