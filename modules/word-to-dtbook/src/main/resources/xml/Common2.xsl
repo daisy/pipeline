@@ -38,7 +38,7 @@
 	<xsl:param name="Language" as="xs:string?" select="''"/>
 	
 	<!--Template for adding Levels-->
-	<xsl:template name="AddLevel">
+	<xsl:template name="OpenLevel">
 		<!--Parameter levelValue holds the value of the current level -->
 		<xsl:param name="levelValue" as="xs:integer?"/>
 		<!--Parameter check holds the value that checks for different level values-->
@@ -68,7 +68,14 @@
 			<xsl:when test="$level &lt; 7">
 				<!--Levels upto 6-->
 				<!--Creating level element-->
-				<xsl:value-of disable-output-escaping="yes" select="concat('&lt;level',$level,'&gt;')"/>
+				<xsl:call-template name="CloseNode">
+					<xsl:with-param name="qname" select="concat('level',$level)"/>
+				</xsl:call-template>
+				<xsl:call-template name="OpenNode">
+					<xsl:with-param name="qname" select="concat('level',$level)"/>
+					<xsl:with-param name="attributes" select="''" />
+				</xsl:call-template>
+				<!-- <xsl:value-of disable-output-escaping="yes" select="concat('&lt;level',$level,'&gt;')"/> -->
 				<xsl:if test="(d:GetPageNum($myObj)=0) and (d:CheckTocOccur($myObj)=1) and ($pagination='automatic')">
 					<xsl:if test="preceding-sibling::w:sdt[1]/w:sdtPr/w:docPartObj/w:docPartGallery/@w:val='Cover Pages'">
 						<xsl:sequence select="d:sink(d:IncrementPage($myObj))"/> <!-- empty -->
@@ -106,7 +113,7 @@
 					<xsl:variable name="IsPageNumberDAISYApplied" as="xs:boolean" select="w:pPr/w:rPr/w:rStyle/@w:val='PageNumberDAISY'"/>
 					<!-- DB : write header in output when PageNumberDAISY is not applied  -->
 					<xsl:if test="not($IsPageNumberDAISYApplied)">
-						<xsl:call-template name="openHeading">
+						<xsl:call-template name="OpenHeading">
 							<xsl:with-param name="level" select="string($level)"/>
 						</xsl:call-template>
 					</xsl:if>
@@ -134,19 +141,27 @@
 					<!-- DB : write header in output when PageNumberDAISY is not applied  -->
 					<xsl:if test="not($IsPageNumberDAISYApplied)">
 						<!--Calling tmpAbbrAcrHeading template setting AbbrAcr flag and closing heading tag-->
-						<xsl:call-template name="closeHeading">
+						<xsl:call-template name="CloseHeading">
 							<xsl:with-param name="level" select="string($level)"/>
 							<xsl:with-param name="levelValue" select="$levelValue"/>
 						</xsl:call-template>
+						
 					</xsl:if>
 
 				</xsl:if>
 			</xsl:when>
 			<!--Levels above 6-->
 			<xsl:when test="$level &gt; 6">
-				<xsl:value-of disable-output-escaping="yes" select="concat('&lt;level',6,'&gt;')"/>
+				<xsl:call-template name="CloseNode">
+					<xsl:with-param name="qname" select="'level6'"/>
+				</xsl:call-template>
+				<xsl:call-template name="OpenNode">
+					<xsl:with-param name="qname" select="'level6'"/>
+					<xsl:with-param name="attributes" select="''" />
+				</xsl:call-template>
+				<!-- <xsl:value-of disable-output-escaping="yes" select="concat('&lt;level',6,'&gt;')"/> -->
 				<!--Calling tmpHeading template for adding Levels-->
-				<xsl:call-template name="openHeading">
+				<xsl:call-template name="OpenHeading">
 					<xsl:with-param name="level" select="'6'"/>
 				</xsl:call-template>
 				<!--Calling ParaHandler template for heading text-->
@@ -171,7 +186,7 @@
 				
 				
 				<!--Calling tmpAbbrAcrHeading template setting AbbrAcr flag and closing heading tag-->
-				<xsl:call-template name="closeHeading">
+				<xsl:call-template name="CloseHeading">
 					<xsl:with-param name="level" select="string($level)"/>
 					<xsl:with-param name="levelValue" select="$levelValue"/>
 				</xsl:call-template>
@@ -179,7 +194,7 @@
 		</xsl:choose>
 	</xsl:template>
 	
-	<xsl:template name="openHeading">
+	<xsl:template name="OpenHeading">
 		<xsl:param name="level"/>
 		<xsl:variable name="headingLanguage">
 			<xsl:call-template name="GetParagraphLanguage">
@@ -187,11 +202,20 @@
 			</xsl:call-template>
 		</xsl:variable>
 		<xsl:variable name="attributes">
-			<xsl:if test="not($headingLanguage = $documentLanguages/*:lang[1]/@*:val)">
-				<xsl:text> xml:lang="</xsl:text><xsl:value-of select="$headingLanguage"/><xsl:text>"</xsl:text>
-			</xsl:if>
+			<xsl:choose>
+				<xsl:when test="not($headingLanguage = $documentLanguages/*:lang[1]/@*:val)">
+					<xsl:text>xml:lang="</xsl:text><xsl:value-of select="$headingLanguage"/><xsl:text>"</xsl:text>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="''"/>
+				</xsl:otherwise>
+			</xsl:choose>
 		</xsl:variable>
-		<xsl:value-of disable-output-escaping="yes" select="concat('&lt;',concat('h',$level,$attributes),'&gt;')" />
+		<xsl:call-template name="OpenNode">
+			<xsl:with-param name="qname" select="concat('h',$level)"/>
+			<xsl:with-param name="attributes" select="$attributes" />
+		</xsl:call-template>
+		<!-- <xsl:value-of disable-output-escaping="yes" select="concat('&lt;',concat('h',$level,$attributes),'&gt;')" /> -->
 	</xsl:template>
 	
 	<xsl:template name="TempLevelSpan">
@@ -342,7 +366,7 @@
 		
 	</xsl:template>
 	
-	<xsl:template name="closeHeading">
+	<xsl:template name="CloseHeading">
 		<xsl:param name="level"/>
 		<xsl:param name="levelValue"/>
 		<xsl:choose>
@@ -358,7 +382,10 @@
 				</xsl:if>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:value-of disable-output-escaping="yes" select="concat('&lt;',concat('/h',$level),'&gt;')"/>
+				<xsl:call-template name="CloseNode">
+					<xsl:with-param name="qname" select="concat('h',$level)"/>
+				</xsl:call-template>
+				<!-- <xsl:value-of disable-output-escaping="yes" select="concat('&lt;',concat('/h',$level),'&gt;')"/> -->
 				<xsl:if test="not(w:r/w:pict/v:shape/v:textbox)">
 					<xsl:if test="d:ListMasterSubFlag($myObj) = 1">
 						<xsl:variable name="curLevel" select="d:PeekLevel($myObj)"/>
@@ -398,7 +425,10 @@
 
 				<xsl:variable name="PopLevel" as="xs:integer" select="d:PopLevel($myObj)"/>
 				<!--Close that level-->
-				<xsl:value-of disable-output-escaping="yes" select="concat('&lt;/level',$PopLevel,'&gt;')"/>
+				<xsl:call-template name="CloseNode">
+					<xsl:with-param name="qname" select="concat('level',$PopLevel)"/>
+				</xsl:call-template>
+				<!-- <xsl:value-of disable-output-escaping="yes" select="concat('&lt;/level',$PopLevel,'&gt;')"/> -->
 				<!-- TODO : if footnotes position is set to be after this level, insert footnotes here -->
 				<!--Loop through until we have closed all the Lower levels-->
 			</xsl:when>
@@ -407,7 +437,10 @@
 				<!-- NP 20240109 : close all inlines before closing paragraph -->
 				<xsl:call-template name="CloseAllStyleTag"/>
 				<!--Close the paragraph -->
-				<xsl:value-of disable-output-escaping="yes" select="'&lt;/p&gt;'"/>
+				<xsl:call-template name="CloseNode">
+					<xsl:with-param name="qname" select="'p'"/>
+				</xsl:call-template>
+				<!-- <xsl:value-of disable-output-escaping="yes" select="'&lt;/p&gt;'"/> -->
 				<!--  insert footnotes after the paragraph if inlined footnotes in the current level is requested
 									current level selection being computed as 
 									the 0 level selector
@@ -453,7 +486,10 @@
 						</xsl:call-template>
 					</xsl:if>
 					<!-- Close the level tag-->
-					<xsl:value-of disable-output-escaping="yes" select="concat('&lt;/level',$PopLevel,'&gt;')"/>
+					 <xsl:call-template name="CloseNode">
+						<xsl:with-param name="qname" select="concat('level',$PopLevel)"/>
+					</xsl:call-template>
+					<!-- <xsl:value-of disable-output-escaping="yes" select="concat('&lt;/level',$PopLevel,'&gt;')"/> -->
 					<!-- TODO : if footnotes are requested to be inlined in the  $PopLevel - 1 level, insert the notes here 
 										like : inlined in level 1 means to insert after level2 is closed
 					-->

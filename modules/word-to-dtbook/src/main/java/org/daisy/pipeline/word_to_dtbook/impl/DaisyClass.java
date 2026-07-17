@@ -17,8 +17,6 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Stack;
 import java.util.List;
-import java.util.Deque;
-import java.util.ArrayDeque;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
@@ -106,12 +104,6 @@ public class DaisyClass {
 	private final List<String> prevHeadId = new ArrayList<>();
 	private final Hashtable<String,List<String>> startHeadingItem = new Hashtable<>();
 	private final List<String> OverideNumList = new ArrayList<>();
-        /**
-         * Stack of character style ti apply on a groupe of letter or text
-         * This is call by CustomCharStyle template to handle
-         * italic (em), bold(strong), superscript(sup) and subscript(sub) groups of characters
-         */
-        Deque<String> characterStyle = new ArrayDeque<>();
 	/** stack of levels value for lists */
 	private Stack<String> lstackList = new Stack<>();
 	/** Stack of lists headings */
@@ -2695,29 +2687,57 @@ public class DaisyClass {
 		_currentMatterType = "";
 	}
 
-		/**
-		 */
-        public void PushCharacterStyle(String tag)
-        {
-            characterStyle.push(tag);
-        }
+	/**
+	 * Stack of character style to apply on a group of letters or text
+	 * This is called by CustomCharStyle template to handle
+	 * italic (em), bold(strong), superscript(sup) and subscript(sub) groups of characters
+	 */
+	Stack<String> characterStyle = new Stack<>();
 
-		/**
-		 */
-        public boolean HasCharacterStyle(String tag)
-        {
-            return characterStyle.contains(tag);
-        }
+	/**
+	 */
+	public void PushCharacterStyle(String tag)
+	{
+		characterStyle.push(tag);
+	}
 
-		/**
-		 */
-        public String PopCharacterStyle()
-        {
-            if(characterStyle.isEmpty())
-            {
-                return "";
-            } else return characterStyle.pop();
-        }
+	/**
+	 */
+	public boolean HasCharacterStyle(String tag)
+	{
+		return characterStyle.contains(tag);
+	}
+
+	/**
+	 */
+	public String PopCharacterStyle()
+	{
+		if(characterStyle.isEmpty())
+		{
+			return "";
+		} else return characterStyle.pop();
+	}
+
+	/**
+	 * Stack of structural nodes (nodes that contains non-pcdata nodes, like levels, sidebar etc)
+	 */
+	private Stack<String> structuralNodes = new Stack<>();
+	
+	
+	public boolean PushStructuralNode(String name){
+		if(!structuralNodes.contains(name)){
+			structuralNodes.push(name);
+			return true;
+		}
+		return false;
+	}
+
+	public String PopStructuralNode(String upToName){
+		if(structuralNodes.isEmpty() || !structuralNodes.contains(upToName))
+			return "";
+		else
+			return structuralNodes.pop();
+	}
 
 	@Component(
 		name = "DaisyClass",

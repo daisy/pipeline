@@ -249,7 +249,6 @@
 										</xsl:choose>
 									</xsl:when>
 									<xsl:otherwise>
-										<!--Calling template for checking style in the footnote text-->
 										<xsl:call-template name="ParagraphStyle">
 											<xsl:with-param name="version" select="$verfoot"/>
 											<xsl:with-param name="flagNote" select="'footnote'"/>
@@ -281,7 +280,13 @@
 		</xsl:if>
 	</xsl:template>
 	
-	<!--Template for handling multiple Prodnotes and Captions applied to an image-->
+	<!--Template for handling multiple Prodnotes and Captions applied to an image
+	Used 4 time in this file in templates 
+		- PictureHandler
+		- Imagegroup2003
+		- Object
+		- tmpShape
+	-->
 	<xsl:template name="ProcessCaptionProdNote">
 		<xsl:param name="followingnodes" as="node()*"/>
 		<xsl:param name="imageId" as="xs:string"/>
@@ -415,7 +420,9 @@
 		<xsl:sequence select="d:ResetCaptionsProdnotes($myObj)"/> <!-- empty -->
 	</xsl:template>
 	
-	<!--Template for implementing Simple Images i.e, ungrouped images-->
+	<!--Template for implementing Simple Images i.e, ungrouped images
+	Only used 1 time in Common.xsl:1391
+	-->
 	<xsl:template name="PictureHandler">
 		<xsl:param name="imgOpt" as="xs:string"/>
 		<xsl:param name="dpi" as="xs:float?"/>
@@ -675,7 +682,10 @@
 		</xsl:if>
 	</xsl:template>
 	
-	<!--Template for handling multiple Prodnotes and Captions applied for grouped images-->
+	<!--Template for handling multiple Prodnotes and Captions applied for grouped images
+	Used only 1 time in Common3.xsl:897 in Imagegroups template
+	(All other occurences are recursive calls)
+	-->
 	<xsl:template name="ProcessProdNoteImggroups">
 		<xsl:param name="followingnodes" as="node()*"/>
 		<xsl:param name="imageId" as="xs:string"/>
@@ -811,7 +821,9 @@
 		<xsl:sequence select="d:ResetCaptionsProdnotes($myObj)"/> <!-- empty -->
 	</xsl:template>
 	
-	<!--Template for Implementing grouped images-->
+	<!--Template for Implementing grouped images
+	Only used 1 time in Common.xsl:1360
+	-->
 	<xsl:template name="Imagegroups">
 		<xsl:param name="characterStyle" as="xs:boolean"/>
 		<!--Handling Image-CaptionDAISY custom paragraph style applied above an image-->
@@ -914,7 +926,9 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-	
+
+
+	<!-- Only used 1 time in Common.xsl:1344 -->
 	<xsl:template name="Imagegroup2003">
 		<xsl:param name="characterStyle" as="xs:boolean"/>
 		<!--Variable that holds the Image Id-->
@@ -1015,7 +1029,7 @@
 		</xsl:if>
 	</xsl:template>
 	
-	
+	<!-- Only used 1 time in Common.xsl:1457 -->
 	<xsl:template name="Object">
 		<xsl:param name="characterStyle" as="xs:boolean"/>
 		<xsl:if test="not(contains(w:object/o:OLEObject/@ProgID,'Equation'))">
@@ -2476,6 +2490,207 @@
 				<xsl:value-of select="w:t"/>
 			</xsl:otherwise>
 		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="OpenNode">
+		<xsl:param name="qname" as="xs:string"/>
+		<xsl:param name="attributes" as="xs:string?" select="''"/>
+		<xsl:variable name="isOkToOpen" select="d:PushStructuralNode($myObj, $qname)" />
+		<xsl:if test="$isOkToOpen">
+			<xsl:value-of disable-output-escaping="yes" select="concat('&lt;', $qname)" />
+			<xsl:if test="not($attributes = '')">
+				<xsl:value-of disable-output-escaping="yes" select="concat(' ', $attributes)" />
+			</xsl:if>
+			<xsl:value-of disable-output-escaping="yes" select="'&gt;'" />
+		</xsl:if>
+	</xsl:template>
+
+	<!-- If the node is found in the stack, it will close all nodes up to the specified one and then close it -->
+	<xsl:template name="CloseNode">
+		<xsl:param name="qname" as="xs:string"/>
+		<xsl:variable name="toClose" select="d:PopStructuralNode($myObj, $qname)" />
+		<xsl:if test="not($toClose = '')">
+			<xsl:value-of disable-output-escaping="yes" select="concat('&lt;/', $toClose, '&gt;')" />
+			<xsl:call-template name="CloseNode">
+				<xsl:with-param name="qname" select="$qname"/>
+			</xsl:call-template>
+		</xsl:if>
+	</xsl:template>
+
+	<!-- New templates for specific elements -->
+
+	<!-- Parsing bookmark start -->
+	<xsl:template name="ParseBookmarkStart">
+		<xsl:call-template name="CloseAllStyleTag" />
+		<xsl:variable name="aquote">"</xsl:variable>
+		<!--Checking whether BookMarkStart is related to Abbreviations or not -->
+		<xsl:if test="substring(@w:name,1,13)='Abbreviations'">
+			<xsl:variable name="full" as="xs:string" select="d:FullAbbr($myObj,@w:name,$version)"/>
+			<xsl:choose>
+				<!--checking whether an Abbreviation is having Full Form or not-->
+				<xsl:when test="not($full='')">
+					<xsl:call-template name="CloseNode">
+						<xsl:with-param name="qname" select="'abbr'"/>
+					</xsl:call-template>
+					<xsl:call-template name="OpenNode">
+						<xsl:with-param name="qname" select="'abbr'"/>
+						<xsl:with-param name="attributes" select="concat('title=',$aquote,$full,$aquote)"/>
+					</xsl:call-template>
+					<!-- <xsl:value-of disable-output-escaping="yes" select="concat('&lt;','abbr ','title=',$aquote,$full,$aquote,'&gt;')"/> -->
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:call-template name="CloseNode">
+						<xsl:with-param name="qname" select="'abbr'"/>
+					</xsl:call-template>
+					<xsl:call-template name="OpenNode">
+						<xsl:with-param name="qname" select="'abbr'"/>
+						<xsl:with-param name="attributes" select="''"/>
+					</xsl:call-template>
+					<!-- <xsl:value-of disable-output-escaping="yes" select="concat('&lt;','abbr','&gt;')"/> -->
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:if>
+		<!--Checking whether BookMarkStart is related to Acronyms or not -->
+		<xsl:if test="substring(@w:name,1,11)='AcronymsYes'">
+			<xsl:variable name="full" as="xs:string" select="d:FullAcr($myObj,@w:name,$version)"/>
+			<xsl:choose>
+				<!--checking whether an Acronym is having Full Form or not-->
+				<xsl:when test="not($full='')">
+					<xsl:call-template name="CloseNode">
+						<xsl:with-param name="qname" select="'acronym'"/>
+					</xsl:call-template>
+					<xsl:call-template name="OpenNode">
+						<xsl:with-param name="qname" select="'acronym'"/>
+						<xsl:with-param name="attributes" select="concat('pronounce=',$aquote,'yes',$aquote,' title=',$aquote,$full,$aquote)"/>
+					</xsl:call-template>
+					<!-- <xsl:value-of disable-output-escaping="yes" select="concat('&lt;','acronym ','pronounce=',$aquote,'yes',$aquote,' title=',$aquote,$full,$aquote,'&gt;')"/> -->
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:call-template name="CloseNode">
+						<xsl:with-param name="qname" select="'acronym'"/>
+					</xsl:call-template>
+					<xsl:call-template name="OpenNode">
+						<xsl:with-param name="qname" select="'acronym'"/>
+						<xsl:with-param name="attributes" select="concat('pronounce=',$aquote,'yes',$aquote)"/>
+					</xsl:call-template>
+					<!-- <xsl:value-of disable-output-escaping="yes" select="concat('&lt;','acronym ','pronounce=',$aquote,'yes',$aquote,'&gt;')"/> -->
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:if>
+		<!--Checking whether BookMarkStart is related to Acronymss or not -->
+		<xsl:if test="substring(@w:name,1,10)='AcronymsNo'">
+			<xsl:call-template name="CloseAllStyleTag" />
+			<xsl:variable name="full" as="xs:string" select="d:FullAcr($myObj,@w:name,$version)"/>
+			<!--checking whether an Acronym is having Full Form or not-->
+			<xsl:choose>
+				<xsl:when test="not($full='')">
+					<xsl:call-template name="CloseNode">
+						<xsl:with-param name="qname" select="'acronym'"/>
+					</xsl:call-template>
+					<xsl:call-template name="OpenNode">
+						<xsl:with-param name="qname" select="'acronym'"/>
+						<xsl:with-param name="attributes" select="concat('pronounce=',$aquote,'no',$aquote,' title=',$aquote,$full,$aquote)"/>
+					</xsl:call-template>
+					<!-- <xsl:value-of disable-output-escaping="yes" select="concat('&lt;','acronym ','pronounce=',$aquote,'no',$aquote,' title=',$aquote,$full,$aquote,'&gt;')"/> -->
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:call-template name="CloseNode">
+						<xsl:with-param name="qname" select="'acronym'"/>
+					</xsl:call-template>
+					<xsl:call-template name="OpenNode">
+						<xsl:with-param name="qname" select="'acronym'"/>
+						<xsl:with-param name="attributes" select="concat('pronounce=',$aquote,'no',$aquote)"/>
+					</xsl:call-template>
+					<!-- <xsl:value-of disable-output-escaping="yes" select="concat('&lt;','acronym ','pronounce=',$aquote,'no',$aquote,'&gt;')"/> -->
+				</xsl:otherwise>
+			</xsl:choose>
+			
+		</xsl:if>
+		<!--Checking for hyperlink-->
+		<xsl:if test="d:GetHyperlinkName($myObj,@w:name)=1 and not(substring(@w:name,1,13)='Abbreviations') and not(substring(@w:name,1,11)='AcronymsYes') and not(substring(@w:name,1,10)='AcronymsNo')">
+			<xsl:choose>
+				<!--If hyperlink is not in Table of content-->
+				<xsl:when test="not(contains(@w:name,'_Toc'))">
+					<xsl:sequence select="d:sink(d:TestRun($myObj))"/> <!-- empty -->
+					<xsl:variable name="initialize" as="xs:integer" select="d:SetHyperLinkFlag($myObj)"/>
+					<xsl:call-template name="CloseAllStyleTag" />
+					<a title="{@w:name}" id="_{@w:id}" />
+					<xsl:sequence select="d:sink(d:StroreId($myObj,'_{@w:id}'))"/> <!-- empty -->
+				</xsl:when>
+			</xsl:choose>
+		</xsl:if>
+	</xsl:template>
+
+	<xsl:variable name="BookmarksCache">
+		<bookmarks>
+			<xsl:for-each select="$documentXml//w:bookmarkStart">
+				<bookmark id="{@w:id}" name="{@w:name}"/>
+			</xsl:for-each>
+			<xsl:for-each select="$footnotesXml//w:bookmarkStart">
+				<bookmark id="{@w:id}" name="{@w:name}"/>
+			</xsl:for-each>
+			<xsl:for-each select="$endnotesXml//w:bookmarkStart">
+				<bookmark id="{@w:id}" name="{@w:name}"/>
+			</xsl:for-each>
+		</bookmarks>
+	</xsl:variable>
+
+	<xsl:template name="ParseBookmarkEnd">
+		<xsl:call-template name="CloseAllStyleTag" />
+		<xsl:variable name="seperate" as="xs:string">
+			<xsl:variable name="id" as="xs:string" select ="@w:id"/>
+			<xsl:variable name="bookmarkName" as="xs:string">
+				<xsl:choose>
+					<xsl:when test="$BookmarksCache//*:bookmark[@*:id=$id]">
+						<xsl:sequence select="$BookmarksCache//*:bookmark[@*:id=$id]/@*:name"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:sequence select="''"/>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:variable>
+			<xsl:choose>
+				<xsl:when test="starts-with($bookmarkName,'Abbreviations')">
+					<xsl:sequence select="'AbbrTrue'"/>
+				</xsl:when>
+				<xsl:when test="starts-with($bookmarkName,'Acronyms')">
+					<xsl:sequence select="'AcrTrue'"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:sequence select="'false'"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<!--Checking whether BookMarkEnd is related to Abbreviations or not -->
+		<xsl:if test="$seperate='AbbrTrue'">
+			<!--checking    condition to close abbr Tag -->
+			<xsl:call-template name="CloseNode">
+				<xsl:with-param name="qname" select="'abbr'"/>
+			</xsl:call-template>
+		</xsl:if>
+		<!--Checking whether BookMarkEnd is related to Acronyms or not -->
+		<xsl:if test="$seperate='AcrTrue'">
+			<!--checking    condition to close acronym Tag -->
+			<xsl:call-template name="CloseNode">
+				<xsl:with-param name="qname" select="'acronym'"/>
+			</xsl:call-template>
+		</xsl:if>
+		<!--Closing hyperlink if not heading-->
+		<xsl:if test="not(d:GetBookmark($myObj)&gt;0)">
+			<xsl:if test="d:CheckId($myObj,@w:id)=1">
+				<xsl:sequence select="d:sink(d:SetTestRun($myObj))"/> <!-- empty -->
+				<!-- <xsl:if test="not(../w:pPr/w:pStyle[substring(@w:val,1,7)='Heading'])">
+					<xsl:value-of disable-output-escaping="yes" select="'&lt;/a&gt;'"/>
+				</xsl:if> -->
+				<xsl:if test="../w:pPr/w:pStyle[substring(@w:val,1,7)='Heading']">
+					<xsl:sequence select="d:sink(d:SetHyperLink($myObj))"/> <!-- empty -->
+				</xsl:if>
+			</xsl:if>
+		</xsl:if>
+		<xsl:if test="d:GetBookmark($myObj)&gt;0">
+			<xsl:sequence select="d:sink(d:SetTestRun($myObj))"/> <!-- empty -->
+		</xsl:if>
+
 	</xsl:template>
 	
 </xsl:stylesheet>

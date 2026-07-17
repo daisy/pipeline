@@ -84,7 +84,7 @@
 		<!--If first paragraph is not Heading-->
 		<xsl:if test="not($documentXml//w:document/w:body/w:p[1]/w:pPr/w:pStyle[substring(@w:val,1,7)='Heading']) or $matterType='Rearmatter'">
 			<!--Calling Template to add level1-->
-			<xsl:call-template name="AddLevel">
+			<xsl:call-template name="OpenLevel">
 				<xsl:with-param name="levelValue" select="1"/>
 				<xsl:with-param name="check" select="false()"/>
 				<xsl:with-param name="verhead" select="$version"/>
@@ -150,7 +150,7 @@
 							)"/>
 						<xsl:variable name="currentLevel" select="d:PeekLevel($myObj)" />
 						<xsl:if test="$currentLevel=0 and $paragraphStyleOutline=''">
-							<xsl:call-template name="AddLevel">
+							<xsl:call-template name="OpenLevel">
 								<xsl:with-param name="levelValue" select="1"/>
 								<xsl:with-param name="check" select="false()"/>
 								<xsl:with-param name="verhead" select="$version"/>
@@ -222,7 +222,7 @@
 									<xsl:with-param name="pagination" select="$pagination"/>
 								</xsl:call-template>
 								<!--Open $PeekLevel levels after Table Of Contents-->
-								<xsl:call-template name="AddLevel">
+								<xsl:call-template name="OpenLevel">
 									<xsl:with-param name="levelValue" select="$PeekLevel"/>
 									<xsl:with-param name="check" select="true()"/>
 									<xsl:with-param name="verhead" select="$version"/>
@@ -248,139 +248,12 @@
 					</xsl:when>
 					<!--Checking for BookmarkStart element-->
 					<xsl:when test="self::w:bookmarkStart">
-						<!--Checking Whether BookMarkStart is related to Abbreviations or not -->
-						<xsl:if test="substring(@w:name,1,13)='Abbreviations'">
-							<!--Storing the full form of Abbreviation in a variable-->
-							<xsl:variable name="full" as="xs:string" select="d:FullAbbr($myObj,@w:name,$version)"/>
-							<xsl:choose>
-								<!--Checking whether all previous Abbreviations tags are closed or not before opening an new Abbreviation tag-->
-								<xsl:when test ="not(d:AbbrAcrFlag($myObj)=1)">
-									<xsl:choose>
-										<!--checking whether an Abbreviation is having Full Form or not-->
-										<xsl:when test="not($full='')">
-											<xsl:value-of disable-output-escaping="yes" select="concat('&lt;abbr title=&quot;',$full,'&quot;&gt;')"/>
-											<xsl:sequence select="d:sink(d:SetAbbrAcrFlag($myObj))"/> <!-- empty -->
-										</xsl:when>
-										<xsl:otherwise>
-											<xsl:value-of disable-output-escaping="yes" select="'&lt;abbr&gt;'"/>
-											<xsl:sequence select="d:sink(d:SetAbbrAcrFlag($myObj))"/> <!-- empty -->
-										</xsl:otherwise>
-									</xsl:choose>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:choose>
-										<!--checking whether an Abbreviation is having Full Form or not-->
-										<xsl:when test="not($full='')">
-											<xsl:variable name="temp" as="xs:string" select="concat('&lt;abbr title=&quot;',$full,'&quot;&gt;')"/>
-											<xsl:sequence select="d:sink(d:PushAbrAcr($myObj,$temp))"/> <!-- empty -->
-										</xsl:when>
-										<xsl:otherwise>
-											<xsl:variable name="temp" as="xs:string" select="'&lt;abbr&gt;'"/>
-											<xsl:sequence select="d:sink(d:PushAbrAcr($myObj,$temp))"/> <!-- empty -->
-										</xsl:otherwise>
-									</xsl:choose>
-								</xsl:otherwise>
-							</xsl:choose>
-						</xsl:if>
-						<!--Checking Whether BookMarkStart is related to Acronyms or not -->
-						<xsl:if test="substring(@w:name,1,11)='AcronymsYes'">
-							<!--Storing the full form of Abbreviation in a variable-->
-							<xsl:variable name="full" as="xs:string" select="d:FullAcr($myObj,@w:name,$version)"/>
-							<xsl:choose>
-								<!--Checking whether all previous Acronyms tags are closed or not before opening an new Acronyms tag-->
-								<xsl:when test ="not(d:AbbrAcrFlag($myObj)=1)">
-									<xsl:choose>
-										<!--checking whether an Abbreviation is having Full Form or not-->
-										<xsl:when test="not($full='')">
-											<xsl:value-of disable-output-escaping="yes" select="concat('&lt;acronym pronounce=&quot;yes&quot; title=&quot;',$full,'&quot;&gt;')"/>
-											<xsl:sequence select="d:sink(d:SetAbbrAcrFlag($myObj))"/> <!-- empty -->
-										</xsl:when>
-										<xsl:otherwise>
-											<xsl:value-of disable-output-escaping="yes" select="'&lt;acronym pronounce=&quot;yes&quot;&gt;'"/>
-											<xsl:sequence select="d:sink(d:SetAbbrAcrFlag($myObj))"/> <!-- empty -->
-										</xsl:otherwise>
-									</xsl:choose>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:choose>
-										<!--checking whether an Abbreviation is having Full Form or not-->
-										<xsl:when test="not($full='')">
-											<xsl:variable name="temp" as="xs:string" select="concat('&lt;acronym pronounce=&quot;yes&quot; title=&quot;',$full,'&quot;&gt;')"/>
-											<xsl:sequence select="d:sink(d:PushAbrAcr($myObj,$temp))"/> <!-- empty -->
-										</xsl:when>
-										<xsl:otherwise>
-											<xsl:variable name="temp" as="xs:string" select="'&lt;acronym pronounce=&quot;yes&quot;&gt;'"/>
-											<xsl:sequence select="d:sink(d:PushAbrAcr($myObj,$temp))"/> <!-- empty -->
-										</xsl:otherwise>
-									</xsl:choose>
-								</xsl:otherwise>
-							</xsl:choose>
-						</xsl:if>
-						<!--Checking Whether BookMarkStart is related to Acronyms or not -->
-						<xsl:if test="substring(@w:name,1,10)='AcronymsNo'">
-							<!--Storing the full form of Abbreviation in a variable-->
-							<xsl:variable name="full" as="xs:string" select="d:FullAcr($myObj,@w:name,$version)"/>
-							<xsl:choose>
-								<!--Checking whether all previous Acronyms tags are closed or not before opening an new Acronyms tag-->
-								<xsl:when test ="not(d:AbbrAcrFlag($myObj)=1)">
-									<xsl:choose>
-										<!--checking whether an Abbreviation is having Full Form or not-->
-										<xsl:when test="not($full='')">
-											<xsl:value-of disable-output-escaping="yes" select="concat('&lt;acronym pronounce=&quot;no&quot; title=&quot;',$full,'&quot;&gt;')"/>
-											<xsl:sequence select="d:sink(d:SetAbbrAcrFlag($myObj))"/> <!-- empty -->
-										</xsl:when>
-										<xsl:otherwise>
-											<xsl:value-of disable-output-escaping="yes" select="'&lt;acronym pronounce=&quot;no&quot;&gt;'"/>
-											<xsl:sequence select="d:sink(d:SetAbbrAcrFlag($myObj))"/> <!-- empty -->
-										</xsl:otherwise>
-									</xsl:choose>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:choose>
-										<!--checking whether an Abbreviation is having Full Form or not-->
-										<xsl:when test="not($full='')">
-											<xsl:variable name="temp" as="xs:string" select="concat('&lt;acronym pronounce=&quot;no&quot; title=&quot;',$full,'&quot;&gt;')"/>
-											<xsl:sequence select="d:sink(d:PushAbrAcr($myObj,$temp))"/> <!-- empty -->
-										</xsl:when>
-										<xsl:otherwise>
-											<xsl:variable name="temp" as="xs:string" select="'&lt;acronym pronounce=&quot;no&quot;&gt;'"/>
-											<xsl:sequence select="d:sink(d:PushAbrAcr($myObj,$temp))"/> <!-- empty -->
-										</xsl:otherwise>
-									</xsl:choose>
-								</xsl:otherwise>
-							</xsl:choose>
-						</xsl:if>
+						<xsl:call-template name="ParseBookmarkStart" />
 					</xsl:when>
+
 					<!--Checking for BookMarkEnd -->
 					<xsl:when test="self::w:bookmarkEnd">
-						<xsl:variable name="seperate" as="xs:string">
-							<xsl:variable name="id" as="xs:string" select="@w:id"/>
-							<xsl:variable name="tempAbbr" as="xs:string" select="$documentXml//w:bookmarkStart[@w:id=$id]/@w:name"/>
-							<xsl:sequence select="d:Book($myObj,$tempAbbr)"/>
-						</xsl:variable>
-						<!--Checking whether BookMarkEnd is related to Abbreviations or not -->
-						<xsl:if test="$seperate='AbbrTrue'">
-							<xsl:value-of disable-output-escaping="yes" select="'&lt;/abbr&gt;'"/>
-							<xsl:sequence select="d:sink(d:ReSetAbbrAcrFlag($myObj))"/> <!-- empty -->
-							<xsl:if test="d:CountAbrAcrpara($myObj) &gt; 0">
-								<xsl:value-of disable-output-escaping="yes" select="d:PeekAbrAcrpara($myObj)"/>
-							</xsl:if>
-							<!-- FIXME NP : This might lead to an error as the heading is already closed-->
-							<xsl:if test="d:CountAbrAcrhead($myObj) &gt; 0">
-								<xsl:value-of disable-output-escaping="yes" select="d:PeekAbrAcrhead($myObj)"/>
-							</xsl:if>
-						</xsl:if>
-						<!--Checking whether BookMarkEnd is related to Acronyms or not -->
-						<xsl:if test="$seperate='AcrTrue'">
-							<xsl:value-of disable-output-escaping="yes" select="'&lt;/acronym&gt;'"/>
-							<xsl:sequence select="d:sink(d:ReSetAbbrAcrFlag($myObj))"/> <!-- empty -->
-							<xsl:if test="d:CountAbrAcrpara($myObj) &gt; 0">
-								<xsl:value-of disable-output-escaping="yes" select="d:PeekAbrAcrpara($myObj)"/>
-							</xsl:if>
-							<xsl:if test="d:CountAbrAcrhead($myObj) &gt; 0">
-								<xsl:value-of disable-output-escaping="yes" select="d:PeekAbrAcrhead($myObj)"/>
-							</xsl:if>
-						</xsl:if>
+						<xsl:call-template name="ParseBookmarkEnd" />
 					</xsl:when>
 					<!--Checking for Pagebreaks and calling footnote template for displaying footnote text at the end of the page-->
 					<xsl:otherwise>
@@ -517,8 +390,12 @@
 			)
 			and not(w:r/w:pict//v:textbox/w:txbxContent/w:p/w:pPr/w:pStyle[@w:val='Caption'])"
 		>
+			
 			<xsl:if test="$flag='0'">
-				<xsl:value-of disable-output-escaping="yes" select="concat('&lt;/h',$level,'&gt;')"/>
+				<xsl:call-template name="CloseNode">
+					<xsl:with-param name="qname" select="concat('h',$level)"/>
+				</xsl:call-template>
+				<!-- <xsl:value-of disable-output-escaping="yes" select="concat('&lt;/h',$level,'&gt;')"/> -->
 			</xsl:if>
 			<!--NP 2025/05/21 :
 				I was not able to produce something that match this expression to create sidebar
@@ -602,7 +479,11 @@
 						<xsl:value-of select="concat(' xml:lang=&quot;',$paragraphLanguage,'&quot;')"/>
 					</xsl:if>
 				</xsl:variable>
-				<xsl:value-of disable-output-escaping="yes" select="concat('&lt;','p',$LangAttribute,'&gt;')"/>
+				<xsl:call-template name="OpenNode">
+					<xsl:with-param name="qname" select="'p'"/>
+					<xsl:with-param name="attributes" select="$LangAttribute"/>
+				</xsl:call-template>
+				<!-- <xsl:value-of disable-output-escaping="yes" select="concat('&lt;','p',$LangAttribute,'&gt;')"/> -->
 			</xsl:if>
 
 			<!--Adding Note index-->
@@ -695,7 +576,10 @@
 				and not(preceding-sibling::w:pPr/w:pStyle[substring(@w:val,1,3)='TOC'])
 					">
 				<xsl:if test="d:GetTestRun($myObj)&gt;='1'">
-					<xsl:value-of disable-output-escaping="yes" select="'&lt;/a&gt;'"/>
+					<xsl:call-template name="CloseNode">
+						<xsl:with-param name="qname" select="'a'"/>
+						</xsl:call-template>
+					<!-- <xsl:value-of disable-output-escaping="yes" select="'&lt;/a&gt;'"/> -->
 					<xsl:sequence select="d:sink(d:SetBookmark($myObj))"/> <!-- empty -->
 				</xsl:if>
 				<xsl:variable name="href">
@@ -734,184 +618,13 @@
 			</xsl:if>
 
 			<!--Checking for BookMarkStart-->
-
 			<xsl:if test="self::w:bookmarkStart">
-				<xsl:variable name="aquote">"</xsl:variable>
-				<!--Checking whether BookMarkStart is related to Abbreviations or not -->
-				<xsl:if test="substring(@w:name,1,13)='Abbreviations'">
-					<xsl:call-template name="CloseAllStyleTag" />
-					<xsl:variable name="full" as="xs:string" select="d:FullAbbr($myObj,@w:name,$version)"/>
-					<xsl:choose>
-						<!--Checking whether all previous Abbrevioations tags are closed or not before opening an new Abbreviation tag-->
-						<xsl:when test="not(d:AbbrAcrFlag($myObj)=1)">
-							<xsl:choose>
-								<!--checking whether an Abbreviation is having Full Form or not-->
-								<xsl:when test="not($full='')">
-									<xsl:value-of disable-output-escaping="yes" select="concat('&lt;','abbr ','title=',$aquote,$full,$aquote,'&gt;')"/>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:value-of disable-output-escaping="yes" select="concat('&lt;','abbr','&gt;')"/>
-								</xsl:otherwise>
-							</xsl:choose>
-							<xsl:sequence select="d:sink(d:SetAbbrAcrFlag($myObj))"/> <!-- empty -->
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:variable name="temp">
-								<xsl:choose>
-									<!--checking whether an Abbreviation is having Full Form or not-->
-									<xsl:when test="not($full='')">
-										<xsl:value-of  select="concat('&lt;','abbr ','title=',$aquote,$full,$aquote,'&gt;')"/>
-									</xsl:when>
-									<xsl:otherwise>
-										<xsl:value-of select="concat('&lt;','abbr','&gt;')"/>
-									</xsl:otherwise>
-								</xsl:choose>
-							</xsl:variable>
-							<xsl:sequence select="d:sink(d:PushAbrAcr($myObj,$temp))"/> <!-- empty -->
-						</xsl:otherwise>
-					</xsl:choose>
-				</xsl:if>
-				<!--Checking whether BookMarkStart is related to Acronyms or not -->
-				<xsl:if test="substring(@w:name,1,11)='AcronymsYes'">
-					<xsl:call-template name="CloseAllStyleTag" />
-					<xsl:variable name="full" as="xs:string" select="d:FullAcr($myObj,@w:name,$version)"/>
-					<xsl:choose>
-						<!--Checking whether all previous Acronyms tags are closed or not before opening an new Acronym tag-->
-						<xsl:when test ="not(d:AbbrAcrFlag($myObj)=1)">
-							<xsl:choose>
-								<!--checking whether an Acronym is having Full Form or not-->
-								<xsl:when test="not($full='')">
-									<xsl:value-of disable-output-escaping="yes" select="concat('&lt;','acronym ','pronounce=',$aquote,'yes',$aquote,' title=',$aquote,$full,$aquote,'&gt;')"/>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:value-of disable-output-escaping="yes" select="concat('&lt;','acronym ','pronounce=',$aquote,'yes',$aquote,'&gt;')"/>
-								</xsl:otherwise>
-							</xsl:choose>
-							<xsl:sequence select="d:sink(d:SetAbbrAcrFlag($myObj))"/> <!-- empty -->
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:variable name="temp">
-								<xsl:choose>
-									<!--checking whether an Acronym is having Full Form or not-->
-									<xsl:when test="not($full='')">
-										<xsl:value-of select="concat('&lt;','acronym ','pronounce=',$aquote,'yes',$aquote,' title=',$aquote,$full,$aquote,'&gt;')"/>
-									</xsl:when>
-									<xsl:otherwise>
-										<xsl:value-of  select="concat('&lt;','acronym ','pronounce=',$aquote,'yes',$aquote,'&gt;')"/>
-									</xsl:otherwise>
-								</xsl:choose>
-							</xsl:variable>
-							<xsl:sequence select="d:sink(d:PushAbrAcr($myObj,$temp))"/> <!-- empty -->
-						</xsl:otherwise>
-					</xsl:choose>
-				</xsl:if>
-				<!--Checking whether BookMarkStart is related to Acronymss or not -->
-				<xsl:if test="substring(@w:name,1,10)='AcronymsNo'">
-					<xsl:call-template name="CloseAllStyleTag" />
-					<xsl:variable name="full" as="xs:string" select="d:FullAcr($myObj,@w:name,$version)"/>
-					<xsl:choose>
-						<!--Checking whether all previous Acronyms tags are closed or not before opening an new Acronym tag-->
-						<xsl:when test="not(d:AbbrAcrFlag($myObj)=1)">
-							<xsl:choose>
-								<!--checking whether an Acronym is having Full Form or not-->
-								<xsl:when test="not($full='')">
-									<xsl:value-of disable-output-escaping="yes" select="concat('&lt;','acronym ','pronounce=',$aquote,'no',$aquote,' title=',$aquote,$full,$aquote,'&gt;')"/>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:value-of disable-output-escaping="yes" select="concat('&lt;','acronym ','pronounce=',$aquote,'no',$aquote,'&gt;')"/>
-
-								</xsl:otherwise>
-							</xsl:choose>
-							<xsl:sequence select="d:sink(d:SetAbbrAcrFlag($myObj))"/> <!-- empty -->
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:variable name="temp">
-								<xsl:choose>
-									<!--checking whether an Acronym is having Full Form or not-->
-									<xsl:when test="not($full='')">
-										<xsl:value-of select="concat('&lt;','acronym ','pronounce=',$aquote,'no',$aquote,' title=',$aquote,$full,$aquote,'&gt;')"/>
-									</xsl:when>
-									<xsl:otherwise>
-										<xsl:value-of select="concat('&lt;','acronym ','pronounce=',$aquote,'no',$aquote,'&gt;')"/>
-									</xsl:otherwise>
-								</xsl:choose>
-							</xsl:variable>
-							<xsl:sequence select="d:sink(d:PushAbrAcr($myObj,$temp))"/> <!-- empty -->
-						</xsl:otherwise>
-					</xsl:choose>
-				</xsl:if>
-				<!--Checking for hyperlink-->
-				<xsl:if test="d:GetHyperlinkName($myObj,@w:name)=1 and not(substring(@w:name,1,13)='Abbreviations') and not(substring(@w:name,1,11)='AcronymsYes') and not(substring(@w:name,1,10)='AcronymsNo')">
-					<xsl:choose>
-						<!--If hyperling in Table of content-->
-						<xsl:when test="not(contains(@w:name,'_Toc'))">
-							<xsl:sequence select="d:sink(d:TestRun($myObj))"/> <!-- empty -->
-							<xsl:variable name="initialize" as="xs:integer" select="d:SetHyperLinkFlag($myObj)"/>
-							<xsl:call-template name="CloseAllStyleTag" />
-							<xsl:if test="$initialize=1">
-								<xsl:value-of disable-output-escaping="yes" select="concat('&lt;a id=&quot;',d:EscapeSpecial(@w:name),'&quot;&gt;')"/>
-								<xsl:sequence select="d:sink(d:StroreId($myObj,@w:id))"/> <!-- empty -->
-							</xsl:if>
-							<xsl:if test="$initialize&gt;1">
-								<xsl:value-of disable-output-escaping="yes" select="'&lt;/a&gt;'"/>
-								<xsl:value-of disable-output-escaping="yes" select="concat('&lt;a id=&quot;',d:EscapeSpecial(@w:name),'&quot;&gt;')"/>
-								<xsl:sequence select="d:sink(d:StroreId($myObj,@w:id))"/> <!-- empty -->
-							</xsl:if>
-						</xsl:when>
-					</xsl:choose>
-				</xsl:if>
-
+				<xsl:call-template name="ParseBookmarkStart" />
 			</xsl:if>
 
 			<!--Checking for BookMarkEnd -->
 			<xsl:if test="self::w:bookmarkEnd">
-				<xsl:variable name="seperate" as="xs:string">
-					<xsl:variable name="id" as="xs:string" select ="@w:id"/>
-					<xsl:choose>
-						<xsl:when test="$flagNote='footnote' or $flagNote='endnote'">
-							<xsl:sequence select="d:BookFootnote($myObj,$id)"/>
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:variable name="tempAbbr" as="xs:string" select="$documentXml//w:bookmarkStart[@w:id=$id]/@w:name"/>
-							<xsl:sequence select="d:Book($myObj,$tempAbbr)"/>
-						</xsl:otherwise>
-					</xsl:choose>
-				</xsl:variable>
-				<!--Checking whether BookMarkEnd is related to Abbreviations or not -->
-				<xsl:if test="$seperate='AbbrTrue'">
-					<!--checking    condition to close abbr Tag -->
-					<xsl:call-template name="CloseAllStyleTag" />
-					<xsl:value-of disable-output-escaping="yes" select="'&lt;/abbr&gt;'"/>
-					<xsl:sequence select="d:sink(d:ReSetAbbrAcrFlag($myObj))"/> <!-- empty -->
-					<xsl:if test="d:CountAbrAcr($myObj) &gt; 0">
-						<xsl:value-of disable-output-escaping="yes" select="d:PeekAbrAcr($myObj)"/>
-					</xsl:if>
-				</xsl:if>
-				<!--Checking whether BookMarkEnd is related to Acronyms or not -->
-				<xsl:if test="$seperate='AcrTrue'">
-					<!--checking    condition to close acronym Tag -->
-					<xsl:call-template name="CloseAllStyleTag" />
-					<xsl:value-of disable-output-escaping="yes" select="'&lt;/acronym&gt;'"/>
-					<xsl:sequence select="d:sink(d:ReSetAbbrAcrFlag($myObj))"/> <!-- empty -->
-					<xsl:if test="d:CountAbrAcr($myObj) &gt; 0">
-						<xsl:value-of disable-output-escaping="yes" select="d:PeekAbrAcr($myObj)"/>
-					</xsl:if>
-				</xsl:if>
-				<!--Closing hyperlink if not heading-->
-				<xsl:if test="not(d:GetBookmark($myObj)&gt;0)">
-					<xsl:if test="d:CheckId($myObj,@w:id)=1">
-						<xsl:sequence select="d:sink(d:SetTestRun($myObj))"/> <!-- empty -->
-						<xsl:if test="not(../w:pPr/w:pStyle[substring(@w:val,1,7)='Heading'])">
-							<xsl:value-of disable-output-escaping="yes" select="'&lt;/a&gt;'"/>
-						</xsl:if>
-						<xsl:if test="../w:pPr/w:pStyle[substring(@w:val,1,7)='Heading']">
-							<xsl:sequence select="d:sink(d:SetHyperLink($myObj))"/> <!-- empty -->
-						</xsl:if>
-					</xsl:if>
-				</xsl:if>
-				<xsl:if test="d:GetBookmark($myObj)&gt;0">
-					<xsl:sequence select="d:sink(d:SetTestRun($myObj))"/> <!-- empty -->
-				</xsl:if>
+				<xsl:call-template name="ParseBookmarkEnd" />
 			</xsl:if>
 
 			<!--checking sdt element for citation-->
@@ -1165,7 +878,10 @@
 						</xsl:call-template>
 						<xsl:if test="$flag='3'">
 							<!--Closing paragraph tag-->
-							<xsl:value-of disable-output-escaping="yes" select="'&lt;p&gt;'"/>
+							<xsl:call-template name="CloseNode">
+								<xsl:with-param name="qname" select="'p'"/>
+							</xsl:call-template>
+							<!-- <xsl:value-of disable-output-escaping="yes" select="'&lt;p&gt;'"/> -->
 						</xsl:if>
 						<!--calling template to initialize page number information-->
 						<xsl:call-template name="SectionBreak">
@@ -1189,7 +905,12 @@
 							</xsl:call-template>
 						</xsl:if>
 						<!--Opening paragraph tag-->
-						<xsl:value-of disable-output-escaping="yes" select="'&lt;p&gt;'"/>
+						
+						<xsl:call-template name="OpenNode">
+							<xsl:with-param name="qname" select="'p'"/>
+							<xsl:with-param name="attributes" select="''"/>
+						</xsl:call-template>
+						<!-- <xsl:value-of disable-output-escaping="yes" select="'&lt;p&gt;'"/> -->
 					</xsl:when>
 					<!--Checking for page breaks and populating page numbers.-->
 					<xsl:when test="(
@@ -1216,7 +937,11 @@
 						</xsl:call-template>
 						<xsl:if test="$flag='3'">
 							<!--Opening paragraph tag-->
-							<xsl:value-of disable-output-escaping="yes" select="'&lt;p&gt;'"/>
+							<xsl:call-template name="OpenNode">
+								<xsl:with-param name="qname" select="'p'"/>
+								<xsl:with-param name="attributes" select="''"/>
+							</xsl:call-template>
+							<!-- <xsl:value-of disable-output-escaping="yes" select="'&lt;p&gt;'"/> -->
 						</xsl:if>
 						<!--calling template to initialize page number information-->
 						<xsl:call-template name="SectionBreak">
@@ -1236,7 +961,11 @@
 							</xsl:call-template>
 						</xsl:if>
 						<!--Opening paragraph tag-->
-						<xsl:value-of disable-output-escaping="yes" select="'&lt;p&gt;'"/>
+						<xsl:call-template name="OpenNode">
+							<xsl:with-param name="qname" select="'p'"/>
+							<xsl:with-param name="attributes" select="''"/>
+						</xsl:call-template>
+						<!-- <xsl:value-of disable-output-escaping="yes" select="'&lt;p&gt;'"/> -->
 					</xsl:when>
 					<!-- Pagebreak not in section neither in Index-->
 					<xsl:when test="(w:lastRenderedPageBreak)
@@ -1814,7 +1543,14 @@
 						</xsl:choose>
 					</xsl:variable>
 					<!--Opening page number tag-->
-					<xsl:value-of disable-output-escaping="yes" select="concat('&lt;pagenum page=&quot;',$page,'&quot; id=&quot;page',d:GeneratePageId($myObj),'&quot;&gt;')"/>
+					<xsl:call-template name="CloseNode">
+						<xsl:with-param name="qname" select="'pagenum'"/>
+					</xsl:call-template>
+					<xsl:call-template name="OpenNode">
+						<xsl:with-param name="qname" select="'pagenum'"/>
+						<xsl:with-param name="attributes" select="concat('spage=&quot;',$page,'&quot; id=&quot;page',d:GeneratePageId($myObj),'&quot;')"/>
+					</xsl:call-template>
+					<!-- <xsl:value-of disable-output-escaping="yes" select="concat('&lt;pagenum page=&quot;',$page,'&quot; id=&quot;page',d:GeneratePageId($myObj),'&quot;&gt;')"/> -->
 				</xsl:if>
 				<!-- pagenum only accept text-->
 				<xsl:if test="not($txt='')">
@@ -1822,7 +1558,10 @@
 				</xsl:if>
 				<xsl:value-of select="normalize-space(w:t)"/>
 				<xsl:if test="count(following-sibling::node()[1]/w:rPr/w:rStyle[@w:val='PageNumberDAISY'])=0">
-					<xsl:value-of disable-output-escaping="yes" select="'&lt;/pagenum&gt;'"/>
+					<xsl:call-template name="CloseNode">
+						<xsl:with-param name="qname" select="'pagenum'"/>
+					</xsl:call-template>
+					<!-- <xsl:value-of disable-output-escaping="yes" select="'&lt;/pagenum&gt;'"/> -->
 				</xsl:if>
 			</xsl:when>
 			<xsl:when test="($customTag='LineNumberDAISY')">
@@ -1859,7 +1598,11 @@
 						</line>
 						<xsl:choose>
 							<xsl:when test="(following-sibling::node()[1][self::w:r]) and (not(following-sibling::node()[1]/w:rPr/w:rStyle[contains(@w:val,'Line')]))">
-								<xsl:value-of disable-output-escaping="yes" select="'&lt;p&gt;'"/>
+								<xsl:call-template name="OpenNode">
+									<xsl:with-param name="qname" select="'p'"/>
+									<xsl:with-param name="attributes" select="''"/>
+								</xsl:call-template>
+								<!-- <xsl:value-of disable-output-escaping="yes" select="'&lt;p&gt;'"/> -->
 							</xsl:when>
 							<xsl:otherwise>
 								<xsl:sequence select="d:sink(d:Resetlinenumflag($myObj))"/> <!-- empty -->
@@ -2157,7 +1900,12 @@
 				<xsl:sequence select="d:Increment($myObj,$checkilvl)"/> <!-- empty -->
 			</xsl:if>
 		</xsl:if>
-
+		<!-- NP 2026/07/17 : closing special content blocks early (we dot not suppert them yet, the styling system is not really practical as of now
+		 	We might need to replace the content styling by block starting and ending markers for more flexibility in content structuration
+			(like with a blockquote start style and a blockquote end style, same for poems, epigraph etc)
+			But we will need to keep the treatment of the previous style for backward compatibility.
+		  -->
+		<xsl:call-template name="CloseEndedBlocks"/>
 		<xsl:if test="(
 				string-length(preceding-sibling::node()[1]/w:pPr/w:numPr/w:ilvl/@w:val) = 0
 				or (
@@ -2308,7 +2056,7 @@
 					<xsl:with-param name="pagination" select="$pagination"/>
 				</xsl:call-template>
 				<!--Open $PeekLevel levels after Table Of Contents-->
-				<xsl:call-template name="AddLevel">
+				<xsl:call-template name="OpenLevel">
 					<xsl:with-param name="levelValue" select="$PeekLevel"/>
 					<xsl:with-param name="check" select="true()"/>
 					<xsl:with-param name="verhead" select="$version"/>
@@ -2384,7 +2132,7 @@
 						</xsl:call-template>
 
 						<!--calling AddLevel template for adding the levels-->
-						<xsl:call-template name="AddLevel">
+						<xsl:call-template name="OpenLevel">
 							<!--Passing parameter levelValue which holds the Heading type value-->
 							<xsl:with-param name="levelValue" select="w:pPr/w:numPr/w:ilvl/@w:val"/>
 							<xsl:with-param name="check" select="true()"/>
@@ -2469,7 +2217,7 @@
 							<xsl:with-param name="sZeros" select="$sZeros"/>
 						</xsl:call-template>
 
-						<xsl:call-template name="AddLevel">
+						<xsl:call-template name="OpenLevel">
 							<xsl:with-param name="levelValue" select="$ilvl"/>
 							<xsl:with-param name="check" select="true()"/>
 							<xsl:with-param name="verhead" select="$version"/>
@@ -2959,18 +2707,21 @@
 		<xsl:param name="characterparaStyle" as="xs:boolean"/>
 
 		<xsl:variable name="checkImageposition" as="xs:integer" select="d:GetCaptionsProdnotes($myObj)"/>
+		<xsl:variable name="lang">
+			<xsl:call-template name="GetParagraphLanguage">
+					<xsl:with-param name="paragraphNode" select="." />
+			</xsl:call-template>
+		</xsl:variable>
 		<!-- Close previously opened blocks that have been now closed on this paragraphe
 				Note that this is not called on ending chapter here, closing chapter is done in StyleContainer template -->
 		<xsl:call-template name="CloseEndedBlocks"/>
 		<xsl:choose>
 			<!--Checking for Title/Subtitle paragraph style-->
 			<xsl:when test="(w:pPr/w:pStyle/@w:val='Title') or (w:pPr/w:pStyle/@w:val='Subtitle')">
-				<xsl:variable name="lang" as="xs:string">
-					<xsl:call-template name="GetParagraphLanguage">
-						<xsl:with-param name="paragraphNode" select="." />
-					</xsl:call-template>
-				</xsl:variable>
-				<doctitle xml:lang="{$lang}">
+				<doctitle>
+					<xsl:if test="not($lang=$documentLanguages/*:lang[1]/@*:val)">
+						<xsl:attribute name="xml:lang" select="$lang"/>
+					</xsl:if>
 					<xsl:call-template name="ParaHandler">
 						<xsl:with-param name="flag" select="'0'"/>
 						<xsl:with-param name="version" select="$version"/>
@@ -2982,12 +2733,10 @@
 			</xsl:when>
 			<!--Checking for AuthorDAISY custom paragraph style-->
 			<xsl:when test="(w:pPr/w:pStyle/@w:val='AuthorDAISY')">
-				<xsl:variable name="lang">
-					<xsl:call-template name="GetParagraphLanguage">
-						<xsl:with-param name="paragraphNode" select="." />
-					</xsl:call-template>
-				</xsl:variable>
-				<author xml:lang="{$lang}">
+				<author>
+					<xsl:if test="not($lang=$documentLanguages/*:lang[1]/@*:val)">
+						<xsl:attribute name="xml:lang" select="$lang"/>
+					</xsl:if>
 					<xsl:if test="$flagNote='footnote' or $flagNote='endnote'">
 						<xsl:if test="d:NoteFlag($myObj)=1">
 							<p>
@@ -3010,12 +2759,10 @@
 			</xsl:when>
 			<!--Checking for CovertitleDAISY custom paragraph style-->
 			<xsl:when test="(w:pPr/w:pStyle/@w:val='CovertitleDAISY')">
-				<xsl:variable name="lang">
-					<xsl:call-template name="GetParagraphLanguage">
-						<xsl:with-param name="paragraphNode" select="." />
-					</xsl:call-template>
-				</xsl:variable>
-				<covertitle xml:lang="{$lang}">
+				<covertitle>
+					<xsl:if test="not($lang=$documentLanguages/*:lang[1]/@*:val)">
+						<xsl:attribute name="xml:lang" select="$lang"/>
+					</xsl:if>
 					<xsl:call-template name="Paracharacterstyle">
 						<xsl:with-param name="characterStyle" select="$characterparaStyle"/>
 						<xsl:with-param name="txt" select="$txt"/>
@@ -3038,12 +2785,10 @@
 						</p>
 					</xsl:if>
 				</xsl:if>
-				<xsl:variable name="lang">
-					<xsl:call-template name="GetParagraphLanguage">
-						<xsl:with-param name="paragraphNode" select="." />
-					</xsl:call-template>
-				</xsl:variable>
-				<byline xml:lang="{$lang}">
+				<byline>
+					<xsl:if test="not($lang=$documentLanguages/*:lang[1]/@*:val)">
+						<xsl:attribute name="xml:lang" select="$lang"/>
+					</xsl:if>
 					<xsl:call-template name="Paracharacterstyle">
 						<xsl:with-param name="characterStyle" select="$characterparaStyle"/>
 						<xsl:with-param name="txt" select="$txt"/>
@@ -3066,28 +2811,39 @@
 						</p>
 					</xsl:if>
 				</xsl:if>
-				<xsl:variable name="lang">
-					<xsl:call-template name="GetParagraphLanguage">
-						<xsl:with-param name="paragraphNode" select="." />
+				<dateline>
+					<xsl:if test="not($lang=$documentLanguages/*:lang[1]/@*:val)">
+						<xsl:attribute name="xml:lang" select="$lang"/>
+					</xsl:if>
+					<xsl:call-template name="Paracharacterstyle">
+						<xsl:with-param name="characterStyle" select="$characterparaStyle"/>
+						<xsl:with-param name="txt" select="$txt"/>
+						<xsl:with-param name="flag" select="'0'"/>
 					</xsl:call-template>
-				</xsl:variable>
-				<xsl:value-of disable-output-escaping="yes" select="concat('&lt;dateline xml:lang=&quot;',$lang,'&quot;&gt;')"/>
-				<xsl:call-template name="Paracharacterstyle">
-					<xsl:with-param name="characterStyle" select="$characterparaStyle"/>
-					<xsl:with-param name="txt" select="$txt"/>
-					<xsl:with-param name="flag" select="'0'"/>
-				</xsl:call-template>
-				<xsl:value-of disable-output-escaping="yes" select="'&lt;/dateline&gt;'"/>
+				</dateline>
 			</xsl:when>
 			<!--Checking for Prodnote-OptionalDAISY custom paragraph style-->
 			<xsl:when test="(w:pPr/w:pStyle/@w:val='Prodnote-OptionalDAISY')and (not((preceding-sibling::node()[$checkImageposition]/w:r/w:drawing) or (preceding-sibling::node()[$checkImageposition]/w:r/w:pict) or (preceding-sibling::node()[$checkImageposition]/w:r/w:object)))">
+				
 				<xsl:if test="count(preceding-sibling::node()[1]/w:pPr/w:pStyle[@w:val='Prodnote-OptionalDAISY'])=0">
-					<xsl:variable name="lang">
-						<xsl:call-template name="GetParagraphLanguage">
-							<xsl:with-param name="paragraphNode" select="." />
-						</xsl:call-template>
+					<xsl:variable name="attributes" as="xs:string">
+						<xsl:choose>
+							<xsl:when test="not($lang=$documentLanguages/*:lang[1]/@*:val)">
+								<xsl:value-of select="concat('render=&quot;optional&quot; xml:lang=&quot;',$lang,'&quot;')"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="'render=&quot;optional&quot;'"/>
+							</xsl:otherwise>
+						</xsl:choose>
 					</xsl:variable>
-					<xsl:value-of disable-output-escaping="yes" select="concat('&lt;prodnote render=&quot;optional&quot; xml:lang=&quot;',$lang,'&quot;&gt;')"/>
+					<xsl:call-template name="CloseNode">
+						<xsl:with-param name="qname" select="'prodnote'"/>
+					</xsl:call-template>
+					<xsl:call-template name="OpenNode">
+						<xsl:with-param name="qname" select="'prodnote'"/>
+						<xsl:with-param name="attributes" select="$attributes" />
+					</xsl:call-template>
+					<!-- <xsl:value-of disable-output-escaping="yes" select="concat('&lt;prodnote render=&quot;optional&quot; xml:lang=&quot;',$lang,'&quot;&gt;')"/> -->
 				</xsl:if>
 
 				<xsl:call-template name="Paracharacterstyle">
@@ -3096,7 +2852,10 @@
 					<xsl:with-param name="flag" select="'1'"/>
 				</xsl:call-template>
 				<xsl:if test="not(following-sibling::w:p)">
-					<xsl:value-of disable-output-escaping="yes" select="'&lt;/prodnote&gt;'"/>
+					<xsl:call-template name="CloseNode">
+						<xsl:with-param name="qname" select="'prodnote'"/>
+					</xsl:call-template>
+					<!-- <xsl:value-of disable-output-escaping="yes" select="'&lt;/prodnote&gt;'"/> -->
 				</xsl:if>
 				<!--<xsl:if test="count(following-sibling::node()[1]/w:pPr/w:pStyle[contains(@w:val,'Prodnote-OptionalDAISY')])=0">
 					<xsl:value-of disable-output-escaping="yes" select="'&lt;/prodnote &gt;'"/>
@@ -3105,12 +2864,23 @@
 			<!--Checking for Prodnote-RequiredDAISY custom paragraph style-->
 			<xsl:when test="(w:pPr/w:pStyle/@w:val='Prodnote-RequiredDAISY')and (not((preceding-sibling::node()[$checkImageposition]/w:r/w:drawing) or (preceding-sibling::node()[$checkImageposition]/w:r/w:pict) or (preceding-sibling::node()[$checkImageposition]/w:r/w:object)))">
 				<xsl:if test="count(preceding-sibling::node()[1]/w:pPr/w:pStyle[@w:val='Prodnote-RequiredDAISY'])=0">
-					<xsl:variable name="lang">
-						<xsl:call-template name="GetParagraphLanguage">
-							<xsl:with-param name="paragraphNode" select="." />
-						</xsl:call-template>
+					<xsl:variable name="attributes" as="xs:string">
+						<xsl:choose>
+							<xsl:when test="not($lang=$documentLanguages/*:lang[1]/@*:val)">
+								<xsl:value-of select="concat('render=&quot;required&quot; xml:lang=&quot;',$lang,'&quot;')"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="'render=&quot;required&quot;'"/>
+							</xsl:otherwise>
+						</xsl:choose>
 					</xsl:variable>
-					<xsl:value-of disable-output-escaping="yes" select="concat('&lt;prodnote render=&quot;required&quot; xml:lang=&quot;',$lang,'&quot;&gt;')"/>
+					<xsl:call-template name="CloseNode">
+						<xsl:with-param name="qname" select="'prodnote'"/>
+					</xsl:call-template>
+					<xsl:call-template name="OpenNode">
+						<xsl:with-param name="qname" select="'prodnote'"/>
+						<xsl:with-param name="attributes" select="$attributes" />
+					</xsl:call-template>
 				</xsl:if>
 
 				<xsl:call-template name="Paracharacterstyle">
@@ -3119,7 +2889,9 @@
 					<xsl:with-param name="flag" select="'1'"/>
 				</xsl:call-template>
 				<xsl:if test="not(following-sibling::w:p)">
-					<xsl:value-of disable-output-escaping="yes" select="'&lt;/prodnote&gt;'"/>
+					<xsl:call-template name="CloseNode">
+						<xsl:with-param name="qname" select="'prodnote'"/>
+					</xsl:call-template>
 				</xsl:if>
 				<!--<xsl:if test="count(following-sibling::node()[1]/w:pPr/w:pStyle[contains(@w:val,'Prodnote-RequiredDAISY')])=0">
 					<xsl:value-of disable-output-escaping="yes" select="'&lt;/prodnote&gt;'"/>
@@ -3140,11 +2912,28 @@
 				</xsl:if>
 				<xsl:if test="count(preceding-sibling::node()[1]/w:pPr/w:pStyle[substring(@w:val,1,5)='Block'])=0">
 					<xsl:variable name="lang">
-							<xsl:call-template name="GetParagraphLanguage">
-									<xsl:with-param name="paragraphNode" select="." />
-							</xsl:call-template>
+						<xsl:call-template name="GetParagraphLanguage">
+								<xsl:with-param name="paragraphNode" select="." />
+						</xsl:call-template>
 					</xsl:variable>
-					<xsl:value-of disable-output-escaping="yes" select="concat('&lt;blockquote xml:lang=&quot;',$lang,'&quot;&gt;')"/>
+					<xsl:variable name="attributes" as="xs:string">
+						<xsl:choose>
+							<xsl:when test="not($lang=$documentLanguages/*:lang[1]/@*:val)">
+								<xsl:value-of select="concat('xml:lang=&quot;',$lang,'&quot;')"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="''"/>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:variable>
+					<xsl:call-template name="CloseNode">
+						<xsl:with-param name="qname" select="'blockquote'"/>
+					</xsl:call-template>
+					<xsl:call-template name="OpenNode">
+						<xsl:with-param name="qname" select="'blockquote'"/>
+						<xsl:with-param name="attributes" select="$attributes" />
+					</xsl:call-template>
+					<!-- <xsl:value-of disable-output-escaping="yes" select="concat('&lt;blockquote xml:lang=&quot;',$lang,'&quot;&gt;')"/> -->
 				</xsl:if>
 				<xsl:choose>
 						<!--Checking for 'Blockquote-AuthorDAISY' style-->
@@ -3165,11 +2954,29 @@
 							</xsl:call-template>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:call-template name="Paracharacterstyle">
+							<xsl:variable name="paragraphLanguage">
+								<xsl:call-template name="GetParagraphLanguage">
+									<xsl:with-param name="paragraphNode" select="."/>
+								</xsl:call-template>
+							</xsl:variable>
+							<!-- NP 2024/06/14 change language handling -->
+							<p>
+								<xsl:if test="not($paragraphLanguage=$documentLanguages/*:lang[1]/@*:val)">
+									<xsl:attribute name="xml:lang">
+										<xsl:value-of select="$paragraphLanguage"/>
+									</xsl:attribute>
+								</xsl:if>
+								<xsl:call-template name="Paracharacterstyle">
+									<xsl:with-param name="characterStyle" select="$characterparaStyle"/>
+									<xsl:with-param name="txt" select="$txt"/>
+									<xsl:with-param name="flag" select="'0'"/>
+								</xsl:call-template>
+							</p>
+							<!-- <xsl:call-template name="Paracharacterstyle">
 									<xsl:with-param name="characterStyle" select="$characterparaStyle"/>
 									<xsl:with-param name="txt" select="$txt"/>
 									<xsl:with-param name="flag" select="'1'"/>
-							</xsl:call-template>
+							</xsl:call-template> -->
 							<!--<xsl:if test="not(w:pPr/pStyle/@w:val='List-HeadingDAISY')">
 									<xsl:call-template name="Paracharacterstyle">
 											<xsl:with-param name="characterStyle" select="$characterparaStyle"/>
@@ -3180,7 +2987,10 @@
 						</xsl:otherwise>
 				</xsl:choose>
 				<xsl:if test="not(following-sibling::w:p)">
-					<xsl:value-of disable-output-escaping="yes" select="'&lt;/blockquote&gt;'"/>
+					<xsl:call-template name="CloseNode">
+						<xsl:with-param name="qname" select="'blockquote'"/>
+					</xsl:call-template>
+					<!-- <xsl:value-of disable-output-escaping="yes" select="'&lt;/blockquote&gt;'"/> -->
 				</xsl:if>
 			</xsl:when>
 			<!--Checking for PoemDAISY/Poem-TitleDAISY/Poem-HeadingDAISY/Poem-AuthorDAISY/Poem-BylineDAISY custom paragraph styles-->
@@ -3199,12 +3009,23 @@
 					</xsl:if>
 				</xsl:if>
 				<xsl:if test="count(preceding-sibling::node()[1]/w:pPr/w:pStyle[substring(@w:val,1,4)='Poem'])=0">
-					<xsl:variable name="lang">
-						<xsl:call-template name="GetParagraphLanguage">
-							<xsl:with-param name="paragraphNode" select="." />
-						</xsl:call-template>
+					<xsl:variable name="attributes" as="xs:string">
+						<xsl:choose>
+							<xsl:when test="not($lang=$documentLanguages/*:lang[1]/@*:val)">
+								<xsl:value-of select="concat('xml:lang=&quot;',$lang,'&quot;')"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="''"/>
+							</xsl:otherwise>
+						</xsl:choose>
 					</xsl:variable>
-					<xsl:value-of disable-output-escaping="yes" select="concat('&lt;poem xml:lang=&quot;',$lang,'&quot;&gt;')"/>
+					<xsl:call-template name="CloseNode">
+						<xsl:with-param name="qname" select="'poem'"/>
+					</xsl:call-template>
+					<xsl:call-template name="OpenNode">
+						<xsl:with-param name="qname" select="'poem'"/>
+						<xsl:with-param name="attributes" select="$attributes" />
+					</xsl:call-template>
 				</xsl:if>
 				<xsl:if test="w:pPr/w:pStyle/@w:val='Poem-TitleDAISY'">
 					<title>
@@ -3226,12 +3047,24 @@
 				</xsl:if>
 				<xsl:if test="(w:pPr/w:pStyle/@w:val='PoemDAISY')">
 					<xsl:if test="count(preceding-sibling::node()[1]/w:pPr/w:pStyle[@w:val='PoemDAISY'])=0">
-						<xsl:variable name="lang">
-							<xsl:call-template name="GetParagraphLanguage">
-								<xsl:with-param name="paragraphNode" select="." />
-							</xsl:call-template>
-						</xsl:variable>
-						<xsl:value-of disable-output-escaping="yes" select="concat('&lt;linegroup xml:lang=&quot;',$lang,'&quot;&gt;')"/>
+						<xsl:variable name="attributes" as="xs:string">
+						<xsl:choose>
+							<xsl:when test="not($lang=$documentLanguages/*:lang[1]/@*:val)">
+								<xsl:value-of select="concat('xml:lang=&quot;',$lang,'&quot;')"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="''"/>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:variable>
+						<xsl:call-template name="CloseNode">
+							<xsl:with-param name="qname" select="'linegroup'"/>
+						</xsl:call-template>
+						<xsl:call-template name="OpenNode">
+							<xsl:with-param name="qname" select="'linegroup'"/>
+							<xsl:with-param name="attributes" select="$attributes" />
+						</xsl:call-template>
+						<!-- <xsl:value-of disable-output-escaping="yes" select="concat('&lt;linegroup xml:lang=&quot;',$lang,'&quot;&gt;')"/> -->
 					</xsl:if>
 					<line>
 						<xsl:call-template name="Paracharacterstyle">
@@ -3241,7 +3074,10 @@
 						</xsl:call-template>
 					</line>
 					<xsl:if test="count(following-sibling::node()[1]/w:pPr/w:pStyle[@w:val='PoemDAISY'])=0">
-						<xsl:value-of disable-output-escaping="yes" select="'&lt;/linegroup&gt;'"/>
+						<xsl:call-template name="CloseNode">
+							<xsl:with-param name="qname" select="'linegroup'"/>
+						</xsl:call-template>
+						<!-- <xsl:value-of disable-output-escaping="yes" select="'&lt;/linegroup&gt;'"/> -->
 					</xsl:if>
 				</xsl:if>
 				<xsl:if test="(w:pPr/w:pStyle/@w:val='Poem-AuthorDAISY')">
@@ -3263,7 +3099,10 @@
 					</byline>
 				</xsl:if>
 				<xsl:if test="not(following-sibling::w:p)">
-					<xsl:value-of disable-output-escaping="yes" select="'&lt;/poem&gt;'"/>
+					<xsl:call-template name="CloseNode">
+							<xsl:with-param name="qname" select="'poem'"/>
+						</xsl:call-template>
+					<!-- <xsl:value-of disable-output-escaping="yes" select="'&lt;/poem&gt;'"/> -->
 				</xsl:if>
 				<!--<xsl:if test="count(following-sibling::node()[1]/w:pPr/w:pStyle[substring(@w:val,1,4)='Poem'])=0">
 					<xsl:value-of disable-output-escaping="yes" select="'&lt;/poem&gt;'"/>
@@ -3272,12 +3111,25 @@
 			<!--Checking for EpigraphDAISY/Epigraph-AuthorDAISY custom paragraph styles-->
 			<xsl:when test="(w:pPr/w:pStyle[substring(@w:val,1,8)='Epigraph'])">
 				<xsl:if test="count(preceding-sibling::node()[1]/w:pPr/w:pStyle[substring(@w:val,1,8)='Epigraph'])=0">
-					<xsl:variable name="lang">
-						<xsl:call-template name="GetParagraphLanguage">
-							<xsl:with-param name="paragraphNode" select="." />
-						</xsl:call-template>
+					
+					<xsl:variable name="attributes" as="xs:string">
+						<xsl:choose>
+							<xsl:when test="not($lang=$documentLanguages/*:lang[1]/@*:val)">
+								<xsl:value-of select="concat('xml:lang=&quot;',$lang,'&quot;')"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="''"/>
+							</xsl:otherwise>
+						</xsl:choose>
 					</xsl:variable>
-					<xsl:value-of disable-output-escaping="yes" select="concat('&lt;epigraph xml:lang=&quot;',$lang,'&quot;&gt;')"/>
+					<xsl:call-template name="CloseNode">
+						<xsl:with-param name="qname" select="'epigraph'"/>
+					</xsl:call-template>
+					<xsl:call-template name="OpenNode">
+						<xsl:with-param name="qname" select="'epigraph'"/>
+						<xsl:with-param name="attributes" select="$attributes" />
+					</xsl:call-template>
+					<!-- <xsl:value-of disable-output-escaping="yes" select="concat('&lt;epigraph xml:lang=&quot;',$lang,'&quot;&gt;')"/> -->
 				</xsl:if>
 				<xsl:call-template name="Paracharacterstyle">
 					<xsl:with-param name="characterStyle" select="$characterparaStyle"/>
@@ -3285,7 +3137,10 @@
 					<xsl:with-param name="flag" select="'1'"/>
 				</xsl:call-template>
 				<xsl:if test="not(following-sibling::w:p)">
-					<xsl:value-of disable-output-escaping="yes" select="'&lt;/epigraph&gt;'"/>
+					<xsl:call-template name="CloseNode">
+						<xsl:with-param name="qname" select="'epigraph'"/>
+					</xsl:call-template>
+					<!-- <xsl:value-of disable-output-escaping="yes" select="'&lt;/epigraph&gt;'"/> -->
 				</xsl:if>
 				<!--<xsl:if test="count(following-sibling::node()[1]/w:pPr/w:pStyle[substring(@w:val,1,8)='Epigraph'])=0">
 					<xsl:value-of disable-output-escaping="yes" select="'&lt;/epigraph&gt;'"/>
@@ -3294,12 +3149,24 @@
 			<!--Checking for Sidebar(header)?-OptionalDAISY custom paragraph styles-->
 			<xsl:when test="w:pPr/w:pStyle[starts-with(@w:val,'Sidebar') and ends-with(@w:val,'OptionalDAISY')]">
 				<xsl:if test="count(preceding-sibling::node()[1]/w:pPr/w:pStyle[starts-with(@w:val,'Sidebar') and ends-with(@w:val,'OptionalDAISY')])=0">
-					<xsl:variable name="lang">
-						<xsl:call-template name="GetParagraphLanguage">
-							<xsl:with-param name="paragraphNode" select="." />
-						</xsl:call-template>
+					<xsl:variable name="attributes" as="xs:string">
+						<xsl:choose>
+							<xsl:when test="not($lang=$documentLanguages/*:lang[1]/@*:val)">
+								<xsl:value-of select="concat('render=&quot;optional&quot; xml:lang=&quot;',$lang,'&quot;')"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="'render=&quot;optional&quot;'"/>
+							</xsl:otherwise>
+						</xsl:choose>
 					</xsl:variable>
-					<xsl:value-of disable-output-escaping="yes" select="concat('&lt;sidebar xml:lang=&quot;',$lang,'&quot; render=&quot;optional&quot; &gt;')"/>
+					<xsl:call-template name="CloseNode">
+						<xsl:with-param name="qname" select="'sidebar'"/>
+					</xsl:call-template>
+					<xsl:call-template name="OpenNode">
+						<xsl:with-param name="qname" select="'sidebar'"/>
+						<xsl:with-param name="attributes" select="$attributes" />
+					</xsl:call-template>
+					<!-- <xsl:value-of disable-output-escaping="yes" select="concat('&lt;sidebar xml:lang=&quot;',$lang,'&quot; render=&quot;optional&quot; &gt;')"/> -->
 				</xsl:if>
 				<xsl:choose>
 					<!--Checking for Sidebarheader* custom style-->
@@ -3313,27 +3180,56 @@
 						</hd>
 					</xsl:when>
 					<xsl:otherwise>
-						<xsl:call-template name="Paracharacterstyle">
-							<xsl:with-param name="characterStyle" select="$characterparaStyle"/>
-							<xsl:with-param name="txt" select="$txt"/>
-							<xsl:with-param name="flag" select="'1'"/>
-						</xsl:call-template>
+						<xsl:variable name="paragraphLanguage">
+							<xsl:call-template name="GetParagraphLanguage">
+								<xsl:with-param name="paragraphNode" select="."/>
+							</xsl:call-template>
+						</xsl:variable>
+						<!-- NP 2024/06/14 change language handling -->
+						<p>
+							<xsl:if test="not($paragraphLanguage=$documentLanguages/*:lang[1]/@*:val)">
+								<xsl:attribute name="xml:lang">
+									<xsl:value-of select="$paragraphLanguage"/>
+								</xsl:attribute>
+							</xsl:if>
+							<xsl:call-template name="Paracharacterstyle">
+								<xsl:with-param name="characterStyle" select="$characterparaStyle"/>
+								<xsl:with-param name="txt" select="$txt"/>
+								<xsl:with-param name="flag" select="'0'"/>
+							</xsl:call-template>
+						</p>
 					</xsl:otherwise>
 				</xsl:choose>
 
 				<xsl:if test="not(following-sibling::w:p)">
-					<xsl:value-of disable-output-escaping="yes" select="'&lt;/sidebar&gt;'"/>
+					<xsl:call-template name="CloseNode">
+						<xsl:with-param name="qname" select="'sidebar'"/>
+					</xsl:call-template>
+					<!-- <xsl:value-of disable-output-escaping="yes" select="'&lt;/sidebar&gt;'"/> -->
 				</xsl:if>
 			</xsl:when>
 			<!--Checking for Sidebar(header)?-RequiredDAISY custom paragraph styles-->
 			<xsl:when test="w:pPr/w:pStyle[starts-with(@w:val,'Sidebar') and ends-with(@w:val,'RequiredDAISY')]">
 				<xsl:if test="count(preceding-sibling::node()[1]/w:pPr/w:pStyle[starts-with(@w:val,'Sidebar') and ends-with(@w:val,'RequiredDAISY')])=0">
-					<xsl:variable name="lang">
-						<xsl:call-template name="GetParagraphLanguage">
-							<xsl:with-param name="paragraphNode" select="." />
-						</xsl:call-template>
+					
+					<xsl:variable name="attributes" as="xs:string">
+						<xsl:choose>
+							<xsl:when test="not($lang=$documentLanguages/*:lang[1]/@*:val)">
+								<xsl:value-of select="concat('render=&quot;required&quot; xml:lang=&quot;',$lang,'&quot;')"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="'render=&quot;required&quot;'"/>
+							</xsl:otherwise>
+						</xsl:choose>
 					</xsl:variable>
-					<xsl:value-of disable-output-escaping="yes" select="concat('&lt;sidebar xml:lang=&quot;',$lang,'&quot; render=&quot;required&quot; &gt;')"/>
+					<xsl:call-template name="CloseNode">
+						<xsl:with-param name="qname" select="'sidebar'"/>
+					</xsl:call-template>
+					<xsl:call-template name="OpenNode">
+						<xsl:with-param name="qname" select="'sidebar'"/>
+						<xsl:with-param name="attributes" select="$attributes" />
+					</xsl:call-template>
+					<!-- <xsl:value-of disable-output-escaping="yes" select="concat('&lt;sidebar xml:lang=&quot;',$lang,'&quot; render=&quot;required&quot; &gt;')"/> -->
 				</xsl:if>
 				<xsl:choose>
 					<!--Checking for Sidebarheader* custom style-->
@@ -3347,15 +3243,31 @@
 						</hd>
 					</xsl:when>
 					<xsl:otherwise>
-						<xsl:call-template name="Paracharacterstyle">
-							<xsl:with-param name="characterStyle" select="$characterparaStyle"/>
-							<xsl:with-param name="txt" select="$txt"/>
-							<xsl:with-param name="flag" select="'1'"/>
-						</xsl:call-template>
+						<xsl:variable name="paragraphLanguage">
+							<xsl:call-template name="GetParagraphLanguage">
+								<xsl:with-param name="paragraphNode" select="."/>
+							</xsl:call-template>
+						</xsl:variable>
+						<!-- NP 2024/06/14 change language handling -->
+						<p>
+							<xsl:if test="not($paragraphLanguage=$documentLanguages/*:lang[1]/@*:val)">
+								<xsl:attribute name="xml:lang">
+									<xsl:value-of select="$paragraphLanguage"/>
+								</xsl:attribute>
+							</xsl:if>
+							<xsl:call-template name="Paracharacterstyle">
+								<xsl:with-param name="characterStyle" select="$characterparaStyle"/>
+								<xsl:with-param name="txt" select="$txt"/>
+								<xsl:with-param name="flag" select="'0'"/>
+							</xsl:call-template>
+						</p>
 					</xsl:otherwise>
 				</xsl:choose>
 				<xsl:if test="not(following-sibling::w:p)">
-					<xsl:value-of disable-output-escaping="yes" select="'&lt;/sidebar&gt;'"/>
+					<xsl:call-template name="CloseNode">
+						<xsl:with-param name="qname" select="'sidebar'"/>
+					</xsl:call-template>
+					<!-- <xsl:value-of disable-output-escaping="yes" select="'&lt;/sidebar&gt;'"/> -->
 				</xsl:if>
 			</xsl:when>
 			<!--Checking for AddressDAISY custom paragraph style-->
@@ -3414,8 +3326,16 @@
 			</xsl:when>
 			<!--Checking for DivDAISY custom paragraph style-->
 			<xsl:when test="w:pPr/w:pStyle[substring(@w:val,1,3)='Div']">
+				
 				<xsl:if test="count(preceding-sibling::node()[1]/w:pPr/w:pStyle[substring(@w:val,1,3)='Div'])=0">
-					<xsl:value-of disable-output-escaping="yes" select="'&lt;div&gt;'"/>
+					<xsl:call-template name="CloseNode">
+						<xsl:with-param name="qname" select="'div'"/>
+					</xsl:call-template>
+					<xsl:call-template name="OpenNode">
+						<xsl:with-param name="qname" select="'div'"/>
+						<xsl:with-param name="attributes" select="''" />
+					</xsl:call-template>
+					<!-- <xsl:value-of disable-output-escaping="yes" select="'&lt;div&gt;'"/> -->
 				</xsl:if>
 
 				<xsl:call-template name="Paracharacterstyle">
@@ -3425,7 +3345,10 @@
 				</xsl:call-template>
 
 				<xsl:if test="count(following-sibling::node()[1]/w:pPr/w:pStyle[substring(@w:val,1,3)='Div'])=0">
-					<xsl:value-of disable-output-escaping="yes" select="'&lt;/div&gt;'"/>
+					<xsl:call-template name="CloseNode">
+						<xsl:with-param name="qname" select="'div'"/>
+					</xsl:call-template>
+					<!-- <xsl:value-of disable-output-escaping="yes" select="'&lt;/div&gt;'"/> -->
 				</xsl:if>
 			</xsl:when>
 
@@ -3450,7 +3373,14 @@
 			<xsl:when test="(w:r/w:rPr/w:rStyle/@w:val='DefinitionTermDAISY') or (w:pPr/w:pStyle/@w:val='DefinitionDataDAISY')">
 				<xsl:if test="(count(preceding-sibling::node()[1]/w:pPr/w:pStyle[@w:val='DefinitionDataDAISY'])=0)
 					and (count(preceding-sibling::node()[1]/w:r/w:rPr/w:rStyle[@w:val='DefinitionTermDAISY'])=0)">
-					<xsl:value-of disable-output-escaping="yes" select="'&lt;dl&gt;'"/>
+					<xsl:call-template name="CloseNode">
+						<xsl:with-param name="qname" select="'dl'"/>
+					</xsl:call-template>
+					<xsl:call-template name="OpenNode">
+						<xsl:with-param name="qname" select="'dl'"/>
+						<xsl:with-param name="attributes" select="''" />
+					</xsl:call-template>
+					<!-- <xsl:value-of disable-output-escaping="yes" select="'&lt;dl&gt;'"/> -->
 				</xsl:if>
 				<!--Checking for DefinitionTermDAISY custom character style-->
 				<xsl:if test="w:r/w:rPr/w:rStyle/@w:val='DefinitionTermDAISY'">
@@ -3483,17 +3413,19 @@
 				</xsl:if>
 				<xsl:if test="(count(following-sibling::node()[1]/w:pPr/w:pStyle[@w:val='DefinitionDataDAISY'])=0)
 					and (count(following-sibling::node()[1]/w:r/w:rPr/w:rStyle[@w:val='DefinitionTermDAISY'])=0)">
-					<xsl:value-of disable-output-escaping="yes" select="'&lt;/dl&gt;'"/>
+					<xsl:call-template name="CloseNode">
+						<xsl:with-param name="qname" select="'dl'"/>
+					</xsl:call-template>
+					<!-- <xsl:value-of disable-output-escaping="yes" select="'&lt;/dl&gt;'"/> -->
 				</xsl:if>
 			</xsl:when>
 			<!--Checking for Bridgehead custom style-->
 			<xsl:when test="(w:pPr/w:pStyle/@w:val='BridgeheadDAISY') and not(parent::w:tc)">
-				<xsl:variable name="lang">
-					<xsl:call-template name="GetParagraphLanguage">
-						<xsl:with-param name="paragraphNode" select="." />
-					</xsl:call-template>
-				</xsl:variable>
-				<bridgehead xml:lang="{$lang}">
+				
+				<bridgehead>
+					<xsl:if test="not($lang=$documentLanguages/*:lang[1]/@*:val)">
+						<xsl:attribute name="xml:lang" select="$lang"/>
+					</xsl:if>
 					<xsl:call-template name="ParaHandler">
 						<xsl:with-param name="flag" select="'0'"/>
 						<xsl:with-param name="version" select="$version"/>
@@ -3612,7 +3544,7 @@
 					)
 				)">
 				<xsl:call-template name="ParaHandler">
-					<xsl:with-param name="flag" select="'2'"/>
+					<xsl:with-param name="flag" select="'2'"/> 
 					<xsl:with-param name="version" select="$version"/>
 					<xsl:with-param name="mastersubpara" select="$masterparastyle"/>
 					<xsl:with-param name="pagination" select="$pagination"/>
@@ -3645,6 +3577,26 @@
 						)
 					)
 				)">
+
+				<xsl:variable name="attributes" as="xs:string">
+						<xsl:choose>
+							<xsl:when test="not($lang=$documentLanguages/*:lang[1]/@*:val)">
+								<xsl:value-of select="concat('xml:lang=&quot;',$lang,'&quot;')"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="''"/>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:variable>
+				<!-- <xsl:call-template name="CloseNode">
+					<xsl:with-param name="qname" select="'p'"/>
+				</xsl:call-template> -->
+				<!-- TODO : maybe add a check on whether the paragraph has any content -->
+				<xsl:call-template name="OpenNode">
+					<xsl:with-param name="qname" select="'p'"/>
+					<xsl:with-param name="attributes" select="$attributes"/>
+				</xsl:call-template>
+				
 				<xsl:call-template name="ParaHandler">
 					<xsl:with-param name="flag" select="'1'"/>
 					<xsl:with-param name="acceptRevisions" select="$acceptRevisions"/>
@@ -3662,11 +3614,11 @@
 					<xsl:with-param name="sNumbers" select="$sNumbers"/>
 					<xsl:with-param name="sZeros" select="$sZeros"/>
 				</xsl:call-template>
+				<xsl:call-template name="CloseNode">
+					<xsl:with-param name="qname" select="'p'"/>
+				</xsl:call-template>
 			</xsl:when>
-			<xsl:otherwise>
-				<!--Other elements are considered as fidelity loss-->
-				<!--Capturing fidility loss elements-->
-				<xsl:if test="not(
+			<xsl:when test="not(
 						self::w:pPr
 						| self::w:p
 						| self::w:r
@@ -3677,10 +3629,47 @@
 						| self::w:br
 						| self::w:tab
 					)">
+					<!--Other elements are considered as fidelity loss-->
+					<!--Capturing fidility loss elements-->
 					<xsl:message terminate="no">
 						<xsl:value-of select="concat('translation.oox2Daisy.UncoveredElement|', name())"/>
 					</xsl:message>
-				</xsl:if>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:variable name="attributes" as="xs:string">
+						<xsl:choose>
+							<xsl:when test="not($lang=$documentLanguages/*:lang[1]/@*:val)">
+								<xsl:value-of select="concat('xml:lang=&quot;',$lang,'&quot;')"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="''"/>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:variable>
+				<xsl:call-template name="OpenNode">
+					<xsl:with-param name="qname" select="'p'"/>
+					<xsl:with-param name="attributes" select="$attributes"/>
+				</xsl:call-template>
+					<xsl:call-template name="ParaHandler">
+						<xsl:with-param name="flag" select="'0'"/>
+						<xsl:with-param name="acceptRevisions" select="$acceptRevisions"/>
+						<xsl:with-param name="version" select="$version"/>
+						<xsl:with-param name="flagNote" select="$flagNote"/>
+						<xsl:with-param name="checkid" select="$checkid"/>
+						<xsl:with-param name="pagination" select="$pagination"/>
+						<xsl:with-param name="mastersubpara" select="$masterparastyle"/>
+						<xsl:with-param name="imgOptionPara" select="$imgOptionPara"/>
+						<xsl:with-param name="dpiPara" select="$dpiPara"/>
+						<xsl:with-param name="txt" select="$txt"/>
+						<xsl:with-param name="charparahandlerStyle" select="$characterparaStyle"/>
+						<xsl:with-param name="sOperators" select="$sOperators"/>
+						<xsl:with-param name="sMinuses" select="$sMinuses"/>
+						<xsl:with-param name="sNumbers" select="$sNumbers"/>
+						<xsl:with-param name="sZeros" select="$sZeros"/>
+					</xsl:call-template>
+				<xsl:call-template name="CloseNode">
+					<xsl:with-param name="qname" select="'p'"/>
+				</xsl:call-template>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
@@ -3815,36 +3804,57 @@
 		<!-- Optional sidebar -->
 		<xsl:if test="not(w:pPr/w:pStyle[starts-with(@w:val,'Sidebar') and ends-with(@w:val,'OptionalDAISY')])
 									and count(preceding-sibling::node()[1]/w:pPr/w:pStyle[starts-with(@w:val,'Sidebar') and ends-with(@w:val,'OptionalDAISY')])=1">
-			<xsl:value-of disable-output-escaping="yes" select="'&lt;/sidebar&gt;'"/>
+			<xsl:call-template name="CloseNode">
+				<xsl:with-param name="qname" select="'sidebar'"/>
+			</xsl:call-template>
+			<!-- <xsl:value-of disable-output-escaping="yes" select="'&lt;/sidebar&gt;'"/> -->
 		</xsl:if>
 		<!-- Required sidebar -->
 		<xsl:if test="not(w:pPr/w:pStyle[starts-with(@w:val,'Sidebar') and ends-with(@w:val,'RequiredDAISY')])
 									and count(preceding-sibling::node()[1]/w:pPr/w:pStyle[starts-with(@w:val,'Sidebar') and ends-with(@w:val,'RequiredDAISY')])=1">
-			<xsl:value-of disable-output-escaping="yes" select="'&lt;/sidebar&gt;'"/>
+			<xsl:call-template name="CloseNode">
+				<xsl:with-param name="qname" select="'sidebar'"/>
+			</xsl:call-template>
+			<!-- <xsl:value-of disable-output-escaping="yes" select="'&lt;/sidebar&gt;'"/> -->
 		</xsl:if>
 		<!-- epigraph -->
 		<xsl:if test="not(w:pPr/w:pStyle[substring(@w:val,1,8)='Epigraph'])
 									and count(preceding-sibling::node()[1]/w:pPr/w:pStyle[substring(@w:val,1,8)='Epigraph'])=1">
-			<xsl:value-of disable-output-escaping="yes" select="'&lt;/epigraph&gt;'"/>
+			<xsl:call-template name="CloseNode">
+				<xsl:with-param name="qname" select="'epigraph'"/>
+			</xsl:call-template>
+			<!-- <xsl:value-of disable-output-escaping="yes" select="'&lt;/epigraph&gt;'"/> -->
 		</xsl:if>
 		<!-- Poem -->
 		<xsl:if test="not(w:pPr/w:pStyle[substring(@w:val,1,4)='Poem'])
 									and count(preceding-sibling::node()[1]/w:pPr/w:pStyle[substring(@w:val,1,4)='Poem'])=1">
-			<xsl:value-of disable-output-escaping="yes" select="'&lt;/poem&gt;'"/>
+			<xsl:call-template name="CloseNode">
+				<xsl:with-param name="qname" select="'poem'"/>
+			</xsl:call-template>
+			<!-- <xsl:value-of disable-output-escaping="yes" select="'&lt;/poem&gt;'"/> -->
 		</xsl:if>
 		<xsl:if test="not(w:pPr/w:pStyle[substring(@w:val,1,5)='Block'])
 									and count(preceding-sibling::node()[1]/w:pPr/w:pStyle[substring(@w:val,1,5)='Block'])=1">
-			<xsl:value-of disable-output-escaping="yes" select="'&lt;/blockquote&gt;'"/>
+			<xsl:call-template name="CloseNode">
+				<xsl:with-param name="qname" select="'blockquote'"/>
+			</xsl:call-template>
+			<!-- <xsl:value-of disable-output-escaping="yes" select="'&lt;/blockquote&gt;'"/> -->
 		</xsl:if>
 		<xsl:if test="not(w:pPr/w:pStyle[contains(@w:val,'Prodnote-RequiredDAISY')])
 									and count(preceding-sibling::node()[1]/w:pPr/w:pStyle[contains(@w:val,'Prodnote-RequiredDAISY')])=1">
-			<xsl:value-of disable-output-escaping="yes" select="'&lt;/prodnote &gt;'"/>
+			<xsl:call-template name="CloseNode">
+				<xsl:with-param name="qname" select="'prodnote'"/>
+			</xsl:call-template>
+			<!-- <xsl:value-of disable-output-escaping="yes" select="'&lt;/prodnote &gt;'"/> -->
 		</xsl:if>
 
 		<!-- Optional prodnote-->
 		<xsl:if test="not(w:pPr/w:pStyle[contains(@w:val,'Prodnote-OptionalDAISY')])
 									and count(preceding-sibling::node()[1]/w:pPr/w:pStyle[contains(@w:val,'Prodnote-OptionalDAISY')])=1">
-			<xsl:value-of disable-output-escaping="yes" select="'&lt;/prodnote &gt;'"/>
+			<xsl:call-template name="CloseNode">
+				<xsl:with-param name="qname" select="'prodnote'"/>
+			</xsl:call-template>
+			<!-- <xsl:value-of disable-output-escaping="yes" select="'&lt;/prodnote &gt;'"/> -->
 		</xsl:if>
 	</xsl:template>
 
