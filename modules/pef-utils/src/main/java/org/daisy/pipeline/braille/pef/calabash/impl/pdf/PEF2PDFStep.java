@@ -148,7 +148,7 @@ public class PEF2PDFStep extends DefaultStep implements XProcStep {
 				try {
 					href = URI.create(getOption(_HREF).getString());
 				} catch (IllegalArgumentException e) {
-					throw new IllegalArgumentException("Not a valid URI: " + href);
+					throw new IllegalArgumentException("Not a valid URI: " + getOption(_HREF).getString());
 				}
 			}
 			File pdfFile = null; {

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               script="../resources/dtbook-to-odt-to-docx-to-dtbook.xpl">
+
+  <x:scenario label="test">
+    <x:call step="pxi:dtbook-to-odt-to-docx-to-dtbook">
+      <x:input port="source.fileset">
+        <x:document type="inline">
+          <d:fileset>
+            <d:file href="file:/tmp/minimal.xml" media-type="application/x-dtbook+xml"/>
+          </d:fileset>
+        </x:document>
+      </x:input>
+      <x:input port="source.in-memory">
+        <x:document type="inline" xml:base="file:/tmp/minimal.xml">
+          <dtbook xml:lang="en" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+            <head>
+              <meta name="dtb:uid" content="foo"/>
+            </head>
+            <book>
+              <bodymatter>
+                <level1>
+                  <p>paragraph</p>
+                </level1>
+              </bodymatter>
+            </book>
+          </dtbook>
+        </x:document>
+      </x:input>
+      <x:option name="template" select="resolve-uri('../../../target/classes/templates/default.ott')"/>
+      <x:option name="output-dir" select="concat($temp-dir,'output/')"/>
+      <x:option name="temp-dir" select="concat($temp-dir,'temp/')"/>
+    </x:call>
+    <x:context label="the result.fileset port">
+      <x:document type="port" port="result.fileset"/>
+    </x:context>
+    <x:expect label="the result.fileset port"
+              type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+      <x:document type="inline" base-uri="temp-dir">
+          <d:fileset>
+              <d:file href="output/minimal.xml" media-type="application/x-dtbook+xml"/>
+          </d:fileset>
+      </x:document>
+    </x:expect>
+    <x:context label="the stored DTBook">
+      <x:document type="file" base-uri="temp-dir" href="output/minimal.xml"/>
+    </x:context>
+    <x:expect label="the DTBook should be as expected" type="compare">
+      <x:document type="inline">
+        <dtbook version="2005-3" xml:lang="en" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+          <head>
+            <meta name="dtb:uid" content="foo"/>
+            <meta name="dtb:generator" content="DAISY Pipeline - Word to DTBook 1.1.3-SNAPSHOT"/>
+            <meta name="dc:Title" content="Unknown"/>
+            <meta name="dc:Identifier" content="foo"/>
+            <meta name="dc:Language" content="en"/>
+          </head>
+          <book showin="blp">
+            <frontmatter>
+              <doctitle/>
+              <docauthor/>
+            </frontmatter>
+            <bodymatter id="bodymatter_0001">
+              <level1>
+                <p>paragraph</p>
+              </level1>
+            </bodymatter>
+          </book>
+        </dtbook>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+</x:description>

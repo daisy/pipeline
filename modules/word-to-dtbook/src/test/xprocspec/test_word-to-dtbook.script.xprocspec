@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-               script="../../main/resources/xml/word-to-dtbook.xpl">
+               script="../../main/resources/xml/word-to-dtbook.script.xpl">
 
   <x:scenario label="FromSingleDocx">
     <x:call step="px:word-to-dtbook.script"/>
