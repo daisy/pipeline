@@ -67,6 +67,8 @@
 		<p:input port="parameters">
 			<p:empty/>
 		</p:input>
+		<p:with-option name="page-numbers" select="true()"/>
+		<p:with-option name="daisy-styles" select="true()"/>
 		<p:with-option name="template" select="$template"/>
 		<p:with-option name="asciimath" select="'ASCIIMATH'"/>
 		<p:with-option name="images" select="'EMBED'"/>

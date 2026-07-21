@@ -1,35 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="2.0"
-		xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-		xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
-		xmlns:dc="http://purl.org/dc/elements/1.1/"
-		xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
-		xmlns:xforms="http://www.w3.org/2002/xforms"
-		xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
-		xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0"
-		xmlns:dom="http://www.w3.org/2001/xml-events"
-		xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0"
-		xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
-		xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0"
-		xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0"
-		xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
-		xmlns:math="http://www.w3.org/1998/Math/MathML"
-		xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0"
-		xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
-		xmlns:xs="http://www.w3.org/2001/XMLSchema"
-		xmlns:xlink="http://www.w3.org/1999/xlink"
-		xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0"
-		xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0"
-		xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
-		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
-		xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
-		xmlns:d="http://www.daisy.org/ns/pipeline/data"
-		xmlns:f="functions"
-		exclude-result-prefixes="#all">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"
+                xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+                xmlns:dc="http://purl.org/dc/elements/1.1/"
+                xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+                xmlns:xforms="http://www.w3.org/2002/xforms"
+                xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+                xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0"
+                xmlns:dom="http://www.w3.org/2001/xml-events"
+                xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0"
+                xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+                xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0"
+                xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0"
+                xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+                xmlns:math="http://www.w3.org/1998/Math/MathML"
+                xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0"
+                xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0"
+                xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0"
+                xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:f="functions"
+                exclude-result-prefixes="#all">
 	
 	<xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
 	<xsl:import href="http://www.daisy.org/pipeline/modules/image-utils/library.xsl"/>
+	
+	<xsl:param name="daisy-styles" as="xs:boolean" select="false()" static="true"/>
+	<xsl:include href="daisy-styles.xsl" use-when="$daisy-styles"/>
+	
 	<xsl:include href="utilities.xsl"/>
 	
 	<!-- ========================== -->
@@ -170,9 +173,7 @@
 				<xsl:call-template name="insert-pagenum-after"/>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:apply-templates select="$group-inline-nodes" mode="#current">
-					<xsl:with-param name="select" select="*|text()"/>
-				</xsl:apply-templates>
+				<xsl:next-match/>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
@@ -612,7 +613,7 @@
 	    FIXME: what if pagenum_done?
 	-->
 	<xsl:template match="dtb:pagenum" as="xs:boolean" mode="is-block-element">
-		<xsl:sequence select="$page_numbers='true'"/>
+		<xsl:sequence select="$page_numbers='true' and not($page_numbers_float='true')"/>
 	</xsl:template>
 	
 	<xsl:template match="dtb:pagenum" mode="office:text office:annotation text:section table:table-cell">

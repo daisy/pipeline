@@ -9,27 +9,140 @@
       <x:input port="source.fileset">
         <x:document type="inline">
           <d:fileset>
-            <d:file href="file:/tmp/minimal.xml" media-type="application/x-dtbook+xml"/>
+            <d:file href="test_dtbook-to-odt-to-docx-to-dtbook.xprocspec" media-type="application/x-dtbook+xml"/>
           </d:fileset>
         </x:document>
       </x:input>
       <x:input port="source.in-memory">
-        <x:document type="inline" xml:base="file:/tmp/minimal.xml">
+        <x:document type="inline">
           <dtbook xml:lang="en" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
             <head>
-              <meta name="dtb:uid" content="foo"/>
+              <meta name="dtb:uid" content="test"/>
             </head>
             <book>
+              <frontmatter>
+                <doctitle>doctitle</doctitle>
+                <covertitle>covertitle</covertitle>
+                <docauthor>docauthor</docauthor>
+              </frontmatter>
               <bodymatter>
                 <level1>
+                  <h1>h1</h1>
+                  <author>author</author>
+                  <pagenum page="normal" id="p1">1</pagenum>
                   <p>paragraph</p>
+                  <prodnote render="required">prodnote</prodnote>
+                  <prodnote render="optional">prodnote</prodnote>
+                  <bridgehead>bridgehead</bridgehead>
+                  <byline>byline</byline>
+                  <dateline>dateline</dateline>
+                  <blockquote>
+                    <p>blockquote</p>
+                    <author>author</author>
+                  </blockquote>
+                  <epigraph>
+                    <p>epigraph</p>
+                    <author>author</author>
+                  </epigraph>
+                  <poem>
+                    <title>title</title>
+                    <author>author</author>
+                    <hd>hd</hd>
+                    <byline>byline</byline>
+                    <linegroup>
+                      <line><linenum>linenum</linenum> line</line>
+                      <line><linenum>linenum</linenum> line</line>
+                    </linegroup>
+                  </poem>
+                  <address>
+                    <line>line</line>
+                    <line>line</line>
+                  </address>
+                  <list type="ol">
+                    <li>
+                      <p>li</p>
+                      <list type="ul">
+                        <li>li</li>
+                        <li>li</li>
+                      </list>
+                    </li>
+                    <li>
+                      <p>li</p>
+                      <list type="pl">
+                        <li>* li</li>
+                        <li>* li</li>
+                      </list>
+                    </li>
+                  </list>
+                  <dl>
+                    <dt>dt</dt>
+                    <dd>dd</dd>
+                  </dl>
+                  <sidebar render="required">
+                    <hd>hd</hd>
+                    <p>sidebar</p>
+                  </sidebar>
+                  <sidebar render="optional">
+                    <hd>hd</hd>
+                    <p>sidebar</p>
+                  </sidebar>
+                  <div>
+                    <p>div</p>
+                  </div>
+                  <p>
+                    <imggroup>
+                        <img alt="img" src="../../../../fileset-utils/src/test/xprocspec/samples/fileset2/c.gif"/>
+                        <caption>caption</caption>
+                    </imggroup>
+                  </p>
+                  <p>
+                    <em>em</em>
+                    <strong>strong</strong>
+                    <kbd>kbd</kbd>
+                    <samp>samp</samp>
+                    <code>code</code>
+                    <span>span</span>
+                    <sent>sent</sent>
+                    <dfn>dfn</dfn>
+                    <w>w</w>
+                    <q>q</q>
+                  </p>
+                  <table>
+                    <caption>caption</caption>
+                    <thead>
+                      <tr>
+                        <th>thead</th>
+                        <th>thead</th>
+                      </tr>
+                    </thead>
+                    <tfoot>
+                      <tr>
+                        <th>tfoot</th>
+                        <th>tfoot</th>
+                      </tr>
+                    </tfoot>
+                    <tbody>
+                      <tr>
+                        <td>tbody</td>
+                        <td>tbody</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <p>
+                    <noteref idref="#note1" class="footnote">noteref</noteref>
+                    <noteref idref="#note2" class="endnote">noteref</noteref>
+                  </p>
+                  <note id="note1" class="footnote">
+                    <cite>cite</cite>
+                  </note>
+                  <note id="note2" class="endnote">note</note>
                 </level1>
               </bodymatter>
             </book>
           </dtbook>
         </x:document>
       </x:input>
-      <x:option name="template" select="resolve-uri('../../../target/classes/templates/default.ott')"/>
+      <x:option name="template" select="resolve-uri('../../../target/classes/templates/save-as-daisy.ott')"/>
       <x:option name="output-dir" select="concat($temp-dir,'output/')"/>
       <x:option name="temp-dir" select="concat($temp-dir,'temp/')"/>
     </x:call>
@@ -40,33 +153,182 @@
               type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
       <x:document type="inline" base-uri="temp-dir">
           <d:fileset>
-              <d:file href="output/minimal.xml" media-type="application/x-dtbook+xml"/>
+              <d:file href="output/test_dtbook-to-odt-to-docx-to-dtbook.xprocspec.xml" media-type="application/x-dtbook+xml"
+                      original-href="output/test_dtbook-to-odt-to-docx-to-dtbook.xprocspec.xml"/>
+              <d:file href="output/test_dtbook-to-odt-to-docx-to-dtbook.xprocspec-img%231.png" media-type="image/png"
+                      original-href="temp/word-to-dtbook/test_dtbook-to-odt-to-docx-to-dtbook.xprocspec-img%231.png"/>
           </d:fileset>
       </x:document>
     </x:expect>
     <x:context label="the stored DTBook">
-      <x:document type="file" base-uri="temp-dir" href="output/minimal.xml"/>
+      <x:document type="file" base-uri="temp-dir" href="output/test_dtbook-to-odt-to-docx-to-dtbook.xprocspec.xml"/>
     </x:context>
     <x:expect label="the DTBook should be as expected" type="compare">
       <x:document type="inline">
         <dtbook version="2005-3" xml:lang="en" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
           <head>
-            <meta name="dtb:uid" content="foo"/>
+            <meta name="dtb:uid" content="test"/>
             <meta name="dtb:generator" content="DAISY Pipeline - Word to DTBook 1.1.3-SNAPSHOT"/>
-            <meta name="dc:Title" content="Unknown"/>
-            <meta name="dc:Identifier" content="foo"/>
+            <meta name="dc:Title" content="doctitle"/>
+            <meta name="dc:Creator" content="docauthor"/>
+            <meta name="dc:Identifier" content="test"/>
             <meta name="dc:Language" content="en"/>
+            <meta name="dc:Language" content="en-US"/>
           </head>
           <book showin="blp">
             <frontmatter>
-              <doctitle/>
-              <docauthor/>
+              <doctitle>doctitle</doctitle>
+              <docauthor>docauthor</docauthor>
             </frontmatter>
             <bodymatter id="bodymatter_0001">
               <level1>
+                <doctitle>doctitle</doctitle>
+                <covertitle>covertitle</covertitle>
+                <p>docauthor</p>
+              </level1>
+              <level1>
+                <h1>h1</h1>
+                <author>author</author>
+                <pagenum page="normal" id="page1">1</pagenum>
                 <p>paragraph</p>
+                <prodnote render="required">
+                  <p>prodnote</p>
+                </prodnote>
+                <prodnote render="optional">
+                  <p>prodnote</p>
+                </prodnote>
+                <bridgehead>bridgehead</bridgehead>
+                <byline>byline</byline>
+                <dateline>dateline</dateline>
+                <blockquote>
+                  <p>blockquote</p>
+                  <author>author</author>
+                </blockquote>
+                <epigraph>
+                  <p>epigraph</p>
+                  <author>author</author>
+                </epigraph>
+                <poem>
+                  <title>title</title>
+                  <author>author</author>
+                  <hd>hd</hd>
+                  <byline>byline</byline>
+                  <linegroup>
+                    <line><linenum>linenum</linenum> line</line>
+                    <line><linenum>linenum</linenum> line</line>
+                  </linegroup>
+                </poem>
+                <address>
+                  <line>line</line>
+                  <line>line</line>
+                </address>
+                <list type="ol" start="1">
+                  <li>
+                    <p>li</p>
+                    <list type="ul">
+                      <li>
+                        <p>li</p>
+                      </li>
+                      <li>
+                        <p>li</p>
+                      </li>
+                    </list>
+                  </li>
+                  <li>
+                    <p>li</p>
+                    <list type="pl">
+                      <li>
+                        <p>* li</p>
+                      </li>
+                      <li>
+                        <p>* li</p>
+                      </li>
+                    </list>
+                  </li>
+                </list>
+                <dl>
+                  <dt>dt</dt>
+                  <dd>dd</dd>
+                </dl>
+                <sidebar render="required">
+                  <hd>hd</hd>
+                  <p>sidebar</p>
+                </sidebar>
+                <sidebar render="optional">
+                  <hd>hd</hd>
+                  <p>sidebar</p>
+                </sidebar>
+                <div>
+                  <p>div</p>
+                </div>
+                <p>
+                  <imggroup>
+                    <img alt="" src="test_dtbook-to-odt-to-docx-to-dtbook.xprocspec-img%231.png" id="rId21"/>
+                    <caption imgref="rId21">caption</caption>
+                  </imggroup>
+                </p>
+                <p>
+                  <em>em</em>
+                  <strong>strong</strong>
+                  <kbd>kbd</kbd>
+                  <samp xml:space="preserve">samp</samp>
+                  <code xml:space="preserve">code</code>
+                  <span>span</span>
+                  <sent>sent</sent>
+                  <dfn>dfn</dfn>
+                  <w>w</w>
+                  <q>q</q>
+                </p>
+                <table border="1">
+                  <caption xml:lang="en-US">caption</caption>
+                  <col align="left"/>
+                  <thead>
+                    <tr>
+                      <th>
+                        <p xml:lang="en-US">thead</p>
+                      </th>
+                      <th>
+                        <p xml:lang="en-US">thead</p>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p xml:lang="en-US">tbody</p>
+                      </td>
+                      <td>
+                        <p xml:lang="en-US">tbody</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p xml:lang="en-US">tfoot</p>
+                      </td>
+                      <td>
+                        <p xml:lang="en-US">tfoot</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p>
+                  <noteref class="Footnote" idref="#footnote-2">2</noteref>
+                  <noteref class="Endnote" idref="#endnote-2">2</noteref>
+                </p>
+                <note id="footnote-2" class="Footnote">
+                  <p>
+                    <cite>cite</cite>
+                  </p>
+                </note>
               </level1>
             </bodymatter>
+            <rearmatter>
+              <level1>
+                <note id="endnote-2" class="Endnote">
+                  <p>note</p>
+                </note>
+              </level1>
+            </rearmatter>
           </book>
         </dtbook>
       </x:document>
