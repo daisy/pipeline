@@ -460,7 +460,8 @@
 	<!-- ==================== -->
 	
 	<xsl:template match="dtb:blockquote|dtb:epigraph|dtb:poem|dtb:prodnote|dtb:poem/dtb:title|dtb:author|
-	                     dtb:doctitle|dtb:docauthor|dtb:byline|dtb:dateline|dtb:bridgehead|dtb:hd|dtb:covertitle"
+	                     dtb:doctitle|dtb:docauthor|dtb:byline|dtb:dateline|dtb:bridgehead|dtb:hd|dtb:covertitle|
+	                     dtb:address"
 	              mode="paragraph-style">
 		<xsl:sequence select="dtb:style-name(.)"/>
 	</xsl:template>
@@ -498,6 +499,12 @@
 	
 	<xsl:template match="dtb:line" mode="office:text office:annotation text:section">
 		<xsl:call-template name="text:p"/>
+	</xsl:template>
+	
+	<xsl:template match="dtb:address" mode="office:text office:annotation text:section">
+		<xsl:apply-templates select="$group-inline-nodes" mode="#current">
+			<xsl:with-param name="select" select="*|text()"/>
+		</xsl:apply-templates>
 	</xsl:template>
 	
 	<!-- ====== -->
@@ -856,7 +863,7 @@
 		<xsl:sequence select="false()"/>
 	</xsl:template>
 	
-	<xsl:template match="dtb:p|dtb:list|dtb:dl|dtb:table|dtb:imggroup|dtb:blockquote"
+	<xsl:template match="dtb:p|dtb:list|dtb:dl|dtb:table|dtb:imggroup|dtb:blockquote|dtb:line"
 	              as="xs:boolean"
 	              mode="is-block-element">
 		<xsl:sequence select="true()"/>
