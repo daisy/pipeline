@@ -863,7 +863,7 @@
 		<xsl:sequence select="false()"/>
 	</xsl:template>
 	
-	<xsl:template match="dtb:p|dtb:list|dtb:dl|dtb:table|dtb:imggroup|dtb:blockquote|dtb:line"
+	<xsl:template match="dtb:p|dtb:list|dtb:dl|dtb:table|dtb:imggroup|dtb:blockquote|dtb:line|dtb:hd"
 	              as="xs:boolean"
 	              mode="is-block-element">
 		<xsl:sequence select="true()"/>
