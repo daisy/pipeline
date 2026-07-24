@@ -80,12 +80,12 @@
 		<xsl:variable name="creator" select="dtb:meta('dc:creator')"/>
 		<xsl:if test="not(dc:creator)">
 			<xsl:element name="dc:creator">
-				<xsl:sequence select="$creator"/>
+				<xsl:value-of select="$creator"/>
 			</xsl:element>
 		</xsl:if>
 		<xsl:if test="not(meta:initial-creator)">
 			<xsl:element name="meta:initial-creator">
-				<xsl:sequence select="$creator"/>
+				<xsl:value-of select="$creator"/>
 			</xsl:element>
 		</xsl:if>
 	</xsl:template>
@@ -94,12 +94,12 @@
 		<xsl:variable name="date" select="dtb:meta('dc:date')"/>
 		<xsl:if test="not(dc:date)">
 			<xsl:element name="dc:date">
-				<xsl:sequence select="$date"/>
+				<xsl:value-of select="$date"/>
 			</xsl:element>
 		</xsl:if>
 		<xsl:if test="not(meta:creation-date)">
 			<xsl:element name="meta:creation-date">
-				<xsl:sequence select="$date"/>
+				<xsl:value-of select="$date"/>
 			</xsl:element>
 		</xsl:if>
 	</xsl:template>
@@ -109,7 +109,7 @@
 		<!--<xsl:variable name="title" select="string(collection()[2]/dtb:dtbook//dtb:doctitle[1])"/>-->
 		<xsl:if test="not(dc:title)">
 			<xsl:element name="dc:title">
-				<xsl:sequence select="$title"/>
+				<xsl:value-of select="$title"/>
 			</xsl:element>
 		</xsl:if>
 	</xsl:template>
@@ -118,7 +118,7 @@
 		<xsl:variable name="subject" select="dtb:meta('dc:subject')"/>
 		<xsl:if test="not(dc:subject) and $subject!=''">
 			<xsl:element name="dc:subject">
-				<xsl:sequence select="$subject"/>
+				<xsl:value-of select="$subject"/>
 			</xsl:element>
 		</xsl:if>
 	</xsl:template>
@@ -127,9 +127,9 @@
 	<!-- UTILITIES -->
 	<!-- ========= -->
 	
-	<xsl:function name="dtb:meta">
+	<xsl:function name="dtb:meta" as="xs:string?">
 		<xsl:param name="name" as="xs:string"/>
-		<xsl:sequence select="collection()[2]/dtb:dtbook/dtb:head/dtb:meta[lower-case(@name)=$name]/@content"/>
+		<xsl:sequence select="collection()[2]/dtb:dtbook/dtb:head/dtb:meta[lower-case(@name)=$name]/@content/string(.)"/>
 	</xsl:function>
 	
 </xsl:stylesheet>
