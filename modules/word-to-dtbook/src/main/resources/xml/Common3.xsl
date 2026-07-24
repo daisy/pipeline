@@ -2256,7 +2256,7 @@
 							<!--Checking for bidirectional language-->
 							<xsl:when test="(../../w:r/w:pict/v:shape/v:textbox/w:txbxContent/w:p/w:r/w:rPr/w:lang/@w:bidi)">
 								<!--Getting value from bidi attribute in lang tag-->
-								<xsl:sequence select="(../../w:r/w:pict/v:shape/v:textbox/w:txbxContent/w:p/w:r/w:rPr/w:lang/@w:bidi)"/>
+								<xsl:sequence select="(../../w:r/w:pict/v:shape/v:textbox/w:txbxContent/w:p/w:r/w:rPr/w:lang/@w:bidi)[1]"/>
 							</xsl:when>
 							<!--Assinging default bidirectional language-->
 							<xsl:otherwise>
@@ -2269,7 +2269,7 @@
 						<xsl:choose>
 							<!--Getting value from eastasia attribute in lang tag-->
 							<xsl:when test="../../w:r/w:pict/v:shape/v:textbox/w:txbxContent/w:p/w:r/w:rPr/w:lang/@w:eastAsia">
-								<xsl:sequence select="../../w:r/w:pict/v:shape/v:textbox/w:txbxContent/w:p/w:r/w:rPr/w:lang/@w:eastAsia"/>
+								<xsl:sequence select="(../../w:r/w:pict/v:shape/v:textbox/w:txbxContent/w:p/w:r/w:rPr/w:lang/@w:eastAsia)[1]"/>
 							</xsl:when>
 							<!--Assinging default eastAsia language-->
 							<xsl:otherwise>
@@ -2282,7 +2282,7 @@
 							<xsl:when test="$count_lang &gt; 1">
 								<xsl:choose>
 									<xsl:when test="../../w:r/w:pict/v:shape/v:textbox/w:txbxContent/w:p/w:r/w:rPr/w:lang/@w:val">
-										<xsl:sequence select="(../../w:r/w:pict/v:shape/v:textbox/w:txbxContent/w:p/w:r/w:rPr/w:lang/@w:val)"/>
+										<xsl:sequence select="(../../w:r/w:pict/v:shape/v:textbox/w:txbxContent/w:p/w:r/w:rPr/w:lang/@w:val)[1]"/>
 									</xsl:when>
 									<xsl:otherwise>
 										<xsl:sequence select="$defaultLatin"/>
@@ -2292,13 +2292,13 @@
 							<xsl:when test="$count_lang=1">
 								<xsl:choose>
 									<xsl:when test="../../w:r/w:pict/v:shape/v:textbox/w:txbxContent/w:p/w:r/w:rPr/w:lang/@w:val">
-										<xsl:sequence select="../../w:r/w:pict/v:shape/v:textbox/w:txbxContent/w:p/w:r/w:rPr/w:lang/@w:val"/>
+										<xsl:sequence select="(../../w:r/w:pict/v:shape/v:textbox/w:txbxContent/w:p/w:r/w:rPr/w:lang/@w:val)[1]"/>
 									</xsl:when>
 									<xsl:when test="../../w:r/w:pict/v:shape/v:textbox/w:txbxContent/w:p/w:r/w:rPr/w:lang/@w:eastAsia">
-										<xsl:sequence select="../../w:r/w:pict/v:shape/v:textbox/w:txbxContent/w:p/w:r/w:rPr/w:lang/@w:eastAsia"/>
+										<xsl:sequence select="(../../w:r/w:pict/v:shape/v:textbox/w:txbxContent/w:p/w:r/w:rPr/w:lang/@w:eastAsia)[1]"/>
 									</xsl:when>
 									<xsl:when test="../../w:r/w:pict/v:shape/v:textbox/w:txbxContent/w:p/w:r/w:rPr/w:lang/@w:bidi">
-										<xsl:sequence select="../../w:r/w:pict/v:shape/v:textbox/w:txbxContent/w:p/w:r/w:rPr/w:lang/@w:bidi"/>
+										<xsl:sequence select="(../../w:r/w:pict/v:shape/v:textbox/w:txbxContent/w:p/w:r/w:rPr/w:lang/@w:bidi)[1]"/>
 									</xsl:when>
 								</xsl:choose>
 							</xsl:when>
@@ -2319,7 +2319,7 @@
 							<!--Getting value from eastasia attribute in lang tag-->
 							
 							<xsl:when test="preceding-sibling::w:p[1]/w:r/w:rPr/w:lang/@w:eastAsia">
-								<xsl:sequence select="(preceding-sibling::w:p[1]/w:r/w:rPr/w:lang/@w:eastAsia)"/>
+								<xsl:sequence select="(preceding-sibling::w:p[1]/w:r/w:rPr/w:lang/@w:eastAsia)[1]"/>
 							</xsl:when>
 							<!--Assinging default eastAsia language-->
 							
@@ -2334,7 +2334,7 @@
 							<!--Checking for bidirectional language-->
 							<xsl:when test="preceding-sibling::w:p[1]/w:r/w:rPr/w:lang/@w:bidi">
 								<!--Getting value from bidi attribute in lang tag-->
-								<xsl:sequence select="(preceding-sibling::w:p[1]/w:r/w:rPr/w:lang/@w:bidi)"/>
+								<xsl:sequence select="(preceding-sibling::w:p[1]/w:r/w:rPr/w:lang/@w:bidi)[1]"/>
 							</xsl:when>
 							<!--Assinging default bidirectional language-->
 							<xsl:otherwise>
@@ -2347,7 +2347,7 @@
 							<xsl:when test="$count_lang &gt; 1">
 								<xsl:choose>
 									<xsl:when test="preceding-sibling::w:p[1]/w:r/w:rPr/w:lang/@w:val">
-										<xsl:sequence select="(preceding-sibling::w:p[1]/w:r/w:rPr/w:lang/@w:val)"/>
+										<xsl:sequence select="(preceding-sibling::w:p[1]/w:r/w:rPr/w:lang/@w:val)[1]"/>
 									</xsl:when>
 									<xsl:otherwise>
 										<xsl:sequence select="$defaultLatin"/>
@@ -2357,13 +2357,13 @@
 							<xsl:when test="$count_lang = 1">
 								<xsl:choose>
 									<xsl:when test="preceding-sibling::w:p[1]/w:r/w:rPr/w:lang/@w:val">
-										<xsl:sequence select="preceding-sibling::w:p[1]/w:r/w:rPr/w:lang/@w:val"/>
+										<xsl:sequence select="(preceding-sibling::w:p[1]/w:r/w:rPr/w:lang/@w:val)[1]"/>
 									</xsl:when>
 									<xsl:when test="preceding-sibling::w:p[1]/w:r/w:rPr/w:lang/@w:eastAsia">
-										<xsl:sequence select="preceding-sibling::w:p[1]/w:r/w:rPr/w:lang/@w:eastAsia"/>
+										<xsl:sequence select="(preceding-sibling::w:p[1]/w:r/w:rPr/w:lang/@w:eastAsia)[1]"/>
 									</xsl:when>
 									<xsl:when test="preceding-sibling::w:p[1]/w:r/w:rPr/w:lang/@w:bidi">
-										<xsl:sequence select="preceding-sibling::w:p[1]/w:r/w:rPr/w:lang/@w:bidi"/>
+										<xsl:sequence select="(preceding-sibling::w:p[1]/w:r/w:rPr/w:lang/@w:bidi)[1]"/>
 									</xsl:when>
 								</xsl:choose>
 							</xsl:when>

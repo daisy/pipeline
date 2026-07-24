@@ -1620,8 +1620,8 @@
 		</xsl:choose>
 	</xsl:template>
 
-	<!-- template to open a style tag (em,strong,sup or sub)-->
-	<xsl:template name="OpenStyleTagIfNotOpened">
+	<!-- template to open inline tags : span, bdo, em, strong, sup, sub, a -->
+	<xsl:template name="OpenStyleTag">
 		<xsl:param name="styleTag"/>
 		<xsl:param name="attributes" select="''"/>
 		<xsl:if test="not(d:HasCharacterStyle($myObj, $styleTag))">
@@ -1748,40 +1748,40 @@
 			<!-- If group is not a notereference and has one of strong|em|sub|sup|a|bdo status -->
 			<xsl:when test="$isBidirectionnal or (not($isBidirectionnal) and $textLanguage != $paragraphLanguage) or $isHyperlink or $isStrong or $isEmp or $isSuperscript or $isSubscript and not($isNote)">
 				<!-- if not already in the style stack, Open new style tag and add it to the stack -->
-				<xsl:if test="not($isBidirectionnal) and $textLanguage != $paragraphLanguage and string-length($innerText) &gt; 0">
-					<xsl:call-template name="OpenStyleTagIfNotOpened">
+				<xsl:if test="not($isBidirectionnal) and not($textLanguage = $paragraphLanguage) and string-length($innerText) &gt; 0">
+					<xsl:call-template name="OpenStyleTag">
 						<xsl:with-param name="styleTag" select="'span'"/>
 						<xsl:with-param name="attributes">xml:lang="<xsl:value-of select="$textLanguage"/>"</xsl:with-param>
 					</xsl:call-template>
 				</xsl:if>
 				<xsl:if test="$isBidirectionnal">
-					<xsl:call-template name="OpenStyleTagIfNotOpened">
+					<xsl:call-template name="OpenStyleTag">
 						<xsl:with-param name="styleTag" select="'bdo'"/>
 						<xsl:with-param name="attributes">dir="rtl" xml:lang="<xsl:value-of select="$textLanguage"/>"</xsl:with-param>
 					</xsl:call-template>
 				</xsl:if>
 				<xsl:if test="$isSubscript">
-					<xsl:call-template name="OpenStyleTagIfNotOpened">
+					<xsl:call-template name="OpenStyleTag">
 						<xsl:with-param name="styleTag" select="'sub'"/>
 					</xsl:call-template>
 				</xsl:if>
 				<xsl:if test="$isSuperscript">
-					<xsl:call-template name="OpenStyleTagIfNotOpened">
+					<xsl:call-template name="OpenStyleTag">
 						<xsl:with-param name="styleTag" select="'sup'"/>
 					</xsl:call-template>
 				</xsl:if>
 				<xsl:if test="$isStrong">
-					<xsl:call-template name="OpenStyleTagIfNotOpened">
+					<xsl:call-template name="OpenStyleTag">
 						<xsl:with-param name="styleTag" select="'strong'"/>
 					</xsl:call-template>
 				</xsl:if>
 				<xsl:if test="$isEmp">
-					<xsl:call-template name="OpenStyleTagIfNotOpened">
+					<xsl:call-template name="OpenStyleTag">
 						<xsl:with-param name="styleTag" select="'em'"/>
 					</xsl:call-template>
 				</xsl:if>
 				<xsl:if test="$isHyperlink">
-					<xsl:call-template name="OpenStyleTagIfNotOpened">
+					<xsl:call-template name="OpenStyleTag">
 						<xsl:with-param name="styleTag" select="'a'"/>
 						<xsl:with-param name="attributes" select="$attributes" />
 					</xsl:call-template>
@@ -3131,11 +3131,26 @@
 					</xsl:call-template>
 					<!-- <xsl:value-of disable-output-escaping="yes" select="concat('&lt;epigraph xml:lang=&quot;',$lang,'&quot;&gt;')"/> -->
 				</xsl:if>
-				<xsl:call-template name="Paracharacterstyle">
-					<xsl:with-param name="characterStyle" select="$characterparaStyle"/>
-					<xsl:with-param name="txt" select="$txt"/>
-					<xsl:with-param name="flag" select="'1'"/>
-				</xsl:call-template>
+				<xsl:choose>
+						<!-- NP: 2026/07/24 - following discussion in https://github.com/daisy/pipeline-modules/issues/104#issuecomment-5085039611 
+						    adding a missing mapping for epigraph author style -->
+						<xsl:when test="w:pPr/w:pStyle[@w:val='Epigraph-AuthorDAISY']">
+							<author>
+								<xsl:call-template name="Paracharacterstyle">
+										<xsl:with-param name="characterStyle" select="$characterparaStyle"/>
+										<xsl:with-param name="txt" select="$txt"/>
+										<xsl:with-param name="flag" select="'0'"/>
+								</xsl:call-template>
+							</author>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:call-template name="Paracharacterstyle">
+								<xsl:with-param name="characterStyle" select="$characterparaStyle"/>
+								<xsl:with-param name="txt" select="$txt"/>
+								<xsl:with-param name="flag" select="'1'"/>
+							</xsl:call-template>
+						</xsl:otherwise>
+				</xsl:choose>
 				<xsl:if test="not(following-sibling::w:p)">
 					<xsl:call-template name="CloseNode">
 						<xsl:with-param name="qname" select="'epigraph'"/>

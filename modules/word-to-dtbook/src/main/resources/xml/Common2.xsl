@@ -918,14 +918,25 @@
 			<!-- check previous sibling is a /w:pPr/w:pStyle[@w:val='Caption'], if so print w:t-->
 			<xsl:if test="(preceding-sibling::node()[1]/w:pPr/w:pStyle/@w:val='Caption') or (preceding-sibling::node()[1]/w:pPr/w:pStyle/@w:val='Table-CaptionDAISY') or (following-sibling::node()[1]/w:pPr/w:pStyle/@w:val='Table-CaptionDAISY')">
 				<caption>
-					<xsl:if test="(preceding-sibling::node()[1]/w:r/w:rPr/w:lang) or (preceding-sibling::node()[1]/w:r/w:rPr/w:rFonts/@w:hint)">
+					<xsl:variable name="lang">
+						<!--Calling PictureLanguage template for implementing language for the text in the Table-->
+						<xsl:call-template name="PictureLanguage">
+								<xsl:with-param name="CheckLang" select="'Table'"/>
+							</xsl:call-template>
+					</xsl:variable>
+					<xsl:if test="not($lang=$documentLanguages/*:lang[1]/@*:val)">
+						<xsl:attribute name="xml:lang" select="$lang"/>
+					</xsl:if>
+					<!-- NP 2026/07/27 TODO FIXME : problem with captions language evaluation
+					   - i'm able to avoid redeclaration of language but there are issues with language evaluation withing the content
+					   -->
+					<!-- <xsl:if test="(preceding-sibling::node()[1]/w:r/w:rPr/w:lang) or (preceding-sibling::node()[1]/w:r/w:rPr/w:rFonts/@w:hint)">
 						<xsl:attribute name="xml:lang">
-							<!--Calling PictureLanguage template for implementing language for the text in the Table-->
 							<xsl:call-template name="PictureLanguage">
 								<xsl:with-param name="CheckLang" select="'Table'"/>
 							</xsl:call-template>
 						</xsl:attribute>
-					</xsl:if>
+					</xsl:if> -->
 					<xsl:if test="(preceding-sibling::node()[1]/w:r/w:rPr/w:rtl) or (preceding-sibling::node()[1]/w:pPr/w:bidi)">
 						<xsl:variable name="varBdo" as="xs:string">
 							<xsl:call-template name="PictureLanguage">
@@ -946,9 +957,12 @@
 											<xsl:text>-</xsl:text>
 										</xsl:when>
 										<xsl:otherwise>
-											<xsl:call-template name="TempCharacterStyle">
+											<xsl:call-template name="CustomCharStyle">
 												<xsl:with-param name="characterStyle" select="$characterStyle"/>
 											</xsl:call-template>
+											<!-- <xsl:call-template name="TempCharacterStyle">
+												<xsl:with-param name="characterStyle" select="$characterStyle"/>
+											</xsl:call-template> -->
 										</xsl:otherwise>
 									</xsl:choose>
 								</xsl:for-each>
@@ -969,9 +983,12 @@
 											<xsl:text>-</xsl:text>
 										</xsl:when>
 										<xsl:otherwise>
-											<xsl:call-template name="TempCharacterStyle">
-												<xsl:with-param name="characterStyle" select="$characterStyle"/>
-											</xsl:call-template>
+												<xsl:call-template name="CustomCharStyle">
+													<xsl:with-param name="characterStyle" select="$characterStyle"/>
+												</xsl:call-template>
+												<!-- <xsl:call-template name="TempCharacterStyle">
+													<xsl:with-param name="characterStyle" select="$characterStyle"/>
+												</xsl:call-template> -->
 										</xsl:otherwise>
 									</xsl:choose>
 								</xsl:for-each>
@@ -992,9 +1009,12 @@
 											<xsl:text>-</xsl:text>
 										</xsl:when>
 										<xsl:otherwise>
-											<xsl:call-template name="TempCharacterStyle">
+											<xsl:call-template name="CustomCharStyle">
 												<xsl:with-param name="characterStyle" select="$characterStyle"/>
 											</xsl:call-template>
+											<!-- <xsl:call-template name="TempCharacterStyle">
+												<xsl:with-param name="characterStyle" select="$characterStyle"/>
+											</xsl:call-template> -->
 										</xsl:otherwise>
 									</xsl:choose>
 								</xsl:for-each>
