@@ -653,7 +653,7 @@
 		<xsl:sequence select="dtb:style-name(.)"/>
 	</xsl:template>
 	
-	<xsl:template match="dtb:span|dtb:sent|dtb:a" mode="text:p text:h text:span">
+	<xsl:template match="dtb:span|dtb:sent|dtb:w|dtb:a" mode="text:p text:h text:span">
 		<xsl:call-template name="text:span"/>
 	</xsl:template>
 	
