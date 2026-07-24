@@ -77,7 +77,8 @@
 	<!-- =============== -->
 	
 	<xsl:template name="dtb:creator">
-		<xsl:variable name="creator" select="dtb:meta('dc:creator')"/>
+		<xsl:variable name="creator" select="(dtb:meta('dc:creator'),
+											  collection()[2]/dtb:dtbook//dtb:docauthor/string(.))[1]"/>
 		<xsl:if test="not(dc:creator)">
 			<xsl:element name="dc:creator">
 				<xsl:value-of select="$creator"/>
@@ -105,8 +106,8 @@
 	</xsl:template>
 	
 	<xsl:template name="dtb:title">
-		<xsl:variable name="title" select="dtb:meta('dc:title')"/>
-		<!--<xsl:variable name="title" select="string(collection()[2]/dtb:dtbook//dtb:doctitle[1])"/>-->
+		<xsl:variable name="title" select="(dtb:meta('dc:title'),
+										    collection()[2]/dtb:dtbook//dtb:doctitle/string(.))[1]"/>
 		<xsl:if test="not(dc:title)">
 			<xsl:element name="dc:title">
 				<xsl:value-of select="$title"/>
