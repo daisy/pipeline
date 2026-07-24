@@ -461,7 +461,7 @@
 	
 	<xsl:template match="dtb:blockquote|dtb:epigraph|dtb:poem|dtb:prodnote|dtb:poem/dtb:title|dtb:author|
 	                     dtb:doctitle|dtb:docauthor|dtb:byline|dtb:dateline|dtb:bridgehead|dtb:hd|dtb:covertitle|
-	                     dtb:address"
+	                     dtb:address|dtb:div"
 	              mode="paragraph-style">
 		<xsl:sequence select="dtb:style-name(.)"/>
 	</xsl:template>
@@ -501,7 +501,7 @@
 		<xsl:call-template name="text:p"/>
 	</xsl:template>
 	
-	<xsl:template match="dtb:address" mode="office:text office:annotation text:section">
+	<xsl:template match="dtb:address|dtb:div" mode="office:text office:annotation text:section">
 		<xsl:apply-templates select="$group-inline-nodes" mode="#current">
 			<xsl:with-param name="select" select="*|text()"/>
 		</xsl:apply-templates>
