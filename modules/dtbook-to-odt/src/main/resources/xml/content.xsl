@@ -459,7 +459,7 @@
 	<!-- OTHER BLOCK ELEMENTS -->
 	<!-- ==================== -->
 	
-	<xsl:template match="dtb:blockquote|dtb:epigraph|dtb:poem|dtb:prodnote|
+	<xsl:template match="dtb:blockquote|dtb:epigraph|dtb:poem|dtb:prodnote|dtb:poem/dtb:title|
 	                     dtb:doctitle|dtb:docauthor|dtb:byline|dtb:bridgehead|dtb:hd|dtb:covertitle"
 	              mode="paragraph-style">
 		<xsl:sequence select="dtb:style-name(.)"/>
@@ -487,7 +487,7 @@
 	</xsl:template>
 	
 	<xsl:template match="dtb:doctitle|dtb:docauthor|dtb:byline|dtb:bridgehead|dtb:hd|
-	                     dtb:covertitle|dtb:author"
+	                     dtb:covertitle|dtb:author|dtb:poem/dtb:title"
 	              mode="office:text office:annotation text:section">
 		<xsl:call-template name="text:p"/>
 	</xsl:template>
@@ -640,7 +640,7 @@
 	<!-- INLINE ELEMENTS & TEXT -->
 	<!-- ====================== -->
 	
-	<xsl:template match="dtb:em|dtb:strong|dtb:sub|dtb:sup|dtb:cite|dtb:q|dtb:author|dtb:title|
+	<xsl:template match="dtb:em|dtb:strong|dtb:sub|dtb:sup|dtb:cite|dtb:q|dtb:author|dtb:cite/dtb:title|
 	                     dtb:acronym|dtb:abbr|dtb:kbd|dtb:code|dtb:samp|dtb:linenum|dtb:a[@href]"
 	              mode="text-style">
 		<xsl:sequence select="dtb:style-name(.)"/>
@@ -650,7 +650,7 @@
 		<xsl:call-template name="text:span"/>
 	</xsl:template>
 	
-	<xsl:template match="dtb:em|dtb:strong|dtb:sub|dtb:sup|dtb:cite|dtb:q|dtb:author|dtb:title|
+	<xsl:template match="dtb:em|dtb:strong|dtb:sub|dtb:sup|dtb:cite|dtb:q|dtb:author|dtb:cite/dtb:title|
 	                     dtb:acronym|dtb:abbr|dtb:kbd|dtb:code|dtb:samp|dtb:linenum"
 	              mode="text:p text:h text:span">
 		<xsl:call-template name="text:span"/>
