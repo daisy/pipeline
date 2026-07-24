@@ -460,7 +460,7 @@
 	<!-- ==================== -->
 	
 	<xsl:template match="dtb:blockquote|dtb:epigraph|dtb:poem|dtb:prodnote|dtb:poem/dtb:title|dtb:author|
-	                     dtb:doctitle|dtb:docauthor|dtb:byline|dtb:bridgehead|dtb:hd|dtb:covertitle"
+	                     dtb:doctitle|dtb:docauthor|dtb:byline|dtb:dateline|dtb:bridgehead|dtb:hd|dtb:covertitle"
 	              mode="paragraph-style">
 		<xsl:sequence select="dtb:style-name(.)"/>
 	</xsl:template>
@@ -486,7 +486,7 @@
 		</xsl:apply-templates>
 	</xsl:template>
 	
-	<xsl:template match="dtb:doctitle|dtb:docauthor|dtb:byline|dtb:bridgehead|dtb:hd|
+	<xsl:template match="dtb:doctitle|dtb:docauthor|dtb:byline|dtb:dateline|dtb:bridgehead|dtb:hd|
 	                     dtb:covertitle|dtb:author|dtb:poem/dtb:title"
 	              mode="office:text office:annotation text:section">
 		<xsl:call-template name="text:p"/>
