@@ -840,14 +840,14 @@
             Many young stars lie inside the mass of gas and dust that forms the Orion Nebula.
           </text:p>
           <text:p text:style-name="dtb_3a_img">
-            <draw:frame draw:name="dtb:img#1" draw:style-name="dtb_3a_img" text:anchor-type="as-char"
+            <draw:frame draw:name="img#1" draw:style-name="dtb_3a_img" text:anchor-type="as-char"
                         draw:z-index="0" svg:width="1.6667in" svg:height="0.8933in">
               <draw:image xlink:href="orion62.jpg" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
               <svg:title>Orion Nebula by visible and ultraviolet light</svg:title>
             </draw:frame>
           </text:p>
           <text:p text:style-name="dtb_3a_img">
-            <draw:frame draw:name="dtb:img#2" draw:style-name="dtb_3a_img" text:anchor-type="as-char"
+            <draw:frame draw:name="img#2" draw:style-name="dtb_3a_img" text:anchor-type="as-char"
                         draw:z-index="0" svg:width="2.1333in" svg:height="1.2433in">
               <draw:image xlink:href="orion3.jpg" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
               <svg:title>Young stars in Orion Nebula</svg:title>

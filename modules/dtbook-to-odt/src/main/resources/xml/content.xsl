@@ -531,7 +531,7 @@
 				<xsl:call-template name="text:p">
 					<xsl:with-param name="sequence">
 						<xsl:element name="draw:frame">
-							<xsl:attribute name="draw:name" select="concat('dtb:img#', count(preceding::dtb:img) + 1)"/>
+							<xsl:attribute name="draw:name" select="concat('img#', count(preceding::dtb:img) + 1)"/>
 							<xsl:attribute name="draw:style-name" select="dtb:style-name(.)"/>
 							<xsl:attribute name="text:anchor-type" select="'as-char'"/>
 							<xsl:attribute name="draw:z-index" select="'0'"/>
