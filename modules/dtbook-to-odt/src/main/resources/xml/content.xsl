@@ -179,7 +179,9 @@
 	
 	<xsl:template match="dtb:p" mode="office:text office:annotation text:section text:list-item
 	                                  table:table-cell text:note-body">
-		<xsl:call-template name="text:p"/>
+		<xsl:apply-templates select="$group-inline-nodes" mode="#current">
+			<xsl:with-param name="select" select="*|text()"/>
+		</xsl:apply-templates>
 	</xsl:template>
 	
 	<!-- ===== -->
@@ -863,7 +865,7 @@
 		<xsl:sequence select="false()"/>
 	</xsl:template>
 	
-	<xsl:template match="dtb:p|dtb:list|dtb:dl|dtb:table|dtb:imggroup|dtb:blockquote|dtb:line|dtb:hd"
+	<xsl:template match="dtb:p|dtb:list|dtb:dl|dtb:table|dtb:imggroup|dtb:blockquote|dtb:line|dtb:hd|dtb:imggroup[dtb:caption]"
 	              as="xs:boolean"
 	              mode="is-block-element">
 		<xsl:sequence select="true()"/>
