@@ -650,7 +650,7 @@
 	<!-- ====================== -->
 	
 	<xsl:template match="dtb:em|dtb:strong|dtb:sub|dtb:sup|dtb:cite|dtb:q|dtb:cite/dtb:author|dtb:cite/dtb:title|
-	                     dtb:acronym|dtb:abbr|dtb:kbd|dtb:code|dtb:samp|dtb:linenum|dtb:a[@href]"
+	                     dtb:acronym|dtb:abbr|dtb:kbd|dtb:code|dtb:samp|dtb:linenum|dtb:a[@href]|dtb:dfn"
 	              mode="text-style">
 		<xsl:sequence select="dtb:style-name(.)"/>
 	</xsl:template>
@@ -660,7 +660,7 @@
 	</xsl:template>
 	
 	<xsl:template match="dtb:em|dtb:strong|dtb:sub|dtb:sup|dtb:cite|dtb:q|dtb:author|dtb:cite/dtb:title|
-	                     dtb:acronym|dtb:abbr|dtb:kbd|dtb:code|dtb:samp|dtb:linenum"
+	                     dtb:acronym|dtb:abbr|dtb:kbd|dtb:code|dtb:samp|dtb:linenum|dtb:dfn"
 	              mode="text:p text:h text:span">
 		<xsl:call-template name="text:span"/>
 	</xsl:template>
