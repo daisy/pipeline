@@ -65,15 +65,18 @@ public interface OCRProcessor {
 	 * @throws IllegalArgumentException
 	 */
 	static String getStringOption(Map<String,Iterable<String>> options, ScriptOption option) {
+		String v = option.getDefault();
 		String name = option.getName();
 		Iterable<String> value = options.get(name);
-		Iterator<String> i = value.iterator();
-		String v = option.getDefault();
-		if (i.hasNext()) {
-			v = i.next();
-			if (i.hasNext())
-				throw new IllegalArgumentException(
-					"did not expect more than one value for option" + name + ": " + value);
+		if (value != null) {
+			Iterator<String> i = value.iterator();
+			if (i.hasNext()) {
+				v = i.next();
+				if (i.hasNext())
+					throw new IllegalArgumentException(
+						"did not expect more than one value for option" + name + ": " + value);
+			} else if (option.isRequired())
+				throw new IllegalArgumentException("did not expect empty value for option " + name);
 		} else if (option.isRequired())
 			throw new IllegalArgumentException("did not expect empty value for option " + name);
 		return v;

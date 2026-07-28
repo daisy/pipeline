@@ -170,7 +170,7 @@ public class MistralOCRService implements OCRService {
 			case 401: // Unauthorized (invalid API key)
 			default:
 			}
-			throw raiseError(response, request);
+			throw raiseApiError(response, request);
 		} catch (IOException|InterruptedException|RuntimeException e) {
 			throw new ServiceDisabledException("Failed to establish a connection to the server", e);
 		}
@@ -199,7 +199,7 @@ public class MistralOCRService implements OCRService {
 
 		@Override
 		public String getDisplayName() {
-			return modelName;
+			return "model " + modelName;
 		}
 
 		@Override
@@ -474,7 +474,7 @@ public class MistralOCRService implements OCRService {
 				case 500: // Internal Server Error
 				default:
 				}
-				throw raiseError(response, request);
+				throw raiseApiError(response, request);
 			} catch (IOException|InterruptedException|RuntimeException e) {
 				throw new RuntimeException("OCR conversion could not be performed", e);
 			}
@@ -504,7 +504,7 @@ public class MistralOCRService implements OCRService {
 					throw new IllegalStateException("could not parse response");
 				default:
 				}
-				throw raiseError(response, request);
+				throw raiseApiError(response, request);
 			} catch (IOException|InterruptedException|RuntimeException e) {
 				throw new RuntimeException("failed to upload file", e);
 			}
@@ -523,7 +523,7 @@ public class MistralOCRService implements OCRService {
 			throw new IllegalArgumentException("JSONObject[\"" + key + "\"] can not be converted to an integer");
 	}
 
-	private static RuntimeException raiseError(Response response, Request request) {
+	private static RuntimeException raiseApiError(Response response, Request request) {
 		String message = "Response code " + response.status + " from " + request.getConnection().getURL();
 		Throwable cause = response.exception;
 		try {

@@ -36,8 +36,7 @@ public class PDFToWordScriptProvider implements ScriptServiceProvider {
 				Collection<OCRProcessor> processors = s.getAvailableProcessors(props);
 				scripts.add(new PDFToWordScript(s, processors, datatypeRegistry, pandoc));
 			} catch (OCRService.ServiceDisabledException e) {
-				logger.debug("Not creating script pdf-to-word-" + s.getName() + " because OCR service disabled: "
-				             + e.getMessage());
+				logger.debug("Not creating script pdf-to-word-" + s.getName() + " because OCR service disabled", e);
 			}
 		return scripts;
 	}

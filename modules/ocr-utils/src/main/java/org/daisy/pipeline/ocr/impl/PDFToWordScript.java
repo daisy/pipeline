@@ -321,9 +321,16 @@ class PDFToWordScript implements ScriptService<Script> {
 			for (OCRProcessor p : processors) {
 				choice.appendChild(xmlDefinition.createElement("value"))
 				      .appendChild(xmlDefinition.createTextNode(p.getName()));
-				choice.appendChild(xmlDefinition.createElementNS(
-				                       "http://relaxng.org/ns/compatibility/annotations/1.0", "documentation"))
-				      .appendChild(xmlDefinition.createTextNode(p.getDisplayName()));
+				Element doc = (Element)choice.appendChild(
+					xmlDefinition.createElementNS(
+						"http://relaxng.org/ns/compatibility/annotations/1.0", "documentation"));
+				String desc = p.getDisplayName();
+				if (!"".equals(p.getDescription())) {
+					desc += ("\n\n" + p.getDescription());
+					doc.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve");
+				}
+				doc.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:lang", "en");
+				doc.appendChild(xmlDefinition.createTextNode(desc));
 			}
 		}
 

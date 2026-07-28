@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.HashMap;
@@ -89,9 +90,146 @@ public class OCRServiceHelper {
 		Matcher m = DATA_URL.matcher(data);
 		if (!m.matches())
 			throw new IllegalArgumentException("unexpected image data URL");
-		return Resource.load(base64Decoder.decode(m.group(2)),
-		                     path,
-		                     m.group(1));
+		return getImageFromBase64String(m.group(2), path, m.group(1));
+	}
+
+	public static Resource getImageFromBase64String(String data, URI path, String mediaType)
+			throws IllegalArgumentException {
+		return Resource.load(base64Decoder.decode(data), path, mediaType);
+	}
+
+	private static final Pattern NOTEREF = Pattern.compile(
+		"<sup>\\s*([^<]+?)\\s*</sup>|([¹²³⁴⁵⁶⁷⁸⁹⁰]+)",
+		Pattern.CASE_INSENSITIVE);
+	private static final Pattern NOTE = Pattern.compile(
+		"^(<sup>\\s*([^<]+?)\\s*</sup>|([¹²³⁴⁵⁶⁷⁸⁹⁰]+))\\s*(.*)$",
+		Pattern.CASE_INSENSITIVE);
+	private static final Pattern GFM_NOTE = Pattern.compile("(?m)^\\[\\^([^\\]\\n]+)\\]:");
+	private static final Map<Character,Character> SUP_MAP = new HashMap<>();
+	static {
+		SUP_MAP.put('¹', '1');
+		SUP_MAP.put('²', '2');
+		SUP_MAP.put('³', '3');
+		SUP_MAP.put('⁴', '4');
+		SUP_MAP.put('⁵', '5');
+		SUP_MAP.put('⁶', '6');
+		SUP_MAP.put('⁷', '7');
+		SUP_MAP.put('⁸', '8');
+		SUP_MAP.put('⁹', '9');
+		SUP_MAP.put('⁰', '0');
+	}
+
+	private static class MarkdownBlock {
+		final int start;
+		final int end;
+		final List<String> lines;
+		MarkdownBlock(int start, int end, List<String> lines) {
+			this.start = start;
+			this.end = end;
+			this.lines = lines;
+		}
+	}
+
+	/**
+	 * Link footnotes in a markdown string
+	 *
+	 * Footnote references and definitions to be paired, are identified as follows:
+	 *
+	 * <ul>
+	 *   <li>Reference: Unicode superscript digits (¹²³…) or <sup>N</sup> attached to body
+	 *       text.</li>
+	 *   <li>Definition: a block whose <em>first</em> line starts with the same superscript marker,
+	 *       plus any following non-empty lines that do *not* start a new superscript definition
+	 *       (multiline body).
+	 * </ul>
+	 *
+	 * We do not pair notes by document order, URL shape, or trailing-section heuristics.
+	 */
+	public static String linkFootnotes(String markdown) {
+		if (markdown == null || markdown.isEmpty() || GFM_NOTE.matcher(markdown).find())
+			return markdown;
+		List<String> lines = Arrays.asList(
+			markdown.replace("\r\n", "\n").replace('\r', '\n').split("\n", -1));
+		// find notes
+		Map<String,MarkdownBlock> notes = new HashMap<>(); {
+			for (int i = 0; i < lines.size(); i++) {
+				String line = lines.get(i).trim();
+				String noteID = null, noteBodyFirstLine = null; {
+					// skip list/table/HTML prefixes before a superscript marker
+					int j = 0;
+					while (j < line.length() && ">-*+| \t".indexOf(line.charAt(j)) >= 0) j++;
+					Matcher m = NOTE.matcher(line.substring(j));
+					if (m.matches()) {
+						String unicode = m.group(3);
+						if (unicode != null) {
+							noteID = "";
+							for (j = 0; j < unicode.length(); j++)
+								noteID += SUP_MAP.get(unicode.charAt(j++));
+						} else
+							noteID = m.group(2).trim();
+						noteBodyFirstLine = m.group(4).trim();
+					} else
+						continue;
+				}
+				List<String> note = new ArrayList<>();
+				int start = i;
+				int end; {
+					// first body line may be empty when the marker is alone on the line and the
+					// text continues on following lines
+					if (!noteBodyFirstLine.isEmpty())
+						note.add("[^" + noteID + "]: " + noteBodyFirstLine);
+					// add remaining lines in block
+					for (i = i + 1 ; i < lines.size(); i++) {
+						String next = lines.get(i).trim();
+						if (next.isEmpty())
+							break;
+						int j = 0;
+						while (j < next.length() && ">-*+| \t".indexOf(next.charAt(j)) >= 0) j++;
+						if (NOTE.matcher(next.substring(j)).matches())
+							break;
+						note.add((note.isEmpty() ? "[^" + noteID + "]: " : "    ") + next);
+					}
+					end = i;
+				}
+				if (!note.isEmpty())
+					notes.put(noteID, new MarkdownBlock(start, end, note));
+			}
+		}
+		if (notes.isEmpty())
+			return markdown;
+		StringBuilder result = new StringBuilder();
+		// find note references
+		lines: for (int i = 0; i < lines.size(); i++) {
+			for (MarkdownBlock n : notes.values())
+				if (n.start == i) {
+					n.lines.forEach(l -> result.append(l).append('\n'));
+					i = n.end - 1;
+					continue lines;
+				}
+			String line = lines.get(i);
+			StringBuffer processedLine = new StringBuffer(); {
+				Matcher m = NOTEREF.matcher(line);
+				while (m.find()) {
+					String id; {
+						String unicode = m.group(2);
+						if (unicode != null) {
+							id = "";
+							for (int j = 0; j < unicode.length(); j++)
+								id += SUP_MAP.get(unicode.charAt(j++));
+						} else
+							id = m.group(1).trim();
+					}
+					m.appendReplacement(processedLine,
+					                    Matcher.quoteReplacement(
+					                        notes.containsKey(id) ? "[^" + id + "]" : m.group()));
+				}
+				m.appendTail(processedLine);
+			}
+			result.append(processedLine).append('\n');
+		}
+		if (!markdown.endsWith("\n"))
+			result.setLength(result.length() - 1);
+		return result.toString();
 	}
 
 	private static final URI markdownToHTML

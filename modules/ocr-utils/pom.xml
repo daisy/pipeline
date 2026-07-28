@@ -64,7 +64,8 @@
   <properties>
     <expose-services>
       org.daisy.pipeline.ocr.impl.PDFToWordScriptProvider,
-      org.daisy.pipeline.ocr.mistral.impl.MistralOCRService
+      org.daisy.pipeline.ocr.mistral.impl.MistralOCRService,
+      org.daisy.pipeline.ocr.datalab.impl.DatalabOCRService
     </expose-services>
   </properties>
 
