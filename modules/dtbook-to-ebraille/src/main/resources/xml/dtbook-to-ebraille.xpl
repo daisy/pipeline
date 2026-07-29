@@ -205,6 +205,11 @@
 						<p:empty/>
 					</p:input>
 				</px:css-cascade>
+				<p:delete match="//dtb:head/dtb:meta[@name='dc:Language']">
+					<!-- delete dc:language because px:transform does not change it, and so that
+					     EPUB metadata will be taken from xml:lang of the DTBook (which is changed
+					     by px:transform) -->
+				</p:delete>
 				<px:transform px:progress="1/2">
 					<!-- note that this step also translates text inside head (such as style
 					     elements), but this text should normally not end up in the result eBraille -->
