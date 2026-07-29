@@ -932,7 +932,7 @@
 							<meta property="a11y:brailleSystem">UEB grade1</meta>
 							<meta property="a11y:completeTranscription">true</meta>
 							<meta property="a11y:producer">Unknown</meta>
-							<meta property="a11y:tactileGraphics">false</meta>
+							<meta property="a11y:tactileGraphics">none</meta>
 							<meta property="schema:accessMode">tactile</meta>
 							<meta property="nordic:guidelines">2015-1</meta>
 							<meta property="nordic:supplier">MTM</meta>

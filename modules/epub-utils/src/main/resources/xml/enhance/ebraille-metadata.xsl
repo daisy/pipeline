@@ -129,7 +129,7 @@
 			<xsl:if test="$ebraille-compatibility">
 				<xsl:if test="not(collection()//meta[@property='a11y:tactileGraphics'][not(@refines)])">
 					<!-- this can only be true if the original contains tactile graphics -->
-					<meta property="a11y:tactileGraphics">false</meta>
+					<meta property="a11y:tactileGraphics">none</meta>
 				</xsl:if>
 			</xsl:if>
 			<!-- ========================
