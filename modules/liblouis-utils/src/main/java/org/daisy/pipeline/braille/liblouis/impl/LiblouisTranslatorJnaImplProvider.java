@@ -425,7 +425,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 							continue;
 						system.add(part.replace(" ", "-"));
 					}
-					brailleCode = new BrailleCode(join(system, "-"), grade, specialization);
+					brailleCode = new BrailleCode(join(system, " "), grade, specialization);
 				}
 				LiblouisTranslatorJnaImplProvider.this.rememberId(this); // otherwise only HandleTextTransformNone
 				                                                         // wrapper may be remembered
