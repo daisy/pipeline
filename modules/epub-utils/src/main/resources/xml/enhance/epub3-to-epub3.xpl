@@ -82,6 +82,11 @@
             always the braille rendition.</p>
         </p:documentation>
     </p:option>
+    <p:option name="delete-original-rendition" select="false()" cx:as="xs:boolean">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>Delete the original rendition if a braille rendition is created.</p>
+        </p:documentation>
+    </p:option>
     <p:option name="content-media-types" select="'application/xhtml+xml'">
         <!--
             space separated list of content document media-types to include in the braille rendition
@@ -147,6 +152,7 @@
             px:fileset-filter
             px:fileset-update
             px:fileset-intersect
+            px:fileset-diff
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl">
@@ -921,7 +927,7 @@
                 </px:fileset-intersect>
             </p:group>
             <p:choose name="maybe-move-default-rendition">
-                <p:when test="$ebraille-compatibility">
+                <p:when test="$ebraille-compatibility and not($delete-original-rendition)">
                     <!--
                         move the default rendition to another folder
                     -->
@@ -1002,51 +1008,64 @@
                 (for creating mapping document later)
             -->
             
-            <p:group name="default-rendition.html-with-sync-points">
-                <p:output port="fileset">
-                    <p:pipe step="load" port="result.fileset"/>
-                </p:output>
-                <p:output port="in-memory" sequence="true" primary="true"/>
-                <px:fileset-load name="load">
-                    <p:input port="fileset">
-                        <p:pipe step="maybe-move-default-rendition" port="default-rendition.fileset"/>
-                    </p:input>
-                    <p:input port="in-memory">
-                        <p:pipe step="maybe-move-default-rendition" port="in-memory"/>
-                    </p:input>
-                    <p:with-option name="media-types" select="$content-media-types"/>
-                </px:fileset-load>
-                <p:for-each>
-                    <pxi:html-insert-sync-points>
-                        <!--
-                            insert synchronization anchors at the start of blocks (first text node
-                            after the beginning or end of a block element, and skipping any white
-                            space)
-                        -->
-                    </pxi:html-insert-sync-points>
-                </p:for-each>
-                <px:add-ids match="*[@class='__tmp__sync__']" prefix="__sync__"/>
-                <p:for-each>
-                    <!-- perform a unity XSL transformation because otherwise for some reason the
-                         base URI is not available within resource-map.xsl -->
-                    <p:xslt>
-                        <p:input port="stylesheet">
-                            <p:inline>
-                                <xsl:stylesheet version="2.0">
-                                    <xsl:template match="@*|node()">
-                                        <xsl:copy>
-                                            <xsl:apply-templates select="@*|node()"/>
-                                        </xsl:copy>
-                                    </xsl:template>
-                                </xsl:stylesheet>
-                            </p:inline>
+            <p:choose name="default-rendition.html-with-sync-points">
+                <p:when test="not($delete-original-rendition)">
+                    <p:output port="fileset">
+                        <p:pipe step="load" port="result.fileset"/>
+                    </p:output>
+                    <p:output port="in-memory" sequence="true" primary="true"/>
+                    <px:fileset-load name="load">
+                        <p:input port="fileset">
+                            <p:pipe step="maybe-move-default-rendition" port="default-rendition.fileset"/>
                         </p:input>
-                        <p:input port="parameters">
+                        <p:input port="in-memory">
+                            <p:pipe step="maybe-move-default-rendition" port="in-memory"/>
+                        </p:input>
+                        <p:with-option name="media-types" select="$content-media-types"/>
+                    </px:fileset-load>
+                    <p:for-each>
+                        <pxi:html-insert-sync-points>
+                            <!--
+                                insert synchronization anchors at the start of blocks (first text node
+                                after the beginning or end of a block element, and skipping any white
+                                space)
+                            -->
+                        </pxi:html-insert-sync-points>
+                    </p:for-each>
+                    <px:add-ids match="*[@class='__tmp__sync__']" prefix="__sync__"/>
+                    <p:for-each>
+                        <!-- perform a unity XSL transformation because otherwise for some reason the
+                             base URI is not available within resource-map.xsl -->
+                        <p:xslt>
+                            <p:input port="stylesheet">
+                                <p:inline>
+                                    <xsl:stylesheet version="2.0">
+                                        <xsl:template match="@*|node()">
+                                            <xsl:copy>
+                                                <xsl:apply-templates select="@*|node()"/>
+                                            </xsl:copy>
+                                        </xsl:template>
+                                    </xsl:stylesheet>
+                                </p:inline>
+                            </p:input>
+                            <p:input port="parameters">
+                                <p:empty/>
+                            </p:input>
+                        </p:xslt>
+                    </p:for-each>
+                </p:when>
+                <p:otherwise>
+                    <p:output port="fileset">
+                        <p:pipe step="maybe-move-default-rendition" port="default-rendition.fileset"/>
+                    </p:output>
+                    <p:output port="in-memory" sequence="true" primary="true"/>
+                    <p:identity>
+                        <p:input port="source">
                             <p:empty/>
                         </p:input>
-                    </p:xslt>
-                </p:for-each>
-            </p:group>
+                    </p:identity>
+                </p:otherwise>
+            </p:choose>
             
             <!--
                 copy html and smil files
@@ -1054,23 +1073,75 @@
             
             <p:sink/>
             <p:group name="braille-rendition.copy">
-                <p:output port="fileset" primary="true"/>
+                <p:output port="fileset" primary="true">
+                    <p:pipe step="rename" port="result.fileset"/>
+                </p:output>
                 <p:output port="in-memory" sequence="true">
                     <p:pipe step="rename" port="result.in-memory"/>
                 </p:output>
-                <px:fileset-filter name="filter">
+                <!--
+                    take html with sync points
+                -->
+                <p:identity>
                     <p:input port="source">
                         <p:pipe step="maybe-move-default-rendition" port="default-rendition.fileset"/>
                     </p:input>
-                    <p:with-option name="media-types"
-                                   select="string-join(
-                                             ('application/oebps-package+xml','application/smil+xml',
-                                              if ($ebraille-compatibility='strict') then ()
-                                                                                    else 'application/x-dtbncx+xml',
-                                              $content-media-types),
-                                             ' ')"/>
-                </px:fileset-filter>
+                </p:identity>
+                <p:choose name="maybe-update-html">
+                    <p:when test="not($delete-original-rendition)">
+                        <p:output port="fileset" primary="true"/>
+                        <p:output port="in-memory" sequence="true">
+                            <p:pipe step="update-html" port="result.in-memory"/>
+                        </p:output>
+                        <px:fileset-filter>
+                            <p:with-option name="media-types"
+                                           select="string-join(
+                                                     ('application/oebps-package+xml','application/smil+xml',
+                                                      if ($ebraille-compatibility='strict') then ()
+                                                                                            else 'application/x-dtbncx+xml',
+                                                      $content-media-types),
+                                                     ' ')"/>
+                        </px:fileset-filter>
+                        <px:fileset-update name="update-html">
+                            <p:input port="source.in-memory">
+                                <p:pipe step="maybe-move-default-rendition" port="in-memory"/>
+                            </p:input>
+                            <p:input port="update.fileset">
+                                <p:pipe step="default-rendition.html-with-sync-points" port="fileset"/>
+                            </p:input>
+                            <p:input port="update.in-memory">
+                                <p:pipe step="default-rendition.html-with-sync-points" port="in-memory"/>
+                            </p:input>
+                        </px:fileset-update>
+                    </p:when>
+                    <p:otherwise>
+                        <!-- No need for html with sync points because there will be no rendition mapping. No
+                             need for filtering because no files are shared between renditions. Note that some
+                             files, notably CSS and resources referenced from CSS, could be dropped because
+                             all original CSS is detached. -->
+                        <p:output port="fileset" primary="true"/>
+                        <p:output port="in-memory" sequence="true">
+                            <p:pipe step="maybe-move-default-rendition" port="in-memory"/>
+                        </p:output>
+                        <p:identity/>
+                    </p:otherwise>
+                </p:choose>
+                <!--
+                    rename files and update cross references
+                -->
+                <px:epub-rename-files name="rename">
+                    <p:input port="source.in-memory">
+                        <p:pipe step="maybe-update-html" port="in-memory"/>
+                    </p:input>
+                    <p:input port="mapping">
+                        <p:pipe step="mapping" port="result"/>
+                    </p:input>
+                </px:epub-rename-files>
+                <p:sink/>
                 <p:xslt name="mapping">
+                    <p:input port="source">
+                        <p:pipe step="maybe-update-html" port="fileset"/>
+                    </p:input>
                     <p:input port="stylesheet">
                         <p:document href="braille-rendition.fileset.xsl"/>
                     </p:input>
@@ -1078,37 +1149,10 @@
                         <p:pipe step="maybe-copy" port="fileset"/>
                     </p:with-param>
                     <p:with-param name="ebraille-compatibility" select="$ebraille-compatibility"/>
+                    <p:with-param name="delete-original-rendition" select="$delete-original-rendition"/>
                     <p:with-param name="content-media-types" select="tokenize($content-media-types,'\s+')[not(.='')]"/>
                 </p:xslt>
                 <p:sink/>
-                <!--
-                    take html with sync points
-                -->
-                <px:fileset-update name="update-html">
-                    <p:input port="source.fileset">
-                        <p:pipe step="filter" port="result"/>
-                    </p:input>
-                    <p:input port="source.in-memory">
-                        <p:pipe step="maybe-move-default-rendition" port="in-memory"/>
-                    </p:input>
-                    <p:input port="update.fileset">
-                        <p:pipe step="default-rendition.html-with-sync-points" port="fileset"/>
-                    </p:input>
-                    <p:input port="update.in-memory">
-                        <p:pipe step="default-rendition.html-with-sync-points" port="in-memory"/>
-                    </p:input>
-                </px:fileset-update>
-                <!--
-                    rename files and update cross references
-                -->
-                <px:epub-rename-files name="rename">
-                    <p:input port="source.in-memory">
-                        <p:pipe step="update-html" port="result.in-memory"/>
-                    </p:input>
-                    <p:input port="mapping">
-                        <p:pipe step="mapping" port="result"/>
-                    </p:input>
-                </px:epub-rename-files>
             </p:group>
             
             <!--
@@ -1307,9 +1351,16 @@
                             <p:input port="source.in-memory">
                                 <p:pipe step="compile" port="result.in-memory"/>
                             </p:input>
+                            <!-- FIXME: Assuming that if the original rendition is deleted, it does not have a
+                                 "css" folder. (Note that if some files are overwritten, it is probably not a
+                                 problem because all original CSS files are detached anyway.) -->
                             <p:with-option name="target"
                                            select="resolve-uri(
-                                                     if ($ebraille-compatibility) then 'ebraille/css/' else 'braille/css/',
+                                                     if ($ebraille-compatibility)
+                                                       then 'ebraille/css/'
+                                                       else if ($delete-original-rendition)
+                                                         then 'css/'
+                                                         else 'braille/css/',
                                                      base-uri(/*))">
                                 <p:pipe step="maybe-copy" port="fileset"/>
                             </p:with-option>
@@ -1489,21 +1540,50 @@
             <p:sink/>
             
             <!--
-                add braille rendition
+                add braille rendition (and possibly delete original rendition)
             -->
             
             <p:group name="add-rendition">
                 <p:output port="fileset" primary="true"/>
                 <p:output port="in-memory" sequence="true">
-                    <p:pipe step="maybe-move-default-rendition" port="in-memory"/>
-                    <p:pipe step="braille-rendition.process-package-doc" port="in-memory"/>
+                    <p:pipe step="update" port="result.in-memory"/>
                 </p:output>
-                <px:fileset-join>
+                <p:identity>
                     <p:input port="source">
                         <p:pipe step="maybe-move-default-rendition" port="fileset"/>
+                    </p:input>
+                </p:identity>
+                <p:choose>
+                    <p:when test="$delete-original-rendition">
+                        <px:fileset-diff>
+                            <p:input port="secondary">
+                                <p:pipe step="maybe-move-default-rendition" port="default-rendition.fileset"/>
+                            </p:input>
+                        </px:fileset-diff>
+                    </p:when>
+                    <p:otherwise>
+                        <p:identity/>
+                    </p:otherwise>
+                </p:choose>
+                <p:identity name="maybe-delete-original-rendition"/>
+                <p:sink/>
+                <px:fileset-join>
+                    <p:input port="source">
+                        <p:pipe step="maybe-delete-original-rendition" port="result"/>
                         <p:pipe step="braille-rendition.process-package-doc" port="fileset"/>
                     </p:input>
                 </px:fileset-join>
+                <px:fileset-update name="update">
+                    <p:input port="source.in-memory">
+                        <p:pipe step="maybe-move-default-rendition" port="in-memory"/>
+                    </p:input>
+                    <p:input port="update.fileset">
+                        <p:pipe step="braille-rendition.process-package-doc" port="fileset"/>
+                    </p:input>
+                    <p:input port="update.in-memory">
+                        <p:pipe step="braille-rendition.process-package-doc" port="in-memory"/>
+                    </p:input>
+                </px:fileset-update>
             </p:group>
             
             <!--
@@ -1562,54 +1642,63 @@
             <!--
                 create and add rendition mapping document
             -->
-            <p:group name="add-rendition-mapping">
-                <p:output port="fileset" primary="true">
-                    <p:pipe step="add-entry" port="result.fileset"/>
-                </p:output>
-                <p:output port="in-memory" sequence="true">
-                    <p:pipe step="add-entry" port="result.in-memory"/>
-                </p:output>
-                <px:fileset-add-entry name="add-entry">
-                    <p:input port="source.in-memory">
+            <p:choose name="add-rendition-mapping">
+                <p:when test="$delete-original-rendition">
+                    <p:output port="fileset" primary="true"/>
+                    <p:output port="in-memory" sequence="true">
                         <p:pipe step="add-metadata-xml" port="in-memory"/>
-                    </p:input>
-                    <p:input port="entry">
-                        <p:pipe step="rendition-mapping" port="result"/>
-                    </p:input>
-                    <p:with-param port="file-attributes" name="indent" select="'true'"/>
-                </px:fileset-add-entry>
-                <p:sink/>
-                <p:xslt template-name="main">
-                    <p:input port="stylesheet">
-                        <p:document href="resource-map.xsl"/>
-                    </p:input>
-                    <p:input port="source">
-                        <p:empty/>
-                    </p:input>
-                    <p:with-param name="default-rendition.package-document" select="/">
-                        <p:pipe step="default-rendition.package-document" port="result"/>
-                    </p:with-param>
-                    <p:with-param name="braille-rendition.package-document" select="/">
-                        <p:pipe step="braille-rendition.package-document" port="result"/>
-                    </p:with-param>
-                    <p:with-param name="default-rendition.html" select="collection()">
-                        <p:pipe step="default-rendition.html-with-sync-points" port="in-memory"/>
-                    </p:with-param>
-                    <p:with-param name="braille-rendition.html" select="collection()">
-                        <p:pipe step="braille-rendition.process-html" port="html-with-sync-points.in-memory"/>
-                    </p:with-param>
-                    <!-- FIXME: assumes there is no file named "renditionMapping.html" yet -->
-                    <p:with-param name="output-base-uri" select="resolve-uri('renditionMapping.html',base-uri(/*))">
-                        <p:pipe step="maybe-copy" port="fileset"/>
-                    </p:with-param>
-                </p:xslt>
-                <px:set-base-uri name="rendition-mapping">
-                    <p:with-option name="base-uri" select="resolve-uri('renditionMapping.html',base-uri(/*))">
-                        <p:pipe step="maybe-copy" port="fileset"/>
-                    </p:with-option>
-                </px:set-base-uri>
-                <p:sink/>
-            </p:group>
+                    </p:output>
+                    <p:identity/>
+                </p:when>
+                <p:otherwise>
+                    <p:output port="fileset" primary="true">
+                        <p:pipe step="add-entry" port="result.fileset"/>
+                    </p:output>
+                    <p:output port="in-memory" sequence="true">
+                        <p:pipe step="add-entry" port="result.in-memory"/>
+                    </p:output>
+                    <px:fileset-add-entry name="add-entry">
+                        <p:input port="source.in-memory">
+                            <p:pipe step="add-metadata-xml" port="in-memory"/>
+                        </p:input>
+                        <p:input port="entry">
+                            <p:pipe step="rendition-mapping" port="result"/>
+                        </p:input>
+                        <p:with-param port="file-attributes" name="indent" select="'true'"/>
+                    </px:fileset-add-entry>
+                    <p:sink/>
+                    <p:xslt template-name="main">
+                        <p:input port="stylesheet">
+                            <p:document href="resource-map.xsl"/>
+                        </p:input>
+                        <p:input port="source">
+                            <p:empty/>
+                        </p:input>
+                        <p:with-param name="default-rendition.package-document" select="/">
+                            <p:pipe step="default-rendition.package-document" port="result"/>
+                        </p:with-param>
+                        <p:with-param name="braille-rendition.package-document" select="/">
+                            <p:pipe step="braille-rendition.package-document" port="result"/>
+                        </p:with-param>
+                        <p:with-param name="default-rendition.html" select="collection()">
+                            <p:pipe step="default-rendition.html-with-sync-points" port="in-memory"/>
+                        </p:with-param>
+                        <p:with-param name="braille-rendition.html" select="collection()">
+                            <p:pipe step="braille-rendition.process-html" port="html-with-sync-points.in-memory"/>
+                        </p:with-param>
+                        <!-- FIXME: assumes there is no file named "renditionMapping.html" yet -->
+                        <p:with-param name="output-base-uri" select="resolve-uri('renditionMapping.html',base-uri(/*))">
+                            <p:pipe step="maybe-copy" port="fileset"/>
+                        </p:with-param>
+                    </p:xslt>
+                    <px:set-base-uri name="rendition-mapping">
+                        <p:with-option name="base-uri" select="resolve-uri('renditionMapping.html',base-uri(/*))">
+                            <p:pipe step="maybe-copy" port="fileset"/>
+                        </p:with-option>
+                    </px:set-base-uri>
+                    <p:sink/>
+                </p:otherwise>
+            </p:choose>
             
             <!--
                 update container.xml
@@ -1650,6 +1739,14 @@
                     <p:variable name="epub-base" select="base-uri(/*)">
                         <p:pipe step="maybe-copy" port="fileset"/>
                     </p:variable>
+                    <p:choose>
+                        <p:when test="$delete-original-rendition">
+                            <p:delete match="/ocf:container/ocf:rootfiles/ocf:rootfile[1]"/>
+                        </p:when>
+                        <p:otherwise>
+                            <p:identity/>
+                        </p:otherwise>
+                    </p:choose>
                     <p:insert match="/ocf:container/ocf:rootfiles">
                         <p:input port="insertion">
                             <p:inline xmlns="urn:oasis:names:tc:opendocument:xmlns:container">
@@ -1658,7 +1755,8 @@
                             </p:inline>
                         </p:input>
                         <p:with-option name="position" select="if ($set-default-rendition-to-braille
-                                                                   or $ebraille-compatibility)
+                                                                   or $ebraille-compatibility
+                                                                   or $delete-original-rendition)
                                                                then 'first-child'
                                                                else 'last-child'"/>
                     </p:insert>
@@ -1681,15 +1779,22 @@
                             <p:pipe step="braille-rendition.package-document" port="result"/>
                         </p:with-option>
                     </p:add-attribute>
-                    <p:insert position="last-child" match="/ocf:container">
-                        <p:input port="insertion">
-                            <p:inline xmlns="urn:oasis:names:tc:opendocument:xmlns:container">
-                                <links>
-                                    <link href="renditionMapping.html" rel="mapping" media-type="application/xhtml+xml"/>
-                                </links>
-                            </p:inline>
-                        </p:input>
-                    </p:insert>
+                    <p:choose>
+                        <p:when test="not($delete-original-rendition)">
+                            <p:insert position="last-child" match="/ocf:container">
+                                <p:input port="insertion">
+                                    <p:inline xmlns="urn:oasis:names:tc:opendocument:xmlns:container">
+                                        <links>
+                                            <link href="renditionMapping.html" rel="mapping" media-type="application/xhtml+xml"/>
+                                        </links>
+                                    </p:inline>
+                                </p:input>
+                            </p:insert>
+                        </p:when>
+                        <p:otherwise>
+                            <p:identity/>
+                        </p:otherwise>
+                    </p:choose>
                     <px:set-base-uri>
                         <p:with-option name="base-uri" select="base-uri(/*)">
                             <p:pipe step="original-container" port="result"/>

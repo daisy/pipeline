@@ -9,6 +9,7 @@
 	
 	<xsl:param name="epub-base" required="yes" as="xs:string"/>
 	<xsl:param name="ebraille-compatibility" required="yes" as="xs:string?"/>
+	<xsl:param name="delete-original-rendition" required="yes" as="xs:boolean"/>
 	<xsl:param name="content-media-types" required="yes" as="xs:string*"/>
 	
 	<xsl:variable name="original-base" as="xs:string"
@@ -19,12 +20,15 @@
 
 	<!--
 	    FIXME: assuming that the input does not have a "braille" folder yet
-	    (note that for eBraille output, the original default rendition is moved to another folder,
-	    so there can be no conflict as long as the input has only one rendition)
+	    (note that for eBraille output, the original default rendition, if not deleted, is moved to
+	    another folder, so in this case there can be no conflict as long as the input has only one
+	    rendition)
 	-->
 	<xsl:variable name="braille-base" as="xs:string"
 	              select="if ($ebraille-compatibility)
 	                      then resolve-uri('ebraille/',$epub-base)
+	                      else if ($delete-original-rendition)
+	                      then $epub-base
 	                      else resolve-uri('braille/',$epub-base)"/>
 
 	<xsl:template match="/">
@@ -35,17 +39,6 @@
 	
 	<xsl:template match="d:fileset/d:file">
 		<xsl:choose>
-			<xsl:when test="@media-type=($content-media-types,'application/smil+xml','application/x-dtbncx+xml')">
-				<xsl:variable name="original-href" select="resolve-uri(@href,pf:base-uri(.))"/>
-				<xsl:variable name="braille-href" select="if ($ebraille-compatibility and @role='nav')
-				                                          then resolve-uri('index.html',$epub-base)
-				                                          else resolve-uri(pf:relativize-uri($original-href,$original-base),
-				                                                           $braille-base)"/>
-				<xsl:element name="d:file">
-					<xsl:attribute name="href" select="$braille-href"/>
-					<xsl:attribute name="original-href" select="$original-href"/>
-				</xsl:element>
-			</xsl:when>
 			<xsl:when test="@media-type='application/oebps-package+xml'">
 				<xsl:variable name="original-href" select="resolve-uri(@href,pf:base-uri(.))"/>
 				<xsl:variable name="braille-href" select="if ($ebraille-compatibility)
@@ -56,6 +49,21 @@
 					<xsl:attribute name="original-href" select="$original-href"/>
 				</xsl:element>
 			</xsl:when>
+			<xsl:otherwise>
+				<!--
+				    In case of $delete-original-rendition, this includes everything except the package document.
+				    Otherwise, this includes only content documents, and possibly SMIL files and an NCX.
+				-->
+				<xsl:variable name="original-href" select="resolve-uri(@href,pf:base-uri(.))"/>
+				<xsl:variable name="braille-href" select="if ($ebraille-compatibility and @role='nav')
+				                                          then resolve-uri('index.html',$epub-base)
+				                                          else resolve-uri(pf:relativize-uri($original-href,$original-base),
+				                                                           $braille-base)"/>
+				<xsl:element name="d:file">
+					<xsl:attribute name="href" select="$braille-href"/>
+					<xsl:attribute name="original-href" select="$original-href"/>
+				</xsl:element>
+			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
 	
