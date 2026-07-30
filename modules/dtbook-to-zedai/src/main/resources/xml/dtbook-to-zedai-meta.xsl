@@ -38,6 +38,15 @@
                                        )">
                     <meta property="{lower-case(@name)}" content="{@content}"/>
                 </xsl:when>
+                <xsl:when test="@name='dc:Identifier'">
+                    <!-- Use first DTBook identifier as dc:source if no other source is
+                         defined. Drop other identifiers as a new identifier will be generated for
+                         the ZedAI. -->
+                    <xsl:if test="not(../preceding-sibling::dtb:meta[@name='dc:Identifier']
+                                      or //dtb:head/dtb:meta[@name='dc:Source'])">
+                        <meta property="dc:source" content="{@content}"/>
+                    </xsl:if>
+                </xsl:when>
                 <xsl:when test="@name='dtb:revisionDescription'">
                     <meta property="dc:description" content="{@content}"
                           about="#meta-dcdate"/>
