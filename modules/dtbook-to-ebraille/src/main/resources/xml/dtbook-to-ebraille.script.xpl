@@ -323,24 +323,16 @@ you can control that variable with the following parameters list: `(foo:true)`.<
             </p:when>
             <p:otherwise px:message="Storing">
               <p:documentation>
-                mimetype and META-INF/container.xml may be omitted when the eBraille
-                publication is not packaged in an EPUB container.
+                META-INF/container.xml may be omitted when the eBraille publication is not packaged
+                in an EPUB container.
               </p:documentation>
-              <px:fileset-filter name="filter-mimetype" href="mimetype">
-                <!-- assumes $output-dir-uri is the fileset base -->
-                <p:input port="source.in-memory">
-                  <p:pipe step="convert" port="result.in-memory"/>
-                </p:input>
-              </px:fileset-filter>
               <p:choose name="filter-container">
                 <p:when test="$include-original-text">
-                  <p:output port="fileset" primary="true">
-                    <p:pipe step="filter-mimetype" port="not-matched"/>
-                  </p:output>
+                  <p:output port="fileset" primary="true"/>
                   <p:output port="in-memory" sequence="true">
-                    <p:pipe step="filter-mimetype" port="not-matched.in-memory"/>
+                    <p:pipe step="convert" port="result.in-memory"/>
                   </p:output>
-                  <p:sink/>
+                  <p:identity/>
                 </p:when>
                 <p:otherwise>
                   <p:output port="fileset" primary="true">
@@ -349,13 +341,10 @@ you can control that variable with the following parameters list: `(foo:true)`.<
                   <p:output port="in-memory" sequence="true">
                     <p:pipe step="filter" port="not-matched.in-memory"/>
                   </p:output>
-                  <p:sink/>
                   <px:fileset-filter name="filter" href="META-INF/container.xml">
-                    <p:input port="source">
-                      <p:pipe step="filter-mimetype" port="not-matched"/>
-                    </p:input>
+                    <!-- assumes $output-dir-uri is the fileset base -->
                     <p:input port="source.in-memory">
-                      <p:pipe step="filter-mimetype" port="not-matched.in-memory"/>
+                      <p:pipe step="convert" port="result.in-memory"/>
                     </p:input>
                   </px:fileset-filter>
                   <p:sink/>
