@@ -963,6 +963,9 @@
                             <p:pipe step="move" port="mapping"/>
                         </p:input>
                     </px:epub-rename-files>
+                    <px:fileset-rebase>
+                        <p:with-option name="new-base" select="$epub-base"/>
+                    </px:fileset-rebase>
                 </p:when>
                 <p:otherwise>
                     <p:output port="fileset" primary="true">
