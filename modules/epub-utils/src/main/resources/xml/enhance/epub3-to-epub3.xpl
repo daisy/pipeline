@@ -1207,7 +1207,7 @@
                         <p:pipe step="default-rendition.package-document" port="result"/>
                     </p:variable>
                     <p:variable name="base" select="base-uri(/*)"/>
-                    <px:message message="Generating $1" severity="INFO">
+                    <px:message message="Generating $1" severity="DEBUG">
                         <p:with-option name="param1" select="substring-after($base,'!/')"/>
                     </px:message>
                     <p:choose>
@@ -1535,7 +1535,7 @@
                         <p:pipe step="package-doc" port="result"/>
                     </p:input>
                 </px:fileset-update>
-                <p:group name="add-ebraille-metadata">
+                <p:group name="add-ebraille-metadata" px:message="Updating metadata of braille rendition">
                     <p:output port="fileset" primary="true">
                         <p:pipe step="add" port="result.fileset"/>
                     </p:output>

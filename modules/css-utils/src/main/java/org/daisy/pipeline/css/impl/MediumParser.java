@@ -98,7 +98,7 @@ public class MediumParser {
 				MediaQuery q = MediaQueryParser.parse(features);
 				query = query != null ? query.and(q) : q;
 			}
-		logger.info("Selecting medium for query: " + query);
+		logger.debug("Selecting medium for query: " + query);
 		try {
 			return mediumProvider.get(query).iterator().next();
 		} finally {
