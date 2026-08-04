@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:dc="http://purl.org/dc/elements/1.1/"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
@@ -57,30 +57,59 @@
 			<xsl:if test="$ebraille-compatibility">
 				<xsl:if test="not(collection()//meta[@property='dcterms:dateCopyrighted'][not(@refines)])">
 					<meta property="dcterms:dateCopyrighted">
+						<xsl:variable name="date" as="xs:string?">
+							<xsl:choose>
+								<!-- if a dcterms:date refinement on dc:source is present, take that value -->
+								<xsl:when test="some $src in collection()//dc:source[not(@refines)]
+								                satisfies $src/../meta[@property='dcterms:date']
+								                                      [@refines=concat('#',$src/@id)]">
+									<xsl:sequence select="(for $src in collection()//dc:source[not(@refines)] return
+									                       $src/../meta[@property='dcterms:date']
+									                                   [@refines=concat('#',$src/@id)]
+									                       )[1]/string(.)"/>
+								</xsl:when>
+								<!-- otherwise if dc:source is unknown, take dc:date -->
+								<xsl:when test="not(collection()//dc:source[not(@refines)]) and
+								                //dc:date[not(@refines)]">
+									<xsl:call-template name="pf:warn">
+										<xsl:with-param name="msg"
+										                select="'dcterms:dateCopyrighted taken from original rendition''s dc:date'"/>
+									</xsl:call-template>
+									<xsl:sequence select="//dc:date[not(@refines)]/string(.)[1]"/>
+								</xsl:when>
+							</xsl:choose>
+						</xsl:variable>
 						<xsl:choose>
-							<!-- if a dcterms:date refinement on dc:source is present, take that value -->
-							<xsl:when test="some $src in collection()//dc:source[not(@refines)]
-							                satisfies $src/../meta[@property='dcterms:date']
-							                                      [@refines=concat('#',$src/@id)]">
-								<xsl:value-of select="(for $src in collection()//dc:source[not(@refines)] return
-								                       $src/../meta[@property='dcterms:date']
-								                                   [@refines=concat('#',$src/@id)]
-								                       )[1]/string(.)"/>
-							</xsl:when>
-							<!-- otherwise if dc:source is unknown, take dc:date -->
-							<xsl:when test="not(collection()//dc:source[not(@refines)]) and
-							                //dc:date[not(@refines)]">
-								<xsl:call-template name="pf:warn">
-									<xsl:with-param name="msg"
-									                select="'dcterms:dateCopyrighted taken from original rendition''s dc:date'"/>
-								</xsl:call-template>
-								<xsl:value-of select="//dc:date[not(@refines)]/string(.)[1]"/>
-							</xsl:when>
-							<xsl:otherwise>
+							<xsl:when test="empty($date)">
 								<xsl:call-template name="pf:warn">
 									<xsl:with-param name="msg" select="'dcterms:dateCopyrighted unknown'"/>
 								</xsl:call-template>
 								<xsl:text>Unknown</xsl:text>
+							</xsl:when>
+							<xsl:when test="matches($date,'^[0-9]{4}(-[0-9]{2}(-[0-9]{2})?)?$')">
+								<xsl:value-of select="$date"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:variable name="dateTime" as="xs:dateTime?">
+									<xsl:try>
+										<xsl:sequence select="parse-ietf-date($date)"/>
+										<xsl:catch>
+											<xsl:try>
+												<xsl:sequence select="xs:dateTime($date)"/>
+												<xsl:catch/>
+											</xsl:try>
+										</xsl:catch>
+									</xsl:try>
+								</xsl:variable>
+								<xsl:choose>
+									<xsl:when test="exists($dateTime)">
+										<xsl:value-of select="format-dateTime($dateTime,'[Y0001]-[M01]-[D01]')"/>
+									</xsl:when>
+									<xsl:otherwise>
+										<!-- We know this is not valid, but it's better to have a date than 'Unknown' -->
+										<xsl:value-of select="$date"/>
+									</xsl:otherwise>
+								</xsl:choose>
 							</xsl:otherwise>
 						</xsl:choose>
 					</meta>
