@@ -13,6 +13,7 @@
 	<xsl:include href="http://www.daisy.org/pipeline/modules/common-utils/generate-id.xsl"/>
 	
 	<xsl:param name="ebraille-compatibility" as="xs:string?" static="true"/> <!-- soft|strict -->
+	<xsl:param name="unreferenced-resources" as="document-node(element(d:fileset))"/>
 	
 	<xsl:variable name="css.fileset" select="collection()[2]"/>
 	<xsl:variable name="html" select="collection()[position() &gt; 2]"/>
@@ -65,7 +66,8 @@
 	                     manifest/item[@media-type='application/x-dtbncx+xml']|
 	                     spine/@toc|
 	                     guide|
-	                     tours"/>
+	                     tours"
+	              priority="0.6"/>
 	<!--
 	    Add CSS files
 	-->
@@ -73,18 +75,28 @@
 		<xsl:variable name="output-base-uri" select="pf:base-uri(/*)"/>
 		<xsl:variable name="manifest-with-css">
 			<xsl:copy>
-				<xsl:apply-templates select="@*|node()"/>
+				<xsl:apply-templates select="@*|node()">
+					<xsl:with-param name="unreferenced-resources"
+					                select="$unreferenced-resources//d:file/@href/resolve-uri(.,base-uri(..))"/>
+				</xsl:apply-templates>
 				<xsl:for-each select="$css.fileset//d:file">
+					<xsl:variable name="href" select="resolve-uri(@href,base-uri(.))"/>
 					<xsl:element name="item" xmlns="http://www.idpf.org/2007/opf">
-						<xsl:attribute name="href" select="pf:relativize-uri(
-						                                     resolve-uri(@href,base-uri(.)),
-						                                     $output-base-uri)"/>
+						<xsl:attribute name="href" select="pf:relativize-uri($href,$output-base-uri)"/>
 						<xsl:attribute name="media-type" select="'text/css'"/>
 					</xsl:element>
 				</xsl:for-each>
 			</xsl:copy>
 		</xsl:variable>
 		<xsl:apply-templates mode="add-ids" select="$manifest-with-css"/>
+	</xsl:template>
+	
+	<xsl:template match="manifest/item">
+		<xsl:param name="unreferenced-resources" as="xs:string*"/>
+		<xsl:variable name="href" select="resolve-uri(@href,base-uri(.))"/>
+		<xsl:if test="not($href=$unreferenced-resources)">
+			<xsl:next-match/>
+		</xsl:if>
 	</xsl:template>
 	
 	<xsl:template mode="add-ids" match="manifest">

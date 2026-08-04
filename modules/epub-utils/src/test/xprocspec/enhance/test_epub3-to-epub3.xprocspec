@@ -942,12 +942,6 @@
 								<meta property="nordic:supplier">MTM</meta>
 							</metadata>
 							<manifest>
-								<item id="item_1" href="original/css/accessibility.css" media-type="text/css"/>
-								<item id="item_2" href="original/css/fonts/opendyslexic/OpenDyslexic-Regular.otf" media-type="application/x-font-opentype"/>
-								<item id="item_3" href="original/css/fonts/opendyslexic/OpenDyslexic-Italic.otf" media-type="application/x-font-opentype"/>
-								<item id="item_4" href="original/css/fonts/opendyslexic/OpenDyslexic-Bold.otf" media-type="application/x-font-opentype"/>
-								<item id="item_5" href="original/css/fonts/opendyslexic/OpenDyslexic-BoldItalic.otf" media-type="application/x-font-opentype"/>
-								<item id="item_6" href="original/css/fonts/opendyslexic/OpenDyslexicMono-Regular.otf" media-type="application/x-font-opentype"/>
 								<item id="item_7" href="original/css/fonts/opendyslexic/LICENSE.txt" media-type="text/plain"/>
 								<item id="item_8" href="original/images/valentin.jpg" media-type="image/jpeg"/>
 								<item id="item_10" href="ebraille/C00000-1-cover.xhtml" media-type="application/xhtml+xml"/>
@@ -960,7 +954,7 @@
 								<item id="item_17" href="ebraille/C00000-8-conclusion.xhtml" media-type="application/xhtml+xml"/>
 								<item id="item_18" href="ebraille/C00000-9-footnotes.xhtml" media-type="application/xhtml+xml"/>
 								<item id="item_19" href="index.html" properties="nav" media-type="application/xhtml+xml"/>
-								<item id="item_9" href="ebraille/css/braille.css" media-type="text/css"/>
+								<item id="item_1" href="ebraille/css/braille.css" media-type="text/css"/>
 							</manifest>
 							<spine>
 								<itemref id="itemref_1" idref="item_10" linear="no"/>
@@ -1116,12 +1110,6 @@
 								<meta property="nordic:supplier">MTM</meta>
 							</metadata>
 							<manifest>
-								<item id="item_1" href="ebraille/css/accessibility.css" media-type="text/css"/>
-								<item id="item_2" href="ebraille/css/fonts/opendyslexic/OpenDyslexic-Regular.otf" media-type="application/x-font-opentype"/>
-								<item id="item_3" href="ebraille/css/fonts/opendyslexic/OpenDyslexic-Italic.otf" media-type="application/x-font-opentype"/>
-								<item id="item_4" href="ebraille/css/fonts/opendyslexic/OpenDyslexic-Bold.otf" media-type="application/x-font-opentype"/>
-								<item id="item_5" href="ebraille/css/fonts/opendyslexic/OpenDyslexic-BoldItalic.otf" media-type="application/x-font-opentype"/>
-								<item id="item_6" href="ebraille/css/fonts/opendyslexic/OpenDyslexicMono-Regular.otf" media-type="application/x-font-opentype"/>
 								<item id="item_7" href="ebraille/css/fonts/opendyslexic/LICENSE.txt" media-type="text/plain"/>
 								<item id="item_8" href="ebraille/images/valentin.jpg" media-type="image/jpeg"/>
 								<item id="item_10" href="ebraille/C00000-1-cover.xhtml" media-type="application/xhtml+xml"/>
@@ -1134,7 +1122,7 @@
 								<item id="item_17" href="ebraille/C00000-8-conclusion.xhtml" media-type="application/xhtml+xml"/>
 								<item id="item_18" href="ebraille/C00000-9-footnotes.xhtml" media-type="application/xhtml+xml"/>
 								<item id="item_19" href="index.html" properties="nav" media-type="application/xhtml+xml"/>
-								<item id="item_9" href="ebraille/css/braille.css" media-type="text/css"/>
+								<item id="item_1" href="ebraille/css/braille.css" media-type="text/css"/>
 							</manifest>
 							<spine>
 								<itemref id="itemref_1" idref="item_10" linear="no"/>

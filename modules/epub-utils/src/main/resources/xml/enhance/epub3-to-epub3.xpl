@@ -160,6 +160,7 @@
             px:html-outline
             px:html-break-detect
             px:html-unwrap-words
+            px:html-load
         </p:documentation>
     </p:import>
     <p:import href="../library.xpl">
@@ -1448,6 +1449,10 @@
                 <p:sink/>
                 <!--
                     change dc:language and dcterms:modified, and add extracted css files
+                    
+                    also drop resources that are referenced by the content documents of the original
+                    rendition, but not by the content documents of the braille rendition (the files are kept
+                    for now, because we aren't sure that they are not used by other renditions)
                 -->
                 <p:xslt name="package-doc">
                     <p:input port="source">
@@ -1461,7 +1466,57 @@
                     <p:with-param name="ebraille-compatibility" select="$ebraille-compatibility">
                         <p:empty/>
                     </p:with-param>
+                    <p:with-param name="unreferenced-resources" select="/">
+                        <p:pipe step="unreferenced-resources" port="result"/>
+                    </p:with-param>
                 </p:xslt>
+                <p:sink/>
+                <p:group name="unreferenced-resources">
+                    <p:output port="result"/>
+                    <px:fileset-filter media-types="application/xhtml+xml" name="default-rendition-filter-html">
+                        <p:input port="source">
+                            <p:pipe step="maybe-move-default-rendition" port="fileset"/>
+                        </p:input>
+                        <p:input port="source.in-memory">
+                            <p:pipe step="maybe-move-default-rendition" port="in-memory"/>
+                        </p:input>
+                    </px:fileset-filter>
+                    <p:sink/>
+                    <px:fileset-join>
+                        <p:input port="source">
+                            <p:pipe step="braille-rendition.copy" port="fileset"/>
+                            <p:pipe step="default-rendition-filter-html" port="not-matched"/>
+                        </p:input>
+                    </px:fileset-join>
+                    <px:html-load name="original-html-fileset">
+                        <p:input port="source.in-memory">
+                            <p:pipe step="braille-rendition.copy" port="in-memory"/>
+                            <p:pipe step="default-rendition-filter-html" port="not-matched.in-memory"/>
+                        </p:input>
+                    </px:html-load>
+                    <p:sink/>
+                    <px:fileset-join>
+                        <p:input port="source">
+                            <p:pipe step="braille-rendition.process-html" port="result.fileset"/>
+                            <p:pipe step="default-rendition-filter-html" port="not-matched"/>
+                        </p:input>
+                    </px:fileset-join>
+                    <px:html-load name="braille-html-fileset">
+                        <p:input port="source.in-memory">
+                            <p:pipe step="braille-rendition.process-html" port="result.in-memory"/>
+                            <p:pipe step="default-rendition-filter-html" port="not-matched.in-memory"/>
+                        </p:input>
+                    </px:html-load>
+                    <p:sink/>
+                    <px:fileset-diff>
+                        <p:input port="source">
+                            <p:pipe step="original-html-fileset" port="result.fileset"/>
+                        </p:input>
+                        <p:input port="secondary">
+                            <p:pipe step="braille-html-fileset" port="result.fileset"/>
+                        </p:input>
+                    </px:fileset-diff>
+                </p:group>
                 <p:sink/>
                 <px:fileset-update name="update-fileset">
                     <p:input port="source.fileset">
