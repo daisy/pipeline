@@ -94,11 +94,16 @@
 	    are in memory (this is needed for html-to-fileset.xsl to correctly load resources referenced
 	    in CSS)
 	-->
-	<px:fileset-purge name="purge">
+	<px:fileset-purge>
 		<p:input port="source.in-memory">
 			<p:pipe step="main" port="source.in-memory"/>
 		</p:input>
 	</px:fileset-purge>
+	<!--
+	    remove media-type from css files so that px:css-to-fileset below only searches the css
+	    referenced by the html
+	-->
+	<p:delete match="d:file/@media-type[.='text/css']" name="purge"/>
 
 	<p:choose>
 		<p:when test="$handle-xinclude">
@@ -139,7 +144,7 @@
 				<p:document href="../xslt/html-to-fileset.xsl"/>
 			</p:input>
 			<p:with-param port="parameters" name="context.fileset" select="/">
-				<p:pipe step="purge" port="result.fileset"/>
+				<p:pipe step="purge" port="result"/>
 			</p:with-param>
 			<p:with-param port="parameters" name="context.in-memory" select="collection()">
 				<p:pipe step="main" port="source.in-memory"/>
@@ -202,7 +207,7 @@
 				<p:input port="source">
 					<p:pipe step="html-and-resources" port="result"/>
 					<p:pipe step="stylesheets-from-pi" port="result"/>
-					<p:pipe step="purge" port="result.fileset"/>
+					<p:pipe step="purge" port="result"/>
 				</p:input>
 			</px:fileset-join>
 			<px:css-to-fileset>
