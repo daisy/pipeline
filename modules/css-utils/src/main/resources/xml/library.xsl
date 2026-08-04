@@ -106,6 +106,9 @@
 		<xsl:choose>
 			<xsl:when test="$file[@original-href]">
 				<xsl:variable name="url" select="$file/resolve-uri(@original-href,base-uri(.))"/>
+				<xsl:variable name="url" select="if (matches($url,'^file:') and contains($url,'!/'))
+				                                 then replace($url,'^file:','jar:file:')
+				                                 else $url"/>
 				<xsl:if test="unparsed-text-available($url)">
 					<xsl:sequence select="unparsed-text($url)"/>
 				</xsl:if>
@@ -113,9 +116,14 @@
 			<xsl:when test="$file">
 				<xsl:sequence select="$context.in-memory[/c:data][base-uri(/*)=$url][1]/string(.)"/>
 			</xsl:when>
-			<xsl:when test="unparsed-text-available($url)">
-				<xsl:sequence select="unparsed-text($url)"/>
-			</xsl:when>
+			<xsl:otherwise>
+				<xsl:variable name="url" select="if (matches($url,'^file:') and contains($url,'!/'))
+				                                 then replace($url,'^file:','jar:file:')
+				                                 else $url"/>
+				<xsl:if test="unparsed-text-available($url)">
+					<xsl:sequence select="unparsed-text($url)"/>
+				</xsl:if>
+			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:function>
 
