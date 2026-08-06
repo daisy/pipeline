@@ -44,6 +44,12 @@
             <p>CSS style sheets as space separated list of absolute URIs.</p>
         </p:documentation>
     </p:option>
+    <p:option name="epub-stylesheet" cx:as="xs:string*" select="()">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>CSS style sheets to be attached to the HTML documents of the EPUB.</p>
+            <p>Sequence of absolute URIs of files that exist on disk.</p>
+        </p:documentation>
+    </p:option>
     <p:option name="lexicon" cx:as="xs:anyURI*" select="()">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p>PLS lexicons as list of absolute URIs.</p>
@@ -108,6 +114,14 @@
             and the package and navigation documents which have their own setting.</p>
         </p:documentation>
     </p:option>
+    <p:option name="css-path" required="false" cx:as="xs:string?" select="()">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>File path, relative to the content directory, of the directory that will contain the
+            CSS style sheets specified through the epub-stylesheet option, and all other style
+            sheets and resources references from it.</p>
+            <p>It is an error if an epub-stylesheet is specified without settings this option.</p>
+        </p:documentation>
+    </p:option>
     <p:option name="temp-dir" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p>Empty directory dedicated to this conversion. May be left empty in which
@@ -159,6 +173,11 @@
             px:tts-for-epub3
         </p:documentation>
     </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/css-utils/library.xpl">
+        <p:documentation>
+            px:css-to-fileset
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
         <p:documentation>
             px:set-base-uri
@@ -178,6 +197,7 @@
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
         <p:documentation>
             px:assert
+            px:tokenize
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl">
@@ -206,6 +226,10 @@
     <p:variable name="content-dir" select="pf:normalize-uri(concat($output-dir,$content-path,'/'))">
         <p:empty/>
     </p:variable>
+
+    <px:assert message="'css-path' option is mandatory when an 'epub-stylesheet' is specified" error-code="XXXXX">
+        <p:with-option name="test" select="not(exists($epub-stylesheet)) or exists($css-path)"/>
+    </px:assert>
 
     <!--=========================================================================-->
     <!-- MOVE FILESET TO NEW LOCATION                                            -->
@@ -386,13 +410,95 @@
     <p:identity px:message="Navigation Document Created."/>
 
     <!--=========================================================================-->
+    <!-- ATTACH CSS STYLE SHEETS                                                 -->
+    <!--=========================================================================-->
+
+    <p:group name="attach-css">
+        <p:output port="fileset" primary="true"/>
+        <p:output port="in-memory" sequence="true">
+            <p:pipe step="update" port="result.in-memory"/>
+        </p:output>
+        <p:sink/>
+        <px:fileset-load name="load-spine">
+            <p:input port="fileset">
+                <p:pipe step="content-docs-except-nav-and-diagram" port="result.fileset"/>
+            </p:input>
+            <p:input port="in-memory">
+                <p:pipe step="add-navigation-doc" port="result.in-memory"/>
+            </p:input>
+        </px:fileset-load>
+        <p:for-each>
+            <p:xslt>
+                <p:input port="stylesheet">
+                    <p:document href="attach-css.xsl"/>
+                </p:input>
+                <p:with-param name="stylesheet-links" select="//d:file[@role='stylesheet']/resolve-uri(@href,base-uri(.))">
+                    <p:pipe step="css" port="fileset"/>
+                </p:with-param>
+            </p:xslt>
+        </p:for-each>
+        <p:identity name="html-with-css-link"/>
+        <p:sink/>
+        <p:group name="css">
+            <p:output port="fileset"/>
+            <p:documentation>CSS style sheets to be attached to the HTML documents, together with any
+            referenced resources (fonts, images, imported style sheets). The top-level files are
+            marked with a <code>role</code> attribute with value <code>stylesheet</code>. The order of
+            the style sheets in the fileset determines the order in which <code>link</code> elements
+            are inserted in the HTML.</p:documentation>
+            <px:tokenize regex="\s+">
+                <p:with-option name="string" select="string-join($epub-stylesheet,' ')"/>
+            </px:tokenize>
+            <p:for-each>
+                <p:variable name="href" select="string(.)"/>
+                <px:fileset-create>
+                    <p:with-option name="base" select="resolve-uri('./',$href)"/>
+                </px:fileset-create>
+                <px:fileset-add-entry media-type="text/css">
+                    <p:with-option name="href" select="$href"/>
+                </px:fileset-add-entry>
+                <p:add-attribute match="d:file[@media-type='text/css']" attribute-name="role" attribute-value="stylesheet"/>
+                <px:css-to-fileset>
+                    <!-- warns about missing (including remote) resources and CSS files -->
+                </px:css-to-fileset>
+                <px:fileset-copy name="copy">
+                    <p:documentation>Copy all style sheets to a common place. This will raise an
+                    error if some referenced resources fall outside the directory that contains the
+                    style sheet.</p:documentation>
+                    <p:with-option name="target" select="pf:normalize-uri(concat($content-dir,$css-path,'/'))"/>
+                </px:fileset-copy>
+            </p:for-each>
+            <px:fileset-join/>
+            <px:epub3-safe-uris/>
+        </p:group>
+        <p:sink/>
+        <px:fileset-join>
+            <p:input port="source">
+                <p:pipe step="add-navigation-doc" port="result.fileset"/>
+                <p:pipe step="css" port="fileset"/>
+            </p:input>
+        </px:fileset-join>
+        <px:fileset-update name="update">
+            <p:input port="source.in-memory">
+                <p:pipe step="add-navigation-doc" port="result.in-memory"/>
+            </p:input>
+            <p:input port="update.fileset">
+                <p:pipe step="load-spine" port="result.fileset"/>
+            </p:input>
+            <p:input port="update.in-memory">
+                <p:pipe step="html-with-css-link" port="result"/>
+            </p:input>
+        </px:fileset-update>
+    </p:group>
+
+    <!--=========================================================================-->
     <!-- CALL THE TTS                                                            -->
     <!--=========================================================================-->
 
     <!-- FIXME: include resources such as lexicons in input -->
     <px:tts-for-epub3 name="tts" px:progress=".6">
       <p:input port="source.in-memory">
-          <p:pipe step="add-navigation-doc" port="result.in-memory"/>
+          <p:pipe step="attach-css" port="in-memory"/>
       </p:input>
       <p:input port="config">
           <p:pipe step="main" port="tts-config"/>

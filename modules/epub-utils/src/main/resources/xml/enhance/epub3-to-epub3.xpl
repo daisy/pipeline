@@ -60,7 +60,12 @@
             other features.</p>
         </p:documentation>
     </p:option>
-    <p:option name="ebraille-stylesheet" cx:as="xs:string*" select="()"/>
+    <p:option name="ebraille-stylesheet" cx:as="xs:string*" select="()">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>CSS style sheets to be attached to the HTML documents.</p>
+            <p>Sequence of absolute URIs of files that exist on disk.</p>
+        </p:documentation>
+    </p:option>
     <p:option name="tts" required="false" select="'default'" cx:as="xs:string"/>
     <p:option name="sentence-detection" required="false" select="'false'" cx:as="xs:string"/>
     <p:option name="braille-translator" select="''"/>

@@ -71,6 +71,8 @@
 					</metadata>
 				</x:document>
 			</x:input>
+			<x:option name="epub-stylesheet" select="resolve-uri('../resources/style%202.css')"/>
+			<x:option name="css-path" select="'css'"/>
 			<x:option name="output-dir" select="resolve-uri('output-dir/')"/>
 		</x:call>
 		<x:context label="the fileset.out port">
@@ -84,6 +86,7 @@
 					<d:file href="output-dir/EPUB/foo.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
 					<d:file href="output-dir/EPUB/image.svg" media-type="image/svg+xml"/>
 					<d:file href="output-dir/EPUB/style_1.css" media-type="text/css"/>
+					<d:file href="output-dir/EPUB/css/style_2.css" media-type="text/css" role="stylesheet" original-href="../resources/style%202.css"/>
 					<d:file href="output-dir/EPUB/toc.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
 					<d:file href="output-dir/EPUB/package.opf" media-type="application/oebps-package+xml"/>
 					<d:file href="output-dir/META-INF/container.xml" media-type="application/xml"/>
@@ -101,6 +104,7 @@
 						<meta charset="UTF-8"/>
 						<title>Minimal HTML</title>
 						<link rel="stylesheet" type="text/css" href="style_1.css"/>
+						<link rel="stylesheet" type="text/css" href="css/style_2.css"/>
 					</head>
 					<body id="a">
 						<section id="b">
@@ -167,6 +171,7 @@
 						<item href="style_1.css" media-type="text/css" id="item_3"/>
 						<item href="desc.xhtml" media-type="application/xhtml+xml" id="item_4"/>
 						<item href="toc.xhtml" media-type="application/xhtml+xml" id="item_5" properties="nav"/>
+						<item href="css/style_2.css" media-type="text/css" id="item_6"/>
 					</manifest>
 					<spine>
 						<itemref idref="item_1" id="itemref_1"/>

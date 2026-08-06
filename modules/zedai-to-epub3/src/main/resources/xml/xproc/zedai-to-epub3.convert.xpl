@@ -24,6 +24,12 @@
             <p>CSS style sheets as space separated list of absolute URIs.</p>
         </p:documentation>
     </p:option>
+    <p:option name="epub-stylesheet" cx:as="xs:string*" select="()">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>CSS style sheets to be attacheD to the HTML documents of the EPUB.</p>
+            <p>Sequence of absolute URIs of files that exist on disk.</p>
+        </p:documentation>
+    </p:option>
     <p:option name="lexicon" cx:as="xs:anyURI*" select="()">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p>PLS lexicons as list of absolute URIs.</p>
@@ -89,6 +95,14 @@
             <p>File path, relative to the root directory, of the directory that will contain all
             files except <code>mimetype</code>, the files that need to be in <code>META-INF</code>,
             and the package and navigation documents which have their own setting.</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="css-path" required="false" cx:as="xs:string?" select="()">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>File path, relative to the content directory, of the directory that will contain the
+            CSS style sheets specified through the epub-stylesheet option, and all other style
+            sheets and resources references from it.</p>
+            <p>It is an error if an epub-stylesheet is specified without settings this option.</p>
         </p:documentation>
     </p:option>
     <p:option name="temp-dir" required="true">
@@ -292,6 +306,8 @@
         <p:with-option name="content-path" select="$content-path"/>
         <p:with-option name="package-doc-path" select="$package-doc-path"/>
         <p:with-option name="navigation-doc-path" select="$navigation-doc-path"/>
+        <p:with-option name="epub-stylesheet" select="$epub-stylesheet"/>
+        <p:with-option name="css-path" select="$css-path"/>
     </px:html-to-epub3>
     <p:sink/>
 
