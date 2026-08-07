@@ -298,7 +298,7 @@ public class TTSRegistry {
 					while (testVoices.hasNext() && tries++ < maxTries) {
 						testVoice = testVoices.next();
 						try {
-							result = new TimedTTSExecutor().synthesizeWithTimeout(
+							result = new TimedTTSExecutor(params).synthesizeWithTimeout(
 								timeout, interrupter, null, ssml, Sentence.computeSize(ssml),
 								engine, testVoice, resource);
 						} catch (Throwable e) {
