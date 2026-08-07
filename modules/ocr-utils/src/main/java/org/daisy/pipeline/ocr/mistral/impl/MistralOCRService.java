@@ -64,7 +64,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Component(
-	name = "mistral-ocr",
+	name = "mistral",
 	service = { OCRService.class }
 )
 public class MistralOCRService implements OCRService {
@@ -99,7 +99,7 @@ public class MistralOCRService implements OCRService {
 
 	@Override
 	public String getName() {
-		return "mistral-ocr";
+		return "mistral";
 	}
 
 	@Override
