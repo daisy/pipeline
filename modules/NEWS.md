@@ -4,6 +4,7 @@ v1.15.5
 Changes
 -------
 
+- Update to Liblouis [3.38.0](https://github.com/liblouis/liblouis/releases/tag/v3.38.0)
 - Optimize volume breaking in saddle stitch mode
 - Make `orphans` and `widows` work as expected on blocks that have child blocks
 - Support for `@supports` rules.
