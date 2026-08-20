@@ -17,12 +17,13 @@ import cz.vutbr.web.domassign.SupportedCSS21;
 import org.daisy.braille.css.BrailleCSSParserFactory; // BrailleCSSParserFactory can be used for regular CSS too
 import org.daisy.common.properties.Properties;
 import org.daisy.common.properties.Properties.Property;
+import org.daisy.common.properties.Properties.Type;
 import org.daisy.pipeline.css.speech.SpeechDeclarationTransformer;
 
 public class SpeechRateProperty {
 
 	private static final Property PROPERTY = Properties.getProperty("org.daisy.pipeline.tts.speech-rate",
-	                                                                true,
+	                                                                Type.CLIENT,
 	                                                                "Speaking rate",
 	                                                                false,
 	                                                                "100%");

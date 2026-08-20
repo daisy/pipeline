@@ -1,6 +1,7 @@
 package org.daisy.pipeline.tts.impl;
 
 import java.util.Collection;
+import java.util.Map;
 
 import org.daisy.common.properties.Properties;
 import org.daisy.pipeline.tts.Voice;
@@ -52,7 +53,9 @@ public class VoiceResource extends AuthenticatedResource {
 			setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
 			return null;
 		}
-		VoiceManager voiceManager = provider.getRememberedVoiceManager(Properties.getSnapshot());
+		String client = getClient() != null ? getClient().getId() : null;
+		Map<String,String> properties = Properties.getProperties(client).getSnapshot();
+		VoiceManager voiceManager = provider.getRememberedVoiceManager(properties);
 		if (voiceManager == null) {
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			return getErrorRepresentation("No /voices call preceeded this call, or settings were changed");

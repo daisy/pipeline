@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -36,7 +37,6 @@ import org.daisy.pipeline.core.transformer.TransformerHandler;
 // Pipeline 2
 import static org.daisy.common.file.Files.deleteDir;
 import org.daisy.common.file.URLs;
-import org.daisy.common.properties.Properties;
 import org.daisy.common.spi.annotations.LoadWith;
 import org.daisy.pipeline.datatypes.DatatypeRegistry;
 import org.daisy.pipeline.script.ScriptService;
@@ -111,7 +111,7 @@ public class Pipeline1ScriptProvider implements ScriptServiceProvider {
 				core = new MyPipelineCore();
 			}
 			String version; {
-				java.util.Properties mavenProps = new java.util.Properties();
+				Properties mavenProps = new Properties();
 				mavenProps.load(getClass().getResourceAsStream("/maven.properties"));
 				version = mavenProps.getProperty("pipeline1.version");
 			}
@@ -125,7 +125,7 @@ public class Pipeline1ScriptProvider implements ScriptServiceProvider {
 						public String getVersion() {
 							return version;
 						}
-						public Pipeline1Script load() {
+						public Pipeline1Script load(Map<String,String> props) {
 							if (closed)
 								throw new IllegalStateException("script provider is closed");
 							if (script == null) {
@@ -195,7 +195,7 @@ public class Pipeline1ScriptProvider implements ScriptServiceProvider {
 		}
 
 		@Override
-		public Pipeline1Script load() {
+		public Pipeline1Script load(Map<String,String> props) {
 			if (script == null) {
 				throw new UnsupportedOperationException("FIXME");
 			}
@@ -206,7 +206,7 @@ public class Pipeline1ScriptProvider implements ScriptServiceProvider {
 	private class MyPipelineCore extends PipelineCore {
 
 		MyPipelineCore() throws DMFCConfigurationException {
-			super(null, new File("/irrelevant"), new java.util.Properties(), new java.util.Properties());
+			super(null, new File("/irrelevant"), new Properties(), new Properties());
 			mCreator = new MyCreator();
 		}
 	}

@@ -7,6 +7,7 @@ import javax.sound.sampled.AudioFormat;
 
 import org.daisy.common.properties.Properties;
 import org.daisy.common.properties.Properties.Property;
+import org.daisy.common.properties.Properties.Type;
 import org.daisy.common.spi.ActivationException;
 import org.daisy.common.spi.annotations.LoadWith;
 import org.daisy.pipeline.tts.RoundRobinLoadBalancer;
@@ -42,31 +43,31 @@ public class AcapelaService implements TTSService {
 		}
 		if (ACAPELA_SAMPLERATE == null)
 			ACAPELA_SAMPLERATE = Properties.getProperty("org.daisy.pipeline.tts.acapela.samplerate",
-			                                            true,
+			                                            Type.CLIENT,
 			                                            "Audio sample rate of Acapela voices (in Hz)",
 			                                            false,
 			                                            "22050");
 		if (ACAPELA_SERVERS == null)
 			ACAPELA_SERVERS = Properties.getProperty("org.daisy.pipeline.tts.acapela.servers",
-			                                         false,
+			                                         Type.STATIC,
 			                                         "Addresses of Acapela speech engine servers",
 			                                         false,
 			                                         "localhost:0");
 		if (ACAPELA_SPEED == null)
 			ACAPELA_SPEED = Properties.getProperty("org.daisy.pipeline.tts.acapela.speed",
-			                                       false,
+			                                       Type.STATIC,
 			                                       "Expected ms per word for Acapela speech engine",
 			                                       false,
 			                                       "300");
 		if (ACAPELA_THREADS == null)
 			ACAPELA_THREADS = Properties.getProperty("org.daisy.pipeline.tts.acapela.threads.reserved",
-			                                         false,
+			                                         Type.STATIC,
 			                                         "Number of reserved threads for Acapela speech engine",
 			                                         false,
 			                                         "3");
 		if (ACAPELA_PRIORITY == null)
 			ACAPELA_PRIORITY = Properties.getProperty("org.daisy.pipeline.tts.acapela.priority",
-			                                          true,
+			                                          Type.CLIENT,
 			                                          "Priority of Acapela voices relative to voices of other speech engines",
 			                                          false,
 			                                          "15");

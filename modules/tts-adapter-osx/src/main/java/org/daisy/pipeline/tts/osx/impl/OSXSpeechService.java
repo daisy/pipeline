@@ -12,6 +12,7 @@ import com.sun.jna.NativeLibrary;
 import org.daisy.common.file.URLs;
 import org.daisy.common.properties.Properties;
 import org.daisy.common.properties.Properties.Property;
+import org.daisy.common.properties.Properties.Type;
 import org.daisy.common.spi.ActivationException;
 import org.daisy.pipeline.tts.TTSEngine;
 import org.daisy.pipeline.tts.TTSService;
@@ -26,7 +27,7 @@ import org.osgi.service.component.annotations.Component;
 public class OSXSpeechService implements TTSService {
 
 	private static final Property OSXSPEECH_PATH = Properties.getProperty("org.daisy.pipeline.tts.osxspeech.path",
-	                                                                      false,
+	                                                                      Type.STATIC,
 	                                                                      "Path of macOS' command line program `say`",
 	                                                                      false,
 	                                                                      "/usr/bin/say");
@@ -41,7 +42,7 @@ public class OSXSpeechService implements TTSService {
 		sayPath = OSXSPEECH_PATH.getValue();
 		if (OSXSPEECH_PRIORITY == null)
 			OSXSPEECH_PRIORITY = Properties.getProperty("org.daisy.pipeline.tts.osxspeech.priority",
-			                                            true,
+			                                            Type.CLIENT,
 			                                            "Priority of macOS voices relative to voices of other engines",
 			                                            false,
 			                                            "2");

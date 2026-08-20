@@ -83,7 +83,7 @@ class PDFToWordScript implements ScriptService<Script> {
 	private Script script = null;
 
 	@Override
-	public Script load() {
+	public Script load(Map<String,String> props) {
 		if (script == null) {
 			Script.Builder b = new Builder()
 				.withInputFileset("pdf")

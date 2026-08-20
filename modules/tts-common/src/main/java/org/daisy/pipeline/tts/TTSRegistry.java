@@ -20,6 +20,7 @@ import net.sf.saxon.s9api.XdmNode;
 
 import org.daisy.common.properties.Properties;
 import org.daisy.common.properties.Properties.Property;
+import org.daisy.common.properties.Properties.Type;
 import org.daisy.pipeline.tts.TTSEngine.SynthesisResult;
 import org.daisy.pipeline.tts.TTSLog.ErrorCode;
 import org.daisy.pipeline.tts.TTSService;
@@ -171,7 +172,7 @@ public class TTSRegistry {
 			this.service = wrap;
 			this.name = wrap.getName();
 			this.enabled = Properties.getProperty("org.daisy.pipeline.tts." + name + ".enabled",
-		                                          true,
+		                                          Type.CLIENT,
 		                                          "Enable " + wrap.getDisplayName(),
 		                                          false,
 		                                          "true");

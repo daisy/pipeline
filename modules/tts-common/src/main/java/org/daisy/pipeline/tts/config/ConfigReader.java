@@ -18,6 +18,7 @@ import net.sf.saxon.s9api.XdmSequenceIterator;
 import org.daisy.common.file.URLs;
 import org.daisy.common.properties.Properties;
 import org.daisy.common.properties.Properties.Property;
+import org.daisy.common.properties.Properties.Type;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -165,7 +166,7 @@ public class ConfigReader {
 	public static class TTSConfigProperty {
 
 		private static final Property PROPERTY = Properties.getProperty("org.daisy.pipeline.tts.config",
-		                                                                true,
+		                                                                Type.CLIENT,
 		                                                                "TTS configuration (XML or file path)",
 		                                                                false,
 		                                                                null);
@@ -179,6 +180,5 @@ public class ConfigReader {
 		public static String getValue(Map<String,String> snapshot) {
 			return PROPERTY.getValue(snapshot);
 		}
-
 	}
 }

@@ -35,6 +35,7 @@ import net.sf.saxon.trans.XPathException;
 import org.daisy.common.messaging.MessageAppender;
 import org.daisy.common.properties.Properties;
 import org.daisy.common.properties.Properties.Property;
+import org.daisy.common.properties.Properties.Type;
 import org.daisy.common.saxon.SaxonHelper;
 import org.daisy.common.saxon.SaxonInputValue;
 import org.daisy.common.saxon.SaxonOutputValue;
@@ -96,22 +97,22 @@ import com.google.common.collect.Iterables;
 public class SSMLtoAudio implements FormatSpecifications {
 
 	private static final Property THREADS_NUMBER = Properties.getProperty("org.daisy.pipeline.tts.threads.number",
-	                                                                      false,
+	                                                                      Type.STATIC,
 	                                                                      "Number of threads for speech synthesis and audio encoding",
 	                                                                      false,
 	                                                                      ""+Runtime.getRuntime().availableProcessors());
 	private static final Property ENCODING_THREADS_NUMBER = Properties.getProperty("org.daisy.pipeline.tts.threads.encoding.number",
-	                                                                               false,
+	                                                                               Type.STATIC,
 	                                                                               "Number of threads for audio encoding",
 	                                                                               false,
 	                                                                               null);
 	private static final Property SPEAKING_THREADS_NUMBER = Properties.getProperty("org.daisy.pipeline.tts.threads.speaking.number",
-	                                                                               false,
+	                                                                               Type.STATIC,
 	                                                                               "Number of threads for speech synthesis",
 	                                                                               false,
 	                                                                               null);
 	private static final Property THREADS_MEMLIMIT = Properties.getProperty("org.daisy.pipeline.tts.threads.each.memlimit",
-	                                                                        false,
+	                                                                        Type.STATIC,
 	                                                                        "Maximum amount of memory consumed by each speech synthesis thread (in Mb)",
 	                                                                        false,
 	                                                                        "20"); // 20 Mb

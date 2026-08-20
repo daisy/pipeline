@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.daisy.common.properties.Properties;
 import org.daisy.common.properties.Properties.Property;
+import org.daisy.common.properties.Properties.Type;
 import org.daisy.pipeline.datatypes.DatatypeRegistry;
 import org.daisy.pipeline.ocr.OCRProcessor;
 import org.daisy.pipeline.ocr.OCRService;
@@ -32,11 +33,11 @@ public class PDFToWordScriptProvider implements ScriptServiceProvider {
 	@Override
 	public Iterable<ScriptService<?>> getScripts() {
 		List<ScriptService<?>> scripts = new ArrayList<>();
-		Map<String,String> props = Properties.getSnapshot();
+		Map<String,String> props = Properties.getGlobalSnapshot();
 		for (OCRService s : ocrServices)
 			try {
 				Property enabled = Properties.getProperty("org.daisy.pipeline.ocr." + s.getName() + ".enabled",
-				                                          true,
+				                                          Type.CLIENT,
 				                                          "Enable " + s.getDisplayName(),
 				                                          false,
 				                                          "true");

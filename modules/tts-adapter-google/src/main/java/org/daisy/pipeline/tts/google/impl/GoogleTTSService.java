@@ -7,6 +7,7 @@ import javax.sound.sampled.AudioFormat;
 
 import org.daisy.common.properties.Properties;
 import org.daisy.common.properties.Properties.Property;
+import org.daisy.common.properties.Properties.Type;
 import org.daisy.pipeline.tts.SpeechRateProperty;
 import org.daisy.pipeline.tts.TTSEngine;
 import org.daisy.pipeline.tts.TTSService;
@@ -25,22 +26,22 @@ import org.osgi.service.component.annotations.Component;
 public class GoogleTTSService implements TTSService {
 
 	private static final Property GOOGLE_APIKEY = Properties.getProperty("org.daisy.pipeline.tts.google.apikey",
-	                                                                     true,
+	                                                                     Type.CLIENT,
 	                                                                     "API key for Google cloud speech engine",
 	                                                                     true,
 	                                                                     null);
 	private static final Property GOOGLE_SAMPLERATE = Properties.getProperty("org.daisy.pipeline.tts.google.samplerate",
-	                                                                         true,
+	                                                                         Type.CLIENT,
 	                                                                         "Audio sample rate of Google cloud voices (in Hz)",
 	                                                                         false,
 	                                                                         "22050");
 	private static final Property GOOGLE_ADDRESS = Properties.getProperty("org.daisy.pipeline.tts.google.address",
-	                                                                      false,
+	                                                                      Type.STATIC,
 	                                                                      "Address of Google cloud speech engine server",
 	                                                                      false,
 	                                                                      "https://texttospeech.googleapis.com");
 	private static final Property GOOGLE_PRIORITY = Properties.getProperty("org.daisy.pipeline.tts.google.priority",
-	                                                                       true,
+	                                                                       Type.CLIENT,
 	                                                                       "Priority of Google cloud voices relative to voices of other engines",
 	                                                                       false,
 	                                                                       "15");

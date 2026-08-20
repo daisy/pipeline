@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.daisy.common.properties.Properties;
 import org.daisy.common.properties.Properties.Property;
+import org.daisy.common.properties.Properties.Type;
 import org.daisy.common.shell.BinaryFinder;
 import org.daisy.common.spi.ActivationException;
 import org.daisy.pipeline.tts.TTSEngine;
@@ -21,7 +22,7 @@ import org.osgi.service.component.annotations.Component;
 public class QfrencyService implements TTSService {
 
 	private static final Property QFRENCY_PATH = Properties.getProperty("org.daisy.pipeline.tts.qfrency.path",
-	                                                                    false,
+	                                                                    Type.STATIC,
 	                                                                    "Path of `synth` client program for communicating with Qfrency server",
 	                                                                    false,
 	                                                                    null);
@@ -42,13 +43,13 @@ public class QfrencyService implements TTSService {
 		}
 		if (QFRENCY_ADDRESS == null)
 			QFRENCY_ADDRESS = Properties.getProperty("org.daisy.pipeline.tts.qfrency.address",
-			                                         false,
+			                                         Type.STATIC,
 			                                         "Address if Qfrency speech engine server",
 			                                         false,
 			                                         "localhost");
 		if (QFRENCY_PRIORITY == null)
 			QFRENCY_PRIORITY = Properties.getProperty("org.daisy.pipeline.tts.qfrency.priority",
-			                                          true,
+			                                          Type.CLIENT,
 			                                          "Priority of Qfrency voices relative to voices of other speech engines",
 			                                          false,
 			                                          "2");

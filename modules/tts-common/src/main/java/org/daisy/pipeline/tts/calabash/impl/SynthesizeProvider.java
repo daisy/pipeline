@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.daisy.common.properties.Properties;
 import org.daisy.common.properties.Properties.Property;
+import org.daisy.common.properties.Properties.Type;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 import org.daisy.common.xproc.XProcMonitor;
@@ -32,7 +33,7 @@ public class SynthesizeProvider implements XProcStepProvider {
 	private AudioFootprintMonitor mAudioFootprintMonitor;
 
 	static final Property ENABLE_LOG = Properties.getProperty("org.daisy.pipeline.tts.log",
-	                                                          true,
+	                                                          Type.CLIENT,
 	                                                          "Whether or not to make the TTS log available",
 	                                                          false,
 	                                                          "false");

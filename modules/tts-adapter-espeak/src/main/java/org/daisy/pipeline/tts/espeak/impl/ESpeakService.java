@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.daisy.common.properties.Properties;
 import org.daisy.common.properties.Properties.Property;
+import org.daisy.common.properties.Properties.Type;
 import org.daisy.common.shell.BinaryFinder;
 import org.daisy.common.spi.ActivationException;
 import org.daisy.pipeline.tts.TTSEngine;
@@ -21,7 +22,7 @@ import org.osgi.service.component.annotations.Component;
 public class ESpeakService implements TTSService {
 
 	private static final Property ESPEAK_PATH = Properties.getProperty("org.daisy.pipeline.tts.espeak.path",
-	                                                                   false,
+	                                                                   Type.STATIC,
 	                                                                   "Path of eSpeak executable",
 	                                                                   false,
 	                                                                   null);
@@ -48,10 +49,10 @@ public class ESpeakService implements TTSService {
 			throw new ActivationException("Cannot find eSpeak's binary using system property " + ESPEAK_PATH.getName());
 		if (ESPEAK_PRIORITY == null)
 			ESPEAK_PRIORITY = Properties.getProperty("org.daisy.pipeline.tts.espeak.priority",
-	 		                                         true,
-	 		                                         "Priority of eSpeak voices relative to voices of other speech engines",
-	 		                                         false,
-	 		                                         "2");
+			                                         Type.CLIENT,
+			                                         "Priority of eSpeak voices relative to voices of other speech engines",
+			                                         false,
+			                                         "2");
 	}
 
 	@Override

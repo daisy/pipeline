@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.daisy.common.properties.Properties;
 import org.daisy.common.properties.Properties.Property;
+import org.daisy.common.properties.Properties.Type;
 import org.daisy.pipeline.tts.TTSService;
 
 import org.osgi.service.component.annotations.Component;
@@ -21,7 +22,7 @@ public class AWSPollyTTSService implements TTSService {
 
 	private static final Property AWS_ACCESS_KEY = Properties.getProperty(
 		"org.daisy.pipeline.tts.aws.accesskey",
-		true,
+		Type.CLIENT,
 		"Access key for Amazon Polly speech engine",
 		true,
 		null
@@ -29,21 +30,21 @@ public class AWSPollyTTSService implements TTSService {
 
 	private static final Property AWS_SECRET_KEY = Properties.getProperty(
 		"org.daisy.pipeline.tts.aws.secretkey",
-		true,
+		Type.CLIENT,
 		"Secret key for Amazon Polly speech engine",
 		true,
 		null);
 
 	private static final Property AWS_REGION = Properties.getProperty(
 		"org.daisy.pipeline.tts.aws.region",
-		true,
+		Type.CLIENT,
 		"Region for Amazon Polly speech engine",
 		true,
 		null);
 
 	private static final Property AWS_PRIORITY = Properties.getProperty(
 		"org.daisy.pipeline.tts.aws.priority",
-		true,
+		Type.CLIENT,
 		"Priority of Amazon voices relative to voices of other engines",
 		false,
 		"15");

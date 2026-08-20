@@ -87,7 +87,8 @@ public class VoicePreviewResource extends AuthenticatedResource {
 			return null;
 		}
 		try {
-			Map<String,String> properties = Properties.getSnapshot();
+			String client = getClient() != null ? getClient().getId() : null;
+			Map<String,String> properties = Properties.getProperties(client).getSnapshot();
 			VoiceManager voiceManager = provider.getRememberedVoiceManager(properties);
 			if (voiceManager == null) {
 				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);

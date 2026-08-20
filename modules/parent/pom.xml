@@ -208,6 +208,11 @@
               <artifactId>xprocspec-runner</artifactId>
               <version>1.2.8</version>
             </dependency>
+            <dependency>
+              <groupId>org.daisy.maven</groupId>
+              <artifactId>xproc-engine-daisy-pipeline</artifactId>
+              <version>1.14.7</version>
+            </dependency>
             <!--
                 provided dependencies of xprocspec-runner
                 
@@ -414,7 +419,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.15.7</version>
+        <version>1.15.8-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -449,12 +454,12 @@
       <dependency>
         <groupId>org.daisy.maven</groupId>
         <artifactId>xproc-engine-daisy-pipeline</artifactId>
-        <version>1.14.7</version>
+        <version>1.14.8-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>tts-mocks</artifactId>
-        <version>1.0.5</version>
+        <version>1.0.6-SNAPSHOT</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

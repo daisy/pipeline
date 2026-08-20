@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.daisy.common.properties.Properties;
 import org.daisy.common.properties.Properties.Property;
+import org.daisy.common.properties.Properties.Type;
 import org.daisy.common.spi.ActivationException;
 import org.daisy.pipeline.tts.TTSEngine;
 import org.daisy.pipeline.tts.TTSService;
@@ -20,7 +21,7 @@ public abstract class CereProcService implements TTSService {
 	private final static Logger logger = LoggerFactory.getLogger(CereProcService.class);
 
 	private final static Property CEREPROC_CLIENT = Properties.getProperty("org.daisy.pipeline.tts.cereproc.client",
-	                                                                       false,
+	                                                                       Type.STATIC,
 	                                                                       "Path of client program for communicating with CereProc server",
 	                                                                       false,
 	                                                                       "/usr/bin/cspeechclient");
@@ -38,7 +39,7 @@ public abstract class CereProcService implements TTSService {
 			throw new ActivationException("No CereProc client installed at " + client);
 		if (CEREPROC_SERVER == null)
 			CEREPROC_SERVER = Properties.getProperty("org.daisy.pipeline.tts.cereproc.server",
-			                                         false,
+			                                         Type.STATIC,
 			                                         "Address of CereProc speech engine server",
 			                                         false,
 			                                         "localhost");
@@ -69,13 +70,13 @@ public abstract class CereProcService implements TTSService {
 			super.activate();
 			if (CEREPROC_PORT == null)
 				CEREPROC_PORT = Properties.getProperty("org.daisy.pipeline.tts.cereproc.port",
-				                                       false,
+				                                       Type.STATIC,
 				                                       "Port of CereProc speech engine server for regular voices",
 				                                       false,
 				                                       null);
 			if (CEREPROC_PRIORITY == null)
 				CEREPROC_PRIORITY = Properties.getProperty("org.daisy.pipeline.tts.cereproc.priority",
-				                                           true,
+				                                           Type.CLIENT,
 				                                           "Priority of CereProc regular voices relative to voices of other speech engines",
 				                                           false,
 				                                           "15");
@@ -132,13 +133,13 @@ public abstract class CereProcService implements TTSService {
 			super.activate();
 			if (CEREPROC_DNN_PORT == null)
 				CEREPROC_DNN_PORT = Properties.getProperty("org.daisy.pipeline.tts.cereproc.dnn.port",
-				                                           false,
+				                                           Type.STATIC,
 				                                           "Port of CereProc speech engine server for DNN voices",
 				                                           false,
 				                                           null);
 			if (CEREPROC_DNN_PRIORITY == null)
 				CEREPROC_DNN_PRIORITY = Properties.getProperty("org.daisy.pipeline.tts.cereproc.dnn.priority",
-				                                               true,
+				                                               Type.CLIENT,
 				                                               "Priority of CereProc DNN voices relative to voices of other speech engines",
 				                                               false,
 				                                               "15");

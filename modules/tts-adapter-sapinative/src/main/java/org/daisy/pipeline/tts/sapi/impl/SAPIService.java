@@ -15,6 +15,7 @@ import javax.sound.sampled.AudioFormat;
 import org.daisy.common.file.URLs;
 import org.daisy.common.properties.Properties;
 import org.daisy.common.properties.Properties.Property;
+import org.daisy.common.properties.Properties.Type;
 import org.daisy.common.spi.ActivationException;
 import org.daisy.pipeline.tts.sapinative.SAPI;
 import org.daisy.pipeline.tts.sapinative.SAPIResult;
@@ -48,19 +49,19 @@ public class SAPIService implements TTSService {
 			throw new ActivationException("SAPI only works on Windows");
 		if (SAPI_SAMPLERATE == null)
 			SAPI_SAMPLERATE = Properties.getProperty("org.daisy.pipeline.tts.sapi.samplerate",
-			                                         true,
+			                                         Type.CLIENT,
 			                                         "Audio sample rate of legacy Windows voices (in Hz)",
 			                                         false,
 			                                         "22050");
 		if (SAPI_BYTESPERSAMPLE == null)
 			SAPI_BYTESPERSAMPLE = Properties.getProperty("org.daisy.pipeline.tts.sapi.bytespersample",
-			                                             true,
+			                                             Type.CLIENT,
 			                                             "Audio bit depth of legacy Windows voices (in bytes per sample)",
 			                                             false,
 			                                             "2");
 		if (SAPI_PRIORITY == null)
 			SAPI_PRIORITY = Properties.getProperty("org.daisy.pipeline.tts.sapi.priority",
-			                                       true,
+			                                       Type.CLIENT,
 			                                       "Priority of Windows voices relative to voices of other engines",
 			                                       false,
 			                                       "7");

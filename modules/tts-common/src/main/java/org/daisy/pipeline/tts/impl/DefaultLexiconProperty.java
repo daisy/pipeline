@@ -1,6 +1,7 @@
 package org.daisy.pipeline.tts.impl;
 
 import org.daisy.common.properties.Properties;
+import org.daisy.common.properties.Properties.Type;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -16,7 +17,7 @@ public class DefaultLexiconProperty {
 
 	public DefaultLexiconProperty() {
 		Properties.getProperty("org.daisy.pipeline.tts.default-lexicon",
-		                       true,
+		                       Type.CLIENT,
 		                       "Default user lexicons",
 		                       true,
 		                       null);

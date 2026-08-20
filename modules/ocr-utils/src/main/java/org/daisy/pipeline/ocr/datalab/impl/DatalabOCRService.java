@@ -21,6 +21,7 @@ import org.daisy.common.messaging.MessageAppender;
 import org.daisy.common.messaging.MessageBuilder;
 import org.daisy.common.properties.Properties;
 import org.daisy.common.properties.Properties.Property;
+import org.daisy.common.properties.Properties.Type;
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.pipeline.common.rest.Request;
 import org.daisy.pipeline.common.rest.Response;
@@ -56,7 +57,7 @@ public class DatalabOCRService implements OCRService {
 	static {
 		// this is a hidden parameter, it is meant to be used in tests only
 		String BASE_URL = Properties.getProperty("org.daisy.pipeline.ocr.datalab.address",
-		                                         false,
+		                                         Type.STATIC,
 		                                         "Base URL of Datalab API",
 		                                         false,
 		                                         "https://www.datalab.to/api/v1")
@@ -71,7 +72,7 @@ public class DatalabOCRService implements OCRService {
 
 	/* package private for tests */
 	static final Property DATALAB_APIKEY = Properties.getProperty("org.daisy.pipeline.ocr.datalab.apikey",
-	                                                              true,
+	                                                              Type.CLIENT,
 	                                                              "API key for Datalab",
 	                                                              true,
 	                                                              null);

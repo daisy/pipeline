@@ -17,6 +17,7 @@ import javax.sound.sampled.AudioFileFormat;
 import org.daisy.common.file.URLs;
 import org.daisy.common.properties.Properties;
 import org.daisy.common.properties.Properties.Property;
+import org.daisy.common.properties.Properties.Type;
 import org.daisy.common.shell.BinaryFinder;
 import org.daisy.pipeline.audio.AudioEncoder;
 import org.daisy.pipeline.audio.AudioEncoderService;
@@ -36,12 +37,12 @@ public class LameEncoderService implements AudioEncoderService {
 
 	private static final Logger logger = LoggerFactory.getLogger(LameEncoderService.class);
 	private static final Property MP3_BITRATE = Properties.getProperty("org.daisy.pipeline.tts.mp3.bitrate",
-	                                                                   true,
+	                                                                   Type.CLIENT,
 	                                                                   "Bit rate of MP3 files",
 	                                                                   false,
 	                                                                   null);
 	private static final Property CLI_OPTIONS = Properties.getProperty("org.daisy.pipeline.tts.lame.cli.options",
-	                                                                   false,
+	                                                                   Type.STATIC,
 	                                                                   "Additional command line options passed to lame (deprecated)",
 	                                                                   false,
 	                                                                   null);

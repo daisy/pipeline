@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.daisy.common.properties.Properties;
 import org.daisy.common.properties.Properties.Property;
+import org.daisy.common.properties.Properties.Type;
 import org.daisy.pipeline.ocr.OCRService;
 import org.daisy.pipeline.ocr.OCRService.ServiceDisabledException;
 import org.daisy.pipeline.webservice.restlet.AuthenticatedResource;
@@ -64,10 +65,10 @@ public class OCRServicesResource extends AuthenticatedResource {
 				serviceElem.setAttribute("name", name);
 				serviceElem.setAttribute("nicename", s.getDisplayName());
 				Throwable error = null;
-				Map<String,String> properties = Properties.getSnapshot();
+				Map<String,String> properties = Properties.getProperties(getClient().getId()).getSnapshot();
 				try {
 					Property enabled = Properties.getProperty("org.daisy.pipeline.ocr." + name + ".enabled",
-					                                          true,
+					                                          Type.CLIENT,
 					                                          "Enable " + s.getDisplayName(),
 					                                          false,
 					                                          "true");

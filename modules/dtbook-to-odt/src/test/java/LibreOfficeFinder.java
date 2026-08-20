@@ -12,7 +12,7 @@ public class LibreOfficeFinder {
 	public static LibreOfficeConverter get() throws NoSuchElementException {
 		if (libreoffice == null) {
 			try {
-				String path = Properties.getProperty("org.daisy.pipeline.libreoffice.path");
+				String path = Properties.getGlobalProperty("org.daisy.pipeline.libreoffice.path");
 				if (path != null && !"".equals(path)) {
 					File file = new File(path);
 					if (file.isFile())

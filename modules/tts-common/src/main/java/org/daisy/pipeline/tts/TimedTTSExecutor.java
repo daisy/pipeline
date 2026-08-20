@@ -10,6 +10,7 @@ import net.sf.saxon.s9api.XdmNode;
 
 import org.daisy.common.properties.Properties;
 import org.daisy.common.properties.Properties.Property;
+import org.daisy.common.properties.Properties.Type;
 import org.daisy.pipeline.tts.TTSEngine.SynthesisResult;
 import org.daisy.pipeline.tts.TTSRegistry.TTSResource;
 import org.daisy.pipeline.tts.TTSService.SynthesisException;
@@ -22,7 +23,7 @@ public class TimedTTSExecutor {
 	private static final int FIRST_CHARACTERS = 2500;
 	private static final int SHORT_SENTENCE_THRESHOLD = 25;
 	private static final Property EXTRA_TOLERANCE_FACTOR = Properties.getProperty("org.daisy.pipeline.tts.timeout.tolerance",
-	                                                                              true,
+	                                                                              Type.ADMIN,
 	                                                                              "Tolerance factor (multiplicator) for TTS timeouts",
 	                                                                              false,
 	                                                                              "1");

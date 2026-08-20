@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 public class DynamicPropertiesExtension implements ConfigReader.Extension {
 
 	private static final Logger logger = LoggerFactory.getLogger(VoiceConfigExtension.class);
-	private static final String HOST_PROTECTION_PROPERTY = Properties.getProperty("org.daisy.pipeline.tts.host.protection", "true");
+	private static final String HOST_PROTECTION_PROPERTY = Properties.getGlobalProperty("org.daisy.pipeline.tts.host.protection", "true");
 
 	private Map<String,String> props = new HashMap<>();
 

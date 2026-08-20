@@ -196,7 +196,7 @@ public class Pandoc {
 	/* Utilities **/
 
 	private Optional<Supplier<File>> findPandoc() {
-		String path = Properties.getProperty("org.daisy.pipeline.pandoc.path");
+		String path = Properties.getGlobalProperty("org.daisy.pipeline.pandoc.path");
 		if (path != null && !"".equals(path)) {
 			File file = new File(path);
 			if (file.isFile())

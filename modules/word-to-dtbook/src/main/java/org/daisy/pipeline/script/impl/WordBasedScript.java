@@ -123,14 +123,14 @@ public abstract class WordBasedScript implements ScriptService<Script>, ScriptSe
 	private Script[] scriptChain = null;
 
 	@Override
-	public Script load() {
+	public Script load(Map<String,String> props) {
 		if (wordToDTBookService == null || scriptServiceChain == null)
 			throw new IllegalStateException(); // the ScriptService interface is supposed to be used only
 			                                   // after ScriptServiceProvider/ getScripts() has been called
 		boolean rebuildScript = false;
 		if (script == null)
 			rebuildScript = true;
-		Script wordToDTBook = wordToDTBookService.load();
+		Script wordToDTBook = wordToDTBookService.load(props);
 		if (wordToDTBook != this.wordToDTBook) {
 			rebuildScript = true;
 			this.wordToDTBook = wordToDTBook;
@@ -141,7 +141,7 @@ public abstract class WordBasedScript implements ScriptService<Script>, ScriptSe
 		for (ScriptService<?> ss : scriptServiceChain) {
 			if (ss == null)
 				throw new IllegalStateException();
-			Script s = ss.load();
+			Script s = ss.load(props);
 			if (s != scriptChain[i]) {
 				rebuildScript = true;
 				scriptChain[i] = s;

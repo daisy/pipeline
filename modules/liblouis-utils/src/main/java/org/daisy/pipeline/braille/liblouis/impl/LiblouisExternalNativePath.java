@@ -24,7 +24,8 @@ import org.osgi.service.component.annotations.Component;
 public class LiblouisExternalNativePath implements NativePath {
 	
 	final static boolean LIBLOUIS_EXTERNAL
-		= Properties.getProperty("org.daisy.pipeline.braille.liblouis.external", "false").equalsIgnoreCase("true");
+		= Properties.getGlobalProperty("org.daisy.pipeline.braille.liblouis.external", "false")
+		            .equalsIgnoreCase("true");
 	
 	/**
 	 * @throws RuntimeException if using the Liblouis library present on the system is not allowed

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.IllformedLocaleException;
 import java.util.Locale;
+import java.util.Map;
 
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
@@ -83,10 +84,12 @@ public class VoicesResource extends AuthenticatedResource {
 					return getErrorRepresentation(e.getMessage());
 				}
 		}
+		String client = getClient() != null ? getClient().getId() : null;
+		Map<String,String> properties = Properties.getProperties(client).getSnapshot();
 		VoiceManager voiceManager = null;
 		boolean omitRefs = false; {
 			synchronized (provider) {
-				voiceManager = provider.getVoiceManager(Properties.getSnapshot(), configXML, logger);
+				voiceManager = provider.getVoiceManager(properties, configXML, logger);
 				omitRefs = !provider.hasRememberedVoiceManager();
 			}
 		}

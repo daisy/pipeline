@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.daisy.common.properties.Properties;
 import org.daisy.common.properties.Properties.Property;
+import org.daisy.common.properties.Properties.Type;
 import org.daisy.pipeline.tts.SpeechRateProperty;
 import org.daisy.pipeline.tts.TTSEngine;
 import org.daisy.pipeline.tts.TTSService;
@@ -18,22 +19,22 @@ import org.osgi.service.component.annotations.Component;
 public class AzureCognitiveSpeechService implements TTSService {
 
 	private static final Property AZURE_KEY = Properties.getProperty("org.daisy.pipeline.tts.azure.key",
-	                                                                 true,
+	                                                                 Type.CLIENT,
 	                                                                 "Access key for Azure cognitive speech engine",
 	                                                                 true,
 	                                                                 null);
 	private static final Property AZURE_REGION = Properties.getProperty("org.daisy.pipeline.tts.azure.region",
-	                                                                    true,
+	                                                                    Type.CLIENT,
 	                                                                    "Region for Azure cognitive speech engine",
 	                                                                    true,
 	                                                                    null);
 	private static final Property AZURE_THREADS = Properties.getProperty("org.daisy.pipeline.tts.azure.threads",
-	                                                                     false,
+	                                                                     Type.STATIC,
 	                                                                     "Number of reserved threads for Azure cognitive speech engine",
 	                                                                     false,
 	                                                                     "2");
 	private static final Property AZURE_PRIORITY = Properties.getProperty("org.daisy.pipeline.tts.azure.priority",
-	                                                                      true,
+	                                                                      Type.CLIENT,
 	                                                                      "Priority of Azure voices relative to voices of other engines",
 	                                                                      false,
 	                                                                      "15");

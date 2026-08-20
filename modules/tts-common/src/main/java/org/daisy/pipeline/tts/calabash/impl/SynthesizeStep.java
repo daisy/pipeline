@@ -29,6 +29,7 @@ import net.sf.saxon.s9api.SaxonApiException;
 
 import org.daisy.common.properties.Properties;
 import org.daisy.common.properties.Properties.Property;
+import org.daisy.common.properties.Properties.Type;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.pipeline.audio.AudioClip;
 import org.daisy.pipeline.audio.AudioFileTypes;
@@ -51,12 +52,12 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 
 	private static final Logger logger = LoggerFactory.getLogger(SynthesizeStep.class);
 	private static final Property AUDIO_TMPDIR = Properties.getProperty("org.daisy.pipeline.tts.audio.tmpdir",
-	                                                                    false,
+	                                                                    Type.STATIC,
 	                                                                    "Temporary directory used during speech synthesis",
 	                                                                    false,
 	                                                                    null);
 	private static final Property SENTENCES_PER_FILE = Properties.getProperty("org.daisy.pipeline.tts.sentences.per.file",
-	                                                                          true,
+	                                                                          Type.CLIENT,
 	                                                                          "Maximum number of sentences per audio file",
 	                                                                          false,
 	                                                                          null);

@@ -93,7 +93,8 @@ public class TTSEnginesResource extends AuthenticatedResource {
 					}
 				}
 			}
-			properties = Properties.getSnapshot();
+			String client = getClient() != null ? getClient().getId() : null;
+			properties = Properties.getProperties(client).getSnapshot();
 			new ConfigReader(saxonProcessor, configXML, properties, propsExt);
 			if (configXML != null)
 				logger.debug("TTS configuration XML:\n" + configXML);

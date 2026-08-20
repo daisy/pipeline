@@ -87,7 +87,7 @@ public class MockGoogle {
 		}
 		// only taking into account system properties and properties defined in global TTS config file
 		new ConfigReader(saxonProcessor, new ConfigReader.Extension[]{});
-		Map<String,String> properties = Properties.getSnapshot();
+		Map<String,String> properties = Properties.getGlobalSnapshot();
 		for (TTSService tts : ttsRegistry.getServices())
 			if (!"google".equals(tts.getName()))
 				try {

@@ -37,6 +37,7 @@ import org.daisy.common.messaging.MessageAppender;
 import org.daisy.common.messaging.MessageBuilder;
 import org.daisy.common.properties.Properties;
 import org.daisy.common.properties.Properties.Property;
+import org.daisy.common.properties.Properties.Type;
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.pipeline.common.rest.Request;
 import org.daisy.pipeline.common.rest.Response;
@@ -76,7 +77,7 @@ public class MistralOCRService implements OCRService {
 	static {
 		// this is a hidden parameter, it is meant to be used in tests only
 		String BASE_URL = Properties.getProperty("org.daisy.pipeline.ocr.mistral.address",
-		                                         false,
+		                                         Type.STATIC,
 		                                         "Base URL of Mistral API",
 		                                         false,
 		                                         "https://api.mistral.ai/v1")
@@ -92,7 +93,7 @@ public class MistralOCRService implements OCRService {
 
 	/* package private for tests */
 	static final Property MISTRAL_APIKEY = Properties.getProperty("org.daisy.pipeline.ocr.mistral.apikey",
-	                                                              true,
+	                                                              Type.CLIENT,
 	                                                              "API key for Mistral OCR",
 	                                                              true,
 	                                                              null);
