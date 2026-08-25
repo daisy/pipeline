@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 
 @Component(
 	name = "pdf-to-word",
-	service = { ScriptServiceProvider.class }
+	service = { PDFToWordScriptProvider.class }
 )
 public class PDFToWordScriptProvider implements ScriptServiceProvider {
 

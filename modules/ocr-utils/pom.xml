@@ -70,7 +70,8 @@
       org.daisy.pipeline.ocr.impl.PDFToWordScriptProvider,
       org.daisy.pipeline.ocr.mistral.impl.MistralOCRService,
       org.daisy.pipeline.ocr.datalab.impl.DatalabOCRService,
-      org.daisy.pipeline.ocr.impl.OCRServicesWebServiceExtension
+      org.daisy.pipeline.ocr.impl.OCRServicesWebServiceExtension,
+      org.daisy.pipeline.ocr.impl.OCRScriptsWebServiceExtension
     </expose-services>
   </properties>
 
