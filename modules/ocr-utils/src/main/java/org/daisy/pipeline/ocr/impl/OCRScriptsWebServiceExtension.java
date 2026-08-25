@@ -1,8 +1,14 @@
 package org.daisy.pipeline.ocr.impl;
 
 import java.util.ArrayList;
+import java.util.function.Function;
 import java.util.List;
+import java.util.Map;
 
+import com.google.common.collect.Iterables;
+
+import org.daisy.common.properties.Properties;
+import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.ScriptServiceProvider;
 import org.daisy.pipeline.webservice.restlet.WebServiceExtension;
@@ -23,7 +29,7 @@ public class OCRScriptsWebServiceExtension implements WebServiceExtension {
 	static final String OCR_SCRIPTS_ROUTE = "/ocr/scripts";
 	static final String OCR_SCRIPT_ROUTE = "/ocr/scripts/{id}";
 
-	private List<ScriptServiceProvider> providers = new ArrayList<>();
+	private List<Function<Map<String,String>,ScriptServiceProvider>> providers = new ArrayList<>();
 
 	@Reference(
 		name = "PDFToWordScriptProvider",
@@ -33,7 +39,7 @@ public class OCRScriptsWebServiceExtension implements WebServiceExtension {
 		policy = ReferencePolicy.STATIC
 	)
 	protected void setPDFToWordScriptProvider(PDFToWordScriptProvider provider) {
-		providers.add(provider);
+		providers.add(props -> () -> provider.getScripts(props));
 	}
 
 	public void attachTo(Router router) {
@@ -42,11 +48,13 @@ public class OCRScriptsWebServiceExtension implements WebServiceExtension {
 		router.attach(OCR_SCRIPT_ROUTE, OCRScriptResource.class);
 	}
 
-	ScriptRegistry getScriptRegistry() {
+	ScriptRegistry getScriptRegistry(Client client) {
+		String clientID = client != null ? client.getId() : null;
+		Map<String,String> props = Properties.getProperties(clientID).getSnapshot();
 		return new ScriptRegistry(true) {
 			@Override
 			protected Iterable<ScriptServiceProvider> getScriptProviders() {
-				return providers;
+				return Iterables.transform(providers, f -> f.apply(props));
 			}
 		};
 	}

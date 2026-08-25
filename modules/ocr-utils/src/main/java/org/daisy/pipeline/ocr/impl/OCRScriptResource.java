@@ -29,7 +29,7 @@ public class OCRScriptResource extends AuthenticatedResource {
 			= (OCRScriptsWebServiceExtension)getContext().getAttributes().get(OCRScriptsResource.OCR_SCRIPTS_KEY);
 		String scriptId = (String)getRequestAttributes().get("id");
 		logger.debug("Script with id: " + scriptId);
-		ScriptService<?> scriptService = registry.getScriptRegistry().getScript(scriptId);
+		ScriptService<?> scriptService = registry.getScriptRegistry(getClient()).getScript(scriptId);
 		if (scriptService != null)
 			script = scriptService.load();
 	}

@@ -14,7 +14,6 @@ import org.daisy.pipeline.ocr.OCRService;
 import org.daisy.pipeline.ocr.OCRService.ServiceDisabledException;
 import org.daisy.pipeline.pandoc.Pandoc;
 import org.daisy.pipeline.script.ScriptService;
-import org.daisy.pipeline.script.ScriptServiceProvider;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -28,12 +27,14 @@ import org.slf4j.LoggerFactory;
 	name = "pdf-to-word",
 	service = { PDFToWordScriptProvider.class }
 )
-public class PDFToWordScriptProvider implements ScriptServiceProvider {
+public class PDFToWordScriptProvider {
 
-	@Override
 	public Iterable<ScriptService<?>> getScripts() {
+		return getScripts(Properties.getGlobalSnapshot());
+	}
+
+	Iterable<ScriptService<?>> getScripts(Map<String,String> props) {
 		List<ScriptService<?>> scripts = new ArrayList<>();
-		Map<String,String> props = Properties.getGlobalSnapshot();
 		for (OCRService s : ocrServices)
 			try {
 				Property enabled = Properties.getProperty("org.daisy.pipeline.ocr." + s.getName() + ".enabled",

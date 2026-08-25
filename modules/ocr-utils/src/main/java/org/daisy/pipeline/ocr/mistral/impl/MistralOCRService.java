@@ -120,8 +120,7 @@ public class MistralOCRService implements OCRService {
 		return options;
 	}
 
-	private String cacheKey = null;
-	private List<OCRProcessor> modelsCache = null;
+	private Map<String,List<OCRProcessor>> modelsCache = new HashMap<>();
 
 	@Override
 	public Collection<OCRProcessor> getAvailableProcessors(Map<String,String> properties)
@@ -129,9 +128,9 @@ public class MistralOCRService implements OCRService {
 		String apiKey = MISTRAL_APIKEY.getValue(properties);
 		if (apiKey == null || "".equals(apiKey))
 			throw new ServiceDisabledException("Property not set: " + MISTRAL_APIKEY.getName());
-		synchronized (this) {
-			if (apiKey.equals(cacheKey))
-				return modelsCache;
+		synchronized (modelsCache) {
+			if (modelsCache.containsKey(apiKey))
+				return modelsCache.get(apiKey);
 		}
 		try {
 			Request request = new Request(MODELS_ENDPOINT)
@@ -159,9 +158,8 @@ public class MistralOCRService implements OCRService {
 								}
 							}
 						}
-						synchronized (this) {
-							modelsCache = Collections.unmodifiableList(models);
-							cacheKey = apiKey;
+						synchronized (modelsCache) {
+							modelsCache.put(apiKey, Collections.unmodifiableList(models));
 						}
 						return models;
 					}

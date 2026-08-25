@@ -100,8 +100,7 @@ public class DatalabOCRService implements OCRService {
 		return options;
 	}
 
-	private String cacheKey = null;
-	private List<OCRProcessor> modelsCache = null;
+	private Map<String,List<OCRProcessor>> modelsCache = new HashMap<>();
 
 	@Override
 	public Collection<OCRProcessor> getAvailableProcessors(Map<String,String> properties)
@@ -109,9 +108,9 @@ public class DatalabOCRService implements OCRService {
 		String apiKey = DATALAB_APIKEY.getValue(properties);
 		if (apiKey == null || "".equals(apiKey))
 			throw new ServiceDisabledException("Property not set: " + DATALAB_APIKEY.getName());
-		synchronized (this) {
-			if (apiKey.equals(cacheKey))
-				return modelsCache;
+		synchronized (modelsCache) {
+			if (modelsCache.containsKey(apiKey))
+				return modelsCache.get(apiKey);
 		}
 		try {
 			Request request = new Request(USER_HEALTH_ENDPOINT)
@@ -127,9 +126,8 @@ public class DatalabOCRService implements OCRService {
 				models.add(new DatalabOCRModel(apiKey, ProcessingMode.BALANCED, properties));
 				models.add(new DatalabOCRModel(apiKey, ProcessingMode.FAST, properties));
 				models.add(new DatalabOCRModel(apiKey, ProcessingMode.ACCURATE, properties));
-				synchronized (this) {
-					modelsCache = Collections.unmodifiableList(models);
-					cacheKey = apiKey;
+				synchronized (modelsCache) {
+					modelsCache.put(apiKey, Collections.unmodifiableList(models));
 				}
 				return models;
 			case 401: // Unauthorized (invalid API key)

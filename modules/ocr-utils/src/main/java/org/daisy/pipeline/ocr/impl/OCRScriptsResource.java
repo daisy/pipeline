@@ -34,7 +34,7 @@ public class OCRScriptsResource extends AuthenticatedResource {
 		OCRScriptsWebServiceExtension registry
 			= (OCRScriptsWebServiceExtension)getContext().getAttributes().get(OCR_SCRIPTS_KEY);
 		scripts = new ArrayList<>();
-		for (ScriptService<?> script : registry.getScriptRegistry().getScripts()) {
+		for (ScriptService<?> script : registry.getScriptRegistry(getClient()).getScripts()) {
 			try {
 				scripts.add(script.load());
 			} catch (Throwable e) {
