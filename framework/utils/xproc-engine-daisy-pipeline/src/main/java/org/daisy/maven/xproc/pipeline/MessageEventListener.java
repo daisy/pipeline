@@ -10,7 +10,6 @@ import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.messaging.ProgressMessage;
-import org.daisy.common.properties.Properties;
 import org.daisy.maven.xproc.pipeline.logging.FlattenedProgressMessage;
 
 import org.slf4j.Logger;
@@ -101,7 +100,7 @@ class MessageEventListener {
 		
 		// If the org.daisy.pipeline.log.level property was not set explicitly, set it to the same
 		// value as the SLF4J level of org.daisy.maven.xproc.pipeline.MessageEventListener
-		if (Properties.getProperty("org.daisy.pipeline.log.level") == null) {
+		if (System.getProperty("org.daisy.pipeline.log.level") == null) {
 			if (logger.isTraceEnabled())
 				System.getProperties().setProperty("org.daisy.pipeline.log.level", "TRACE");
 			else if (logger.isDebugEnabled())

@@ -88,11 +88,11 @@ public class XProcScriptService implements ScriptService<XProcScript> {
 	}
 
 	@Override
-	public XProcScript load() {
+	public XProcScript load(Map<String,String> properties) {
 		if (parser == null)
 			throw new IllegalStateException("Object was not properly initialized");
 		if (script == null || script.someOptionsUseProperty)
-			script = parser.parse(this);
+			script = parser.parse(this, properties);
 		return script;
 	}
 

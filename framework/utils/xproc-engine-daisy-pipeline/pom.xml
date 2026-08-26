@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.15.7-SNAPSHOT</version>
+    <version>1.15.8-SNAPSHOT</version>
     <relativePath>../../parent</relativePath>
   </parent>
 
@@ -78,7 +78,7 @@
         runtime dependencies
         
         disabled in order to force users of xproc-engine-daisy-pipeline to also explicitely include
-        (a specific version of) calabash-adapter and framework-volatile
+        (a specific version of) calabash-adapter
     -->
     <!--
         for org.daisy.common.xproc.XProcEngine

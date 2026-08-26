@@ -3,6 +3,7 @@ package org.daisy.pipeline.webservice.xml;
 import java.io.IOException;
 
 import org.daisy.common.properties.Properties.SettableProperty;
+import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.webservice.Routes;
 
 import org.slf4j.Logger;
@@ -18,15 +19,24 @@ public class PropertyXmlWriter {
 	private static Logger logger = LoggerFactory.getLogger(PropertyXmlWriter.class);
 
 	private final String baseUrl;
+	private final String route;
 	private final SettableProperty property;
+	private final String clientID;
 	private final boolean scrub;
 
 	/**
+	 * @param client Retrieve the property specific to the given client. Get the global property if {@code null}.
 	 * @param scrub Whether to scrub sensitive data
 	 */
-	public PropertyXmlWriter(SettableProperty property, String baseUrl, boolean scrub) {
+	public PropertyXmlWriter(SettableProperty property, Client client, String baseUrl, boolean scrub) {
+		this(property, client, baseUrl, Routes.ADMIN_PROPERTY_ROUTE, scrub);
+	}
+
+	public PropertyXmlWriter(SettableProperty property, Client client, String baseUrl, String route, boolean scrub) {
 		this.property = property;
+		this.clientID = client != null ? client.getId() : null;
 		this.baseUrl = baseUrl;
+		this.route = route;
 		this.scrub = scrub;
 	}
 
@@ -54,9 +64,9 @@ public class PropertyXmlWriter {
 	}
 
 	private void addElementData(Element element) {
-		element.setAttribute("href", baseUrl + Routes.PROPERTY_ROUTE.replaceFirst("\\{name\\}", property.getName()));
+		element.setAttribute("href", baseUrl + route.replaceFirst("\\{name\\}", property.getName()));
 		element.setAttribute("name", property.getName());
-		String val = property.getValue();
+		String val = property.getValue(clientID);
 		String description = property.getDescription();
 		if (description != null)
 			element.setAttribute("desc", description);

@@ -71,6 +71,7 @@ public class JobRequest extends Request {
 			throw new IllegalArgumentException("Supplied XML is not a valid job request");
 		try {
 			JobRequest req = new JobRequest();
+			req.xml = xml;
 			Element elem = (Element)xml.getElementsByTagNameNS(XmlUtils.NS_DAISY, "script").item(0);
 			req.script = elem.getAttribute("href");
 			NodeList elems = xml.getElementsByTagNameNS(XmlUtils.NS_DAISY, "nicename");
@@ -210,6 +211,10 @@ public class JobRequest extends Request {
 		}
 	}
 
+	public Document toXML() {
+		return xml;
+	}
+
 	public String toJSON() {
 		return GSON.toJson(this);
 	}
@@ -228,6 +233,7 @@ public class JobRequest extends Request {
 	@SerializedName("callback")
 	private Callbacks callbacks = Callbacks.EMPTY;
 	private transient boolean outputElementUsed = false;
+	private transient Document xml = null;
 
 	private void validate() throws IllegalArgumentException {
 		checkRequiredFields();

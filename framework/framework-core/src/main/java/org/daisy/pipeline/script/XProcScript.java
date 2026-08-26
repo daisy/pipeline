@@ -25,7 +25,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 
 import org.daisy.common.messaging.MessageAppender;
-import org.daisy.common.properties.Properties;
 import org.daisy.common.xml.DocumentBuilder;
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.common.xproc.XProcInput;
@@ -118,21 +117,38 @@ public final class XProcScript extends Script {
 		private final XProcEngine xprocEngine;
 		private final List<DocumentBuilder> inputParsers;
 		private final DatatypeRegistry datatypes;
+		private final Map<String,String> properties;
 
-		public Builder(XProcScriptService descriptor, URI uri, XProcEngine xprocEngine, List<DocumentBuilder> inputParsers, DatatypeRegistry datatypes) {
+		/**
+		 * @param properties for resolving p:system-property() in select statements of options
+		 */
+		public Builder(XProcScriptService descriptor,
+		               URI uri,
+		               XProcEngine xprocEngine,
+		               List<DocumentBuilder> inputParsers,
+		               DatatypeRegistry datatypes,
+		               Map<String,String> properties) {
 			super(descriptor);
 			this.uri = uri;
 			this.xprocEngine = xprocEngine;
 			this.inputParsers = inputParsers;
 			this.datatypes = datatypes;
+			this.properties = properties;
 		}
 
-		public Builder(String id, String version, URI uri, XProcEngine xprocEngine, List<DocumentBuilder> inputParsers, DatatypeRegistry datatypes) {
+		public Builder(String id,
+		               String version,
+		               URI uri,
+		               XProcEngine xprocEngine,
+		               List<DocumentBuilder> inputParsers,
+		               DatatypeRegistry datatypes,
+		               Map<String,String> properties) {
 			super(id, version);
 			this.uri = uri;
 			this.xprocEngine = xprocEngine;
 			this.inputParsers = inputParsers;
 			this.datatypes = datatypes;
+			this.properties = properties;
 		}
 
 		public Builder withOption(XProcOptionInfo info, XProcOptionMetadata metadata) {
@@ -140,7 +156,7 @@ public final class XProcScript extends Script {
 			case TEMP:
 				if (XProcOptionMetadata.ANY_DIR_URI.equals(metadata.getType())) {
 					// need (unique) name to derive default value from
-					tempOptions.add(new XProcScriptOption(uniqueOptionName(info.getName()), info, metadata, datatypes));
+					tempOptions.add(new XProcScriptOption(uniqueOptionName(info.getName()), info, metadata, datatypes, properties));
 					return this;
 				}
 				break;
@@ -185,7 +201,7 @@ public final class XProcScript extends Script {
 					withOutputPort(port.getName(), port);
 					// need (unique) name to derive default file/dir from
 					resultOptions.put(port.getName(),
-					                  new XProcScriptOption(uniqueOptionName(info.getName()), info, metadata, datatypes));
+					                  new XProcScriptOption(uniqueOptionName(info.getName()), info, metadata, datatypes, properties));
 					return this;
 				}
 				break;
@@ -227,11 +243,11 @@ public final class XProcScript extends Script {
 							}
 						};
 					withInputPort(port.getName(), port);
-					inputOptions.put(port.getName(), new XProcScriptOption(null, info, metadata, datatypes));
+					inputOptions.put(port.getName(), new XProcScriptOption(null, info, metadata, datatypes, properties));
 					return this;
 				}
 			}
-			XProcScriptOption option = new XProcScriptOption(uniqueOptionName(info.getName()), info, metadata, datatypes);
+			XProcScriptOption option = new XProcScriptOption(uniqueOptionName(info.getName()), info, metadata, datatypes, properties);
 			super.withOption(option.getName(), option);
 			return this;
 		}
@@ -362,10 +378,14 @@ public final class XProcScript extends Script {
 		private static final String NS_XPROC = "http://www.w3.org/ns/xproc";
 		private static final String NS_PIPELINE_DATA = "http://www.daisy.org/ns/pipeline/data";
 
+		/**
+		 * @param properties for resolving p:system-property() in select statement
+		 */
 		public XProcScriptOption(String name,
 		                         XProcOptionInfo info,
 		                         XProcOptionMetadata metadata,
-		                         DatatypeRegistry datatypes) {
+		                         DatatypeRegistry datatypes,
+		                         Map<String,String> properties) {
 			this.name = name;
 			this.info = info;
 			this.metadata = metadata;
@@ -475,14 +495,14 @@ public final class XProcScript extends Script {
 										String prop = m.group("localPart");
 										if (NS_PIPELINE_DATA.equals(ns)) {
 											usesProperty = true;
-											defaultValue = Properties.getSnapshot().get(prop);
-											if (defaultValue == null) {// if property not settable
-												defaultValue = Properties.getProperty(prop);
+											if (properties != null) {
+												defaultValue = properties.get(prop);
 												if (defaultValue != null)
 													try {
 														defaultValue = "" + convertValue(defaultValue);
 													} catch (IllegalArgumentException e) {
-														logger.debug(select + " can not be evaluated to a " + datatype.getId() + ": " + defaultValue);
+														logger.debug(select + " can not be evaluated to a "
+														             + datatype.getId() + ": " + defaultValue);
 														defaultValue = fallbackDefaultValue;
 													}
 											}

@@ -75,7 +75,7 @@ public class XProcScriptParserTest {
 				return ValidationResult.valid();
 			}});
 		 parser.setDatatypeRegistry(datatypes);
-		 scp = parser.parse(new MockScriptService(url)); //Try to fix this using a service
+		 scp = parser.parse(new MockScriptService(url), null); //Try to fix this using a service
 	 
 	 
 	 }

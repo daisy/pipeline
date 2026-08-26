@@ -76,7 +76,7 @@ public abstract class GenericResource extends ServerResource {
 		return websocketRootRef;
 	}
 
-	protected Representation getErrorRepresentation(Throwable error) {
+	public Representation getErrorRepresentation(Throwable error) {
 		logger.debug("Error in fulfilling request:", error);
 		ErrorWriter.ErrorWriterBuilder builder = new ErrorWriter.ErrorWriterBuilder()
 		                                                        .withError(error)
@@ -89,7 +89,7 @@ public abstract class GenericResource extends ServerResource {
 	// Only use this method when there is no stack trace information. Use the
 	// getErrorRepresentation(Throwable) method if possible, so that the stack trace is included in
 	// the logs. ErrorWriter does not include the stack trace in the XML representation anyway.
-	protected Representation getErrorRepresentation(String error) {
+	public Representation getErrorRepresentation(String error) {
 		logger.debug("Error in fulfilling request: " + error);
 		ErrorWriter.ErrorWriterBuilder builder = new ErrorWriter.ErrorWriterBuilder()
 		                                                        .withError(new Throwable(error))
@@ -129,11 +129,11 @@ public abstract class GenericResource extends ServerResource {
 		logger.debug(status.toString());
 	}
 
-	protected void addWarningHeader(int code, String description) {
+	public void addWarningHeader(int code, String description) {
 		addWarningHeader(code, "-", description);
 	}
 
-	protected void addWarningHeader(int code, String agent, String description) {
+	public void addWarningHeader(int code, String agent, String description) {
 		List<Warning> warnings = getResponse().getWarnings();
 		if (warnings == null) {
 			warnings = new ArrayList<Warning>();

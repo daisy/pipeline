@@ -1,6 +1,5 @@
 package org.daisy.common.properties;
 
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
@@ -10,13 +9,25 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public final class Properties {
 
-	private Properties() {
-	}
+	public enum Type {
+
+		/**
+		 * Immutable global property: can be set only at the beginning of the process, through a
+		 * system property or environment variable.
+		 */
+		STATIC,
+
+		/** Global property: can be set by admins. */
+		ADMIN,
+
+		/**
+		 * Client level properties: can be set globally by admins, or for a specific client, by that
+		 * client.
+		 */
+		CLIENT
+	};
 
 	// System.getProperties() returns an object that can change afterwards, so make a copy to get
 	// the initial system properties
@@ -26,10 +37,24 @@ public final class Properties {
 	private final static String propertiesFile = systemProperties.get(PROPERTIES_FILE_PROPERTY);
 	private static Map<String,String> propertiesFromFile = null;
 
-	private static Logger logger;
-	private static Logger logger() {
-		if (logger == null) logger = LoggerFactory.getLogger(Properties.class);
-		return logger;
+	private final String clientID;
+
+	private Properties(String clientID) {
+		this.clientID = clientID;
+	}
+
+	/**
+	 * @param clientID String that identifies the web service client that properties are associated
+	 *                 with.
+	 */
+	public static Properties getProperties(String clientID) {
+		return new Properties(clientID);
+	}
+
+	private static Properties GLOBAL = new Properties(null);
+
+	public static Properties getGlobalProperties() {
+		return GLOBAL;
 	}
 
 	/**
@@ -62,16 +87,23 @@ public final class Properties {
 	/**
 	 * Returns the momentary set of properties as a {@link Map} object.
 	 */
-	public static Map<String,String> getSnapshot() {
+	public Map<String,String> getSnapshot() {
 		synchronized (settableProperties) {
 			java.util.Properties snapshot = new java.util.Properties();
 			for (String prop : propertyNames()) {
 				String val = getProperty(prop);
-				if (val != null) // could be null for a settable property that has not been set
+				if (val != null) // could be null for a settable property that has not been set and has no default
 					snapshot.setProperty(prop, val);
 			}
 			return propertiesAsMap(snapshot);
 		}
+	}
+
+	/**
+	 * Returns the momentary set of global properties.
+	 */
+	public static Map<String, String> getGlobalSnapshot() {
+		return GLOBAL.getSnapshot();
 	}
 
 	/**
@@ -92,8 +124,12 @@ public final class Properties {
 	 * @return The string value of the system property or environment variable, or null if
 	 *         there is no property or variable with that key.
 	 */
-	public static String getProperty(String key) {
+	public String getProperty(String key) {
 		return getProperty(key, null);
+	}
+
+	public static String getGlobalProperty(String key) {
+		return GLOBAL.getProperty(key);
 	}
 
 	/**
@@ -103,7 +139,7 @@ public final class Properties {
 	 *         default value if there is no property or variable with that key. Modifications to
 	 *         settable properties are taken into account.
 	 */
-	public static String getProperty(String key, String defaultValue) {
+	public String getProperty(String key, String defaultValue) {
 		if (key == null)
 			throw new IllegalArgumentException();
 		// modified properties have highest priority
@@ -111,7 +147,7 @@ public final class Properties {
 			SettableProperty p = settableProperties.get(key);
 			if (p != null)
 				// defaultValue ignored (only the defaultValue that was defined first is remembered)
-				return p.getValue();
+				return (clientID != null && p.isClientLevel()) ? p.getValue(clientID) : p.getValue();
 		}
 		// then come environment variables
 		if (key.startsWith("org.daisy.pipeline.")) {
@@ -142,29 +178,37 @@ public final class Properties {
 		return defaultValue;
 	}
 
+	public static String getGlobalProperty(String key, String defaultValue) {
+		return GLOBAL.getProperty(key, defaultValue);
+	}
+
 	private static final Map<String,SettableProperty> settableProperties = new HashMap<>();
 
 	/**
 	 * @param settable Allow a property to be modified and get a {@link SettableProperty} object for
 	 *                 reading future values.
 	 */
-	public static Property getProperty(String key, boolean settable, String description, boolean sensitive) {
-		return getProperty(key, settable, description, sensitive, null);
+	public static Property getProperty(String key, Type type, String description, boolean sensitive) {
+		return getProperty(key, type, description, sensitive, null);
 	}
 
-	public static Property getProperty(String key, boolean settable, String description, boolean sensitive, String defaultValue) {
-		if (settable)
+	public static Property getProperty(String key, Type type, String description, boolean sensitive, String defaultValue) {
+		switch (type) {
+		case ADMIN:
+		case CLIENT:
 			synchronized (settableProperties) {
 				if (settableProperties.containsKey(key)) {
 					// defaultValue ignored (only the defaultValue that was defined first is remembered)
 					return settableProperties.get(key);
 				}
-				SettableProperty prop = new SettableProperty(key, description, sensitive, defaultValue, getProperty(key));
+				SettableProperty prop = new SettableProperty(key, description, type, sensitive, defaultValue, getGlobalProperty(key));
 				settableProperties.put(key, prop);
 				return prop;
 			}
-		else
-			return new Property(key, getProperty(key, defaultValue));
+		case STATIC:
+		default:
+			return new Property(key, getGlobalProperty(key, defaultValue));
+		}
 	}
 
 	/**
@@ -193,7 +237,7 @@ public final class Properties {
 
 	private static Pattern variableReference = Pattern.compile("\\$\\{(?<var>[^\\}]+)\\}");
 
-	private static String expand(String value) {
+	private String expand(String value) {
 		Matcher m = variableReference.matcher(value);
 		if (m.find()) {
 			StringBuilder s = new StringBuilder();
@@ -245,24 +289,53 @@ public final class Properties {
 		private final String description;
 		private final boolean sensitive;
 		private final String defaultValue;
-		private String value;
+		private String globalValue;
+		private final boolean clientLevel;
+		private final Map<String, String> clientValues = new HashMap<>();
 
-		private SettableProperty(String key, String description, boolean sensitive, String defaultValue, String value) {
+		private SettableProperty(String key, String description, Type type, boolean sensitive, String defaultValue, String value) {
 			super(key, defaultValue);
 			this.description = description;
+			switch (type) {
+			case ADMIN:
+				clientLevel = false;
+				break;
+			case CLIENT:
+				clientLevel = true;
+				break;
+			case STATIC:
+			default:
+				throw new IllegalStateException(); // coding error
+			}
 			this.sensitive = sensitive;
-			this.value = value;
+			this.globalValue = value;
 			this.defaultValue = defaultValue;
+		}
+
+		/**
+		 * Whether this property can be set for specific clients, by those clients.
+		 */
+		public boolean isClientLevel() {
+			return clientLevel;
 		}
 
 		/**
 		 * Set the value
 		 */
 		public void setValue(String value) {
+			setValue(null, value);
+		}
+
+		public void setValue(String clientID, String value) {
+			if (clientID != null && !clientLevel)
+				throw new UnsupportedOperationException("Not a property that can be set for specific clients");
 			synchronized (settableProperties) { // not sure if this synchronized block is really needed
 				synchronized (this) { // use synchronized (this) instead of synchronized method, so that
 				                      // the order of the locks is always the same, to avoid deadlocks
-					this.value = value;
+					if (clientID != null)
+						clientValues.put(clientID, value);
+					else
+						this.globalValue = value;
 				}
 			}
 		}
@@ -272,8 +345,21 @@ public final class Properties {
 		 * not have an initial value.
 		 */
 		@Override
-		public synchronized String getValue() {
-			return value != null ? value : defaultValue;
+		public String getValue() {
+			return getValue((String)null);
+		}
+
+		public synchronized String getValue(String clientID) {
+			if (clientID != null) {
+				if (!clientLevel)
+					throw new UnsupportedOperationException("Not a property that can be set for specific clients");
+				String value = clientValues.get(clientID);
+				if (value != null)
+					return value;
+			}
+			if (globalValue != null)
+				return globalValue;
+			return defaultValue;
 		}
 
 		/**
@@ -299,6 +385,7 @@ public final class Properties {
 		}
 	}
 
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	private static Map<String,String> propertiesAsMap(java.util.Properties properties) {
 		return (Map<String,String>)(Map)properties;
 	}

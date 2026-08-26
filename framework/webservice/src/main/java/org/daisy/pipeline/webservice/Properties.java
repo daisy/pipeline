@@ -26,11 +26,11 @@ public enum Properties {
 	}
 
 	public String get() {
-		return org.daisy.common.properties.Properties.getProperty(key);
+		return org.daisy.common.properties.Properties.getGlobalProperty(key);
 	}
 
 	public String get(String defaultValue) {
-		return org.daisy.common.properties.Properties.getProperty(key, defaultValue);
+		return org.daisy.common.properties.Properties.getGlobalProperty(key, defaultValue);
 	}
 
 	public String getName() {
