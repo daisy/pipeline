@@ -21,7 +21,8 @@ if [ $1 == "libs/com.xmlcalabash" ]; then
     echo ": update version in gradle.properties to $version and distVersion to $distVersion"
     echo "git commit -m \"XML Calabash $version released\""
     echo "$ROOT_DIR/$MY_DIR/gradlew uploadArchives"
-    echo 'curl -i -X POST https://ossrh-staging-api.central.sonatype.com/manual/upload/defaultRepository/org.daisy -H "Authorization: Bearer $(echo <user>:<pass> | openssl base64)"'
+    echo 'curl -H "https://ossrh-staging-api.central.sonatype.com/manual/search/repositories?ip=any" -H "Authorization: Bearer $(echo <user>:<pass> | openssl base64)"'
+    echo 'curl -i -X POST "https://ossrh-staging-api.central.sonatype.com/manual/upload/repository/f1jZkx/84.196.185.113/org.daisy--default-repository" -H "Authorization: Bearer $(echo <user>:<pass> | openssl base64)"'
     echo "open \"https://central.sonatype.com/publishing/deployments\""
     echo ": login and publish"
     echo ": checkout subrepo and cherry-pick commit"
