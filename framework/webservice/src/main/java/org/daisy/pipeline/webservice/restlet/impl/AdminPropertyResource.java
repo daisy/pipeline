@@ -5,9 +5,8 @@ import java.util.Optional;
 
 import org.daisy.common.properties.Properties;
 import org.daisy.common.properties.Properties.SettableProperty;
-import org.daisy.pipeline.webservice.Routes;
 import org.daisy.pipeline.webservice.request.PropertyRequest;
-import org.daisy.pipeline.webservice.restlet.AuthenticatedResource;
+import org.daisy.pipeline.webservice.restlet.AdminResource;
 import org.daisy.pipeline.webservice.xml.PropertyXmlWriter;
 import org.daisy.pipeline.webservice.xml.XmlUtils;
 
@@ -21,15 +20,15 @@ import org.restlet.resource.Put;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PropertyResource extends AuthenticatedResource {
+public class AdminPropertyResource extends AdminResource {
 
-	private static Logger logger = LoggerFactory.getLogger(PropertyResource.class.getName());
+	private static Logger logger = LoggerFactory.getLogger(AdminPropertyResource.class.getName());
 	private Optional<SettableProperty> property;
 
 	@Override
 	public void doInit() {
 		super.doInit();
-		if (!isAuthenticated()) {
+		if (!isAuthorized()) {
 			setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
 			return;
 		}
@@ -48,7 +47,7 @@ public class PropertyResource extends AuthenticatedResource {
 	public Representation getResource() {
 		logRequest();
 		maybeEnableCORS();
-		if (!isAuthenticated()) {
+		if (!isAuthorized()) {
 			setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
 			return null;
 		}
@@ -56,37 +55,26 @@ public class PropertyResource extends AuthenticatedResource {
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
 			return this.getErrorRepresentation("Property not found");
 		}
-		if (!property.get().isClientLevel()) {
-			setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
-			return getErrorRepresentation("Property not settable by non-admin clients");
-		}
-		PropertyXmlWriter writer = new PropertyXmlWriter(
-			property.get(), getClient(), getRequest().getRootRef().toString(), Routes.PROPERTY_ROUTE, false);
+		PropertyXmlWriter writer = new PropertyXmlWriter(property.get(), null, getRequest().getRootRef().toString(), false);
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, writer.getXmlDocument());
 		setStatus(Status.SUCCESS_OK);
 		if (logger.isDebugEnabled())
 			logger.debug(
 				XmlUtils.nodeToString(
-					new PropertyXmlWriter(
-						property.get(), getClient(), getRequest().getRootRef().toString(), Routes.PROPERTY_ROUTE, true
-					).getXmlDocument()));
+					new PropertyXmlWriter(property.get(), null, getRequest().getRootRef().toString(), true).getXmlDocument()));
 		return dom;
 	}
 
 	@Put
 	public Representation putResource(Representation representation) {
 		logRequest();
-		if (!isAuthenticated()) {
+		if (!isAuthorized()) {
 			setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
 			return null;
 		}
 		if (!property.isPresent()) {
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-			return getErrorRepresentation("Property not found");
-		}
-		if (!property.get().isClientLevel()) {
-			setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
-			return getErrorRepresentation("Property not settable by non-admin clients");
+			return this.getErrorRepresentation("Property not found");
 		}
 		String name = property.get().getName();
 		PropertyRequest req; {
@@ -113,16 +101,13 @@ public class PropertyResource extends AuthenticatedResource {
 			}
 		}
 		property.get().setValue(req.getValue());
-		PropertyXmlWriter writer = new PropertyXmlWriter(
-			property.get(), getClient(), getRequest().getRootRef().toString(), Routes.PROPERTY_ROUTE, false);
+		PropertyXmlWriter writer = new PropertyXmlWriter(property.get(), null, getRequest().getRootRef().toString(), false);
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, writer.getXmlDocument());
 		setStatus(Status.SUCCESS_OK);
 		if (logger.isDebugEnabled())
 			logger.debug(
 				XmlUtils.nodeToString(
-					new PropertyXmlWriter(
-						property.get(), getClient(), getRequest().getRootRef().toString(), Routes.PROPERTY_ROUTE, true
-					).getXmlDocument()));
+					new PropertyXmlWriter(property.get(), null, getRequest().getRootRef().toString(), true).getXmlDocument()));
 		return dom;
 	}
 }

@@ -19,6 +19,7 @@ import com.google.common.collect.Iterables;
 public class ScriptXmlWriter {
 	
 	private final String baseUrl;
+	private final String route;
 	private Script script = null;
 	private boolean details = false;
 	private static Logger logger = LoggerFactory.getLogger(ScriptXmlWriter.class.getName());
@@ -31,10 +32,15 @@ public class ScriptXmlWriter {
 	 *                absolute paths relative to the domain name.
 	 */
 	public ScriptXmlWriter(Script script, String baseUrl) {
+		this(script, baseUrl, Routes.SCRIPT_ROUTE);
+	}
+
+	public ScriptXmlWriter(Script script, String baseUrl, String route) {
 		this.script = script;
 		this.baseUrl = baseUrl;
+		this.route = route;
 	}
-	
+
 	public ScriptXmlWriter withDetails() {
 		details = true;
 		return this;
@@ -60,44 +66,35 @@ public class ScriptXmlWriter {
 		Document doc = XmlUtils.createDom("script");
 		Element scriptElm = doc.getDocumentElement();
 		addElementData(script, scriptElm);
-		
 		// for debugging only
 		if (!XmlValidator.validate(doc, XmlValidator.SCRIPT_SCHEMA_URL)) {
 			logger.error("INVALID XML:\n" + XmlUtils.nodeToString(doc));
 		}
-
 		return doc;
 	}
 
 	// element is <script> but it's empty
 	private void addElementData(Script script, Element element) {
 		Document doc = element.getOwnerDocument();
-		String scriptHref = baseUrl + Routes.SCRIPT_ROUTE.replaceFirst("\\{id\\}", script.getId());
-
+		String scriptHref = baseUrl + route.replaceFirst("\\{id\\}", script.getId());
 		element.setAttribute("id", script.getId());
 		element.setAttribute("href", scriptHref);
 		Joiner joiner = Joiner.on(" ");
-		if(!Iterables.isEmpty(script.getInputFilesets())){
+		if (!Iterables.isEmpty(script.getInputFilesets())){
 			element.setAttribute("input-filesets",joiner.join(script.getInputFilesets()));
 		}
-
-
-		if(!Iterables.isEmpty(script.getOutputFilesets())){
+		if (!Iterables.isEmpty(script.getOutputFilesets())){
 			element.setAttribute("output-filesets",joiner.join(script.getOutputFilesets()));
 		}
-
 		Element nicenameElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "nicename");
 		nicenameElm.setTextContent(script.getName());
 		element.appendChild(nicenameElm);
-
 		Element descriptionElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "description");
 		descriptionElm.setTextContent(script.getDescription());
 		element.appendChild(descriptionElm);
-
 		Element versionElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "version");
 		versionElm.setTextContent(script.getVersion());
 		element.appendChild(versionElm);
-
 		if (details) {
 			String homepage = script.getHomepage();
 			if (homepage != null && homepage.trim().length() > 0) {
@@ -105,7 +102,6 @@ public class ScriptXmlWriter {
 				homepageElm.setTextContent(homepage);
 				element.appendChild(homepageElm);
 			}
-			
 			addInputPorts(script.getInputPorts(), element);
 			addOptions(script.getOptions(), element);
 		}
@@ -135,7 +131,6 @@ public class ScriptXmlWriter {
 			optionElm.setAttribute("name", option.getName().toString());
 			optionElm.setAttribute("nicename", option.getNiceName());
 			optionElm.setAttribute("required", Boolean.toString(option.isRequired()));
-			
 			optionElm.setAttribute("type", option.getType().getId());
 			if (option.getMediaType() != null && !option.getMediaType().isEmpty()) {
 				optionElm.setAttribute("mediaType", option.getMediaType());

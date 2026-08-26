@@ -1,5 +1,6 @@
 package org.daisy.pipeline.script;
 
+@FunctionalInterface
 public interface ScriptServiceProvider {
 
 	/**

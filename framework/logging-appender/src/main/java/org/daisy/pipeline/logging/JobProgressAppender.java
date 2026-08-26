@@ -38,7 +38,7 @@ public class JobProgressAppender extends AppenderBase<ILoggingEvent> {
 	static {
 		try {
 			messagesThreshold = Message.Level.valueOf(
-				Properties.getProperty("org.daisy.pipeline.log.level", "INFO"));
+				Properties.getGlobalProperty("org.daisy.pipeline.log.level", "INFO"));
 		} catch (IllegalArgumentException e) {
 			messagesThreshold = Message.Level.INFO;
 		}

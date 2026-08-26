@@ -30,6 +30,7 @@ public class JobXmlWriter {
         
         private final String baseUrl;
         private final String notificationBaseUrl;
+        private final String route;
         private Job job = null;
         private List<Message> messages = null;
         private long messagesNewerThan = -1;
@@ -67,9 +68,13 @@ public class JobXmlWriter {
                 this(job, messagesThreshold, baseUrl, null);
         }
         public JobXmlWriter(Job job, Level messagesThreshold, String baseUrl, String notificationBaseUrl) {
+                this(job, messagesThreshold, baseUrl, notificationBaseUrl, Routes.JOB_ROUTE);
+        }
+        public JobXmlWriter(Job job, Level messagesThreshold, String baseUrl, String notificationBaseUrl, String route) {
                 this.job = job;
                 this.baseUrl = baseUrl;
                 this.notificationBaseUrl = notificationBaseUrl;
+                this.route = route;
                 MSG_LEVELS = new HashSet<Level>();
                 MSG_LEVELS.add(Level.ERROR);
                 MSG_LEVELS.add(Level.WARNING);
@@ -178,7 +183,7 @@ public class JobXmlWriter {
         private void addElementData(Job job, Element element) throws UnsupportedOperationException {
                 Document doc = element.getOwnerDocument();
                 Job.Status status = (this.statusOverWrite==null)?job.getStatus():this.statusOverWrite;
-                String jobPath = Routes.JOB_ROUTE.replaceFirst("\\{id\\}", job.getId().toString());
+                String jobPath = route.replaceFirst("\\{id\\}", job.getId().toString());
                 
                 element.setAttribute("id", job.getId().toString());
                 element.setAttribute("href", baseUrl + jobPath);
@@ -246,7 +251,7 @@ public class JobXmlWriter {
                         URI logfileUri = job.getLogFile();
                         if (logfileUri != null) {
                                 Element logElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "log");
-                                String logHref = baseUrl + Routes.LOG_ROUTE.replaceFirst("\\{id\\}", job.getId().toString());
+                                String logHref = baseUrl + route.replaceFirst("\\{id\\}", job.getId().toString()) + "/log";
                                 logElm.setAttribute("href", logHref);
                                 element.appendChild(logElm);
                         }
@@ -288,7 +293,7 @@ public class JobXmlWriter {
                 }
                 Document doc = jobElem.getOwnerDocument();
                 Element resultsElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "results");
-                String resultHref = baseUrl + Routes.RESULT_ROUTE.replaceFirst("\\{id\\}", job.getId().toString());
+                String resultHref = baseUrl + route.replaceFirst("\\{id\\}", job.getId().toString()) + "/result";
                 resultsElm.setAttribute("href", resultHref);
                 resultsElm.setAttribute("mime-type", "application/zip");
                 jobElem.appendChild(resultsElm);

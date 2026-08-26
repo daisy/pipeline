@@ -1,6 +1,7 @@
 package org.daisy.common.xproc;
 
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * XProcPipeline gives access to the pipeline info and allows to run a pipeline.
@@ -24,4 +25,7 @@ public interface XProcPipeline {
 	 */
 	XProcResult run(XProcInput data, XProcMonitor monitor, Map<String,String> props) throws XProcErrorException;
 
+	default XProcResult run(XProcInput data, XProcMonitor monitor, Properties props) throws XProcErrorException {
+		return run(data, monitor, (Map<String,String>)(Map)props);
+	}
 }

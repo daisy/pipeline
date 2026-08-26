@@ -1,5 +1,6 @@
 package org.daisy.pipeline.webservice.restlet.impl;
 
+import org.daisy.common.properties.Properties;
 import org.daisy.pipeline.script.Script;
 import org.daisy.pipeline.script.ScriptService;
 import org.daisy.pipeline.webservice.restlet.AuthenticatedResource;
@@ -14,10 +15,6 @@ import org.restlet.resource.Get;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Class ScriptResource.
- */
 public class ScriptResource extends AuthenticatedResource {
 	/** The script. */
 	private Script script = null;
@@ -33,16 +30,13 @@ public class ScriptResource extends AuthenticatedResource {
 		if (!isAuthenticated()) {
 			return;
 		}
-
 		String scriptId = null;
 		scriptId = (String) getRequestAttributes().get("id");
-
-		logger.debug("Script with id :"+scriptId);
+		logger.debug("Script with id: " + scriptId);
 		ScriptService<?> scriptService = getScriptRegistry().getScript(scriptId);
-
-		if (scriptService != null) {
-			script = scriptService.load();
-		}
+		if (scriptService != null)
+			script = scriptService.load(
+				Properties.getProperties(getClient().getId()).getSnapshot());
 	}
 
 	/**

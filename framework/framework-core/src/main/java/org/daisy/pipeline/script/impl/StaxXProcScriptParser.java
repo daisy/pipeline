@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.function.Predicate;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
@@ -111,8 +112,8 @@ public class StaxXProcScriptParser {
 	/**
 	 * Parses the XProc file.
 	 */
-	public XProcScript parse(final XProcScriptService descriptor) {
-		return new StatefulParser().parse(descriptor);
+	public XProcScript parse(final XProcScriptService descriptor, Map<String,String> props) {
+		return new StatefulParser().parse(descriptor, props);
 	}
 
 	/**
@@ -129,7 +130,7 @@ public class StaxXProcScriptParser {
 		/**
 		 * Parses the XProc file extracting the metadata attached to options, ports and the step.
 		 */
-		public XProcScript parse(final XProcScriptService descriptor) {
+		public XProcScript parse(XProcScriptService descriptor, Map<String,String> properties) {
 			if (xmlInputFactory == null) {
 				throw new IllegalStateException();
 			}
@@ -140,7 +141,7 @@ public class StaxXProcScriptParser {
 			infoParser.setFactory(xmlInputFactory);
 			try {
 				XProcPipelineInfo info = infoParser.parse(descriptor.getURL());
-				scriptBuilder = new XProcScript.Builder(descriptor, info.getURI(), xprocEngine, inputParsers, datatypeRegistry);
+				scriptBuilder = new XProcScript.Builder(descriptor, info.getURI(), xprocEngine, inputParsers, datatypeRegistry, properties);
 				URL descUrl = descriptor.getURL();
 				is = descUrl.openConnection().getInputStream();
 				reader = xmlInputFactory.createXMLEventReader(is);

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.daisy.common.properties.Properties;
 import org.daisy.common.properties.Properties.Property;
+import org.daisy.common.properties.Properties.Type;
 import org.daisy.common.xml.DocumentBuilder;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.impl.DefaultJobBuilder;
@@ -35,12 +36,12 @@ public class JobManagerFactory implements JobFactory {
         private static final Logger logger = LoggerFactory.getLogger(JobManagerFactory.class);
 
         private final static Property procsProperty = Properties.getProperty("org.daisy.pipeline.procs",
-                                                                             false,
+                                                                             Type.STATIC,
                                                                              "Maximum allowed number of jobs running simultaneously",
                                                                              false,
                                                                              "2");
         private final static Property logLevelProperty = Properties.getProperty("org.daisy.pipeline.log.level",
-                                                                                true,
+                                                                                Type.ADMIN,
                                                                                 "Disable job messages below this level",
                                                                                 false,
                                                                                 "INFO");

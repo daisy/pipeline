@@ -143,7 +143,7 @@ public class JobMonitorFactory {
 		JobMonitorCache() {
 			// Use this property only for testing! Use to configure how long finished messages are cached
 			// before storing them in a MessageStorage (volatile of persistent).
-			int timeout = Integer.valueOf(Properties.getProperty("org.daisy.pipeline.messaging.cache.buffer", "60"));
+			int timeout = Integer.valueOf(Properties.getGlobalProperty("org.daisy.pipeline.messaging.cache.buffer", "60"));
 			finished = CacheBuilder.newBuilder()
 			                       .expireAfterAccess(timeout, TimeUnit.SECONDS)
 			                       .<JobId,JobMonitor>build()

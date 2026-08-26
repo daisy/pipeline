@@ -189,7 +189,7 @@ public class FullConversionTest extends AbstractTest implements DifferenceListen
 				.load(new URI(
 						"http://www.daisy.org/pipeline/modules/dtbook-to-daisy3/dtbook-to-daisy3.xpl"));
 
-		pipeline.run(xprocInput.build(), null, org.daisy.common.properties.Properties.getSnapshot());
+		pipeline.run(xprocInput.build(), null, System.getProperties());
 
 		if (audio) {
 			Assert.assertTrue("No audio was generated",

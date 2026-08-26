@@ -45,11 +45,11 @@ public class JobURIUtils {
         private static File getJobBaseDir(String jobId, boolean create) throws IOException {
                 if (jobsBaseDir == null) {
                         String prop = "org.daisy.pipeline.iobase";
-                        String val = Properties.getProperty(prop);
+                        String val = Properties.getGlobalProperty(prop);
                         if (val != null)
                                 logger.warn("The '" + prop + "' property is deprecated. Ignoring.");
                         jobsBaseDir = new File(frameworkDataDir(), "jobs");
-                        if (Properties.getProperty("org.daisy.pipeline.data") == null)
+                        if (Properties.getGlobalProperty("org.daisy.pipeline.data") == null)
                                 // delete on exit when empty
                                 jobsBaseDir.deleteOnExit();
                 }
@@ -142,7 +142,7 @@ public class JobURIUtils {
         // see org.daisy.pipeline.job.JobURIUtils
         public static void assertFrameworkDataDirPersisted() throws IllegalStateException {
                 String prop = "org.daisy.pipeline.data";
-                if (Properties.getProperty(prop) == null)
+                if (Properties.getGlobalProperty(prop) == null)
                         throw new IllegalStateException(String.format("The property '%s' is not set", prop));
         }
 
@@ -151,7 +151,7 @@ public class JobURIUtils {
         private static File frameworkDataDir() throws IOException {
                 if (frameworkDataDir == null) {
                         String prop = "org.daisy.pipeline.data";
-                        String val = Properties.getProperty(prop);
+                        String val = Properties.getGlobalProperty(prop);
                         if (val != null)
                                 frameworkDataDir = new File(val);
                         else {
