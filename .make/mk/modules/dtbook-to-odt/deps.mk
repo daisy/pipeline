@@ -8,13 +8,19 @@ $(TARGET_DIR)/state/modules/dtbook-to-odt/last-tested : $(TARGET_DIR)/state/%/la
 # this rule gets executed at least once
 $(TARGET_DIR)/state/modules/dtbook-to-odt/modified-since-release_ : modules/dtbook-to-odt/pom.xml \
 	$(TARGET_DIR)/state/modules/parent/modified-since-release \
+	$(TARGET_DIR)/state/framework/framework-core/modified-since-release \
 	$(TARGET_DIR)/state/modules/asciimath-utils/modified-since-release \
 	$(TARGET_DIR)/state/modules/dtbook-utils/modified-since-release \
 	$(TARGET_DIR)/state/modules/file-utils/modified-since-release \
 	$(TARGET_DIR)/state/modules/fileset-utils/modified-since-release \
 	$(TARGET_DIR)/state/modules/odf-utils/modified-since-release \
 	$(TARGET_DIR)/state/modules/image-utils/modified-since-release \
-	$(TARGET_DIR)/state/modules/word-to-dtbook/modified-since-release
+	$(TARGET_DIR)/state/modules/word-to-dtbook/modified-since-release \
+	$(TARGET_DIR)/state/framework/modules-registry/modified-since-release \
+	$(TARGET_DIR)/state/framework/logging-appender/modified-since-release \
+	$(TARGET_DIR)/state/framework/webservice/modified-since-release \
+	$(TARGET_DIR)/state/framework/persistence-derby/modified-since-release \
+	$(TARGET_DIR)/state/framework/calabash-adapter/modified-since-release
 	mkdirs("$(dir $@)"); \
 	try (OutputStream s = new FileOutputStream("$@")) { \
 		ModificationType modified = isModifiedSinceLastRelease(new File("$<").getParentFile()); \
@@ -67,8 +73,15 @@ modules/dtbook-to-odt/.install-doc : %/.install-doc : %/pom.xml | %/.compile-dep
 .SECONDARY : modules/dtbook-to-odt/.compile-dependencies modules/dtbook-to-odt/.test-dependencies
 modules/dtbook-to-odt/.compile-dependencies : \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-parent/1.15.5-SNAPSHOT/modules-parent-1.15.5-SNAPSHOT.pom \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/framework-core/12.1.1-SNAPSHOT/framework-core-12.1.1-SNAPSHOT.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/common-utils/6.7.1-SNAPSHOT/common-utils-6.7.1-SNAPSHOT.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/xproc-api/8.1.2-SNAPSHOT/xproc-api-8.1.2-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/asciimath-utils/2.0.2-SNAPSHOT/asciimath-utils-2.0.2-SNAPSHOT.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/calabash-adapter/7.1.2-SNAPSHOT/calabash-adapter-7.1.2-SNAPSHOT.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/saxon-adapter/5.8.3-SNAPSHOT/saxon-adapter-5.8.3-SNAPSHOT.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules-registry/5.0.3-SNAPSHOT/modules-registry-5.0.3-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/tts-common/9.0.1-SNAPSHOT/tts-common-9.0.1-SNAPSHOT.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/webservice/4.0.2-SNAPSHOT/webservice-4.0.2-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/audio-common/5.1.9-SNAPSHOT/audio-common-5.1.9-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/common-utils/3.4.1-SNAPSHOT/common-utils-3.4.1-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/file-utils/5.0.1-SNAPSHOT/file-utils-5.0.1-SNAPSHOT.jar \
@@ -84,15 +97,22 @@ modules/dtbook-to-odt/.compile-dependencies : \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/odf-utils/1.0.8-SNAPSHOT/odf-utils-1.0.8-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/image-utils/1.0.9-SNAPSHOT/image-utils-1.0.9-SNAPSHOT.jar
 modules/dtbook-to-odt/.test-dependencies : \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules-registry/5.0.3-SNAPSHOT/modules-registry-5.0.3-SNAPSHOT.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/common-utils/6.7.1-SNAPSHOT/common-utils-6.7.1-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/word-to-dtbook/1.1.3-SNAPSHOT/word-to-dtbook-1.1.3-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/common-utils/3.4.1-SNAPSHOT/common-utils-3.4.1-SNAPSHOT.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/calabash-adapter/7.1.2-SNAPSHOT/calabash-adapter-7.1.2-SNAPSHOT.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/saxon-adapter/5.8.3-SNAPSHOT/saxon-adapter-5.8.3-SNAPSHOT.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/xproc-api/8.1.2-SNAPSHOT/xproc-api-8.1.2-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/fileset-utils/8.0.1-SNAPSHOT/fileset-utils-8.0.1-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/file-utils/5.0.1-SNAPSHOT/file-utils-5.0.1-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/zip-utils/2.1.11-SNAPSHOT/zip-utils-2.1.11-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/dtbook-utils/6.1.1-SNAPSHOT/dtbook-utils-6.1.1-SNAPSHOT.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/framework-core/12.1.1-SNAPSHOT/framework-core-12.1.1-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/mediatype-utils/2.1.2-SNAPSHOT/mediatype-utils-2.1.2-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/validation-utils/2.0.4-SNAPSHOT/validation-utils-2.0.4-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/css-utils/8.0.1-SNAPSHOT/css-utils-8.0.1-SNAPSHOT.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/webservice/4.0.2-SNAPSHOT/webservice-4.0.2-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/metadata-utils/2.0.3-SNAPSHOT/metadata-utils-2.0.3-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/mathml-utils/1.1.2-SNAPSHOT/mathml-utils-1.1.2-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/tts-common/9.0.1-SNAPSHOT/tts-common-9.0.1-SNAPSHOT.jar \
@@ -121,7 +141,11 @@ modules/dtbook-to-odt/.test-dependencies : \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/braille/dtbook-to-pef/13.0.1-SNAPSHOT/dtbook-to-pef-13.0.1-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/dtbook-to-html/4.1.1-SNAPSHOT/dtbook-to-html-4.1.1-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/epub3-to-daisy202/2.2.12-SNAPSHOT/epub3-to-daisy202-2.2.12-SNAPSHOT.jar \
-	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/daisy202-utils/1.6.7-SNAPSHOT/daisy202-utils-1.6.7-SNAPSHOT.jar
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/daisy202-utils/1.6.7-SNAPSHOT/daisy202-utils-1.6.7-SNAPSHOT.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/maven/xproc-engine-daisy-pipeline/1.14.8-SNAPSHOT/xproc-engine-daisy-pipeline-1.14.8-SNAPSHOT.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/logging-appender/3.0.1-SNAPSHOT/logging-appender-3.0.1-SNAPSHOT.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/persistence-derby/2.0.13-SNAPSHOT/persistence-derby-2.0.13-SNAPSHOT.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/framework-persistence/2.1.14-SNAPSHOT/framework-persistence-2.1.14-SNAPSHOT.jar
 
 $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/dtbook-to-odt/2.1.17/dtbook-to-odt-2.1.17.% \
 $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/dtbook-to-odt/2.1.17/dtbook-to-odt-2.1.17-% : modules/dtbook-to-odt/.release
@@ -133,8 +157,15 @@ modules/dtbook-to-odt/.release : modules/.release
 
 modules/dtbook-to-odt/.release : \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-parent/1.15.5/modules-parent-1.15.5.pom \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/framework-core/12.1.1/framework-core-12.1.1.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/common-utils/6.7.1/common-utils-6.7.1.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/xproc-api/8.1.2/xproc-api-8.1.2.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/asciimath-utils/2.0.2/asciimath-utils-2.0.2.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/calabash-adapter/7.1.2/calabash-adapter-7.1.2.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/saxon-adapter/5.8.3/saxon-adapter-5.8.3.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules-registry/5.0.3/modules-registry-5.0.3.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/tts-common/9.0.1/tts-common-9.0.1.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/webservice/4.0.2/webservice-4.0.2.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/audio-common/5.1.9/audio-common-5.1.9.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/common-utils/3.4.1/common-utils-3.4.1.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/file-utils/5.0.1/file-utils-5.0.1.jar \
@@ -172,7 +203,11 @@ modules/dtbook-to-odt/.release : \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/braille/dtbook-to-pef/13.0.1/dtbook-to-pef-13.0.1.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/dtbook-to-html/4.1.1/dtbook-to-html-4.1.1.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/epub3-to-daisy202/2.2.12/epub3-to-daisy202-2.2.12.jar \
-	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/daisy202-utils/1.6.7/daisy202-utils-1.6.7.jar
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/daisy202-utils/1.6.7/daisy202-utils-1.6.7.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/maven/xproc-engine-daisy-pipeline/1.14.8/xproc-engine-daisy-pipeline-1.14.8.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/logging-appender/3.0.1/logging-appender-3.0.1.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/persistence-derby/2.0.13/persistence-derby-2.0.13.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/framework-persistence/2.1.14/framework-persistence-2.1.14.jar
 
 clean : modules/dtbook-to-odt/.clean
 .PHONY : modules/dtbook-to-odt/.clean

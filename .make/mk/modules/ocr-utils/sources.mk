@@ -5,8 +5,12 @@ modules/ocr-utils/.test modules/ocr-utils/.install modules/ocr-utils/.install-do
 	modules/ocr-utils/src/main/java/org/daisy/pipeline/ocr/impl/PDFToWordScript.java \
 	modules/ocr-utils/src/main/java/org/daisy/pipeline/ocr/impl/PDFToWordScriptProvider.java \
 	modules/ocr-utils/src/main/java/org/daisy/pipeline/ocr/impl/OCRServicesResource.java \
+	modules/ocr-utils/src/main/java/org/daisy/pipeline/ocr/impl/OCRScriptsResource.java \
 	modules/ocr-utils/src/main/java/org/daisy/pipeline/ocr/impl/OCRServiceHelper.java \
 	modules/ocr-utils/src/main/java/org/daisy/pipeline/ocr/impl/OCRServicesWebServiceExtension.java \
+	modules/ocr-utils/src/main/java/org/daisy/pipeline/ocr/impl/OCRScriptsWebServiceExtension.java \
+	modules/ocr-utils/src/main/java/org/daisy/pipeline/ocr/impl/OCRJobsResource.java \
+	modules/ocr-utils/src/main/java/org/daisy/pipeline/ocr/impl/OCRScriptResource.java \
 	modules/ocr-utils/src/main/java/org/daisy/pipeline/ocr/OCRProcessor.java \
 	modules/ocr-utils/src/main/java/org/daisy/pipeline/ocr/OCRService.java \
 	modules/ocr-utils/src/main/java/org/daisy/pipeline/ocr/datalab/impl/DatalabOCRService.java \

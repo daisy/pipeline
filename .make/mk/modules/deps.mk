@@ -160,4 +160,16 @@ $(TARGET_DIR)/state/modules/last-tested : \
 .SECONDARY : modules/.release
 modules/.release : | .maven-init .group-eval
 
-modules/.release :
+modules/.release : \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/framework-bom/1.15.8/framework-bom-1.15.8.pom \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/maven/xproc-engine-daisy-pipeline/1.14.8/xproc-engine-daisy-pipeline-1.14.8.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/webservice/4.0.2/webservice-4.0.2.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/common-utils/6.7.1/common-utils-6.7.1.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/framework-core/12.1.1/framework-core-12.1.1.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/xproc-api/8.1.2/xproc-api-8.1.2.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/persistence-derby/2.0.13/persistence-derby-2.0.13.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/framework-persistence/2.1.14/framework-persistence-2.1.14.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/calabash-adapter/7.1.2/calabash-adapter-7.1.2.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/saxon-adapter/5.8.3/saxon-adapter-5.8.3.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules-registry/5.0.3/modules-registry-5.0.3.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/logging-appender/3.0.1/logging-appender-3.0.1.jar
