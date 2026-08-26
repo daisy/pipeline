@@ -50,12 +50,12 @@
 	</p:output>
 
 	<p:option name="braille-translator" select="''"/>
-	<p:option name="braille-translator-stylesheet" select="''">
+	<p:option name="stylesheet" select="''">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<p>CSS style sheets as space separated list of absolute URIs.</p>
 		</p:documentation>
 	</p:option>
-	<p:option name="braille-translator-stylesheet-parameters" cx:as="xs:string" select="'()'"/>
+	<p:option name="stylesheet-parameters" cx:as="xs:string" select="'()'"/>
 	<p:option name="dtbook-is-valid" cx:as="xs:boolean" select="true()">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<p>Whether the input is a valid DTBook.</p>
@@ -193,18 +193,23 @@
 		<p:documentation>Translate all text content to Unicode braille</p:documentation>
 		<p:group px:progress="1">
 			<p:variable name="parameter-map"
-			            select="pf:css-parse-param-set(($braille-translator-stylesheet-parameters,()))"/>
+			            select="pf:css-parse-param-set(($stylesheet-parameters,()))"/>
 			<p:for-each px:progress="1">
 				<p:variable name="lang" select="(/*/@xml:lang,'und')[1]"/>
 				<px:css-cascade media="braille" content-type="application/x-dtbook+xml"
 				                include-user-agent-stylesheet="true" name="dtbook-with-css"
 				                px:progress="1/2">
-					<p:with-option name="user-stylesheet" select="$braille-translator-stylesheet"/>
+					<p:with-option name="user-stylesheet" select="$stylesheet"/>
 					<p:with-option name="parameters" select="$parameter-map"/>
 					<p:input port="parameters">
 						<p:empty/>
 					</p:input>
 				</px:css-cascade>
+				<p:delete match="//dtb:head/dtb:meta[@name='dc:Language']">
+					<!-- delete dc:language because px:transform does not change it, and so that
+					     EPUB metadata will be taken from xml:lang of the DTBook (which is changed
+					     by px:transform) -->
+				</p:delete>
 				<px:transform px:progress="1/2">
 					<!-- note that this step also translates text inside head (such as style
 					     elements), but this text should normally not end up in the result eBraille -->
@@ -236,7 +241,7 @@
 				</p:output>
 				<p:xslt name="xslt">
 					<p:input port="stylesheet">
-						<p:document href="get-used-braille-codes.xsl"/>
+						<p:document href="http://www.daisy.org/pipeline/modules/braille/common-utils/get-used-braille-codes.xsl"/>
 					</p:input>
 					<p:input port="parameters">
 						<p:empty/>
@@ -407,10 +412,9 @@
 			<p:with-param name="original-text" select="collection()">
 				<p:pipe step="process-dtbook" port="original-text"/>
 			</p:with-param>
-			<!-- Note that $braille-translator-stylesheet and
-			     $braille-translator-stylesheet-parameters are not taken into account, as well as
-			     any CSS defined in the DTBook itself, as they apply only on the DTBook. This means
-			     that any @text-transform rules will not have any effect for the primary entry
+			<!-- Note that $stylesheet and $stylesheet-parameters are not taken into account, as well
+			     as any CSS defined in the DTBook itself, as they apply only on the DTBook. This
+			     means that any @text-transform rules will not have any effect for the primary entry
 			     page. -->
 			<p:with-param name="braille-translator" select="$braille-translator"/>
 		</p:xslt>

@@ -4,6 +4,7 @@
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:dc="http://purl.org/dc/elements/1.1/"
                 xmlns:daisy="http://www.daisy.org/ns/pipeline/"
                 xmlns:obfl="http://www.daisy.org/ns/2011/obfl"
                 type="px:obfl-to-pef" name="main">
@@ -38,7 +39,27 @@
 		</p:documentation>
 	</p:import>
 
+	<p:variable name="imply-text-transform-none-on-braille-content" select="true()"/>
+
 	<pxi:obfl-normalize-space px:progress=".10"/>
+
+	<p:choose>
+		<p:when test="$imply-text-transform-none-on-braille-content
+		              and /obfl:obfl/obfl:meta/daisy:style-type[1][string(.)='text/css']">
+			<!--
+				Dotify does not take into account xml:lang if no translate attribute was declared
+				(or if it was set to the empty string), so add translate attributes were necessary.
+			-->
+			<p:label-elements match="*[@xml:lang][not(@translate)]"
+			                 attribute="translate"
+			                 label="if (tokenize(@xml:lang,'-')='Brai')
+			                        then 'pre-translated-text-css'
+			                        else (ancestor::*[@translate][1]/string(@translate),'')[1]"/>
+		</p:when>
+		<p:otherwise>
+			<p:identity/>
+		</p:otherwise>
+	</p:choose>
 
 	<p:add-attribute match="*[@translate='pre-translated-text-css']"
 	                 attribute-name="translate"
@@ -81,7 +102,9 @@
 	</p:delete>
 
 	<pxi:obfl-to-pef px:progress=".90">
-		<p:with-option name="locale" select="(/obfl:obfl/@xml:lang,'und')[1]"/>
+		<p:with-option name="locale" select="(/obfl:obfl/obfl:meta/dc:language,
+		                                      /obfl:obfl/@xml:lang,
+		                                      'und')[1]"/>
 		<p:with-option name="mode" select="/obfl:obfl/obfl:meta/daisy:default-mode">
 			<p:pipe step="main" port="source"/>
 		</p:with-option>

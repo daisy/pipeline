@@ -198,7 +198,7 @@
                         <xsl:variable name="first-group-processed" as="element(opf:meta)*">
                             <xsl:apply-templates select="$first-group"/>
                         </xsl:variable>
-                        <xsl:sequence select="$first-group-processed"/>
+                        <xsl:copy-of copy-namespaces="false" select="$first-group-processed"/>
                         <!-- Discard fields that are not from the same metadata document -->
                         <xsl:if test="$log-conflicts='true'">
                             <xsl:variable name="discarded" as="element(opf:meta)*"
@@ -452,7 +452,7 @@
 
 
     <xsl:template match="node() | @*">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="false">
             <xsl:apply-templates select="node() | @*"/>
         </xsl:copy>
     </xsl:template>

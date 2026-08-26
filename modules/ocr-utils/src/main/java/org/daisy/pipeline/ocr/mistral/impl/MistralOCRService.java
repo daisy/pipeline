@@ -1,11 +1,9 @@
 package org.daisy.pipeline.ocr.mistral.impl;
 
-import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -26,42 +24,32 @@ import java.util.Optional;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
-import javax.xml.namespace.QName;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.transform.stax.StAXResult;
 
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 
-import org.apache.pdfbox.contentstream.PDFGraphicsStreamEngine;
-import org.apache.pdfbox.cos.COSName;
-import org.apache.pdfbox.pdmodel.graphics.image.PDImage;
 import org.apache.pdfbox.rendering.PDFRenderer;
-import org.apache.pdfbox.util.Matrix;
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.common.PDMetadata;
-import org.apache.xmpbox.schema.DublinCoreSchema;
-import org.apache.xmpbox.xml.XmpParsingException;
-import org.apache.xmpbox.xml.DomXmpParser;
 
 import org.daisy.common.file.Resource;
-import org.daisy.common.file.URLs;
 import org.daisy.common.messaging.MessageAppender;
 import org.daisy.common.messaging.MessageBuilder;
 import org.daisy.common.properties.Properties;
 import org.daisy.common.properties.Properties.Property;
-import org.daisy.common.saxon.SaxonBuffer;
 import org.daisy.common.xproc.XProcEngine;
-import org.daisy.common.xproc.XProcErrorException;
-import org.daisy.common.xproc.XProcInput;
-import org.daisy.common.xproc.XProcOutput;
 import org.daisy.pipeline.common.rest.Request;
 import org.daisy.pipeline.common.rest.Response;
-import org.daisy.pipeline.fileset.Fileset;
+import static org.daisy.pipeline.ocr.impl.OCRServiceHelper.extractRegion;
+import static org.daisy.pipeline.ocr.impl.OCRServiceHelper.getMetadataFromPDF;
+import static org.daisy.pipeline.ocr.impl.OCRServiceHelper.getImageFromDataURL;
+import static org.daisy.pipeline.ocr.impl.OCRServiceHelper.markdownToHTML;
+import static org.daisy.pipeline.ocr.impl.OCRServiceHelper.IMAGE_DPI;
+import org.daisy.pipeline.ocr.impl.OCRServiceHelper.ImageInfo;
+import org.daisy.pipeline.ocr.impl.OCRServiceHelper.Metadata;
 import org.daisy.pipeline.ocr.OCRProcessor;
 import org.daisy.pipeline.ocr.OCRService;
+import org.daisy.pipeline.script.ScriptOption;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -76,7 +64,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Component(
-	name = "mistral-ocr",
+	name = "mistral",
 	service = { OCRService.class }
 )
 public class MistralOCRService implements OCRService {
@@ -111,7 +99,7 @@ public class MistralOCRService implements OCRService {
 
 	@Override
 	public String getName() {
-		return "mistral-ocr";
+		return "mistral";
 	}
 
 	@Override
@@ -122,6 +110,13 @@ public class MistralOCRService implements OCRService {
 	@Override
 	public String getDescription() {
 		return "AI-based online service";
+	}
+
+	@Override
+	public Iterable<ScriptOption> getOptions() {
+		List<ScriptOption> options = new ArrayList<>();
+		options.add(CommonOptions.INCLUDE_PAGE_NUMBERS);
+		return options;
 	}
 
 	private String cacheKey = null;
@@ -175,19 +170,13 @@ public class MistralOCRService implements OCRService {
 			case 401: // Unauthorized (invalid API key)
 			default:
 			}
-			throw raiseError(response, request);
+			throw raiseApiError(response, request);
 		} catch (IOException|InterruptedException|RuntimeException e) {
 			throw new ServiceDisabledException("Failed to establish a connection to the server", e);
 		}
 	}
 
-	private static final URI markdownToHTML = URLs.asURI(URLs.getResourceFromJAR("/xml/mistral/markdown-to-html.xpl", MistralOCRService.class));
 	private static final Logger logger = LoggerFactory.getLogger(MistralOCRService.class);
-	// Resolution of produced images if taken from rendered pages. (If taken directly from
-	// source images, the original resulotion is used.)
-	// Beware: this variable is specifically set to match Mistral's coordinate system. If
-	// you change it, the returned image coordinates need to be processed differently.
-	private static final float IMAGE_DPI = 200f;
 
 	private class MistralOCRModel implements OCRProcessor {
 
@@ -210,7 +199,7 @@ public class MistralOCRService implements OCRService {
 
 		@Override
 		public String getDisplayName() {
-			return modelName;
+			return "model " + modelName;
 		}
 
 		@Override
@@ -226,35 +215,16 @@ public class MistralOCRService implements OCRService {
 			                                       : input.getPath().toString().endsWith(".pdf")))
 				throw new UnsupportedOperationException("Only supports PDF");
 
-			// metadata
-			String title = null;
-			String author = null;
-			Locale language = null;
+			// options
+			boolean includePageNumbers = OCRProcessor.getBooleanOption(options, CommonOptions.INCLUDE_PAGE_NUMBERS);
+
+			// other variables
+			boolean includeImageBase64 = true; // for some reason, extracting the images from the PDF based on the
+			                                   // bounding boxes is not reliable enough
 
 			// first try to get metadata from PDF directly
-			try (PDDocument pdf = PDDocument.load(input.read())) {
-				PDDocumentInformation info = pdf.getDocumentInformation();
-				title = info.getTitle();
-				author = info.getAuthor();
-				if ("unknown".equalsIgnoreCase(author))
-					author = null;
-				PDMetadata metadata = pdf.getDocumentCatalog().getMetadata();
-				if (metadata != null)
-					try (InputStream s = metadata.createInputStream()) {
-						DublinCoreSchema dc = new DomXmpParser().parse(s).getDublinCoreSchema();
-						if (title == null)
-							title = dc.getTitle();
-						if (language == null) {
-							List<String> languages = dc.getLanguages();
-							if (languages != null && languages.size()> 0)
-								language = new Locale.Builder().setLanguageTag(languages.get(0)).build();
-						}
-					} catch (XmpParsingException e) {
-						logger.debug("Failed to extract XMP metadata from PDF", e);
-					}
-			} catch (IOException e) {
-				logger.warn("Failed to extract metadata from PDF", e);
-			}
+			Metadata metadata = getMetadataFromPDF(input, logger);
+
 			try {
 				String fileId = uploadFile(input);
 				JSONObject bboxAnnotationSchema; {
@@ -279,7 +249,7 @@ public class MistralOCRService implements OCRService {
 								                                   "The full literal text content of the image, as well-structured HTML."
 								                                   + " Must include only the exact text present within the image."
 								                                   + " Prefer lists over headings to convey structure."
-								                                   + " If the image contains to text, return an empty string.")
+								                                   + " If the image contains no text, return an empty string.")
 								                              .put("type", "string"))
 								         .put("functional_index",
 								              new JSONObject().put("title", "Functional_Index")
@@ -337,8 +307,8 @@ public class MistralOCRService implements OCRService {
 							.put("bbox_annotation_format",
 							     new JSONObject().put("type", "json_schema")
 							                     .put("json_schema", bboxAnnotationSchema))
-							.put("include_image_base64", false);
-						if (title == null || author == null || language == null)
+							.put("include_image_base64", includeImageBase64);
+						if (metadata.title == null || metadata.author == null || metadata.language == null)
 							requestBody = requestBody.put("document_annotation_format",
 							                              new JSONObject().put("type", "json_schema")
 							                                              .put("json_schema", docAnnotationSchema));
@@ -363,22 +333,23 @@ public class MistralOCRService implements OCRService {
 					logger.debug(response.body);
 					Resource markdown = null;
 					List<Map<String,Rectangle2D>> imageBoxes = null;
+					List<Map<String,String>> imageData = null;
 					Map<String,String> imageShortDescriptions = null;
 					Map<String,String> imagesTextContent = null;
 					List<String> replaceImages = null;
 					try {
 						JSONObject json = new JSONObject(response.body);
-						if (title == null || author == null || language == null) {
+						if (metadata.title == null || metadata.author == null || metadata.language == null) {
 							JSONObject docAnnotation = new JSONObject(json.getString("document_annotation"));
-							if (title == null)
-								title = docAnnotation.isNull("title") ? null : docAnnotation.getString("title");
-							if (author == null) {
-								author = docAnnotation.isNull("author") ? null : docAnnotation.getString("author");
-								if ("unknown".equalsIgnoreCase(author))
-									author = null;
+							if (metadata.title == null)
+								metadata.title = docAnnotation.isNull("title") ? null : docAnnotation.getString("title");
+							if (metadata.author == null) {
+								metadata.author = docAnnotation.isNull("author") ? null : docAnnotation.getString("author");
+								if ("unknown".equalsIgnoreCase(metadata.author))
+									metadata.author = null;
 							}
-							if (language == null)
-								language = docAnnotation.isNull("language")
+							if (metadata.language == null)
+								metadata.language = docAnnotation.isNull("language")
 									? null
 									: new Locale.Builder().setLanguageTag(docAnnotation.getString("language")).build();
 						}
@@ -390,6 +361,8 @@ public class MistralOCRService implements OCRService {
 						imagesTextContent = new HashMap<>();
 						replaceImages = new ArrayList<>();
 						imageBoxes = new ArrayList<>();
+						if (includeImageBase64)
+							imageData = new ArrayList<>();
 						for (int p = 0; p < pages.length(); p++) {
 							JSONObject pageJson = pages.getJSONObject(p);
 							String md = pageJson.getString("markdown");
@@ -398,6 +371,8 @@ public class MistralOCRService implements OCRService {
 							markdownPages.add(md);
 							JSONArray images = pageJson.getJSONArray("images");
 							imageBoxes.add(images.length() > 0 ? new HashMap<>() : null);
+							if (includeImageBase64)
+								imageData.add(images.length() > 0 ? new HashMap<>() : null);
 							for (int i = 0; i < images.length(); i++) {
 								JSONObject img = images.getJSONObject(i);
 								String id = img.getString("id");
@@ -423,11 +398,20 @@ public class MistralOCRService implements OCRService {
 								                                         topLeftY,
 								                                         bottomRightX - topLeftX,
 								                                         bottomRightY - topLeftY));
+								if (includeImageBase64) {
+									String data = img.getString("image_base64");
+									if (data == null)
+										throw new RuntimeException("missing image data");
+									imageData.get(imageData.size() - 1)
+									         .put(id, data);
+								}
 							}
 						}
 
 						// <hr> and not <br> because <br> is wrapped in <p>
-						String markdownContent = String.join("\n\n<hr role='doc-pagebreak'/>\n\n", markdownPages);
+						String markdownContent = String.join(
+							includePageNumbers ? "\n\n<hr role='doc-pagebreak'/>\n\n" : "\n\n",
+							markdownPages);
 						markdownContent = "_This document was converted from PDF using AI._\n\n" + markdownContent;
 						markdown = Resource.load(markdownContent.getBytes(StandardCharsets.UTF_8),
 						                         URI.create("index.md"),
@@ -445,25 +429,31 @@ public class MistralOCRService implements OCRService {
 								: null;
 							try (PDDocument pdf = PDDocument.load(input.read())) {
 								for (int p = 0; p < imageBoxes.size(); p++) {
-									PDPage page = pdf.getPage(p);
 									Map<String,Rectangle2D> boxes = imageBoxes.get(p);
 									if (boxes != null) {
-										// FIXME: extractRegion appears to be unreliable when it makes use of the source images
-										List<ImageInfo> pdfImages = null; //getImageInfo(page);
-										int pageIndex = p;
-										Supplier<BufferedImage> renderedPage = Suppliers.memoize(
-											() -> {
-												try {
-													return new PDFRenderer(pdf).renderImageWithDPI(pageIndex, IMAGE_DPI); }
-												catch (IOException e) {
-													throw new UncheckedIOException(e); }});
-										for (String id : boxes.keySet()) {
-											ByteArrayOutputStream imageData = new ByteArrayOutputStream();
-											ImageIO.write(extractRegion(page, renderedPage, pdfImages, boxes.get(id)),
-											              "png",
-											              imageData);
-											images.add(Resource.load(imageData.toByteArray(), URI.create(id), "image/png"));
+										for (String id : boxes.keySet())
 											imageWidths.put(id, (int)boxes.get(id).getWidth());
+										if (includeImageBase64) {
+											for (String id : boxes.keySet())
+												images.add(getImageFromDataURL(imageData.get(p).get(id), URI.create(id)));
+										} else {
+											// FIXME: extractRegion appears to be unreliable when it makes use of the source images
+											PDPage page = pdf.getPage(p);
+											List<ImageInfo> pdfImages = null; //getImageInfo(page);
+											int pageIndex = p;
+											Supplier<BufferedImage> renderedPage = Suppliers.memoize(
+												() -> {
+													try {
+														return new PDFRenderer(pdf).renderImageWithDPI(pageIndex, IMAGE_DPI); }
+													catch (IOException e) {
+														throw new UncheckedIOException(e); }});
+											for (String id : boxes.keySet()) {
+												ByteArrayOutputStream data = new ByteArrayOutputStream();
+												ImageIO.write(extractRegion(page, renderedPage, pdfImages, boxes.get(id)),
+												              "png", // FIXME: should match file extension
+												              data);
+												images.add(Resource.load(data.toByteArray(), URI.create(id), "image/png"));
+											}
 										}
 									}
 									if (progress != null)
@@ -473,56 +463,19 @@ public class MistralOCRService implements OCRService {
 						}
 					}
 					// convert the markdown to HTML
-					Map<String,String> metadata = new HashMap<>(); {
-						if (title != null)
-							metadata.put("title", title);
-						if (author != null)
-							metadata.put("author", author);
-						if (language != null)
-							metadata.put("language", language.toLanguageTag());
-					}
 					File tempDir = new File(resultDir, "tmp");
 					resultDir = new File(resultDir, "result");
 					tempDir.mkdirs();
-					markdown = markdown.copy(URLs.resolve(URLs.asURI(tempDir), markdown.getPath())).store();
-					for (Resource image : images)
-						image.copy(URLs.resolve(URLs.asURI(tempDir), image.getPath())).store();
-					List<Resource> htmlFileset = new ArrayList<>();
-					SaxonBuffer buffer = new SaxonBuffer();
 					try (MessageAppender xprocMessages = messages != null ? messages.append(new MessageBuilder().withProgress(new BigDecimal(.2))) : null) {
-						xprocEngine
-							.load(markdownToHTML)
-							.run(
-								new XProcInput.Builder()
-								              .withOption(new QName("source"), markdown.getPath())
-								              .withOption(new QName("metadata"), metadata)
-								              .withOption(new QName("result-dir"), URLs.asURI(resultDir))
-								              .withOption(new QName("image-descriptions"), imageShortDescriptions)
-								              .withOption(new QName("image-text-content"), imagesTextContent)
-								              .withOption(new QName("image-sizes"), imageWidths)
-								              .withOption(new QName("replace-images"), replaceImages)
-								              .build(),
-								() -> xprocMessages,
-								properties)
-							.writeTo(
-								new XProcOutput.Builder()
-								               .withOutput(
-								                   "result",
-								                   () -> new StAXResult(buffer.asOutput().asXMLStreamWriter()))
-								               .build());
-					} catch (XProcErrorException e) {
-						logger.error("XProc error:\n" + e.toString());
-						throw new RuntimeException("XProc error happened. Please see detailed log for more info.", e);
+						return markdownToHTML(xprocEngine, xprocMessages, logger, properties, tempDir, resultDir, markdown, metadata,
+						                      images, imageShortDescriptions, imagesTextContent, imageWidths, replaceImages);
 					}
-					buffer.done();
-					htmlFileset.addAll(Fileset.unmarshall(buffer.asInput().asXMLStreamReader()));
-					return htmlFileset;
 				case 422: // Unprocessable Content
 				case 500: // Internal Server Error
 				default:
 				}
-				throw raiseError(response, request);
-			} catch (IOException|InterruptedException|XMLStreamException|RuntimeException e) {
+				throw raiseApiError(response, request);
+			} catch (IOException|InterruptedException|RuntimeException e) {
 				throw new RuntimeException("OCR conversion could not be performed", e);
 			}
 		}
@@ -551,7 +504,7 @@ public class MistralOCRService implements OCRService {
 					throw new IllegalStateException("could not parse response");
 				default:
 				}
-				throw raiseError(response, request);
+				throw raiseApiError(response, request);
 			} catch (IOException|InterruptedException|RuntimeException e) {
 				throw new RuntimeException("failed to upload file", e);
 			}
@@ -570,74 +523,7 @@ public class MistralOCRService implements OCRService {
 			throw new IllegalArgumentException("JSONObject[\"" + key + "\"] can not be converted to an integer");
 	}
 
-	static class ImageInfo {
-		BufferedImage image;
-		Rectangle2D bounds;
-	}
-
-	private static List<ImageInfo> getImageInfo(PDPage page) throws IOException {
-		List<ImageInfo> images = new ArrayList<>();
-		new PDFGraphicsStreamEngine(page) {
-			@Override
-			public void drawImage(PDImage pdImage) throws IOException {
-				Matrix ctm = getGraphicsState().getCurrentTransformationMatrix();
-				float x = ctm.getTranslateX();
-				float y = ctm.getTranslateY();
-				float w = ctm.getScalingFactorX();
-				float h = ctm.getScalingFactorY();
-				ImageInfo info = new ImageInfo();
-				info.image = pdImage.getImage();
-				info.bounds = new Rectangle2D.Float(x, y, w, h);
-				images.add(info);
-			}
-			@Override public void strokePath() {}
-			@Override public void fillPath(int windingRule) {}
-			@Override public void clip(int windingRule) {}
-			@Override public void moveTo(float x, float y) {}
-			@Override public void lineTo(float x, float y) {}
-			@Override public void curveTo(float x1, float y1, float x2, float y2, float x3, float y3) {}
-			@Override public Point2D getCurrentPoint() { return null; }
-			@Override public void closePath() {}
-			@Override public void endPath() {}
-			@Override public void shadingFill(COSName shadingName) {}
-			@Override public void appendRectangle(Point2D p0, Point2D p1, Point2D p2, Point2D p3) throws IOException {}
-			@Override public void fillAndStrokePath(int windingRule) throws IOException {}
-		}.processPage(page);
-		return images;
-	}
-
-	private static BufferedImage extractRegion(PDPage page,
-	                                           Supplier<BufferedImage> renderedPage,
-	                                           List<ImageInfo> images,
-	                                           Rectangle2D region)
-			throws IOException {
-
-		// try direct image crop
-		if (images != null)
-			for (ImageInfo info : images) {
-
-				// convert region to coordinate system of source image
-				double scaleX = info.image.getWidth() / info.bounds.getWidth();
-				double scaleY = info.image.getHeight() / info.bounds.getHeight();
-				double x = (region.getX() * 72f / IMAGE_DPI - info.bounds.getX()) * scaleX;
-				double y = (region.getY() * 72f / IMAGE_DPI - info.bounds.getY()) * scaleY;
-				double w = region.getWidth() * 72f / IMAGE_DPI * scaleX;
-				double h = region.getHeight() * 72f / IMAGE_DPI * scaleY;
-				if (x >= 0
-				    && y >= 0
-				    && x + w <= info.image.getWidth()
-				    && y + h <= info.image.getHeight())
-					return info.image.getSubimage((int)x, (int)y, (int)w, (int)h);
-			}
-
-		// otherwise render full page (in 200 dpi) and crop
-		return renderedPage.get().getSubimage((int)region.getX(),
-		                                      (int)region.getY(),
-		                                      (int)region.getWidth(),
-		                                      (int)region.getHeight()); 
-	}
-
-	private static RuntimeException raiseError(Response response, Request request) {
+	private static RuntimeException raiseApiError(Response response, Request request) {
 		String message = "Response code " + response.status + " from " + request.getConnection().getURL();
 		Throwable cause = response.exception;
 		try {
@@ -649,6 +535,12 @@ public class MistralOCRService implements OCRService {
 					if (detail != null) {
 						message = message + ": " + detail;
 						cause = null;
+					} else {
+						detail = errorJson.getString("message");
+						if (detail != null) {
+							message = message + ": " + detail;
+							cause = null;
+						}
 					}
 				}
 			}

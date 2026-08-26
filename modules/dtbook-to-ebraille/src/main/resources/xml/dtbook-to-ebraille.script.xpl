@@ -44,15 +44,15 @@ contained in a directory.</p>
         </p:documentation>
     </p:option>
 
-    <p:input port="metadata" sequence="true" px:media-type="application/xml">
-        <p:empty/>
-    </p:input>
+    <!-- <p:input port="metadata" sequence="true" px:media-type="application/xml"> -->
+    <!--     <p:empty/> -->
+    <!-- </p:input> -->
 
-    <p:option name="attach-stylesheet" required="false" px:type="anyFileURI" select="''" px:sequence="true" px:separator=" "
+    <p:option name="ebraille-stylesheet" required="false" px:type="anyFileURI" select="''" px:sequence="true" px:separator=" "
               px:reusable="false" px:media-type="text/css text/x-scss">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Attach CSS style sheets</h2>
-            <p px:role="desc" xml:space="preserve">CSS style sheet(s) to be attached with the HTML documents of the eBraille publication.
+            <h2 px:role="name">eBraille style sheets</h2>
+            <p px:role="desc" xml:space="preserve">CSS style sheet(s) to be attached to the HTML documents of the eBraille publication.
 
 The style sheets are associated with each HTML file through `link`
 elements. This script does not allow specifying `media` attributes on
@@ -60,7 +60,8 @@ the `link` elements. If media queries are needed, they must be
 specified in the CSS itself, through `@media` and `@import` rules.
 
 The style sheets are included as-is, and should therefore apply to
-HTML, not DTBook.</p>
+HTML, not DTBook. It should also conform to the [eBraille
+standard for CSS](https://daisy.github.io/ebraille/#html-css).</p>
         </p:documentation>
     </p:option>
 
@@ -70,7 +71,7 @@ HTML, not DTBook.</p>
 
     <!--<p:option name="braille-translator" required="false" px:type="transform-query" select="''"/>-->
 
-    <p:option name="braille-translator-stylesheet" required="false" px:type="anyURI" select="''" px:sequence="true" px:separator=" "
+    <p:option name="stylesheet" required="false" px:type="anyURI" select="''" px:sequence="true" px:separator=" "
               px:reusable="true" px:media-type="text/css text/x-scss">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Braille transcription style sheets</h2>
@@ -78,8 +79,8 @@ HTML, not DTBook.</p>
 
 Must be a space separated list of URIs, absolute or relative to the input.
 
-Note that any CSS provided through this option will not end up in the eBraille publication. The
-"Attach CSS style sheets" option should be used for that purpose.
+Note that CSS provided through this option will not end up in the eBraille publication. The
+"eBraille style sheets" option should be used for that purpose.
 
 Style sheets specified through this option are called "[user style
 sheets](https://www.w3.org/TR/CSS2/cascade.html#cascade)". Style sheets can also be attached to the
@@ -95,15 +96,15 @@ All style sheets are applied at once, but the order in which they are specified 
 the [cascading order](https://www.w3.org/TR/CSS2/cascade.html#cascading-order). Author styles take
 precedence over user styles.
 
-Style sheets are interpreted according to [braille
-CSS](http://braillespecs.github.io/braille-css) rules.
+Style sheets are interpreted according to [braille CSS](http://braillespecs.github.io/braille-css)
+rules.
 
 For info on how to use Sass (Syntactically Awesome StyleSheets) see the [Sass
 manual](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).</p>
         </p:documentation>
     </p:option>
 
-    <p:option name="braille-translator-stylesheet-parameters" required="false" px:type="stylesheet-parameters" select="'()'">
+    <p:option name="stylesheet-parameters" required="false" px:type="stylesheet-parameters" select="'()'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Braille transcription style sheet parameters</h2>
             <p px:role="desc" xml:space="preserve">A list of parameters passed to the braille transcription style sheets.
@@ -243,7 +244,7 @@ you can control that variable with the following parameters list: `(foo:true)`.<
         <p:group name="css">
           <p:output port="result"/>
           <px:tokenize regex="\s+">
-            <p:with-option name="string" select="normalize-space($attach-stylesheet)"/>
+            <p:with-option name="string" select="normalize-space($ebraille-stylesheet)"/>
           </px:tokenize>
           <p:for-each>
             <p:variable name="href" select="string(.)"/>
@@ -293,13 +294,13 @@ you can control that variable with the following parameters list: `(foo:true)`.<
               <p:empty/>
             </p:input>
             <p:with-option name="braille-translator" select="$braille-code"/>
-            <p:with-option name="braille-translator-stylesheet"
+            <p:with-option name="stylesheet"
                            select="string-join(
-                                     for $s in tokenize($braille-translator-stylesheet,'\s+')[not(.='')] return
+                                     for $s in tokenize($stylesheet,'\s+')[not(.='')] return
                                        resolve-uri($s,$dtbook-uri),
                                      ' ')"/>
-            <p:with-option name="braille-translator-stylesheet-parameters"
-                           select="$braille-translator-stylesheet-parameters"/>
+            <p:with-option name="stylesheet-parameters"
+                           select="$stylesheet-parameters"/>
             <p:with-option name="dtbook-is-valid" select="$dtbook-is-valid"/>
             <p:with-option name="nimas" select="$nimas='true'"/>
             <p:with-option name="include-original-text" select="$include-original-text"/>
@@ -322,24 +323,16 @@ you can control that variable with the following parameters list: `(foo:true)`.<
             </p:when>
             <p:otherwise px:message="Storing">
               <p:documentation>
-                mimetype and META-INF/container.xml may be omitted when the eBraille
-                publication is not packaged in an EPUB container.
+                META-INF/container.xml may be omitted when the eBraille publication is not packaged
+                in an EPUB container.
               </p:documentation>
-              <px:fileset-filter name="filter-mimetype" href="mimetype">
-                <!-- assumes $output-dir-uri is the fileset base -->
-                <p:input port="source.in-memory">
-                  <p:pipe step="convert" port="result.in-memory"/>
-                </p:input>
-              </px:fileset-filter>
               <p:choose name="filter-container">
                 <p:when test="$include-original-text">
-                  <p:output port="fileset" primary="true">
-                    <p:pipe step="filter-mimetype" port="not-matched"/>
-                  </p:output>
+                  <p:output port="fileset" primary="true"/>
                   <p:output port="in-memory" sequence="true">
-                    <p:pipe step="filter-mimetype" port="not-matched.in-memory"/>
+                    <p:pipe step="convert" port="result.in-memory"/>
                   </p:output>
-                  <p:sink/>
+                  <p:identity/>
                 </p:when>
                 <p:otherwise>
                   <p:output port="fileset" primary="true">
@@ -348,13 +341,10 @@ you can control that variable with the following parameters list: `(foo:true)`.<
                   <p:output port="in-memory" sequence="true">
                     <p:pipe step="filter" port="not-matched.in-memory"/>
                   </p:output>
-                  <p:sink/>
                   <px:fileset-filter name="filter" href="META-INF/container.xml">
-                    <p:input port="source">
-                      <p:pipe step="filter-mimetype" port="not-matched"/>
-                    </p:input>
+                    <!-- assumes $output-dir-uri is the fileset base -->
                     <p:input port="source.in-memory">
-                      <p:pipe step="filter-mimetype" port="not-matched.in-memory"/>
+                      <p:pipe step="convert" port="result.in-memory"/>
                     </p:input>
                   </px:fileset-filter>
                   <p:sink/>

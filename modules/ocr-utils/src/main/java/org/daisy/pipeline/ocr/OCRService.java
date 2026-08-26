@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
+import org.daisy.pipeline.datatypes.DatatypeService;
 import org.daisy.pipeline.script.ScriptOption;
 
 /**
@@ -64,5 +65,22 @@ public interface OCRService {
 		public ServiceDisabledException(String message, Throwable cause) {
 			super(message, cause);
 		}
+	}
+
+	class CommonOptions {
+		private CommonOptions() {}
+
+		public static final ScriptOption INCLUDE_PAGE_NUMBERS = new ScriptOption() {
+				@Override public String getName() { return "include-page-numbers"; }
+				@Override public String getNiceName() { return "Include page numbers"; }
+				@Override public String getDescription() { return "Whether or not to include print page break indicators"; }
+				@Override public boolean isRequired() { return false; }
+				@Override public String getDefault() { return "true"; }
+				@Override public DatatypeService getType() { return DatatypeService.XS_BOOLEAN; }
+				@Override public String getMediaType() { return null; }
+				@Override public boolean isSequence() { return false; }
+				@Override public boolean isOrdered() { return false; }
+				@Override public Role getRole() { return null; }
+				@Override public boolean isPrimary() { return false; }};
 	}
 }

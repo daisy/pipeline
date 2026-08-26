@@ -6,7 +6,7 @@
                 name="main">
 
 	<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-		<p>Update the links in a EPUB package document document after resources have been
+		<p>Update the links in a EPUB package document after resources have been
 		relocated.</p>
 	</p:documentation>
 	

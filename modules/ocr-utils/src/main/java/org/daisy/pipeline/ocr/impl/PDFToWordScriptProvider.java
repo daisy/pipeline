@@ -6,9 +6,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.daisy.common.properties.Properties;
+import org.daisy.common.properties.Properties.Property;
 import org.daisy.pipeline.datatypes.DatatypeRegistry;
 import org.daisy.pipeline.ocr.OCRProcessor;
 import org.daisy.pipeline.ocr.OCRService;
+import org.daisy.pipeline.ocr.OCRService.ServiceDisabledException;
 import org.daisy.pipeline.pandoc.Pandoc;
 import org.daisy.pipeline.script.ScriptService;
 import org.daisy.pipeline.script.ScriptServiceProvider;
@@ -33,11 +35,23 @@ public class PDFToWordScriptProvider implements ScriptServiceProvider {
 		Map<String,String> props = Properties.getSnapshot();
 		for (OCRService s : ocrServices)
 			try {
+				Property enabled = Properties.getProperty("org.daisy.pipeline.ocr." + s.getName() + ".enabled",
+				                                          true,
+				                                          "Enable " + s.getDisplayName(),
+				                                          false,
+				                                          "true");
+				String str = enabled.getValue(props);
+				if (str != null && "false".equals(str.toLowerCase()) || "0".equals(str))
+					throw new ServiceDisabledException(
+						"In order to enable the " + s.getName() + " service, set property '" + enabled.getName() + "' to 'true'");
 				Collection<OCRProcessor> processors = s.getAvailableProcessors(props);
+				if (processors.isEmpty()) {
+					logger.debug("Not creating script pdf-to-word-" + s.getName() + " because this OCR service has no processors available");
+					continue;
+				}
 				scripts.add(new PDFToWordScript(s, processors, datatypeRegistry, pandoc));
 			} catch (OCRService.ServiceDisabledException e) {
-				logger.debug("Not creating script pdf-to-word-" + s.getName() + " because OCR service disabled: "
-				             + e.getMessage());
+				logger.debug("Not creating script pdf-to-word-" + s.getName() + " because OCR service disabled", e);
 			}
 		return scripts;
 	}

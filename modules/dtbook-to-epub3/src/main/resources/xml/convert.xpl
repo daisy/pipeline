@@ -35,6 +35,13 @@
 
 	<p:option name="stylesheet-parameters" cx:as="xs:string" select="'()'"/>
 
+	<p:option name="epub-stylesheet" cx:as="xs:string*" select="()">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<p>CSS style sheets to be attacheD to the HTML documents of the EPUB.</p>
+			<p>Sequence of absolute URIs of files that exist on disk.</p>
+		</p:documentation>
+	</p:option>
+
 	<p:option name="lexicon" cx:as="xs:anyURI*" select="()">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<p>PLS lexicons as list of absolute URIs.</p>
@@ -284,6 +291,11 @@
 			<p:with-option name="content-path" select="$content-path"/>
 			<p:with-option name="package-doc-path" select="$package-doc-path"/>
 			<p:with-option name="navigation-doc-path" select="$navigation-doc-path"/>
+			<p:with-option name="epub-stylesheet" select="$epub-stylesheet"/>
+			<p:with-option name="css-path" select="'css/'">
+				<!-- CSS files that may be contained in the DTBook fileset, should not be part of the ZedAI
+				     fileset anymore, so it is safe to assume that there will be no conflicts -->
+			</p:with-option>
 		</px:zedai-to-epub3>
 	</p:group>
 

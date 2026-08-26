@@ -97,8 +97,13 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 			if (!m.matches())
 				throw new TranslatorConfigurationException();
 			Query query = query(mode);
-			if (locale != null && !"und".equals(locale))
+			if (locale != null && !"und".equals(locale)) {
 				query = mutableQuery(query).add("document-locale", locale);
+				if ("Brai".equals(parseLocale(locale).getScript()))
+					// Force selection of PreTranslatedBrailleTranslator in case of a "Brai" subtag. Liblouis
+					// will select the correct table regardless of whether the "Brai" subtag is present.
+					query = mutableQuery(query).add("input", "braille");
+			}
 			for (org.daisy.pipeline.braille.common.BrailleTranslator t : translatorRegistry.getWithHyphenator(query))
 				try {
 					return new BrailleTranslatorFromBrailleTranslator(mode, t.lineBreakingFromStyledText()); }

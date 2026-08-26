@@ -3,6 +3,7 @@
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:odt="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
                 xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
                 xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
@@ -41,6 +42,17 @@
     <p:option name="images" required="true" cx:type="EMBED|LINK">
         <p:documentation>
             How to render images?
+        </p:documentation>
+    </p:option>
+    <p:option name="page-numbers" cx:as="xs:boolean" select="false()">
+        <p:documentation>
+            Whether to process <code>pagenum</code> elements.
+        </p:documentation>
+    </p:option>
+    <p:option name="daisy-styles" cx:as="xs:boolean" select="false()">
+        <p:documentation>
+            Use "DAISY" style names instead of "dtb:" prefixed style names, for compatibility with
+            Word to DTBoook / Save-as-DAISY.
         </p:documentation>
     </p:option>
     
@@ -195,6 +207,8 @@
         </p:input>
         <p:with-param port="parameters" name="asciimath" select="$asciimath"/>
         <p:with-param port="parameters" name="images" select="$images"/>
+        <p:with-param port="parameters" name="page_numbers" select="string($page-numbers)"/>
+        <p:with-param port="parameters" name="daisy-styles" select="$daisy-styles"/>
     </p:xslt>
     
     <p:xslt name="content">

@@ -99,10 +99,11 @@ public class VoicesWebServiceExtension implements WebServiceExtension {
 		VoiceConfigExtension voiceConfigExt = new VoiceConfigExtension();
 		DynamicPropertiesExtension propsExt = new DynamicPropertiesExtension();
 		new ConfigReader(saxonProcessor, configXML, properties, voiceConfigExt, propsExt);
-		if (configXML != null) {
+		if (configXML != null)
 			logger.debug("Voice configuration XML:\n" + configXML);
+		String staticConfig = ConfigReader.TTSConfigProperty.getValue(properties);
+		if (configXML != null || (staticConfig != null && !"".equals(staticConfig)))
 			logger.debug("Parsed voice configuration:\n" + voiceConfigExt.getVoiceDeclarations());
-		}
 		Map<String,String> dynProperties = propsExt.getDynamicProperties();
 		synchronized (this) {
 			if (dynProperties != null && !dynProperties.isEmpty()) {

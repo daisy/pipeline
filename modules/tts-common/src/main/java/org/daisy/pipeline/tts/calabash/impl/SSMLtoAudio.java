@@ -133,7 +133,7 @@ public class SSMLtoAudio implements FormatSpecifications {
 	private AudioFootprintMonitor mAudioFootprintMonitor;
 	private Processor mProc;
 	private VoiceManager mVoiceManager;
-	private TimedTTSExecutor mExecutor = new TimedTTSExecutor();
+	private final TimedTTSExecutor mExecutor;
 	private final Map<String,String> mProperties;
 	private TTSLog mTTSlog;
 	private int mErrorCounter;
@@ -155,10 +155,8 @@ public class SSMLtoAudio implements FormatSpecifications {
 		mAudioFileFormat = audioFileFormat;
 		mMaxSentencesPerSection = maxSentencesPerSection;
 		mTTSlog = logs;
-		/*
-		 * initialize the TTS engines
-		 */
 		mProperties = properties;
+		mExecutor = new TimedTTSExecutor(properties);
 		mVoiceManager = new VoiceManager(
 			ttsregistry.getWorkingEngines(properties, mTTSlog, mLogger),
 			configExt.getVoiceDeclarations());

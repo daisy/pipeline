@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import javax.sound.sampled.AudioFileFormat;
@@ -86,7 +87,8 @@ public class VoicePreviewResource extends AuthenticatedResource {
 			return null;
 		}
 		try {
-			VoiceManager voiceManager = provider.getRememberedVoiceManager(Properties.getSnapshot());
+			Map<String,String> properties = Properties.getSnapshot();
+			VoiceManager voiceManager = provider.getRememberedVoiceManager(properties);
 			if (voiceManager == null) {
 				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 				return getErrorRepresentation("No /voices call preceeded this call, or settings were changed");
@@ -146,7 +148,7 @@ public class VoicePreviewResource extends AuthenticatedResource {
 								tts.interruptCurrentWork(res);
 							}
 						};
-					pcm = new TimedTTSExecutor().synthesizeWithTimeout(
+					pcm = new TimedTTSExecutor(properties).synthesizeWithTimeout(
 						timeout, interrupter, null, ssml, Sentence.computeSize(ssml), tts, voice, res
 					).audio;
 				} finally {

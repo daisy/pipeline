@@ -9,18 +9,18 @@
 			<x:input port="source.fileset">
 				<x:document type="inline">
 					<d:fileset>
-						<d:file href="../../../../epub2-to-epub3/src/test/resources/minimal.epub/mimetype" compression-method="stored"/>
-						<d:file href="../../../../epub2-to-epub3/src/test/resources/minimal.epub/EPUB/chapter.xhtml"
+						<d:file href="../../../../epub-utils/src/test/resources/minimal.epub/mimetype" compression-method="stored"/>
+						<d:file href="../../../../epub-utils/src/test/resources/minimal.epub/EPUB/chapter.xhtml"
 						        media-type="application/xhtml+xml"/>
-						<d:file href="../../../../epub2-to-epub3/src/test/resources/minimal.epub/EPUB/cover.xhtml"
+						<d:file href="../../../../epub-utils/src/test/resources/minimal.epub/EPUB/cover.xhtml"
 						        media-type="application/xhtml+xml"/>
-						<d:file href="../../../../epub2-to-epub3/src/test/resources/minimal.epub/EPUB/front.xhtml"
+						<d:file href="../../../../epub-utils/src/test/resources/minimal.epub/EPUB/front.xhtml"
 						        media-type="application/xhtml+xml"/>
-						<d:file href="../../../../epub2-to-epub3/src/test/resources/minimal.epub/EPUB/package.opf"
+						<d:file href="../../../../epub-utils/src/test/resources/minimal.epub/EPUB/package.opf"
 						        media-type="application/oebps-package+xml" media-version="2.0"/>
-						<d:file href="../../../../epub2-to-epub3/src/test/resources/minimal.epub/EPUB/toc.ncx"
+						<d:file href="../../../../epub-utils/src/test/resources/minimal.epub/EPUB/toc.ncx"
 						        media-type="application/x-dtbncx+xml"/>
-						<d:file href="../../../../epub2-to-epub3/src/test/resources/minimal.epub/META-INF/container.xml"
+						<d:file href="../../../../epub-utils/src/test/resources/minimal.epub/META-INF/container.xml"
 						        media-type="application/xml"/>
 					</d:fileset>
 				</x:document>
@@ -56,7 +56,7 @@
 			<x:document type="inline">
 				<d:fileset>
 					<d:file href="out/epub3/mimetype" compression-method="stored"
-					        original-href="../../../../epub2-to-epub3/src/test/resources/minimal.epub/mimetype"/>
+					        original-href="../../../../epub-utils/src/test/resources/minimal.epub/mimetype"/>
 					<d:file href="out/epub3/EPUB/chapter.xhtml" media-type="application/xhtml+xml"
 					        doctype="&lt;!DOCTYPE html&gt;"/>
 					<d:file href="out/epub3/EPUB/cover.xhtml" media-type="application/xhtml+xml"
@@ -64,8 +64,7 @@
 					<d:file href="out/epub3/EPUB/front.xhtml" media-type="application/xhtml+xml"
 					        doctype="&lt;!DOCTYPE html&gt;"/>
 					<d:file href="out/epub3/EPUB/toc.ncx" media-type="application/x-dtbncx+xml"/>
-					<d:file href="out/epub3/META-INF/container.xml" media-type="application/xml"
-					        original-href="../../../../epub2-to-epub3/src/test/resources/minimal.epub/META-INF/container.xml"/>
+					<d:file href="out/epub3/META-INF/container.xml" media-type="application/xml"/>
 					<d:file href="out/epub3/EPUB/nav.xhtml" media-type="application/xhtml+xml"
 					        doctype="&lt;!DOCTYPE html&gt;"/>
 					<d:file href="out/epub3/EPUB/package.opf" media-type="application/oebps-package+xml" media-version="2.0" indent="true"/>

@@ -202,7 +202,7 @@ public class BrailleCode {
 				part = part.toLowerCase();
 				part = part.replaceAll("[^a-z0-9]", "");
 				if (part.length() < 3) // too short to make into a language subtag
-					throw new IllegalArgumentException();
+					part += com.google.common.base.Strings.repeat("0", 3 - part.length());
 				if (part.length() > 8) // too long to make into a language subtag
 					part = part.substring(0, 8);
 				languageSubtags.add(part);

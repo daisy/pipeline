@@ -89,7 +89,7 @@
     </p:documentation>
   </p:option>
 
-  <p:option name="stylesheet-parameters" cx:as="xs:string" select="'()'">
+  <p:option name="stylesheet-parameters" select="map{}"> <!-- (map(xs:string,item()) | xs:string)* -->
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
       <p>Parameters that are passed to SCSS style sheets.</p>
     </p:documentation>

@@ -3,7 +3,9 @@
   <!-- libraries -->
   <uri name="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl" uri="../xml/library.xpl"/>
   <uri name="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xsl" uri="../xml/library.xsl"/>
-  <!-- extendable XSLT stylesheets -->
+  <!-- public XSLT stylesheets -->
+  <uri name="http://www.daisy.org/pipeline/modules/braille/common-utils/get-used-braille-codes.xsl"
+       uri="../xml/get-used-braille-codes.xsl"/>
   <uri name="http://www.daisy.org/pipeline/modules/braille/css-utils/transform/abstract-block-translator.xsl"
        uri="../xml/abstract-block-translator.xsl"/>
   <uri name="http://www.daisy.org/pipeline/modules/braille/css-utils/transform/block-translator-from-text-transform.xsl"

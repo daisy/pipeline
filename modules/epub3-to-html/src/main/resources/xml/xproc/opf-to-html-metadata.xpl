@@ -5,10 +5,27 @@
                 name="main"
                 exclude-inline-prefixes="#all">
 	
+	<!--
+	    This step is specific to EPUB 3 to DAISY 3. The result is only suitable for further
+	    processing into DTBook metadata (see epub3-to-dtbook.xsl). In HTML, dublin core metadata is
+	    supposed to be encoded with a "DC." prefix, e.g.:
+	    
+	        <meta name    = "DC.Creator"
+	              content = "Simpson, Homer">
+	    
+	    Associating prefixes with namespaces should not be done using an epub:prefix attribute, but
+	    with link tags, e.g.:
+	    
+	        <link rel  = "schema.DC"
+	              href = "http://purl.org/DC/elements/1.0/">
+	    
+	    See https://datatracker.ietf.org/doc/html/rfc2731
+	-->
+
 	<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 		<p>Convert <a
 		href="https://w3c.github.io/publ-epub-revision/epub32/spec/epub-packages.html#sec-pkg-metadata">OPF
-		metadata</a> to a HTML metadata.</p>
+		metadata</a> to HTML metadata.</p>
 	</p:documentation>
 
 	<p:input port="source">
@@ -41,6 +58,15 @@
 	</p:xslt>
 
 	<!-- normalize epub:prefix attribute -->
-	<px:epub3-merge-prefix implicit-output-prefixes="dc: http://purl.org/dc/elements/1.1/"/>
+	<px:epub3-merge-prefix implicit-input-prefixes="a11y:      http://www.idpf.org/epub/vocab/package/a11y/#
+	                                                dcterms:   http://purl.org/dc/terms/
+	                                                dc:        http://purl.org/dc/elements/1.1/
+	                                                marc:      http://id.loc.gov/vocabulary/
+	                                                media:     http://www.idpf.org/epub/vocab/overlays/#
+	                                                onix:      http://www.editeur.org/ONIX/book/codelists/current.html#
+	                                                rendition: http://www.idpf.org/vocab/rendition/#
+	                                                schema:    http://schema.org/
+	                                                xsd:       http://www.w3.org/2001/XMLSchema#"
+	                       implicit-output-prefixes="dc: http://purl.org/dc/elements/1.1/"/>
 
 </p:declare-step>

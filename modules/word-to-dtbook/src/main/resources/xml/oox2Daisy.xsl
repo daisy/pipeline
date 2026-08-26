@@ -81,8 +81,11 @@
 		as="document-node(element(w:endnotes))?"
 		select="document(concat('jar:',$InputFile,'!/word/endnotes.xml'))" />
 	<xsl:variable name="customPropsXml"
-								as="document-node(element(ccp:Properties))?"
-								select="document(concat('jar:',$InputFile,'!/docProps/custom.xml'))" />
+		as="document-node(element(ccp:Properties))?"
+		select="let $uri := concat('jar:',$InputFile,'!/docProps/custom.xml') return
+		        if (doc-available($uri))
+		        then document($uri)
+		        else ()" />
 	
 	<xsl:variable name="documentLanguages">
 		<!-- Compute runners languages -->

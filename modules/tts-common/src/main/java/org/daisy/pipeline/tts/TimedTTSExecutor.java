@@ -6,19 +6,54 @@ import static java.lang.Math.toIntExact;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.sf.saxon.s9api.XdmNode;
+
+import org.daisy.common.properties.Properties;
+import org.daisy.common.properties.Properties.Property;
 import org.daisy.pipeline.tts.TTSEngine.SynthesisResult;
 import org.daisy.pipeline.tts.TTSRegistry.TTSResource;
 import org.daisy.pipeline.tts.TTSService.SynthesisException;
 
-import net.sf.saxon.s9api.XdmNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TimedTTSExecutor {
 
 	private static final int FIRST_CHARACTERS = 2500;
 	private static final int SHORT_SENTENCE_THRESHOLD = 25;
+	private static final Property EXTRA_TOLERANCE_FACTOR = Properties.getProperty("org.daisy.pipeline.tts.timeout.tolerance",
+	                                                                              true,
+	                                                                              "Tolerance factor (multiplicator) for TTS timeouts",
+	                                                                              false,
+	                                                                              "1");
+
 	private Map<TTSEngine,Integer> totalCharacters = new HashMap<>(); // only count first 2500 characters
 	private Map<TTSEngine,Integer> maxMillisecPerCharacter = new HashMap<>();
 	private Map<TTSEngine,Integer> maxMillisecOfShortSentence = new HashMap<>(); // shorter than 25 characters
+	private Float extraToleranceFactor = null;
+
+	private static final Logger logger = LoggerFactory.getLogger(TimedTTSExecutor.class);
+
+	public TimedTTSExecutor() {
+		this(null);
+	}
+
+	public TimedTTSExecutor(Map<String,String> params) {
+		if (params != null) {
+			String s = EXTRA_TOLERANCE_FACTOR.getValue(params);
+			if (s != null) {
+				try {
+					extraToleranceFactor = Float.valueOf(s);
+					if (extraToleranceFactor < 1) {
+						logger.warn(EXTRA_TOLERANCE_FACTOR.getName() + ": may not be a number smaller than 1 (got " + s + ")");
+						extraToleranceFactor = null;
+					}
+				} catch (NumberFormatException e) {
+					logger.warn(EXTRA_TOLERANCE_FACTOR.getName() + ": " + s + "is  not a valid number");
+				}
+			}
+		}
+	}
 
 	/**
 	 * The maximum number of milliseconds the TTS engine is allowed to spend on a sentence. This
@@ -69,7 +104,10 @@ public class TimedTTSExecutor {
 		TTSResource threadResources
 	) throws SynthesisException, TimeoutException {
 		long startTime = System.currentTimeMillis();
-		int timeoutSec = maximumMillisec(engine, sentenceSize) / 1000;
+		int timeoutMillisec = maximumMillisec(engine, sentenceSize);
+		if (extraToleranceFactor != null)
+			timeoutMillisec *= extraToleranceFactor;
+		int timeoutSec = timeoutMillisec / 1000;
 		// add 1 so it can never be 0 seconds
 		timeoutSec += 1;
 		if (log != null)

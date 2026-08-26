@@ -40,6 +40,18 @@
       <!-- defined in ../../../../../common-options.xpl -->
     </p:option>
 
+    <p:option name="epub-stylesheet" required="false" px:type="anyFileURI" select="''" px:sequence="true" px:separator=" "
+              px:reusable="true" px:media-type="text/css">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">EPUB style sheets</h2>
+            <p px:role="desc" xml:space="preserve">CSS style sheet(s) to be attached to the HTML documents of the EPUB.
+
+The style sheets are associated with each HTML file through `link` elements. No media query (`media`
+attribute) is specified on the `link` elements. If media queries are needed, they must be specified
+in the CSS itself, through `@media` and `@import` rules.</p>
+        </p:documentation>
+    </p:option>
+
     <p:option name="language" select="''">
       <!-- defined in ../../../../../common-options.xpl -->
     </p:option>
@@ -206,6 +218,7 @@
 	                                                               resolve-uri($s,$dtbook-uri),
 	                                                             ' ')"/>
 	    <p:with-option name="stylesheet-parameters" select="$stylesheet-parameters"/>
+	    <p:with-option name="epub-stylesheet" select="tokenize($epub-stylesheet,'\s+')[not(.='')]"/>
 	    <p:with-option name="lexicon" select="for $l in tokenize($lexicon,'\s+')[not(.='')] return
 	                                            resolve-uri($l,$dtbook-uri)"/>
 	    <p:with-option name="audio" select="$audio"/>

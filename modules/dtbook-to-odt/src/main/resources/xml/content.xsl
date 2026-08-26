@@ -1,35 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="2.0"
-		xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-		xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
-		xmlns:dc="http://purl.org/dc/elements/1.1/"
-		xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
-		xmlns:xforms="http://www.w3.org/2002/xforms"
-		xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
-		xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0"
-		xmlns:dom="http://www.w3.org/2001/xml-events"
-		xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0"
-		xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
-		xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0"
-		xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0"
-		xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
-		xmlns:math="http://www.w3.org/1998/Math/MathML"
-		xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0"
-		xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
-		xmlns:xs="http://www.w3.org/2001/XMLSchema"
-		xmlns:xlink="http://www.w3.org/1999/xlink"
-		xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0"
-		xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0"
-		xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
-		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
-		xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
-		xmlns:d="http://www.daisy.org/ns/pipeline/data"
-		xmlns:f="functions"
-		exclude-result-prefixes="#all">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"
+                xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+                xmlns:dc="http://purl.org/dc/elements/1.1/"
+                xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+                xmlns:xforms="http://www.w3.org/2002/xforms"
+                xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+                xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0"
+                xmlns:dom="http://www.w3.org/2001/xml-events"
+                xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0"
+                xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+                xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0"
+                xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0"
+                xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+                xmlns:math="http://www.w3.org/1998/Math/MathML"
+                xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0"
+                xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0"
+                xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0"
+                xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:f="functions"
+                exclude-result-prefixes="#all">
 	
 	<xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
 	<xsl:import href="http://www.daisy.org/pipeline/modules/image-utils/library.xsl"/>
+	
+	<xsl:param name="daisy-styles" as="xs:boolean" select="false()" static="true"/>
+	<xsl:include href="daisy-styles.xsl" use-when="$daisy-styles"/>
+	
 	<xsl:include href="utilities.xsl"/>
 	
 	<!-- ========================== -->
@@ -170,16 +173,16 @@
 				<xsl:call-template name="insert-pagenum-after"/>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:apply-templates select="$group-inline-nodes" mode="#current">
-					<xsl:with-param name="select" select="*|text()"/>
-				</xsl:apply-templates>
+				<xsl:next-match/>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
 	
 	<xsl:template match="dtb:p" mode="office:text office:annotation text:section text:list-item
 	                                  table:table-cell text:note-body">
-		<xsl:call-template name="text:p"/>
+		<xsl:apply-templates select="$group-inline-nodes" mode="#current">
+			<xsl:with-param name="select" select="*|text()"/>
+		</xsl:apply-templates>
 	</xsl:template>
 	
 	<!-- ===== -->
@@ -459,8 +462,9 @@
 	<!-- OTHER BLOCK ELEMENTS -->
 	<!-- ==================== -->
 	
-	<xsl:template match="dtb:blockquote|dtb:epigraph|dtb:poem|dtb:prodnote|
-	                     dtb:doctitle|dtb:docauthor|dtb:byline|dtb:bridgehead|dtb:hd|dtb:covertitle"
+	<xsl:template match="dtb:blockquote|dtb:epigraph|dtb:poem|dtb:prodnote|dtb:poem/dtb:title|dtb:author|
+	                     dtb:doctitle|dtb:docauthor|dtb:byline|dtb:dateline|dtb:bridgehead|dtb:hd|dtb:covertitle|
+	                     dtb:address|dtb:div"
 	              mode="paragraph-style">
 		<xsl:sequence select="dtb:style-name(.)"/>
 	</xsl:template>
@@ -486,8 +490,8 @@
 		</xsl:apply-templates>
 	</xsl:template>
 	
-	<xsl:template match="dtb:doctitle|dtb:docauthor|dtb:byline|dtb:bridgehead|dtb:hd|
-	                     dtb:covertitle|dtb:author"
+	<xsl:template match="dtb:doctitle|dtb:docauthor|dtb:byline|dtb:dateline|dtb:bridgehead|dtb:hd|
+	                     dtb:covertitle|dtb:author|dtb:poem/dtb:title"
 	              mode="office:text office:annotation text:section">
 		<xsl:call-template name="text:p"/>
 	</xsl:template>
@@ -498,6 +502,12 @@
 	
 	<xsl:template match="dtb:line" mode="office:text office:annotation text:section">
 		<xsl:call-template name="text:p"/>
+	</xsl:template>
+	
+	<xsl:template match="dtb:address|dtb:div" mode="office:text office:annotation text:section">
+		<xsl:apply-templates select="$group-inline-nodes" mode="#current">
+			<xsl:with-param name="select" select="*|text()"/>
+		</xsl:apply-templates>
 	</xsl:template>
 	
 	<!-- ====== -->
@@ -522,7 +532,7 @@
 				<xsl:call-template name="text:p">
 					<xsl:with-param name="sequence">
 						<xsl:element name="draw:frame">
-							<xsl:attribute name="draw:name" select="concat('dtb:img#', count(preceding::dtb:img) + 1)"/>
+							<xsl:attribute name="draw:name" select="concat('img#', count(preceding::dtb:img) + 1)"/>
 							<xsl:attribute name="draw:style-name" select="dtb:style-name(.)"/>
 							<xsl:attribute name="text:anchor-type" select="'as-char'"/>
 							<xsl:attribute name="draw:z-index" select="'0'"/>
@@ -603,7 +613,7 @@
 	    FIXME: what if pagenum_done?
 	-->
 	<xsl:template match="dtb:pagenum" as="xs:boolean" mode="is-block-element">
-		<xsl:sequence select="$page_numbers='true'"/>
+		<xsl:sequence select="$page_numbers='true' and not($page_numbers_float='true')"/>
 	</xsl:template>
 	
 	<xsl:template match="dtb:pagenum" mode="office:text office:annotation text:section table:table-cell">
@@ -640,18 +650,18 @@
 	<!-- INLINE ELEMENTS & TEXT -->
 	<!-- ====================== -->
 	
-	<xsl:template match="dtb:em|dtb:strong|dtb:sub|dtb:sup|dtb:cite|dtb:q|dtb:author|dtb:title|
-	                     dtb:acronym|dtb:abbr|dtb:kbd|dtb:code|dtb:samp|dtb:linenum|dtb:a[@href]"
+	<xsl:template match="dtb:em|dtb:strong|dtb:sub|dtb:sup|dtb:cite|dtb:q|dtb:cite/dtb:author|dtb:cite/dtb:title|
+	                     dtb:acronym|dtb:abbr|dtb:kbd|dtb:code|dtb:samp|dtb:linenum|dtb:a[@href]|dtb:dfn"
 	              mode="text-style">
 		<xsl:sequence select="dtb:style-name(.)"/>
 	</xsl:template>
 	
-	<xsl:template match="dtb:span|dtb:sent|dtb:a" mode="text:p text:h text:span">
+	<xsl:template match="dtb:span|dtb:sent|dtb:w|dtb:a" mode="text:p text:h text:span">
 		<xsl:call-template name="text:span"/>
 	</xsl:template>
 	
-	<xsl:template match="dtb:em|dtb:strong|dtb:sub|dtb:sup|dtb:cite|dtb:q|dtb:author|dtb:title|
-	                     dtb:acronym|dtb:abbr|dtb:kbd|dtb:code|dtb:samp|dtb:linenum"
+	<xsl:template match="dtb:em|dtb:strong|dtb:sub|dtb:sup|dtb:cite|dtb:q|dtb:author|dtb:cite/dtb:title|
+	                     dtb:acronym|dtb:abbr|dtb:kbd|dtb:code|dtb:samp|dtb:linenum|dtb:dfn"
 	              mode="text:p text:h text:span">
 		<xsl:call-template name="text:span"/>
 	</xsl:template>
@@ -856,7 +866,7 @@
 		<xsl:sequence select="false()"/>
 	</xsl:template>
 	
-	<xsl:template match="dtb:p|dtb:list|dtb:dl|dtb:table|dtb:imggroup|dtb:blockquote"
+	<xsl:template match="dtb:p|dtb:list|dtb:dl|dtb:table|dtb:imggroup|dtb:blockquote|dtb:line|dtb:hd|dtb:imggroup[dtb:caption]"
 	              as="xs:boolean"
 	              mode="is-block-element">
 		<xsl:sequence select="true()"/>

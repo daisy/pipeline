@@ -1,10 +1,6 @@
 /*
  * Default style sheet for HTML
  *
- * This style sheet simply puts "display:block" on all elements that are defined as
- * block-level in the default CSS2 style sheet for HTML 4. The rules defined here
- * can be reset with http://www.daisy.org/pipeline/modules/braille/html-to-pef/reset.css
- *
  * See also
  * - http://www.w3.org/TR/CSS2/sample.html
  * - http://www.w3.org/TR/html5/rendering.html
@@ -12,6 +8,23 @@
 
 @namespace xml "http://www.w3.org/XML/1998/namespace";
 
+/* ======= Braille transcription ======= */
+
+/* The following styles are required for transcription of content to braille. It is the set of rules
+ * within this style sheet that you want to include for pure transcription, i.e. replacing the text
+ * of an HTML document with braille nodes.
+ *
+ * The display property is needed to determine the boundaries of blocks, the units of text processed
+ * by the "block translator".
+ *
+ * Hyphenation is seen as part of braille transcription because it is easier to transcribe
+ * pre-hyphenated text to braille, than to hyphenate braille text.
+ */
+
+/* Put "display: block" on all elements that are defined as block-level in the default CSS2 style
+ * sheet for HTML 4. The rules defined here can be reset with
+ * http://www.daisy.org/pipeline/modules/braille/html-to-pef/reset.css
+ */
 html, address,
 blockquote,
 body, dd, div,
@@ -37,44 +50,14 @@ li {
 	display: list-item;
 }
 
-ol, ul {
-	counter-reset: list-item;
-}
-
-ol,
-ol[type="1"] { list-style-type: decimal;     }
-ol[type="a"] { list-style-type: lower-alpha; }
-ol[type="A"] { list-style-type: upper-alpha; }
-ol[type="i"] { list-style-type: lower-roman; }
-ol[type="I"] { list-style-type: upper-roman; }
-
-/* handle ol[start] and li[value] */
-@-daisy-xslt "lists.xsl";
-
 head {
 	display: none
-}
-
-br::before {
-	content: "\A";
-	white-space: pre-line;
-}
-
-wbr::before {
-	content: "\200B";
-}
-
-/* xml:space */
-[xml|space=preserve] {
-	white-space: pre-wrap;
 }
 
 @-daisy-text-transform uncontracted {
 	system: braille;
 	contraction: no;
 }
-
-/* ======= Implementation of script options =============== */
 
 /**
  * @var $hyphenation
@@ -118,42 +101,99 @@ $hyphenation: manual !default;
 	}
 }
 
-/**
- * @var $line-spacing
- *
- * @brief Line spacing
- *
- * Single or double line spacing.
- *
- * The following CSS rule is included by default (where `$line-spacing` is the value of this option):
- *
- * ~~~sass
- * @if $line-spacing == double {
- *   :root {
- *     line-height: 2;
- *   }
- * }
- * ~~~
- *
- * See the CSS specification for more info:
- *
- * - the [`line-height`](http://braillespecs.github.io/braille-css/#h3_the-line-height-property)
- *   property
- *
- * <px:type xmlns:px="http://www.daisy.org/ns/pipeline/xproc">
- *     <choice>
- *         <value>single</value>
- *         <documentation xml:lang="en">Single</documentation>
- *         <value>double</value>
- *         <documentation xml:lang="en">Double</documentation>
- *     </choice>
- * </px:type>
- */
-$line-spacing: single !default;
+/* ======= List numbering ======= */
 
-@if $line-spacing == double {
-	:root {
-		line-height: 2;
+/* The rules below could in theory be used to generate marker contents of list items, resulting in
+ * so-called "pre-formatted lists".
+ */
+
+ol, ul {
+	counter-reset: list-item;
+}
+
+ol,
+ol[type="1"] { list-style-type: decimal;     }
+ol[type="a"] { list-style-type: lower-alpha; }
+ol[type="A"] { list-style-type: upper-alpha; }
+ol[type="i"] { list-style-type: lower-roman; }
+ol[type="I"] { list-style-type: upper-roman; }
+
+/* handle ol[start] and li[value] */
+@-daisy-xslt "lists.xsl";
+
+/* ======= Simple braille formatting ======= */
+
+/* This is the set of rules within this style sheet that you want to include for simple braille
+ * formatting, i.e. the kind of braille formatting that makes sense for refreshable braille displays
+ * (but not the multiline kind): line breaking, indentation, etc.
+ */
+
+br::before {
+	content: "\A";
+	white-space: pre-line;
+}
+
+wbr::before {
+	content: "\200B";
+}
+
+/* xml:space */
+[xml|space=preserve] {
+	white-space: pre-wrap;
+}
+
+/* ======= Other braille formatting ======= */
+
+/* Everything below mostly makes sense for embossed braille or possibly multiline braille
+ * displays. For now it is all limited to embossed braille, for these reasons:
+ *
+ * - So that the style sheet parameters are not exposed for the EPUB 3 Enhancer script, which only
+ *   uses this style sheet for braille transcription. (This is a bit of a hack!)
+ * - Volume breaking and notes placement (which assumes page breaking) use braille CSS,
+ *   i.e. features specific to DAISY Pipeline. Even though a braille display may also do page
+ *   breaking and even volume breaking, it is unlikely to use braille CSS for this. Basically, we are
+ *   using "embossed" as a replacement for "formatted using DAISY Pipeline".
+ */
+
+@media embossed {
+
+	/**
+	 * @var $line-spacing
+	 *
+	 * @brief Line spacing
+	 *
+	 * Single or double line spacing.
+	 *
+	 * The following CSS rule is included by default (where `$line-spacing` is the value of this option):
+	 *
+	 * ~~~sass
+	 * @if $line-spacing == double {
+	 *   :root {
+	 *     line-height: 2;
+	 *   }
+	 * }
+	 * ~~~
+	 *
+	 * See the CSS specification for more info:
+	 *
+	 * - the [`line-height`](http://braillespecs.github.io/braille-css/#h3_the-line-height-property)
+	 *   property
+	 *
+	 * <px:type xmlns:px="http://www.daisy.org/ns/pipeline/xproc">
+	 *     <choice>
+	 *         <value>single</value>
+	 *         <documentation xml:lang="en">Single</documentation>
+	 *         <value>double</value>
+	 *         <documentation xml:lang="en">Double</documentation>
+	 *     </choice>
+	 * </px:type>
+	 */
+	$line-spacing: single !default;
+
+	@if $line-spacing == double {
+		:root {
+			line-height: 2;
+		}
 	}
 }
 

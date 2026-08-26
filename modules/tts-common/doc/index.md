@@ -109,7 +109,6 @@ properties. The following properties are available:
 : Maximum amount of memory in Mb to be used by TTS and audio encoding
 : Defaults to 50% of the total amount of memory that the JVM will
   attempt to use, or 500 Mb if there is no such limit
-: FIXME
 
 `org.daisy.pipeline.tts.threads.number`
 : Number of threads for audio encoding and regular text-to-speech
@@ -130,6 +129,10 @@ properties. The following properties are available:
 `org.daisy.pipeline.tts.encoding.speed`
 : Maximum number of seconds of encoded audio per seconds of encoding
 : Defaults to "2.0"
+
+`org.daisy.pipeline.tts.timeout.tolerance`
+: Tolerance factor (multiplicator) for TTS timeouts
+: Defaults to "1.0"
 
 ### Acapela
 

@@ -86,8 +86,8 @@
                 <xsl:variable name="default-page-counter-names"
                               select="distinct-values(
                                         for $s in $sequences[@css:page=current()] return
-                                          if ($s/parent::obfl:pre-content) then 'pre-page'
-                                          else if ($s/parent::obfl:post-content) then 'post-page'
+                                          if ($s/parent::obfl:pre-content) then '--pre-page'
+                                          else if ($s/parent::obfl:post-content) then '--post-page'
                                           else 'page')"/>
                 <xsl:call-template name="obfl:generate-layout-master">
                     <xsl:with-param name="page-style" select="$page-style"/>
