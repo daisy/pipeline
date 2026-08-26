@@ -28,6 +28,7 @@ public class OCRScriptsWebServiceExtension implements WebServiceExtension {
 
 	static final String OCR_SCRIPTS_ROUTE = "/ocr/scripts";
 	static final String OCR_SCRIPT_ROUTE = "/ocr/scripts/{id}";
+	static final String OCR_JOBS_ROUTE = "/ocr/jobs";
 
 	private List<Function<Map<String,String>,ScriptServiceProvider>> providers = new ArrayList<>();
 
@@ -46,6 +47,7 @@ public class OCRScriptsWebServiceExtension implements WebServiceExtension {
 		router.getContext().getAttributes().put(OCRScriptsResource.OCR_SCRIPTS_KEY, this);
 		router.attach(OCR_SCRIPTS_ROUTE, OCRScriptsResource.class);
 		router.attach(OCR_SCRIPT_ROUTE, OCRScriptResource.class);
+		router.attach(OCR_JOBS_ROUTE, OCRJobsResource.class);
 	}
 
 	ScriptRegistry getScriptRegistry(Client client) {
