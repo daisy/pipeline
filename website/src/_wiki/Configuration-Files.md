@@ -110,11 +110,6 @@ the `pipeline.properties` file.
 : Disable job messages below this level
 : **Default**: "INFO"
 
-`org.daisy.pipeline.updater.updateSite`
-: URL of the update service
-: **Required**: No
-: **Default**: "http://daisy.github.io/pipeline-assembly/releases/"
-
 `org.daisy.pipeline.braille.liblouis.external`
 : Whether to use the Liblouis library present on the system instead of the embedded version
 : **Allowed values**: "true" or "false"
@@ -126,28 +121,6 @@ the `pipeline.properties` file.
 A number of properties are specific to text-to-speech. These
 properties are documented
 [here](http://daisy.github.io/pipeline/Get-Help/User-Guide/Text-To-Speech/).
-
-<!--
-
-The following are used in persistence-mysql but persistence-mysql is not included
-
-`org.daisy.pipeline.persistence.url`
-: Database connection URL
-: **Allowed values**: A JDBC url
-: **Required**: No
-: **Default**: "jdbc:mysql://localhost:3306/daisy_pipeline"
-
-`org.daisy.pipeline.persistence.user`
-: Database user
-: **Allowed values**: A non-empty string
-: **Required**: Yes
-
-`org.daisy.pipeline.persistence.password`
-: Database password
-: **Allowed values**: A non-empty string
-: **Required**: Yes
-
--->
 
 ## Logback
 
