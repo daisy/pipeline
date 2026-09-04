@@ -7,5 +7,5 @@
 	remote = git@github.com:daisy/pipeline-cli-go.git
 	branch = master
 	commit = 207efbb62c24f226ca24b14d348d47369e5e6d30
-	parent = 9ecbc17cd0a6efda12dc0dce6ad72ebd7a175c6f
+	parent = d2dc3d918ce6c622f11fe173e1c85c50dce28bf6
 	cmdver = 0.3.1
