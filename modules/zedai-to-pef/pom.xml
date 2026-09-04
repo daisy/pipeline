@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.15.5</version>
+    <version>1.15.6-SNAPSHOT</version>
     <relativePath>../parent/</relativePath>
   </parent>
 
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>zedai-to-pef</artifactId>
-  <version>7.1.1</version>
+  <version>7.1.2-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: ZedAI to PEF</name>

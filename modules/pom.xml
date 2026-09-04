@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>modules-aggregator</artifactId>
-  <version>1.15.5</version>
+  <version>1.15.6-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Aggregator POM for all the modules</name>
@@ -69,7 +69,7 @@
     <module>mediatype-utils</module>
     <module>metadata-utils</module>
     <module>nlp-common</module>
-    <!--<module>obfl-utils</module>-->
+    <module>obfl-utils</module>
     <module>ocr-utils</module>
     <module>odf-utils</module>
     <module>pandoc-adapter</module>
@@ -86,7 +86,7 @@
     <module>tts-adapter-qfrency</module>
     <module>tts-adapter-sapinative</module>
     <module>tts-common</module>
-    <!--<module>tts-mocks</module>-->
+    <module>tts-mocks</module>
     <module>validation-utils</module>
     <module>word-to-dtbook</module>
     <module>zedai-to-epub3</module>
@@ -128,8 +128,4 @@
       </plugin>
     </plugins>
   </build>
-
-  <scm>
-    <tag>v1.15.5</tag>
-  </scm>
 </project>
