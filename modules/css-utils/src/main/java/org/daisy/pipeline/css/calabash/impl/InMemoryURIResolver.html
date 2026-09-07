@@ -40,7 +40,7 @@
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  		<strong class="jxr_keyword">this</strong>.documents = documents;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  	}
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName c_encoding = <strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"c"</span>, XProcConstants.NS_XPROC_STEP, <span class="jxr_string">"encoding"</span>);
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName _encoding = <strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"encoding"</span>);
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName _content_type = <strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"content-type"</span>);
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  	<strong class="jxr_keyword">public</strong> Source resolve(String href, String base) <strong class="jxr_keyword">throws</strong> TransformerException {
@@ -61,7 +61,7 @@
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  					    &amp;&amp; root.getAttributeValue(_content_type).startsWith(<span class="jxr_string">"text/"</span>))
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  						<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> StreamSource(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(doc.getStringValue().getBytes()),
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  						                        uri.toASCIIString());
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  					<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"base64"</span>.equals(root.getAttributeValue(c_encoding)))
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  					<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"base64"</span>.equals(root.getAttributeValue(_encoding)))
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  						<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> StreamSource(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(Base64.decode(doc.getStringValue())),
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  						                        uri.toASCIIString());
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  					<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (XProcConstants.c_data.equals(root.getNodeName()))

@@ -108,45 +108,46 @@
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  		VoiceConfigExtension voiceConfigExt = <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/tts-common/src/main/java/org/daisy/pipeline/tts/config/VoiceConfigExtension.html">VoiceConfigExtension</a>();
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 		DynamicPropertiesExtension propsExt = <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/tts-common/src/main/java/org/daisy/pipeline/tts/config/DynamicPropertiesExtension.html">DynamicPropertiesExtension</a>();
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 		<strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/tts-common/src/main/java/org/daisy/pipeline/tts/config/ConfigReader.html">ConfigReader</a>(saxonProcessor, configXML, properties, voiceConfigExt, propsExt);
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		<strong class="jxr_keyword">if</strong> (configXML != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		<strong class="jxr_keyword">if</strong> (configXML != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 			logger.debug(<span class="jxr_string">"Voice configuration XML:\n"</span> + configXML);
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 			logger.debug(<span class="jxr_string">"Parsed voice configuration:\n"</span> + voiceConfigExt.getVoiceDeclarations());
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		}
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		Map&lt;String,String&gt; dynProperties = propsExt.getDynamicProperties();
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">synchronized</strong> (<strong class="jxr_keyword">this</strong>) {
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 			<strong class="jxr_keyword">if</strong> (dynProperties != <strong class="jxr_keyword">null</strong> &amp;&amp; !dynProperties.isEmpty()) {
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 				properties = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;(properties);
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 				properties.putAll(dynProperties);
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 				<em class="jxr_comment">// forget everything if any dynamic properties are present</em>
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 				rememberProperties = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 				rememberVoiceManager = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (rememberProperties != <strong class="jxr_keyword">null</strong> &amp;&amp; rememberProperties.equals(properties))
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 				<strong class="jxr_keyword">return</strong> rememberVoiceManager;
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 			<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 				rememberProperties = properties;
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		}
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		VoiceManager m = <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/tts-common/src/main/java/org/daisy/pipeline/tts/VoiceManager.html">VoiceManager</a>(
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 			ttsRegistry.getWorkingEngines(properties, <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/tts-common/src/main/java/org/daisy/pipeline/tts/TTSLog.html">TTSLog</a>(logger), logger),
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 			voiceConfigExt.getVoiceDeclarations());
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		<strong class="jxr_keyword">if</strong> (rememberProperties != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 			rememberVoiceManager = m;
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		<strong class="jxr_keyword">return</strong> m;
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	}
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 	AudioEncoder getAudioEncoder(AudioFileFormat.Type audioFileType) {
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">return</strong> audioServices.newEncoder(audioFileType, Collections.emptyMap()).orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 	}
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Processor saxonProcessor = <strong class="jxr_keyword">new</strong> Processor(false);
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 	XdmNode getConfigXML(String ttsConfig) <strong class="jxr_keyword">throws</strong> IOException, SaxonApiException {
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<strong class="jxr_keyword">if</strong> (ttsConfig == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		<strong class="jxr_keyword">return</strong> saxonProcessor.newDocumentBuilder().build(
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 			<strong class="jxr_keyword">new</strong> SAXSource(<strong class="jxr_keyword">new</strong> InputSource(<strong class="jxr_keyword">new</strong> StringReader(ttsConfig))));
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 	}
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> }
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		String staticConfig = ConfigReader.TTSConfigProperty.getValue(properties);
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">if</strong> (configXML != <strong class="jxr_keyword">null</strong> || (staticConfig != <strong class="jxr_keyword">null</strong> &amp;&amp; !<span class="jxr_string">""</span>.equals(staticConfig)))
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 			logger.debug(<span class="jxr_string">"Parsed voice configuration:\n"</span> + voiceConfigExt.getVoiceDeclarations());
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		Map&lt;String,String&gt; dynProperties = propsExt.getDynamicProperties();
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">synchronized</strong> (<strong class="jxr_keyword">this</strong>) {
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 			<strong class="jxr_keyword">if</strong> (dynProperties != <strong class="jxr_keyword">null</strong> &amp;&amp; !dynProperties.isEmpty()) {
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 				properties = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;(properties);
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 				properties.putAll(dynProperties);
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 				<em class="jxr_comment">// forget everything if any dynamic properties are present</em>
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 				rememberProperties = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 				rememberVoiceManager = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (rememberProperties != <strong class="jxr_keyword">null</strong> &amp;&amp; rememberProperties.equals(properties))
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 				<strong class="jxr_keyword">return</strong> rememberVoiceManager;
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 			<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 				rememberProperties = properties;
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		}
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		VoiceManager m = <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/tts-common/src/main/java/org/daisy/pipeline/tts/VoiceManager.html">VoiceManager</a>(
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 			ttsRegistry.getWorkingEngines(properties, <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/tts-common/src/main/java/org/daisy/pipeline/tts/TTSLog.html">TTSLog</a>(logger), logger),
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 			voiceConfigExt.getVoiceDeclarations());
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		<strong class="jxr_keyword">if</strong> (rememberProperties != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 			rememberVoiceManager = m;
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		<strong class="jxr_keyword">return</strong> m;
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 	}
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 	AudioEncoder getAudioEncoder(AudioFileFormat.Type audioFileType) {
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<strong class="jxr_keyword">return</strong> audioServices.newEncoder(audioFileType, Collections.emptyMap()).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	}
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Processor saxonProcessor = <strong class="jxr_keyword">new</strong> Processor(false);
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 	XdmNode getConfigXML(String ttsConfig) <strong class="jxr_keyword">throws</strong> IOException, SaxonApiException {
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		<strong class="jxr_keyword">if</strong> (ttsConfig == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		<strong class="jxr_keyword">return</strong> saxonProcessor.newDocumentBuilder().build(
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 			<strong class="jxr_keyword">new</strong> SAXSource(<strong class="jxr_keyword">new</strong> InputSource(<strong class="jxr_keyword">new</strong> StringReader(ttsConfig))));
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	}
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> }
 </pre>
 <hr>
 <div id="footer">Copyright © 2010–2026 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>

@@ -93,8 +93,8 @@ attached to the source document.&lt;/<span class="code-xml-element-local-name">p
                     &lt;a:documentation xml:lang="en" xml:space="preserve"&gt;United States and Canada (BANA)
 
 The document is formatted according to the rules of the [Braille Authority of North America
-(BANA)](https://www.brailleauthority.org/). [UEB](https://iceb.org/) is used as the braille code for
-all text.
+(BANA)](https://www.brailleauthority.org/). Note that this does not select
+[UEB](https://iceb.org/) as the braille code automatically.
 
 Equivalent to specifying the value
 `https://raw.githubusercontent.com/daisy/braille-stylesheets/refs/heads/main/bana/bana.scss` for the
@@ -111,8 +111,8 @@ See the [online documentation](https://daisy.github.io/braille-stylesheets/bana/
                     &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">lang</span>=<span class="code-xml-attribute-value">"en"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;United States and Canada (BANA)
 
 The document is formatted according to the rules of the [Braille Authority of North America
-(BANA)](https://www.brailleauthority.org/). [UEB](https://iceb.org/) is used as the braille code for
-all text.
+(BANA)](https://www.brailleauthority.org/). Note that this does not select
+[UEB](https://iceb.org/) as the braille code automatically.
 
 Equivalent to specifying the value
 `https://raw.githubusercontent.com/daisy/braille-stylesheets/refs/heads/main/bana/bana.scss` for the
@@ -456,7 +456,7 @@ The syntax is as follows (described in terms of [CSS grammar](https://www.w3.org
      : 'mm' | 'cm' | 'in' | 'px' | 'ch'
      ;
 &lt;/a:documentation&gt;
-                    &lt;param name=&quot;pattern&quot;&gt;^+?([0-9]*\\\\.)?[0-9]+([eE][+-]?[0-9]+)?(mm|cm|in|px|ch)?$&lt;/param&gt;
+                    &lt;param name=&quot;pattern&quot;&gt;^\\+?([0-9]*\\.)?[0-9]+([eE][+-]?[0-9]+)?(mm|cm|in|px|ch)?$&lt;/param&gt;
                 &lt;/data&gt;
             ">&lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">type</span>&gt;
                 &lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">a</span>=<span class="code-xml-attribute-value">"http://relaxng.org/ns/compatibility/annotations/1.0"</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;
@@ -471,7 +471,7 @@ The syntax is as follows (described in terms of [CSS grammar](https://www.w3.org
      : 'mm' | 'cm' | 'in' | 'px' | 'ch'
      ;
 &lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-                    &lt;<span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pattern"</span>&gt;^+?([0-9]*\\.)?[0-9]+([eE][+-]?[0-9]+)?(mm|cm|in|px|ch)?$&lt;/<span class="code-xml-element-local-name">param</span>&gt;
+                    &lt;<span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pattern"</span>&gt;^\+?([0-9]*\.)?[0-9]+([eE][+-]?[0-9]+)?(mm|cm|in|px|ch)?$&lt;/<span class="code-xml-element-local-name">param</span>&gt;
                 &lt;/<span class="code-xml-element-local-name">data</span>&gt;
             &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">type</span>&gt;</span></span></span></span>&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipeinfo</span>&gt;</span><span class="script-inherited">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
             <span property="name" content="Page width">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Page width&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
@@ -527,7 +527,7 @@ The syntax is as follows (described in terms of [CSS grammar](https://www.w3.org
      : 'mm' | 'cm' | 'in' | 'px' | 'em'
      ;
 &lt;/a:documentation&gt;
-                    &lt;param name=&quot;pattern&quot;&gt;^+?([0-9]*\\.)?[0-9]+([eE][+-]?[0-9]+)?(mm|cm|in|px|em)?$&lt;/param&gt;
+                    &lt;param name=&quot;pattern&quot;&gt;^\\+?([0-9]*\\.)?[0-9]+([eE][+-]?[0-9]+)?(mm|cm|in|px|em)?$&lt;/param&gt;
                 &lt;/data&gt;
             ">&lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">type</span>&gt;
                 &lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">a</span>=<span class="code-xml-attribute-value">"http://relaxng.org/ns/compatibility/annotations/1.0"</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;
@@ -542,7 +542,7 @@ The syntax is as follows (described in terms of [CSS grammar](https://www.w3.org
      : 'mm' | 'cm' | 'in' | 'px' | 'em'
      ;
 &lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-                    &lt;<span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pattern"</span>&gt;^+?([0-9]*\.)?[0-9]+([eE][+-]?[0-9]+)?(mm|cm|in|px|em)?$&lt;/<span class="code-xml-element-local-name">param</span>&gt;
+                    &lt;<span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pattern"</span>&gt;^\+?([0-9]*\.)?[0-9]+([eE][+-]?[0-9]+)?(mm|cm|in|px|em)?$&lt;/<span class="code-xml-element-local-name">param</span>&gt;
                 &lt;/<span class="code-xml-element-local-name">data</span>&gt;
             &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">type</span>&gt;</span></span></span></span>&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipeinfo</span>&gt;</span><span class="script-inherited">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
             <span property="name" content="Page height">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Page height&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
@@ -746,7 +746,7 @@ is too long to fit the space.
             &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"temp-dir"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"concat($temp-dir,'convert/')"</span>/&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">_</span>=<span class="code-xml-attribute-value">"embossed"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"stylesheet"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"string-join(($formatting-standard,$_:stylesheet),' ')"</span>/&gt;
-            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"parameters"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"($stylesheet-parameters,                                                       map:merge((                                                         for $page-width in $page-width return map:entry('page-width',$page-width),                                                         for $page-height in $page-width return map:entry('page-height',$page-height),                                                         for $duplex in $duplex return map:entry('duplex',$duplex),                                                         for $saddle-stitch in $saddle-stitch return map:entry('saddle-stitch',$saddle-stitch),                                                         map:entry('hyphenation-at-page-breaks',$hyphenation-at-page-breaks),                                                         map:entry('allow-text-overflow-trimming',$allow-text-overflow-trimming))))"</span>/&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"parameters"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"($stylesheet-parameters,                                                       map:merge((                                                         for $page-width in $page-width return map:entry('page-width',$page-width),                                                         for $page-height in $page-width return map:entry('page-height',$page-height),                                                         for $duplex in $duplex return map:entry('duplex',$duplex),                                                         for $saddle-stitch in $saddle-stitch return map:entry('saddle-stitch',$saddle-stitch),                                                         map:entry('hyphenation-at-page-breaks',$hyphenation-at-page-breaks),                                                         map:entry('allow-text-overflow-trimming',$allow-text-overflow-trimming),                                                         map:entry('preview-table',$preview-table))))"</span>/&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"transform"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"concat($braille-code,($transform,'(translator:liblouis)(formatter:dotify)')[not(.='')][1])"</span>/&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"medium"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$medium"</span>/&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"include-obfl"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$include-obfl"</span>/&gt;

@@ -245,7 +245,7 @@
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> URIResolver fallback(URIResolver... resolvers) {
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> URIResolver() {
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 			<strong class="jxr_keyword">public</strong> Source resolve(String href, String base) <strong class="jxr_keyword">throws</strong> javax.xml.transform.TransformerException {
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 			<strong class="jxr_keyword">public</strong> Source resolve(String href, String base) <strong class="jxr_keyword">throws</strong> TransformerException {
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 				Iterator&lt;URIResolver&gt; iterator = forArray(resolvers);
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 				<strong class="jxr_keyword">while</strong> (iterator.hasNext()) {
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 					Source source = iterator.next().resolve(href, base);

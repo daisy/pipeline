@@ -211,7 +211,7 @@
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 				part = part.toLowerCase();
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 				part = part.replaceAll(<span class="jxr_string">"[^a-z0-9]"</span>, <span class="jxr_string">""</span>);
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 				<strong class="jxr_keyword">if</strong> (part.length() &lt; 3) <em class="jxr_comment">// too short to make into a language subtag</em>
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 					part += com.google.common.base.Strings.repeat(<span class="jxr_string">"0"</span>, 3 - part.length());
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 				<strong class="jxr_keyword">if</strong> (part.length() &gt; 8) <em class="jxr_comment">// too long to make into a language subtag</em>
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 					part = part.substring(0, 8);
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> 				languageSubtags.add(part);

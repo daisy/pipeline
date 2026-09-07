@@ -42,7 +42,7 @@
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> activate() <strong class="jxr_keyword">throws</strong> RuntimeException {
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  		<em class="jxr_comment">// only called when created with SPI</em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  		<strong class="jxr_keyword">if</strong> (!LIBLOUIS_EXTERNAL)
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  			SPIHelper.failToActivate(<span class="jxr_string">"Using external Liblouis is not allowed"</span>);
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> ActivationException(<span class="jxr_string">"Using external Liblouis is not allowed"</span>);
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  	}
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  	
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  	<strong class="jxr_keyword">public</strong> URI getIdentifier() { <strong class="jxr_keyword">return</strong> URLs.asURI(<span class="jxr_string">"http://www.liblouis.org/native/EXTERNAL"</span>); }
@@ -68,15 +68,7 @@
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> stop(BundleContext context) <strong class="jxr_keyword">throws</strong> Exception {}
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  		
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  	}
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	<em class="jxr_comment">// static nested class in order to delay class loading</em>
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/liblouis-utils/src/main/java/org/daisy/pipeline/braille/liblouis/impl/LiblouisExternalNativePath.html">SPIHelper</a> {
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">private</strong> <a href="/pipeline/modules/braille/liblouis-utils/src/main/java/org/daisy/pipeline/braille/liblouis/impl/LiblouisExternalNativePath.html">SPIHelper</a>() {}
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> failToActivate(String message) <strong class="jxr_keyword">throws</strong> ActivationException {
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> ActivationException(message);
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		}
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  	}
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  }
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  }
 </pre>
 <hr>
 <div id="footer">Copyright © 2010–2026 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>

@@ -120,7 +120,7 @@
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 		}
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 		Document doc = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		ZippedJobResources data; {
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		JobResources data; {
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 			<strong class="jxr_keyword">if</strong> (representation == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 				<em class="jxr_comment">// everything will be in the query string</em>
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 				data = <strong class="jxr_keyword">null</strong>;
@@ -200,212 +200,218 @@
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 					<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"http"</span>.equals(href.getScheme()) || <span class="jxr_string">"https"</span>.equals(href.getScheme()))
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 						builder.withInput(<span class="jxr_string">"stylesheet"</span>,
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 						                  <strong class="jxr_keyword">new</strong> ByteArrayInputStream(
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 							                  (<span class="jxr_string">"@import url(\""</span> + href + <span class="jxr_string">"\");"</span>).getBytes(StandardCharsets.UTF_8)));
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 					<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 						builder.withInput(<span class="jxr_string">"stylesheet"</span>, href);
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 				} <strong class="jxr_keyword">catch</strong> (IllegalArgumentException|FileNotFoundException e) {
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 					<strong class="jxr_keyword">return</strong> badRequest(e);
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 				}
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 			}
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 			<strong class="jxr_keyword">for</strong> (URI href : req.getSourceDocument().map(Collections::singleton).orElseGet(Collections::emptySet)) {
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 				<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 					<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"file"</span>.equals(href.getScheme()) &amp;&amp; !getConfiguration().isLocalFS())
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> FileNotFoundException(
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 							<span class="jxr_string">"WS does not allow local inputs but a URI starting with 'file:' was found: "</span> + href);
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 					builder.withInput(<span class="jxr_string">"source"</span>, href);
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 				} <strong class="jxr_keyword">catch</strong> (IllegalArgumentException|FileNotFoundException e) {
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 					<strong class="jxr_keyword">return</strong> badRequest(e);
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 				}
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 			}
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 			inputs = builder.build();
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 		}
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		List&lt;Medium&gt; media = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(); {
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 			<strong class="jxr_keyword">for</strong> (MediaQuery q : req.getMedia())
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 				<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 					media.add(mediumProvider.get(q).iterator().next());
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 				} <strong class="jxr_keyword">catch</strong> (NoSuchElementException e) {
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 				}
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		}
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		URI contextBase = URI.create(<span class="jxr_string">"context:/"</span>);
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		uriResolver = fallback(uriResolver, simpleURIResolver);
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		URIResolver resolver = data == <strong class="jxr_keyword">null</strong>
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 			? uriResolver
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 			: <strong class="jxr_keyword">new</strong> URIResolver() {
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 					@Override
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 					<strong class="jxr_keyword">public</strong> Source resolve(String href, String base) <strong class="jxr_keyword">throws</strong> TransformerException {
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 						URI hrefURI = URLs.asURI(href);
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 						<strong class="jxr_keyword">if</strong> (href.startsWith(contextBase.toString())
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 						    || (base != <strong class="jxr_keyword">null</strong> &amp;&amp; base.startsWith(contextBase.toString())
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 						        &amp;&amp; !(hrefURI.isAbsolute() || hrefURI.getSchemeSpecificPart().startsWith(<span class="jxr_string">"/"</span>)))) {
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 							<strong class="jxr_keyword">if</strong> (!href.startsWith(contextBase.toString()))
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 								hrefURI = URLs.resolve(URLs.asURI(base), hrefURI);
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 							<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 								URL u = URLs.asURL(hrefURI);
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 								<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> StreamSource(u.openStream(), <em class="jxr_comment">// implemented in custom URLStreamHandler below</em>
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 								                        hrefURI.toString());
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 							} <strong class="jxr_keyword">catch</strong> (IOException e) {
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 								<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> TransformerException(e);
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 							}
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 						}
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 						<strong class="jxr_keyword">return</strong> uriResolver.resolve(href, base);
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 					}
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 				};
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		URLStreamHandlerFactory resetURLStreamHandlerFactory = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		<strong class="jxr_keyword">if</strong> (data != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 			resetURLStreamHandlerFactory = setURLStreamHandlerFactory(
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 				<strong class="jxr_keyword">new</strong> URLStreamHandlerFactory() {
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 					@Override
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 					<strong class="jxr_keyword">public</strong> URLStreamHandler createURLStreamHandler(String protocol) {
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 						<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"context"</span>.equals(protocol))
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 							<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> URLStreamHandler() {
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 								@Override
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 								<strong class="jxr_keyword">protected</strong> URLConnection openConnection(URL u) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 									<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> URLConnection(u) {
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 										@Override
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 										<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> connect() <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 										}
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 										@Override
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 										<strong class="jxr_keyword">public</strong> InputStream getInputStream() <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 											Resource r = data.getResource(URLs.relativize(contextBase, URLs.asURI(u)));
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 											<strong class="jxr_keyword">if</strong> (r == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 												<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> FileNotFoundException();
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 											<strong class="jxr_keyword">return</strong> r.read();
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 										}
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 									};
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 								}
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 							};
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 						<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 							<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 					}
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 				}
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 			);
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 			Function&lt;URI,Source&gt; handleZippedInput = s -&gt; {
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 				<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 					<strong class="jxr_keyword">return</strong> resolveResource(s, inputs).readAsSource();
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 				} <strong class="jxr_keyword">catch</strong> (IOException e) {
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UncheckedIOException(e);
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 				}
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 			};
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 			List&lt;Source&gt; userAndUserAgentStylesheets = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(); {
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 				List&lt;String&gt; mediaTypes = req.getMediaTypes();
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 				<strong class="jxr_keyword">if</strong> (mediaTypes.size() &gt; 0) {
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 					<strong class="jxr_keyword">for</strong> (URL u : userAgentStylesheetRegistry.get(
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 					                 Collections.singleton(<span class="jxr_string">"text/x-scss"</span>),
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 					                 mediaTypes,
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 					                 media))
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 						<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 							userAndUserAgentStylesheets.add(simpleURIResolver.resolve(u.toString(), <strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 						} <strong class="jxr_keyword">catch</strong> (TransformerException e) {
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(e);
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 						}
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 				}
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 				<strong class="jxr_keyword">for</strong> (Source s : Iterables.transform(inputs.getInput(<span class="jxr_string">"stylesheet"</span>), handleZippedInput))
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 					userAndUserAgentStylesheets.add(s);
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 			}
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 			Source sourceDocument = Iterables.getFirst(Iterables.transform(inputs.getInput(<span class="jxr_string">"source"</span>), handleZippedInput), <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 			Document parametersDoc; {
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 				parametersDoc = XmlUtils.createDom(<span class="jxr_string">"parameters"</span>);
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 				Element parametersElem = parametersDoc.getDocumentElement();
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 				<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 					<strong class="jxr_keyword">for</strong> (SassVariable v : <strong class="jxr_keyword">new</strong> CssAnalyzer(media, resolver, datatypeRegistry)
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 						                      .analyze(userAndUserAgentStylesheets, sourceDocument)
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 						                      .getVariables()) {
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 						<strong class="jxr_keyword">if</strong> (v.isDefault()) {
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 							Element parameterElem = parametersDoc.createElementNS(XmlUtils.NS_PIPELINE_DATA, <span class="jxr_string">"parameter"</span>);
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 							parameterElem.setAttribute(<span class="jxr_string">"name"</span>, v.getName());
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 							parameterElem.setAttribute(<span class="jxr_string">"nicename"</span>, v.getNiceName());
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 							parameterElem.setAttribute(<span class="jxr_string">"description"</span>, v.getDescription());
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 							parameterElem.setAttribute(<span class="jxr_string">"default"</span>, v.getValue());
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 							parameterElem.setAttribute(<span class="jxr_string">"type"</span>, v.getType().getId());
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 							parameterElem.setAttribute(<span class="jxr_string">"required"</span>, <span class="jxr_string">"false"</span>);
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 							parameterElem.setAttribute(<span class="jxr_string">"sequence"</span>, <span class="jxr_string">"false"</span>);
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 							parameterElem.setAttribute(<span class="jxr_string">"ordered"</span>, <span class="jxr_string">"false"</span>);
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 							parametersElem.appendChild(parameterElem);
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 						}
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 					}
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 				} <strong class="jxr_keyword">catch</strong> (IOException e) {
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 					<strong class="jxr_keyword">return</strong> badRequest(e);
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 				} <strong class="jxr_keyword">catch</strong> (DOMException e) { <em class="jxr_comment">// should not happen</em>
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 					setStatus(Status.SERVER_ERROR_INTERNAL);
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 					<strong class="jxr_keyword">return</strong> getErrorRepresentation(e.getMessage());
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> 				}
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 				DomRepresentation dom = <strong class="jxr_keyword">new</strong> DomRepresentation(MediaType.APPLICATION_XML, parametersDoc);
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 				setStatus(Status.SUCCESS_OK);
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 				logResponse(dom);
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 				<strong class="jxr_keyword">return</strong> dom;
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 			}
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 			<strong class="jxr_keyword">if</strong> (data != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 				setURLStreamHandlerFactory(resetURLStreamHandlerFactory);
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 		}
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 	}
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 	<strong class="jxr_keyword">private</strong> Representation badRequest(Exception e) {
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		logger.error(<span class="jxr_string">"bad request:"</span>, e);
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		<strong class="jxr_keyword">return</strong> getErrorRepresentation(e.getMessage());
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 						                      (<span class="jxr_string">"@import url(\""</span> + href + <span class="jxr_string">"\");"</span>).getBytes(StandardCharsets.UTF_8)),
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 						                  <span class="jxr_string">"text/css"</span>);
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 					<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 						builder.withInput(<span class="jxr_string">"stylesheet"</span>, href);
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 				} <strong class="jxr_keyword">catch</strong> (IllegalArgumentException|FileNotFoundException e) {
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 					<strong class="jxr_keyword">return</strong> badRequest(e);
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 				}
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 			}
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 			<strong class="jxr_keyword">for</strong> (URI href : req.getSourceDocument().map(Collections::singleton).orElseGet(Collections::emptySet)) {
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 				<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 					<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"file"</span>.equals(href.getScheme()) &amp;&amp; !getConfiguration().isLocalFS())
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> FileNotFoundException(
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 							<span class="jxr_string">"WS does not allow local inputs but a URI starting with 'file:' was found: "</span> + href);
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 					builder.withInput(<span class="jxr_string">"source"</span>, href);
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 				} <strong class="jxr_keyword">catch</strong> (IllegalArgumentException|FileNotFoundException e) {
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 					<strong class="jxr_keyword">return</strong> badRequest(e);
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 				}
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 			}
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 			inputs = builder.build();
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		}
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		List&lt;Medium&gt; media = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(); {
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 			<strong class="jxr_keyword">for</strong> (MediaQuery q : req.getMedia())
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 				<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 					media.add(mediumProvider.get(q).iterator().next());
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 				} <strong class="jxr_keyword">catch</strong> (NoSuchElementException e) {
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 				}
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		}
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		URI contextBase = URI.create(<span class="jxr_string">"context:/"</span>);
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		uriResolver = fallback(uriResolver, simpleURIResolver);
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		URIResolver resolver = inputs.getResources() == <strong class="jxr_keyword">null</strong>
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 			? uriResolver
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 			: <strong class="jxr_keyword">new</strong> URIResolver() {
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 					@Override
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 					<strong class="jxr_keyword">public</strong> Source resolve(String href, String base) <strong class="jxr_keyword">throws</strong> TransformerException {
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 						URI hrefURI = URLs.asURI(href);
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 						<strong class="jxr_keyword">if</strong> (href.startsWith(contextBase.toString())
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 						    || (base != <strong class="jxr_keyword">null</strong> &amp;&amp; base.startsWith(contextBase.toString())
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 						        &amp;&amp; !(hrefURI.isAbsolute() || hrefURI.getSchemeSpecificPart().startsWith(<span class="jxr_string">"/"</span>)))) {
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 							<strong class="jxr_keyword">if</strong> (!href.startsWith(contextBase.toString()))
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 								hrefURI = URLs.resolve(URLs.asURI(base), hrefURI);
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 							<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 								URL u = URLs.asURL(hrefURI);
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 								<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> StreamSource(u.openStream(), <em class="jxr_comment">// implemented in custom URLStreamHandler below</em>
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 								                        hrefURI.toString());
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 							} <strong class="jxr_keyword">catch</strong> (IOException e) {
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 								<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> TransformerException(e);
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 							}
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 						}
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 						<strong class="jxr_keyword">return</strong> uriResolver.resolve(href, base);
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 					}
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 				};
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		URLStreamHandlerFactory resetURLStreamHandlerFactory = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		<strong class="jxr_keyword">if</strong> (inputs.getResources() != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 			resetURLStreamHandlerFactory = setURLStreamHandlerFactory(
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 				<strong class="jxr_keyword">new</strong> URLStreamHandlerFactory() {
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 					@Override
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 					<strong class="jxr_keyword">public</strong> URLStreamHandler createURLStreamHandler(String protocol) {
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 						<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"context"</span>.equals(protocol))
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 							<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> URLStreamHandler() {
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 								@Override
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 								<strong class="jxr_keyword">protected</strong> URLConnection openConnection(URL u) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 									<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> URLConnection(u) {
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 										@Override
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 										<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> connect() <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 										}
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 										@Override
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 										<strong class="jxr_keyword">public</strong> InputStream getInputStream() <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 											Resource r = inputs.getResources().getResource(URLs.relativize(contextBase, URLs.asURI(u)));
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 											<strong class="jxr_keyword">if</strong> (r == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 												<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> FileNotFoundException();
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 											<strong class="jxr_keyword">return</strong> r.read();
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 										}
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 									};
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 								}
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 							};
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 						<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 							<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 					}
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 				}
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 			);
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 			Function&lt;URI,Source&gt; handleZippedInput = s -&gt; {
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 				<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 					Resource r = resolveResource(s, inputs);
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 					URI u = r.getPath();
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 					<strong class="jxr_keyword">if</strong> (!u.isAbsolute())
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 						<em class="jxr_comment">// we know that u is a relative URI and that data contains the file</em>
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 						r = r.copy(URLs.resolve(contextBase, u));
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 					<strong class="jxr_keyword">return</strong> r.readAsSource();
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 				} <strong class="jxr_keyword">catch</strong> (IOException e) {
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UncheckedIOException(e);
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 				}
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 			};
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 			List&lt;Source&gt; userAndUserAgentStylesheets = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(); {
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 				List&lt;String&gt; mediaTypes = req.getMediaTypes();
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 				<strong class="jxr_keyword">if</strong> (mediaTypes.size() &gt; 0) {
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 					<strong class="jxr_keyword">for</strong> (URL u : userAgentStylesheetRegistry.get(
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 					                 Collections.singleton(<span class="jxr_string">"text/x-scss"</span>),
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 					                 mediaTypes,
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 					                 media))
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 						<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 							userAndUserAgentStylesheets.add(simpleURIResolver.resolve(u.toString(), <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 						} <strong class="jxr_keyword">catch</strong> (TransformerException e) {
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(e);
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 						}
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 				}
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 				<strong class="jxr_keyword">for</strong> (Source s : Iterables.transform(inputs.getInput(<span class="jxr_string">"stylesheet"</span>), handleZippedInput))
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 					userAndUserAgentStylesheets.add(s);
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 			}
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 			Source sourceDocument = Iterables.getFirst(Iterables.transform(inputs.getInput(<span class="jxr_string">"source"</span>), handleZippedInput), <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 			Document parametersDoc; {
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 				parametersDoc = XmlUtils.createDom(<span class="jxr_string">"parameters"</span>);
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 				Element parametersElem = parametersDoc.getDocumentElement();
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 				<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 					<strong class="jxr_keyword">for</strong> (SassVariable v : <strong class="jxr_keyword">new</strong> CssAnalyzer(media, resolver, datatypeRegistry)
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 						                      .analyze(userAndUserAgentStylesheets, sourceDocument)
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 						                      .getVariables()) {
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 						<strong class="jxr_keyword">if</strong> (v.isDefault()) {
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 							Element parameterElem = parametersDoc.createElementNS(XmlUtils.NS_PIPELINE_DATA, <span class="jxr_string">"parameter"</span>);
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 							parameterElem.setAttribute(<span class="jxr_string">"name"</span>, v.getName());
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 							parameterElem.setAttribute(<span class="jxr_string">"nicename"</span>, v.getNiceName());
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 							parameterElem.setAttribute(<span class="jxr_string">"description"</span>, v.getDescription());
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 							parameterElem.setAttribute(<span class="jxr_string">"default"</span>, v.getValue());
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 							parameterElem.setAttribute(<span class="jxr_string">"type"</span>, v.getType().getId());
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 							parameterElem.setAttribute(<span class="jxr_string">"required"</span>, <span class="jxr_string">"false"</span>);
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 							parameterElem.setAttribute(<span class="jxr_string">"sequence"</span>, <span class="jxr_string">"false"</span>);
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 							parameterElem.setAttribute(<span class="jxr_string">"ordered"</span>, <span class="jxr_string">"false"</span>);
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 							parametersElem.appendChild(parameterElem);
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 						}
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 					}
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 				} <strong class="jxr_keyword">catch</strong> (IOException e) {
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 					<strong class="jxr_keyword">return</strong> badRequest(e);
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 				} <strong class="jxr_keyword">catch</strong> (DOMException e) { <em class="jxr_comment">// should not happen</em>
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 					setStatus(Status.SERVER_ERROR_INTERNAL);
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 					<strong class="jxr_keyword">return</strong> getErrorRepresentation(e.getMessage());
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 				}
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 				DomRepresentation dom = <strong class="jxr_keyword">new</strong> DomRepresentation(MediaType.APPLICATION_XML, parametersDoc);
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 				setStatus(Status.SUCCESS_OK);
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 				logResponse(dom);
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 				<strong class="jxr_keyword">return</strong> dom;
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 			}
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 			<strong class="jxr_keyword">if</strong> (inputs.getResources() != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 				setURLStreamHandlerFactory(resetURLStreamHandlerFactory);
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		}
 <a class="jxr_linenumber" name="L339" href="#L339">339</a> 	}
 <a class="jxr_linenumber" name="L340" href="#L340">340</a> 
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Resource resolveResource(URI uri, ScriptInput input) {
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 		JobResources resources = input.getResources();
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		<strong class="jxr_keyword">if</strong> (resources != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 			Resource r = resources.getResource(uri);
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 			<strong class="jxr_keyword">if</strong> (r != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 				<strong class="jxr_keyword">return</strong> r;
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		}
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		<em class="jxr_comment">// otherwise must be a file URI</em>
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		<strong class="jxr_keyword">if</strong> (!<span class="jxr_string">"file"</span>.equals(uri.getScheme()) || uri.isOpaque())
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(); <em class="jxr_comment">// should not happen: ScriptInput does not allow this</em>
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		<strong class="jxr_keyword">return</strong> Resource.load(uri, Resource.MEDIA_TYPE_UNKNOWN);
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 	}
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> URIResolver simpleURIResolver = <strong class="jxr_keyword">new</strong> URIResolver() {
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 			@Override
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 			<strong class="jxr_keyword">public</strong> Source resolve(String href, String base) <strong class="jxr_keyword">throws</strong> TransformerException {
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 				<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 					URI uri; {
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 						<strong class="jxr_keyword">if</strong> (base != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 							uri = <strong class="jxr_keyword">new</strong> URI(base).resolve(<strong class="jxr_keyword">new</strong> URI(href));
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 						<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 							uri = <strong class="jxr_keyword">new</strong> URI(href);
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 					}
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> SAXSource(<strong class="jxr_keyword">new</strong> InputSource(uri.toASCIIString()));
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 				} <strong class="jxr_keyword">catch</strong> (URISyntaxException e) {
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> TransformerException(e);
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 				}
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 			}
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		};
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> URIResolver fallback(URIResolver... resolvers) {
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> URIResolver() {
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 			@Override
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 			<strong class="jxr_keyword">public</strong> Source resolve(String href, String base) <strong class="jxr_keyword">throws</strong> TransformerException {
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 				Source source = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 				Iterator&lt;URIResolver&gt; iterator = Iterators.forArray(resolvers);
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 				<strong class="jxr_keyword">while</strong> (iterator.hasNext()) {
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 					source = iterator.next().resolve(href, base);
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 					<strong class="jxr_keyword">if</strong> (source != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 						<strong class="jxr_keyword">break</strong>; }
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 				<strong class="jxr_keyword">return</strong> source;
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 			}
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 		};
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 	}
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 	<em class="jxr_comment">// see https://stackoverflow.com/a/18018891</em>
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> URLStreamHandlerFactory setURLStreamHandlerFactory(URLStreamHandlerFactory factory) {
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 			Field f = URL.<strong class="jxr_keyword">class</strong>.getDeclaredField(<span class="jxr_string">"factory"</span>);
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 			f.setAccessible(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 			URLStreamHandlerFactory curFactory = (URLStreamHandlerFactory)f.get(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 			f.set(<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 			URL.setURLStreamHandlerFactory(factory);
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 			<strong class="jxr_keyword">return</strong> curFactory;
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 		} <strong class="jxr_keyword">catch</strong> (NoSuchFieldException|SecurityException|IllegalArgumentException|IllegalAccessException e) {
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException();
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		}
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 	}
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> }
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 	<strong class="jxr_keyword">private</strong> Representation badRequest(Exception e) {
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 		logger.error(<span class="jxr_string">"bad request:"</span>, e);
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		<strong class="jxr_keyword">return</strong> getErrorRepresentation(e.getMessage());
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 	}
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Resource resolveResource(URI uri, ScriptInput input) {
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		JobResources resources = input.getResources();
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		<strong class="jxr_keyword">if</strong> (resources != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 			Resource r = resources.getResource(uri);
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 			<strong class="jxr_keyword">if</strong> (r != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 				<strong class="jxr_keyword">return</strong> r;
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 		}
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		<em class="jxr_comment">// otherwise must be a file URI</em>
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		<strong class="jxr_keyword">if</strong> (!<span class="jxr_string">"file"</span>.equals(uri.getScheme()) || uri.isOpaque())
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(); <em class="jxr_comment">// should not happen: ScriptInput does not allow this</em>
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		<strong class="jxr_keyword">return</strong> Resource.load(uri, Resource.MEDIA_TYPE_UNKNOWN);
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 	}
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> URIResolver simpleURIResolver = <strong class="jxr_keyword">new</strong> URIResolver() {
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 			@Override
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 			<strong class="jxr_keyword">public</strong> Source resolve(String href, String base) <strong class="jxr_keyword">throws</strong> TransformerException {
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 				<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 					URI uri; {
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 						<strong class="jxr_keyword">if</strong> (base != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 							uri = <strong class="jxr_keyword">new</strong> URI(base).resolve(<strong class="jxr_keyword">new</strong> URI(href));
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 						<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 							uri = <strong class="jxr_keyword">new</strong> URI(href);
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 					}
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> SAXSource(<strong class="jxr_keyword">new</strong> InputSource(uri.toASCIIString()));
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 				} <strong class="jxr_keyword">catch</strong> (URISyntaxException e) {
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> TransformerException(e);
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 				}
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 			}
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 		};
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> URIResolver fallback(URIResolver... resolvers) {
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> URIResolver() {
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 			@Override
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 			<strong class="jxr_keyword">public</strong> Source resolve(String href, String base) <strong class="jxr_keyword">throws</strong> TransformerException {
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 				Source source = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 				Iterator&lt;URIResolver&gt; iterator = Iterators.forArray(resolvers);
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 				<strong class="jxr_keyword">while</strong> (iterator.hasNext()) {
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 					source = iterator.next().resolve(href, base);
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 					<strong class="jxr_keyword">if</strong> (source != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 						<strong class="jxr_keyword">break</strong>; }
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 				<strong class="jxr_keyword">return</strong> source;
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 			}
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		};
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 	}
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 	<em class="jxr_comment">// see https://stackoverflow.com/a/18018891</em>
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> URLStreamHandlerFactory setURLStreamHandlerFactory(URLStreamHandlerFactory factory) {
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 			Field f = URL.<strong class="jxr_keyword">class</strong>.getDeclaredField(<span class="jxr_string">"factory"</span>);
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 			f.setAccessible(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 			URLStreamHandlerFactory curFactory = (URLStreamHandlerFactory)f.get(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 			f.set(<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 			URL.setURLStreamHandlerFactory(factory);
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 			<strong class="jxr_keyword">return</strong> curFactory;
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 		} <strong class="jxr_keyword">catch</strong> (NoSuchFieldException|SecurityException|IllegalArgumentException|IllegalAccessException e) {
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException();
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 		}
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 	}
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> }
 </pre>
 <hr>
 <div id="footer">Copyright © 2010–2026 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>

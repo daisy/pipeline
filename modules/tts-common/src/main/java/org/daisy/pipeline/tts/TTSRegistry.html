@@ -307,7 +307,7 @@
 <a class="jxr_linenumber" name="L298" href="#L298">298</a> 					<strong class="jxr_keyword">while</strong> (testVoices.hasNext() &amp;&amp; tries++ &lt; maxTries) {
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 						testVoice = testVoices.next();
 <a class="jxr_linenumber" name="L300" href="#L300">300</a> 						<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 							result = <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/tts-common/src/main/java/org/daisy/pipeline/tts/TimedTTSExecutor.html">TimedTTSExecutor</a>().synthesizeWithTimeout(
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 							result = <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/tts-common/src/main/java/org/daisy/pipeline/tts/TimedTTSExecutor.html">TimedTTSExecutor</a>(params).synthesizeWithTimeout(
 <a class="jxr_linenumber" name="L302" href="#L302">302</a> 								timeout, interrupter, <strong class="jxr_keyword">null</strong>, ssml, Sentence.computeSize(ssml),
 <a class="jxr_linenumber" name="L303" href="#L303">303</a> 								engine, testVoice, resource);
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> 						} <strong class="jxr_keyword">catch</strong> (Throwable e) {

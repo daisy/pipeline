@@ -1,0 +1,441 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns="http://www.w3.org/1999/xhtml">
+<head prefix="dc: http://purl.org/dc/elements/1.1/                   dp2: http://www.daisy.org/ns/pipeline/">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title property="dc:title">epub3-to-epub3.script {http://www.daisy.org/ns/pipeline/xproc}</title>
+<link rev="dp2:doc" href="">
+<link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/apidoc">
+<style type="text/css" prefix="">
+        
+                 table                   { width: 100%; empty-cells: show; }
+                 thead                   { background-color: 184882; color: white; font-weight: bold; }
+                 td                      { vertical-align: top; padding: 2px; }
+                 .name                   { /* font-family: sans-serif; */ }
+                 .uri, .code             { font-family: monospace; }
+                 .primary, .required     { font-weight: bold; }
+                 .details                { display:block; text-align:right; font-size: x-small; font-style: italic; }
+                 .nowrap                 { white-space: nowrap; }
+                 .small                  { font-size: x-small; }
+        
+      </style>
+</head>
+<body>
+<h2>
+            Step <span class="name">epub3-to-epub3.script</span> <span class="uri">{http://www.daisy.org/ns/pipeline/xproc}</span>
+</h2>
+<h1 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">EPUB 3 Enhancer</h1>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Transforms an EPUB 3 publication into an EPUB 3 publication with audio and/or a braille rendition.</p>
+<a xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="homepage" href="/pipeline/Get-Help/User-Guide/Scripts/epub3-to-epub3">
+            Online documentation
+        </a><address xmlns:xd="http://github.com/vojtechtoman/xprocdoc">
+            Authors:
+            </address>
+<dl xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="author">
+                <dt>Name:</dt>
+                <dd px:role="name">Bert Frees</dd>
+                <dt>E-mail:</dt>
+                <dd><a px:role="contact" href="mailto:bertfrees@gmail.com">bertfrees@gmail.com</a></dd>
+            </dl>
+        <div>Defined in:
+          <span class="uri"></span>
+</div>
+<h3>Input Ports</h3>
+<table border="1">
+<thead><tr>
+<td>Port</td>
+<td>Description</td>
+</tr></thead>
+<tbody>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="">metadata</span><span class="details"> sequence</span>
+</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Metadata</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">Metadata to be included in the EPUB.
+
+If specified, the document must be a single
+[`metadata`](https://www.w3.org/TR/epub-33/#sec-metadata-elem) or
+[`package`](https://www.w3.org/TR/epub-33/#sec-package-elem) element. A
+[`prefix`](https://www.w3.org/TR/epub-33/#sec-prefix-attr) attribute is
+allowed on the root element. The metadata will be injected in the EPUB's package document, possibly
+overwriting existing metadata. This works as follows:
+
+- All (valid) fields in the provided metadata document end up in the output EPUB. More than one
+  field with the same property is allowed. `meta` elements with a `refines` attribute must refine
+  elements within the metadata document itself. Elements that refine elements in the EPUB's package
+  document will be dropped.
+- Any metadata fields in the input EPUB that have matching fields (same property in case of `meta`
+  fields, same element name in case of `dc:*` fields) in the provided metadata document are omitted,
+  together with any `meta` elements that refine them.
+- Metadata fields in the input that do not have any matching fields in the provided metadata
+  document are preserved in the output.
+
+There are a number of fields that result in addional changes in the EPUB (apart from an updated
+`metadata` section in the package document):
+
+- If the provided metadata document contains one or more
+  [`dc:identifier`](https://www.w3.org/TR/epub-33/#dfn-dc-identifier)
+  fields, the first one without a `refines` attribute will be used to update the
+  [`unique-identifier`](https://www.w3.org/TR/epub-33/#attrdef-package-unique-identifier)
+  attribute on the package document. The `dc:identifier` metadata in the content documents can also be
+  aligned with it. This behavior can be enabled or disabled with the "Update &lt;meta
+  name='dc:identifier'&gt; elements based on EPUB metadata" option.
+- If the provided metadata document contains one or more
+  [`dc:title`](https://www.w3.org/TR/epub-33/#dfn-dc-title) fields, the
+  first one can also be used as the `title` element in the content documents. This behavior can be
+  enabled or disabled with the "Update &lt;title&gt; elements based on EPUB metadata" option.
+- If the provided metadata document contains exactly one
+  [`dc:language`](https://www.w3.org/TR/epub-33/#dfn-dc-language) field,
+  it can be used to update the `xml:lang` and `lang` attributes of the content documents. This
+  behavior can be enabled or disabled with the "Update 'lang' attributes based on metadata" option.
+
+Some fields are ignored:
+
+- The [`dcterms:modified`](https://www.w3.org/TR/epub-33/#dfn-dcterms-modified)
+  field gets updated whenever Pipeline produces an EPUB. As a consequence, any `dcterms:modified`
+  fields in the provided metadata document are ignored.</p>
+</td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="">tts-config</span><span class="details"></span>
+</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3>Output Ports</h3>
+<table border="1">
+<thead><tr>
+<td>Port</td>
+<td>Description</td>
+</tr></thead>
+<tbody><tr>
+<td width="150px" class="nowrap name">
+<span class="primary">tts-log</span><span class="details"> primary sequence</span>
+</td>
+<td></td>
+</tr></tbody>
+</table>
+<h3>Options</h3>
+<table border="1">
+<thead><tr>
+<td class="nowrap">Local Name</td>
+<td class="nowrap">Namespace URI</td>
+<td class="nowrap">Default</td>
+<td>Description</td>
+</tr></thead>
+<tbody>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="required">source</span><span class="details"> required</span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code"></td>
+<td>
+<h2 xmlns="" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Input EPUB 3</h2>
+<p xmlns="" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">The EPUB you want to convert.
+
+You may alternatively use the "mimetype" document if your input is a unzipped/"exploded" version of an EPUB.</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">update-lang-attributes</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'false'</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Update 'lang' attributes based on metadata</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">Whether to update 'lang' and 'xml:lang' attributes of content documents based on metadata in the package document.
+
+If there is exactly one
+[`dc:language`](https://www.w3.org/TR/epub-33/#dfn-dc-language) element,
+use its value to create `xml:lang` and `lang` attributes on the root elements of all content
+documents (overwriting any existing attributes)
+
+If the "Metadata" option is used to inject new metadata into the EPUB, the resulting metadata is
+used to generate the attributes.</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">update-identifier-in-content-docs</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'false'</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Update &lt;meta name='dc:identifier'&gt; elements based on EPUB metadata</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">Whether to update &lt;meta name='dc:identifier'&gt; elements of content documents based on metadata in the package document.
+
+Use the primary identifier (provided by the
+[`dc:identifier`](https://www.w3.org/TR/epub-33/#dfn-dc-identifier)
+element identified by the
+[`unique-identifier`](https://www.w3.org/TR/epub-33/#attrdef-package-unique-identifier)
+attribute) to create a `&lt;meta name='dc:identifier'&gt;` element in all content documents
+(overwriting any existing elements with the same name).
+
+If the "Metadata" option is used to inject new metadata into the EPUB, the resulting metadata is
+used to generate the attributes.</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">update-title-in-content-docs</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'false'</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Update &lt;title&gt; elements based on EPUB metadata</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">Whether to update &lt;title&gt; elements of content documents based on metadata in the package document.
+
+If there is one or more
+[`dc:title`](https://www.w3.org/TR/epub-33/#dfn-dc-title) element, use
+the value of the first one to create a `&lt;title&gt;` element in all content documents (overwriting
+any existing elements with the same name).
+
+If the "Metadata" option is used to inject new metadata into the EPUB, the resulting metadata is
+used to generate the attributes.</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">ensure-pagenum-text</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'false'</td>
+<td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">ensure-section-headings</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'false'</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Ensure headings for all sections</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">Whether to generate a heading element for sections that don't have one.
+
+For sectioning elements that don't have a heading element, one can be created. The headings are
+generated based on the section element's [`aria-label`](https://www.w3.org/TR/wai-aria/#aria-label)
+attribute. If the `aria-label` attribute is not present, no heading element is generated. When an
+`aria-label` is used to generate a heading, it is replaced with a
+[`aria-labelledby`](https://www.w3.org/TR/wai-aria/#aria-labelledby) attribute that points to the
+new heading. The rank of the generated heading matches the depth of the corresponding TOC item in
+the navigation document.</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">braille</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">false()</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Translate to braille</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">Whether to produce a braille rendition.
+
+When this option is selected, a secondary rendition, containing the braille transcription of the text,
+will be added to the EPUB 3 publication.</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">audio</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'default'</td>
+<td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">sentence-detection</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'false'</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Perform sentence detection</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">Whether to add markup (span elements) for sentences.
+
+This setting has no effect when text-to-speech is also enabled. In that case sentences are always
+marked up.</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">braille-code</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">''</td>
+<td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">braille-translator</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'(translator:liblouis)'</td>
+<td><p xmlns="" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">Features of the braille transformer.
+
+Features of the [braille transcription](http://daisy.github.io/pipeline/Get-Help/User-Guide/Braille/)
+for creating the braille rendition. Together with the "Braille code" option this determines the
+translator that is selected.</p></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">stylesheet</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">''</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Style sheets</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">A list of CSS/Sass style sheets to take into account.
+
+A list of CSS/Sass style sheets to take into account, both for text-to-speech (if text-to-speech is
+enabled), and for braille transcription (if a braille rendition is requested). (Note that in order
+to support _formatting_ of the braille rendition, the "eBraille style sheets" option is provided.)
+
+Must be a space separated list of URIs, absolute or relative to the input.
+
+All style sheets are applied at once, but the order in which they are specified has an influence on
+the [cascading order](https://www.w3.org/TR/CSS2/cascade.html#cascading-order).
+
+If the "Apply author style sheets" option is enabled, [author style
+sheets](https://www.w3.org/TR/CSS2/cascade.html#cascade) will be taken into account and will take
+precedence over any style sheets specified through this option ([user style
+sheets](https://www.w3.org/TR/CSS2/cascade.html#cascade)).
+
+When generating the braille rendition, style sheets are interpreted according to [braille
+CSS](http://braillespecs.github.io/braille-css) rules. When performing text-to-speech, they are
+interpreted as [aural CSS](https://www.w3.org/TR/CSS2/aural.html).
+
+For info on how to use Sass (Syntactically Awesome StyleSheets) see the [Sass
+manual](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).
+</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">stylesheet-parameters</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'()'</td>
+<td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">lexicon</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">p:system-property('d:org.daisy.pipeline.tts.default-lexicon')</td>
+<td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">apply-document-specific-stylesheets</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'false'</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Apply author CSS style sheets</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">If this option is enabled, any CSS style sheets attached to the EPUB's content documents for media "braille" or "speech" will be taken into account.
+
+The EPUB's content documents may contain CSS ([author style
+sheets](https://www.w3.org/TR/CSS2/cascade.html#cascade)) that apply to "braille" or
+"[speech](https://www.w3.org/TR/CSS2/aural.html)" media. Style sheets can be associated with an HTML
+file in several ways: linked (using an 'xml-stylesheet' processing instruction or a 'link' element),
+embedded (using a 'style' element) and/or inlined (using 'style' attributes).
+
+Author style sheets take precedence over user style sheets (any CSS provided through the "Style
+sheets" option). For instance, if the EPUB already contains the rule `p { padding-left: 2; }`, and
+using this script the rule `p#docauthor { padding-left: 4; }` is provided, then the `padding-left`
+property will get the value `2` because that's what was defined in the EPUB, even though the
+provided CSS is more specific.
+</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">set-default-rendition-to-braille</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'false'</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Set default rendition to braille.</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">Make the generated braille rendition the default rendition.
+
+This option is implicitly set when the "eBraille compatibility" option is set.</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">ebraille-compatibility</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'none'</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">eBraille compatibility</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">When a braille rendition is produced, ensure the output is a valid eBraille publication.</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">ebraille-stylesheet</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">''</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">eBraille style sheets</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">CSS style sheet(s) to be attached to the HTML documents of the eBraille publication.
+
+The style sheets are associated with each HTML file through `link` elements. No media query (`media`
+attribute) is specified on the `link` elements. If media queries are needed, they must be specified
+in the CSS itself, through `@media` and `@import` rules.
+
+The style sheets are included as-is, and should therefore conform to the [eBraille standard for
+CSS](https://daisy.github.io/ebraille/#html-css).</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">sentence-class</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">''</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Sentence class</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">Class attribute to mark sentences with.
+
+When sentence detection is enabled, this option may be used to add a class attribute to the `span`
+elements that represent the sentences.</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="required">result</span><span class="details"> required</span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code"></td>
+<td><h2 xmlns="" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Output EPUB 3</h2></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="required">temp-dir</span><span class="details"> required</span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code"></td>
+<td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">include-tts-log</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">p:system-property('d:org.daisy.pipeline.tts.log')</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>
