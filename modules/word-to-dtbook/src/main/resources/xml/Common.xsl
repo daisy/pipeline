@@ -16,7 +16,9 @@
 				xmlns:o="urn:schemas-microsoft-com:office:office"
 				xmlns:d="org.daisy.pipeline.word_to_dtbook.impl.DaisyClass"
 				xmlns="http://www.daisy.org/z3986/2005/dtbook/"
-				exclude-result-prefixes="w pic wp dcterms xsi cp dc a r v dcmitype d xsl m o xs">
+				xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+				exclude-result-prefixes="w pic wp dcterms xsi cp dc a r v dcmitype d xsl m o xs pf">
+	<xsl:include href="http://www.daisy.org/pipeline/modules/common-utils/library.xsl"/>
 	<!--Parameter citation-->
 	<xsl:param name="Cite_style" as="xs:string" select="d:Citation($myObj)"/>
 
@@ -128,6 +130,13 @@
 			</xsl:if>
 			<!-- If the node parsing context match the wanted matter context (i.e. node context is Bodymatter and requested matter type is Bodymatter ) -->
 			<xsl:if test="d:GetCurrentMatterType($myObj)=$matterType">
+				<!-- The following message better reports progress (on a per paragraph basis) but can put an heavy load on the job log -->
+				<!-- <xsl:message terminate="no">
+					<xsl:value-of select="concat('progress: ',string(position()),'/',string($ElementCountToConvert))"/>
+				</xsl:message> -->
+				<xsl:call-template name="pf:progress">
+					<xsl:with-param name="progress" select="concat('1/',string($ElementCountToConvert))"/>
+				</xsl:call-template>
 				<!-- <xsl:message terminate="no">progress:Converting element <xsl:value-of select="name()"/> - <xsl:value-of select="position()"/> / <xsl:value-of select="$ElementCountToConvert"/></xsl:message> -->
 				<xsl:choose>
 					<!--Checking for Paragraph element-->
