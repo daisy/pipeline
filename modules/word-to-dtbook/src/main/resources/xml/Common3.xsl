@@ -25,6 +25,17 @@
 	     footnotes.xml / endnotes.xml per note reference -->
 	<xsl:key name="footnote-by-id" match="w:footnote" use="number(@w:id)"/>
 	<xsl:key name="endnote-by-id" match="w:endnote" use="number(@w:id)"/>
+	<!-- Keys and constants for style lookups : hash-based O(1) access by styleId instead
+	     of a scan over all the styles of styles.xml on every language evaluation.
+	     key() returns the matching styles in document order, which reproduces exactly
+	     the previous $styles/w:style[...] scan semantics (any-match for exists tests,
+	     first match for value-of), including multiple lookup values. The default style
+	     lookups are constant, so they are evaluated once as global variables. -->
+	<xsl:key name="paragraph-style-by-id" match="w:style[@w:type='paragraph']" use="@w:styleId"/>
+	<xsl:key name="character-style-by-id" match="w:style[@w:type='character']" use="@w:styleId"/>
+	<xsl:variable name="normalOrDefaultParagraphStyle" select="$styles/w:style[@w:type='paragraph' and (@w:styleId='Normal' or @w:default='1')]"/>
+	<xsl:variable name="normalParagraphStyle" select="$styles/w:style[@w:type='paragraph' and @w:styleId='Normal']"/>
+	<xsl:variable name="defaultCharacterStyle" select="$styles/w:style[@w:type='character' and @w:default='1']"/>
 	
 	<xsl:variable name="defaultLatin">
 		<xsl:choose>
@@ -1885,11 +1896,11 @@
 		<xsl:variable name="paragraphStyle">
 			<xsl:choose>
 				<xsl:when test="$paragraphStyleId">
-					<xsl:value-of select="$styles/w:style[@w:type='paragraph' and @w:styleId=$paragraphStyleId]/w:rPr" />
+					<xsl:value-of select="key('paragraph-style-by-id', $paragraphStyleId, $stylesXml)/w:rPr" />
 				</xsl:when>
 				<!-- Use the default Normal type (note : there might be style a more complexe style hierarchy not handled here) -->
-				<xsl:when test="$styles/w:style[@w:type='paragraph' and (@w:styleId='Normal' or w:default='1')]/w:rPr">
-					<xsl:value-of select="$styles/w:style[@w:type='paragraph' and (@w:styleId='Normal' or w:default='1')]/w:rPr" />
+				<xsl:when test="$normalOrDefaultParagraphStyle/w:rPr">
+					<xsl:value-of select="$normalOrDefaultParagraphStyle/w:rPr" />
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:value-of select="$styles/w:docDefaults/w:rPrDefault/w:rPr" />
@@ -1898,8 +1909,8 @@
 		</xsl:variable>
 		<xsl:variable name="paragraphLatin">
 			<xsl:choose>
-				<xsl:when test="$paragraphStyleId and $styles/w:style[@w:type='paragraph' and @w:styleId=$paragraphStyleId]/w:rPr/w:lang/@w:val">
-					<xsl:value-of select="$styles/w:style[@w:type='paragraph' and @w:styleId=$paragraphStyleId]/w:rPr/w:lang/@w:val" />
+				<xsl:when test="$paragraphStyleId and key('paragraph-style-by-id', $paragraphStyleId, $stylesXml)/w:rPr/w:lang/@w:val">
+					<xsl:value-of select="key('paragraph-style-by-id', $paragraphStyleId, $stylesXml)/w:rPr/w:lang/@w:val" />
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:value-of select="$defaultLatin"/>
@@ -1908,8 +1919,8 @@
 		</xsl:variable>
 		<xsl:variable name="paragraphEastAsia">
 			<xsl:choose>
-				<xsl:when test="$paragraphStyleId and $styles/w:style[@w:type='paragraph' and @w:styleId=$paragraphStyleId]/w:rPr/w:lang/@w:eastAsia">
-					<xsl:value-of select="$styles/w:style[@w:type='paragraph' and @w:styleId=$paragraphStyleId]/w:rPr/w:lang/@w:eastAsia" />
+				<xsl:when test="$paragraphStyleId and key('paragraph-style-by-id', $paragraphStyleId, $stylesXml)/w:rPr/w:lang/@w:eastAsia">
+					<xsl:value-of select="key('paragraph-style-by-id', $paragraphStyleId, $stylesXml)/w:rPr/w:lang/@w:eastAsia" />
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:value-of select="$defaultEastAsia"/>
@@ -1918,8 +1929,8 @@
 		</xsl:variable>
 		<xsl:variable name="paragraphComplex">
 			<xsl:choose>
-				<xsl:when test="$paragraphStyleId and $styles/w:style[@w:type='paragraph' and @w:styleId=$paragraphStyleId]/w:rPr/w:lang/@w:bidi">
-					<xsl:value-of select="$styles/w:style[@w:type='paragraph' and @w:styleId=$paragraphStyleId]/w:rPr/w:lang/@w:bidi" />
+				<xsl:when test="$paragraphStyleId and key('paragraph-style-by-id', $paragraphStyleId, $stylesXml)/w:rPr/w:lang/@w:bidi">
+					<xsl:value-of select="key('paragraph-style-by-id', $paragraphStyleId, $stylesXml)/w:rPr/w:lang/@w:bidi" />
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:value-of select="$defaultComplex"/>
@@ -1994,6 +2005,22 @@
 	<xsl:template name="GetRunLanguage">
 		<xsl:param name="runNode" />  <!-- Expects a w:r run node-->
 		
+		<!-- The run language is cached on the java side, keyed by generate-id() of the
+		     run node : GetRunLanguage is a pure function of the run node (the styles
+		     document is immutable during the conversion), and it is evaluated up to twice
+		     per run during the conversion (current and previous run) plus once per run in
+		     the document languages pre-pass. The key itself is returned when not cached.
+		     The expensive computation is inside the "not cached" branch, as Saxon
+		     evaluates local variables eagerly. -->
+		<xsl:variable name="runKey" as="xs:string" select="generate-id($runNode)"/>
+		<xsl:variable name="cachedLanguage" as="xs:string" select="d:RunLanguageCached($myObj, $runKey)"/>
+		<xsl:choose>
+			<xsl:when test="not($cachedLanguage = $runKey)">
+				<xsl:value-of select="$cachedLanguage"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:variable name="computedLanguage" as="xs:string">
+		
 		<!-- Run and Paragraph possible style id-->
 		<xsl:variable name="characterStyleId" select="$runNode/w:rPr/w:rStyle/@w:val" />
 		<xsl:variable name="paragraphStyleId" select="$runNode/../w:pPr/w:pStyle/@w:val" />
@@ -2003,10 +2030,10 @@
 		<xsl:variable name="characterStyle">
 			<xsl:choose>
 				<xsl:when test="$characterStyleId">
-					<xsl:value-of select="$styles/w:style[@w:type='character' and @w:styleId=$characterStyleId]/w:rPr" />
+					<xsl:value-of select="key('character-style-by-id', $characterStyleId, $stylesXml)/w:rPr" />
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:value-of select="$styles/w:style[@w:type='character' and @w:default='1']/w:rPr" />
+					<xsl:value-of select="$defaultCharacterStyle/w:rPr" />
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
@@ -2016,11 +2043,11 @@
 		<xsl:variable name="paragraphStyle">
 			<xsl:choose>
 				<xsl:when test="$paragraphStyleId">
-					<xsl:value-of select="$styles/w:style[@w:type='paragraph' and @w:styleId=$paragraphStyleId]/w:rPr" />
+					<xsl:value-of select="key('paragraph-style-by-id', $paragraphStyleId, $stylesXml)/w:rPr" />
 				</xsl:when>
 				<!-- Use the default Normal type (note : there might be style a more complexe style hierarchy not handled here) -->
 				<xsl:otherwise>
-					<xsl:value-of select="$styles/w:style[@w:type='paragraph' and @w:styleId='Normal']/w:rPr" />
+					<xsl:value-of select="$normalParagraphStyle/w:rPr" />
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
@@ -2154,6 +2181,11 @@
 						<xsl:value-of select="$runLatin"/>
 					</xsl:otherwise>
 				</xsl:choose>
+			</xsl:otherwise>
+		</xsl:choose>
+				</xsl:variable>
+				<xsl:sequence select="d:SetCachedRunLanguage($myObj, $runKey, $computedLanguage)"/>
+				<xsl:value-of select="$computedLanguage"/>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>

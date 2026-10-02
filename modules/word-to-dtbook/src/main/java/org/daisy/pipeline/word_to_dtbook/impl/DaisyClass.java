@@ -185,6 +185,13 @@ public class DaisyClass {
 	 * language of the same paragraph for every run of that paragraph.
 	 */
 	private final Hashtable<String,String> _paragraphLanguageCache = new Hashtable<>();
+	/**
+	 * Cache of run languages (GetRunLanguage results), keyed by generate-id() of
+	 * the run node. GetRunLanguage is a pure function of the run node, and is
+	 * evaluated up to twice per run during the conversion plus once per run in the
+	 * document languages pre-pass : the cache avoids recomputing it.
+	 */
+	private final Hashtable<String,String> _runLanguageCache = new Hashtable<>();
 	private boolean _isAnyPageStyleApplied = false;
 	private String _currentMatterType = "";
 
@@ -504,6 +511,23 @@ public class DaisyClass {
 	 */
 	public void SetCachedParagraphLanguage(String id, String language) {
 		_paragraphLanguageCache.put(id, language == null ? "" : language);
+	}
+
+	/**
+	 * Returns the cached language of the run identified by the given generate-id()
+	 * key, or the key itself when the run language is not cached (same sentinel
+	 * pattern as ParagraphLanguageCached).
+	 */
+	public String RunLanguageCached(String id) {
+		String cached = _runLanguageCache.get(id);
+		return cached != null ? cached : id;
+	}
+
+	/**
+	 * Stores the language of a run, computed by GetRunLanguage.
+	 */
+	public void SetCachedRunLanguage(String id, String language) {
+		_runLanguageCache.put(id, language == null ? "" : language);
 	}
 
 	private static String GetFileNameWithoutExtension(File f) {
