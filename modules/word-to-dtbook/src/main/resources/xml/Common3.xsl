@@ -1927,45 +1927,64 @@
 			</xsl:choose>
 		</xsl:variable>
 		
-		<!-- deduce languages from runner first.
-		     Languages are computed once per run and deduplicated / counted using
-		     xsl:for-each-group (hash based, O(n)) instead of repeated preceding/following-sibling
-		     scans over temporary trees (O(n²) on paragraphs with many runs). -->
-		<xsl:variable name="runnerLanguages" as="xs:string*">
-			<xsl:for-each select="$paragraphNode/w:r">
-				<xsl:variable name="found" as="xs:string">
-					<xsl:call-template name="GetRunLanguage">
-						<xsl:with-param name="runNode" select="." />
-					</xsl:call-template>
-				</xsl:variable>
-				<xsl:sequence select="$found"/>
-			</xsl:for-each>
-		</xsl:variable>
-		<!-- Most frequent runner language (ties keep first appearance order) -->
-		<xsl:variable name="topRunnerLanguage" as="xs:string?">
-			<xsl:for-each-group select="$runnerLanguages" group-by=".">
-				<xsl:sort select="count(current-group())" data-type="number" order="descending"/>
-				<xsl:if test="position()=1">
-					<xsl:sequence select="current-grouping-key()"/>
-				</xsl:if>
-			</xsl:for-each-group>
-		</xsl:variable>
+		<!-- The paragraph language is cached on the java side (keyed by generate-id() of
+		     the paragraph node) : GetParagraphLanguage is called for every run of a
+		     paragraph during the conversion, and computing it requires a pass over all
+		     the runs of the paragraph. The expensive computation is inside the "not
+		     cached" branch below, as Saxon evaluates local variables eagerly. Only the
+		     result of the "runner languages" branch is cached, as the fallback branches
+		     depend on the calling context. -->
+		<xsl:variable name="cacheKey" as="xs:string" select="generate-id($paragraphNode)"/>
+		<xsl:variable name="cachedLanguage" as="xs:string" select="d:ParagraphLanguageCached($myObj, $cacheKey)"/>
 		<xsl:choose>
-			<!-- Prioritize the language count (at least one run, even if its language is an empty string) -->
-			<xsl:when test="exists($runnerLanguages)">
-				<xsl:value-of select="$topRunnerLanguage"/>
+			<!-- Cached language of this paragraph : returns the key itself when not cached -->
+			<xsl:when test="not($cachedLanguage = $cacheKey)">
+				<xsl:value-of select="$cachedLanguage"/>
 			</xsl:when>
-			<!-- then check if east asia is used as default -->
-			<xsl:when test="w:rPr/w:eastAsianLayout or (w:rPr/w:rFonts/@w:hint='eastAsia') or (w:pPr/w:rPr/w:rFonts/@w:hint='eastAsia')">
-				<xsl:value-of select="$paragraphEastAsia"/>
-			</xsl:when>
-			<!-- then check if complex is used as default -->
-			<xsl:when test="w:rPr/w:cs or (w:rPr/w:rFonts/@w:hint='cs') or (w:pPr/w:rPr/w:rFonts/@w:hint='cs')">
-				<xsl:value-of select="$paragraphComplex"/>
-			</xsl:when>
-			<!-- default as latin -->
 			<xsl:otherwise>
-				<xsl:value-of select="$paragraphLatin"/>
+				<!-- deduce languages from runner first.
+				     Languages are computed once per run and deduplicated / counted using
+				     xsl:for-each-group (hash based, O(n)) instead of repeated preceding/following-sibling
+				     scans over temporary trees (O(n²) on paragraphs with many runs). -->
+				<xsl:variable name="runnerLanguages" as="xs:string*">
+					<xsl:for-each select="$paragraphNode/w:r">
+						<xsl:variable name="found" as="xs:string">
+							<xsl:call-template name="GetRunLanguage">
+								<xsl:with-param name="runNode" select="." />
+							</xsl:call-template>
+						</xsl:variable>
+						<xsl:sequence select="$found"/>
+					</xsl:for-each>
+				</xsl:variable>
+				<!-- Most frequent runner language (ties keep first appearance order) -->
+				<xsl:variable name="topRunnerLanguage" as="xs:string?">
+					<xsl:for-each-group select="$runnerLanguages" group-by=".">
+						<xsl:sort select="count(current-group())" data-type="number" order="descending"/>
+						<xsl:if test="position()=1">
+							<xsl:sequence select="current-grouping-key()"/>
+						</xsl:if>
+					</xsl:for-each-group>
+				</xsl:variable>
+				<xsl:choose>
+					<!-- Prioritize the language count (at least one run, even if its language is an empty string).
+					     This branch only depends on the paragraph node : its result is cached. -->
+					<xsl:when test="exists($runnerLanguages)">
+						<xsl:sequence select="d:SetCachedParagraphLanguage($myObj, $cacheKey, $topRunnerLanguage)"/>
+						<xsl:value-of select="$topRunnerLanguage"/>
+					</xsl:when>
+					<!-- then check if east asia is used as default -->
+					<xsl:when test="w:rPr/w:eastAsianLayout or (w:rPr/w:rFonts/@w:hint='eastAsia') or (w:pPr/w:rPr/w:rFonts/@w:hint='eastAsia')">
+						<xsl:value-of select="$paragraphEastAsia"/>
+					</xsl:when>
+					<!-- then check if complex is used as default -->
+					<xsl:when test="w:rPr/w:cs or (w:rPr/w:rFonts/@w:hint='cs') or (w:pPr/w:rPr/w:rFonts/@w:hint='cs')">
+						<xsl:value-of select="$paragraphComplex"/>
+					</xsl:when>
+					<!-- default as latin -->
+					<xsl:otherwise>
+						<xsl:value-of select="$paragraphLatin"/>
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:otherwise>
 		</xsl:choose>
 		

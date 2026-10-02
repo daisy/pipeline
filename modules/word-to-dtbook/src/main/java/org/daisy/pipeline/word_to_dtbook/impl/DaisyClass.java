@@ -173,6 +173,14 @@ public class DaisyClass {
 	private PageStylesValidator _pageStylesValidator = new PageStylesValidator();
 	private List<PageStyle> _currentParagraphStylse = new ArrayList<>();
 	private StringBuilder _pageStylesErrors = new StringBuilder();
+	/**
+	 * Cache of paragraph languages (GetParagraphLanguage results), keyed by
+	 * generate-id() of the paragraph node. GetParagraphLanguage is a pure function
+	 * of the paragraph node when the paragraph has runs (the context-dependent
+	 * fallback branches are never cached), so caching avoids recomputing the
+	 * language of the same paragraph for every run of that paragraph.
+	 */
+	private final Hashtable<String,String> _paragraphLanguageCache = new Hashtable<>();
 	private boolean _isAnyPageStyleApplied = false;
 	private String _currentMatterType = "";
 
@@ -448,6 +456,24 @@ public class DaisyClass {
 			if (c >= range[0] && c <= range[1])
 				return true;
 		return false;
+	}
+
+	/**
+	 * Returns the cached language of the paragraph identified by the given
+	 * generate-id() key, or the key itself when the paragraph language is not
+	 * cached (a generate-id() value can never be a language value, so the key
+	 * is used as the "not cached" marker without needing a null/boolean return).
+	 */
+	public String ParagraphLanguageCached(String id) {
+		String cached = _paragraphLanguageCache.get(id);
+		return cached != null ? cached : id;
+	}
+
+	/**
+	 * Stores the language of a paragraph, computed by GetParagraphLanguage.
+	 */
+	public void SetCachedParagraphLanguage(String id, String language) {
+		_paragraphLanguageCache.put(id, language == null ? "" : language);
 	}
 
 	private static String GetFileNameWithoutExtension(File f) {
