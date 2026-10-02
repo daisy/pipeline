@@ -398,6 +398,58 @@ public class DaisyClass {
 
 	public static void sink(Object item) {}
 
+	/**
+	 * East Asian character ranges used for run language detection.
+	 * Identical to the character set that was previously embedded as string
+	 * literals in the $EastAsianCharacters variable of Common3.xsl (extracted
+	 * programmatically, so the detected characters are unchanged).
+	 */
+	private static final int[][] EAST_ASIAN_RANGES = {
+		{0x1100, 0x11FF}, {0x1720, 0x173F}, {0x3040, 0x318F}, {0x31A0, 0x31BF},
+		{0x31F0, 0x31FF}, {0x4DC0, 0xA4CF}, {0xAC00, 0xD7AF}};
+
+	/**
+	 * Bidirectional (complex script) character ranges used for run language detection.
+	 * Identical to the character set that was previously embedded as string
+	 * literals in the $BidiCharacters variable of Common3.xsl.
+	 */
+	private static final int[][] BIDI_RANGES = {
+		{0x0590, 0x074F}, {0x0780, 0x07BF}, {0x0900, 0x10FF}, {0xFB50, 0xFDFF}, {0xFE70, 0xFEFF}};
+
+	/**
+	 * Checks whether the given character belongs to the East Asian character set.
+	 * Replacement for the contains($EastAsianCharacters, substring($innerText,1,1))
+	 * test that was done in the XSLT : same result, O(1) per run instead of a scan
+	 * of a 34000+ characters string.
+	 */
+	public boolean IsEastAsia(String character) {
+		return isCharacterInRange(character, EAST_ASIAN_RANGES);
+	}
+
+	/**
+	 * Checks whether the given character belongs to the bidirectional (complex
+	 * script) character set. Same replacement as IsEastAsia.
+	 */
+	public boolean IsBiDi(String character) {
+		return isCharacterInRange(character, BIDI_RANGES);
+	}
+
+	/**
+	 * Mirrors the XPath contains($characters, $needle) test that was done on the
+	 * character sets : true if the needle is a single character of the set (the
+	 * sets only contain Basic Multilingual Plane characters, so a multi-character
+	 * needle - an astral character in XPath - never matched).
+	 */
+	private static boolean isCharacterInRange(String character, int[][] ranges) {
+		if (character == null || character.length() != 1)
+			return false;
+		char c = character.charAt(0);
+		for (int[] range : ranges)
+			if (c >= range[0] && c <= range[1])
+				return true;
+		return false;
+	}
+
 	private static String GetFileNameWithoutExtension(File f) {
 		String name = f.getName();
 		if (name.lastIndexOf('.') >= 0)
