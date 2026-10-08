@@ -111,6 +111,7 @@ VERSION := 0-SNAPSHOT
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/braille/zedai-to-pef/7.1.2-SNAPSHOT/zedai-to-pef-7.1.2-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/zedai-utils/1.3.3-SNAPSHOT/zedai-utils-1.3.3-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/zip-utils/2.1.12-SNAPSHOT/zip-utils-2.1.12-SNAPSHOT.jar \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/1.15.6-SNAPSHOT/assembly-1.15.6-SNAPSHOT.jar \
 	$(MVN_LOCAL_REPOSITORY)/x/x/x-SNAPSHOT/x-x-SNAPSHOT.pom \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/clientlib-java-httpclient/2.1.3-SNAPSHOT/clientlib-java-httpclient-2.1.3-SNAPSHOT.jar
 

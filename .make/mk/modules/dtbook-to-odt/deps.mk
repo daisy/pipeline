@@ -6,7 +6,9 @@ $(TARGET_DIR)/state/modules/dtbook-to-odt/last-tested : $(TARGET_DIR)/state/%/la
 # this rule overrides the implicit rule in main.mk
 # note that because the modified-since-release_ files created by main.mk, are deleted,
 # this rule gets executed at least once
-$(TARGET_DIR)/state/modules/dtbook-to-odt/modified-since-release_ : modules/dtbook-to-odt/pom.xml $(TARGET_DIR)/state/modules/parent/modified-since-release
+$(TARGET_DIR)/state/modules/dtbook-to-odt/modified-since-release_ : modules/dtbook-to-odt/pom.xml \
+	$(TARGET_DIR)/state/modules/parent/modified-since-release \
+	$(TARGET_DIR)/state/modules/word-to-dtbook/modified-since-release
 	mkdirs("$(dir $@)"); \
 	try (OutputStream s = new FileOutputStream("$@")) { \
 		ModificationType modified = isModifiedSinceLastRelease(new File("$<").getParentFile()); \
@@ -58,7 +60,7 @@ modules/dtbook-to-odt/.install-doc : %/.install-doc : %/pom.xml | %/.compile-dep
 
 .SECONDARY : modules/dtbook-to-odt/.compile-dependencies modules/dtbook-to-odt/.test-dependencies
 modules/dtbook-to-odt/.compile-dependencies : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-parent/1.15.6-SNAPSHOT/modules-parent-1.15.6-SNAPSHOT.pom
-modules/dtbook-to-odt/.test-dependencies :
+modules/dtbook-to-odt/.test-dependencies : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/word-to-dtbook/1.1.4-SNAPSHOT/word-to-dtbook-1.1.4-SNAPSHOT.jar
 
 $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/dtbook-to-odt/2.2.1/dtbook-to-odt-2.2.1.% \
 $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/dtbook-to-odt/2.2.1/dtbook-to-odt-2.2.1-% : modules/dtbook-to-odt/.release
@@ -68,7 +70,9 @@ $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/dtbook-to-odt/2.2.1/dtbook-to
 modules/dtbook-to-odt/.release : modules/.release
 	+$(EVAL) mvn.releaseModulesInDir("modules").apply("dtbook-to-odt");
 
-modules/dtbook-to-odt/.release : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-parent/1.15.6/modules-parent-1.15.6.pom
+modules/dtbook-to-odt/.release : \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-parent/1.15.6/modules-parent-1.15.6.pom \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/word-to-dtbook/1.1.4/word-to-dtbook-1.1.4.jar
 
 clean : modules/dtbook-to-odt/.clean
 .PHONY : modules/dtbook-to-odt/.clean
