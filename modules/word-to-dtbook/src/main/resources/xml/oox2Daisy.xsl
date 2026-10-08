@@ -88,64 +88,48 @@
 		        else ()" />
 	
 	<xsl:variable name="documentLanguages">
-		<!-- Compute runners languages -->
-		<xsl:variable name="runnerLanguages">
+		<!-- Compute runners languages. -->
+		<xsl:variable name="runnerLanguages" as="xs:string*">
 			<xsl:for-each select="$documentXml//w:body//w:r">
-				<xsl:variable name="found">
+				<xsl:variable name="found" as="xs:string">
 					<xsl:call-template name="GetRunLanguage">
 						<xsl:with-param name="runNode" select="." />
 					</xsl:call-template>
 				</xsl:variable>
-				<lang val="{$found}" />
+				<xsl:sequence select="$found"/>
 			</xsl:for-each>
 		</xsl:variable>
-		<!-- keep uniq runner language
+		<!-- keep uniq runner language (order of first appearance)
 		   Note : we don't count runners occurences here to later weight languages as many runners can be empty texts.
 		   We prioritize paragraph based evaluation to deduce document languages importance -->
-		<xsl:variable name="uniqRunnerLanguages">
-			<xsl:for-each select="$runnerLanguages/*:lang">
-				<xsl:variable name="currentVal" select="@*:val"/>
-				<xsl:if test="count(preceding-sibling::*:lang[@*:val=$currentVal])=0">
-					<lang val="{$currentVal}" />
-				</xsl:if>
-			</xsl:for-each>
+		<xsl:variable name="uniqRunnerLanguages" as="xs:string*">
+			<xsl:for-each-group select="$runnerLanguages" group-by=".">
+				<xsl:sequence select="current-grouping-key()"/>
+			</xsl:for-each-group>
 		</xsl:variable>
-		<!-- Compute languages of paragraphes -->
-		<xsl:variable name="paragraphLanguages">
+		<!-- Compute languages of paragraphes, and merge with uniq runners languages -->
+		<xsl:variable name="paragraphLanguages" as="xs:string*">
 			<xsl:for-each select="$documentXml//w:body//w:p">
-				<xsl:variable name="found">
+				<xsl:variable name="found" as="xs:string">
 					<xsl:call-template name="GetParagraphLanguage">
 						<xsl:with-param name="paragraphNode" select="." />
 					</xsl:call-template>
 				</xsl:variable>
-				<lang val="{$found}" />
+				<xsl:sequence select="$found"/>
 			</xsl:for-each>
-			<!-- merge paragraph and runners languages -->
-			<xsl:for-each select="$uniqRunnerLanguages/*:lang">
-				<lang val="{@*:val}" />
-			</xsl:for-each>
+			<xsl:sequence select="$uniqRunnerLanguages"/>
 		</xsl:variable>
-		<!-- <xsl:message terminate="no">progress:Document languages <xsl:value-of select="count($paragraphLanguages/*:lang)" /></xsl:message> -->
-		<!-- Count languages -->
-		<xsl:variable name="uniqLanguages">
-			<xsl:for-each select="$paragraphLanguages/*:lang">
-				<xsl:variable name="currentVal" select="@*:val"/>
-				<xsl:if test="count(preceding-sibling::*:lang[@*:val=$currentVal])=0">
-					<lang val="{$currentVal}"
-						count="{count(following-sibling::*:lang[@*:val=$currentVal]) + 1}" />
-				</xsl:if>
-			</xsl:for-each>
-		</xsl:variable>
+		<!-- Count languages and emit the ordered list (most frequent first, ties keep
+		     first appearance order; the $Language parameter value is excluded) -->
 		<xsl:if test="$Language and string-length($Language) &gt; 0">
 			<lang val="{@*:val}"/>
 		</xsl:if>
-		<xsl:for-each select="$uniqLanguages/*:lang">
-			<xsl:sort select="@*:count" data-type="number" order="descending"/>
-			<xsl:if test="not($Language = @*:val)">
-				<lang val="{@*:val}" />
+		<xsl:for-each-group select="$paragraphLanguages" group-by=".">
+			<xsl:sort select="count(current-group())" data-type="number" order="descending"/>
+			<xsl:if test="not($Language = current-grouping-key())">
+				<lang val="{current-grouping-key()}" />
 			</xsl:if>
-			
-		</xsl:for-each>
+		</xsl:for-each-group>
 	</xsl:variable>
 	
 	<!--Imports all the XSLT-->
@@ -266,10 +250,12 @@
 		<!--This Xslt is Adding meta elements in Dtbook head element 
 			It is also calling templates Frontmatter, Bodymatter and Rearmatter-->
 		<!--Adding dtbook element-->
+			<!-- Math presence, used for the doctype and the mml namespace declaration -->
+			<xsl:variable name="hasMath" as="xs:boolean" select="count($documentXml//m:*) &gt; 0"/>
 		<xsl:result-document encoding="utf-8" indent="yes" >
 			<!--<xsl:text disable-output-escaping="yes">&lt;?xml-stylesheet href="dtbookbasic.css" type="text/css"?&gt;</xsl:text>-->
 			<xsl:text disable-output-escaping="yes">&lt;!DOCTYPE dtbook PUBLIC '-//NISO//DTD dtbook 2005-3//EN' 'http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd'</xsl:text>
-			<xsl:if test="count($documentXml//m:*) &gt; 0">
+			<xsl:if test="$hasMath">
 				<xsl:text disable-output-escaping="yes">[
 	&lt;!ENTITY % MATHML.prefixed "INCLUDE" &gt;
 	&lt;!ENTITY % MATHML.prefix "mml"&gt;
@@ -296,7 +282,7 @@
 			
 			<xsl:text disable-output-escaping="yes"> &gt;&#10;</xsl:text>
 			<dtbook version="2005-3">
-				<xsl:if test="count($documentXml//m:*) &gt; 0">
+				<xsl:if test="$hasMath">
 					<xsl:namespace name="mml" select="'http://www.w3.org/1998/Math/MathML'" />
 				</xsl:if>
 				<!-- <xsl:message terminate="no">progress:Parsing document languages</xsl:message> -->
@@ -531,6 +517,10 @@
 					</bodymatter>
 					<!--Calling Rearmatter template-->
 					<!--NP 20220427 - launch only if a Rearmatter daisy style is found to avoid empty rearmatter -->
+					<xsl:variable name="endnoteReferences" select="$documentXml//w:document/w:body/w:p/w:r[
+						./w:rPr/w:rStyle[@w:val='EndnoteReference'] 
+						or ./w:endnoteReference
+					]"/>
 					<xsl:if test="(
 							count($documentXml//w:document/w:body/w:p/w:pPr/w:pStyle[substring(@w:val,1,10)='Rearmatter'])=1
 							or count($documentXml//w:document/w:body/w:p/w:r/w:rPr/w:rStyle[substring(@w:val,1,10)='Rearmatter'])=1
@@ -538,22 +528,12 @@
 							or count($documentXml//w:document/w:body/w:p/w:r/w:endnoteReference)  &gt; 0
 						)">
 						<rearmatter>
-							<xsl:if test="count(
-									$documentXml//w:document/w:body/w:p/w:r[
-										./w:rPr/w:rStyle[@w:val='EndnoteReference'] 
-										or ./w:endnoteReference
-									]
-								)  &gt; 0">
+							<xsl:if test="count($endnoteReferences) &gt; 0">
 								<!-- <xsl:message terminate="no">progress:Inserting endnotes in the rearmatter</xsl:message> -->
 								<level1>
 									<!--Checking if any elements should be translated to the rearmatter-->
 									<!--Otherwise Traversing through document.xml file and passing the Endnote id to the Note template.-->
-									<xsl:for-each select="(
-											$documentXml//w:document/w:body/w:p/w:r[
-												./w:rPr/w:rStyle[@w:val='EndnoteReference'] 
-												or ./w:endnoteReference
-											]
-										)">
+									<xsl:for-each select="$endnoteReferences">
 										<xsl:variable name="endNoteId" as="xs:integer" select="./w:endnoteReference/@w:id"/>
 										<xsl:if test="$endNoteId &gt; 0">
 											<note id="{concat('endnote-',$endNoteId)}">
@@ -561,8 +541,8 @@
 												<xsl:attribute name="class">
 													<xsl:value-of select="'Endnote'"/>
 												</xsl:attribute>
-												<!--Travering each w:endnote element in endnote.xml file-->
-												<xsl:for-each select="$endnotesXml//w:endnotes/w:endnote">
+												<!--Travering the matching w:endnote element in endnote.xml file (key-based lookup) -->
+												<xsl:for-each select="if (exists($endnotesXml)) then key('endnote-by-id', $endNoteId, $endnotesXml) else ()">
 													<!--Checks for matching Id-->
 													<xsl:if test="@w:id=$endNoteId">
 														<!--Travering each element inside w:endnote in endnote.xml file-->

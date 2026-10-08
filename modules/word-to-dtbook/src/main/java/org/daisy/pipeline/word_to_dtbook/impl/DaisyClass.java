@@ -35,6 +35,7 @@ import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
+import org.apache.poi.openxml4j.opc.PackageAccess;
 import org.apache.poi.openxml4j.opc.PackagePart;
 import org.apache.poi.openxml4j.opc.PackageRelationship;
 import org.apache.poi.openxml4j.opc.TargetMode;
@@ -93,7 +94,10 @@ public class DaisyClass {
 	private final File outputFilename;
 	/** Input file name without extension and without spaces */
 	private final String inputName;
-	private final OPCPackage pack;
+	/** Lazily opened OPC package of the input document (see pack()) */
+	private OPCPackage pack;
+	/** Original input file, used for the lazy read-only open of the package */
+	private final File inputFile;
 	/** stack of document levels value */
 	private final Stack<Integer> stackList = new Stack<>();
 	/** Stack of abbrevations (and acronyms) */
@@ -173,6 +177,21 @@ public class DaisyClass {
 	private PageStylesValidator _pageStylesValidator = new PageStylesValidator();
 	private List<PageStyle> _currentParagraphStylse = new ArrayList<>();
 	private StringBuilder _pageStylesErrors = new StringBuilder();
+	/**
+	 * Cache of paragraph languages (GetParagraphLanguage results), keyed by
+	 * generate-id() of the paragraph node. GetParagraphLanguage is a pure function
+	 * of the paragraph node when the paragraph has runs (the context-dependent
+	 * fallback branches are never cached), so caching avoids recomputing the
+	 * language of the same paragraph for every run of that paragraph.
+	 */
+	private final Hashtable<String,String> _paragraphLanguageCache = new Hashtable<>();
+	/**
+	 * Cache of run languages (GetRunLanguage results), keyed by generate-id() of
+	 * the run node. GetRunLanguage is a pure function of the run node, and is
+	 * evaluated up to twice per run during the conversion plus once per run in the
+	 * document languages pre-pass : the cache avoids recomputing it.
+	 */
+	private final Hashtable<String,String> _runLanguageCache = new Hashtable<>();
 	private boolean _isAnyPageStyleApplied = false;
 	private String _currentMatterType = "";
 
@@ -195,7 +214,9 @@ public class DaisyClass {
 		outputFilename = new File(URI.create(output));
 		outputFilename.mkdirs();
 		File inputFile = new File(URI.create(input));
+		this.inputFile = inputFile;
 
+		if(extractShapes){
 		// first try to copy the current file in another location
 		// as the file might be opened by the user in word
 		OPCPackage copyOrOriginal;
@@ -236,12 +257,36 @@ public class DaisyClass {
 			copyOrOriginal = OPCPackage.open(inputFile);
 		}
 		pack = copyOrOriginal;
+		}
+		// when the shapes export is not requested, no copy of the input document is
+		// made here: the OPC package is opened lazily by pack() on first use,
+		// read-only on the original input file
 		for (int i = 0; i < 9; i++) {
 			startItem.add("");
 		}
 		for (int i = 0; i < 2; i++) {
 			prevHeadId.add("");
 		}
+	}
+
+	/**
+	 * Opens the OPC package of the input document on first use, and returns it.
+	 * The package is only used to walk the package relationships (images,
+	 * hyperlinks, math images) and is never written. When the shapes export was
+	 * requested the package was already opened by the constructor (on the copy
+	 * used for the export); otherwise it is opened here read-only on the
+	 * original input file - avoiding a copy of the whole archive and a
+	 * read-write handle on the document for every conversion.
+	 */
+	private OPCPackage pack() {
+		if (pack == null) {
+			try {
+				pack = OPCPackage.open(inputFile, PackageAccess.READ);
+			} catch (InvalidFormatException e) {
+				throw new RuntimeException("Could not open the input document package", e);
+			}
+		}
+		return pack;
 	}
 
 	/**
@@ -398,6 +443,82 @@ public class DaisyClass {
 
 	public static void sink(Object item) {}
 
+	/**
+	 * East Asian character ranges used for run language detection.
+	 */
+	private static final int[][] EAST_ASIAN_RANGES = {
+		{0x1100, 0x11FF}, {0x1720, 0x173F}, {0x3040, 0x318F}, {0x31A0, 0x31BF},
+		{0x31F0, 0x31FF}, {0x4DC0, 0xA4CF}, {0xAC00, 0xD7AF}};
+
+	/**
+	 * Bidirectional (complex script) character ranges used for run language detection.
+	 */
+	private static final int[][] BIDI_RANGES = {
+		{0x0590, 0x074F}, {0x0780, 0x07BF}, {0x0900, 0x10FF}, {0xFB50, 0xFDFF}, {0xFE70, 0xFEFF}};
+
+	/**
+	 * Checks whether the given character belongs to the East Asian character set.
+	 */
+	public boolean IsEastAsia(String character) {
+		return isCharacterInRange(character, EAST_ASIAN_RANGES);
+	}
+
+	/**
+	 * Checks whether the given character belongs to the bidirectional (complex
+	 * script) character set.
+	 */
+	public boolean IsBiDi(String character) {
+		return isCharacterInRange(character, BIDI_RANGES);
+	}
+
+	/**
+	 * True if {@code character} is a single character of the set..
+	 */
+	private static boolean isCharacterInRange(String character, int[][] ranges) {
+		if (character == null || character.length() != 1)
+			return false;
+		char c = character.charAt(0);
+		for (int[] range : ranges)
+			if (c >= range[0] && c <= range[1])
+				return true;
+		return false;
+	}
+
+	/**
+	 * Returns the cached language of the paragraph identified by the given
+	 * generate-id() key, or the key itself when the paragraph language is not
+	 * cached (a generate-id() value can never be a language value, so the key
+	 * is used as the "not cached" marker without needing a null/boolean return).
+	 */
+	public String ParagraphLanguageCached(String id) {
+		String cached = _paragraphLanguageCache.get(id);
+		return cached != null ? cached : id;
+	}
+
+	/**
+	 * Stores the language of a paragraph, computed by GetParagraphLanguage.
+	 */
+	public void SetCachedParagraphLanguage(String id, String language) {
+		_paragraphLanguageCache.put(id, language == null ? "" : language);
+	}
+
+	/**
+	 * Returns the cached language of the run identified by the given generate-id()
+	 * key, or the key itself when the run language is not cached (same sentinel
+	 * pattern as ParagraphLanguageCached).
+	 */
+	public String RunLanguageCached(String id) {
+		String cached = _runLanguageCache.get(id);
+		return cached != null ? cached : id;
+	}
+
+	/**
+	 * Stores the language of a run, computed by GetRunLanguage.
+	 */
+	public void SetCachedRunLanguage(String id, String language) {
+		_runLanguageCache.put(id, language == null ? "" : language);
+	}
+
 	private static String GetFileNameWithoutExtension(File f) {
 		String name = f.getName();
 		if (name.lastIndexOf('.') >= 0)
@@ -439,9 +560,9 @@ public class DaisyClass {
 	}
 
 	public void End(){
-		if(!pack.isClosed()){
+		if(pack != null && !pack().isClosed()){
 			try{
-				pack.close();
+				pack().close();
 			} catch (Exception e){
 
 			}
@@ -524,11 +645,11 @@ public class DaisyClass {
 	public String MathImageFootnote(String inNum) {
 		try {
 			PackageRelationship relationship = null;
-			for (PackageRelationship searchRelation : pack.getRelationshipsByType(wordRelationshipType)) {
+			for (PackageRelationship searchRelation : pack().getRelationshipsByType(wordRelationshipType)) {
 				relationship = searchRelation;
 				break;
 			}
-			PackagePart mainPartxml = pack.getPart(relationship);
+			PackagePart mainPartxml = pack().getPart(relationship);
 			PackageRelationship footrelationship = null;
 			for (PackageRelationship searchRelation : mainPartxml.getRelationshipsByType(footnotesRelationshipType)) {
 				footrelationship = searchRelation;
@@ -569,11 +690,11 @@ public class DaisyClass {
 	public String MathImage(String inNum) {
 		try {
 			PackageRelationship relationship = null;
-			for (PackageRelationship searchRelation : pack.getRelationshipsByType(wordRelationshipType)) {
+			for (PackageRelationship searchRelation : pack().getRelationshipsByType(wordRelationshipType)) {
 				relationship = searchRelation;
 				break;
 			}
-			PackagePart mainPartxml = pack.getPart(relationship);
+			PackagePart mainPartxml = pack().getPart(relationship);
 			PackageRelationship imgRelationship = mainPartxml.getRelationship(inNum);
 			PackagePart imgPartxml = mainPartxml.getRelatedPart(imgRelationship);
 			BufferedImage img = ImageIO.read(imgPartxml.getInputStream());
@@ -606,11 +727,11 @@ public class DaisyClass {
 	public String Image(String inNum, String imageName) {
 		try {
 			PackageRelationship relationship = null;
-			for (PackageRelationship searchRelation : pack.getRelationshipsByType(wordRelationshipType)) {
+			for (PackageRelationship searchRelation : pack().getRelationshipsByType(wordRelationshipType)) {
 				relationship = searchRelation;
 				break;
 			}
-			PackagePart mainPartxml = pack.getPart(relationship);
+			PackagePart mainPartxml = pack().getPart(relationship);
 			PackageRelationship imgRelationship = mainPartxml.getRelationship(inNum);
 			PackagePart imgPartxml = mainPartxml.getRelatedPart(imgRelationship);
 			ImageIO.read(imgPartxml.getInputStream());
@@ -655,11 +776,11 @@ public class DaisyClass {
 	public String ResampleImage(String inNum, String imageName, float resampleValue)
 			throws IOException, InvalidFormatException {
 		PackageRelationship relationship = null;
-		for (PackageRelationship searchRelation : pack.getRelationshipsByType(wordRelationshipType)) {
+		for (PackageRelationship searchRelation : pack().getRelationshipsByType(wordRelationshipType)) {
 			relationship = searchRelation;
 			break;
 		}
-		PackagePart mainPartxml = pack.getPart(relationship);
+		PackagePart mainPartxml = pack().getPart(relationship);
 		PackageRelationship imgRelationship = mainPartxml.getRelationship(inNum);
 		PackagePart imgPartxml = mainPartxml.getRelatedPart(imgRelationship);
 		String srcName = GetFileNameWithoutExtension(new File(outputFilename, imageName));
@@ -676,11 +797,11 @@ public class DaisyClass {
 	private String ImageExt(String inNum, File pathName, String imageName)
 			throws IOException, InvalidFormatException {
 		PackageRelationship relationship = null;
-		for (PackageRelationship searchRelation : pack.getRelationshipsByType(wordRelationshipType)) {
+		for (PackageRelationship searchRelation : pack().getRelationshipsByType(wordRelationshipType)) {
 			relationship = searchRelation;
 			break;
 		}
-		PackagePart mainPartxml = pack.getPart(relationship);
+		PackagePart mainPartxml = pack().getPart(relationship);
 		PackageRelationship imgRelationship = mainPartxml.getRelationship(inNum);
 		PackagePart imgPartxml = mainPartxml.getRelatedPart(imgRelationship);
 		BufferedImage img = ImageIO.read(imgPartxml.getInputStream());
@@ -724,11 +845,11 @@ public class DaisyClass {
 	 */
 	public String ExternalImage() throws InvalidFormatException {
 		PackageRelationship relationship = null;
-		for (PackageRelationship searchRelation : pack.getRelationshipsByType(wordRelationshipType)) {
+		for (PackageRelationship searchRelation : pack().getRelationshipsByType(wordRelationshipType)) {
 			relationship = searchRelation;
 			break;
 		}
-		PackagePart mainPartxml = pack.getPart(relationship);
+		PackagePart mainPartxml = pack().getPart(relationship);
 		for (PackageRelationship searchRelation : mainPartxml.getRelationships()) {
 			if ("http://schemas.openxmlformats.org/officeDocument/2006/relationships/image"
 			    .equals(searchRelation.getRelationshipType())) {
@@ -1102,16 +1223,16 @@ public class DaisyClass {
 	 */
 	public String Anchor(String inNum, String flagNote) throws InvalidFormatException {
 		PackageRelationship wordRelationship = null;
-		for (PackageRelationship searchRelation : pack.getRelationshipsByType(wordRelationshipType)) {
+		for (PackageRelationship searchRelation : pack().getRelationshipsByType(wordRelationshipType)) {
 			wordRelationship = searchRelation;
 			break;
 		}
-		PackagePart mainPartxml = null;// = pack.getPart(relationship);
+		PackagePart mainPartxml = null;// = pack().getPart(relationship);
 		PackageRelationship anchorRelationshipFile = null;// = mainPartxml.getRelationship(inNum);
 		String uri;
 		switch (flagNote){
 			case "footnote":
-				mainPartxml = pack.getPart(wordRelationship);
+				mainPartxml = pack().getPart(wordRelationship);
 				try{
 					for (PackageRelationship searchRelation : mainPartxml.getRelationshipsByType(footnotesRelationshipType)) {
 						anchorRelationshipFile = searchRelation;
@@ -1122,7 +1243,7 @@ public class DaisyClass {
 				}
 				break;
 			case "endnote":
-				mainPartxml = pack.getPart(wordRelationship);
+				mainPartxml = pack().getPart(wordRelationship);
 				try{
 					for (PackageRelationship searchRelation : mainPartxml.getRelationshipsByType(endnotesRelationshipType)) {
 						anchorRelationshipFile = searchRelation;
@@ -1139,7 +1260,7 @@ public class DaisyClass {
 
 		if(anchorRelationshipFile != null){
 			PackageRelationship anchorRelationship;
-			mainPartxml = pack.getPart(anchorRelationshipFile);
+			mainPartxml = pack().getPart(anchorRelationshipFile);
 			if(mainPartxml == null){
 				// fallback for footnotes and endnotes where the pack does
 				// resolve correctly the underlying file
@@ -1246,11 +1367,11 @@ public class DaisyClass {
 			throws InvalidFormatException, SAXException, IOException, XPathExpressionException {
 		String indicator = " ";
 		PackageRelationship relationship = null;
-		for (PackageRelationship searchRelation : pack.getRelationshipsByType(wordRelationshipType)) {
+		for (PackageRelationship searchRelation : pack().getRelationshipsByType(wordRelationshipType)) {
 			relationship = searchRelation;
 			break;
 		}
-		PackagePart mainPartxml = pack.getPart(relationship);
+		PackagePart mainPartxml = pack().getPart(relationship);
 		for (PackageRelationship searchRelation : mainPartxml.getRelationshipsByType(CustomRelationshipType)) {
 			PackagePart customPartxml = mainPartxml.getRelatedPart(searchRelation);
 			Document doc = docBuilder.parse(customPartxml.getInputStream());
@@ -1277,11 +1398,11 @@ public class DaisyClass {
 			throws InvalidFormatException, XPathExpressionException, DOMException, SAXException, IOException {
 		String temp = "";
 		PackageRelationship relationship = null;
-		for (PackageRelationship searchRelation : pack.getRelationshipsByType(wordRelationshipType)) {
+		for (PackageRelationship searchRelation : pack().getRelationshipsByType(wordRelationshipType)) {
 			relationship = searchRelation;
 			break;
 		}
-		PackagePart mainPartxml = pack.getPart(relationship);
+		PackagePart mainPartxml = pack().getPart(relationship);
 		for (PackageRelationship searchRelation : mainPartxml.getRelationshipsByType(CustomRelationshipType)) {
 			PackagePart customPartxml = mainPartxml.getRelatedPart(searchRelation);
 			Document doc = docBuilder.parse(customPartxml.getInputStream());
@@ -1509,11 +1630,11 @@ public class DaisyClass {
 			throws InvalidFormatException, SAXException, IOException, XPathExpressionException {
 		NodeList node;
 		PackageRelationship relationship = null;
-		for (PackageRelationship searchRelation : pack.getRelationshipsByType(wordRelationshipType)) {
+		for (PackageRelationship searchRelation : pack().getRelationshipsByType(wordRelationshipType)) {
 			relationship = searchRelation;
 			break;
 		}
-		PackagePart mainPartxml = pack.getPart(relationship);
+		PackagePart mainPartxml = pack().getPart(relationship);
 		PackageRelationship footrelationship = null;
 		for (PackageRelationship searchRelation : mainPartxml.getRelationshipsByType(footnotesRelationshipType)) {
 			footrelationship = searchRelation;
@@ -1558,11 +1679,11 @@ public class DaisyClass {
 		String indicator = "";
 		PackageRelationship relationship = null;
 		if (IsOffice2007Or2010(version)) {
-			for (PackageRelationship searchRelation : pack.getRelationshipsByType(wordRelationshipType)) {
+			for (PackageRelationship searchRelation : pack().getRelationshipsByType(wordRelationshipType)) {
 				relationship = searchRelation;
 				break;
 			}
-			PackagePart mainPartxml = pack.getPart(relationship);
+			PackagePart mainPartxml = pack().getPart(relationship);
 			for (PackageRelationship searchRelation : mainPartxml.getRelationshipsByType(CustomRelationshipType)) {
 				PackagePart customPartxml = mainPartxml.getRelatedPart(searchRelation);
 				Document doc = docBuilder.parse(customPartxml.getInputStream());
@@ -1584,12 +1705,12 @@ public class DaisyClass {
 			}
 		}
 		if (version.equals(version2003) || version.equals(versionXP)) {
-			for (PackageRelationship searchRelation : pack.getRelationshipsByType(customPropRelationshipType)) {
+			for (PackageRelationship searchRelation : pack().getRelationshipsByType(customPropRelationshipType)) {
 				relationship = searchRelation;
 				break;
 			}
 			if (relationship != null) {
-				PackagePart mainPartxml = pack.getPart(relationship);
+				PackagePart mainPartxml = pack().getPart(relationship);
 				Document doc = docBuilder.parse(mainPartxml.getInputStream());
 				NodeList node = doc.getFirstChild().getNextSibling().getChildNodes();
 				if (node != null) {
@@ -1618,11 +1739,11 @@ public class DaisyClass {
 		String indicator = "";
 		PackageRelationship relationship = null;
 		if (IsOffice2007Or2010(version)) {
-			for (PackageRelationship searchRelation : pack.getRelationshipsByType(wordRelationshipType)) {
+			for (PackageRelationship searchRelation : pack().getRelationshipsByType(wordRelationshipType)) {
 				relationship = searchRelation;
 				break;
 			}
-			PackagePart mainPartxml = pack.getPart(relationship);
+			PackagePart mainPartxml = pack().getPart(relationship);
 			for (PackageRelationship searchRelation : mainPartxml.getRelationshipsByType(CustomRelationshipType)) {
 				PackagePart customPartxml = mainPartxml.getRelatedPart(searchRelation);
 				Document doc = docBuilder.parse(customPartxml.getInputStream());
@@ -1642,12 +1763,12 @@ public class DaisyClass {
 			}
 		}
 		if (version == version2003 || version == versionXP) {
-			for (PackageRelationship searchRelation : pack.getRelationshipsByType(customPropRelationshipType)) {
+			for (PackageRelationship searchRelation : pack().getRelationshipsByType(customPropRelationshipType)) {
 				relationship = searchRelation;
 				break;
 			}
 			if (relationship != null) {
-				PackagePart mainPartxml = pack.getPart(relationship);
+				PackagePart mainPartxml = pack().getPart(relationship);
 				Document doc = docBuilder.parse(mainPartxml.getInputStream());
 				NodeList node = doc.getFirstChild().getNextSibling().getChildNodes();
 				if (node != null) {
@@ -2080,11 +2201,11 @@ public class DaisyClass {
 	private List<String> AbstractFormat(String numId, XPath xpath, DocumentBuilder docBuilder)
 			throws InvalidFormatException, IOException, SAXException, XPathExpressionException {
 		PackageRelationship relationship = null;
-		for (PackageRelationship searchRelation : pack.getRelationshipsByType(wordRelationshipType)) {
+		for (PackageRelationship searchRelation : pack().getRelationshipsByType(wordRelationshipType)) {
 			relationship = searchRelation;
 			break;
 		}
-		PackagePart mainPartxml = pack.getPart(relationship);
+		PackagePart mainPartxml = pack().getPart(relationship);
 		PackageRelationship numberRelationship = null;
 		for (PackageRelationship searchRelation : mainPartxml.getRelationshipsByType(numberRelationshipType)) {
 			numberRelationship = searchRelation;
@@ -2503,11 +2624,11 @@ public class DaisyClass {
 	                            XPath xpath, DocumentBuilder docBuilder)
 			throws XPathExpressionException, InvalidFormatException, SAXException, IOException {
 		PackageRelationship relationship = null;
-		for (PackageRelationship searchRelation : pack.getRelationshipsByType(wordRelationshipType)) {
+		for (PackageRelationship searchRelation : pack().getRelationshipsByType(wordRelationshipType)) {
 			relationship = searchRelation;
 			break;
 		}
-		PackagePart mainPartxml = pack.getPart(relationship);
+		PackagePart mainPartxml = pack().getPart(relationship);
 		PackageRelationship numberRelationship = null;
 		for (PackageRelationship searchRelation : mainPartxml.getRelationshipsByType(numberRelationshipType)) {
 			numberRelationship = searchRelation;
@@ -2602,11 +2723,11 @@ public class DaisyClass {
 	 */
 	public String Object(String inNum) throws IOException, InvalidFormatException {
 		PackageRelationship relationship = null;
-		for (PackageRelationship searchRelation : pack.getRelationshipsByType(wordRelationshipType)) {
+		for (PackageRelationship searchRelation : pack().getRelationshipsByType(wordRelationshipType)) {
 			relationship = searchRelation;
 			break;
 		}
-		PackagePart mainPartxml = pack.getPart(relationship);
+		PackagePart mainPartxml = pack().getPart(relationship);
 		PackageRelationship imgRelationship = mainPartxml.getRelationship(inNum);
 		PackagePart objPartxml = mainPartxml.getRelatedPart(imgRelationship);
 		String strImgName = objPartxml.getPartName().getURI().toString()
@@ -2628,11 +2749,11 @@ public class DaisyClass {
 	}
 
 	public String DocPropSubject() throws InvalidFormatException {
-		return pack.getPackageProperties().getSubjectProperty().orElse("");
+		return pack().getPackageProperties().getSubjectProperty().orElse("");
 	}
 
 	public String DocPropDescription() throws InvalidFormatException {
-		return pack.getPackageProperties().getDescriptionProperty().orElse("");
+		return pack().getPackageProperties().getDescriptionProperty().orElse("");
 	}
 
 	/**
