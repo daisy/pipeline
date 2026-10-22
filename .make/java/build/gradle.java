@@ -42,11 +42,30 @@ public class gradle {
 			gradlew = new File(ROOT_DIR , MY_DIR + "/" + gradlewFileName);
 		List<String> properties = null; {
 			if (MVN_PROPERTIES != null) {
-				Pattern property = Pattern.compile("(?:[^\"\\s]|\"(\\\\\"|[^\"])*\")+");
+				Pattern valuePart = Pattern.compile("[^\"'\\s]|\"(\\\\\"|[^\"])*\"|'[^']*'");
+				Pattern property = Pattern.compile(
+					"(?<key>[^\"'\\s]+)=(?<val>(?:" + valuePart.pattern() + ")+)");
 				Matcher m = property.matcher(MVN_PROPERTIES.trim());
 				while (m.find()) {
+					String key = m.group("key");
+					String value = ""; {
+						Matcher mm = valuePart.matcher(m.group("val"));
+						while (mm.find()) {
+							String v = mm.group();
+							switch (v.charAt(0)) {
+							case '\'':
+								value += v.substring(1, v.length() - 1);
+								break;
+							case '"':
+								value += v.substring(1, v.length() - 1).replace("\\\"","\"");
+								break;
+							default:
+								value += v;
+							}
+						}
+					}
 					if (properties == null) properties = new ArrayList<String>();
-					properties.add(m.group());
+					properties.add(key + "=" + value);
 				}
 			}
 		}
