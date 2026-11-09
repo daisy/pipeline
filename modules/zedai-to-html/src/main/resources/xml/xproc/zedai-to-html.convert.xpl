@@ -110,6 +110,9 @@
             <p:empty/>
         </p:variable>
         <p:group name="zedai-to-html.html-single">
+            <p:output port="outline">
+                <p:pipe step="book-outline" port="outline"/>
+            </p:output>
             <p:output port="result" primary="true">
                 <p:pipe step="result" port="result"/>
             </p:output>
@@ -125,7 +128,7 @@
                 </p:input>
             </p:xslt>
             <!-- zedai-to-html.xsl only uses h1 -->
-            <px:html-outline fix-heading-ranks="outline-depth"/>
+            <px:html-outline name="book-outline" fix-heading-ranks="outline-depth"/>
             <px:set-base-uri name="result">
                 <p:with-option name="base-uri" select="$result-basename"/>
             </px:set-base-uri>
@@ -151,6 +154,20 @@
                 <px:html-chunker name="chunker">
                     <p:with-option name="max-chunk-size" select="$chunk-size"/>
                 </px:html-chunker>
+                <p:for-each name="chunk-content">
+                    <p:xslt>
+                        <p:input port="source">
+                            <p:pipe step="chunk-content" port="current"/>
+                            <p:pipe step="zedai-to-html.html-single" port="outline"/>
+                            <p:pipe step="zedai-to-html.html-single" port="result"/>
+                        </p:input>
+                        <p:input port="stylesheet">
+                            <p:document href="../xslt/chunk-heading-ranks.xsl"/>
+                        </p:input>
+                        <p:input port="parameters"><p:empty/></p:input>
+                        <p:with-option name="output-base-uri" select="base-uri(/*)"/>
+                    </p:xslt>
+                </p:for-each>
             </p:when>
             <p:otherwise>
                 <p:output port="result" sequence="true" primary="true"/>

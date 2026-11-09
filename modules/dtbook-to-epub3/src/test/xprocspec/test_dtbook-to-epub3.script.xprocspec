@@ -142,6 +142,10 @@
                                     <h1 id="chapter_1">
                                         <em>CHAPTER 1</em> <strong>THE LAST JUDGEMENT (MICHAEL ANGELO)</strong>
                                     </h1>
+                                    <level2>
+                                        <h2 id="section_1">Details</h2>
+                                        <p>More about the picture.</p>
+                                    </level2>
                                 </level1>
                             </bodymatter>
                         </book>
@@ -161,15 +165,20 @@
             </x:document>
         </x:expect>
         <x:context label="the content file">
-            <x:document type="file" base-uri="temp-dir" href="issue-94/output-dir/test_dtbook-to-epub3.script.epub!/EPUB/test_dtbook-to-epub3.script-2.xhtml" select="//(html:h1|html:h2|html:h3|html:h4|html:h5|html:h6)[1]"/>
+            <x:document type="file" base-uri="temp-dir" href="issue-94/output-dir/test_dtbook-to-epub3.script.epub!/EPUB/test_dtbook-to-epub3.script-2.xhtml" select="(//(html:h1|html:h2|html:h3|html:h4|html:h5|html:h6))[1]"/>
         </x:context>
         <x:expect label="the white space in between the 'em' elements should be preserved" type="compare" normalize-space="false">
             <x:document type="inline">
-                <h3 xmlns="http://www.w3.org/1999/xhtml" id="chapter_1">
+                <h1 xmlns="http://www.w3.org/1999/xhtml" id="chapter_1">
                                         <em>CHAPTER 1</em> <strong>THE LAST JUDGEMENT (MICHAEL ANGELO)</strong>
-                                    </h3>
+                                    </h1>
             </x:document>
         </x:expect>
+        <x:context label="the chapter and subsection">
+            <x:document type="file" base-uri="temp-dir" href="issue-94/output-dir/test_dtbook-to-epub3.script.epub!/EPUB/test_dtbook-to-epub3.script-2.xhtml"/>
+        </x:context>
+        <x:expect label="the chapter and subsection keep their heading levels and IDs" type="xpath"
+                  test="exists(//html:h1[@id='chapter_1']/following::html:h2[@id='section_1'][.='Details'])"/>
     </x:scenario>
     
     <x:scenario label="dtbook 1.1.0">
@@ -201,7 +210,7 @@
                     </head>
                     <body id="id_3" epub:type="frontmatter">
                         <section id="id_4">
-                            <h3 id="id_5" epub:type="title">Title</h3>
+                            <h1 id="id_5" epub:type="title">Title</h1>
                         </section>
                     </body>
                 </html>

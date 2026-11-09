@@ -314,7 +314,7 @@
 					<body epub:type="bodymatter" id="id_6">
 						<section id="id_1">
 							<span epub:type="pagebreak" role="doc-pagebreak" aria-label=" 1. " id="page_1"/>
-							<h3 id="id_7">Chapter</h3>
+							<h1 id="id_7">Chapter</h1>
 							<p>Paragraph</p>
 						</section>
 					</body>

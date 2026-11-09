@@ -67,9 +67,9 @@
 		</x:context>
 		<x:expect label="the white space in between the 'em' elements should be preserved" type="compare" normalize-space="false">
 			<x:document type="inline">
-				<h3 xmlns="http://www.w3.org/1999/xhtml" id="chapter_1">
+				<h1 xmlns="http://www.w3.org/1999/xhtml" id="chapter_1">
 										<em>CHAPTER 1</em> <em>THE LAST JUDGEMENT (MICHAEL ANGELO)</em>
-									</h3>
+									</h1>
 			</x:document>
 		</x:expect>
 	</x:scenario>

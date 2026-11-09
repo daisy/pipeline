@@ -103,7 +103,7 @@
 		<x:expect label="the toc in the alice-1.xhtml file" type="compare">
 			<x:document type="inline">
 				<nav xmlns="http://www.w3.org/1999/xhtml" id="id_17" epub:type="toc">
-					<h3 id="id_18">Contents</h3>
+					<h1 id="id_18">Contents</h1>
 					<ul>
 						<li>
 							I. Down the Rabbit-Hole <a href="alice-2.xhtml#p1">1</a>
