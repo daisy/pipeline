@@ -667,7 +667,7 @@
       <dependency>
         <groupId>org.json</groupId>
         <artifactId>json</artifactId>
-        <version>20200518</version>
+        <version>20260719</version>
       </dependency>
       <!--
           for tts-adapter-acapela (includes jna 4.0.0)
