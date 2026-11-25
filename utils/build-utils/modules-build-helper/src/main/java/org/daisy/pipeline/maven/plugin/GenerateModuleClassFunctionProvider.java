@@ -16,6 +16,8 @@ import java.util.Set;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLResolver;
+import javax.xml.stream.XMLStreamException;
 
 import org.apache.maven.plugin.logging.Log;
 
@@ -39,6 +41,9 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
+
 public class GenerateModuleClassFunctionProvider extends ReflexiveExtensionFunctionProvider {
 
 	private final XMLInputFactory xmlParser;
@@ -49,7 +54,6 @@ public class GenerateModuleClassFunctionProvider extends ReflexiveExtensionFunct
 
 	public GenerateModuleClassFunctionProvider(ClassLoader compileClassPath, Collection<String> sourceRoots, Log logger) {
 		super(GenerateModuleClass.class);
-		xmlParser = XMLInputFactory.newInstance();
 		this.sourceRoots = new HashSet<>(); {
 			for (String dir : sourceRoots) {
 				File f = new File(dir);
@@ -57,6 +61,27 @@ public class GenerateModuleClassFunctionProvider extends ReflexiveExtensionFunct
 					this.sourceRoots.add(f); }}
 		this.compileClassPath = compileClassPath;
 		moduleRegistry = getModuleRegistry(compileClassPath);
+		xmlParser = XMLInputFactory.newInstance();
+		xmlParser.setXMLResolver(new XMLResolver() {
+				EntityResolver entityResolver = getEntityResolver(compileClassPath);
+				@Override
+				public Object resolveEntity(String publicID, String systemID, String baseURI, String namespace)
+						throws XMLStreamException {
+					try {
+						InputSource inputSource = entityResolver.resolveEntity(publicID, systemID);
+						if (inputSource != null)
+							if (inputSource.getByteStream() != null)
+								return inputSource.getByteStream();
+							if (inputSource.getCharacterStream() != null)
+								return inputSource.getCharacterStream();
+							if (inputSource.getSystemId() != null)
+								return inputSource.getSystemId();
+					} catch (Exception e) {
+						throw new XMLStreamException(e);
+					}
+					return null;
+				}
+			});
 		this.logger = logger;
 	}
 
@@ -678,6 +703,18 @@ public class GenerateModuleClassFunctionProvider extends ReflexiveExtensionFunct
 			for (ModuleRegistry r : ServiceLoader.load(ModuleRegistry.class))
 				return r;
 			throw new RuntimeException("No ModuleRegistry found");
+		} finally {
+			Thread.currentThread().setContextClassLoader(restoreClassLoader);
+		}
+	}
+
+	private static EntityResolver getEntityResolver(ClassLoader classLoader) {
+		ClassLoader restoreClassLoader = Thread.currentThread().getContextClassLoader();
+		try {
+			Thread.currentThread().setContextClassLoader(classLoader);
+			for (EntityResolver r : ServiceLoader.load(EntityResolver.class))
+				return r;
+			throw new RuntimeException("No EntityResolver found");
 		} finally {
 			Thread.currentThread().setContextClassLoader(restoreClassLoader);
 		}
