@@ -6,7 +6,9 @@ $(TARGET_DIR)/state/modules/tts-adapter-osx/last-tested : $(TARGET_DIR)/state/%/
 # this rule overrides the implicit rule in main.mk
 # note that because the modified-since-release_ files created by main.mk, are deleted,
 # this rule gets executed at least once
-$(TARGET_DIR)/state/modules/tts-adapter-osx/modified-since-release_ : modules/tts-adapter-osx/pom.xml $(TARGET_DIR)/state/modules/parent/modified-since-release
+$(TARGET_DIR)/state/modules/tts-adapter-osx/modified-since-release_ : modules/tts-adapter-osx/pom.xml \
+	$(TARGET_DIR)/state/modules/parent/modified-since-release \
+	$(TARGET_DIR)/state/utils/build-utils/modules-build-helper/modified-since-release
 	mkdirs("$(dir $@)"); \
 	try (OutputStream s = new FileOutputStream("$@")) { \
 		ModificationType modified = isModifiedSinceLastRelease(new File("$<").getParentFile()); \
@@ -57,7 +59,9 @@ modules/tts-adapter-osx/.install-doc : | .maven-init .group-eval
 modules/tts-adapter-osx/.install-doc : %/.install-doc : %/pom.xml | %/.compile-dependencies %/.test-dependencies
 
 .SECONDARY : modules/tts-adapter-osx/.compile-dependencies modules/tts-adapter-osx/.test-dependencies
-modules/tts-adapter-osx/.compile-dependencies : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-parent/1.15.6-SNAPSHOT/modules-parent-1.15.6-SNAPSHOT.pom
+modules/tts-adapter-osx/.compile-dependencies : \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-parent/1.15.6-SNAPSHOT/modules-parent-1.15.6-SNAPSHOT.pom \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/build/modules-build-helper/3.0.2-SNAPSHOT/modules-build-helper-3.0.2-SNAPSHOT.jar
 modules/tts-adapter-osx/.test-dependencies :
 
 $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/tts-adapter-osx/3.2.3/tts-adapter-osx-3.2.3.% \
@@ -68,7 +72,9 @@ $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/tts-adapter-osx/3.2.3/tts-ada
 modules/tts-adapter-osx/.release : modules/.release
 	+$(EVAL) mvn.releaseModulesInDir("modules").apply("tts-adapter-osx");
 
-modules/tts-adapter-osx/.release : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-parent/1.15.6/modules-parent-1.15.6.pom
+modules/tts-adapter-osx/.release : \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-parent/1.15.6/modules-parent-1.15.6.pom \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/build/modules-build-helper/3.0.2/modules-build-helper-3.0.2.jar
 
 clean : modules/tts-adapter-osx/.clean
 .PHONY : modules/tts-adapter-osx/.clean

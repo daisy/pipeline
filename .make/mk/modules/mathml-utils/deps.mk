@@ -6,7 +6,9 @@ $(TARGET_DIR)/state/modules/mathml-utils/last-tested : $(TARGET_DIR)/state/%/las
 # this rule overrides the implicit rule in main.mk
 # note that because the modified-since-release_ files created by main.mk, are deleted,
 # this rule gets executed at least once
-$(TARGET_DIR)/state/modules/mathml-utils/modified-since-release_ : modules/mathml-utils/pom.xml $(TARGET_DIR)/state/modules/parent/modified-since-release
+$(TARGET_DIR)/state/modules/mathml-utils/modified-since-release_ : modules/mathml-utils/pom.xml \
+	$(TARGET_DIR)/state/modules/parent/modified-since-release \
+	$(TARGET_DIR)/state/utils/build-utils/modules-build-helper/modified-since-release
 	mkdirs("$(dir $@)"); \
 	try (OutputStream s = new FileOutputStream("$@")) { \
 		ModificationType modified = isModifiedSinceLastRelease(new File("$<").getParentFile()); \
@@ -57,7 +59,9 @@ modules/mathml-utils/.install-doc : | .maven-init .group-eval
 modules/mathml-utils/.install-doc : %/.install-doc : %/pom.xml | %/.compile-dependencies %/.test-dependencies
 
 .SECONDARY : modules/mathml-utils/.compile-dependencies modules/mathml-utils/.test-dependencies
-modules/mathml-utils/.compile-dependencies : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-parent/1.15.6-SNAPSHOT/modules-parent-1.15.6-SNAPSHOT.pom
+modules/mathml-utils/.compile-dependencies : \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-parent/1.15.6-SNAPSHOT/modules-parent-1.15.6-SNAPSHOT.pom \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/build/modules-build-helper/3.0.2-SNAPSHOT/modules-build-helper-3.0.2-SNAPSHOT.jar
 modules/mathml-utils/.test-dependencies :
 
 $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/mathml-utils/1.1.3/mathml-utils-1.1.3.% \
@@ -68,7 +72,9 @@ $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/mathml-utils/1.1.3/mathml-uti
 modules/mathml-utils/.release : modules/.release
 	+$(EVAL) mvn.releaseModulesInDir("modules").apply("mathml-utils");
 
-modules/mathml-utils/.release : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-parent/1.15.6/modules-parent-1.15.6.pom
+modules/mathml-utils/.release : \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-parent/1.15.6/modules-parent-1.15.6.pom \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/build/modules-build-helper/3.0.2/modules-build-helper-3.0.2.jar
 
 clean : modules/mathml-utils/.clean
 .PHONY : modules/mathml-utils/.clean

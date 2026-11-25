@@ -3,6 +3,20 @@ modules/parent/VERSION := 1.15.6-SNAPSHOT
 $(TARGET_DIR)/state/modules/parent/last-tested : $(TARGET_DIR)/state/%/last-tested : %/.test | .group-eval
 	+$(EVAL) mkdirs("$(dir $@)"); touch("$@");
 
+# this rule overrides the implicit rule in main.mk
+# note that because the modified-since-release_ files created by main.mk, are deleted,
+# this rule gets executed at least once
+$(TARGET_DIR)/state/modules/parent/modified-since-release_ : modules/parent/pom.xml $(TARGET_DIR)/state/utils/build-utils/modules-build-helper/modified-since-release
+	mkdirs("$(dir $@)"); \
+	try (OutputStream s = new FileOutputStream("$@")) { \
+		ModificationType modified = isModifiedSinceLastRelease(new File("$<").getParentFile()); \
+		if (modified == null) \
+			for (String d : "$(filter %/modified-since-release,$^)".trim().split("\\s+")) \
+				if ("major".equals(slurp(new File(d)).trim())) { \
+					modified = ModificationType.PATCH; \
+					break; } \
+		new PrintStream(s).print("" + modified); }
+
 .SECONDARY : modules/parent/.test
 modules/parent/.test : | .maven-init .group-eval
 	+$(EVAL) mvn.test("$(patsubst %/,%,$(dir $@))");
@@ -28,7 +42,9 @@ modules/parent/.install-doc : | .maven-init .group-eval
 modules/parent/.install-doc : %/.install-doc : %/pom.xml | %/.compile-dependencies %/.test-dependencies
 
 .SECONDARY : modules/parent/.compile-dependencies modules/parent/.test-dependencies
-modules/parent/.compile-dependencies : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-bom/1.15.6-SNAPSHOT/modules-bom-1.15.6-SNAPSHOT.pom
+modules/parent/.compile-dependencies : \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-bom/1.15.6-SNAPSHOT/modules-bom-1.15.6-SNAPSHOT.pom \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/build/modules-build-helper/3.0.2-SNAPSHOT/modules-build-helper-3.0.2-SNAPSHOT.jar
 modules/parent/.test-dependencies : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-bom/1.15.6-SNAPSHOT/modules-bom-1.15.6-SNAPSHOT.pom
 
 $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-parent/1.15.6/modules-parent-1.15.6.% \
@@ -39,7 +55,9 @@ $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-parent/1.15.6/modules
 modules/parent/.release : modules/.release
 	+$(EVAL) mvn.releaseModulesInDir("modules").apply("parent");
 
-modules/parent/.release : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-bom/1.15.6/modules-bom-1.15.6.pom
+modules/parent/.release : \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-bom/1.15.6/modules-bom-1.15.6.pom \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/build/modules-build-helper/3.0.2/modules-build-helper-3.0.2.jar
 
 clean : modules/parent/.clean
 .PHONY : modules/parent/.clean

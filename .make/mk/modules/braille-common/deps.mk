@@ -6,7 +6,9 @@ $(TARGET_DIR)/state/modules/braille-common/last-tested : $(TARGET_DIR)/state/%/l
 # this rule overrides the implicit rule in main.mk
 # note that because the modified-since-release_ files created by main.mk, are deleted,
 # this rule gets executed at least once
-$(TARGET_DIR)/state/modules/braille-common/modified-since-release_ : modules/braille-common/pom.xml $(TARGET_DIR)/state/modules/parent/modified-since-release
+$(TARGET_DIR)/state/modules/braille-common/modified-since-release_ : modules/braille-common/pom.xml \
+	$(TARGET_DIR)/state/modules/parent/modified-since-release \
+	$(TARGET_DIR)/state/utils/build-utils/modules-build-helper/modified-since-release
 	mkdirs("$(dir $@)"); \
 	try (OutputStream s = new FileOutputStream("$@")) { \
 		ModificationType modified = isModifiedSinceLastRelease(new File("$<").getParentFile()); \
@@ -60,7 +62,9 @@ modules/braille-common/.install-doc : | .maven-init .group-eval
 modules/braille-common/.install-doc : %/.install-doc : %/pom.xml | %/.compile-dependencies %/.test-dependencies
 
 .SECONDARY : modules/braille-common/.compile-dependencies modules/braille-common/.test-dependencies
-modules/braille-common/.compile-dependencies : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-parent/1.15.6-SNAPSHOT/modules-parent-1.15.6-SNAPSHOT.pom
+modules/braille-common/.compile-dependencies : \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-parent/1.15.6-SNAPSHOT/modules-parent-1.15.6-SNAPSHOT.pom \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/build/modules-build-helper/3.0.2-SNAPSHOT/modules-build-helper-3.0.2-SNAPSHOT.jar
 modules/braille-common/.test-dependencies :
 
 $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/braille/braille-common/7.0.2/braille-common-7.0.2.% \
@@ -71,7 +75,9 @@ $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/braille/braille-common/7.0.2/
 modules/braille-common/.release : modules/.release
 	+$(EVAL) mvn.releaseModulesInDir("modules").apply("braille-common");
 
-modules/braille-common/.release : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-parent/1.15.6/modules-parent-1.15.6.pom
+modules/braille-common/.release : \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-parent/1.15.6/modules-parent-1.15.6.pom \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/build/modules-build-helper/3.0.2/modules-build-helper-3.0.2.jar
 
 clean : modules/braille-common/.clean
 .PHONY : modules/braille-common/.clean

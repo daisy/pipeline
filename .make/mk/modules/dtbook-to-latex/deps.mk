@@ -6,7 +6,9 @@ $(TARGET_DIR)/state/modules/dtbook-to-latex/last-tested : $(TARGET_DIR)/state/%/
 # this rule overrides the implicit rule in main.mk
 # note that because the modified-since-release_ files created by main.mk, are deleted,
 # this rule gets executed at least once
-$(TARGET_DIR)/state/modules/dtbook-to-latex/modified-since-release_ : modules/dtbook-to-latex/pom.xml $(TARGET_DIR)/state/modules/parent/modified-since-release
+$(TARGET_DIR)/state/modules/dtbook-to-latex/modified-since-release_ : modules/dtbook-to-latex/pom.xml \
+	$(TARGET_DIR)/state/modules/parent/modified-since-release \
+	$(TARGET_DIR)/state/utils/build-utils/modules-build-helper/modified-since-release
 	mkdirs("$(dir $@)"); \
 	try (OutputStream s = new FileOutputStream("$@")) { \
 		ModificationType modified = isModifiedSinceLastRelease(new File("$<").getParentFile()); \
@@ -57,7 +59,9 @@ modules/dtbook-to-latex/.install-doc : | .maven-init .group-eval
 modules/dtbook-to-latex/.install-doc : %/.install-doc : %/pom.xml | %/.compile-dependencies %/.test-dependencies
 
 .SECONDARY : modules/dtbook-to-latex/.compile-dependencies modules/dtbook-to-latex/.test-dependencies
-modules/dtbook-to-latex/.compile-dependencies : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-parent/1.15.6-SNAPSHOT/modules-parent-1.15.6-SNAPSHOT.pom
+modules/dtbook-to-latex/.compile-dependencies : \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-parent/1.15.6-SNAPSHOT/modules-parent-1.15.6-SNAPSHOT.pom \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/build/modules-build-helper/3.0.2-SNAPSHOT/modules-build-helper-3.0.2-SNAPSHOT.jar
 modules/dtbook-to-latex/.test-dependencies :
 
 $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/dtbook-to-latex/1.0.1/dtbook-to-latex-1.0.1.% \
@@ -68,7 +72,9 @@ $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/dtbook-to-latex/1.0.1/dtbook-
 modules/dtbook-to-latex/.release : modules/.release
 	+$(EVAL) mvn.releaseModulesInDir("modules").apply("dtbook-to-latex");
 
-modules/dtbook-to-latex/.release : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-parent/1.15.6/modules-parent-1.15.6.pom
+modules/dtbook-to-latex/.release : \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-parent/1.15.6/modules-parent-1.15.6.pom \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/build/modules-build-helper/3.0.2/modules-build-helper-3.0.2.jar
 
 clean : modules/dtbook-to-latex/.clean
 .PHONY : modules/dtbook-to-latex/.clean

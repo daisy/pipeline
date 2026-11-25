@@ -6,7 +6,9 @@ $(TARGET_DIR)/state/modules/epubcheck-adapter/last-tested : $(TARGET_DIR)/state/
 # this rule overrides the implicit rule in main.mk
 # note that because the modified-since-release_ files created by main.mk, are deleted,
 # this rule gets executed at least once
-$(TARGET_DIR)/state/modules/epubcheck-adapter/modified-since-release_ : modules/epubcheck-adapter/pom.xml $(TARGET_DIR)/state/modules/parent/modified-since-release
+$(TARGET_DIR)/state/modules/epubcheck-adapter/modified-since-release_ : modules/epubcheck-adapter/pom.xml \
+	$(TARGET_DIR)/state/modules/parent/modified-since-release \
+	$(TARGET_DIR)/state/utils/build-utils/modules-build-helper/modified-since-release
 	mkdirs("$(dir $@)"); \
 	try (OutputStream s = new FileOutputStream("$@")) { \
 		ModificationType modified = isModifiedSinceLastRelease(new File("$<").getParentFile()); \
@@ -57,7 +59,9 @@ modules/epubcheck-adapter/.install-doc : | .maven-init .group-eval
 modules/epubcheck-adapter/.install-doc : %/.install-doc : %/pom.xml | %/.compile-dependencies %/.test-dependencies
 
 .SECONDARY : modules/epubcheck-adapter/.compile-dependencies modules/epubcheck-adapter/.test-dependencies
-modules/epubcheck-adapter/.compile-dependencies : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-parent/1.15.6-SNAPSHOT/modules-parent-1.15.6-SNAPSHOT.pom
+modules/epubcheck-adapter/.compile-dependencies : \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-parent/1.15.6-SNAPSHOT/modules-parent-1.15.6-SNAPSHOT.pom \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/build/modules-build-helper/3.0.2-SNAPSHOT/modules-build-helper-3.0.2-SNAPSHOT.jar
 modules/epubcheck-adapter/.test-dependencies :
 
 $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/epubcheck-adapter/1.1.16/epubcheck-adapter-1.1.16.% \
@@ -68,7 +72,9 @@ $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/epubcheck-adapter/1.1.16/epub
 modules/epubcheck-adapter/.release : modules/.release
 	+$(EVAL) mvn.releaseModulesInDir("modules").apply("epubcheck-adapter");
 
-modules/epubcheck-adapter/.release : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-parent/1.15.6/modules-parent-1.15.6.pom
+modules/epubcheck-adapter/.release : \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-parent/1.15.6/modules-parent-1.15.6.pom \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/build/modules-build-helper/3.0.2/modules-build-helper-3.0.2.jar
 
 clean : modules/epubcheck-adapter/.clean
 .PHONY : modules/epubcheck-adapter/.clean

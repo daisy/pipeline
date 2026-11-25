@@ -160,4 +160,4 @@ $(TARGET_DIR)/state/modules/last-tested : \
 .SECONDARY : modules/.release
 modules/.release : | .maven-init .group-eval
 
-modules/.release :
+modules/.release : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/build/modules-build-helper/3.0.2/modules-build-helper-3.0.2.jar

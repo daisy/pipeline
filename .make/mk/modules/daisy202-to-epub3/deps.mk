@@ -6,7 +6,9 @@ $(TARGET_DIR)/state/modules/daisy202-to-epub3/last-tested : $(TARGET_DIR)/state/
 # this rule overrides the implicit rule in main.mk
 # note that because the modified-since-release_ files created by main.mk, are deleted,
 # this rule gets executed at least once
-$(TARGET_DIR)/state/modules/daisy202-to-epub3/modified-since-release_ : modules/daisy202-to-epub3/pom.xml $(TARGET_DIR)/state/modules/parent/modified-since-release
+$(TARGET_DIR)/state/modules/daisy202-to-epub3/modified-since-release_ : modules/daisy202-to-epub3/pom.xml \
+	$(TARGET_DIR)/state/modules/parent/modified-since-release \
+	$(TARGET_DIR)/state/utils/build-utils/modules-build-helper/modified-since-release
 	mkdirs("$(dir $@)"); \
 	try (OutputStream s = new FileOutputStream("$@")) { \
 		ModificationType modified = isModifiedSinceLastRelease(new File("$<").getParentFile()); \
@@ -57,7 +59,9 @@ modules/daisy202-to-epub3/.install-doc : | .maven-init .group-eval
 modules/daisy202-to-epub3/.install-doc : %/.install-doc : %/pom.xml | %/.compile-dependencies %/.test-dependencies
 
 .SECONDARY : modules/daisy202-to-epub3/.compile-dependencies modules/daisy202-to-epub3/.test-dependencies
-modules/daisy202-to-epub3/.compile-dependencies : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-parent/1.15.6-SNAPSHOT/modules-parent-1.15.6-SNAPSHOT.pom
+modules/daisy202-to-epub3/.compile-dependencies : \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-parent/1.15.6-SNAPSHOT/modules-parent-1.15.6-SNAPSHOT.pom \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/build/modules-build-helper/3.0.2-SNAPSHOT/modules-build-helper-3.0.2-SNAPSHOT.jar
 modules/daisy202-to-epub3/.test-dependencies :
 
 $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/daisy202-to-epub3/2.1.7/daisy202-to-epub3-2.1.7.% \
@@ -68,7 +72,9 @@ $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/daisy202-to-epub3/2.1.7/daisy
 modules/daisy202-to-epub3/.release : modules/.release
 	+$(EVAL) mvn.releaseModulesInDir("modules").apply("daisy202-to-epub3");
 
-modules/daisy202-to-epub3/.release : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-parent/1.15.6/modules-parent-1.15.6.pom
+modules/daisy202-to-epub3/.release : \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/modules/modules-parent/1.15.6/modules-parent-1.15.6.pom \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/build/modules-build-helper/3.0.2/modules-build-helper-3.0.2.jar
 
 clean : modules/daisy202-to-epub3/.clean
 .PHONY : modules/daisy202-to-epub3/.clean
